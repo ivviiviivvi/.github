@@ -1,0 +1,79 @@
+---
+name: Commit Tracking
+
+'on':
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  track-commits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commit information
+        id: commit-info
+        run: |
+          echo "## Commit Tracking Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Latest Commit Details" >> $GITHUB_STEP_SUMMARY
+          SHA="${{ github.sha }}"
+          echo "- **SHA**: \`$SHA\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Author**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          MSG=$(git log -1 --pretty=%B)
+          echo "- **Message**: $MSG" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "### Pull Request Commits" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            git log --oneline $BASE..$HEAD >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Validate commit message
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Checking commit message: $COMMIT_MSG"
+
+          # Check if commit message is not empty
+          if [ -z "$COMMIT_MSG" ]; then
+            echo "Error: Commit message is empty"
+            exit 1
+          fi
+
+          # Check minimum length
+          if [ ${#COMMIT_MSG} -lt 10 ]; then
+            echo "Warning: Commit message is too short"
+          fi
+
+          echo "Commit message validation passed"
+
+      - name: Generate commit statistics
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Recent Commit Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          git log -10 --pretty=format:"%h - %an, %ar : %s" \
+            >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Commit Activity by Author" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          git shortlog -sn --since="30 days ago" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

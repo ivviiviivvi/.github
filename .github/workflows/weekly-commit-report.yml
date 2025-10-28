@@ -1,0 +1,74 @@
+---
+name: Weekly Commit Report
+
+'on':
+  schedule:
+    # Run every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate weekly commit report
+        run: |
+          REPORT_FILE="reports/commit-report-$(date +%Y-%m-%d).md"
+          mkdir -p reports
+
+          cat > $REPORT_FILE << 'EOL'
+          # Weekly Commit Report
+
+          **Generated**: $(date +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Summary (Last 7 Days)
+
+          EOL
+
+          echo "### Total Commits" >> $REPORT_FILE
+          COMMIT_COUNT=$(git log --since="7 days ago" --oneline | wc -l)
+          echo "- **Total**: $COMMIT_COUNT commits" >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+
+          echo "### Commits by Author" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+          git shortlog -sn --since="7 days ago" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+
+          echo "### Commits by Day" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+          git log --since="7 days ago" --date=short \
+            --pretty=format:"%ad" | sort | uniq -c >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+
+          echo "### Recent Commits" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+          git log --since="7 days ago" \
+            --pretty=format:"%h - %an, %ar : %s" >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+          echo '```' >> $REPORT_FILE
+
+          echo "Report generated at: $REPORT_FILE"
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          EMAIL="github-actions[bot]@users.noreply.github.com"
+          git config user.email "$EMAIL"
+          git add reports/
+          COMMIT_MSG="chore: add weekly commit report for $(date +%Y-%m-%d)"
+          git diff-index --quiet HEAD || git commit -m "$COMMIT_MSG"
+          git push
