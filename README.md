@@ -48,7 +48,27 @@ Comprehensive templates to encourage useful issues and pull requests:
 
 ### Workflow Templates
 
-The `workflow-templates/` directory contains reusable GitHub Actions workflow templates that can be used across repositories.
+The `workflow-templates/` directory contains reusable GitHub Actions workflow templates that can be used across repositories:
+
+- **ci.yml** - Basic CI pipeline for building and testing
+- **security-scan.yml** - CodeQL analysis and vulnerability scanning
+- **stale-management.yml** - Automated stale issue and PR management
+- **dependency-updates.yml** - Automated dependency update workflow
+- **deployment.yml** - Complete deployment pipeline with staging and production
+
+### Automation Configuration
+
+- **dependabot.yml** - Organization-wide Dependabot configuration for automated dependency updates across multiple package ecosystems (npm, pip, GitHub Actions, Docker, Go, Composer)
+
+### Documentation and Guides
+
+Comprehensive guides for repository management and organization standards:
+
+- **AI_IMPLEMENTATION_GUIDE.md** - Implementation guide for AI-driven GitHub organization management
+- **BRANCH_PROTECTION.md** - Branch protection rules and configuration guide
+- **REPOSITORY_SETUP_CHECKLIST.md** - Complete checklist for new repository setup
+- **LABELS.md** - Standard label set for consistent issue and PR labeling
+- **for-ai-implementation.txt** - Detailed protocol for AI GitHub organization management (8 core modules)
 
 ## How It Works
 
@@ -85,15 +105,29 @@ Individual repositories can override these defaults by creating their own versio
 │   ├── refactoring.md                      # Refactoring PR template
 │   └── performance.md                      # Performance PR template
 ├── workflow-templates/
-│   ├── ci.yml                              # CI workflow template
-│   └── ci.properties.json                  # Workflow template metadata
+│   ├── ci.yml                              # CI workflow
+│   ├── ci.properties.json                  # CI metadata
+│   ├── security-scan.yml                   # Security scanning workflow
+│   ├── security-scan.properties.json       # Security scan metadata
+│   ├── stale-management.yml                # Stale issue/PR workflow
+│   ├── stale-management.properties.json    # Stale management metadata
+│   ├── dependency-updates.yml              # Dependency update workflow
+│   ├── dependency-updates.properties.json  # Dependency update metadata
+│   ├── deployment.yml                      # Deployment workflow
+│   └── deployment.properties.json          # Deployment metadata
+├── AI_IMPLEMENTATION_GUIDE.md              # AI management implementation guide
+├── BRANCH_PROTECTION.md                    # Branch protection guide
 ├── CODE_OF_CONDUCT.md                      # Code of conduct
 ├── CONTRIBUTING.md                         # Contributing guidelines
 ├── FUNDING.yml                             # Funding configuration
 ├── GOVERNANCE.md                           # Governance model
+├── LABELS.md                               # Standard labels documentation
 ├── LICENSE                                 # License (MIT)
 ├── MANIFESTO.md                            # Organization manifesto
 ├── PULL_REQUEST_TEMPLATE.md                # Default PR template
+├── REPOSITORY_SETUP_CHECKLIST.md           # New repo setup checklist
 ├── SECURITY.md                             # Security policy
-└── SUPPORT.md                              # Support information
+├── SUPPORT.md                              # Support information
+├── dependabot.yml                          # Dependabot configuration
+└── for-ai-implementation.txt               # AI management protocol
 ```
