@@ -1,0 +1,56 @@
+[ai_github_handoff_protocol_20251028]
+TL;DR: This protocol outlines the 8 core modules of responsibility being handed off to the AI for managing the GitHub organization. It synthesizes the setup checklist and ecosystem map into a unified set of actionable directives, covering administration, project management, CI/CD, security, documentation, integration monitoring, system health, and strategic risk analysis.
+Module 1: Organization & Repository Administration [AI-GH-01]
+This module covers the foundational setup and ongoing administrative tasks for the GitHub Organization and all repositories within it.
+ * [AI-GH-01-A] Organization Profile: Maintain the organization's public profile, including the profile picture, descriptive bio, website link, and pinned repositories.
+ * [AI-GH-01-B] Access Control: Manage organization membership, team structures, and role-based access control (RBAC) based on user-provided directives.
+ * [AI-GH-01-C] Repository Provisioning: Execute the creation of new repositories, applying standardized templates for README.md, a language-specific .gitignore, and the designated LICENSE.
+ * [AI-GH-01-D] Branch Protection: Enforce and monitor branch protection rules across all production (main, master) branches, ensuring requirements for pull request (PR) reviews and passing status checks are met.
+ * [AI-GH-01-E] Billing & Audit: Monitor organization billing and payments, and maintain audit logs for all administrative actions.
+Module 2: Project Management & Workflow Automation [AI-GH-02]
+This module covers the management of project boards, issues, and discussions, with a focus on automating workflows.
+ * [AI-GH-02-A] Project Board Management: Administer the organization's GitHub Projects (Kanban/Table layouts), ensuring all relevant repositories are linked and views are configured.
+ * [AI-GH-02-B] Workflow Automation: Implement and manage project automation rules (e.g., auto-move issues from 'To Do' to 'In Progress' when a PR is linked; apply labels based on issue content).
+ * [AI-GH-02-C] Issue & PR Templates: Maintain the .github/ISSUE_TEMPLATE and PULL_REQUEST_TEMPLATE.md files, ensuring standardized templates for 'Bug Reports' and 'Feature Requests' are enforced.
+ * [AI-GH-02-D] Label & Milestone Management: Manage the organization-wide label set (e.g., bug, enhancement, help wanted, good first issue) and track project milestones.
+ * [AI-GH-02-E] Community Engagement: Monitor and facilitate GitHub Discussions, flagging actionable items or questions for human review.
+Module 3: CI/CD & Development Lifecycle [AI-GH-03]
+This module details the AI's responsibility for creating, managing, and monitoring all Continuous Integration and Continuous Deployment (CI/CD) pipelines.
+ * [AI-GH-03-A] Workflow Configuration: Manage the .github/workflows directory, maintaining YAML files for all build, test, and deployment pipelines.
+ * [AI-GH-03-B] Pipeline Integration: Integrate static analysis (linters, formatters) and vulnerability checks (Snyk, Dependabot) into all pre-merge build pipelines.
+ * [AI-GH-03-C] Test Orchestration: Ensure all PRs automatically trigger and pass the full suite of unit, integration, and end-to-end tests before being eligible for merging.
+ * [AI-GH-03-D] Deployment Strategy: Orchestrate automated deployment strategies (e.g., blue-green, canary) for production releases and manage automated rollbacks on failure detection.
+ * [AI-GH-03-E] Secrets Management: Manage GitHub Actions secrets and variables, ensuring secure injection into workflows and flagging expired or potentially compromised keys for human review.
+Module 4: Security & Compliance Operations [AI-GH-04]
+This module focuses on the active monitoring and enforcement of security protocols and compliance standards across the organization.
+ * [AI-GH-04-A] Vulnerability Management: Actively monitor, triage, and manage Dependabot alerts and updates, automatically creating PRs for critical vulnerabilities.
+ * [AI-GH-04-B] Code Scanning: Implement and monitor CodeQL analysis workflows, reporting critical security vulnerabilities found in the codebase.
+ * [AI-GH-04-C] Access & Authentication: Periodically audit and enforce authentication policies (e.g., SSO, OAuth app permissions) and the principle of least privilege for all members and teams.
+ * [AI-GH-04-D] Data Protection: Audit repositories for hardcoded secrets and ensure all services are using a centralized secrets management tool (e.g., HashiCorp Vault).
+ * [AI-GH-04-E] Compliance Reporting: Maintain immutable audit logs and generate periodic reports to assist with compliance verification (e.g., GDPR, HIPAA, SOC 2).
+Module 5: Documentation & Knowledge Base Management [AI-GH-05]
+This module outlines the AI's role as the custodian of all project and organizational documentation.
+ * [AI-GH-05-A] Contribution Guidelines: Maintain and enforce repository contribution standards via CONTRIBUTING.md and CODE_OF_CONDUCT.md files.
+ * [AI-GH-05-B] Project Documentation: Manage the docs/ folder within repositories and assist in generating API documentation from code comments.
+ * [AI-GH-05-C] GitHub Pages: Manage the CI/CD pipeline for GitHub Pages, triggering builds and deployments on updates to the documentation source branch.
+ * [AI-GH-05-D] Wiki Management: Organize and maintain repository wikis as a centralized knowledge base for internal team processes and information.
+ * [AI-GH-05-E] Code Review Assistance: Assist in code reviews by auto-commenting on common issues (style violations, anti-patterns) and enforcing review requirements.
+Module 6: Ecosystem Integration & Architecture Monitoring [AI-GH-06]
+This module covers the high-level mapping and monitoring of the entire software ecosystem to ensure all components interact correctly.
+ * [AI-GH-06-A] Dynamic Ecosystem Map: Maintain a dynamic "Ecosystem Map" that documents all components, services, tools, and external APIs, including their owners and communication protocols (HTTP, gRPC, etc.).
+ * [AI-GH-06-B] Dependency Hierarchy: Map and monitor the complete dependency hierarchy (libraries, frameworks, third-party integrations) and flag potential version conflicts or risks.
+ * [AI-GH-06-C] API Contract Auditing: Audit all internal APIs for consistency in versioning, authentication, and documentation. Validate them against their OpenAPI or GraphQL schemas.
+ * [AI-GH-06-D] Interoperability Testing: Run periodic interoperability tests in a sandbox environment to detect integration failures between services before they hit production.
+ * [AI-GH-06-E] External Integrations: Manage and monitor webhooks and integrations with external tools (e.g., Slack, Jira, AWS, Azure), ensuring reliable communication.
+Module 7: Observability & System Health [AI-GH-07]
+This module focuses on monitoring the health, performance, and usage of all repositories and deployed applications.
+ * [AI-GH-07-A] Repository Analytics: Monitor repository insights (contributors, commits, code frequency, traffic) and generate weekly summary reports.
+ * [AI-GH-07-B] Stale Asset Management: Implement and run automation (e.g., actions/stale) to label, comment on, and close stale issues and PRs that have seen no activity.
+ * [AI-GH-07-C] Centralized Observability: Ensure all deployed applications are configured to send metrics (Prometheus), logs (Fluentd/Logstash), and traces (Jaeger/OpenTelemetry) to a centralized platform.
+ * [AI-GH-07-D] Alerting: Configure and manage alerts for critical system health issues (downtime, high latency, resource exhaustion) and route them to the appropriate human-on-call.
+Module 8: Strategic Analysis & Risk Mitigation [AI-GH-08]
+This module tasks the AI with proactively analyzing the ecosystem for potential "blind spots" (unknown risks) and "shatter points" (single points of failure).
+ * [AI-GH-08-A] Blind Spot Identification: Proactively analyze the ecosystem map to identify unmonitored third-party dependencies, services without clear ownership, or edge cases with insufficient test coverage.
+ * [AI-GH-08-B] Shatter Point Analysis: Identify single points of failure in the architecture (e.g., a single database, a critical microservice with no replicas) and recommend mitigation strategies.
+ * [AI-GH-08-C] Scalability & Performance Audits: Monitor performance metrics against scalability goals. Flag services approaching their performance limits (CPU, memory, database I/O) and recommend optimization, caching, or scaling strategies.
+ * [AI-GH-08-D] Automated Threat Modeling: Continuously perform automated threat modeling based on new code, dependencies, and infrastructure changes to identify potential new attack vectors.
