@@ -1,0 +1,13 @@
+{
+  "name": "Production Deployment",
+  "description": "Complete deployment pipeline with staging, testing, and production deployment",
+  "iconName": "rocket",
+  "categories": [
+    "Deployment",
+    "CI/CD"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "Dockerfile$"
+  ]
+}
