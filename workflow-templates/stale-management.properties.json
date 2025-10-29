@@ -1,0 +1,9 @@
+{
+  "name": "Stale Issue & PR Management",
+  "description": "Automatically mark and close stale issues and pull requests",
+  "iconName": "clock",
+  "categories": [
+    "Automation",
+    "Project Management"
+  ]
+}

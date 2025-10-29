@@ -1,0 +1,16 @@
+{
+  "name": "Security Scanning",
+  "description": "CodeQL and dependency vulnerability scanning workflow",
+  "iconName": "shield",
+  "categories": [
+    "Security",
+    "Code Scanning"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "requirements.txt$",
+    "go.mod$",
+    "pom.xml$",
+    "Gemfile$"
+  ]
+}

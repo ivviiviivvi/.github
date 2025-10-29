@@ -1,0 +1,14 @@
+{
+  "name": "Continuous Integration",
+  "description": "Basic CI workflow template for testing and building",
+  "iconName": "example-icon",
+  "categories": [
+    "Automation"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "go.mod$",
+    "requirements.txt$",
+    "Cargo.toml$"
+  ]
+}
