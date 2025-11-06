@@ -40,6 +40,8 @@ jobs:
           # event types (issue_comment, pr_review, etc.) where author_association may not
           # be consistently available. claude-code-review.yml uses author_association
           # because it only handles pull_request events where it's always available.
+          # The /repos/{owner}/{repo}/collaborators/{username}/permission endpoint returns
+          # the effective permission level including organization membership.
           ACTOR="${{ github.actor }}"
           REPO="${{ github.repository }}"
 
