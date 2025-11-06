@@ -12,27 +12,12 @@ on:
 
 jobs:
   claude:
-    # Security: Validate user permissions before allowing Claude to run
+    # Security: Only trigger on @claude mentions
     if: |
-      (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
-      ) && (
-        github.event.sender.type == 'User' &&
-        (
-          github.event.comment.author_association == 'OWNER' ||
-          github.event.comment.author_association == 'MEMBER' ||
-          github.event.comment.author_association == 'COLLABORATOR' ||
-          github.event.issue.author_association == 'OWNER' ||
-          github.event.issue.author_association == 'MEMBER' ||
-          github.event.issue.author_association == 'COLLABORATOR' ||
-          github.event.review.author_association == 'OWNER' ||
-          github.event.review.author_association == 'MEMBER' ||
-          github.event.review.author_association == 'COLLABORATOR'
-        )
-      )
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,6 +30,29 @@ jobs:
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
           fetch-depth: 1
+
+      - name: Validate user permissions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Check if the triggering user has appropriate permissions
+          ACTOR="${{ github.actor }}"
+          REPO="${{ github.repository }}"
+
+          echo "Checking permissions for user: $ACTOR"
+
+          # Get user's permission level
+          PERMISSION=$(gh api /repos/$REPO/collaborators/$ACTOR/permission -q .permission 2>/dev/null || echo "none")
+
+          echo "User permission level: $PERMISSION"
+
+          # Allow only admin, write, or maintain permissions (OWNER, MEMBER, COLLABORATOR)
+          if [[ "$PERMISSION" == "admin" || "$PERMISSION" == "write" || "$PERMISSION" == "maintain" ]]; then
+            echo "✓ User has sufficient permissions to trigger Claude"
+          else
+            echo "✗ Error: User does not have sufficient permissions (need admin/write/maintain, got: $PERMISSION)"
+            exit 1
+          fi
 
       - name: Validate CLAUDE_CODE_OAUTH_TOKEN
         run: |

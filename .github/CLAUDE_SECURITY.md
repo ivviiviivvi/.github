@@ -8,8 +8,22 @@ This document outlines the security measures implemented for Claude AI integrati
 
 Both Claude workflows (`claude.yml` and `claude-code-review.yml`) now include permission checks to ensure only authorized users can trigger Claude operations:
 
-- **Allowed user associations**: OWNER, MEMBER, COLLABORATOR
-- **Blocked**: FIRST_TIME_CONTRIBUTOR, CONTRIBUTOR, NONE (external users)
+**claude-code-review.yml**: Uses GitHub Actions conditional to check `author_association` at workflow trigger time:
+```yaml
+if: |
+  github.event.pull_request.author_association == 'OWNER' ||
+  github.event.pull_request.author_association == 'MEMBER' ||
+  github.event.pull_request.author_association == 'COLLABORATOR'
+```
+
+**claude.yml**: Uses GitHub API to validate user permissions at runtime:
+```bash
+PERMISSION=$(gh api /repos/$REPO/collaborators/$ACTOR/permission -q .permission)
+# Allows: admin, write, maintain
+```
+
+- **Allowed permission levels**: admin, write, maintain (maps to OWNER, MEMBER, COLLABORATOR)
+- **Blocked**: read, none (external users, first-time contributors)
 
 This prevents unauthorized users from:
 - Exhausting API quotas
