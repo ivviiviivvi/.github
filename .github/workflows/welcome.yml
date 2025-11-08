@@ -1,0 +1,103 @@
+name: Welcome
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    name: Welcome New Contributors
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome First Time Contributors
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            👋 **Welcome to the project!**
+
+            Thank you for opening your first issue! We appreciate your contribution and will review it as soon as possible.
+
+            **Before we proceed, please make sure:**
+            - [ ] You've searched for similar issues
+            - [ ] You've provided all necessary information
+            - [ ] You've followed our [Code of Conduct](../CODE_OF_CONDUCT.md)
+
+            A maintainer will respond soon. In the meantime, feel free to:
+            - Check out our [Contributing Guide](../CONTRIBUTING.md)
+            - Read our [Documentation](../README.md)
+            - Join our community discussions
+
+            Happy collaborating! 🚀
+          pr-message: |
+            👋 **Welcome to the project!**
+
+            Thank you for opening your first pull request! We're excited to review your contribution.
+
+            **Before we merge, please ensure:**
+            - [ ] Your code follows our style guidelines
+            - [ ] You've added tests for new functionality
+            - [ ] All tests pass locally
+            - [ ] You've updated relevant documentation
+            - [ ] Your commits follow our [commit conventions](../CONTRIBUTING.md)
+            - [ ] You've read our [Code of Conduct](../CODE_OF_CONDUCT.md)
+
+            **What happens next?**
+            1. Automated checks will run on your PR
+            2. A maintainer will review your changes
+            3. You may be asked to make some adjustments
+            4. Once approved, we'll merge your contribution!
+
+            Thank you for contributing! 🎉
+
+  pr-welcome-comment:
+    name: Add PR Welcome Comment
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get PR details
+            const pr = context.payload.pull_request;
+
+            // Check if this is the user's first PR
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: pr.user.login
+            });
+
+            // If this is their first PR, add a helpful comment
+            if (prs.length === 1) {
+              const comment = `## 🎉 First Pull Request!
+
+            Congratulations on your first pull request to this repository!
+
+            ### Quick Checklist
+            - [ ] Does your PR have a descriptive title?
+            - [ ] Have you linked any related issues?
+            - [ ] Are your commits following our conventions?
+            - [ ] Have you tested your changes?
+
+            ### Useful Commands
+            - \`@claude review\` - Request an AI code review
+            - \`@claude help\` - Get help from our AI assistant
+
+            Our team will review your contribution soon. Thank you for helping improve this project! 🚀`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: comment
+              });
+            }
