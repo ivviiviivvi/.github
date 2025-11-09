@@ -1,0 +1,43 @@
+name: Gemini Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gemini:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Check quota
+        id: quota
+        run: |
+          usage=$(python scripts/quota_manager.py get_usage "Gemini_API_Tier1")
+          quota=$(jq -r '.subscriptions[] | select(.name=="Gemini_API_Tier1") | .quota' .github/subscriptions.json)
+          echo "usage=$usage" >> $GITHUB_OUTPUT
+          echo "quota=$quota" >> $GITHUB_OUTPUT
+
+      - name: Run Gemini Task
+        if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+        run: |
+          echo "Running Gemini task..."
+          # Add your Gemini API call here
+          # For example:
+          # response=$(curl -s -X POST -H "Authorization: Bearer $GEMINI_API_KEY" ... )
+          # cost=$(echo $response | jq -r '.cost')
+          # python scripts/quota_manager.py increment_usage "Gemini_API_Tier1" $cost
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Queue Task
+        if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
+        run: |
+          task='{ "subscription": "Gemini_API_Tier1", "details": "..." }'
+          python scripts/quota_manager.py add_task "$task"
+          echo "Gemini API quota reached. Task queued."

@@ -1,0 +1,43 @@
+name: Perplexity Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  perplexity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Check quota
+        id: quota
+        run: |
+          usage=$(python scripts/quota_manager.py get_usage "Perplexity_Pro_API")
+          quota=$(jq -r '.subscriptions[] | select(.name=="Perplexity_Pro_API") | .quota' .github/subscriptions.json)
+          echo "usage=$usage" >> $GITHUB_OUTPUT
+          echo "quota=$quota" >> $GITHUB_OUTPUT
+
+      - name: Run Perplexity Task
+        if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+        run: |
+          echo "Running Perplexity task..."
+          # Add your Perplexity API call here
+          # For example:
+          # response=$(curl -s -X POST -H "Authorization: Bearer $PERPLEXITY_API_KEY" ... )
+          # cost=$(echo $response | jq -r '.cost')
+          # python scripts/quota_manager.py increment_usage "Perplexity_Pro_API" $cost
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+
+      - name: Queue Task
+        if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
+        run: |
+          task='{ "subscription": "Perplexity_Pro_API", "details": "..." }'
+          python scripts/quota_manager.py add_task "$task"
+          echo "Perplexity API quota reached. Task queued."

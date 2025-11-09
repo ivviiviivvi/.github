@@ -18,32 +18,43 @@ jobs:
 
       - name: Process queue
         run: |
-          tasks_json=$(python scripts/token_manager.py get_tasks)
+          tasks_json=$(python scripts/quota_manager.py get_tasks)
           if [ -z "$tasks_json" ] || [ "$tasks_json" == "[]" ]; then
             echo "No tasks in the queue."
             exit 0
           fi
 
           echo "$tasks_json" | jq -c '.[]' | while read -r task; do
-            token_count=$(python scripts/token_manager.py get)
-            if [ "$token_count" -lt 100 ]; then
-              issue_number=$(echo "$task" | jq -r '.issue_number')
-              pr_url=$(echo "$task" | jq -r '.pr_url')
+            subscription_name=$(echo "$task" | jq -r '.subscription')
+            usage=$(python scripts/quota_manager.py get_usage "$subscription_name")
+            quota=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .quota' .github/subscriptions.json)
 
-              if [ -n "$issue_number" ] && [ "$issue_number" != "null" ]; then
-                echo "Processing task for issue #$issue_number"
-                gh workflow run claude.yml --ref ${{ github.ref }} -f "issue_number=$issue_number"
-              elif [ -n "$pr_url" ] && [ "$pr_url" != "null" ]; then
-                pr_number=$(basename "$pr_url")
-                echo "Processing task for PR #$pr_number"
-                gh workflow run claude.yml --ref ${{ github.ref }} -f "pr_number=$pr_number"
+            if (( $(echo "$usage < $quota" | bc -l) )); then
+              echo "Processing task for subscription: $subscription_name"
+
+              workflow_file=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .relevant_workflows[0]' .github/subscriptions.json)
+
+              if [ -n "$workflow_file" ] && [ "$workflow_file" != "null" ]; then
+                inputs=""
+                if [ "$subscription_name" == "Jules_Agent" ]; then
+                  issue_number=$(echo "$task" | jq -r '.issue_number')
+                  pr_url=$(echo "$task" | jq -r '.pr_url')
+                  if [ -n "$issue_number" ] && [ "$issue_number" != "null" ]; then
+                    inputs=" -f issue_number=$issue_number"
+                  elif [ -n "$pr_url" ] && [ "$pr_url" != "null" ]; then
+                    pr_number=$(basename "$pr_url")
+                    inputs=" -f pr_number=$pr_number"
+                  fi
+                fi
+                gh workflow run "$workflow_file" --ref ${{ github.ref }}$inputs
+
+                python scripts/quota_manager.py increment_usage "$subscription_name"
+                python scripts/quota_manager.py remove_task "$task"
+              else
+                echo "No relevant workflow found for subscription: $subscription_name"
               fi
-
-              python scripts/token_manager.py increment
-              python scripts/token_manager.py remove_task "$task"
             else
-              echo "Token limit reached. Remaining tasks will be processed in the next run."
-              break
+              echo "Quota limit reached for $subscription_name. Task will be processed later."
             fi
           done
         env:

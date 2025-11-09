@@ -1,4 +1,4 @@
-name: Reset Token Count
+name: Reset Quotas
 
 on:
   schedule:
@@ -16,5 +16,5 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Reset token count
-        run: python scripts/token_manager.py reset
+      - name: Reset quotas
+        run: python scripts/quota_manager.py reset_quotas
