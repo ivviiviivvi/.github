@@ -18,3 +18,7 @@ jobs:
 
       - name: Reset quotas
         run: python scripts/quota_manager.py reset_quotas
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: reset quotas"

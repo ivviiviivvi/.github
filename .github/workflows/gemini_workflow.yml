@@ -2,6 +2,10 @@ name: Gemini Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'The prompt for the Gemini task'
+        required: true
 
 jobs:
   gemini:
@@ -26,12 +30,11 @@ jobs:
       - name: Run Gemini Task
         if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
         run: |
-          echo "Running Gemini task..."
-          # Add your Gemini API call here
-          # For example:
-          # response=$(curl -s -X POST -H "Authorization: Bearer $GEMINI_API_KEY" ... )
-          # cost=$(echo $response | jq -r '.cost')
-          # python scripts/quota_manager.py increment_usage "Gemini_API_Tier1" $cost
+          echo "Running Gemini task with prompt: ${{ github.event.inputs.prompt }}"
+          # Simulate API call and cost
+          cost=0.08
+          echo "Simulated cost: $cost"
+          python scripts/quota_manager.py increment_usage "Gemini_API_Tier1" $cost
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
@@ -41,3 +44,7 @@ jobs:
           task='{ "subscription": "Gemini_API_Tier1", "details": "..." }'
           python scripts/quota_manager.py add_task "$task"
           echo "Gemini API quota reached. Task queued."
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: update state for Gemini task"

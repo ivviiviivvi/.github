@@ -2,6 +2,10 @@ name: Grok Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'The prompt for the Grok task'
+        required: true
 
 jobs:
   grok:
@@ -26,12 +30,11 @@ jobs:
       - name: Run Grok Task
         if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
         run: |
-          echo "Running Grok task..."
-          # Add your Grok API call here
-          # For example:
-          # response=$(curl -s -X POST -H "Authorization: Bearer $GROK_API_KEY" ... )
-          # cost=$(echo $response | jq -r '.cost')
-          # python scripts/quota_manager.py increment_usage "Grok_API" $cost
+          echo "Running Grok task with prompt: ${{ github.event.inputs.prompt }}"
+          # Simulate API call and cost
+          cost=0.10
+          echo "Simulated cost: $cost"
+          python scripts/quota_manager.py increment_usage "Grok_API" $cost
         env:
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
 
@@ -41,3 +44,7 @@ jobs:
           task='{ "subscription": "Grok_API", "details": "..." }'
           python scripts/quota_manager.py add_task "$task"
           echo "Grok API quota reached. Task queued."
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: update state for Grok task"

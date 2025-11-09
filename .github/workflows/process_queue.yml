@@ -48,7 +48,6 @@ jobs:
                 fi
                 gh workflow run "$workflow_file" --ref ${{ github.ref }}$inputs
 
-                python scripts/quota_manager.py increment_usage "$subscription_name"
                 python scripts/quota_manager.py remove_task "$task"
               else
                 echo "No relevant workflow found for subscription: $subscription_name"
@@ -59,3 +58,7 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: process task queue and update state"

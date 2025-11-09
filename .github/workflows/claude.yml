@@ -75,3 +75,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: update state for Jules task"
