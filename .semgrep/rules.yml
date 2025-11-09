@@ -931,3 +931,581 @@ rules:
     languages:
       - javascript
       - typescript
+
+  # ============================================================================
+  # TYPESCRIPT SPECIFIC RULES
+  # ============================================================================
+
+  # Using 'any' type
+  - id: typescript-avoid-any
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $VAR: any = ...
+          - pattern: |
+              function $FUNC($PARAM: any) { ... }
+          - pattern: |
+              let $VAR: any
+    message: |
+      Avoid using 'any' type as it bypasses type checking.
+      Use specific types, 'unknown', or generic types instead.
+    severity: WARNING
+    languages:
+      - typescript
+    paths:
+      include:
+        - "src/**/*.ts"
+
+  # Non-null assertion operator overuse
+  - id: typescript-non-null-assertion
+    pattern: $VAR!.$PROP
+    message: |
+      Non-null assertion operator (!) can cause runtime errors.
+      Use optional chaining ($VAR?.$PROP) or proper null checks instead.
+    severity: INFO
+    languages:
+      - typescript
+
+  # Type assertion as 'any'
+  - id: typescript-as-any
+    patterns:
+      - pattern-either:
+          - pattern: $VAR as any
+          - pattern: <any>$VAR
+    message: |
+      Type assertion to 'any' defeats TypeScript's type safety.
+      Use proper type guards or specific types.
+    severity: WARNING
+    languages:
+      - typescript
+
+  # @ts-ignore usage
+  - id: typescript-ts-ignore
+    pattern-regex: '// @ts-ignore'
+    message: |
+      '@ts-ignore' suppresses TypeScript errors which may hide real issues.
+      Use '@ts-expect-error' with explanation, or fix the underlying issue.
+    severity: INFO
+    languages:
+      - typescript
+
+  # ============================================================================
+  # GRAPHQL SECURITY RULES
+  # ============================================================================
+
+  # GraphQL query without depth limit
+  - id: graphql-no-depth-limit
+    patterns:
+      - pattern: |
+          new ApolloServer({ ... })
+      - pattern-not: |
+          new ApolloServer({ validationRules: [depthLimit($LIMIT)], ... })
+    message: |
+      GraphQL server without query depth limit.
+      Add depthLimit validation rule to prevent DoS attacks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # GraphQL query without cost analysis
+  - id: graphql-no-cost-analysis
+    patterns:
+      - pattern: |
+          new ApolloServer({ ... })
+      - pattern-not: |
+          new ApolloServer({ plugins: [..., costAnalysis(...)], ... })
+    message: |
+      GraphQL server without query cost analysis.
+      Consider adding query cost limits to prevent resource exhaustion.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # GraphQL resolver without authentication
+  - id: graphql-resolver-no-auth
+    patterns:
+      - pattern: |
+          $FIELD: async ($PARENT, $ARGS, $CONTEXT) => { ... }
+      - pattern-not: |
+          $FIELD: async ($PARENT, $ARGS, $CONTEXT) => {
+            ...
+            if (!$CONTEXT.user) { ... }
+            ...
+          }
+    message: |
+      GraphQL resolver without authentication check.
+      Verify user authentication in sensitive resolvers.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/resolvers/**"
+        - "**/graphql/**"
+
+  # ============================================================================
+  # ENVIRONMENT & CONFIGURATION SECURITY
+  # ============================================================================
+
+  # Missing environment variable validation
+  - id: missing-env-validation
+    patterns:
+      - pattern: process.env.$VAR
+      - pattern-not: |
+          if (!process.env.$VAR) { throw ... }
+      - pattern-not: |
+          process.env.$VAR || $DEFAULT
+    message: |
+      Environment variable used without validation.
+      Check for undefined values and provide defaults or throw errors.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Hardcoded database credentials
+  - id: hardcoded-database-credentials
+    patterns:
+      - pattern-either:
+          - pattern: |
+              mongoose.connect("mongodb://user:password@...")
+          - pattern: |
+              createConnection({ host: "...", password: "...", ... })
+          - pattern: |
+              new Client({ connectionString: "postgresql://user:password@..." })
+    message: |
+      Hardcoded database credentials detected.
+      Use environment variables for sensitive connection strings.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+
+  # Exposing internal error details
+  - id: expose-error-details
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.status(500).json({ error: $ERR.stack })
+          - pattern: |
+              res.send($ERR.toString())
+          - pattern: |
+              res.json({ message: $ERR.message, stack: $ERR.stack })
+    message: |
+      Exposing error stack traces to clients.
+      Send generic error messages in production, log details server-side.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # CRYPTOGRAPHY & SECURITY PATTERNS
+  # ============================================================================
+
+  # Insufficient IV size
+  - id: insufficient-iv-size
+    patterns:
+      - pattern: |
+          crypto.randomBytes($SIZE)
+      - metavariable-comparison:
+          metavariable: $SIZE
+          comparison: $SIZE < 12
+    message: |
+      Insufficient initialization vector (IV) size.
+      Use at least 12 bytes (96 bits) for AES-GCM, 16 bytes for AES-CBC.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ECB mode encryption
+  - id: ecb-mode-encryption
+    patterns:
+      - pattern-either:
+          - pattern: crypto.createCipher("aes-128-ecb", ...)
+          - pattern: crypto.createCipher("aes-256-ecb", ...)
+    message: |
+      ECB cipher mode is insecure as it doesn't use IV.
+      Use GCM or CBC mode: aes-256-gcm or aes-256-cbc.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe: "CWE-327: Use of a Broken Cryptographic Algorithm"
+
+  # Timing attack on comparison
+  - id: timing-attack-string-comparison
+    patterns:
+      - pattern-either:
+          - pattern: |
+              if ($SECRET === $INPUT) { ... }
+          - pattern: |
+              if ($TOKEN == $INPUT) { ... }
+      - metavariable-pattern:
+          metavariable: $SECRET
+          patterns:
+            - pattern-regex: '.*(secret|token|key|password).*'
+    message: |
+      String comparison vulnerable to timing attacks.
+      Use crypto.timingSafeEqual() for constant-time comparison.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Weak random for security
+  - id: weak-random-for-security
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $TOKEN = Math.random().toString(36)
+          - pattern: |
+              const $SECRET = uuid.v4()
+      - metavariable-pattern:
+          metavariable: $TOKEN
+          patterns:
+            - pattern-regex: '.*(token|secret|key).*'
+    message: |
+      Using weak random generator for security-sensitive values.
+      Use crypto.randomBytes() for cryptographically secure random values.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # HTTP SECURITY HEADERS
+  # ============================================================================
+
+  # Missing Content-Security-Policy
+  - id: missing-csp-header
+    patterns:
+      - pattern: |
+          res.send(...)
+      - pattern-not: |
+          res.setHeader("Content-Security-Policy", ...)
+    message: |
+      Response without Content-Security-Policy header.
+      Set CSP header to prevent XSS and injection attacks.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Permissive CORS origin
+  - id: permissive-cors-origin
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.setHeader("Access-Control-Allow-Origin", "*")
+          - pattern: |
+              res.header("Access-Control-Allow-Origin", "*")
+    message: |
+      Permissive CORS policy allows any origin.
+      Specify exact origins for APIs handling sensitive data.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Missing HSTS header
+  - id: missing-hsts-header
+    patterns:
+      - pattern: |
+          app.listen(...)
+      - pattern-not: |
+          app.use(helmet.hsts(...))
+    message: |
+      Application without HSTS (HTTP Strict Transport Security).
+      Add helmet.hsts() to enforce HTTPS connections.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # FILE SYSTEM SECURITY
+  # ============================================================================
+
+  # Directory traversal in file operations
+  - id: directory-traversal
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fs.readFile(__dirname + $PATH, ...)
+          - pattern: |
+              fs.writeFile("./uploads/" + $REQ.body.filename, ...)
+      - pattern-not: |
+          path.resolve($BASE, $PATH)
+    message: |
+      Potential directory traversal vulnerability.
+      Use path.resolve() and validate paths don't contain '../'.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Insecure file permissions
+  - id: insecure-file-permissions
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fs.chmod($PATH, 0o777)
+          - pattern: |
+              fs.writeFile($PATH, $DATA, { mode: 0o777 })
+    message: |
+      Insecure file permissions (world-writable).
+      Use restrictive permissions like 0o644 or 0o600 for sensitive files.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Temporary file without cleanup
+  - id: temp-file-no-cleanup
+    patterns:
+      - pattern: |
+          fs.writeFileSync("/tmp/$FILE", ...)
+      - pattern-not-inside: |
+          try {
+            ...
+            fs.writeFileSync("/tmp/$FILE", ...)
+            ...
+          } finally {
+            fs.unlinkSync("/tmp/$FILE")
+          }
+    message: |
+      Temporary file created without cleanup.
+      Use try-finally or tmp module to ensure cleanup.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # MEMORY & RESOURCE MANAGEMENT
+  # ============================================================================
+
+  # Memory leak - event listener not removed
+  - id: event-listener-leak
+    patterns:
+      - pattern: |
+          $EMITTER.on($EVENT, ...)
+      - pattern-not: |
+          $EMITTER.once($EVENT, ...)
+      - pattern-not-inside: |
+          class $CLASS {
+            ...
+            $EMITTER.on($EVENT, ...)
+            ...
+            $EMITTER.removeListener($EVENT, ...)
+            ...
+          }
+    message: |
+      Event listener added without removal can cause memory leaks.
+      Use once() for one-time events or ensure removeListener() is called.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Unbounded array growth
+  - id: unbounded-array-growth
+    patterns:
+      - pattern: |
+          $ARRAY.push($ITEM)
+      - pattern-inside: |
+          setInterval(() => { ... }, ...)
+      - pattern-not: |
+          if ($ARRAY.length > $LIMIT) { ... }
+    message: |
+      Array growing in interval without size limit.
+      Implement bounds checking to prevent memory exhaustion.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Large buffer allocation from user input
+  - id: buffer-allocation-from-input
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Buffer.alloc($REQ.body.$SIZE)
+          - pattern: |
+              new Array($REQ.params.$SIZE)
+    message: |
+      Buffer/Array allocation with user-controlled size.
+      Validate and limit size to prevent DoS attacks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # API SECURITY PATTERNS
+  # ============================================================================
+
+  # Missing pagination
+  - id: api-missing-pagination
+    patterns:
+      - pattern: |
+          router.get($PATH, async ($REQ, $RES) => {
+            ...
+            const $RESULTS = await $MODEL.find()
+            ...
+          })
+      - pattern-not: |
+          router.get($PATH, async ($REQ, $RES) => {
+            ...
+            const $RESULTS = await $MODEL.find().limit($LIMIT)
+            ...
+          })
+    message: |
+      API endpoint without pagination or result limiting.
+      Add .limit() and .skip() to prevent large data transfers.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # API key in URL
+  - id: api-key-in-url
+    patterns:
+      - pattern-either:
+          - pattern: |
+              axios.get(`$URL?api_key=${$KEY}`)
+          - pattern: |
+              fetch(`$URL?token=${$TOKEN}`)
+    message: |
+      API key/token in URL query parameters.
+      URLs are logged and cached. Use Authorization header instead.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Missing request timeout
+  - id: missing-request-timeout
+    patterns:
+      - pattern-either:
+          - pattern: |
+              axios.get($URL)
+          - pattern: |
+              axios.post($URL, $DATA)
+      - pattern-not: |
+          axios.$METHOD($URL, { timeout: $TIME })
+    message: |
+      HTTP request without timeout can hang indefinitely.
+      Set timeout option to prevent resource exhaustion.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Exposed admin endpoint
+  - id: exposed-admin-endpoint
+    patterns:
+      - pattern: |
+          router.$METHOD('/admin/$PATH', ...)
+      - pattern-not: |
+          router.$METHOD('/admin/$PATH', $AUTH_MIDDLEWARE, ...)
+    message: |
+      Admin endpoint without authentication middleware.
+      Add authentication and authorization checks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # CONTAINER & DOCKER SECURITY
+  # ============================================================================
+
+  # Running as root in Docker
+  - id: dockerfile-root-user
+    pattern-regex: '^(?!.*USER).*ENTRYPOINT'
+    message: |
+      Docker container running as root user.
+      Add 'USER node' or 'USER 1000' before ENTRYPOINT.
+    severity: WARNING
+    languages:
+      - dockerfile
+
+  # Using latest tag in production
+  - id: dockerfile-latest-tag
+    pattern-regex: 'FROM.*:latest'
+    message: |
+      Using ':latest' tag in Dockerfile is not reproducible.
+      Pin to specific version tags for production.
+    severity: WARNING
+    languages:
+      - dockerfile
+
+  # ============================================================================
+  # TESTING & CODE QUALITY
+  # ============================================================================
+
+  # Test without assertion
+  - id: test-without-assertion
+    patterns:
+      - pattern-either:
+          - pattern: |
+              test($NAME, () => { ... })
+          - pattern: |
+              it($NAME, () => { ... })
+      - pattern-not: |
+          test($NAME, () => { ... expect(...) ... })
+      - pattern-not: |
+          it($NAME, () => { ... assert(...) ... })
+    message: |
+      Test without any assertions.
+      Add expect() or assert() statements to validate behavior.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/*.test.*"
+        - "**/*.spec.*"
+
+  # Disabled test
+  - id: disabled-test
+    patterns:
+      - pattern-either:
+          - pattern: test.skip($NAME, ...)
+          - pattern: it.skip($NAME, ...)
+          - pattern: describe.skip($NAME, ...)
+    message: |
+      Disabled test found.
+      Fix and re-enable the test, or remove if no longer needed.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Focused test
+  - id: focused-test
+    patterns:
+      - pattern-either:
+          - pattern: test.only($NAME, ...)
+          - pattern: it.only($NAME, ...)
+          - pattern: describe.only($NAME, ...)
+    message: |
+      Focused test (only) will skip other tests.
+      Remove .only() before committing.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/*.test.*"
+        - "**/*.spec.*"
