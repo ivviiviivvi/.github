@@ -12,8 +12,11 @@ This is the special `.github` repository for our organization. It serves as the 
 - **Standardized templates** for issues and pull requests
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
+- **Living Document System** - AI-driven governance and management protocols
 
 When a repository in our organization doesn't have its own community health files, GitHub automatically uses the defaults from this repository.
+
+> **Is this the right repository for these functions?** See our [Repository Purpose Analysis](REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why this `.github` repository is the appropriate location for organization-wide governance, templates, and the Living Document System.
 
 ## 🎯 Our Mission
 
@@ -98,6 +101,7 @@ Comprehensive guides for maintaining high-quality repositories:
 | Document | Description |
 |----------|-------------|
 | [AI_IMPLEMENTATION_GUIDE.md](AI_IMPLEMENTATION_GUIDE.md) | AI-driven organization management guide |
+| [REPOSITORY_PURPOSE_ANALYSIS.md](REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of repository appropriateness for function set |
 | [BRANCH_PROTECTION.md](BRANCH_PROTECTION.md) | Branch protection rules and configuration |
 | [REPOSITORY_SETUP_CHECKLIST.md](REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
 | [LABELS.md](LABELS.md) | Standard label set for consistent tagging |
@@ -178,6 +182,7 @@ Individual repositories can override these defaults by creating their own versio
 ├── SECURITY.md                             # Security policy
 ├── SUPPORT.md                              # Support information
 ├── TESTING.md                              # Testing standards
+├── REPOSITORY_PURPOSE_ANALYSIS.md           # Repository appropriateness analysis
 ├── dependabot.yml                          # Dependabot configuration
 └── for-ai-implementation.txt               # AI management protocol
 ```
