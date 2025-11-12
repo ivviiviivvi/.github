@@ -6,14 +6,14 @@ This is the organization profile for ivi374forivi.
 
 We're building innovative solutions and contributing to open source projects.
 
-## Getting Started
+### Getting Started
 
 Explore our repositories to find projects that interest you. We welcome contributions and collaboration!
 
-## Contributing
+#### Contributing
 
 Please read our [Contributing Guidelines](../CONTRIBUTING.md) before submitting pull requests.
 
-## Support
+##### Support
 
 If you need help or have questions, check out our [Support documentation](../SUPPORT.md).
