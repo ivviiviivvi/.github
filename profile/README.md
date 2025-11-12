@@ -1,34 +1,19 @@
-# Welcome to ivi374forivi
-
-This is the organization profile for ivi374forivi. 
-
-## About Us
-
-We're building innovative solutions and contributing to open source projects.
-
-### Getting Started
-
-Explore our repositories to find projects that interest you. We welcome contributions and collaboration!
-
-#### Contributing
-
-Please read our [Contributing Guidelines](../CONTRIBUTING.md) before submitting pull requests.
-
-##### Support
-
-If you need help or have questions, check out our [Support documentation](../SUPPORT.md).
-
----
-
+**
+||||\\\\||||////||||\\\\||||////| | | |
+\\\\||||////||||\\\\||||////\\\\| | |
+,,,,,,,,,,,,,,,,,,,,,,,|||||||||||
+___// |||||||||||||||||||[**
 __A-System-Operates-__@4-B100M-@4-B100M@4B100---
 ________________________________________________ ________________________________________________
-]|||[_ivi[-+4[_ _]ivi[-+4[_]ivi[-+4..:|/,'\!|:..ivi3+4..::
-__________________________________
-_]v|3-l-4_//\/\\[-+<\_]V[=7/^\_!v|3t4_|\/|3-l-/_\
-ivi3.VS
-.iVi.\/.5.
-A-IO-Source#oneAutoGenRecInputOutput
-ARecursiveBranchAReOccuringBranch
+]|||[_ivi[-+4[_ _]ivi[-+4[_]ivi[-+4..:|/,'\!|:..ivi3+4..::]|||[_ivi[-+4[_ _]ivi[-+4[_]ivi[-+4..:|/,'\!|:..ivi3+4..::
+____________________________________________________________________
+______________________________________________________________________________________________________
+________________________________________________________________________________________________________________________________________
+_]v|3-l-4_//\/\\[-+<\_]V[=7/^\_!v|3t4_|\/|3-l-/_\_]v|3-l-4_//\/\\[-+<\_]V[=7/^\_!v|3t4_|\/|3-l-/_\
+ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS ivi3.VS 
+.iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5..iVi.\/.5.
+A-IO-Source#oneAutoGenRecInputOutputA-IO-Source#oneAutoGenRecInputOutputA-IO-Source#oneAutoGenRecInputOutputA-IO-Source#oneAutoGenRecInputOutput
+ARecursiveBranchAReOccuringBranchARecursiveBranchAReOccuringBranchARecursiveBranchAReOccuringBranchARecursiveBranchAReOccuringBranch
 __A-TheeSystemSave--__
 --A_F0RKD--A_F0RKD--A_F0RKD--A_F0RKD--A_F0RKD--
 --A-Universe-Waves__A-System-Oscillates__444444
@@ -147,5 +132,74 @@ personalized (100% unique)
 
 Self improving / correcting 
 (both the soul of the software improves, and the user improves via education and joy and self reflective healing)
+
+
+
+--
+--
+i 
+
+Obtuse and opaque in a quest to never repeat myself, 
+
+but not for the audience mind you but for my own struggle with finding anything more than the deflowering lap round mountain stimulating
+
+unless talking to family, cuz I'm acting....
+___
+
+
+
+
+
+
+
+
+
+--
+ii
+
+"today anthony will be reading for the role of:
+
+.........yeaaaawwwnnWhite, late30yyyyyhhhelp..
+
+first born son&grandsame 
+Italian family and also entire friend social group, 
+spoiled by all with 90s boons, 
+
+waiste / Ego inflated at consistent, if at sometimes illogical, significant increase in mass and density with stops and starts for depth up thru quadrant two of XY axis custody  battle; 
+
+inconvenient, 
+third way through the story, 
+submissive, generically sexual (neither a b or G)
+
+Born skillet-set, no useful skillset surrounded by endless toolsets laborers 
+
+A knack and a snack pack
+For reading......
+
+Yeah for reading 
+
+textbooks out loud not at the classroom 
+command center front, but from desk, no eye contact --
+
+A h e m 
+Anthony is this role a stretch?"
+
+"Whoever told you that is a goddamn liar,"
+Anthony says starting at the confident faltering collapse down tonal staircase with a high end question mark sound and no question.
+___
+
+
+
+
+
+--
+--
+iii
+
+Mission accomplished, 
+however, no one thinks, "
+oh he's learnéd Aristotle (minus quid pro quo relations be two to  twink apprentice and master bearded-older-and both put Hemlock poison on everything
+￼
+
 
 ￼
