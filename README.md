@@ -36,7 +36,7 @@ At **ivi374forivi**, we are committed to:
 - **Innovation**: Encouraging experimentation and creative problem-solving
 - **Sustainability**: Building projects supported by healthy communities
 
-Read our complete vision in the [Manifesto](MANIFESTO.md).
+Read our complete vision in the [Manifesto](docs/MANIFESTO.md).
 
 ### Commit Message Format
 
@@ -123,6 +123,10 @@ s all repositories:
 
 | File | Purpose |
 |------|---------|
+| [CODE_OF_CONDUCT.md](docs/CODE_OF_CONDUCT.md) | Standards for respectful community interaction |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Guidelines for contributing to our projects |
+| [SECURITY.md](docs/SECURITY.md) | Security policy and vulnerability reporting |
+| [SUPPORT.md](docs/SUPPORT.md) | How to get help and support |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Standards for respectful community
 interaction |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Guidelines for contributing to our projec
@@ -131,8 +135,22 @@ ts |
 | [SUPPORT.md](SUPPORT.md) | How to get help and support |
 | [LICENSE](LICENSE) | MIT License for our projects |
 | [FUNDING.yml](FUNDING.yml) | Funding and sponsorship configuration |
-| [GOVERNANCE.md](GOVERNANCE.md) | Project governance and decision-making |
-| [MANIFESTO.md](MANIFESTO.md) | Our core principles and values |
+| [GOVERNANCE.md](docs/GOVERNANCE.md) | Project governance and decision-making |
+| [MANIFESTO.md](docs/MANIFESTO.md) | Our core principles and values |
+
+### Documentation & Guides
+
+All our documentation and guides are now located in the `docs/` directory. This includes:
+
+| Document | Description |
+|----------|-------------|
+| [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md) | AI-driven organization management guide |
+| [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) | Branch protection rules and configuration |
+| [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
+| [LABELS.md](docs/LABELS.md) | Standard label set for consistent tagging |
+| [TESTING.md](docs/TESTING.md) | Testing standards and best practices |
+| [for-ai-implementation.txt](for-ai-implementation.txt) | Complete AI GitHub management protocol |
+
 
 ### Issue Templates
 
@@ -149,6 +167,14 @@ Configuration: [ISSUE_TEMPLATE/config.yml](ISSUE_TEMPLATE/config.yml)
 
 Specialized templates for different types of contributions:
 
+- **Default Template** - [PULL_REQUEST_TEMPLATE.md](docs/PULL_REQUEST_TEMPLATE.md)
+- **Bug Fix** - [PULL_REQUEST_TEMPLATE/bug_fix.md](PULL_REQUEST_TEMPLATE/bug_fix.md)
+- **Feature** - [PULL_REQUEST_TEMPLATE/feature.md](PULL_REQUEST_TEMPLATE/feature.md)
+- **Documentation** - [PULL_REQUEST_TEMPLATE/documentation.md](PULL_REQUEST_TEMPLATE/documentation.md)
+- **Refactoring** - [PULL_REQUEST_TEMPLATE/refactoring.md](PULL_REQUEST_TEMPLATE/refactoring.md)
+- **Performance** - [PULL_REQUEST_TEMPLATE/performance.md](PULL_REQUEST_TEMPLATE/performance.md)
+
+💡 **Tip**: Select a specific template by adding `?template=<name>.md` to the PR URL
 - **Default Template** - [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md)
 - **Bug Fix** - [PULL_REQUEST_TEMPLATE/bug_fix.md](PULL_REQUEST_TEMPLATE/bug_fix
 .md)
@@ -228,12 +254,17 @@ ealth files from this repository if they don't have their own versions.
    - Look for templates in the "By your organization" section
    - Select, customize, and commit the workflow
 
+3. **Setup Checklist**: Follow the [Repository Setup Checklist](docs/REPOSITORY_SETUP_CHECKLIST.md) for comprehensive guidance.
 3. **Setup Checklist**: Follow the [Repository Setup Checklist](REPOSITORY_SETUP
 _CHECKLIST.md) for comprehensive guidance.
 
 ### For Existing Repositories
 
 1. **Adopt Standards**: Review organization standards from this repository
+2. **Enable Workflows**: Copy desired workflow templates to `.github/workflows/` in your repo
+3. **Configure Dependabot**: Copy [dependabot.yml](dependabot.yml) to `.github/` in your repository
+4. **Apply Labels**: Use [LABELS.md](docs/LABELS.md) to standardize issue labels
+5. **Enable Branch Protection**: Follow [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) guidelines
 2. **Enable Workflows**: Copy desired workflow templates to `.github/workflows/`
  in your repo
 3. **Configure Dependabot**: Copy [dependabot.yml](dependabot.yml) to `.github/`
@@ -252,6 +283,19 @@ tion default.
 
 ```
 .github/
+├── docs/
+│   ├── AI_IMPLEMENTATION_GUIDE.md
+│   ├── BRANCH_PROTECTION.md
+│   ├── CODE_OF_CONDUCT.md
+│   ├── CONTRIBUTING.md
+│   ├── GOVERNANCE.md
+│   ├── LABELS.md
+│   ├── MANIFESTO.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── REPOSITORY_SETUP_CHECKLIST.md
+│   ├── SECURITY.md
+│   ├── SUPPORT.md
+│   └── TESTING.md
 ├── .github/
 │   ├── copilot-instructions.md             # Copilot code review instructions
 │   └── workflows/                          # GitHub Actions workflows
@@ -293,8 +337,6 @@ tion default.
 ├── CODE_OF_CONDUCT.md                      # Code of conduct
 ├── CONTRIBUTING.md                         # Contributing guidelines
 ├── FUNDING.yml                             # Funding configuration
-├── GOVERNANCE.md                           # Governance model
-├── LABELS.md                               # Standard labels
 ├── LICENSE                                 # MIT License
 ├── MANIFESTO.md                            # Organization manifesto
 ├── PULL_REQUEST_TEMPLATE.md                # Default PR template
@@ -325,6 +367,7 @@ e
 7. **Observability & System Health** - Analytics and system monitoring
 8. **Strategic Analysis & Risk Mitigation** - Proactive risk identification
 
+Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) | [Implementation Guide](docs/AI_IMPLEMENTATION_GUIDE.md)
 Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
  [Implementation Guide](AI_IMPLEMENTATION_GUIDE.md)
 
@@ -341,6 +384,8 @@ Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
 
 - **Standardized Templates**: Consistent issue and PR formats
 - **Code Review Guidelines**: Built into PR templates
+- **Testing Standards**: Documented in [TESTING.md](docs/TESTING.md)
+- **Contribution Guidelines**: Clear expectations in [CONTRIBUTING.md](docs/CONTRIBUTING.md)
 - **Testing Standards**: Documented in [TESTING.md](TESTING.md)
 - **Contribution Guidelines**: Clear expectations in [CONTRIBUTING.md](CONTRIBUT
 ING.md)
@@ -356,6 +401,8 @@ ING.md)
 
 We welcome contributions from everyone! Here's how to get started:
 
+1. **Read the Guidelines**: Check [CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed instructions
+2. **Follow the Code of Conduct**: All interactions must follow our [CODE_OF_CONDUCT.md](docs/CODE_OF_CONDUCT.md)
 1. **Read the Guidelines**: Check [CONTRIBUTING.md](CONTRIBUTING.md) for detaile
 d instructions
 2. **Follow the Code of Conduct**: All interactions must follow our [CODE_OF_CON
@@ -388,10 +435,10 @@ ws/creating-starter-workflows-for-your-organization)
 
 ### Organization Documentation
 
-- [Manifesto](MANIFESTO.md) - Our core principles and values
-- [Governance](GOVERNANCE.md) - How we make decisions
-- [Support](SUPPORT.md) - Getting help
-- [Security](SECURITY.md) - Reporting vulnerabilities
+- [Manifesto](docs/MANIFESTO.md) - Our core principles and values
+- [Governance](docs/GOVERNANCE.md) - How we make decisions
+- [Support](docs/SUPPORT.md) - Getting help
+- [Security](docs/SECURITY.md) - Reporting vulnerabilities
 
 ## 📄 License
 
@@ -402,7 +449,7 @@ IT License](LICENSE).
 
 Need help? Have questions?
 
-- 📖 Check our [Support Documentation](SUPPORT.md) for detailed guidance
+- 📖 Check our [Support Documentation](docs/SUPPORT.md) for detailed guidance
 - 🐛 Report issues using our [issue templates](ISSUE_TEMPLATE/)
 - 📧 Contact repository maintainers through GitHub
 - 💬 For general discussions, check if [GitHub Discussions](https://github.com/or
