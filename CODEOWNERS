@@ -1,0 +1,58 @@
+# CODEOWNERS - Defines individuals or teams responsible for code in this repository
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# These owners will be automatically requested for review when someone opens a pull request
+# that modifies code that they own. Order is important; the last matching pattern takes precedence.
+
+# Default owners for everything in the repo
+# Unless a later match takes precedence, these users will be requested for review
+* @ivi374forivi
+
+# GitHub-specific configuration files
+/.github/ @ivi374forivi
+/.github/workflows/ @ivi374forivi
+
+# Documentation
+*.md @ivi374forivi
+/docs/ @ivi374forivi
+
+# Configuration files
+*.yml @ivi374forivi
+*.yaml @ivi374forivi
+*.json @ivi374forivi
+*.toml @ivi374forivi
+
+# Security-related files
+/SECURITY.md @ivi374forivi
+/.github/workflows/security-*.yml @ivi374forivi
+/.github/workflows/codeql*.yml @ivi374forivi
+
+# Community health files
+/CODE_OF_CONDUCT.md @ivi374forivi
+/CONTRIBUTING.md @ivi374forivi
+/LICENSE @ivi374forivi
+
+# CI/CD workflows
+/.github/workflows/ @ivi374forivi
+
+# Dependency management
+/dependabot.yml @ivi374forivi
+/renovate.json @ivi374forivi
+package.json @ivi374forivi
+package-lock.json @ivi374forivi
+requirements.txt @ivi374forivi
+go.mod @ivi374forivi
+go.sum @ivi374forivi
+Gemfile @ivi374forivi
+Gemfile.lock @ivi374forivi
+Cargo.toml @ivi374forivi
+Cargo.lock @ivi374forivi
+
+# Example: Specific teams for different areas
+# Uncomment and customize as needed:
+# /frontend/ @org/frontend-team
+# /backend/ @org/backend-team
+# /api/ @org/api-team
+# /infrastructure/ @org/devops-team
+# /scripts/ @org/automation-team
+# /tests/ @org/qa-team

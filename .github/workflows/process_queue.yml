@@ -11,9 +11,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Acquire lock
-        run: ./scripts/manage_lock.sh acquire
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -63,8 +60,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit state changes
-        run: ./scripts/commit_changes.sh "chore: process task queue and update state"
-
-      - name: Release lock
         if: always()
-        run: ./scripts/manage_lock.sh release
+        run: ./scripts/commit_changes.sh "chore: process task queue and update state"

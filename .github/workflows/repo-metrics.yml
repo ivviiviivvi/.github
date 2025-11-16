@@ -1,0 +1,204 @@
+name: Repository Metrics
+
+on:
+  schedule:
+    # Run on the first day of each month at 00:00 UTC
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  generate-metrics:
+    name: Generate Repository Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Issue Metrics
+        uses: github/issue-metrics@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH_QUERY: 'repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}'
+
+      - name: Rename Issue Metrics
+        run: mv issue_metrics.md issue_metrics_report.md
+
+      - name: Generate PR Metrics
+        uses: github/issue-metrics@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH_QUERY: 'repo:${{ github.repository }} is:pr created:>=${{ github.event.repository.created_at }}'
+
+      - name: Rename PR Metrics
+        run: mv issue_metrics.md pr_metrics_report.md
+
+      - name: Create Metrics Summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const date = new Date().toISOString().split('T')[0];
+
+            // Read the metrics reports
+            const issueMetrics = fs.existsSync('issue_metrics_report.md')
+              ? fs.readFileSync('issue_metrics_report.md', 'utf8')
+              : 'No issue metrics available';
+
+            const prMetrics = fs.existsSync('pr_metrics_report.md')
+              ? fs.readFileSync('pr_metrics_report.md', 'utf8')
+              : 'No PR metrics available';
+
+            // Create combined report
+            const report = `# Repository Metrics Report
+
+            Generated on: ${date}
+            Repository: ${{ github.repository }}
+
+            ## Overview
+
+            This report provides insights into the health and activity of this repository.
+
+            ---
+
+            ## Issue Metrics
+
+            ${issueMetrics}
+
+            ---
+
+            ## Pull Request Metrics
+
+            ${prMetrics}
+
+            ---
+
+            ## Notes
+
+            - These metrics are automatically generated monthly
+            - Metrics help track repository health and contributor activity
+            - Use these insights to improve processes and community engagement
+
+            `;
+
+            fs.writeFileSync('repository_metrics.md', report);
+
+      - name: Upload Metrics Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-metrics-${{ github.run_number }}
+          path: |
+            issue_metrics_report.md
+            pr_metrics_report.md
+            repository_metrics.md
+          retention-days: 90
+
+      - name: Commit Metrics to Repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'docs: update repository metrics [skip ci]'
+          file_pattern: 'reports/metrics-*.md'
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+
+  repository-stats:
+    name: Generate Repository Statistics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Statistics
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Get repository information
+            const { data: repo } = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Get contributors
+            const { data: contributors } = await github.rest.repos.listContributors({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+
+            // Get recent commits
+            const { data: commits } = await github.rest.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+
+            // Get languages
+            const { data: languages } = await github.rest.repos.listLanguages({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Calculate statistics
+            const totalCommits = commits.length;
+            const uniqueContributors = contributors.length;
+            const stars = repo.stargazers_count;
+            const forks = repo.forks_count;
+            const openIssues = repo.open_issues_count;
+
+            // Format languages
+            const totalBytes = Object.values(languages).reduce((a, b) => a + b, 0);
+            const languageStats = Object.entries(languages)
+              .map(([lang, bytes]) => ({
+                language: lang,
+                percentage: ((bytes / totalBytes) * 100).toFixed(2)
+              }))
+              .sort((a, b) => b.percentage - a.percentage);
+
+            const date = new Date().toISOString().split('T')[0];
+
+            const stats = `# Repository Statistics
+
+            Generated on: ${date}
+
+            ## Overview
+
+            - **Stars**: ${stars}
+            - **Forks**: ${forks}
+            - **Open Issues**: ${openIssues}
+            - **Contributors**: ${uniqueContributors}
+            - **Recent Commits**: ${totalCommits}
+            - **Default Branch**: ${repo.default_branch}
+            - **Created**: ${repo.created_at}
+            - **Last Updated**: ${repo.updated_at}
+
+            ## Languages
+
+            ${languageStats.map(ls => `- **${ls.language}**: ${ls.percentage}%`).join('\n')}
+
+            ## Top Contributors
+
+            ${contributors.slice(0, 10).map((c, i) => `${i + 1}. [@${c.login}](${c.html_url}) - ${c.contributions} contributions`).join('\n')}
+
+            ---
+
+            *This file is automatically generated and updated monthly.*
+            `;
+
+            fs.writeFileSync('REPOSITORY_STATS.md', stats);
+            console.log('Statistics generated successfully');
+
+      - name: Commit Statistics
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'docs: update repository statistics [skip ci]'
+          file_pattern: 'REPOSITORY_STATS.md'
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com

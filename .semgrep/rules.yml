@@ -1,0 +1,1511 @@
+# Custom Semgrep Rules
+# https://semgrep.dev/docs/writing-rules/overview/
+
+rules:
+  # Detect hardcoded API keys
+  - id: hardcoded-api-key
+    patterns:
+      - pattern-either:
+          - pattern: $API_KEY = "..."
+          - pattern: $API_SECRET = "..."
+          - pattern: apiKey = "..."
+          - pattern: api_key = "..."
+    message: Potential hardcoded API key detected
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      owasp: "A07:2021 - Identification and Authentication Failures"
+
+  # Detect SQL injection vulnerabilities
+  - id: sql-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $SQL = "... " + $INPUT + " ..."
+              $DB.execute($SQL)
+          - pattern: |
+              $DB.query("... " + $INPUT + " ...")
+    message: Possible SQL injection vulnerability
+    severity: ERROR
+    languages:
+      - javascript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021 - Injection"
+
+  # Detect insecure random number generation
+  - id: insecure-random
+    patterns:
+      - pattern-either:
+          - pattern: Math.random()
+          - pattern: random.random()
+    message: |
+      Using insecure random number generator.
+      Use crypto.randomBytes() or secrets module instead.
+    severity: WARNING
+    languages:
+      - javascript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-338: Use of Cryptographically Weak PRNG"
+
+  # Detect missing input validation
+  - id: missing-input-validation
+    patterns:
+      - pattern: |
+          function $FUNC($PARAM) {
+            ...
+            $DB.save($PARAM)
+            ...
+          }
+      - pattern-not: |
+          function $FUNC($PARAM) {
+            ...
+            if (...) { ... }
+            ...
+            $DB.save($PARAM)
+            ...
+          }
+    message: Input parameter used without validation
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Detect console.log in production
+  - id: console-log-in-production
+    pattern: console.log(...)
+    message: |
+      console.log() detected. Remove debug logs before production.
+      Consider using a proper logging library.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "src/**"
+      exclude:
+        - "**/*.test.*"
+        - "**/*.spec.*"
+
+  # Detect TODO/FIXME comments
+  - id: todo-fixme-comments
+    patterns:
+      - pattern-regex: "(TODO|FIXME|HACK|XXX):"
+    message: Found TODO/FIXME comment - track in issue tracker
+    severity: INFO
+    languages:
+      - generic
+
+  # Detect missing error handling
+  - id: unhandled-promise
+    patterns:
+      - pattern: $PROMISE.then(...)
+      - pattern-not: $PROMISE.then(...).catch(...)
+      - pattern-not: |
+          try {
+            ...
+            $PROMISE.then(...)
+            ...
+          } catch (...) { ... }
+    message: Promise without error handling - add .catch() or try/catch
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Detect improper error logging
+  - id: log-error-without-stack
+    patterns:
+      - pattern-either:
+          - pattern: console.error($ERR.message)
+          - pattern: logger.error($ERR.message)
+      - pattern-not: console.error($ERR)
+      - pattern-not: logger.error($ERR)
+    message: |
+      Logging only error message loses stack trace.
+      Log the full error object instead.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Detect use of eval()
+  - id: dangerous-eval
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: Function(...)
+          - pattern: setTimeout("...", ...)
+          - pattern: setInterval("...", ...)
+    message: |
+      Dangerous use of eval() or Function() constructor.
+      This can lead to code injection vulnerabilities.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      category: security
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code"
+
+  # Detect weak cryptography
+  - id: weak-crypto-algorithm
+    patterns:
+      - pattern-either:
+          - pattern: crypto.createHash("md5")
+          - pattern: crypto.createHash("sha1")
+          - pattern: hashlib.md5(...)
+          - pattern: hashlib.sha1(...)
+    message: |
+      Weak cryptographic algorithm detected (MD5/SHA1).
+      Use SHA-256 or stronger algorithms.
+    severity: ERROR
+    languages:
+      - javascript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+
+  # Detect missing HTTPS
+  - id: http-not-https
+    patterns:
+      - pattern-regex: 'http://[^"]+'
+      - pattern-not-regex: 'http://localhost'
+      - pattern-not-regex: 'http://127\.0\.0\.1'
+    message: HTTP URL detected - use HTTPS for external resources
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+      - python
+      - yaml
+      - json
+
+  # Organization-specific: Enforce logging standards
+  - id: use-structured-logging
+    patterns:
+      - pattern: console.log($MSG)
+      - pattern-not: logger.$METHOD(...)
+    message: |
+      Use structured logging (logger) instead of console.log
+      Example: logger.info({ msg: 'event', data })
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "src/**"
+
+  # Detect missing authentication checks
+  - id: missing-auth-check
+    patterns:
+      - pattern: |
+          app.$METHOD($PATH, function($REQ, $RES) {
+            ...
+          })
+      - pattern-not: |
+          app.$METHOD($PATH, $AUTH, function($REQ, $RES) {
+            ...
+          })
+      - pattern-not: |
+          app.$METHOD($PATH, function($REQ, $RES) {
+            ...
+            if ($REQ.user ...) { ... }
+            ...
+          })
+    message: Route handler missing authentication/authorization check
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "src/routes/**"
+        - "src/api/**"
+
+  # Detect race conditions
+  - id: check-then-use-race-condition
+    patterns:
+      - pattern: |
+          if (fs.existsSync($PATH)) {
+            ...
+            fs.$OP($PATH, ...)
+            ...
+          }
+    message: |
+      Potential race condition: file existence check followed by operation.
+      File state may change between check and use.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Detect missing rate limiting
+  - id: missing-rate-limit
+    patterns:
+      - pattern: |
+          app.post($PATH, ...)
+      - pattern-not: |
+          app.post($PATH, $RATE_LIMITER, ...)
+    message: POST endpoint without rate limiting - consider adding rate limiter
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "src/routes/**"
+        - "src/api/**"
+
+  # ============================================================================
+  # ADVANCED SECURITY RULES
+  # ============================================================================
+
+  # Server-Side Request Forgery (SSRF)
+  - id: ssrf-request-from-input
+    patterns:
+      - pattern-either:
+          - pattern: |
+              axios.get($REQ.body.$PARAM, ...)
+          - pattern: |
+              axios.post($REQ.body.$PARAM, ...)
+          - pattern: |
+              fetch($REQ.body.$PARAM, ...)
+          - pattern: |
+              http.get($REQ.body.$PARAM, ...)
+          - pattern: |
+              requests.get($REQ.body.$PARAM, ...)
+    message: |
+      Potential SSRF vulnerability: HTTP request using user-controlled URL.
+      Validate and whitelist allowed domains before making requests.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-918: Server-Side Request Forgery"
+      owasp: "A10:2021 - Server-Side Request Forgery"
+
+  # Path Traversal
+  - id: path-traversal
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fs.readFile($REQ.params.$PARAM, ...)
+          - pattern: |
+              fs.readFileSync($REQ.params.$PARAM, ...)
+          - pattern: |
+              open($REQ.params.$PARAM, ...)
+          - pattern: |
+              path.join(__dirname, $REQ.params.$PARAM)
+    message: |
+      Path traversal vulnerability: User input used in file path.
+      Validate and sanitize file paths, use path.resolve() and check for '..'
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021 - Broken Access Control"
+
+  # Command Injection
+  - id: command-injection
+    patterns:
+      - pattern-either:
+          - pattern: |
+              exec($REQ.body.$PARAM, ...)
+          - pattern: |
+              execSync($REQ.body.$PARAM, ...)
+          - pattern: |
+              spawn($REQ.body.$PARAM, ...)
+          - pattern: |
+              os.system($REQ.body.$PARAM)
+          - pattern: |
+              subprocess.call($REQ.body.$PARAM, ...)
+    message: |
+      Command injection vulnerability: User input executed as shell command.
+      Never execute user input. Use parameterized commands or avoid shell execution.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021 - Injection"
+
+  # XML External Entity (XXE)
+  - id: xxe-vulnerability
+    patterns:
+      - pattern: |
+          $PARSER.parseString($INPUT, ...)
+      - pattern-not: |
+          $PARSER = new DOMParser({ features: { 'http://xml.org/sax/features/external-general-entities': false } })
+    message: |
+      XXE vulnerability: XML parser without external entity protection.
+      Disable external entities and DTD processing.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      category: security
+      cwe: "CWE-611: XML External Entity"
+      owasp: "A05:2021 - Security Misconfiguration"
+
+  # JWT without verification
+  - id: jwt-decode-without-verify
+    patterns:
+      - pattern: jwt.decode($TOKEN)
+      - pattern-not: jwt.verify($TOKEN, ...)
+    message: |
+      JWT decoded without signature verification.
+      Always use jwt.verify() to validate JWT signatures.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-347: Improper Verification of Cryptographic Signature"
+
+  # Insecure cookie settings
+  - id: insecure-cookie
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.cookie($NAME, $VALUE)
+          - pattern: |
+              res.cookie($NAME, $VALUE, { httpOnly: false })
+          - pattern: |
+              res.cookie($NAME, $VALUE, { secure: false })
+      - pattern-not: |
+          res.cookie($NAME, $VALUE, { httpOnly: true, secure: true, sameSite: 'strict' })
+    message: |
+      Insecure cookie configuration.
+      Set httpOnly: true, secure: true, sameSite: 'strict' for security cookies.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Hardcoded JWT secret
+  - id: hardcoded-jwt-secret
+    patterns:
+      - pattern-either:
+          - pattern: jwt.sign($PAYLOAD, "...", ...)
+          - pattern: jwt.verify($TOKEN, "...", ...)
+    message: |
+      Hardcoded JWT secret detected.
+      Use environment variables: process.env.JWT_SECRET
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Regex Denial of Service (ReDoS)
+  - id: potential-redos
+    patterns:
+      - pattern-regex: 'new RegExp\(["\'].*(\(.*\+.*\)|\(.*\*.*\)){2,}'
+    message: |
+      Potential ReDoS vulnerability: Complex nested quantifiers in regex.
+      Simplify regex or use regex timeout.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Prototype pollution
+  - id: prototype-pollution
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $OBJ[$KEY] = $VALUE
+          - pattern: |
+              Object.assign($TARGET, $SOURCE)
+      - pattern-inside: |
+          function $FUNC($INPUT) {
+            ...
+          }
+    message: |
+      Potential prototype pollution vulnerability.
+      Validate object keys and use Object.create(null) for safe objects.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # REACT SPECIFIC RULES
+  # ============================================================================
+
+  # Dangerous dangerouslySetInnerHTML
+  - id: react-dangerous-innerhtml
+    patterns:
+      - pattern: |
+          <$EL dangerouslySetInnerHTML={{__html: $HTML}} />
+      - pattern-not: |
+          <$EL dangerouslySetInnerHTML={{__html: DOMPurify.sanitize($HTML)}} />
+    message: |
+      Using dangerouslySetInnerHTML without sanitization.
+      Sanitize HTML with DOMPurify before rendering.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Missing React key in list
+  - id: react-missing-key
+    pattern: |
+      $ARR.map($ITEM => <$COMPONENT ... />)
+    message: |
+      Missing 'key' prop in list rendering.
+      Add unique key prop to avoid React reconciliation issues.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/*.jsx"
+        - "**/*.tsx"
+
+  # Direct state mutation
+  - id: react-direct-state-mutation
+    patterns:
+      - pattern: |
+          this.state.$PROP = $VALUE
+      - pattern-not-inside: |
+          constructor(...) { ... }
+    message: |
+      Direct state mutation detected.
+      Use this.setState() to update state.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # EXPRESS.JS SECURITY RULES
+  # ============================================================================
+
+  # Missing helmet security headers
+  - id: express-missing-helmet
+    patterns:
+      - pattern: |
+          const app = express()
+      - pattern-not: |
+          app.use(helmet())
+    message: |
+      Express app without helmet security headers.
+      Add app.use(helmet()) for security headers.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Missing CORS configuration
+  - id: express-permissive-cors
+    patterns:
+      - pattern: |
+          app.use(cors())
+      - pattern-not: |
+          app.use(cors({ origin: [...], credentials: true }))
+    message: |
+      Permissive CORS configuration.
+      Specify allowed origins instead of allowing all.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Trust proxy misconfiguration
+  - id: express-trust-proxy
+    pattern: |
+      app.set('trust proxy', true)
+    message: |
+      Trusting all proxies can be dangerous.
+      Specify exact number of proxies or use 'loopback'.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # DATABASE SECURITY RULES
+  # ============================================================================
+
+  # NoSQL Injection
+  - id: nosql-injection
+    patterns:
+      - pattern: |
+          collection.find({ $FIELD: $REQ.body.$PARAM })
+      - pattern-not: |
+          collection.find({ $FIELD: String($REQ.body.$PARAM) })
+    message: |
+      Potential NoSQL injection vulnerability.
+      Validate and sanitize user input before database queries.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # MongoDB $where operator
+  - id: mongodb-where-operator
+    pattern: |
+      collection.find({ $where: ... })
+    message: |
+      Dangerous use of $where operator in MongoDB.
+      Avoid $where as it executes JavaScript and is slow. Use other operators.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # SQL string concatenation
+  - id: sql-string-concatenation
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $DB.query("SELECT * FROM users WHERE id = " + $ID)
+          - pattern: |
+              $DB.query(f"SELECT * FROM users WHERE id = {$ID}")
+    message: |
+      SQL query using string concatenation.
+      Use parameterized queries to prevent SQL injection.
+    severity: ERROR
+    languages:
+      - javascript
+      - python
+
+  # ============================================================================
+  # AUTHENTICATION & AUTHORIZATION RULES
+  # ============================================================================
+
+  # Weak password hashing
+  - id: weak-password-hashing
+    patterns:
+      - pattern-either:
+          - pattern: crypto.createHash("md5").update($PASSWORD)
+          - pattern: crypto.createHash("sha1").update($PASSWORD)
+          - pattern: hashlib.md5($PASSWORD)
+          - pattern: hashlib.sha1($PASSWORD)
+    message: |
+      Weak password hashing algorithm.
+      Use bcrypt, scrypt, or argon2 for password hashing.
+    severity: ERROR
+    languages:
+      - javascript
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-327: Weak Cryptography"
+
+  # Missing password complexity
+  - id: missing-password-validation
+    patterns:
+      - pattern: |
+          if ($PASSWORD.length < 8) { ... }
+      - pattern-not: |
+          if ($PASSWORD.length < 12) { ... }
+    message: |
+      Weak password length requirement.
+      Require minimum 12 characters for stronger security.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+      - python
+
+  # Session without timeout
+  - id: session-no-timeout
+    patterns:
+      - pattern: |
+          session({ ... })
+      - pattern-not: |
+          session({ cookie: { maxAge: $TIME }, ... })
+    message: |
+      Session configured without timeout.
+      Set cookie.maxAge for automatic session expiration.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # CLOUD SECURITY RULES
+  # ============================================================================
+
+  # AWS S3 public bucket
+  - id: aws-s3-public-bucket
+    patterns:
+      - pattern-either:
+          - pattern: |
+              new S3({ params: { ACL: 'public-read' } })
+          - pattern: |
+              s3.putBucketAcl({ ACL: 'public-read-write' })
+    message: |
+      S3 bucket configured with public access.
+      Avoid public ACLs unless absolutely necessary.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Hardcoded AWS credentials
+  - id: hardcoded-aws-credentials
+    patterns:
+      - pattern-either:
+          - pattern: |
+              accessKeyId: "AKIA..."
+          - pattern: |
+              secretAccessKey: "..."
+    message: |
+      Hardcoded AWS credentials detected.
+      Use IAM roles, environment variables, or AWS credential files.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+
+  # ============================================================================
+  # PERFORMANCE & CODE QUALITY RULES
+  # ============================================================================
+
+  # Synchronous crypto in async context
+  - id: sync-crypto-in-async
+    patterns:
+      - pattern: |
+          async function $FUNC(...) {
+            ...
+            crypto.pbkdf2Sync(...)
+            ...
+          }
+    message: |
+      Synchronous crypto function in async context blocks event loop.
+      Use async version: crypto.pbkdf2()
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Missing await in async function
+  - id: missing-await
+    patterns:
+      - pattern: |
+          async function $FUNC() {
+            ...
+            $PROMISE
+            ...
+          }
+      - pattern-not: |
+          async function $FUNC() {
+            ...
+            await $PROMISE
+            ...
+          }
+    message: |
+      Promise returned but not awaited in async function.
+      Add await or return the promise.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Array.forEach with async
+  - id: foreach-async-antipattern
+    pattern: |
+      $ARR.forEach(async ($ITEM) => { ... })
+    message: |
+      Using async callback in forEach doesn't wait for promises.
+      Use Promise.all() with map() or for...of loop instead.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Inefficient regex
+  - id: inefficient-regex-test
+    patterns:
+      - pattern-either:
+          - pattern: |
+              if ($STR.match($REGEX)) { ... }
+          - pattern: |
+              while ($STR.match($REGEX)) { ... }
+      - pattern-not: |
+          if ($REGEX.test($STR)) { ... }
+    message: |
+      Using match() for boolean check is inefficient.
+      Use regex.test() instead which is faster.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # PYTHON SPECIFIC RULES
+  # ============================================================================
+
+  # Pickle security
+  - id: pickle-unsafe
+    pattern: pickle.loads($DATA)
+    message: |
+      Unsafe deserialization with pickle.
+      Never unpickle data from untrusted sources. Use JSON instead.
+    severity: ERROR
+    languages:
+      - python
+    metadata:
+      category: security
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+
+  # YAML unsafe load
+  - id: yaml-unsafe-load
+    pattern: yaml.load($DATA)
+    message: |
+      Unsafe YAML loading.
+      Use yaml.safe_load() to prevent arbitrary code execution.
+    severity: ERROR
+    languages:
+      - python
+
+  # Flask debug mode in production
+  - id: flask-debug-mode
+    patterns:
+      - pattern: |
+          app.run(debug=True)
+      - pattern-not-inside: |
+          if __name__ == '__main__':
+            ...
+    message: |
+      Flask debug mode enabled.
+      Never enable debug mode in production.
+    severity: ERROR
+    languages:
+      - python
+
+  # Django DEBUG = True
+  - id: django-debug-true
+    pattern: |
+      DEBUG = True
+    message: |
+      Django DEBUG setting is True.
+      Set DEBUG = False in production.
+    severity: ERROR
+    languages:
+      - python
+    paths:
+      include:
+        - "**/settings.py"
+
+  # ============================================================================
+  # API & DATA VALIDATION RULES
+  # ============================================================================
+
+  # Missing input sanitization
+  - id: missing-input-sanitization-html
+    patterns:
+      - pattern: |
+          <div>{$REQ.body.$PARAM}</div>
+      - pattern-not: |
+          <div>{sanitize($REQ.body.$PARAM)}</div>
+    message: |
+      Rendering user input without sanitization.
+      Sanitize HTML to prevent XSS attacks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Large file upload without limit
+  - id: unlimited-file-upload
+    patterns:
+      - pattern: |
+          multer({ ... })
+      - pattern-not: |
+          multer({ limits: { fileSize: $SIZE }, ... })
+    message: |
+      File upload without size limit.
+      Set limits.fileSize to prevent DoS attacks.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Email validation regex
+  - id: email-validation-weak
+    pattern-regex: '/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/'
+    message: |
+      Overly simple email validation regex.
+      Use a proper email validation library or RFC-compliant regex.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # LOGGING & MONITORING RULES
+  # ============================================================================
+
+  # Logging sensitive data
+  - id: log-sensitive-data
+    patterns:
+      - pattern-either:
+          - pattern: |
+              console.log($MSG, $REQ.body.password)
+          - pattern: |
+              logger.info($MSG, $USER.password)
+          - pattern: |
+              console.log($MSG, $REQ.headers.authorization)
+    message: |
+      Logging sensitive data (password, token, etc.).
+      Never log passwords, tokens, or PII.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+
+  # Missing error context
+  - id: error-without-context
+    patterns:
+      - pattern: |
+          catch ($ERR) {
+            console.error("Error")
+          }
+      - pattern-not: |
+          catch ($ERR) {
+            console.error("Error", $ERR)
+          }
+    message: |
+      Error logged without context or stack trace.
+      Log the error object for debugging.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # DEPENDENCY & IMPORT RULES
+  # ============================================================================
+
+  # Deprecated package
+  - id: deprecated-package-request
+    pattern: |
+      require('request')
+    message: |
+      Package 'request' is deprecated.
+      Use 'axios', 'node-fetch', or native 'fetch' instead.
+    severity: WARNING
+    languages:
+      - javascript
+
+  # Unsafe dependency
+  - id: unsafe-dependency-moment
+    pattern: |
+      require('moment')
+    message: |
+      Consider using 'date-fns' or 'dayjs' instead of 'moment'.
+      Moment is in maintenance mode and very large.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # TYPESCRIPT SPECIFIC RULES
+  # ============================================================================
+
+  # Using 'any' type
+  - id: typescript-avoid-any
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $VAR: any = ...
+          - pattern: |
+              function $FUNC($PARAM: any) { ... }
+          - pattern: |
+              let $VAR: any
+    message: |
+      Avoid using 'any' type as it bypasses type checking.
+      Use specific types, 'unknown', or generic types instead.
+    severity: WARNING
+    languages:
+      - typescript
+    paths:
+      include:
+        - "src/**/*.ts"
+
+  # Non-null assertion operator overuse
+  - id: typescript-non-null-assertion
+    pattern: $VAR!.$PROP
+    message: |
+      Non-null assertion operator (!) can cause runtime errors.
+      Use optional chaining ($VAR?.$PROP) or proper null checks instead.
+    severity: INFO
+    languages:
+      - typescript
+
+  # Type assertion as 'any'
+  - id: typescript-as-any
+    patterns:
+      - pattern-either:
+          - pattern: $VAR as any
+          - pattern: <any>$VAR
+    message: |
+      Type assertion to 'any' defeats TypeScript's type safety.
+      Use proper type guards or specific types.
+    severity: WARNING
+    languages:
+      - typescript
+
+  # @ts-ignore usage
+  - id: typescript-ts-ignore
+    pattern-regex: '// @ts-ignore'
+    message: |
+      '@ts-ignore' suppresses TypeScript errors which may hide real issues.
+      Use '@ts-expect-error' with explanation, or fix the underlying issue.
+    severity: INFO
+    languages:
+      - typescript
+
+  # ============================================================================
+  # GRAPHQL SECURITY RULES
+  # ============================================================================
+
+  # GraphQL query without depth limit
+  - id: graphql-no-depth-limit
+    patterns:
+      - pattern: |
+          new ApolloServer({ ... })
+      - pattern-not: |
+          new ApolloServer({ validationRules: [depthLimit($LIMIT)], ... })
+    message: |
+      GraphQL server without query depth limit.
+      Add depthLimit validation rule to prevent DoS attacks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # GraphQL query without cost analysis
+  - id: graphql-no-cost-analysis
+    patterns:
+      - pattern: |
+          new ApolloServer({ ... })
+      - pattern-not: |
+          new ApolloServer({ plugins: [..., costAnalysis(...)], ... })
+    message: |
+      GraphQL server without query cost analysis.
+      Consider adding query cost limits to prevent resource exhaustion.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # GraphQL resolver without authentication
+  - id: graphql-resolver-no-auth
+    patterns:
+      - pattern: |
+          $FIELD: async ($PARENT, $ARGS, $CONTEXT) => { ... }
+      - pattern-not: |
+          $FIELD: async ($PARENT, $ARGS, $CONTEXT) => {
+            ...
+            if (!$CONTEXT.user) { ... }
+            ...
+          }
+    message: |
+      GraphQL resolver without authentication check.
+      Verify user authentication in sensitive resolvers.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/resolvers/**"
+        - "**/graphql/**"
+
+  # ============================================================================
+  # ENVIRONMENT & CONFIGURATION SECURITY
+  # ============================================================================
+
+  # Missing environment variable validation
+  - id: missing-env-validation
+    patterns:
+      - pattern: process.env.$VAR
+      - pattern-not: |
+          if (!process.env.$VAR) { throw ... }
+      - pattern-not: |
+          process.env.$VAR || $DEFAULT
+    message: |
+      Environment variable used without validation.
+      Check for undefined values and provide defaults or throw errors.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Hardcoded database credentials
+  - id: hardcoded-database-credentials
+    patterns:
+      - pattern-either:
+          - pattern: |
+              mongoose.connect("mongodb://user:password@...")
+          - pattern: |
+              createConnection({ host: "...", password: "...", ... })
+          - pattern: |
+              new Client({ connectionString: "postgresql://user:password@..." })
+    message: |
+      Hardcoded database credentials detected.
+      Use environment variables for sensitive connection strings.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+      - python
+
+  # Exposing internal error details
+  - id: expose-error-details
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.status(500).json({ error: $ERR.stack })
+          - pattern: |
+              res.send($ERR.toString())
+          - pattern: |
+              res.json({ message: $ERR.message, stack: $ERR.stack })
+    message: |
+      Exposing error stack traces to clients.
+      Send generic error messages in production, log details server-side.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # CRYPTOGRAPHY & SECURITY PATTERNS
+  # ============================================================================
+
+  # Insufficient IV size
+  - id: insufficient-iv-size
+    patterns:
+      - pattern: |
+          crypto.randomBytes($SIZE)
+      - metavariable-comparison:
+          metavariable: $SIZE
+          comparison: $SIZE < 12
+    message: |
+      Insufficient initialization vector (IV) size.
+      Use at least 12 bytes (96 bits) for AES-GCM, 16 bytes for AES-CBC.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ECB mode encryption
+  - id: ecb-mode-encryption
+    patterns:
+      - pattern-either:
+          - pattern: crypto.createCipher("aes-128-ecb", ...)
+          - pattern: crypto.createCipher("aes-256-ecb", ...)
+    message: |
+      ECB cipher mode is insecure as it doesn't use IV.
+      Use GCM or CBC mode: aes-256-gcm or aes-256-cbc.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe: "CWE-327: Use of a Broken Cryptographic Algorithm"
+
+  # Timing attack on comparison
+  - id: timing-attack-string-comparison
+    patterns:
+      - pattern-either:
+          - pattern: |
+              if ($SECRET === $INPUT) { ... }
+          - pattern: |
+              if ($TOKEN == $INPUT) { ... }
+      - metavariable-pattern:
+          metavariable: $SECRET
+          patterns:
+            - pattern-regex: '.*(secret|token|key|password).*'
+    message: |
+      String comparison vulnerable to timing attacks.
+      Use crypto.timingSafeEqual() for constant-time comparison.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Weak random for security
+  - id: weak-random-for-security
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $TOKEN = Math.random().toString(36)
+          - pattern: |
+              const $SECRET = uuid.v4()
+      - metavariable-pattern:
+          metavariable: $TOKEN
+          patterns:
+            - pattern-regex: '.*(token|secret|key).*'
+    message: |
+      Using weak random generator for security-sensitive values.
+      Use crypto.randomBytes() for cryptographically secure random values.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # HTTP SECURITY HEADERS
+  # ============================================================================
+
+  # Missing Content-Security-Policy
+  - id: missing-csp-header
+    patterns:
+      - pattern: |
+          res.send(...)
+      - pattern-not: |
+          res.setHeader("Content-Security-Policy", ...)
+    message: |
+      Response without Content-Security-Policy header.
+      Set CSP header to prevent XSS and injection attacks.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Permissive CORS origin
+  - id: permissive-cors-origin
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.setHeader("Access-Control-Allow-Origin", "*")
+          - pattern: |
+              res.header("Access-Control-Allow-Origin", "*")
+    message: |
+      Permissive CORS policy allows any origin.
+      Specify exact origins for APIs handling sensitive data.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Missing HSTS header
+  - id: missing-hsts-header
+    patterns:
+      - pattern: |
+          app.listen(...)
+      - pattern-not: |
+          app.use(helmet.hsts(...))
+    message: |
+      Application without HSTS (HTTP Strict Transport Security).
+      Add helmet.hsts() to enforce HTTPS connections.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # FILE SYSTEM SECURITY
+  # ============================================================================
+
+  # Directory traversal in file operations
+  - id: directory-traversal
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fs.readFile(__dirname + $PATH, ...)
+          - pattern: |
+              fs.writeFile("./uploads/" + $REQ.body.filename, ...)
+      - pattern-not: |
+          path.resolve($BASE, $PATH)
+    message: |
+      Potential directory traversal vulnerability.
+      Use path.resolve() and validate paths don't contain '../'.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Insecure file permissions
+  - id: insecure-file-permissions
+    patterns:
+      - pattern-either:
+          - pattern: |
+              fs.chmod($PATH, 0o777)
+          - pattern: |
+              fs.writeFile($PATH, $DATA, { mode: 0o777 })
+    message: |
+      Insecure file permissions (world-writable).
+      Use restrictive permissions like 0o644 or 0o600 for sensitive files.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Temporary file without cleanup
+  - id: temp-file-no-cleanup
+    patterns:
+      - pattern: |
+          fs.writeFileSync("/tmp/$FILE", ...)
+      - pattern-not-inside: |
+          try {
+            ...
+            fs.writeFileSync("/tmp/$FILE", ...)
+            ...
+          } finally {
+            fs.unlinkSync("/tmp/$FILE")
+          }
+    message: |
+      Temporary file created without cleanup.
+      Use try-finally or tmp module to ensure cleanup.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # MEMORY & RESOURCE MANAGEMENT
+  # ============================================================================
+
+  # Memory leak - event listener not removed
+  - id: event-listener-leak
+    patterns:
+      - pattern: |
+          $EMITTER.on($EVENT, ...)
+      - pattern-not: |
+          $EMITTER.once($EVENT, ...)
+      - pattern-not-inside: |
+          class $CLASS {
+            ...
+            $EMITTER.on($EVENT, ...)
+            ...
+            $EMITTER.removeListener($EVENT, ...)
+            ...
+          }
+    message: |
+      Event listener added without removal can cause memory leaks.
+      Use once() for one-time events or ensure removeListener() is called.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Unbounded array growth
+  - id: unbounded-array-growth
+    patterns:
+      - pattern: |
+          $ARRAY.push($ITEM)
+      - pattern-inside: |
+          setInterval(() => { ... }, ...)
+      - pattern-not: |
+          if ($ARRAY.length > $LIMIT) { ... }
+    message: |
+      Array growing in interval without size limit.
+      Implement bounds checking to prevent memory exhaustion.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # Large buffer allocation from user input
+  - id: buffer-allocation-from-input
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Buffer.alloc($REQ.body.$SIZE)
+          - pattern: |
+              new Array($REQ.params.$SIZE)
+    message: |
+      Buffer/Array allocation with user-controlled size.
+      Validate and limit size to prevent DoS attacks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # API SECURITY PATTERNS
+  # ============================================================================
+
+  # Missing pagination
+  - id: api-missing-pagination
+    patterns:
+      - pattern: |
+          router.get($PATH, async ($REQ, $RES) => {
+            ...
+            const $RESULTS = await $MODEL.find()
+            ...
+          })
+      - pattern-not: |
+          router.get($PATH, async ($REQ, $RES) => {
+            ...
+            const $RESULTS = await $MODEL.find().limit($LIMIT)
+            ...
+          })
+    message: |
+      API endpoint without pagination or result limiting.
+      Add .limit() and .skip() to prevent large data transfers.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+
+  # API key in URL
+  - id: api-key-in-url
+    patterns:
+      - pattern-either:
+          - pattern: |
+              axios.get(`$URL?api_key=${$KEY}`)
+          - pattern: |
+              fetch(`$URL?token=${$TOKEN}`)
+    message: |
+      API key/token in URL query parameters.
+      URLs are logged and cached. Use Authorization header instead.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # Missing request timeout
+  - id: missing-request-timeout
+    patterns:
+      - pattern-either:
+          - pattern: |
+              axios.get($URL)
+          - pattern: |
+              axios.post($URL, $DATA)
+      - pattern-not: |
+          axios.$METHOD($URL, { timeout: $TIME })
+    message: |
+      HTTP request without timeout can hang indefinitely.
+      Set timeout option to prevent resource exhaustion.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Exposed admin endpoint
+  - id: exposed-admin-endpoint
+    patterns:
+      - pattern: |
+          router.$METHOD('/admin/$PATH', ...)
+      - pattern-not: |
+          router.$METHOD('/admin/$PATH', $AUTH_MIDDLEWARE, ...)
+    message: |
+      Admin endpoint without authentication middleware.
+      Add authentication and authorization checks.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+
+  # ============================================================================
+  # CONTAINER & DOCKER SECURITY
+  # ============================================================================
+
+  # Running as root in Docker
+  - id: dockerfile-root-user
+    pattern-regex: '^(?!.*USER).*ENTRYPOINT'
+    message: |
+      Docker container running as root user.
+      Add 'USER node' or 'USER 1000' before ENTRYPOINT.
+    severity: WARNING
+    languages:
+      - dockerfile
+
+  # Using latest tag in production
+  - id: dockerfile-latest-tag
+    pattern-regex: 'FROM.*:latest'
+    message: |
+      Using ':latest' tag in Dockerfile is not reproducible.
+      Pin to specific version tags for production.
+    severity: WARNING
+    languages:
+      - dockerfile
+
+  # ============================================================================
+  # TESTING & CODE QUALITY
+  # ============================================================================
+
+  # Test without assertion
+  - id: test-without-assertion
+    patterns:
+      - pattern-either:
+          - pattern: |
+              test($NAME, () => { ... })
+          - pattern: |
+              it($NAME, () => { ... })
+      - pattern-not: |
+          test($NAME, () => { ... expect(...) ... })
+      - pattern-not: |
+          it($NAME, () => { ... assert(...) ... })
+    message: |
+      Test without any assertions.
+      Add expect() or assert() statements to validate behavior.
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/*.test.*"
+        - "**/*.spec.*"
+
+  # Disabled test
+  - id: disabled-test
+    patterns:
+      - pattern-either:
+          - pattern: test.skip($NAME, ...)
+          - pattern: it.skip($NAME, ...)
+          - pattern: describe.skip($NAME, ...)
+    message: |
+      Disabled test found.
+      Fix and re-enable the test, or remove if no longer needed.
+    severity: INFO
+    languages:
+      - javascript
+      - typescript
+
+  # Focused test
+  - id: focused-test
+    patterns:
+      - pattern-either:
+          - pattern: test.only($NAME, ...)
+          - pattern: it.only($NAME, ...)
+          - pattern: describe.only($NAME, ...)
+    message: |
+      Focused test (only) will skip other tests.
+      Remove .only() before committing.
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    paths:
+      include:
+        - "**/*.test.*"
+        - "**/*.spec.*"

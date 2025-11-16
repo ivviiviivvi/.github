@@ -1,0 +1,157 @@
+name: Semgrep Security Analysis
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+  schedule:
+    # Run daily at 3 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Semgrep
+        run: semgrep ci
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_RULES: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/cwe-top-25
+            p/default
+
+      # Alternative: Run without Semgrep Cloud (free tier)
+      - name: Run Semgrep (Local)
+        if: env.SEMGREP_APP_TOKEN == ''
+        run: |
+          semgrep scan \
+            --config=auto \
+            --sarif \
+            --output=semgrep-results.sarif \
+            --severity=ERROR \
+            --severity=WARNING
+
+      - name: Upload SARIF to GitHub
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep
+
+  semgrep-custom-rules:
+    name: Custom Semgrep Rules
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Custom Rules
+        run: |
+          # Run organization-specific rules if they exist
+          if [ -d ".semgrep" ]; then
+            semgrep scan \
+              --config=.semgrep/ \
+              --sarif \
+              --output=custom-rules.sarif
+          fi
+
+      - name: Upload Custom Rules Results
+        if: always() && hashFiles('custom-rules.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: custom-rules.sarif
+          category: semgrep-custom
+
+  semgrep-supply-chain:
+    name: Semgrep Supply Chain
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Semgrep Supply Chain Scan
+        run: semgrep ci --supply-chain
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        continue-on-error: true
+
+  semgrep-diff:
+    name: Semgrep Diff Scan (PR only)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Semgrep Diff Scan
+        run: |
+          semgrep scan \
+            --config=auto \
+            --baseline-commit=${{ github.event.pull_request.base.sha }} \
+            --json \
+            --output=semgrep-diff.json
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            if (fs.existsSync('semgrep-diff.json')) {
+              const results = JSON.parse(fs.readFileSync('semgrep-diff.json', 'utf8'));
+
+              if (results.results && results.results.length > 0) {
+                const findings = results.results.slice(0, 10);
+
+                let comment = '## 🔍 Semgrep Found Issues in This PR\n\n';
+                comment += `Found ${results.results.length} issue(s)\n\n`;
+
+                findings.forEach(finding => {
+                  comment += `### ${finding.check_id}\n`;
+                  comment += `**Severity**: ${finding.extra.severity}\n`;
+                  comment += `**File**: ${finding.path}:${finding.start.line}\n`;
+                  comment += `**Message**: ${finding.extra.message}\n\n`;
+                });
+
+                if (results.results.length > 10) {
+                  comment += `\n... and ${results.results.length - 10} more issues\n`;
+                }
+
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: comment
+                });
+              }
+            }

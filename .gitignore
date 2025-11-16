@@ -1,3 +1,9 @@
 
-# Lock file for state management
-.github/state.lock
+# Ignore automatically generated direnv output
+.direnv
+
+# gemini-cli settings
+.gemini/
+
+# GitHub App credentials
+gha-creds-*.json
