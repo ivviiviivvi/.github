@@ -1,0 +1,139 @@
+name: Link Checker
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - '**.md'
+      - '**.html'
+  pull_request:
+    paths:
+      - '**.md'
+      - '**.html'
+  schedule:
+    # Run weekly on Mondays at 8:00 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  link-checker:
+    name: Check Links in Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          # Check all markdown and html files
+          args: |
+            --verbose
+            --no-progress
+            --exclude-mail
+            --exclude 'linkedin.com'
+            --exclude 'twitter.com'
+            --exclude 'x.com'
+            --max-retries 3
+            --timeout 20
+            '**/*.md'
+            '**/*.html'
+          # Fail action on broken links
+          fail: true
+          # Output format
+          format: markdown
+          # Output file
+          output: link-checker-report.md
+
+      - name: Upload Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-checker-report
+          path: link-checker-report.md
+          retention-days: 30
+
+      - name: Comment on PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = 'Broken links detected!';
+
+            if (fs.existsSync('link-checker-report.md')) {
+              report = fs.readFileSync('link-checker-report.md', 'utf8');
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## 🔗 Broken Links Detected\n\n${report}\n\nPlease fix the broken links before merging.`
+            });
+
+      - name: Create Issue for Broken Links
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = 'Broken links detected in scheduled check.';
+
+            if (fs.existsSync('link-checker-report.md')) {
+              report = fs.readFileSync('link-checker-report.md', 'utf8');
+            }
+
+            // Check if an issue already exists
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'broken-links'
+            });
+
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔗 Broken Links Detected in Documentation',
+                body: `## Broken Links Report\n\nAutomated link checker found broken links in the documentation.\n\n${report}\n\n**Action Required:**\n- Review and fix broken links\n- Update or remove outdated references\n- Close this issue once all links are fixed`,
+                labels: ['documentation', 'broken-links', 'automated']
+              });
+            }
+
+  markdown-link-check:
+    name: Check Markdown Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Markdown Links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check-config.json'
+          folder-path: '.'
+          file-path: './README.md'
+          max-depth: -1
+          check-modified-files-only: 'no'
+
+  spell-check:
+    name: Spell Check Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Spell Check
+        uses: rojopolis/spellcheck-github-actions@0.36.0
+        with:
+          config_path: .github/spellcheck-config.yml
+          task_name: Markdown

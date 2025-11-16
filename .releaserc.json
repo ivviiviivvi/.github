@@ -1,0 +1,209 @@
+{
+  "branches": [
+    "main",
+    "master",
+    {
+      "name": "next",
+      "prerelease": true
+    },
+    {
+      "name": "beta",
+      "prerelease": true
+    },
+    {
+      "name": "alpha",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {
+            "type": "feat",
+            "release": "minor"
+          },
+          {
+            "type": "fix",
+            "release": "patch"
+          },
+          {
+            "type": "perf",
+            "release": "patch"
+          },
+          {
+            "type": "revert",
+            "release": "patch"
+          },
+          {
+            "type": "docs",
+            "release": "patch"
+          },
+          {
+            "type": "style",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "test",
+            "release": "patch"
+          },
+          {
+            "type": "build",
+            "release": "patch"
+          },
+          {
+            "type": "ci",
+            "release": "patch"
+          },
+          {
+            "type": "chore",
+            "release": false
+          },
+          {
+            "scope": "no-release",
+            "release": false
+          },
+          {
+            "breaking": true,
+            "release": "major"
+          }
+        ],
+        "parserOpts": {
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES",
+            "BREAKING"
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {
+              "type": "feat",
+              "section": "🚀 Features",
+              "hidden": false
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes",
+              "hidden": false
+            },
+            {
+              "type": "perf",
+              "section": "⚡ Performance Improvements",
+              "hidden": false
+            },
+            {
+              "type": "revert",
+              "section": "⏪ Reverts",
+              "hidden": false
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation",
+              "hidden": false
+            },
+            {
+              "type": "style",
+              "section": "💎 Styles",
+              "hidden": true
+            },
+            {
+              "type": "refactor",
+              "section": "♻️ Code Refactoring",
+              "hidden": false
+            },
+            {
+              "type": "test",
+              "section": "✅ Tests",
+              "hidden": true
+            },
+            {
+              "type": "build",
+              "section": "📦 Build System",
+              "hidden": true
+            },
+            {
+              "type": "ci",
+              "section": "👷 CI/CD",
+              "hidden": true
+            },
+            {
+              "type": "chore",
+              "section": "🔧 Chores",
+              "hidden": true
+            }
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines."
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "tarballDir": "dist"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/*.tgz",
+            "label": "Distribution"
+          },
+          {
+            "path": "CHANGELOG.md",
+            "label": "Changelog"
+          }
+        ],
+        "successComment": false,
+        "failTitle": false,
+        "failComment": false,
+        "labels": [
+          "released"
+        ],
+        "releasedLabels": [
+          "released<%= nextRelease.channel ? `-${nextRelease.channel}` : \"\" %>-<%= nextRelease.gitTag %>"
+        ]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "package.json",
+          "package-lock.json",
+          "npm-shrinkwrap.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "echo 'Preparing release ${nextRelease.version}'",
+        "publishCmd": "echo 'Publishing release ${nextRelease.version}'"
+      }
+    ]
+  ]
+}
