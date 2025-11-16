@@ -1,0 +1,159 @@
+# Configuration for actions/labeler
+# Add labels to pull requests based on file paths changed
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**/*'
+      - '.github/**/*.md'
+
+# GitHub Actions / CI/CD
+github-actions:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**'
+      - '.github/actions/**'
+
+# Configuration files
+configuration:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.json'
+      - '**/*.toml'
+      - '**/*.ini'
+      - '**/*.config'
+      - '.editorconfig'
+      - '.gitignore'
+      - '.gitattributes'
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'yarn.lock'
+      - 'pnpm-lock.yaml'
+      - 'requirements.txt'
+      - 'Pipfile'
+      - 'Pipfile.lock'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'composer.json'
+      - 'composer.lock'
+
+# JavaScript/TypeScript
+javascript:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+      - '**/*.cjs'
+
+typescript:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.ts'
+      - '**/*.tsx'
+
+# Python
+python:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.py'
+      - '**/*.pyx'
+
+# Go
+go:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.go'
+
+# Rust
+rust:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.rs'
+
+# Ruby
+ruby:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.rb'
+
+# PHP
+php:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.php'
+
+# Docker
+docker:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Dockerfile'
+      - '**/Dockerfile.*'
+      - '**/*.dockerfile'
+      - 'docker-compose*.yml'
+      - '.dockerignore'
+
+# Tests
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.test.*'
+      - '**/*.spec.*'
+      - '**/tests/**'
+      - '**/test/**'
+      - '**/__tests__/**'
+
+# Security
+security:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'SECURITY.md'
+      - '.github/workflows/security*.yml'
+      - '.github/workflows/codeql*.yml'
+
+# Frontend
+frontend:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/components/**'
+      - 'src/pages/**'
+      - 'public/**'
+      - '**/*.css'
+      - '**/*.scss'
+      - '**/*.sass'
+      - '**/*.less'
+      - '**/*.html'
+      - '**/*.vue'
+      - '**/*.svelte'
+
+# Backend
+backend:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/api/**'
+      - 'src/server/**'
+      - 'src/services/**'
+      - 'src/controllers/**'
+      - 'src/models/**'
+      - 'src/routes/**'
+
+# Database
+database:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'migrations/**'
+      - 'seeds/**'
+      - '**/*.sql'

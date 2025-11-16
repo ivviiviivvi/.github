@@ -1,0 +1,77 @@
+name: AI Task Orchestrator
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Runs every 15 minutes
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install croniter
+
+      - name: Run Orchestrator
+        id: orchestrator
+        run: |
+          import json
+          from datetime import datetime
+          from croniter import croniter
+
+          now = datetime.now()
+          tasks = json.load(open('.github/orchestration_tasks.json'))['tasks']
+          due_tasks = []
+
+          for task in tasks:
+              if task['enabled'] and croniter.is_valid(task['schedule']):
+                  base_time = now
+                  cron = croniter(task['schedule'], base_time)
+
+                  # Check if a scheduled run occurred in the last 15 minutes
+                  # To do this, we get the time of the previous scheduled run
+                  prev_run = cron.get_prev(datetime)
+
+                  # Now, we check if that previous run time is within the last 15 minutes
+                  if (now - prev_run).total_seconds() <= 900: # 15 minutes * 60 seconds
+                      due_tasks.append(task)
+
+          print(f"{len(due_tasks)} tasks due to run.")
+
+          # Correctly format the JSON for the output
+          due_tasks_json = json.dumps({"tasks": due_tasks})
+          print(due_tasks_json)
+          echo "due_tasks=$due_tasks_json" >> $GITHUB_OUTPUT
+
+      - name: Dispatch Due Tasks
+        if: steps.orchestrator.outputs.due_tasks != '{"tasks":[]}'
+        run: |
+          echo '${{ steps.orchestrator.outputs.due_tasks }}' | jq -c '.tasks[]' | while read -r task; do
+            subscription_name=$(echo "$task" | jq -r '.subscription')
+            usage=$(python scripts/quota_manager.py get_usage "$subscription_name")
+            quota=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .quota' .github/subscriptions.json)
+
+            if (( $(echo "$usage < $quota" | bc -l) )); then
+              echo "Dispatching task: $(echo "$task" | jq -r '.id')"
+              workflow_file=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .relevant_workflows[0]' .github/subscriptions.json)
+              prompt=$(echo "$task" | jq -r '.prompt')
+
+              if [ -n "$workflow_file" ] && [ "$workflow_file" != "null" ]; then
+                gh workflow run "$workflow_file" --ref ${{ github.ref }} -f "prompt=$prompt"
+                # Note: The increment of usage will be handled by the individual workflows
+              else
+                echo "No relevant workflow found for subscription: $subscription_name"
+              fi
+            else
+              echo "Skipping task $(echo "$task" | jq -r '.id'): Quota limit reached for $subscription_name."
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

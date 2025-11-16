@@ -1,0 +1,243 @@
+# .gitattributes - Define attributes for pathnames
+# https://git-scm.com/docs/gitattributes
+
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Source code
+*.bash text eol=lf
+*.fish text eol=lf
+*.sh text eol=lf
+*.zsh text eol=lf
+
+# Scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Serialization
+*.json text
+*.toml text
+*.xml text
+*.yaml text
+*.yml text
+
+# Archives
+*.7z binary
+*.gz binary
+*.tar binary
+*.tgz binary
+*.zip binary
+
+# Text files where line endings should be preserved
+*.patch -text
+
+# Documentation
+*.markdown text diff=markdown
+*.md text diff=markdown
+*.mdwn text diff=markdown
+*.mdown text diff=markdown
+*.mkd text diff=markdown
+*.mkdn text diff=markdown
+*.mdtxt text
+*.mdtext text
+*.txt text
+AUTHORS text
+CHANGELOG text
+CHANGES text
+CONTRIBUTING text
+COPYING text
+COPYRIGHT text
+*COPYRIGHT* text
+INSTALL text
+license text
+LICENSE text
+NEWS text
+readme text
+*README* text
+TODO text
+
+# Graphics
+*.ai binary
+*.bmp binary
+*.eps binary
+*.gif binary
+*.gifv binary
+*.ico binary
+*.jng binary
+*.jp2 binary
+*.jpg binary
+*.jpeg binary
+*.jpx binary
+*.jxr binary
+*.pdf binary
+*.png binary
+*.psb binary
+*.psd binary
+*.svg text
+*.svgz binary
+*.tif binary
+*.tiff binary
+*.wbmp binary
+*.webp binary
+
+# Audio
+*.kar binary
+*.m4a binary
+*.mid binary
+*.midi binary
+*.mp3 binary
+*.ogg binary
+*.ra binary
+
+# Video
+*.3gpp binary
+*.3gp binary
+*.as binary
+*.asf binary
+*.asx binary
+*.avi binary
+*.fla binary
+*.flv binary
+*.m4v binary
+*.mng binary
+*.mov binary
+*.mp4 binary
+*.mpeg binary
+*.mpg binary
+*.ogv binary
+*.swc binary
+*.swf binary
+*.webm binary
+
+# Fonts
+*.ttf binary
+*.eot binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# RC files (like .babelrc or .eslintrc)
+*.*rc text
+
+# Ignore files (like .gitignore)
+*.*ignore text
+
+# Configs
+*.cnf text
+*.conf text
+*.config text
+.editorconfig text
+.env text
+.gitattributes text
+.gitconfig text
+.htaccess text
+*.lock text -diff
+package.json text eol=lf
+package-lock.json text eol=lf -diff
+pnpm-lock.yaml text eol=lf -diff
+.prettierrc text
+yarn.lock text -diff
+*.toml text
+*.yaml text
+*.yml text
+browserslist text
+Makefile text
+makefile text
+
+# Heroku
+Procfile text
+
+# Documentation
+*.ipynb text eol=lf
+*.tex text diff=tex
+*.adoc text
+*.textile text
+*.mustache text
+*.csv text eol=lf
+*.tab text
+*.tsv text
+*.coffee text
+*.css text diff=css
+*.htm text diff=html
+*.html text diff=html
+*.js text
+*.mjs text
+*.cjs text
+*.ts text
+*.tsx text
+*.jsx text
+*.less text
+*.od text
+*.onlydata text
+*.sass text
+*.scm text
+*.log text
+*.properties text
+*.props text
+*.settings text
+*.sql text
+*.kql text
+*.scala text
+
+# Templates
+*.dot text
+*.ejs text
+*.erb text
+*.haml text
+*.handlebars text
+*.hbs text
+*.hbt text
+*.jade text
+*.latte text
+*.njk text
+*.phtml text
+*.svelte text
+*.tmpl text
+*.tpl text
+*.twig text
+*.vue text
+
+# Compiled Dynamic Library
+*.so binary
+*.dylib binary
+*.dll binary
+
+# Compiled Static Library
+*.lai binary
+*.la binary
+*.a binary
+*.lib binary
+
+# Executables
+*.exe binary
+*.out binary
+*.app binary
+
+# Prevent massive diffs for generated files
+*.min.css -diff
+*.min.js -diff
+
+# Define binary file attributes
+# - Ensure binary files are not modified by line ending normalization
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.a binary
+*.lib binary
+*.obj binary
+*.o binary
+
+# Define diff drivers for better diffs
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+*.py diff=python
+*.rb diff=ruby
+
+# Denote files that should not be modified
+*.min.* -diff
+*-min.* -diff
+*.map -diff

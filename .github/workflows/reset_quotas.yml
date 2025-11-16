@@ -1,0 +1,24 @@
+name: Reset Quotas
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Reset quotas
+        run: python scripts/quota_manager.py reset_quotas
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: reset quotas"
