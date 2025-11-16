@@ -1,0 +1,16 @@
+{
+  "name": "Enhanced PR Quality Checks",
+  "description": "Comprehensive PR validation workflow that checks title format, description quality, breaking changes, test coverage, documentation updates, and code complexity. Auto-labels PRs and provides actionable feedback.",
+  "iconName": "checklist",
+  "categories": [
+    "automation",
+    "code-quality"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "*.go$",
+    "*.py$",
+    "*.ts$",
+    "*.js$"
+  ]
+}

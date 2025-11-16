@@ -1,0 +1,309 @@
+name: 🏗️ Infrastructure / DevOps
+description: Report infrastructure, deployment, or DevOps related issues
+title: "[INFRA]: "
+labels: ["infrastructure", "devops", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an infrastructure or DevOps issue! This includes problems with CI/CD, deployments, build systems, cloud infrastructure, monitoring, and tooling.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of infrastructure issue is this?
+      options:
+        - CI/CD Pipeline
+        - Deployment
+        - Build System
+        - Cloud Infrastructure (AWS/Azure/GCP)
+        - Containers/Docker
+        - Kubernetes/Orchestration
+        - Monitoring/Observability
+        - Logging
+        - Networking
+        - Database Infrastructure
+        - Security/Access Control
+        - Performance/Scaling
+        - Configuration Management
+        - Tooling
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Which environment is affected?
+      options:
+        - Development
+        - Staging
+        - Production
+        - All Environments
+        - CI/CD
+        - Local Development
+      multiple: true
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this infrastructure issue?
+      options:
+        - Low (Minor inconvenience, non-critical)
+        - Medium (Affects workflows, has workarounds)
+        - High (Major disruption, degraded service)
+        - Critical (Service down, data at risk, security issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Detailed description of the infrastructure issue
+      placeholder: Describe the infrastructure or DevOps problem
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can this issue be reproduced?
+      placeholder: |
+        1. Deploy to '...'
+        2. Run command '...'
+        3. Observe error '...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+      placeholder: Describe the expected infrastructure behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What is actually happening?
+      placeholder: Describe what is occurring instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages/Logs
+      description: Include relevant error messages, logs, or stack traces
+      placeholder: |
+        Paste error messages, workflow logs, deployment logs, etc.
+        Please redact any sensitive information (secrets, credentials, etc.)
+      render: shell
+
+  - type: textarea
+    id: infrastructure-details
+    attributes:
+      label: Infrastructure Details
+      description: Provide details about the affected infrastructure
+      placeholder: |
+        - Cloud Provider: [AWS/Azure/GCP/Other]
+        - Region: [us-east-1, etc.]
+        - Services: [ECS, Lambda, App Service, etc.]
+        - Resources: [specific resource names/IDs]
+        - Configuration: [relevant settings]
+        - Infrastructure as Code: [Terraform, CloudFormation, ARM, etc.]
+
+  - type: textarea
+    id: workflow-details
+    attributes:
+      label: Workflow/Pipeline Details
+      description: For CI/CD issues, provide workflow information
+      placeholder: |
+        - Workflow name: [e.g., CI Pipeline]
+        - Workflow file: [e.g., .github/workflows/ci.yml]
+        - Job name: [e.g., build]
+        - Step that fails: [step number or name]
+        - Run ID/URL: [link to failed run]
+        - Runner: [ubuntu-latest, self-hosted, etc.]
+
+  - type: textarea
+    id: deployment-details
+    attributes:
+      label: Deployment Details
+      description: For deployment issues, provide deployment information
+      placeholder: |
+        - Deployment method: [GitHub Actions, manual, CLI, etc.]
+        - Target environment: [staging, production]
+        - Version/commit being deployed: [v1.2.3 or SHA]
+        - Deployment timestamp: [when did this occur]
+        - Rollback status: [successful/failed/not attempted]
+
+  - type: textarea
+    id: config-changes
+    attributes:
+      label: Recent Configuration Changes
+      description: Have there been recent infrastructure or configuration changes?
+      placeholder: |
+        - Changes to IaC code
+        - Workflow modifications
+        - Environment variable updates
+        - Secrets/credentials rotation
+        - Package updates
+        - Service configurations
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact Assessment
+      description: What is the impact of this issue?
+      placeholder: |
+        - Services affected: [list services]
+        - Users impacted: [number/percentage]
+        - Data impact: [any data loss/corruption]
+        - Financial impact: [increased costs, lost revenue]
+        - Duration: [how long has this been occurring]
+        - Frequency: [constant, intermittent, once]
+
+  - type: textarea
+    id: monitoring-alerts
+    attributes:
+      label: Monitoring/Alerts
+      description: Are there related monitoring alerts or metrics?
+      placeholder: |
+        - Alert name: [alert that fired]
+        - Metrics: [CPU at 100%, memory at 95%, etc.]
+        - Dashboards: [links to relevant dashboards]
+        - APM traces: [links to traces]
+        - Logs: [relevant log entries]
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Current Workarounds
+      description: Are there any temporary workarounds in place?
+      placeholder: Describe any workarounds or manual interventions being used
+
+  - type: textarea
+    id: suggested-solution
+    attributes:
+      label: Suggested Solution
+      description: Do you have suggestions for fixing this issue?
+      placeholder: |
+        Describe potential fixes:
+        - Infrastructure changes needed
+        - Configuration updates required
+        - Code changes needed
+        - Process improvements
+
+  - type: checkboxes
+    id: incident-management
+    attributes:
+      label: Incident Management
+      description: For critical issues
+      options:
+        - label: This is an active incident
+        - label: Incident response team has been notified
+        - label: Customer communication sent
+        - label: Rollback attempted
+        - label: Postmortem required
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What services or systems does this depend on or affect?
+      placeholder: |
+        Upstream dependencies:
+        - Service A
+        - Database B
+
+        Downstream impacts:
+        - Service X is degraded
+        - Feature Y is unavailable
+
+  - type: textarea
+    id: security-considerations
+    attributes:
+      label: Security Considerations
+      description: Are there security implications?
+      placeholder: |
+        - Exposed credentials
+        - Unauthorized access
+        - Data exposure
+        - Compliance concerns
+        - Security group misconfigurations
+
+  - type: textarea
+    id: cost-impact
+    attributes:
+      label: Cost Impact
+      description: Is there a cost impact from this issue?
+      placeholder: |
+        - Unexpected costs incurred
+        - Resource over-provisioning
+        - Inefficient resource usage
+        - Cost optimization opportunities
+
+  - type: textarea
+    id: compliance
+    attributes:
+      label: Compliance/Regulatory Impact
+      description: Does this affect compliance or regulatory requirements?
+      placeholder: |
+        - Audit logging affected
+        - Data retention policies
+        - Encryption requirements
+        - Regional compliance (GDPR, HIPAA, etc.)
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Timeline
+      description: When did this issue start? Any relevant timeline?
+      placeholder: |
+        - First observed: [timestamp]
+        - Started occurring after: [deployment, config change, etc.]
+        - Pattern: [time of day, day of week]
+        - Related events: [what else happened around this time]
+
+  - type: textarea
+    id: infrastructure-code
+    attributes:
+      label: Infrastructure as Code
+      description: Include relevant IaC snippets if applicable
+      placeholder: |
+        Include Terraform, CloudFormation, ARM templates, Kubernetes manifests, etc.
+        Please redact any sensitive information
+      render: hcl
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: |
+        - Screenshots of dashboards
+        - Architecture diagrams
+        - Network diagrams
+        - Related documentation
+        - Previous incidents
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/ivi374forivi/.github/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

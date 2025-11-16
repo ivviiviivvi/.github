@@ -3,10 +3,21 @@
 #
 # These owners will be automatically requested for review when someone opens a pull request
 # that modifies code that they own. Order is important; the last matching pattern takes precedence.
+#
+# Module 1: Organization & Repository Administration - Access Control
+# Module 2: Project Management & Workflow Automation - Code Review Assistance
+
+##############################
+# Default Owners
+##############################
 
 # Default owners for everything in the repo
 # Unless a later match takes precedence, these users will be requested for review
 * @ivi374forivi
+
+##############################
+# GitHub-specific Files
+##############################
 
 # GitHub-specific configuration files
 /.github/ @ivi374forivi
@@ -48,11 +59,66 @@ Gemfile.lock @ivi374forivi
 Cargo.toml @ivi374forivi
 Cargo.lock @ivi374forivi
 
+##############################
+# GitHub Copilot Customizations
+##############################
+
+# GitHub Copilot agents
+/agents/ @ivi374forivi
+
+# GitHub Copilot chat modes
+/chatmodes/ @ivi374forivi
+
+# GitHub Copilot collections
+/collections/ @ivi374forivi
+
+# GitHub Copilot instructions
+/instructions/ @ivi374forivi
+
+# GitHub Copilot prompts
+/prompts/ @ivi374forivi
+
+##############################
+# Templates
+##############################
+
+# Issue templates
+/ISSUE_TEMPLATE/ @ivi374forivi
+
+# PR templates
+/PULL_REQUEST_TEMPLATE/ @ivi374forivi
+/PULL_REQUEST_TEMPLATE.md @ivi374forivi
+
+##############################
+# Organization-specific Areas
+##############################
+
 # Example: Specific teams for different areas
-# Uncomment and customize as needed:
+# Uncomment and customize as needed when you have teams:
 # /frontend/ @org/frontend-team
 # /backend/ @org/backend-team
 # /api/ @org/api-team
 # /infrastructure/ @org/devops-team
 # /scripts/ @org/automation-team
 # /tests/ @org/qa-team
+
+##############################
+# Automation Scripts
+##############################
+
+/scripts/ @ivi374forivi
+/scripts/quota_manager.py @ivi374forivi
+/scripts/manage_lock.sh @ivi374forivi
+/scripts/commit_changes.sh @ivi374forivi
+
+##############################
+# Documentation
+##############################
+
+# Organization documentation
+/docs/ @ivi374forivi
+/profile/ @ivi374forivi
+
+# AI Implementation Protocol
+/for-ai-implementation.txt @ivi374forivi
+AI_IMPLEMENTATION_GUIDE.md @ivi374forivi

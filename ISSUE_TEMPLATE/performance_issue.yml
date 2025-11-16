@@ -1,0 +1,200 @@
+name: ⚡ Performance Issue
+description: Report a performance problem or optimization opportunity
+title: "[PERFORMANCE]: "
+labels: ["performance", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a performance issue! Performance issues can include slow response times, high resource usage, memory leaks, or inefficient operations.
+
+  - type: dropdown
+    id: performance-type
+    attributes:
+      label: Performance Issue Type
+      description: What kind of performance issue is this?
+      options:
+        - Slow Response Time
+        - High CPU Usage
+        - High Memory Usage
+        - Memory Leak
+        - Slow Database Queries
+        - Slow API Calls
+        - Large Bundle Size
+        - Slow Page Load
+        - Inefficient Algorithm
+        - Resource Exhaustion
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Impact Severity
+      description: How severe is the performance impact?
+      options:
+        - Low (Minor slowdown, hardly noticeable)
+        - Medium (Noticeable delay, affects user experience)
+        - High (Significant delay, major user experience impact)
+        - Critical (System unusable, crashes, or extreme slowdown)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Detailed description of the performance issue
+      placeholder: Describe what is slow, inefficient, or causing performance problems
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this performance issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Perform action '...'
+        4. Notice performance degradation
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-performance
+    attributes:
+      label: Expected Performance
+      description: What performance do you expect?
+      placeholder: |
+        - Expected response time: < 100ms
+        - Expected memory usage: < 50MB
+        - Expected load time: < 2s
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-performance
+    attributes:
+      label: Actual Performance
+      description: What performance are you experiencing?
+      placeholder: |
+        - Actual response time: 5000ms
+        - Actual memory usage: 500MB
+        - Actual load time: 15s
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Performance Metrics
+      description: Provide specific performance metrics if available
+      placeholder: |
+        - Lighthouse score: 45
+        - Time to First Byte: 3000ms
+        - Largest Contentful Paint: 8000ms
+        - Total Blocking Time: 2000ms
+        - Cumulative Layout Shift: 0.5
+        - CPU usage: 95%
+        - Memory usage: 2GB
+        - Network requests: 150
+        - Bundle size: 5MB
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Profiling Data
+      description: Include profiling data, flame graphs, or performance traces if available
+      placeholder: |
+        Attach screenshots from:
+        - Chrome DevTools Performance tab
+        - React DevTools Profiler
+        - Network waterfall
+        - Memory snapshots
+        - CPU profiling results
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Environment where performance issue occurs
+      placeholder: |
+        - OS: [e.g., Windows 11]
+        - Browser: [e.g., Chrome 120]
+        - Device: [e.g., Desktop, Mobile, Low-end device]
+        - CPU: [e.g., Intel i5]
+        - RAM: [e.g., 8GB]
+        - Network: [e.g., 4G, Cable 100Mbps]
+        - Version: [e.g., 1.0.0]
+    validations:
+      required: true
+
+  - type: textarea
+    id: load-conditions
+    attributes:
+      label: Load Conditions
+      description: What load conditions trigger this issue?
+      placeholder: |
+        - Number of concurrent users: 100
+        - Data volume: 10,000 records
+        - Request frequency: 100/second
+        - Time of day: Peak hours
+        - Specific scenarios: Large file uploads, complex queries
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Optimization
+      description: Do you have suggestions for improving performance?
+      placeholder: |
+        - Implement caching
+        - Optimize database queries
+        - Use pagination
+        - Implement lazy loading
+        - Code splitting
+        - Memoization
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: User Impact
+      description: How does this affect users?
+      placeholder: |
+        - Number of users affected
+        - Frequency of occurrence
+        - User workflows impacted
+        - Business impact
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Current Workarounds
+      description: Are there any workarounds currently being used?
+      placeholder: Describe any temporary solutions or workarounds
+
+  - type: checkboxes
+    id: regression
+    attributes:
+      label: Performance Regression
+      options:
+        - label: This is a performance regression (it worked faster before)
+        - label: I can identify the version where performance degraded
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Add any other context, screenshots, or logs
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/ivi374forivi/.github/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
