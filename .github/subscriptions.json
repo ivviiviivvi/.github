@@ -1,0 +1,49 @@
+{
+  "subscriptions": [
+    {
+      "name": "Jules_Agent",
+      "quota": 100,
+      "unit": "tasks",
+      "reset_cadence": "daily",
+      "relevant_workflows": ["jules.yml"],
+      "usage": 0,
+      "last_reset": "2024-01-01"
+    },
+    {
+      "name": "Perplexity_Pro_API",
+      "quota": 5.00,
+      "unit": "dollars",
+      "reset_cadence": "monthly",
+      "relevant_workflows": ["perplexity_workflow.yml"],
+      "usage": 0,
+      "last_reset": "2024-01-01"
+    },
+    {
+      "name": "Grok_API",
+      "quota": 150.00,
+      "unit": "dollars",
+      "reset_cadence": "monthly",
+      "relevant_workflows": ["grok_workflow.yml"],
+      "usage": 0,
+      "last_reset": "2024-01-01"
+    },
+    {
+      "name": "Gemini_API_Tier1",
+      "quota": 100.00,
+      "unit": "dollars",
+      "reset_cadence": "monthly",
+      "relevant_workflows": ["gemini_workflow.yml"],
+      "usage": 0,
+      "last_reset": "2024-01-01"
+    },
+    {
+      "name": "OpenAI_API",
+      "quota": 100.00,
+      "unit": "dollars",
+      "reset_cadence": "monthly",
+      "relevant_workflows": ["openai_workflow.yml"],
+      "usage": 0,
+      "last_reset": "2024-01-01"
+    }
+  ]
+}

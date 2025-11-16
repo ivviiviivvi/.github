@@ -1,0 +1,32 @@
+name: Manual Reset
+
+on:
+  workflow_dispatch:
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh
+
+      - name: Acquire lock
+        run: ./scripts/manage_lock.sh acquire
+
+      - name: Reset quotas
+        run: python scripts/quota_manager.py reset_quotas
+
+      - name: Commit state changes
+        run: ./scripts/commit_changes.sh "chore: manually reset quotas"
+
+      - name: Release lock
+        if: always()
+        run: ./scripts/manage_lock.sh release

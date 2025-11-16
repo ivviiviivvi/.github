@@ -1,0 +1,201 @@
+name: PR Quality Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+
+jobs:
+  pr-title-check:
+    name: Check PR Title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR Title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Types allowed in PR titles (conventional commits)
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          # Scopes are optional
+          requireScope: false
+          # Subject must not be empty
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject found in the PR title must not start with an uppercase character.
+          # Validate PR description
+          validateSingleCommit: false
+
+  pr-description-check:
+    name: Check PR Description
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Description Length
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+            const minLength = 50;
+
+            if (body.length < minLength) {
+              core.setFailed(`PR description is too short (${body.length} characters). Please provide a description of at least ${minLength} characters.`);
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `⚠️ **PR Description Too Short**\n\nYour PR description is only ${body.length} characters long. Please provide a more detailed description (at least ${minLength} characters) that includes:\n\n- What changes were made\n- Why these changes were necessary\n- How to test the changes\n- Any breaking changes or migration notes\n\nA good PR description helps reviewers understand your changes better and speeds up the review process.`
+              });
+            }
+
+      - name: Check for Linked Issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+
+            // Check for issue references (e.g., #123, fixes #123, closes #123)
+            const issuePattern = /(close[sd]?|fix(e[sd])?|resolve[sd]?)\s+#\d+/i;
+            const simpleIssuePattern = /#\d+/;
+
+            const hasLinkedIssue = issuePattern.test(body) || simpleIssuePattern.test(body);
+
+            if (!hasLinkedIssue) {
+              core.warning('No linked issue found in PR description. Consider linking related issues.');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `💡 **Tip**: Link Related Issues\n\nWe noticed this PR doesn't reference any issues. If this PR addresses an existing issue, please link it using:\n\n- \`Fixes #123\` (for bug fixes)\n- \`Closes #123\` (for feature implementations)\n- \`Relates to #123\` (for related work)\n\nThis helps track the relationship between issues and PRs.`
+              });
+            }
+
+  pr-checklist-verification:
+    name: Verify PR Checklist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Completed Checklist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+
+            // Find all checkboxes
+            const checkboxPattern = /- \[([ xX])\]/g;
+            const checkboxes = body.match(checkboxPattern) || [];
+
+            if (checkboxes.length === 0) {
+              core.warning('No checklist found in PR description.');
+              return;
+            }
+
+            const checkedBoxes = checkboxes.filter(box => box.includes('[x]') || box.includes('[X]'));
+            const uncheckedBoxes = checkboxes.length - checkedBoxes.length;
+
+            const completionRate = (checkedBoxes.length / checkboxes.length * 100).toFixed(0);
+
+            console.log(`Checklist completion: ${completionRate}% (${checkedBoxes.length}/${checkboxes.length})`);
+
+            if (uncheckedBoxes > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `📋 **Checklist Status**\n\n${completionRate}% complete (${checkedBoxes.length}/${checkboxes.length} items checked)\n\nPlease complete the checklist before requesting review.`
+              });
+            }
+
+  pr-size-warning:
+    name: Warn on Large PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR Size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            const files = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+
+            let totalChanges = 0;
+            let filesChanged = files.data.length;
+
+            files.data.forEach(file => {
+              totalChanges += file.additions + file.deletions;
+            });
+
+            console.log(`PR Size: ${filesChanged} files, ${totalChanges} total changes`);
+
+            const largeFilesThreshold = 50;
+            const largeChangesThreshold = 1000;
+
+            if (filesChanged > largeFilesThreshold || totalChanges > largeChangesThreshold) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `⚠️ **Large Pull Request Detected**\n\nThis PR is quite large:\n- **${filesChanged}** files changed\n- **${totalChanges}** total line changes\n\n**Consider:**\n- Breaking this into smaller, focused PRs\n- Each PR should address a single concern\n- Smaller PRs are easier to review and less likely to introduce bugs\n\nIf this PR must remain large, please provide extra context in the description about why these changes are grouped together.`
+              });
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['large-pr']
+              });
+            }
+
+  check-merge-conflicts:
+    name: Check for Merge Conflicts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Merge Conflicts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            if (pr.mergeable === false) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `🔀 **Merge Conflicts Detected**\n\nThis PR has merge conflicts that need to be resolved before it can be merged.\n\n**To resolve:**\n1. Update your local branch: \`git checkout ${pr.head.ref}\`\n2. Merge the base branch: \`git merge ${pr.base.ref}\`\n3. Resolve conflicts in your editor\n4. Commit the resolved changes\n5. Push to update this PR\n\nNeed help? See our [contribution guide](../CONTRIBUTING.md) or ask in the comments.`
+              });
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['conflicts']
+              });
+            }

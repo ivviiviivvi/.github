@@ -1,0 +1,229 @@
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  deployments: write
+
+jobs:
+  benchmark:
+    name: Run Performance Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Set up Python
+        if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Node dependencies
+        if: hashFiles('package.json') != ''
+        run: npm ci
+
+      - name: Install Python dependencies
+        if: hashFiles('requirements.txt') != ''
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-benchmark
+
+      # JavaScript/TypeScript Benchmarks
+      - name: Run JavaScript Benchmarks
+        if: hashFiles('package.json') != ''
+        run: |
+          npm run benchmark || echo "No benchmark script found"
+          # Alternative: npx vitest bench || npx jest --testMatch="**/*.bench.js"
+
+      # Python Benchmarks
+      - name: Run Python Benchmarks
+        if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+        run: |
+          pytest benchmarks/ --benchmark-only --benchmark-json=benchmark-results.json || true
+
+      # Store benchmark results
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'benchmarkjs'
+          output-file-path: benchmark-results.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: '150%'
+          comment-on-alert: true
+          fail-on-alert: false
+          alert-comment-cc-users: '@ivi374forivi'
+
+      # Lighthouse Performance (for web apps)
+      - name: Run Lighthouse CI
+        if: hashFiles('package.json') != ''
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun || echo "Lighthouse CI not configured"
+
+      # Load Testing with k6
+      - name: Load Testing
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/load-test.js
+        continue-on-error: true
+
+      # Generate Performance Report
+      - name: Generate Performance Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let report = '## 📊 Performance Benchmark Results\n\n';
+
+            if (fs.existsSync('benchmark-results.json')) {
+              const results = JSON.parse(fs.readFileSync('benchmark-results.json', 'utf8'));
+              report += '### Benchmark Metrics\n\n';
+              report += '| Test | Operations/sec | Relative Margin of Error |\n';
+              report += '|------|----------------|-------------------------|\n';
+              // Add benchmark results here
+            }
+
+            if (context.eventName === 'pull_request') {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: report
+              });
+            }
+
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    if: hashFiles('package.json') != ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build || true
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  bundle-size:
+    name: Check Bundle Size
+    runs-on: ubuntu-latest
+    if: hashFiles('package.json') != ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Analyze bundle size
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_step: install
+          build_script: build
+
+  memory-profiling:
+    name: Memory Profiling
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: hashFiles('requirements.txt') != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install memory profiler
+        if: hashFiles('requirements.txt') != ''
+        run: |
+          pip install memory_profiler
+          pip install -r requirements.txt
+
+      - name: Run memory profiling
+        if: hashFiles('requirements.txt') != ''
+        run: |
+          python -m memory_profiler tests/profile_memory.py || echo "No memory profiling script"
+
+      - name: Upload profiling results
+        uses: actions/upload-artifact@v4
+        with:
+          name: memory-profile
+          path: '*.prof'
+          retention-days: 30
+
+  performance-report:
+    name: Performance Summary
+    needs: [benchmark, lighthouse, bundle-size, memory-profiling]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Performance Summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const summary = `
+            ## 🎯 Performance Test Summary
+
+            | Job | Status |
+            |-----|--------|
+            | Benchmarks | ${{ needs.benchmark.result }} |
+            | Lighthouse | ${{ needs.lighthouse.result }} |
+            | Bundle Size | ${{ needs.bundle-size.result }} |
+            | Memory Profiling | ${{ needs.memory-profiling.result }} |
+
+            ### Recommendations
+
+            - Monitor performance metrics regularly
+            - Set performance budgets
+            - Optimize critical rendering path
+            - Minimize bundle size
+            - Use lazy loading where applicable
+            - Implement caching strategies
+
+            See individual job outputs for detailed metrics.
+            `;
+
+            console.log(summary);

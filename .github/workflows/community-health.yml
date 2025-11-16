@@ -1,0 +1,139 @@
+name: Community Health
+
+on:
+  schedule:
+    # Run weekly on Sundays at 9:00 AM UTC
+    - cron: '0 9 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale-management:
+    name: Manage Stale Issues and PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Stale Issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          # Issues
+          stale-issue-message: |
+            👋 This issue has been automatically marked as stale because it has not had recent activity.
+
+            It will be closed in 7 days if no further activity occurs.
+
+            If you believe this issue is still relevant, please:
+            - Add a comment explaining why it should remain open
+            - Remove the 'stale' label
+            - Add new information or updates
+
+            Thank you for your contributions!
+          close-issue-message: |
+            This issue has been automatically closed due to inactivity.
+
+            If you believe this issue should be reopened, please create a new issue with:
+            - Reference to this closed issue
+            - Updated information or context
+            - Why it's still relevant
+
+            Thank you for your understanding!
+          days-before-issue-stale: 60
+          days-before-issue-close: 7
+          stale-issue-label: 'stale'
+          exempt-issue-labels: 'pinned,security,roadmap,epic,planned'
+
+          # Pull Requests
+          stale-pr-message: |
+            👋 This pull request has been automatically marked as stale because it has not had recent activity.
+
+            It will be closed in 7 days if no further activity occurs.
+
+            If you're still working on this:
+            - Add a comment with an update
+            - Push new commits
+            - Request a review
+            - Remove the 'stale' label
+
+            Thank you for your contribution!
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity.
+
+            If you'd like to continue this work:
+            - Reopen the PR if you have write access
+            - Create a new PR with updated changes
+            - Reference this PR in the new one
+
+            Thank you for your contribution!
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-pr-label: 'stale'
+          exempt-pr-labels: 'pinned,security,work-in-progress,blocked'
+
+          # General settings
+          operations-per-run: 100
+          remove-stale-when-updated: true
+          ascending: true
+
+  lock-closed-issues:
+    name: Lock Closed Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lock Inactive Closed Issues
+        uses: dessant/lock-threads@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-inactive-days: 90
+          issue-comment: |
+            This issue has been automatically locked because it has been closed for more than 90 days.
+
+            If you have a related problem, please open a new issue and reference this one.
+
+            Thank you!
+          pr-inactive-days: 90
+          pr-comment: |
+            This pull request has been automatically locked because it has been closed for more than 90 days.
+
+            If you have a related issue, please open a new PR or issue.
+
+            Thank you!
+
+  update-contributors:
+    name: Update Contributors List
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Contributors List
+        uses: akhilmhdh/contributors-readme-action@v2.3.6
+        with:
+          image_size: 80
+          columns_per_row: 7
+          readme_path: 'CONTRIBUTORS.md'
+          committer_username: 'github-actions[bot]'
+          committer_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'docs: update contributors list'
+
+  issue-metrics:
+    name: Generate Issue Metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Issue Metrics
+        uses: github/issue-metrics@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH_QUERY: 'repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}'
+
+      - name: Upload Metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-metrics
+          path: issue_metrics.md
+          retention-days: 90

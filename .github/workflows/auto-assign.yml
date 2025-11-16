@@ -1,0 +1,69 @@
+name: Auto Assign
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto-assign-pr:
+    name: Auto Assign PR
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Auto-assign PR to author
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Assign PR to the author
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: [context.payload.pull_request.user.login]
+            })
+
+      - name: Request review from CODEOWNERS
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // You can customize this to request reviews from specific people/teams
+            // based on the files changed or other criteria
+
+            // Example: Request review from a specific team
+            // github.rest.pulls.requestReviewers({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   pull_number: context.issue.number,
+            //   team_reviewers: ['core-team']
+            // })
+
+            console.log('CODEOWNERS will be automatically requested for review')
+
+  auto-assign-issue:
+    name: Auto Assign Issue
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    steps:
+      - name: Auto-assign issue to maintainers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Uncomment and customize to auto-assign issues to specific users
+            // const maintainers = ['maintainer1', 'maintainer2']
+            // const randomMaintainer = maintainers[Math.floor(Math.random() * maintainers.length)]
+
+            // github.rest.issues.addAssignees({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   issue_number: context.issue.number,
+            //   assignees: [randomMaintainer]
+            // })
+
+            console.log('Issue opened, ready for assignment')

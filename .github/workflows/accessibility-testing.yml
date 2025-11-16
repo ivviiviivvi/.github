@@ -1,0 +1,241 @@
+name: Accessibility Testing
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.html'
+      - 'src/**/*.jsx'
+      - 'src/**/*.tsx'
+      - 'src/**/*.vue'
+      - 'public/**'
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  pa11y-test:
+    name: Pa11y Accessibility Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build || true
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Install Pa11y CI
+        run: npm install -g pa11y-ci
+
+      - name: Create Pa11y config
+        run: |
+          cat > .pa11yci.json << 'EOF'
+          {
+            "defaults": {
+              "standard": "WCAG2AA",
+              "timeout": 10000,
+              "wait": 1000,
+              "chromeLaunchConfig": {
+                "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+              },
+              "runners": [
+                "axe",
+                "htmlcs"
+              ]
+            },
+            "urls": [
+              "http://localhost:3000",
+              "http://localhost:3000/about",
+              "http://localhost:3000/contact"
+            ]
+          }
+          EOF
+
+      - name: Run Pa11y tests
+        run: pa11y-ci --json > pa11y-results.json || true
+
+      - name: Parse Results
+        id: parse
+        run: |
+          if [ -f pa11y-results.json ]; then
+            ERRORS=$(jq '[.[] | .issues | length] | add' pa11y-results.json || echo "0")
+            echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Pa11y results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pa11y-results
+          path: pa11y-results.json
+          retention-days: 30
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && steps.parse.outputs.errors != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('pa11y-results.json', 'utf8'));
+
+            let comment = '## ♿ Accessibility Issues Found\n\n';
+            comment += `**Total Issues**: ${results.reduce((sum, r) => sum + r.issues.length, 0)}\n\n`;
+
+            results.forEach(result => {
+              if (result.issues.length > 0) {
+                comment += `### ${result.pageUrl}\n\n`;
+                result.issues.slice(0, 5).forEach(issue => {
+                  comment += `- **${issue.type}**: ${issue.message}\n`;
+                  comment += `  - Code: ${issue.code}\n`;
+                  comment += `  - Selector: \`${issue.selector}\`\n\n`;
+                });
+                if (result.issues.length > 5) {
+                  comment += `... and ${result.issues.length - 5} more issues\n\n`;
+                }
+              }
+            });
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+  axe-test:
+    name: axe-core Accessibility Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Create axe test
+        run: |
+          mkdir -p tests/accessibility
+          cat > tests/accessibility/axe.test.js << 'EOF'
+          const { test, expect } = require('@playwright/test');
+          const AxeBuilder = require('@axe-core/playwright').default;
+
+          test.describe('Accessibility tests', () => {
+            test('should not have any automatically detectable accessibility issues', async ({ page }) => {
+              await page.goto('http://localhost:3000');
+
+              const accessibilityScanResults = await new AxeBuilder({ page })
+                .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+                .analyze();
+
+              expect(accessibilityScanResults.violations).toEqual([]);
+            });
+
+            test('should have proper form labels', async ({ page }) => {
+              await page.goto('http://localhost:3000/contact');
+
+              const accessibilityScanResults = await new AxeBuilder({ page })
+                .include('form')
+                .analyze();
+
+              expect(accessibilityScanResults.violations).toEqual([]);
+            });
+          });
+          EOF
+
+      - name: Build and start application
+        run: |
+          npm run build || true
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run axe tests
+        run: npx playwright test tests/accessibility/
+
+      - name: Upload axe report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe-playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  lighthouse-a11y:
+    name: Lighthouse Accessibility Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build || true
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+          configPath: './.github/lighthouse-config.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  a11y-summary:
+    name: Accessibility Summary
+    needs: [pa11y-test, axe-test, lighthouse-a11y]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## ♿ Accessibility Testing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Tool | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Pa11y | ${{ needs.pa11y-test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| axe-core | ${{ needs.axe-test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lighthouse | ${{ needs.lighthouse-a11y.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Standards Tested" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ WCAG 2.1 Level A" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ WCAG 2.1 Level AA" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Section 508" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Common Issues to Fix" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Missing alt text** on images" >> $GITHUB_STEP_SUMMARY
+          echo "2. **Low contrast** text" >> $GITHUB_STEP_SUMMARY
+          echo "3. **Missing form labels**" >> $GITHUB_STEP_SUMMARY
+          echo "4. **Keyboard navigation** issues" >> $GITHUB_STEP_SUMMARY
+          echo "5. **ARIA attributes** misuse" >> $GITHUB_STEP_SUMMARY

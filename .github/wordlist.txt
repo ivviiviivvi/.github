@@ -1,0 +1,39 @@
+# Custom wordlist for spell checking
+# Add technical terms, project-specific words, and proper nouns here
+
+# GitHub and Git terms
+github
+repo
+repos
+workflow
+workflows
+codeql
+dependabot
+renovate
+PR
+PRs
+CI
+CD
+SBOM
+
+# Technical terms
+API
+APIs
+CLI
+SDK
+JSON
+YAML
+TOML
+npm
+pip
+docker
+kubernetes
+
+# Common abbreviations
+e.g.
+i.e.
+etc
+vs
+
+# Project-specific terms
+ivi374forivi

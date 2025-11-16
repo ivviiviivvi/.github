@@ -1,0 +1,54 @@
+name: Perplexity Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'The prompt for the Perplexity task'
+        required: true
+
+jobs:
+  perplexity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Check quota
+        id: quota
+        run: |
+          usage=$(python scripts/quota_manager.py get_usage "Perplexity_Pro_API")
+          quota=$(jq -r '.subscriptions[] | select(.name=="Perplexity_Pro_API") | .quota' .github/subscriptions.json)
+          echo "usage=$usage" >> $GITHUB_OUTPUT
+          echo "quota=$quota" >> $GITHUB_OUTPUT
+
+      - name: Run Perplexity Task
+        if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+        run: |
+          echo "Running Perplexity task with prompt: ${{ github.event.inputs.prompt }}"
+          # Simulate a variable cost based on prompt length
+          prompt_length=${#${{ github.event.inputs.prompt }}}
+          cost=$(echo "scale=4; $prompt_length * 0.0001" | bc)
+          echo "Simulated cost: $cost"
+          python scripts/quota_manager.py increment_usage "Perplexity_Pro_API" $cost
+
+          # Simulate output
+          echo "This is a simulated output from Perplexity for the prompt: ${{ github.event.inputs.prompt }}" > perplexity_output_${{ github.run_id }}.txt
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+
+      - name: Queue Task
+        if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
+        run: |
+          task='{ "subscription": "Perplexity_Pro_API", "details": "..." }'
+          python scripts/quota_manager.py add_task "$task"
+          echo "Perplexity API quota reached. Task queued."
+
+      - name: Commit state changes
+        if: always()
+        run: ./scripts/commit_changes.sh "chore: update state for Perplexity task"

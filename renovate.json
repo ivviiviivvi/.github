@@ -1,0 +1,110 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":enableVulnerabilityAlertsWithLabel('security')",
+    ":semanticCommits",
+    ":timezone(UTC)"
+  ],
+  "description": "Renovate configuration for automated dependency updates",
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🤖 Dependency Updates Dashboard",
+  "dependencyDashboardLabels": ["dependencies", "renovate"],
+  "rebaseWhen": "conflicted",
+  "assignees": ["@ivi374forivi"],
+  "reviewers": ["@ivi374forivi"],
+  "labels": ["dependencies", "automated"],
+  "schedule": ["before 4am on Monday"],
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 5,
+  "automerge": false,
+  "platformAutomerge": false,
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
+  "rangeStrategy": "bump",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "dependencies"],
+    "assignees": ["@ivi374forivi"],
+    "automerge": false
+  },
+  "packageRules": [
+    {
+      "description": "Group all non-major dependencies together",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Automerge non-major updates",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": false,
+      "labels": ["dependencies", "automerge-candidate"]
+    },
+    {
+      "description": "Major updates should be reviewed carefully",
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "major-update"],
+      "automerge": false
+    },
+    {
+      "description": "Security updates have higher priority",
+      "matchDatasources": ["npm"],
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["*"],
+      "prPriority": 10,
+      "labels": ["dependencies", "security"]
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "automerge": false,
+      "labels": ["dependencies", "github-actions"]
+    },
+    {
+      "description": "Group Docker updates",
+      "matchDatasources": ["docker"],
+      "groupName": "Docker",
+      "labels": ["dependencies", "docker"]
+    },
+    {
+      "description": "Separate eslint packages",
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint packages"
+    },
+    {
+      "description": "Separate typescript packages",
+      "matchPackagePatterns": ["^@typescript-eslint", "^typescript"],
+      "groupName": "typescript packages"
+    },
+    {
+      "description": "Separate testing packages",
+      "matchPackagePatterns": ["^jest", "^@testing-library", "^vitest", "^@vitest"],
+      "groupName": "testing packages"
+    },
+    {
+      "description": "Pin dependencies for reproducible builds",
+      "matchPackagePatterns": ["*"],
+      "rangeStrategy": "pin"
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "Update version in README badges",
+      "fileMatch": ["^README\\.md$"],
+      "matchStrings": [
+        "badge\\/v(?<currentValue>.*?)-"
+      ],
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "package-name"
+    }
+  ],
+  "prBodyTemplate": "{{{header}}}{{{table}}}{{{notes}}}{{{changelogs}}}{{{configDescription}}}{{{footer}}}",
+  "prBodyDefinitions": {
+    "Package": "**{{{depName}}}**",
+    "Type": "{{{updateType}}}",
+    "Update": "{{{displayFrom}}} → {{{displayTo}}}",
+    "Change": "[Commits](https://renovatebot.com/diffs/npm/{{{depName}}}/{{{fromVersion}}}/{{{toVersion}}})"
+  }
+}

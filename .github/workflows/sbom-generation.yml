@@ -1,0 +1,48 @@
+name: SBOM Generation
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  generate-sbom:
+    name: Generate Software Bill of Materials
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          format: spdx-json
+          output-file: sbom.spdx.json
+          upload-artifact: true
+          upload-release-assets: true
+
+      - name: Generate SBOM (CycloneDX format)
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: sbom.cyclonedx.json
+          upload-artifact: true
+
+      - name: Upload SBOM to dependency graph
+        uses: advanced-security/spdx-dependency-submission-action@v0.1.0
+        with:
+          filePath: sbom.spdx.json
+
+      - name: Archive SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-reports
+          path: |
+            sbom.*.json
+          retention-days: 90
