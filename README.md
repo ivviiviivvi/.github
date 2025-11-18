@@ -16,6 +16,7 @@ central hub for:
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
 - **Living Document System** - AI-driven governance and management protocols
+- **🎭 Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
 
 When a repository in our organization doesn't have its own community health file
 s, GitHub automatically uses the defaults from this repository.
@@ -115,6 +116,40 @@ For detailed documentation on each component, see the `docs/` directory:
 - [Prompts Documentation](docs/README.prompts.md)
 - [Chat Modes Documentation](docs/README.chatmodes.md)
 - [Collections Documentation](docs/README.collections.md)
+
+### 🎭 Mouthpiece Filter System
+
+**Transform your natural human expression into AI-optimized prompts.**
+
+The Mouthpiece Filter System allows you to write and speak in your authentic voice—with all its imperfections, metaphors, and humanity—and automatically transforms that input into structured, clear prompts that AI systems can understand and act upon.
+
+> *"Write like a human. Let the filter handle the rest."*
+
+#### What It Does
+- **Preserves Your Voice**: Keeps your unique style, metaphors, and emotional context
+- **Extracts Intent**: Understands what you mean, not just what you say
+- **Structures Information**: Organizes thoughts into clear, actionable formats
+- **Optimizes for AI**: Creates prompts that AI systems can process effectively
+
+#### Components
+- **Filter Script** (`scripts/mouthpiece_filter.py`) - CLI transformation engine
+- **Chat Mode** (`chatmodes/mouthpiece.chatmode.md`) - Interactive AI persona
+- **Prompt Template** (`prompts/mouthpiece-transform.prompt.md`) - Quick transformations
+- **Documentation** ([MOUTHPIECE_README.md](MOUTHPIECE_README.md)) - Complete guide
+
+#### Quick Start
+```bash
+# Transform natural writing into structured prompts
+python scripts/mouthpiece_filter.py "your natural thoughts here"
+
+# Example
+python scripts/mouthpiece_filter.py "need something that watches APIs and alerts when they fail"
+```
+
+**Learn More:**
+- [Mouthpiece System Overview](MOUTHPIECE_README.md)
+- [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
+- [Examples & Patterns](docs/mouthpiece-examples.md)
 
 ### Community Health Files
 
