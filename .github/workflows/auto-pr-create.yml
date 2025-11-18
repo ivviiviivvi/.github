@@ -1,0 +1,247 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'release/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  auto-create-pr:
+    name: Automatically Create PR
+    runs-on: ubuntu-latest
+    # Prevent running on PR branches that already have PRs
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip-auto-pr]')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if PR already exists
+        id: check-pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            console.log(`Checking for existing PRs for branch: ${branch}`);
+
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open'
+            });
+
+            const prExists = pulls.length > 0;
+            console.log(`PR exists: ${prExists}`);
+
+            return prExists;
+
+      - name: Determine base branch
+        id: base-branch
+        if: steps.check-pr.outputs.result == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            let baseBranch = 'main';
+
+            // Determine base branch based on branch type
+            if (branch.startsWith('feature/') || branch.startsWith('bugfix/')) {
+              baseBranch = 'develop';
+            } else if (branch.startsWith('hotfix/')) {
+              baseBranch = 'main';
+            } else if (branch.startsWith('release/')) {
+              baseBranch = 'main';
+            }
+
+            // Check if base branch exists
+            try {
+              await github.rest.repos.getBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: baseBranch
+              });
+            } catch (error) {
+              console.log(`Base branch ${baseBranch} not found, falling back to main`);
+              baseBranch = 'main';
+            }
+
+            console.log(`Base branch: ${baseBranch}`);
+            core.setOutput('base', baseBranch);
+            return baseBranch;
+
+      - name: Generate PR details
+        id: pr-details
+        if: steps.check-pr.outputs.result == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            const baseBranch = '${{ steps.base-branch.outputs.base }}';
+
+            // Extract branch type and description
+            const parts = branch.split('/');
+            const branchType = parts[0];
+            const description = parts.slice(1).join('/').replace(/-/g, ' ');
+
+            // Generate conventional commit type
+            const typeMap = {
+              'feature': 'feat',
+              'bugfix': 'fix',
+              'hotfix': 'fix',
+              'release': 'release'
+            };
+            const commitType = typeMap[branchType] || 'chore';
+
+            // Generate PR title
+            const title = `${commitType}: ${description}`;
+
+            // Get recent commits
+            const { data: commits } = await github.rest.repos.compareCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: baseBranch,
+              head: branch
+            });
+
+            // Generate commit list for PR body
+            const commitList = commits.commits
+              .map(commit => `- ${commit.commit.message.split('\n')[0]} (${commit.sha.substring(0, 7)})`)
+              .join('\n');
+
+            // Generate PR body based on branch type
+            let body = `## Description\n\nAuto-generated PR for \`${branch}\`\n\n`;
+
+            body += `## Type of Change\n`;
+            body += `- [${branchType === 'feature' ? 'x' : ' '}] New feature\n`;
+            body += `- [${branchType === 'bugfix' || branchType === 'hotfix' ? 'x' : ' '}] Bug fix\n`;
+            body += `- [${branchType === 'release' ? 'x' : ' '}] Release\n`;
+            body += `- [ ] Breaking change\n`;
+            body += `- [ ] Documentation update\n\n`;
+
+            body += `## Changes Made\n${commitList}\n\n`;
+
+            body += `## Testing\n`;
+            body += `- [ ] Unit tests added/updated\n`;
+            body += `- [ ] Integration tests added/updated\n`;
+            body += `- [ ] Manual testing completed\n\n`;
+
+            body += `## Checklist\n`;
+            body += `- [ ] Code follows project style guidelines\n`;
+            body += `- [ ] Self-review completed\n`;
+            body += `- [ ] Comments added for complex code\n`;
+            body += `- [ ] Documentation updated\n`;
+            body += `- [ ] No new warnings generated\n`;
+            body += `- [ ] Tests pass locally\n\n`;
+
+            body += `## Additional Notes\n`;
+            body += `This PR was automatically created by the Auto PR workflow.\n`;
+            body += `Please review and update the description as needed.\n\n`;
+            body += `---\n`;
+            body += `*To prevent auto-PR creation, include \`[skip-auto-pr]\` in your commit message.*`;
+
+            core.setOutput('title', title);
+            core.setOutput('body', body);
+
+            return { title, body };
+
+      - name: Create Pull Request
+        id: create-pr
+        if: steps.check-pr.outputs.result == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            const baseBranch = '${{ steps.base-branch.outputs.base }}';
+            const title = `${{ steps.pr-details.outputs.title }}`;
+            const body = `${{ steps.pr-details.outputs.body }}`;
+
+            try {
+              const { data: pr } = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                head: branch,
+                base: baseBranch,
+                draft: false
+              });
+
+              console.log(`Created PR #${pr.number}: ${pr.html_url}`);
+
+              // Assign PR to author
+              const author = context.payload.pusher.name;
+              if (author) {
+                try {
+                  await github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    assignees: [author]
+                  });
+                } catch (error) {
+                  console.log(`Could not assign to ${author}: ${error.message}`);
+                }
+              }
+
+              // Add labels based on branch type
+              const branchType = branch.split('/')[0];
+              const labels = [];
+
+              if (branchType === 'feature') labels.push('enhancement');
+              if (branchType === 'bugfix') labels.push('bug');
+              if (branchType === 'hotfix') labels.push('hotfix', 'priority:high');
+              if (branchType === 'release') labels.push('release');
+
+              labels.push('auto-created');
+
+              if (labels.length > 0) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  labels: labels
+                });
+              }
+
+              core.setOutput('pr-number', pr.number);
+              core.setOutput('pr-url', pr.html_url);
+
+              return pr.number;
+            } catch (error) {
+              core.setFailed(`Failed to create PR: ${error.message}`);
+            }
+
+      - name: Comment on PR
+        if: steps.check-pr.outputs.result == 'false' && steps.create-pr.outputs.pr-number
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.create-pr.outputs.pr-number }};
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `🤖 **Auto-Generated Pull Request**\n\nThis PR was automatically created from the \`${context.ref.replace('refs/heads/', '')}\` branch.\n\n**Next Steps:**\n1. Review and update the PR description\n2. Ensure all checklist items are completed\n3. Request reviews from appropriate team members\n4. Address any CI/CD check failures\n\n**Auto-Merge:** This PR can be automatically merged when:\n- All required checks pass\n- Required approvals are obtained\n- No merge conflicts exist\n\nSee [PR Automation Guide](../AUTOMATION_MASTER_GUIDE.md) for more details.`
+            });
+
+      - name: Summary
+        if: steps.check-pr.outputs.result == 'false' && steps.create-pr.outputs.pr-number
+        run: |
+          echo "### ✅ Pull Request Created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Number:** #${{ steps.create-pr.outputs.pr-number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR URL:** ${{ steps.create-pr.outputs.pr-url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${GITHUB_REF#refs/heads/}" >> $GITHUB_STEP_SUMMARY
+          echo "**Base:** ${{ steps.base-branch.outputs.base }}" >> $GITHUB_STEP_SUMMARY

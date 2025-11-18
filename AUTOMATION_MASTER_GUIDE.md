@@ -21,7 +21,8 @@ Complete reference for all automation, tooling, and integrations in this gold st
 | Event | Automated Actions | Workflows |
 |-------|-------------------|-----------|
 | **Push to main** | Security scan, deploy, metrics, release | 10+ workflows |
-| **Pull Request** | Tests, linting, coverage, quality checks, review | 12+ workflows |
+| **Pull Request** | Tests, linting, coverage, quality checks, review, **auto-merge** | 13+ workflows |
+| **Feature Branch Push** | **Auto-PR creation**, auto-assign, auto-label | 2+ workflows |
 | **New Issue** | Auto-label, auto-assign, welcome message | 3 workflows |
 | **Schedule** | Dependency updates, stale cleanup, metrics | 5 workflows |
 | **Release Tag** | Changelog, GitHub release, package publish | 2 workflows |
@@ -194,6 +195,56 @@ git commit --no-verify -m "WIP: quick fix"
 - **Tests**: Benchmarks, Lighthouse, bundle size
 - **Alerts**: 150% regression threshold
 - **Runtime**: ~5-10 minutes
+
+### PR Automation Workflows (2)
+
+#### 1. Auto PR Creation
+**File**: `.github/workflows/auto-pr-create.yml`
+- **Trigger**: Push to feature/bugfix/hotfix/release branches
+- **Actions**: Creates PR, assigns author, adds labels
+- **Smart**: Auto-detects base branch (develop/main)
+- **Title**: Conventional commit format
+- **Runtime**: ~30 seconds
+- **Documentation**: [PR_AUTOMATION.md](PR_AUTOMATION.md)
+
+**Features**:
+- Automatic PR creation for all feature branches
+- Generates comprehensive PR description with commit history
+- Applies appropriate labels based on branch type
+- Assigns PR to branch author
+- Includes checklist and testing templates
+- Skip with `[skip-auto-pr]` in commit message
+
+#### 2. Auto Merge
+**File**: `.github/workflows/auto-merge.yml`
+- **Trigger**: PR updates, reviews, check completions
+- **Eligibility**: Auto-created PRs or labeled `auto-merge`
+- **Validates**: Approvals, checks, conflicts
+- **Conflict Resolution**: Auto-updates branch when possible
+- **Runtime**: ~1-2 minutes
+- **Configuration**: `.github/pr-automation.yml`
+
+**Features**:
+- Intelligent auto-merge when all conditions met
+- Automatic merge conflict resolution
+- Configurable approval requirements by branch type
+- Smart base branch detection
+- Automatic branch cleanup after merge
+- Comprehensive status reporting
+
+**Merge Requirements**:
+- All status checks pass
+- Required approvals obtained (0-2 based on branch type)
+- No merge conflicts (auto-resolved if possible)
+- Not in draft mode
+- No blocking labels (`do-not-merge`, `wip`)
+
+**Configuration**: Edit `.github/pr-automation.yml` to customize:
+- Merge methods (squash/merge/rebase)
+- Approval requirements
+- Conflict resolution behavior
+- Branch cleanup settings
+- Notification preferences
 
 ### Release Workflows (3)
 
