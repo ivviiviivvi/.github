@@ -7,70 +7,95 @@
 
 ## 🚀 Quick Start
 
-### For AI Assistants Creating PRs
+### Golden Rule: 1 Feature = 1 PR
 
 ```bash
-# Quick fix/small feature (auto-merge immediately)
-gh pr create \
-  --title "fix: your fix here" \
-  --body "Description" \
-  --label "automerge:when-ci-passes"
+# ✅ DO: One feature per branch/PR
+git checkout -b feature/user-dashboard  # Single feature
+gh pr create --label "automerge:when-ci-passes"
 
-# Standard feature (auto-merge after 24h)
+# ❌ DON'T: Multiple features in one PR
+git checkout -b feature/dashboard-and-api-and-auth  # Bad!
+```
+
+### For AI Assistants Creating PRs (Burst Mode)
+
+```bash
+# 90% of PRs: Auto-merge immediately when CI passes
 gh pr create \
-  --title "feat: your feature" \
+  --title "feat: user dashboard" \
   --body "Description\n\nCloses #123" \
-  --label "automerge:after-24h"
+  --label "automerge:when-ci-passes"  # ← Default!
 
-# Complex change (needs review)
+# 10% of PRs: Complex/breaking changes
 gh pr create \
-  --title "refactor: major change" \
-  --body "Description" \
-  --label "needs-review"
+  --title "refactor: major architecture change" \
+  --body "Detailed explanation" \
+  --label "needs-review"  # ← Requires approval
 
-# Related PRs (batch merge)
-gh pr create \
-  --title "feat: API endpoint" \
-  --body "Description" \
-  --label "batch:api-refactor"
+# Related features that MUST go together
+gh pr create --label "batch:api-v2" --title "feat: API endpoint"
+gh pr create --label "batch:api-v2" --title "feat: API client"
+gh pr create --label "batch:api-v2" --title "test: API tests"
+# Trigger: /merge-batch api-v2
 ```
 
 ---
 
 ## 🏷️ Labels Quick Reference
 
-| Label | Effect | Use When |
-|-------|--------|----------|
-| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅ | Bug fixes, docs, small features |
-| `automerge:after-24h` | ⏰ Merges 24h after creation | Standard features |
-| `automerge:batch` | 🔗 Waits for related PRs | Dependent changes |
-| `batch:<name>` | 🔗 Groups related PRs | API updates, refactors |
-| `needs-review` | 🛑 Blocks auto-merge | Complex/critical changes |
-| `keep-alive` | ♾️ Prevents stale closure | Long-running work |
-| `hold` | 🛑 Temporarily blocks merge | Need to pause |
-| `do-not-extract-tasks` | 🚫 Skip task extraction on close | Obsolete work |
+**Burst Mode (Default):**
+
+| Label | Effect | Use When | % of PRs |
+|-------|--------|----------|----------|
+| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅ | **90% of PRs** - all features | **Default** |
+| `needs-review` | 🛑 Blocks auto-merge, needs approval | Complex/breaking/security | 10% |
+| `batch:<name>` | 🔗 Groups related PRs for batch merge | Tightly coupled features | As needed |
+| `keep-alive` | ♾️ Prevents stale closure | Rare - work needs >24h | Rare |
+| `hold` | ⏸️ Temporarily blocks merge | Need to pause | As needed |
+| `do-not-extract-tasks` | 🚫 Skip task extraction on close | Obsolete/test PRs | As needed |
+
+**Normal Mode (Lower velocity):**
+
+| Label | Effect |
+|-------|--------|
+| `automerge:after-review-period` | ⏰ Waits 24h before merge |
 
 ---
 
 ## ⏱️ PR Lifecycle Timeline
 
+### 🚀 Burst Mode (Default - for rapid development)
+
+```
+0h    PR Created → CI runs
+      ↓
+      ✅ CI passes + "automerge:when-ci-passes" → MERGED
+      (Total time: 15 min - 2 hours)
+      ↓
+      OR if not merged...
+      ↓
+12h   ⚠️  Stale warning (ship it or close it!)
+      ↓
+24h   🔒 Auto-closed + task extraction
+```
+
+### 🐢 Normal Mode (for lower-velocity periods)
+
 ```
 0h    PR Created
       ↓
-      CI runs
+24h   "automerge:after-review-period" → MERGED
+      OR wait for manual merge...
       ↓
-      ✅ CI passes + "automerge:when-ci-passes" → MERGED
-      OR
-      ⏳ Wait for label trigger...
-      ↓
-24h   "automerge:after-24h" → MERGED
-      ↓
-48h   ⚠️  Stale warning (if no activity)
+48h   ⚠️  Stale warning
       ↓
 72h   🚨 Final warning
       ↓
 96h   🔒 Auto-closed + task extraction
 ```
+
+**Switch modes:** Edit `BURST_MODE` in `.github/workflows/branch-lifecycle.yml`
 
 ---
 

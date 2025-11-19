@@ -11,6 +11,11 @@ permissions:
   pull-requests: write
   issues: write
 
+env:
+  # Burst mode for rapid development (12h warning, 24h close)
+  # Normal mode for lower velocity (48h warning, 96h close)
+  BURST_MODE: 'true'  # Change to 'false' for normal mode
+
 jobs:
   manage-stale-prs:
     name: Manage Stale PRs and Branches
@@ -60,30 +65,46 @@ jobs:
               continue
             fi
 
-            # Skip if recently updated (< 48h)
-            if [ "$INACTIVE_HOURS" -lt 48 ]; then
-              echo "✓ Active: updated within 48h"
+            # Configure thresholds based on mode
+            if [ "${{ env.BURST_MODE }}" == "true" ]; then
+              # Burst mode: 12h warning, 24h close
+              WARNING_HOURS=12
+              CLOSE_HOURS=24
+              MODE_NAME="Burst Mode"
+            else
+              # Normal mode: 48h warning, 72h final warning, 96h close
+              WARNING_HOURS=48
+              FINAL_WARNING_HOURS=72
+              CLOSE_HOURS=96
+              MODE_NAME="Normal Mode"
+            fi
+
+            echo "Mode: $MODE_NAME (Warning: ${WARNING_HOURS}h, Close: ${CLOSE_HOURS}h)"
+
+            # Skip if recently updated
+            if [ "$INACTIVE_HOURS" -lt "$WARNING_HOURS" ]; then
+              echo "✓ Active: updated within ${WARNING_HOURS}h"
               continue
             fi
 
-            # Determine action based on age and labels
+            # Determine action based on age and mode
             ACTION="none"
 
-            if [ "$AGE_HOURS" -ge 96 ]; then
-              # 96+ hours (4 days): Close with task extraction
+            if [ "$AGE_HOURS" -ge "$CLOSE_HOURS" ]; then
+              # Close threshold reached
               if [[ ! "$LABELS" =~ "stale" ]]; then
                 ACTION="close"
               else
                 ACTION="already_closed"
               fi
-            elif [ "$AGE_HOURS" -ge 72 ]; then
-              # 72-96 hours (3-4 days): Final warning
+            elif [ "${{ env.BURST_MODE }}" == "false" ] && [ "$AGE_HOURS" -ge "$FINAL_WARNING_HOURS" ]; then
+              # Normal mode only: 72-96 hours final warning
               if [[ ! "$LABELS" =~ "stale:final-warning" ]]; then
                 ACTION="final_warning"
               fi
-            elif [ "$AGE_HOURS" -ge 48 ]; then
-              # 48-72 hours (2-3 days): First warning
-              if [[ ! "$LABELS" =~ "stale:warning" ]]; then
+            elif [ "$AGE_HOURS" -ge "$WARNING_HOURS" ]; then
+              # Warning threshold reached
+              if [[ ! "$LABELS" =~ "stale:warning" ]] && [[ ! "$LABELS" =~ "stale:final-warning" ]]; then
                 ACTION="warning"
               fi
             fi
@@ -95,21 +116,46 @@ jobs:
               warning)
                 echo "⚠️ Adding warning label and comment"
                 gh pr edit $PR_NUMBER --add-label "stale:warning"
-                gh pr comment $PR_NUMBER --body "⚠️ **Stale PR Warning**
 
-This PR has been inactive for 48+ hours (${INACTIVE_HOURS}h).
+                if [ "${{ env.BURST_MODE }}" == "true" ]; then
+                  # Burst mode warning
+                  gh pr comment $PR_NUMBER --body "⚠️ **Stale PR Warning (Burst Mode)**
+
+This PR has been inactive for ${INACTIVE_HOURS}h.
+
+**Mode:** Burst Mode (rapid development)
+**This PR will be auto-closed in ~$((CLOSE_HOURS - AGE_HOURS)) hours** (at ${CLOSE_HOURS}h total age)
 
 **Next steps:**
-- Update the PR within 24h to keep it active
+- Merge it NOW with \`automerge:when-ci-passes\` label
+- Add \`keep-alive\` label if legitimately needs more time
+- Or close it manually if no longer needed
+
+**Why so fast?**
+In burst mode, features should ship in hours. If this PR isn't merged by ${CLOSE_HOURS}h, either:
+- CI is failing (fix it)
+- It needs review (add \`needs-review\` label)
+- It's abandoned (will extract tasks to issue)
+
+See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details."
+                else
+                  # Normal mode warning
+                  gh pr comment $PR_NUMBER --body "⚠️ **Stale PR Warning**
+
+This PR has been inactive for ${INACTIVE_HOURS}h.
+
+**Next steps:**
+- Update the PR to keep it active
 - Add \`keep-alive\` label to prevent auto-closure
 - Or close it manually if no longer needed
 
 **Timeline:**
-- Now: Warning issued
+- Now: Warning issued (${AGE_HOURS}h old)
 - 72h: Final warning
 - 96h: Auto-closed with task extraction
 
 See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details."
+                fi
                 ;;
 
               final_warning)
@@ -117,7 +163,7 @@ See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-ma
                 gh pr edit $PR_NUMBER --remove-label "stale:warning" --add-label "stale:final-warning"
                 gh pr comment $PR_NUMBER --body "🚨 **Final Warning: PR Will Be Closed Soon**
 
-This PR has been inactive for 72+ hours (${INACTIVE_HOURS}h).
+This PR has been inactive for ${INACTIVE_HOURS}h.
 
 **This PR will be auto-closed in ~24 hours** unless:
 - You push new commits

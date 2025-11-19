@@ -36,95 +36,128 @@ Result: 10+ open PRs, lost tasks, merge bottleneck
 
 ---
 
-## Workflow Types
+## Feature Scope: 1 Feature = 1 PR
 
-### Type 1: Quick Wins (<2 hours, low risk)
+**Golden Rule:**
+- ✅ **1 feature per branch** → **1 PR per feature**
+- Clean git history
+- Easy to review
+- Easy to rollback if issues
+- Clear changelog
 
-**Use this for:** Bug fixes, docs, config changes, small features
-
+**Bad:**
 ```bash
-# AI creates branch
-git checkout -b fix/quick-bug-fix
-
-# AI implements fix
-# ... makes changes ...
-
-# AI commits with auto-merge label
-git commit -m "fix: resolve quick bug"
-git push -u origin fix/quick-bug-fix
-
-# Create PR with auto-merge label
-gh pr create --title "fix: resolve quick bug" \
-  --body "Quick fix that passes all CI checks" \
-  --label "automerge:when-ci-passes"
-
-# ✅ Auto-merges when CI passes (no manual review)
+# DON'T: Multiple features in one PR
+git checkout -b feature/dashboard-and-api-and-auth
+# Mixes 3 features - hard to review, hard to rollback
 ```
 
-**Lifecycle:**
-- Created → CI runs → ✅ Pass → Auto-merge → Branch deleted
-- Total time: 5-15 minutes
+**Good:**
+```bash
+# DO: Separate PRs for each feature
+git checkout -b feature/user-dashboard    # PR #1
+git checkout -b feature/api-v2-endpoint  # PR #2
+git checkout -b feature/oauth-login      # PR #3
+# Each can be reviewed, merged, or rolled back independently
+```
+
+**Exception - Use batch merge for tightly coupled features:**
+```bash
+# If features MUST go together:
+gh pr create --label "batch:api-v2" --title "feat: API v2 endpoint"
+gh pr create --label "batch:api-v2" --title "feat: API v2 client"
+gh pr create --label "batch:api-v2" --title "test: API v2 integration tests"
+# Merges all 3 together
+```
 
 ---
 
-### Type 2: Standard Features (2-24 hours, medium complexity)
+## Workflow Types
 
-**Use this for:** New features, refactoring, multi-file changes
+### 🚀 Burst Mode (Default for Rapid Development)
+
+**When:** You're in active development with AI assistants creating features in rapid succession (hours, not days)
+
+**Philosophy:** Ship fast, fix forward. If CI passes, it's good enough.
+
+**Timeline:**
+- **0-2h:** Feature development
+- **Immediate:** Auto-merge when CI passes
+- **12h:** Stale warning (if no merge/activity)
+- **24h:** Auto-close + task extraction
+
+#### Type 1: Most Features (90% of PRs in burst mode)
+
+**Use for:** Bug fixes, docs, config, small-to-medium features, refactoring
 
 ```bash
-# AI creates branch
+# AI creates feature branch (1 feature = 1 branch)
 git checkout -b feature/user-dashboard
 
-# AI implements feature
+# AI implements feature (2 hours)
 # ... makes changes ...
 
-# AI commits
+# AI commits and creates PR
 git commit -m "feat: add user dashboard"
 git push -u origin feature/user-dashboard
 
-# Create PR with standard review
 gh pr create --title "feat: add user dashboard" \
-  --body "Implements user dashboard with analytics\n\nCloses #123" \
-  --label "needs-review"
+  --body "User dashboard with analytics\n\nCloses #123" \
+  --label "automerge:when-ci-passes"  # ← Ship it!
 
-# You review when ready (not blocking)
-# Meanwhile, AI continues on other tasks
-
-# When ready: approve and auto-merge, OR let it auto-merge if labeled
+# ✅ Auto-merges in ~5-15 min when CI passes
 ```
 
 **Lifecycle:**
-- Created → CI runs → You review async → Merge
-- Total time: 2-24 hours
-- **Key:** Review happens async, doesn't block other AI work
+- Created → CI runs (5-10 min) → ✅ Pass → Auto-merge → Branch deleted
+- **Total time: 15 minutes - 2 hours**
+- You review AFTER merge (async) for learning, not blocking
 
----
+#### Type 2: Complex Features (10% of PRs in burst mode)
 
-### Type 3: Complex/Critical (>24 hours, high risk)
-
-**Use this for:** Architecture changes, security, breaking changes
+**Use for:** Breaking changes, security, architecture changes, multi-service updates
 
 ```bash
-# AI creates branch
+# AI creates feature branch
 git checkout -b feature/major-refactor
 
-# AI works incrementally with draft PR
-gh pr create --draft --title "feat: major refactor" \
-  --body "Work in progress - major architecture change"
+# AI implements (may take 4-6 hours)
+# ... makes changes ...
 
-# You review incrementally
-# When ready, mark ready for review
-gh pr ready
+# Create PR for manual review
+gh pr create --title "feat: major refactor" \
+  --body "Detailed explanation of changes\n\nCloses #456" \
+  --label "needs-review"  # ← Explicit approval required
 
-# Manual approval required
+# You review within 2-4 hours (same day)
 gh pr review --approve
 gh pr merge --squash
 ```
 
 **Lifecycle:**
-- Created → Draft PR → Incremental commits → Review → Approve → Merge
-- Total time: Variable
-- **Key:** Explicit approval required
+- Created → CI runs → Manual review (2-4h) → Approve → Merge
+- **Total time: 4-8 hours same day**
+- Still fast, but with your explicit approval
+
+---
+
+### 🐢 Normal Mode (Optional - Lower Velocity)
+
+**When:** Not actively developing, maintenance mode, or want extra caution
+
+**Timeline:**
+- **24h:** Review window before auto-merge
+- **48h:** Stale warning
+- **72h:** Final warning
+- **96h:** Auto-close + task extraction
+
+**Use labels:**
+```bash
+gh pr create --label "automerge:after-review-period"  # Wait 24h
+gh pr create --label "needs-review"                    # Manual approval
+```
+
+**Most solo dev + AI scenarios should use Burst Mode.**
 
 ---
 
@@ -132,12 +165,20 @@ gh pr merge --squash
 
 ### Labels that Trigger Auto-Merge
 
+**For Burst Mode (Recommended):**
+
+| Label | Behavior | Use When | % of PRs |
+|-------|----------|----------|----------|
+| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅ | 90% of PRs - all features unless complex | **90%** |
+| `needs-review` | 🛑 Blocks auto-merge, requires approval | Complex/breaking/security changes | **10%** |
+| `batch:<name>` | 🔗 Groups related PRs, merges together | Tightly coupled features | As needed |
+
+**For Normal Mode (Lower velocity):**
+
 | Label | Behavior | Use When |
 |-------|----------|----------|
-| `automerge:when-ci-passes` | Merges immediately when all CI checks pass | Bug fixes, docs, low-risk changes |
-| `automerge:after-24h` | Merges 24h after creation if CI passes | Standard features, gives time for second thought |
-| `automerge:batch` | Waits for related PRs, merges together | Dependent changes across multiple PRs |
-| `needs-review` | **Blocks** auto-merge, requires manual approval | Default for complex changes |
+| `automerge:after-review-period` | ⏰ Waits 24h before merging | Want extra review time |
+| `needs-review` | 🛑 Requires manual approval | Critical changes |
 
 ### How to Apply
 
@@ -162,17 +203,43 @@ gh pr edit 123 --add-label "automerge:when-ci-passes"
 
 ### Automatic Cleanup
 
-**Stale Branch Policy:**
+**🚀 Burst Mode Timeline (Default - for rapid development):**
+
+| Age | Status | Action |
+|-----|--------|--------|
+| 0-12h | Active | No action - rapid development in progress |
+| 12-24h | Warning | Bot comments: "⚠️ PR is 12h old, merge or update soon" |
+| 24h+ | Stale | Auto-closes PR, deletes branch, extracts tasks to issue |
+
+**Why so aggressive?**
+- Burst development = features ship in hours
+- If PR isn't merged in 12h during active development, something's wrong
+- Forces fast feedback loop: ship it or close it
+- No lingering PRs during active sprints
+
+**🐢 Normal Mode Timeline (for lower-velocity periods):**
 
 | Age | Status | Action |
 |-----|--------|--------|
 | 0-48h | Active | No action |
 | 48-72h | Warning | Bot comments: "Branch is 2 days old, merge or close soon" |
-| 72h+ | Stale | Bot comments: "Will auto-close in 24h unless updated" |
+| 72h+ | Final Warning | Bot comments: "Will auto-close in 24h unless updated" |
 | 96h+ | Closed | Auto-closes PR, deletes branch, extracts tasks to issue |
+
+**Configure mode:**
+```bash
+# Enable burst mode (default)
+# PRs auto-close after 24h
+# Set in .github/workflows/branch-lifecycle.yml: BURST_MODE: true
+
+# Enable normal mode
+# PRs auto-close after 96h
+# Set in .github/workflows/branch-lifecycle.yml: BURST_MODE: false
+```
 
 **Override stale automation:**
 ```bash
+# For work that genuinely needs >24h (rare in burst mode)
 gh pr edit 123 --add-label "keep-alive"
 ```
 

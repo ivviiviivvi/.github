@@ -97,22 +97,22 @@ gh pr create --label "needs-review"
 | `keep-alive` | Prevents stale auto-closure | Long-running work |
 | `hold` | Temporarily blocks merge | Need to pause |
 
-### ⏱️ Branch Lifecycle
+### ⏱️ Branch Lifecycle (Burst Mode - Default)
 
 ```
 0h     PR created → CI runs
        ↓
-       If CI passes + "automerge:when-ci-passes" → MERGED ✅
-       OR wait for trigger...
+       CI passes + "automerge:when-ci-passes" → MERGED ✅
+       (Total time: 15 min - 2 hours)
        ↓
-24h    "automerge:after-24h" + CI passed → MERGED ✅
+       OR if not merged...
        ↓
-48h    No activity → ⚠️ Stale warning
+12h    No merge/activity → ⚠️ Stale warning (ship it!)
        ↓
-72h    Still inactive → 🚨 Final warning
-       ↓
-96h    Auto-closed + task extraction → Issue created 📋
+24h    Auto-closed + task extraction → Issue created 📋
 ```
+
+**For rapid bursts:** Features ship in hours, not days. 24h timeline matches burst development pace.
 
 ### 🔄 Automated Workflows
 
@@ -123,10 +123,10 @@ gh pr create --label "needs-review"
    - Automatically merges when conditions met
    - Posts helpful comments on blocks/success
 
-2. **`branch-lifecycle.yml`** - Stale management
+2. **`branch-lifecycle.yml`** - Stale management (Burst Mode)
    - Runs every 6 hours
-   - Warns at 48h, 72h
-   - Auto-closes at 96h with task extraction
+   - Burst mode: Warns at 12h, closes at 24h
+   - Normal mode: Warns at 48h/72h, closes at 96h
    - Cleans up merged branches
 
 3. **`pr-batch-merge.yml`** - Batch processing
