@@ -149,6 +149,7 @@ All our documentation and guides are now located in the `docs/` directory. This 
 | [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
 | [LABELS.md](docs/LABELS.md) | Standard label set for consistent tagging |
 | [TESTING.md](docs/TESTING.md) | Testing standards and best practices |
+| [PR_AUTOMATION.md](PR_AUTOMATION.md) | **Automated PR creation, push, and merge system** |
 | [for-ai-implementation.txt](for-ai-implementation.txt) | Complete AI GitHub management protocol |
 
 
@@ -386,6 +387,14 @@ The organization now features **automated health monitoring** that brings the AI
 📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️  [Scripts Documentation](scripts/README.md)
 
 ## 🛠️ Key Features
+
+### 🤖 PR Automation (NEW!)
+
+- **Auto PR Creation**: Automatically creates PRs when feature branches are pushed
+- **Auto Merge**: Intelligently merges PRs when all requirements are met
+- **Conflict Resolution**: Automatically resolves merge conflicts when possible
+- **Branch Cleanup**: Removes merged branches automatically
+- **Comprehensive Documentation**: See [PR_AUTOMATION.md](PR_AUTOMATION.md) for details
 
 ### Automated Security
 
