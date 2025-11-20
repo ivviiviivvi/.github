@@ -1,0 +1,198 @@
+name: Organization Health Crawler
+
+on:
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      validate_links:
+        description: 'Validate external links (slow)'
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches:
+      - main
+      - claude/**
+    paths:
+      - 'scripts/web_crawler.py'
+      - '.github/workflows/org-health-crawler.yml'
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+  repository-projects: read
+
+jobs:
+  crawl-and-analyze:
+    name: Crawl Organization Health
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Organization Health Crawler
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/web_crawler.py \
+            --base-dir . \
+            ${{ github.event.inputs.validate_links == 'true' && '--validate-links' || '' }}
+
+      - name: Upload Reports as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-reports-${{ github.run_number }}
+          path: reports/org_health_*.{json,md}
+          retention-days: 90
+
+      - name: Commit Reports
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [[ -n $(git status -s reports/) ]]; then
+            git add reports/
+            git commit -m "chore: add organization health report $(date -u +%Y-%m-%d)"
+            git push
+          else
+            echo "No new reports to commit"
+          fi
+
+      - name: Create Issue on Critical Findings
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Find the latest report
+            const reportsDir = 'reports';
+            const files = fs.readdirSync(reportsDir)
+              .filter(f => f.endsWith('.json') && f.startsWith('org_health_'))
+              .sort()
+              .reverse();
+
+            if (files.length === 0) {
+              console.log('No reports found');
+              return;
+            }
+
+            const reportPath = path.join(reportsDir, files[0]);
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+
+            // Check for critical findings
+            const criticalBlindSpots = (report.blind_spots || [])
+              .filter(b => b.severity === 'high' || b.severity === 'critical');
+
+            const criticalShatterPoints = (report.shatter_points || [])
+              .filter(s => s.severity === 'high' || s.severity === 'critical');
+
+            if (criticalBlindSpots.length === 0 && criticalShatterPoints.length === 0) {
+              console.log('No critical findings to report');
+              return;
+            }
+
+            // Create issue body
+            let issueBody = `## 🚨 Critical Organization Health Findings
+
+            This issue was automatically created by the Organization Health Crawler after detecting critical issues.
+
+            **Report Generated**: ${report.timestamp}
+
+            `;
+
+            if (criticalBlindSpots.length > 0) {
+              issueBody += `### 🔦 Critical Blind Spots\n\n`;
+              for (const spot of criticalBlindSpots) {
+                issueBody += `#### ${spot.category} (${spot.severity})\n\n`;
+                issueBody += `${spot.description}\n\n`;
+                if (spot.recommendation) {
+                  issueBody += `**Recommendation**: ${spot.recommendation}\n\n`;
+                }
+              }
+            }
+
+            if (criticalShatterPoints.length > 0) {
+              issueBody += `### 💥 Critical Shatter Points\n\n`;
+              for (const point of criticalShatterPoints) {
+                issueBody += `#### ${point.category} (${point.severity})\n\n`;
+                issueBody += `${point.description}\n\n`;
+                if (point.recommendation) {
+                  issueBody += `**Recommendation**: ${point.recommendation}\n\n`;
+                }
+              }
+            }
+
+            issueBody += `\n---\n\n`;
+            issueBody += `[View full report](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n`;
+
+            // Check if similar issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'health-alert',
+              per_page: 10
+            });
+
+            const recentIssue = existingIssues.data.find(issue => {
+              const createdAt = new Date(issue.created_at);
+              const daysSinceCreation = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
+              return daysSinceCreation < 7; // Issue created within last 7 days
+            });
+
+            if (recentIssue) {
+              // Comment on existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: recentIssue.number,
+                body: `## Updated Findings (${new Date().toISOString().split('T')[0]})\n\n${issueBody}`
+              });
+              console.log(`Updated existing issue #${recentIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Critical Organization Health Alert - ${new Date().toISOString().split('T')[0]}`,
+                body: issueBody,
+                labels: ['health-alert', 'automated', 'priority: high']
+              });
+              console.log(`Created new issue #${issue.data.number}`);
+            }
+
+      - name: Generate Summary
+        if: always()
+        run: |
+          echo "## 📊 Organization Health Crawler Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Find latest report
+          LATEST_REPORT=$(ls -t reports/org_health_*.md 2>/dev/null | head -1)
+
+          if [ -f "$LATEST_REPORT" ]; then
+            cat "$LATEST_REPORT" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No report generated" >> $GITHUB_STEP_SUMMARY
+          fi
