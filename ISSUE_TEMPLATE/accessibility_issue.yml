@@ -1,0 +1,234 @@
+name: ♿ Accessibility Issue
+description: Report an accessibility barrier or WCAG compliance issue
+title: "[A11Y]: "
+labels: ["accessibility", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us make our project more accessible! Accessibility issues include barriers that prevent people with disabilities from using our software effectively.
+
+  - type: dropdown
+    id: wcag-level
+    attributes:
+      label: WCAG Conformance Level
+      description: Which WCAG level does this issue relate to?
+      options:
+        - Level A (Essential)
+        - Level AA (Recommended)
+        - Level AAA (Enhanced)
+        - Not WCAG related
+    validations:
+      required: true
+
+  - type: dropdown
+    id: disability-type
+    attributes:
+      label: Affected User Group
+      description: Which users are primarily affected?
+      options:
+        - Visual (blind, low vision, color blind)
+        - Motor (keyboard-only, limited dexterity)
+        - Auditory (deaf, hard of hearing)
+        - Cognitive (learning disabilities, memory issues)
+        - Multiple disabilities
+        - All users (general usability)
+      multiple: true
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Accessibility Issue Type
+      description: What type of accessibility barrier is this?
+      options:
+        - Keyboard Navigation
+        - Screen Reader Support
+        - Color Contrast
+        - Focus Management
+        - ARIA Attributes
+        - Alternative Text
+        - Form Labels
+        - Heading Structure
+        - Link Text
+        - Button Accessibility
+        - Modal/Dialog Accessibility
+        - Error Messages
+        - Skip Links
+        - Captions/Transcripts
+        - Language Attributes
+        - Responsive Design
+        - Animation/Motion
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Detailed description of the accessibility barrier
+      placeholder: Describe the accessibility issue and how it prevents users from accessing content or functionality
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this accessibility issue?
+      placeholder: |
+        1. Using [assistive technology]
+        2. Navigate to '...'
+        3. Try to '...'
+        4. Observe accessibility barrier
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Accessible Behavior
+      description: What should happen for accessible experience?
+      placeholder: Describe the expected accessible behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happens?
+      placeholder: Describe what users experience instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: wcag-criteria
+    attributes:
+      label: WCAG Success Criteria
+      description: Which WCAG success criteria does this violate?
+      placeholder: |
+        - 1.1.1 Non-text Content (Level A)
+        - 2.1.1 Keyboard (Level A)
+        - 2.4.3 Focus Order (Level A)
+        - 3.3.2 Labels or Instructions (Level A)
+        - 4.1.2 Name, Role, Value (Level A)
+
+  - type: textarea
+    id: assistive-technology
+    attributes:
+      label: Assistive Technology Used
+      description: Which assistive technologies were used to identify this issue?
+      placeholder: |
+        - Screen Reader: [e.g., NVDA 2024.1, JAWS 2024, VoiceOver]
+        - Browser: [e.g., Chrome 120, Firefox 121, Safari 17]
+        - OS: [e.g., Windows 11, macOS 14, iOS 17]
+        - Keyboard only: [Yes/No]
+        - Voice control: [Yes/No]
+        - Screen magnification: [Yes/No]
+    validations:
+      required: true
+
+  - type: textarea
+    id: automated-testing
+    attributes:
+      label: Automated Testing Results
+      description: Results from accessibility testing tools (if available)
+      placeholder: |
+        - axe DevTools: [violations found]
+        - WAVE: [errors/warnings]
+        - Lighthouse Accessibility Score: [score]
+        - pa11y: [issues]
+        Include screenshots of tool results if helpful
+
+  - type: textarea
+    id: code-location
+    attributes:
+      label: Code Location
+      description: Where in the code is this issue located?
+      placeholder: |
+        - Component: [e.g., LoginForm.tsx]
+        - Page: [e.g., /dashboard]
+        - Line numbers: [if known]
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Fix
+      description: Do you have suggestions for fixing this accessibility issue?
+      placeholder: |
+        Describe the recommended solution, including:
+        - Code changes needed
+        - ARIA attributes to add
+        - HTML structure improvements
+        - Design changes required
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact Assessment
+      description: How severely does this affect users?
+      placeholder: |
+        - Severity: [Blocker/Critical/Major/Minor]
+        - Percentage of users affected: [estimate]
+        - Workarounds available: [Yes/No, describe]
+        - Business impact: [describe]
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this accessibility barrier?
+      options:
+        - Low (Minor inconvenience, workarounds available)
+        - Medium (Notable barrier, affects some users)
+        - High (Major barrier, significantly limits access)
+        - Critical (Complete blocker, prevents all access)
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-impact
+    attributes:
+      label: User Impact Example
+      description: Provide a real-world scenario of how this affects users
+      placeholder: |
+        Example: "A blind user using NVDA cannot submit the contact form because
+        the submit button has no accessible label, and the screen reader only
+        announces 'button' without indicating its purpose."
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Videos
+      description: Add screenshots, screen recordings, or screen reader output
+      placeholder: Drag and drop images or videos here
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Requirements
+      description: Does this affect legal/regulatory compliance?
+      options:
+        - label: This may affect ADA compliance
+        - label: This may affect Section 508 compliance
+        - label: This may affect EN 301 549 compliance
+        - label: This is required for our organization's accessibility policy
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Add any other context, user feedback, or references
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/ivi374forivi/.github/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

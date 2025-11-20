@@ -1,258 +1,409 @@
-name: Auto-Merge PRs
+name: Auto Merge Pull Request
 
 on:
-  pull_request_target:
-    types: [labeled, unlabeled, synchronize, opened, reopened, ready_for_review]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
   check_suite:
     types: [completed]
+  status: {}
+  # Manual trigger for specific PRs
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to evaluate for auto-merge'
-        required: false
+        description: 'PR number to auto-merge'
+        required: true
+        type: number
 
 permissions:
   contents: write
   pull-requests: write
+  issues: write
   checks: read
 
 jobs:
   auto-merge:
-    name: Auto-Merge When Ready
+    name: Auto Merge PR
     runs-on: ubuntu-latest
+    # Skip if PR contains [skip-auto-merge] in title or body
     if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.draft == false &&
-       github.event.pull_request.state == 'open')
+      !contains(github.event.pull_request.title, '[skip-auto-merge]') &&
+      !contains(github.event.pull_request.body, '[skip-auto-merge]')
 
     steps:
-      - name: Get PR Number
-        id: pr
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get PR details
+        id: pr-details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let prNumber;
+
+            if (context.eventName === 'workflow_dispatch') {
+              prNumber = ${{ github.event.inputs.pr_number }};
+            } else if (context.payload.pull_request) {
+              prNumber = context.payload.pull_request.number;
+            } else {
+              console.log('No PR found in event payload');
+              return null;
+            }
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            console.log(`Processing PR #${prNumber}: ${pr.title}`);
+            core.setOutput('number', prNumber);
+            core.setOutput('head', pr.head.ref);
+            core.setOutput('base', pr.base.ref);
+            core.setOutput('mergeable', pr.mergeable);
+            core.setOutput('draft', pr.draft);
+
+            return pr;
+
+      - name: Check auto-merge eligibility
+        id: check-eligibility
+        if: steps.pr-details.outputs.number
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            const isDraft = '${{ steps.pr-details.outputs.draft }}' === 'true';
+
+            if (isDraft) {
+              console.log('PR is in draft mode, skipping auto-merge');
+              return { eligible: false, reason: 'PR is in draft mode' };
+            }
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Check for auto-merge label
+            const hasAutoMergeLabel = pr.labels.some(label =>
+              label.name === 'auto-merge' || label.name === 'automerge'
+            );
+
+            // Check for auto-created label (auto-created PRs are eligible)
+            const isAutoCreated = pr.labels.some(label => label.name === 'auto-created');
+
+            // Check if PR title indicates it should be auto-merged
+            const titleIndicatesAutoMerge = /\[auto-merge\]/i.test(pr.title);
+
+            const shouldAutoMerge = hasAutoMergeLabel || isAutoCreated || titleIndicatesAutoMerge;
+
+            if (!shouldAutoMerge) {
+              console.log('PR not marked for auto-merge');
+              return { eligible: false, reason: 'Not marked for auto-merge' };
+            }
+
+            core.setOutput('eligible', 'true');
+            return { eligible: true, reason: 'Eligible for auto-merge' };
+
+      - name: Check merge conflicts
+        id: check-conflicts
+        if: steps.check-eligibility.outputs.eligible == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const mergeable = pr.mergeable;
+            const mergeableState = pr.mergeable_state;
+
+            console.log(`Mergeable: ${mergeable}, State: ${mergeableState}`);
+
+            if (mergeable === false) {
+              core.setOutput('has-conflicts', 'true');
+              return { hasConflicts: true, state: mergeableState };
+            }
+
+            core.setOutput('has-conflicts', 'false');
+            return { hasConflicts: false, state: mergeableState };
+
+      - name: Auto-fix merge conflicts
+        id: fix-conflicts
+        if: steps.check-conflicts.outputs.has-conflicts == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            const headBranch = '${{ steps.pr-details.outputs.head }}';
+            const baseBranch = '${{ steps.pr-details.outputs.base }}';
+
+            // Attempt to update branch (merge base into head)
+            try {
+              await github.rest.pulls.updateBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `🔄 **Auto-Merge: Branch Updated**\n\nThe base branch \`${baseBranch}\` has been merged into \`${headBranch}\` to resolve conflicts.\n\nWaiting for checks to complete before auto-merging.`
+              });
+
+              core.setOutput('fixed', 'true');
+              return { fixed: true };
+            } catch (error) {
+              console.log(`Could not auto-update branch: ${error.message}`);
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `⚠️ **Auto-Merge: Conflicts Detected**\n\nThis PR has merge conflicts that cannot be automatically resolved.\n\n**To resolve:**\n1. Update your local branch: \`git checkout ${headBranch}\`\n2. Merge the base branch: \`git merge ${baseBranch}\`\n3. Resolve conflicts in your editor\n4. Commit the resolved changes\n5. Push to update this PR\n\nOnce conflicts are resolved and all checks pass, auto-merge will proceed.`
+              });
+
+              core.setOutput('fixed', 'false');
+              return { fixed: false };
+            }
+
+      - name: Check required status checks
+        id: check-status
+        if: |
+          steps.check-eligibility.outputs.eligible == 'true' &&
+          (steps.check-conflicts.outputs.has-conflicts == 'false' || steps.fix-conflicts.outputs.fixed == 'true')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Get combined status
+            const { data: status } = await github.rest.repos.getCombinedStatusForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: pr.head.sha
+            });
+
+            console.log(`Combined status: ${status.state}`);
+
+            // Check if all checks have passed
+            const allChecksPassed = status.state === 'success';
+
+            // Get check runs
+            const { data: checkRuns } = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: pr.head.sha
+            });
+
+            const failedChecks = checkRuns.check_runs.filter(check =>
+              check.conclusion === 'failure' || check.conclusion === 'cancelled'
+            );
+
+            if (failedChecks.length > 0) {
+              console.log(`Failed checks: ${failedChecks.map(c => c.name).join(', ')}`);
+              core.setOutput('all-passed', 'false');
+              return { passed: false, failedChecks: failedChecks.map(c => c.name) };
+            }
+
+            core.setOutput('all-passed', allChecksPassed ? 'true' : 'false');
+            return { passed: allChecksPassed };
+
+      - name: Check required approvals
+        id: check-approvals
+        if: steps.check-status.outputs.all-passed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+
+            // Get reviews
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Count approvals (take latest review from each user)
+            const latestReviews = {};
+            reviews.forEach(review => {
+              if (!latestReviews[review.user.login] ||
+                  new Date(review.submitted_at) > new Date(latestReviews[review.user.login].submitted_at)) {
+                latestReviews[review.user.login] = review;
+              }
+            });
+
+            const approvals = Object.values(latestReviews).filter(
+              review => review.state === 'APPROVED'
+            ).length;
+
+            const changesRequested = Object.values(latestReviews).filter(
+              review => review.state === 'CHANGES_REQUESTED'
+            ).length;
+
+            console.log(`Approvals: ${approvals}, Changes requested: ${changesRequested}`);
+
+            // Auto-created PRs or PRs with auto-merge label need at least 1 approval
+            // unless it's a hotfix (then 0 is ok)
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const isHotfix = pr.labels.some(label => label.name === 'hotfix');
+            const requiredApprovals = isHotfix ? 0 : 1;
+
+            const hasEnoughApprovals = approvals >= requiredApprovals && changesRequested === 0;
+
+            core.setOutput('approved', hasEnoughApprovals ? 'true' : 'false');
+            core.setOutput('approval-count', approvals);
+
+            return { approved: hasEnoughApprovals, count: approvals, required: requiredApprovals };
+
+      - name: Enable auto-merge
+        id: enable-auto-merge
+        if: |
+          steps.check-eligibility.outputs.eligible == 'true' &&
+          steps.check-status.outputs.all-passed == 'true' &&
+          steps.check-approvals.outputs.approved == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+
+            try {
+              // Use GraphQL to enable auto-merge
+              const { data: pr } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              // Merge the PR
+              const { data: merge } = await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'squash', // Can be 'merge', 'squash', or 'rebase'
+                commit_title: pr.title,
+                commit_message: `Auto-merged PR #${prNumber}\n\n${pr.body || ''}`
+              });
+
+              console.log(`PR #${prNumber} merged successfully`);
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `✅ **Auto-Merge Successful**\n\nThis PR has been automatically merged!\n\n**Details:**\n- All required checks passed\n- Required approvals obtained (${steps.check-approvals.outputs.approval-count})\n- No merge conflicts\n\n**Merge SHA:** ${merge.sha}`
+              });
+
+              core.setOutput('merged', 'true');
+              core.setOutput('merge-sha', merge.sha);
+
+              return { merged: true, sha: merge.sha };
+            } catch (error) {
+              console.log(`Failed to merge PR: ${error.message}`);
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `❌ **Auto-Merge Failed**\n\nCould not automatically merge this PR.\n\n**Error:** ${error.message}\n\nPlease merge manually or check the workflow logs.`
+              });
+
+              core.setOutput('merged', 'false');
+              return { merged: false, error: error.message };
+            }
+
+      - name: Cleanup merged branch
+        if: steps.enable-auto-merge.outputs.merged == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const headBranch = '${{ steps.pr-details.outputs.head }}';
+
+            // Don't delete main, develop, or master branches
+            const protectedBranches = ['main', 'master', 'develop'];
+            if (protectedBranches.includes(headBranch)) {
+              console.log(`Skipping deletion of protected branch: ${headBranch}`);
+              return;
+            }
+
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${headBranch}`
+              });
+
+              console.log(`Deleted branch: ${headBranch}`);
+            } catch (error) {
+              console.log(`Could not delete branch ${headBranch}: ${error.message}`);
+            }
+
+      - name: Summary
+        if: always()
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "number=${{ github.event.inputs.pr_number }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.event_name }}" == "check_suite" ]; then
-            # Get PR number from check suite
-            PR_NUMBER=$(gh pr list --repo ${{ github.repository }} --json number,headRefName --jq ".[] | select(.headRefName == \"${{ github.event.check_suite.head_branch }}\") | .number" | head -1)
-            echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          else
-            echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "### 🤖 Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
 
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+          if [ "${{ steps.pr-details.outputs.number }}" != "" ]; then
+            echo "**PR Number:** #${{ steps.pr-details.outputs.number }}" >> $GITHUB_STEP_SUMMARY
+            echo "**Branch:** ${{ steps.pr-details.outputs.head }} → ${{ steps.pr-details.outputs.base }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
 
-      - name: Get PR Details
-        id: pr_details
-        run: |
-          PR_DATA=$(gh pr view ${{ steps.pr.outputs.number }} --json \
-            labels,isDraft,mergeable,reviewDecision,statusCheckRollup,baseRefName,headRefName,title,body)
-
-          echo "labels=$(echo "$PR_DATA" | jq -r '.labels | map(.name) | join(",")')" >> $GITHUB_OUTPUT
-          echo "is_draft=$(echo "$PR_DATA" | jq -r '.isDraft')" >> $GITHUB_OUTPUT
-          echo "mergeable=$(echo "$PR_DATA" | jq -r '.mergeable')" >> $GITHUB_OUTPUT
-          echo "review_decision=$(echo "$PR_DATA" | jq -r '.reviewDecision // "NONE"')" >> $GITHUB_OUTPUT
-          echo "base_ref=$(echo "$PR_DATA" | jq -r '.baseRefName')" >> $GITHUB_OUTPUT
-          echo "head_ref=$(echo "$PR_DATA" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-          echo "title=$(echo "$PR_DATA" | jq -r '.title')" >> $GITHUB_OUTPUT
-
-          # Check if all status checks passed
-          ALL_CHECKS_PASSED=$(echo "$PR_DATA" | jq -r '
-            .statusCheckRollup // [] |
-            map(select(.conclusion != null)) |
-            all(.conclusion == "SUCCESS" or .conclusion == "SKIPPED" or .conclusion == "NEUTRAL")
-          ')
-          echo "all_checks_passed=$ALL_CHECKS_PASSED" >> $GITHUB_OUTPUT
-
-          # Get PR age in hours
-          CREATED_AT=$(echo "$PR_DATA" | jq -r '.createdAt // ""')
-          if [ -n "$CREATED_AT" ]; then
-            PR_AGE_HOURS=$(( ($(date +%s) - $(date -d "$CREATED_AT" +%s)) / 3600 ))
-          else
-            PR_AGE_HOURS=0
-          fi
-          echo "pr_age_hours=$PR_AGE_HOURS" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check Auto-Merge Eligibility
-        id: eligibility
-        run: |
-          LABELS="${{ steps.pr_details.outputs.labels }}"
-          IS_DRAFT="${{ steps.pr_details.outputs.is_draft }}"
-          MERGEABLE="${{ steps.pr_details.outputs.mergeable }}"
-          REVIEW_DECISION="${{ steps.pr_details.outputs.review_decision }}"
-          ALL_CHECKS="${{ steps.pr_details.outputs.all_checks_passed }}"
-          BASE_REF="${{ steps.pr_details.outputs.base_ref }}"
-          PR_AGE_HOURS="${{ steps.pr_details.outputs.pr_age_hours }}"
-
-          echo "🔍 Evaluating auto-merge eligibility..."
-          echo "Labels: $LABELS"
-          echo "Draft: $IS_DRAFT"
-          echo "Mergeable: $MERGEABLE"
-          echo "Review Decision: $REVIEW_DECISION"
-          echo "All Checks Passed: $ALL_CHECKS"
-          echo "Base Branch: $BASE_REF"
-          echo "PR Age (hours): $PR_AGE_HOURS"
-
-          # Blockers
-          ELIGIBLE="true"
-          REASON=""
-
-          # Check if PR is draft
-          if [ "$IS_DRAFT" == "true" ]; then
-            ELIGIBLE="false"
-            REASON="PR is in draft state"
-          fi
-
-          # Check if PR has merge conflicts
-          if [ "$MERGEABLE" != "MERGEABLE" ]; then
-            ELIGIBLE="false"
-            REASON="PR has merge conflicts or is not mergeable"
-          fi
-
-          # Check if targeting main (require manual review)
-          if [ "$BASE_REF" == "main" ] || [ "$BASE_REF" == "master" ]; then
-            if [[ ! "$LABELS" =~ "automerge:when-ci-passes" ]]; then
-              ELIGIBLE="false"
-              REASON="PRs to main/master require explicit automerge:when-ci-passes label"
-            fi
-          fi
-
-          # Check for hold label
-          if [[ "$LABELS" =~ "hold" ]]; then
-            ELIGIBLE="false"
-            REASON="PR has 'hold' label"
-          fi
-
-          # Check for needs-review label (blocks auto-merge)
-          if [[ "$LABELS" =~ "needs-review" ]]; then
-            if [ "$REVIEW_DECISION" != "APPROVED" ]; then
-              ELIGIBLE="false"
-              REASON="PR requires manual review (needs-review label)"
-            fi
-          fi
-
-          # Check if all CI checks passed
-          if [ "$ALL_CHECKS" != "true" ]; then
-            ELIGIBLE="false"
-            REASON="Not all CI checks have passed"
-          fi
-
-          # Determine merge strategy based on labels
-          SHOULD_MERGE="false"
-
-          if [ "$ELIGIBLE" == "true" ]; then
-            if [[ "$LABELS" =~ "automerge:when-ci-passes" ]]; then
-              SHOULD_MERGE="true"
-              echo "✅ Will auto-merge immediately (automerge:when-ci-passes)"
-            elif [[ "$LABELS" =~ "automerge:after-24h" ]]; then
-              if [ "$PR_AGE_HOURS" -ge 24 ]; then
-                SHOULD_MERGE="true"
-                echo "✅ Will auto-merge (>24h old, automerge:after-24h)"
-              else
-                echo "⏳ Waiting for 24h (currently ${PR_AGE_HOURS}h old)"
-                REASON="PR not yet 24 hours old"
-              fi
-            elif [[ "$LABELS" =~ "automerge:batch" ]]; then
-              echo "⏳ Batch merge label detected, handled by separate workflow"
-              REASON="Batch merge pending"
+            if [ "${{ steps.check-eligibility.outputs.eligible }}" == "true" ]; then
+              echo "✅ Eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
             else
-              echo "ℹ️ No auto-merge label found"
-              REASON="No auto-merge label (automerge:when-ci-passes, automerge:after-24h)"
+              echo "❌ Not eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
             fi
+
+            if [ "${{ steps.check-conflicts.outputs.has-conflicts }}" == "true" ]; then
+              if [ "${{ steps.fix-conflicts.outputs.fixed }}" == "true" ]; then
+                echo "✅ Conflicts resolved automatically" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "❌ Conflicts detected - manual resolution required" >> $GITHUB_STEP_SUMMARY
+              fi
+            else
+              echo "✅ No merge conflicts" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ "${{ steps.check-status.outputs.all-passed }}" == "true" ]; then
+              echo "✅ All status checks passed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⏳ Waiting for status checks" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ "${{ steps.check-approvals.outputs.approved }}" == "true" ]; then
+              echo "✅ Required approvals obtained (${{ steps.check-approvals.outputs.approval-count }})" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⏳ Waiting for approvals" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ "${{ steps.enable-auto-merge.outputs.merged }}" == "true" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "🎉 **PR Successfully Auto-Merged!**" >> $GITHUB_STEP_SUMMARY
+              echo "Merge SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "No PR found in event payload" >> $GITHUB_STEP_SUMMARY
           fi
-
-          echo "eligible=$ELIGIBLE" >> $GITHUB_OUTPUT
-          echo "should_merge=$SHOULD_MERGE" >> $GITHUB_OUTPUT
-          echo "reason=$REASON" >> $GITHUB_OUTPUT
-
-      - name: Add Comment on Block
-        if: steps.eligibility.outputs.eligible == 'false' && steps.eligibility.outputs.reason != ''
-        run: |
-          # Check if we already commented with this reason
-          EXISTING_COMMENT=$(gh pr view ${{ steps.pr.outputs.number }} --json comments --jq '
-            .comments[] |
-            select(.author.login == "github-actions" and (.body | contains("Auto-merge blocked"))) |
-            .body
-          ' | tail -1)
-
-          REASON="${{ steps.eligibility.outputs.reason }}"
-
-          if [[ "$EXISTING_COMMENT" != *"$REASON"* ]]; then
-            gh pr comment ${{ steps.pr.outputs.number }} --body "🚫 **Auto-merge blocked**
-
-**Reason:** $REASON
-
-**To enable auto-merge:**
-- Ensure all CI checks pass
-- Remove any 'hold' or 'needs-review' labels (or get approval)
-- Resolve merge conflicts
-- Add label: \`automerge:when-ci-passes\` or \`automerge:after-24h\`
-
-See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md) for details."
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Execute Auto-Merge
-        if: steps.eligibility.outputs.should_merge == 'true'
-        run: |
-          echo "🚀 Auto-merging PR #${{ steps.pr.outputs.number }}"
-
-          gh pr merge ${{ steps.pr.outputs.number }} \
-            --squash \
-            --auto \
-            --delete-branch \
-            --subject "${{ steps.pr_details.outputs.title }}" \
-            --body "Auto-merged by workflow after all checks passed ✅"
-
-          echo "✅ Auto-merge enabled. Will merge when all checks pass."
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add Success Comment
-        if: steps.eligibility.outputs.should_merge == 'true'
-        run: |
-          gh pr comment ${{ steps.pr.outputs.number }} --body "✅ **Auto-merge enabled**
-
-This PR will be automatically merged when all checks pass.
-
-Merge method: Squash
-Branch will be deleted after merge.
-
-_Automated by [auto-merge.yml](../.github/workflows/auto-merge.yml)_"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # Job to handle PRs without auto-merge labels (informational)
-  suggest-auto-merge:
-    name: Suggest Auto-Merge Label
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'pull_request_target' &&
-      github.event.action == 'opened' &&
-      github.event.pull_request.draft == false
-
-    steps:
-      - name: Check for Auto-Merge Labels
-        run: |
-          LABELS=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels | map(.name) | join(",")')
-
-          if [[ ! "$LABELS" =~ "automerge:" ]] && [[ ! "$LABELS" =~ "needs-review" ]]; then
-            gh pr comment ${{ github.event.pull_request.number }} --body "👋 **Auto-merge not configured**
-
-This PR doesn't have an auto-merge label. Consider adding one for faster merging:
-
-- \`automerge:when-ci-passes\` - Merges immediately when CI passes (for bug fixes, docs, small features)
-- \`automerge:after-24h\` - Merges 24h after creation if CI passes (for standard features)
-- \`needs-review\` - Requires manual review and approval
-
-Or leave as-is for manual merge.
-
-See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md) for details."
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

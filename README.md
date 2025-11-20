@@ -16,6 +16,7 @@ central hub for:
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
 - **Living Document System** - AI-driven governance and management protocols
+- **🎭 Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
 
 When a repository in our organization doesn't have its own community health file
 s, GitHub automatically uses the defaults from this repository.
@@ -116,6 +117,40 @@ For detailed documentation on each component, see the `docs/` directory:
 - [Chat Modes Documentation](docs/README.chatmodes.md)
 - [Collections Documentation](docs/README.collections.md)
 
+### 🎭 Mouthpiece Filter System
+
+**Transform your natural human expression into AI-optimized prompts.**
+
+The Mouthpiece Filter System allows you to write and speak in your authentic voice—with all its imperfections, metaphors, and humanity—and automatically transforms that input into structured, clear prompts that AI systems can understand and act upon.
+
+> *"Write like a human. Let the filter handle the rest."*
+
+#### What It Does
+- **Preserves Your Voice**: Keeps your unique style, metaphors, and emotional context
+- **Extracts Intent**: Understands what you mean, not just what you say
+- **Structures Information**: Organizes thoughts into clear, actionable formats
+- **Optimizes for AI**: Creates prompts that AI systems can process effectively
+
+#### Components
+- **Filter Script** (`scripts/mouthpiece_filter.py`) - CLI transformation engine
+- **Chat Mode** (`chatmodes/mouthpiece.chatmode.md`) - Interactive AI persona
+- **Prompt Template** (`prompts/mouthpiece-transform.prompt.md`) - Quick transformations
+- **Documentation** ([MOUTHPIECE_README.md](MOUTHPIECE_README.md)) - Complete guide
+
+#### Quick Start
+```bash
+# Transform natural writing into structured prompts
+python scripts/mouthpiece_filter.py "your natural thoughts here"
+
+# Example
+python scripts/mouthpiece_filter.py "need something that watches APIs and alerts when they fail"
+```
+
+**Learn More:**
+- [Mouthpiece System Overview](MOUTHPIECE_README.md)
+- [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
+- [Examples & Patterns](docs/mouthpiece-examples.md)
+
 ### Community Health Files
 
 These files establish standards for community interaction and contribution acros
@@ -127,12 +162,6 @@ s all repositories:
 | [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Guidelines for contributing to our projects |
 | [SECURITY.md](docs/SECURITY.md) | Security policy and vulnerability reporting |
 | [SUPPORT.md](docs/SUPPORT.md) | How to get help and support |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Standards for respectful community
-interaction |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Guidelines for contributing to our projec
-ts |
-| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
-| [SUPPORT.md](SUPPORT.md) | How to get help and support |
 | [LICENSE](LICENSE) | MIT License for our projects |
 | [FUNDING.yml](FUNDING.yml) | Funding and sponsorship configuration |
 | [GOVERNANCE.md](docs/GOVERNANCE.md) | Project governance and decision-making |
@@ -149,6 +178,7 @@ All our documentation and guides are now located in the `docs/` directory. This 
 | [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
 | [LABELS.md](docs/LABELS.md) | Standard label set for consistent tagging |
 | [TESTING.md](docs/TESTING.md) | Testing standards and best practices |
+| [PR_AUTOMATION.md](PR_AUTOMATION.md) | **Automated PR creation, push, and merge system** |
 | [for-ai-implementation.txt](for-ai-implementation.txt) | Complete AI GitHub management protocol |
 
 
@@ -175,20 +205,6 @@ Specialized templates for different types of contributions:
 - **Performance** - [PULL_REQUEST_TEMPLATE/performance.md](PULL_REQUEST_TEMPLATE/performance.md)
 
 💡 **Tip**: Select a specific template by adding `?template=<name>.md` to the PR URL
-- **Default Template** - [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md)
-- **Bug Fix** - [PULL_REQUEST_TEMPLATE/bug_fix.md](PULL_REQUEST_TEMPLATE/bug_fix
-.md)
-- **Feature** - [PULL_REQUEST_TEMPLATE/feature.md](PULL_REQUEST_TEMPLATE/feature
-.md)
-- **Documentation** - [PULL_REQUEST_TEMPLATE/documentation.md](PULL_REQUEST_TEMP
-LATE/documentation.md)
-- **Refactoring** - [PULL_REQUEST_TEMPLATE/refactoring.md](PULL_REQUEST_TEMPLATE
-/refactoring.md)
-- **Performance** - [PULL_REQUEST_TEMPLATE/performance.md](PULL_REQUEST_TEMPLATE
-/performance.md)
-
-💡 **Tip**: Select a specific template by adding `?template=<name>.md` to the PR
-URL
 
 ### Workflow Templates
 
@@ -224,18 +240,13 @@ Comprehensive guides for maintaining high-quality repositories:
 
 | Document | Description |
 |----------|-------------|
-| [AI_IMPLEMENTATION_GUIDE.md](AI_IMPLEMENTATION_GUIDE.md) | AI-driven organizat
-ion management guide |
-| [REPOSITORY_PURPOSE_ANALYSIS.md](REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of
- repository appropriateness for function set |
-| [BRANCH_PROTECTION.md](BRANCH_PROTECTION.md) | Branch protection rules and con
-figuration |
-| [REPOSITORY_SETUP_CHECKLIST.md](REPOSITORY_SETUP_CHECKLIST.md) | New repositor
-y setup checklist |
-| [LABELS.md](LABELS.md) | Standard label set for consistent tagging |
-| [TESTING.md](TESTING.md) | Testing standards and best practices |
-| [for-ai-implementation.txt](for-ai-implementation.txt) | Complete AI GitHub ma
-nagement protocol |
+| [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md) | AI-driven organization management guide |
+| [REPOSITORY_PURPOSE_ANALYSIS.md](docs/REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of repository appropriateness for function set |
+| [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) | Branch protection rules and configuration |
+| [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
+| [LABELS.md](docs/LABELS.md) | Standard label set for consistent tagging |
+| [TESTING.md](docs/TESTING.md) | Testing standards and best practices |
+| [for-ai-implementation.txt](for-ai-implementation.txt) | Complete AI GitHub management protocol |
 
 ### Organization Profile
 
@@ -255,8 +266,6 @@ ealth files from this repository if they don't have their own versions.
    - Select, customize, and commit the workflow
 
 3. **Setup Checklist**: Follow the [Repository Setup Checklist](docs/REPOSITORY_SETUP_CHECKLIST.md) for comprehensive guidance.
-3. **Setup Checklist**: Follow the [Repository Setup Checklist](REPOSITORY_SETUP
-_CHECKLIST.md) for comprehensive guidance.
 
 ### For Existing Repositories
 
@@ -265,13 +274,6 @@ _CHECKLIST.md) for comprehensive guidance.
 3. **Configure Dependabot**: Copy [dependabot.yml](dependabot.yml) to `.github/` in your repository
 4. **Apply Labels**: Use [LABELS.md](docs/LABELS.md) to standardize issue labels
 5. **Enable Branch Protection**: Follow [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) guidelines
-2. **Enable Workflows**: Copy desired workflow templates to `.github/workflows/`
- in your repo
-3. **Configure Dependabot**: Copy [dependabot.yml](dependabot.yml) to `.github/`
- in your repository
-4. **Apply Labels**: Use [LABELS.md](LABELS.md) to standardize issue labels
-5. **Enable Branch Protection**: Follow [BRANCH_PROTECTION.md](BRANCH_PROTECTION
-.md) guidelines
 
 ### Customizing Templates
 
@@ -371,7 +373,29 @@ Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
 Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
  [Implementation Guide](AI_IMPLEMENTATION_GUIDE.md)
 
+### 🕷️  Active Health Monitoring
+
+The organization now features **automated health monitoring** that brings the AI protocol to life:
+
+- **🔍 Web Crawler** - Continuously analyzes organization health, validates documentation links, and maps the ecosystem
+- **📊 Health Dashboard** - Real-time visualization of repository health, workflow coverage, and Copilot customizations
+- **🔦 Blind Spot Detection** - Identifies unknown risks and unmaintained areas
+- **💥 Shatter Point Analysis** - Detects single points of failure in workflows and infrastructure
+- **⚡ Automated Reporting** - Weekly health reports with critical issue alerts
+
+**Current Stats**: 32 workflows • 324 Copilot customizations • 109 technologies supported
+
+📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️  [Scripts Documentation](scripts/README.md)
+
 ## 🛠️ Key Features
+
+### 🤖 PR Automation (NEW!)
+
+- **Auto PR Creation**: Automatically creates PRs when feature branches are pushed
+- **Auto Merge**: Intelligently merges PRs when all requirements are met
+- **Conflict Resolution**: Automatically resolves merge conflicts when possible
+- **Branch Cleanup**: Removes merged branches automatically
+- **Comprehensive Documentation**: See [PR_AUTOMATION.md](PR_AUTOMATION.md) for details
 
 ### Automated Security
 
@@ -386,9 +410,6 @@ Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
 - **Code Review Guidelines**: Built into PR templates
 - **Testing Standards**: Documented in [TESTING.md](docs/TESTING.md)
 - **Contribution Guidelines**: Clear expectations in [CONTRIBUTING.md](docs/CONTRIBUTING.md)
-- **Testing Standards**: Documented in [TESTING.md](TESTING.md)
-- **Contribution Guidelines**: Clear expectations in [CONTRIBUTING.md](CONTRIBUT
-ING.md)
 
 ### Developer Experience
 
@@ -403,10 +424,6 @@ We welcome contributions from everyone! Here's how to get started:
 
 1. **Read the Guidelines**: Check [CONTRIBUTING.md](docs/CONTRIBUTING.md) for detailed instructions
 2. **Follow the Code of Conduct**: All interactions must follow our [CODE_OF_CONDUCT.md](docs/CODE_OF_CONDUCT.md)
-1. **Read the Guidelines**: Check [CONTRIBUTING.md](CONTRIBUTING.md) for detaile
-d instructions
-2. **Follow the Code of Conduct**: All interactions must follow our [CODE_OF_CON
-DUCT.md](CODE_OF_CONDUCT.md)
 3. **Use Templates**: Submit issues and PRs using our templates
 4. **Ask Questions**: Don't hesitate to open a question issue or discussion
 

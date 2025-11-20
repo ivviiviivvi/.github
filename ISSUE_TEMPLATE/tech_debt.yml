@@ -1,0 +1,275 @@
+name: 🔧 Technical Debt / Refactoring
+description: Propose code refactoring or technical debt reduction
+title: "[TECH DEBT]: "
+labels: ["tech-debt", "refactoring", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us improve code quality! Technical debt includes code that works but needs improvement for maintainability, scalability, or quality.
+
+  - type: dropdown
+    id: debt-type
+    attributes:
+      label: Technical Debt Type
+      description: What type of technical debt is this?
+      options:
+        - Code Duplication
+        - Poor Code Structure
+        - Lack of Tests
+        - Outdated Dependencies
+        - Deprecated APIs
+        - Missing Documentation
+        - Code Smells
+        - Performance Debt
+        - Security Debt
+        - Design Debt
+        - Infrastructure Debt
+        - Build/Tooling Debt
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is addressing this technical debt?
+      options:
+        - Low (Nice to have, can wait)
+        - Medium (Should address in next few sprints)
+        - High (Should address soon, causing issues)
+        - Critical (Urgent, blocking other work)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is the technical debt or refactoring need?
+      placeholder: Describe the current state and why it needs improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Current State
+      description: Describe the current implementation or situation
+      placeholder: |
+        What exists now that needs refactoring?
+        Include code examples if relevant
+      render: typescript
+
+  - type: textarea
+    id: problems
+    attributes:
+      label: Problems with Current State
+      description: What problems does the current state cause?
+      placeholder: |
+        - Hard to maintain
+        - Difficult to test
+        - Poor performance
+        - Brittle/fragile code
+        - Confusing to understand
+        - Blocks new features
+        - Increasing bug rate
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How should this be refactored or improved?
+      placeholder: |
+        Describe the desired end state
+        Include proposed code structure or patterns
+      render: typescript
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits
+      description: What benefits will this refactoring provide?
+      placeholder: |
+        - Improved maintainability
+        - Better test coverage
+        - Clearer code structure
+        - Performance improvements
+        - Easier to add features
+        - Reduced bug risk
+        - Better developer experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-areas
+    attributes:
+      label: Affected Code Areas
+      description: Which files, components, or modules are affected?
+      placeholder: |
+        - src/components/UserForm.tsx
+        - src/utils/validation.ts
+        - tests/unit/user.test.ts
+        List all files and areas that need changes
+
+  - type: textarea
+    id: effort-estimate
+    attributes:
+      label: Effort Estimate
+      description: Estimated effort to complete this refactoring
+      placeholder: |
+        - Story points: [e.g., 5]
+        - Time estimate: [e.g., 3 days]
+        - Complexity: [Low/Medium/High]
+        - Number of files affected: [e.g., 15]
+        - Lines of code affected: [e.g., 500]
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and Challenges
+      description: What risks or challenges exist with this refactoring?
+      placeholder: |
+        - Risk of introducing bugs
+        - Need for extensive testing
+        - May require database migrations
+        - Potential breaking changes
+        - Dependencies on other work
+        - Requires team coordination
+
+  - type: textarea
+    id: testing-strategy
+    attributes:
+      label: Testing Strategy
+      description: How will the refactoring be tested?
+      placeholder: |
+        - Unit tests to add/update
+        - Integration tests needed
+        - E2E tests required
+        - Manual testing checklist
+        - Regression testing plan
+
+  - type: textarea
+    id: migration-plan
+    attributes:
+      label: Migration/Rollout Plan
+      description: How will this change be rolled out?
+      placeholder: |
+        - Can it be done incrementally?
+        - Need feature flags?
+        - Backward compatibility required?
+        - Rollback strategy?
+        - Communication plan?
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Will this introduce breaking changes?
+      options:
+        - No breaking changes
+        - Breaking changes (will require major version bump)
+        - Breaking changes (internal only, not public API)
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What depends on this work or what does this depend on?
+      placeholder: |
+        Blocks:
+        - #123 Feature X
+        - #456 Bug fix Y
+
+        Blocked by:
+        - #789 Migration Z
+        - #101 Dependency update
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact Areas
+      description: Which areas are impacted by this refactoring?
+      options:
+        - label: Public API
+        - label: Internal APIs
+        - label: Database schema
+        - label: Configuration
+        - label: Build process
+        - label: Deployment process
+        - label: Documentation
+        - label: Tests
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches were considered?
+      placeholder: |
+        Describe alternative solutions and why they were not chosen:
+        - Alternative 1: [description and why not chosen]
+        - Alternative 2: [description and why not chosen]
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Relevant resources, documentation, or examples
+      placeholder: |
+        - Design pattern documentation
+        - Similar implementations
+        - RFC or ADR documents
+        - Blog posts or articles
+        - Code examples from other projects
+
+  - type: checkboxes
+    id: code-quality
+    attributes:
+      label: Code Quality Improvements
+      description: Which code quality aspects will improve?
+      options:
+        - label: Reduces code duplication
+        - label: Improves code readability
+        - label: Enhances maintainability
+        - label: Increases test coverage
+        - label: Improves performance
+        - label: Enhances security
+        - label: Better error handling
+        - label: Clearer separation of concerns
+        - label: More consistent code style
+        - label: Better documentation
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Success Metrics
+      description: How will success be measured?
+      placeholder: |
+        - Code coverage increases from X% to Y%
+        - Complexity score decreases
+        - Build time improves
+        - Number of bugs in area decreases
+        - Developer velocity improves
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Add any other context, diagrams, or examples
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/ivi374forivi/.github/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

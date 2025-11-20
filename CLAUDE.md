@@ -5,17 +5,16 @@
 ## Table of Contents
 
 1. [Repository Overview](#repository-overview)
-2. [AI Rapid Development Workflow](#ai-rapid-development-workflow) ⭐ **NEW**
-3. [Codebase Structure](#codebase-structure)
-4. [Development Workflows](#development-workflows)
-5. [Commit Conventions](#commit-conventions)
-6. [Pull Request Process](#pull-request-process)
-7. [GitHub Copilot Customizations](#github-copilot-customizations)
-8. [Automation & CI/CD](#automation--cicd)
-9. [Security & Compliance](#security--compliance)
-10. [Key Conventions](#key-conventions)
-11. [AI Assistant Guidelines](#ai-assistant-guidelines)
-12. [Common Tasks](#common-tasks)
+2. [Codebase Structure](#codebase-structure)
+3. [Development Workflows](#development-workflows)
+4. [Commit Conventions](#commit-conventions)
+5. [Pull Request Process](#pull-request-process)
+6. [GitHub Copilot Customizations](#github-copilot-customizations)
+7. [Automation & CI/CD](#automation--cicd)
+8. [Security & Compliance](#security--compliance)
+9. [Key Conventions](#key-conventions)
+10. [AI Assistant Guidelines](#ai-assistant-guidelines)
+11. [Common Tasks](#common-tasks)
 
 ---
 
@@ -37,175 +36,11 @@ When a repository in the organization doesn't have its own community health file
 ### Key Principles
 
 - **Openness**: Transparent development and documentation
-- **Automation-First**: 32+ GitHub Actions workflows covering all aspects of development
+- **Automation-First**: 43 total workflows (31 active + 12 templates) covering all aspects of development
 - **Security-by-Default**: Multi-layered security scanning (CodeQL, Semgrep, dependency review)
 - **AI-Driven**: Deep integration with AI tools (Claude, GitHub Copilot, OpenAI, Gemini, Grok)
 - **Community-Focused**: Welcoming to contributors with clear guidelines and templates
 - **Quality-Enforced**: Automated quality checks on all PRs
-
----
-
-## AI Rapid Development Workflow
-
-### ⚡ The Challenge
-
-**Problem:** Traditional PR workflows create bottlenecks when a solo developer works with multiple AI assistants:
-- Multiple AI agents create many branches simultaneously
-- PR backlog grows faster than manual review capacity
-- Tasks get lost in closed/stale PRs
-- Can develop working software in <24 hours but spend days managing merges
-
-**Solution:** Speed-optimized workflow with intelligent auto-merge, batch processing, and task preservation.
-
-### 🎯 Core Philosophy
-
-> **For solo dev + AI assistants:**
-> - **CI is your code reviewer** - If tests pass, ship it
-> - **Auto-merge by default** - Manual review only for complex/critical changes
-> - **Short-lived branches** - Max 48-72 hours from creation to merge
-> - **Track work in issues, not PR backlogs** - Tasks extracted from closed PRs
-> - **Batch related work** - Merge dependent PRs together
-> - **Ruthless cleanup** - Auto-close stale PRs
-
-### 🚀 Quick Start
-
-**AI assistants should use these labels when creating PRs:**
-
-```bash
-# Bug fixes, docs, small features (auto-merge immediately)
-gh pr create --label "automerge:when-ci-passes"
-
-# Standard features (auto-merge after 24h review window)
-gh pr create --label "automerge:after-24h"
-
-# Related changes (batch merge together)
-gh pr create --label "batch:feature-name"
-
-# Complex/critical (manual review required)
-gh pr create --label "needs-review"
-```
-
-### 📋 Auto-Merge Labels
-
-| Label | Behavior | Use When |
-|-------|----------|----------|
-| `automerge:when-ci-passes` | Merges immediately when CI ✅ | Bug fixes, docs, config, small features |
-| `automerge:after-24h` | Merges 24h after creation if CI ✅ | Standard features (time for review) |
-| `automerge:batch` | Waits for related PRs, merges together | Dependent changes |
-| `batch:<name>` | Groups related PRs for batch merge | API refactors, multi-PR features |
-| `needs-review` | **Blocks** auto-merge, requires approval | Complex/security/breaking changes |
-| `keep-alive` | Prevents stale auto-closure | Long-running work |
-| `hold` | Temporarily blocks merge | Need to pause |
-
-### ⏱️ Branch Lifecycle (Burst Mode - Default)
-
-```
-0h     PR created → CI runs
-       ↓
-       CI passes + "automerge:when-ci-passes" → MERGED ✅
-       (Total time: 15 min - 2 hours)
-       ↓
-       OR if not merged...
-       ↓
-12h    No merge/activity → ⚠️ Stale warning (ship it!)
-       ↓
-24h    Auto-closed + task extraction → Issue created 📋
-```
-
-**For rapid bursts:** Features ship in hours, not days. 24h timeline matches burst development pace.
-
-### 🔄 Automated Workflows
-
-**Five new workflows support this process:**
-
-1. **`auto-merge.yml`** - Core auto-merge logic
-   - Evaluates PRs based on labels, CI status, age
-   - Automatically merges when conditions met
-   - Posts helpful comments on blocks/success
-
-2. **`branch-lifecycle.yml`** - Stale management (Burst Mode)
-   - Runs every 6 hours
-   - Burst mode: Warns at 12h, closes at 24h
-   - Normal mode: Warns at 48h/72h, closes at 96h
-   - Cleans up merged branches
-
-3. **`pr-batch-merge.yml`** - Batch processing
-   - Triggered by `/merge-batch <name>` comment
-   - Validates all PRs in batch are ready
-   - Merges in dependency order
-   - Creates summary issue
-
-4. **`task-extraction.yml`** - Preserve work
-   - Runs when PR closes without merge
-   - Extracts incomplete tasks
-   - Creates new issue with tasks
-   - Assigns to original author
-
-5. **`pr-task-catcher.yml`** - Comment task tracking (NEW)
-   - Scans all PR comments for tasks/suggestions
-   - Detects blocker keywords, unchecked tasks, review threads
-   - Posts/updates task summary comment
-   - Blocks merge if blocker items found
-   - Creates issues for tasks on merge (optional)
-
-### 📊 Target Metrics
-
-| Metric | Target | Why |
-|--------|--------|-----|
-| Open PRs | <10 | Reduce cognitive load |
-| PR merge time (small) | <2 hours | Ship faster |
-| Auto-merge rate | >70% | Reduce manual overhead |
-| Stale PRs | <5 | Keep backlog clean |
-| Lost tasks | 0 | Automation extracts them |
-
-### 🎓 Daily Routine (15 min/day)
-
-**Morning:**
-```bash
-gh pr list --state merged --search "merged:>=yesterday"  # What shipped?
-gh pr list --label "needs-review"                        # What needs me?
-gh pr list | wc -l                                       # PR count (<10?)
-```
-
-**Evening:**
-```bash
-gh pr list --label "stale:final-warning"  # Triage stale PRs
-```
-
-### 📚 Documentation
-
-- **Full Guide**: [`AI_RAPID_WORKFLOW.md`](AI_RAPID_WORKFLOW.md) - Complete workflow documentation
-- **Quick Reference**: [`RAPID_WORKFLOW_QUICK_REF.md`](RAPID_WORKFLOW_QUICK_REF.md) - Cheat sheet
-- **Workflows**: `.github/workflows/auto-merge.yml`, `branch-lifecycle.yml`, `pr-batch-merge.yml`, `task-extraction.yml`
-
-### ⚠️ Important for AI Assistants
-
-**DO:**
-- ✅ Use `automerge:when-ci-passes` for >70% of your PRs
-- ✅ Keep PRs small (<500 lines when possible)
-- ✅ Link PRs to issues (`Closes #123`)
-- ✅ Use `batch:<name>` for related work
-- ✅ Trust the CI pipeline
-
-**DON'T:**
-- ❌ Create PRs without auto-merge labels (causes manual work)
-- ❌ Create XL PRs (>1000 lines) without breaking them up
-- ❌ Let PRs sit without activity for >48 hours
-- ❌ Disable CI checks to "move faster"
-
-### 🆘 Common Scenarios
-
-**Too many open PRs?**
-→ Use batch merge or add `automerge:when-ci-passes` labels
-
-**Related PRs conflicting?**
-→ Use `batch:<name>` label and trigger `/merge-batch <name>`
-
-**Lost track of work?**
-→ Check issues with `extracted-tasks` label
-
-**PR not auto-merging?**
-→ Check CI status, labels, and merge conflicts
 
 ---
 
@@ -216,12 +51,7 @@ gh pr list --label "stale:final-warning"  # Triage stale PRs
 ```
 /home/user/.github/
 ├── .github/                          # Organization's own automation
-│   ├── workflows/                    # 36+ GitHub Actions workflows
-│   │   ├── Rapid Development (NEW)
-│   │   │   ├── auto-merge.yml
-│   │   │   ├── branch-lifecycle.yml
-│   │   │   ├── pr-batch-merge.yml
-│   │   │   └── task-extraction.yml
+│   ├── workflows/                    # 31 active GitHub Actions workflows
 │   │   ├── Security & Compliance
 │   │   │   ├── codeql-analysis.yml
 │   │   │   ├── semgrep.yml
@@ -272,32 +102,36 @@ gh pr list --label "stale:final-warning"  # Triage stale PRs
 │   │   ├── azure-principal-architect.md
 │   │   ├── Ultimate-Transparent-Thinking-Beast-Mode.md
 │   │   └── [85 more modes]
-│   └── collections/                  # 28 curated themed bundles
+│   └── collections/                  # 27 collections (55 files w/ .yml+.md)
 │       ├── azure-cloud-development.yml
 │       ├── typescript-mcp-development.yml
-│       └── [26 more collections]
+│       ├── python-mcp-development.yml
+│       ├── clojure.collection.yml
+│       ├── edge-ai-tasks.collection.yml
+│       └── [22 more collections]
 │
-├── Community Health Files/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── config.yml
-│   │   ├── bug_report.md
-│   │   ├── bug_report_form.yml
-│   │   ├── feature_request.md
-│   │   ├── feature_request_form.yml
-│   │   ├── documentation.md
-│   │   └── question.md
-│   ├── PULL_REQUEST_TEMPLATE/
-│   │   ├── bug_fix.md
-│   │   ├── feature.md
-│   │   ├── documentation.md
-│   │   ├── refactoring.md
-│   │   └── performance.md
-│   ├── CODE_OF_CONDUCT.md
-│   ├── CONTRIBUTING.md
-│   ├── SECURITY.md
-│   ├── SUPPORT.md
-│   ├── LICENSE
-│   └── FUNDING.yml
+├── chaos-zone/                       # Temporary holding area for unorganized content
+│   ├── README.md                     # Chaos zone documentation
+│   ├── chats/                        # AI chat transcripts
+│   ├── drafts/                       # Work-in-progress documents
+│   ├── ideas/                        # Brainstorming notes
+│   └── misc/                         # Miscellaneous files
+│
+├── ISSUE_TEMPLATE/                   # Issue templates
+│   ├── config.yml
+│   ├── bug_report.md
+│   ├── bug_report_form.yml
+│   ├── feature_request.md
+│   ├── feature_request_form.yml
+│   ├── documentation.md
+│   └── question.md
+│
+├── PULL_REQUEST_TEMPLATE/            # PR templates
+│   ├── bug_fix.md
+│   ├── feature.md
+│   ├── documentation.md
+│   ├── refactoring.md
+│   └── performance.md
 │
 ├── workflow-templates/               # Reusable org-wide workflows
 │   ├── ci.yml
@@ -307,33 +141,35 @@ gh pr list --label "stale:final-warning"  # Triage stale PRs
 │   ├── dependency-updates.yml
 │   └── *.properties.json
 │
-├── Documentation/
-│   ├── docs/                         # Comprehensive guides
-│   │   ├── README.agents.md          # Agent documentation (23KB)
-│   │   ├── README.instructions.md    # Instructions catalog (104KB)
-│   │   ├── README.prompts.md         # Prompts catalog (110KB)
-│   │   ├── README.chatmodes.md       # Chat modes catalog (81KB)
-│   │   ├── README.collections.md     # Collections guide
-│   │   ├── AI_IMPLEMENTATION_GUIDE.md
-│   │   ├── BRANCH_PROTECTION.md
-│   │   ├── REPOSITORY_SETUP_CHECKLIST.md
-│   │   ├── LABELS.md
-│   │   ├── TESTING.md
-│   │   ├── GOVERNANCE.md
-│   │   └── MANIFESTO.md
-│   ├── AI_CODE_INTELLIGENCE.md       # AI tools integration guide
-│   ├── AI_RAPID_WORKFLOW.md          # Rapid dev workflow (NEW)
-│   ├── RAPID_WORKFLOW_QUICK_REF.md   # Quick reference (NEW)
-│   ├── AUTOMATION_MASTER_GUIDE.md    # Automation documentation
-│   ├── BEST_PRACTICES.md             # Gold standard practices
-│   ├── DOCKER_BEST_PRACTICES.md
-│   ├── GIT_WORKFLOW.md
-│   ├── SEMANTIC_VERSIONING.md
-│   ├── SECURITY_ADVANCED.md
+├── docs/                             # Documentation & guides
+│   ├── README.agents.md              # Agent documentation (23KB)
+│   ├── README.instructions.md        # Instructions catalog (104KB)
+│   ├── README.prompts.md             # Prompts catalog (110KB)
+│   ├── README.chatmodes.md           # Chat modes catalog (81KB)
+│   ├── README.collections.md         # Collections guide
+│   ├── AI_IMPLEMENTATION_GUIDE.md
+│   ├── BRANCH_PROTECTION.md
+│   ├── REPOSITORY_SETUP_CHECKLIST.md
+│   ├── LABELS.md
+│   ├── TESTING.md
+│   ├── GOVERNANCE.md
+│   ├── MANIFESTO.md
+│   ├── CODE_OF_CONDUCT.md            # Community code of conduct
+│   ├── CONTRIBUTING.md               # Contribution guidelines
+│   ├── SECURITY.md                   # Security policy
+│   ├── SUPPORT.md                    # Support information
+│   ├── PULL_REQUEST_TEMPLATE.md      # Default PR template
 │   ├── LOGICAL_EXPANSIONS.md
 │   ├── ORG_HEALTH_REPORT.md
 │   ├── REPOSITORY_PURPOSE_ANALYSIS.md
 │   ├── QUICK_START.md
+│   ├── AI_CODE_INTELLIGENCE.md       # AI tools integration guide
+│   ├── AUTOMATION_MASTER_GUIDE.md    # Automation documentation
+│   ├── BEST_PRACTICES.md             # Comprehensive best practices
+│   ├── DOCKER_BEST_PRACTICES.md
+│   ├── GIT_WORKFLOW.md
+│   ├── SEMANTIC_VERSIONING.md
+│   ├── SECURITY_ADVANCED.md
 │   └── CHANGELOG.md
 │
 ├── Configuration/
@@ -698,7 +534,7 @@ model: 'claude-sonnet-4.5'  # Strongly encouraged
 
 **File Naming Convention**: `lowercase-with-hyphens.chatmode.md` or `PascalCase.md`
 
-### 5. Collections (28 files)
+### 5. Collections (27 collections, 55 files)
 
 **Purpose**: Curated bundles of related prompts, instructions, chat modes
 
@@ -707,11 +543,21 @@ model: 'claude-sonnet-4.5'  # Strongly encouraged
   - `azure-cloud-development.yml` - IaC (Bicep/Terraform), Functions, Logic Apps, Architecture
 - **MCP Development**:
   - `typescript-mcp-development.yml`, `python-mcp-development.yml`
-  - Language-specific: Go, Rust, C#, Java, Kotlin, Swift, Ruby, PHP
+  - Language-specific: Go, Rust, C#, Java, Kotlin, Swift, Ruby, PHP, Clojure
 - **Domains**:
   - `security-best-practices.yml` - Security-focused tools
   - `testing-and-automation.yml` - QA and test automation
   - `frontend-web-dev.yml` - React, Angular, Vue
+  - `database-data-management.yml` - Database and data management
+  - `edge-ai-tasks.collection.yml` - Edge AI and machine learning tasks
+- **Microsoft Power Platform**:
+  - `power-platform.yml` - Power Platform development
+  - `power-apps.yml` - Power Apps customizations
+  - `power-bi.yml` - Power BI and analytics
+- **Project Management**:
+  - `project-planning.yml` - Project planning and management
+  - `technical-spike.yml` - Technical spike exploration
+  - `partners.yml` - Partner integrations
 
 **Documentation**: `docs/README.collections.md`
 
@@ -744,6 +590,40 @@ Applied during code reviews, checks for:
 
 **README Updates**:
 - New files added to `README.md`
+
+### 6. Chaos Zone
+
+**Location**: `chaos-zone/` directory
+
+**Purpose**: Temporary holding area for unorganized, unstructured, or work-in-progress content. Think of it as the repository's "inbox" for quickly uploading content without worrying about structure.
+
+**Structure**:
+```
+chaos-zone/
+├── README.md         # Usage guidelines
+├── chats/            # AI chat transcripts and conversation logs
+├── drafts/           # Work-in-progress documents before refinement
+├── ideas/            # Brainstorming notes and quick ideas
+└── misc/             # Everything else that doesn't fit elsewhere
+```
+
+**What Goes Here**:
+- Raw chat transcripts from AI conversations
+- Draft documents before they're refined
+- Brainstorming notes and ideas
+- Screenshots and temporary files
+- Anything that doesn't have a clear home yet
+- Content that needs to be reviewed and organized later
+
+**Best Practices**:
+- ✅ Use descriptive filenames with dates (YYYY-MM-DD format)
+- ✅ Dump content quickly without worrying about formatting
+- ✅ Review and organize periodically (suggested: monthly)
+- ❌ Don't let content sit here indefinitely
+- ❌ Don't upload sensitive information (API keys, passwords, etc.)
+- ❌ Don't store large binary files (use Git LFS or external storage)
+
+**Maintenance**: The chaos zone should be reviewed monthly to move relevant content to appropriate directories, archive outdated material, and extract useful insights into proper documentation.
 
 ---
 
@@ -824,18 +704,44 @@ Applied during code reviews, checks for:
 
 8. **Accessibility Testing** - WCAG 2.1 compliance validation
 
-#### AI & Code Intelligence (6 workflows)
+#### AI & Code Intelligence (9 workflows)
 
 1. **Claude Code Review** (`claude-code-review.yml`)
    - AI-powered PR reviews
    - Analyzes: security, performance, best practices
    - Posts review comments
 
-2. **OpenAI/Gemini/Grok/Perplexity Workflows**
-   - Multiple AI provider integrations
-   - Configurable for various tasks
+2. **OpenAI Workflow** (`openai_workflow.yml`)
+   - OpenAI API integration for code analysis
+   - Configurable for various AI tasks
 
-3. **Jules** - AI-powered development assistant
+3. **Gemini Workflow** (`gemini_workflow.yml`)
+   - Google Gemini integration
+   - Multi-modal AI capabilities
+
+4. **Grok Workflow** (`grok_workflow.yml`)
+   - xAI Grok integration
+   - Real-time AI assistance
+
+5. **Perplexity Workflow** (`perplexity_workflow.yml`)
+   - Perplexity AI integration
+   - Research and code understanding
+
+6. **Jules** (`jules.yml`)
+   - AI-powered development assistant
+   - Automated task execution
+
+7. **Orchestrator** (`orchestrator.yml`)
+   - Coordinates multi-AI workflows
+   - Task distribution and management
+
+8. **Process Queue** (`process_queue.yml`)
+   - Async task processing
+   - Quota management integration
+
+9. **CI Advanced** (`ci-advanced.yml`)
+   - Advanced continuous integration
+   - AI-enhanced build and test automation
 
 #### Metrics & Reporting (5 workflows)
 
@@ -876,11 +782,23 @@ Applied during code reviews, checks for:
    - Asset uploads
    - Release notes
 
-#### Orchestration (2 workflows)
+#### Orchestration & Quota Management (4 workflows)
 
-1. **Orchestrator** - Coordinates multi-AI workflows
+1. **Orchestrator** (`orchestrator.yml`)
+   - Coordinates multi-AI workflows
+   - Manages task distribution across AI providers
 
-2. **Process Queue** (`process_queue.yml`) - Async task processing with quota management
+2. **Process Queue** (`process_queue.yml`)
+   - Async task processing with quota management
+   - Handles background job execution
+
+3. **Reset Quotas** (`reset_quotas.yml`)
+   - Automated quota reset on schedule
+   - Manages API rate limits
+
+4. **Manual Reset** (`manual_reset.yml`)
+   - Manual quota reset trigger
+   - Emergency quota management
 
 ---
 
@@ -1392,10 +1310,10 @@ gh repo view --json name,description,stargazerCount,forkCount
 
 ## Summary
 
-This `.github` repository represents a **gold standard** for organization-level GitHub management with:
+This `.github` repository represents a **comprehensive reference implementation** for organization-level GitHub management with:
 
 - **300+ AI customizations** for GitHub Copilot
-- **32+ automated workflows** covering security, quality, metrics, and releases
+- **43 automated workflows** (31 active + 12 templates) covering security, quality, metrics, and releases
 - **Multi-layered security** scanning with CodeQL, Semgrep, and dependency review
 - **Comprehensive documentation** (300KB+ of Copilot docs alone)
 - **Strict quality enforcement** via automated PR checks

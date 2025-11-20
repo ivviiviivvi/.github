@@ -1,0 +1,16 @@
+{
+  "name": "Repository Health Check Workflow",
+  "description": "Automated repository health assessment workflow that monitors community files, templates, CI/CD configuration, and repository metrics. Aligns with AI GitHub Management Protocol Module 7.",
+  "iconName": "health",
+  "categories": [
+    "automation",
+    "monitoring"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "*.go$",
+    "*.py$",
+    "*.ts$",
+    "*.js$"
+  ]
+}
