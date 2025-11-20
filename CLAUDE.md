@@ -36,7 +36,7 @@ When a repository in the organization doesn't have its own community health file
 ### Key Principles
 
 - **Openness**: Transparent development and documentation
-- **Automation-First**: 32+ GitHub Actions workflows covering all aspects of development
+- **Automation-First**: 43 total workflows (31 active + 12 templates) covering all aspects of development
 - **Security-by-Default**: Multi-layered security scanning (CodeQL, Semgrep, dependency review)
 - **AI-Driven**: Deep integration with AI tools (Claude, GitHub Copilot, OpenAI, Gemini, Grok)
 - **Community-Focused**: Welcoming to contributors with clear guidelines and templates
@@ -51,7 +51,7 @@ When a repository in the organization doesn't have its own community health file
 ```
 /home/user/.github/
 ├── .github/                          # Organization's own automation
-│   ├── workflows/                    # 32+ GitHub Actions workflows
+│   ├── workflows/                    # 31 active GitHub Actions workflows
 │   │   ├── Security & Compliance
 │   │   │   ├── codeql-analysis.yml
 │   │   │   ├── semgrep.yml
@@ -102,32 +102,36 @@ When a repository in the organization doesn't have its own community health file
 │   │   ├── azure-principal-architect.md
 │   │   ├── Ultimate-Transparent-Thinking-Beast-Mode.md
 │   │   └── [85 more modes]
-│   └── collections/                  # 28 curated themed bundles
+│   └── collections/                  # 27 collections (55 files w/ .yml+.md)
 │       ├── azure-cloud-development.yml
 │       ├── typescript-mcp-development.yml
-│       └── [26 more collections]
+│       ├── python-mcp-development.yml
+│       ├── clojure.collection.yml
+│       ├── edge-ai-tasks.collection.yml
+│       └── [22 more collections]
 │
-├── Community Health Files/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── config.yml
-│   │   ├── bug_report.md
-│   │   ├── bug_report_form.yml
-│   │   ├── feature_request.md
-│   │   ├── feature_request_form.yml
-│   │   ├── documentation.md
-│   │   └── question.md
-│   ├── PULL_REQUEST_TEMPLATE/
-│   │   ├── bug_fix.md
-│   │   ├── feature.md
-│   │   ├── documentation.md
-│   │   ├── refactoring.md
-│   │   └── performance.md
-│   ├── CODE_OF_CONDUCT.md
-│   ├── CONTRIBUTING.md
-│   ├── SECURITY.md
-│   ├── SUPPORT.md
-│   ├── LICENSE
-│   └── FUNDING.yml
+├── chaos-zone/                       # Temporary holding area for unorganized content
+│   ├── README.md                     # Chaos zone documentation
+│   ├── chats/                        # AI chat transcripts
+│   ├── drafts/                       # Work-in-progress documents
+│   ├── ideas/                        # Brainstorming notes
+│   └── misc/                         # Miscellaneous files
+│
+├── ISSUE_TEMPLATE/                   # Issue templates
+│   ├── config.yml
+│   ├── bug_report.md
+│   ├── bug_report_form.yml
+│   ├── feature_request.md
+│   ├── feature_request_form.yml
+│   ├── documentation.md
+│   └── question.md
+│
+├── PULL_REQUEST_TEMPLATE/            # PR templates
+│   ├── bug_fix.md
+│   ├── feature.md
+│   ├── documentation.md
+│   ├── refactoring.md
+│   └── performance.md
 │
 ├── workflow-templates/               # Reusable org-wide workflows
 │   ├── ci.yml
@@ -137,31 +141,35 @@ When a repository in the organization doesn't have its own community health file
 │   ├── dependency-updates.yml
 │   └── *.properties.json
 │
-├── Documentation/
-│   ├── docs/                         # Comprehensive guides
-│   │   ├── README.agents.md          # Agent documentation (23KB)
-│   │   ├── README.instructions.md    # Instructions catalog (104KB)
-│   │   ├── README.prompts.md         # Prompts catalog (110KB)
-│   │   ├── README.chatmodes.md       # Chat modes catalog (81KB)
-│   │   ├── README.collections.md     # Collections guide
-│   │   ├── AI_IMPLEMENTATION_GUIDE.md
-│   │   ├── BRANCH_PROTECTION.md
-│   │   ├── REPOSITORY_SETUP_CHECKLIST.md
-│   │   ├── LABELS.md
-│   │   ├── TESTING.md
-│   │   ├── GOVERNANCE.md
-│   │   └── MANIFESTO.md
-│   ├── AI_CODE_INTELLIGENCE.md       # AI tools integration guide
-│   ├── AUTOMATION_MASTER_GUIDE.md    # Automation documentation
-│   ├── BEST_PRACTICES.md             # Gold standard practices
-│   ├── DOCKER_BEST_PRACTICES.md
-│   ├── GIT_WORKFLOW.md
-│   ├── SEMANTIC_VERSIONING.md
-│   ├── SECURITY_ADVANCED.md
+├── docs/                             # Documentation & guides
+│   ├── README.agents.md              # Agent documentation (23KB)
+│   ├── README.instructions.md        # Instructions catalog (104KB)
+│   ├── README.prompts.md             # Prompts catalog (110KB)
+│   ├── README.chatmodes.md           # Chat modes catalog (81KB)
+│   ├── README.collections.md         # Collections guide
+│   ├── AI_IMPLEMENTATION_GUIDE.md
+│   ├── BRANCH_PROTECTION.md
+│   ├── REPOSITORY_SETUP_CHECKLIST.md
+│   ├── LABELS.md
+│   ├── TESTING.md
+│   ├── GOVERNANCE.md
+│   ├── MANIFESTO.md
+│   ├── CODE_OF_CONDUCT.md            # Community code of conduct
+│   ├── CONTRIBUTING.md               # Contribution guidelines
+│   ├── SECURITY.md                   # Security policy
+│   ├── SUPPORT.md                    # Support information
+│   ├── PULL_REQUEST_TEMPLATE.md      # Default PR template
 │   ├── LOGICAL_EXPANSIONS.md
 │   ├── ORG_HEALTH_REPORT.md
 │   ├── REPOSITORY_PURPOSE_ANALYSIS.md
 │   ├── QUICK_START.md
+│   ├── AI_CODE_INTELLIGENCE.md       # AI tools integration guide
+│   ├── AUTOMATION_MASTER_GUIDE.md    # Automation documentation
+│   ├── BEST_PRACTICES.md             # Comprehensive best practices
+│   ├── DOCKER_BEST_PRACTICES.md
+│   ├── GIT_WORKFLOW.md
+│   ├── SEMANTIC_VERSIONING.md
+│   ├── SECURITY_ADVANCED.md
 │   └── CHANGELOG.md
 │
 ├── Configuration/
@@ -526,7 +534,7 @@ model: 'claude-sonnet-4.5'  # Strongly encouraged
 
 **File Naming Convention**: `lowercase-with-hyphens.chatmode.md` or `PascalCase.md`
 
-### 5. Collections (28 files)
+### 5. Collections (27 collections, 55 files)
 
 **Purpose**: Curated bundles of related prompts, instructions, chat modes
 
@@ -535,11 +543,21 @@ model: 'claude-sonnet-4.5'  # Strongly encouraged
   - `azure-cloud-development.yml` - IaC (Bicep/Terraform), Functions, Logic Apps, Architecture
 - **MCP Development**:
   - `typescript-mcp-development.yml`, `python-mcp-development.yml`
-  - Language-specific: Go, Rust, C#, Java, Kotlin, Swift, Ruby, PHP
+  - Language-specific: Go, Rust, C#, Java, Kotlin, Swift, Ruby, PHP, Clojure
 - **Domains**:
   - `security-best-practices.yml` - Security-focused tools
   - `testing-and-automation.yml` - QA and test automation
   - `frontend-web-dev.yml` - React, Angular, Vue
+  - `database-data-management.yml` - Database and data management
+  - `edge-ai-tasks.collection.yml` - Edge AI and machine learning tasks
+- **Microsoft Power Platform**:
+  - `power-platform.yml` - Power Platform development
+  - `power-apps.yml` - Power Apps customizations
+  - `power-bi.yml` - Power BI and analytics
+- **Project Management**:
+  - `project-planning.yml` - Project planning and management
+  - `technical-spike.yml` - Technical spike exploration
+  - `partners.yml` - Partner integrations
 
 **Documentation**: `docs/README.collections.md`
 
@@ -572,6 +590,40 @@ Applied during code reviews, checks for:
 
 **README Updates**:
 - New files added to `README.md`
+
+### 6. Chaos Zone
+
+**Location**: `chaos-zone/` directory
+
+**Purpose**: Temporary holding area for unorganized, unstructured, or work-in-progress content. Think of it as the repository's "inbox" for quickly uploading content without worrying about structure.
+
+**Structure**:
+```
+chaos-zone/
+├── README.md         # Usage guidelines
+├── chats/            # AI chat transcripts and conversation logs
+├── drafts/           # Work-in-progress documents before refinement
+├── ideas/            # Brainstorming notes and quick ideas
+└── misc/             # Everything else that doesn't fit elsewhere
+```
+
+**What Goes Here**:
+- Raw chat transcripts from AI conversations
+- Draft documents before they're refined
+- Brainstorming notes and ideas
+- Screenshots and temporary files
+- Anything that doesn't have a clear home yet
+- Content that needs to be reviewed and organized later
+
+**Best Practices**:
+- ✅ Use descriptive filenames with dates (YYYY-MM-DD format)
+- ✅ Dump content quickly without worrying about formatting
+- ✅ Review and organize periodically (suggested: monthly)
+- ❌ Don't let content sit here indefinitely
+- ❌ Don't upload sensitive information (API keys, passwords, etc.)
+- ❌ Don't store large binary files (use Git LFS or external storage)
+
+**Maintenance**: The chaos zone should be reviewed monthly to move relevant content to appropriate directories, archive outdated material, and extract useful insights into proper documentation.
 
 ---
 
@@ -652,18 +704,44 @@ Applied during code reviews, checks for:
 
 8. **Accessibility Testing** - WCAG 2.1 compliance validation
 
-#### AI & Code Intelligence (6 workflows)
+#### AI & Code Intelligence (9 workflows)
 
 1. **Claude Code Review** (`claude-code-review.yml`)
    - AI-powered PR reviews
    - Analyzes: security, performance, best practices
    - Posts review comments
 
-2. **OpenAI/Gemini/Grok/Perplexity Workflows**
-   - Multiple AI provider integrations
-   - Configurable for various tasks
+2. **OpenAI Workflow** (`openai_workflow.yml`)
+   - OpenAI API integration for code analysis
+   - Configurable for various AI tasks
 
-3. **Jules** - AI-powered development assistant
+3. **Gemini Workflow** (`gemini_workflow.yml`)
+   - Google Gemini integration
+   - Multi-modal AI capabilities
+
+4. **Grok Workflow** (`grok_workflow.yml`)
+   - xAI Grok integration
+   - Real-time AI assistance
+
+5. **Perplexity Workflow** (`perplexity_workflow.yml`)
+   - Perplexity AI integration
+   - Research and code understanding
+
+6. **Jules** (`jules.yml`)
+   - AI-powered development assistant
+   - Automated task execution
+
+7. **Orchestrator** (`orchestrator.yml`)
+   - Coordinates multi-AI workflows
+   - Task distribution and management
+
+8. **Process Queue** (`process_queue.yml`)
+   - Async task processing
+   - Quota management integration
+
+9. **CI Advanced** (`ci-advanced.yml`)
+   - Advanced continuous integration
+   - AI-enhanced build and test automation
 
 #### Metrics & Reporting (5 workflows)
 
@@ -704,11 +782,23 @@ Applied during code reviews, checks for:
    - Asset uploads
    - Release notes
 
-#### Orchestration (2 workflows)
+#### Orchestration & Quota Management (4 workflows)
 
-1. **Orchestrator** - Coordinates multi-AI workflows
+1. **Orchestrator** (`orchestrator.yml`)
+   - Coordinates multi-AI workflows
+   - Manages task distribution across AI providers
 
-2. **Process Queue** (`process_queue.yml`) - Async task processing with quota management
+2. **Process Queue** (`process_queue.yml`)
+   - Async task processing with quota management
+   - Handles background job execution
+
+3. **Reset Quotas** (`reset_quotas.yml`)
+   - Automated quota reset on schedule
+   - Manages API rate limits
+
+4. **Manual Reset** (`manual_reset.yml`)
+   - Manual quota reset trigger
+   - Emergency quota management
 
 ---
 
@@ -1220,10 +1310,10 @@ gh repo view --json name,description,stargazerCount,forkCount
 
 ## Summary
 
-This `.github` repository represents a **gold standard** for organization-level GitHub management with:
+This `.github` repository represents a **comprehensive reference implementation** for organization-level GitHub management with:
 
 - **300+ AI customizations** for GitHub Copilot
-- **32+ automated workflows** covering security, quality, metrics, and releases
+- **43 automated workflows** (31 active + 12 templates) covering security, quality, metrics, and releases
 - **Multi-layered security** scanning with CodeQL, Semgrep, and dependency review
 - **Comprehensive documentation** (300KB+ of Copilot docs alone)
 - **Strict quality enforcement** via automated PR checks
