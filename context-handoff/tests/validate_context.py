@@ -236,9 +236,9 @@ class ContextValidator:
         token_count = self.get_token_count()
         target = self.TARGETS[level]
 
-        print("=" * 60)
+        print("=" * 80)
         print("Context Validation Report")
-        print("=" * 60)
+        print("=" * 80)
         print(f"File:        {self.context_file}")
         print(f"Level:       {level}")
         print(f"Token count: {token_count} (target: ≤{target})")
@@ -267,7 +267,7 @@ class ContextValidator:
             print("\n✓ All validations passed")
             print(f"✓ Token efficiency: {(1 - token_count/8500)*100:.1f}% reduction from naive")
 
-        print("=" * 60)
+        print("=" * 80)
 
         return is_valid
 
