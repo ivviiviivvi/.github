@@ -265,7 +265,8 @@ Comprehensive dependency analysis:
 - Verify respectful communication patterns
 
 ### Organization Standards
-- **Python**: PEP 8 compliance, Python 3.11+ features
+When analyzing Python code, verify:
+- **Python**: PEP 8 compliance, appropriate use of modern Python features
 - **YAML**: 2-space indentation consistency
 - **Markdown**: Consistent formatting and structure
 - **Commits**: Conventional Commits format (`feat:`, `fix:`, `docs:`, `chore:`)
@@ -698,8 +699,9 @@ The nervous-archaeologist agent is successful when:
 **Current Version**: 1.0.0
 **Last Updated**: 2024-11-24
 **Compatibility**: GitHub Copilot Workspace, GitHub MCP Server
-**Python Version**: 3.11+
-**Commit Style**: Conventional Commits
+**Repository Requirements**: Works with repositories of any language or framework
+**Agent Requirements**: Requires GitHub MCP Server for repository access
+**Commit Style**: Conventional Commits (when creating commits)
 
 ---
 
