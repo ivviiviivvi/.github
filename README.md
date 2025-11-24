@@ -77,9 +77,10 @@ ithub/awesome-copilot](https://github.com/github/awesome-copilot) repository for
 
 #### Custom Agents
 - **Location**: `agents/` directory
-- **Purpose**: Specialized GitHub Copilot agents that integrate with MCP servers
- for enhanced capabilities
-- **Examples**: CSharpExpert, Terraform, ADR Generator, and partner integrations
+- **Purpose**: Specialized GitHub Copilot agents that integrate with MCP servers for enhanced capabilities
+- **Count**: 18 production-ready agents across 5 categories (Security, Infrastructure, Development, Languages, Documentation)
+- **Registry**: See [Agent Registry](docs/AGENT_REGISTRY.md) for complete catalog with usage examples
+- **Examples**: CSharpExpert, Terraform, ADR Generator, Security Audit, and partner integrations
 
 #### Instructions
 - **Location**: `instructions/` directory
@@ -111,7 +112,7 @@ nized by theme
 es
 
 For detailed documentation on each component, see the `docs/` directory:
-- [Agent Architecture Guide](docs/AGENT_ARCHITECTURE_GUIDE.md) - **NEW**: Comprehensive guide for building agents
+- [**Agent Registry**](docs/AGENT_REGISTRY.md) - Complete catalog of 18 production agents + future roadmap
 - [Agents Documentation](docs/README.agents.md)
 - [Instructions Documentation](docs/README.instructions.md)
 - [Prompts Documentation](docs/README.prompts.md)
