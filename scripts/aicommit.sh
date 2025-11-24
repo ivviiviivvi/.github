@@ -239,10 +239,13 @@ Changes:
 $diff_output
 "
     
+    # Create secure temporary file
+    local tmp_file=$(mktemp)
+    trap "rm -f $tmp_file" EXIT
+    
     # Try to use gh copilot suggest
-    if echo "$prompt" | gh copilot suggest --target shell 2>/dev/null | grep -E "^(feat|fix|docs|style|refactor|test|chore|security|perf)" > /tmp/aicommit_msg.tmp; then
-        cat /tmp/aicommit_msg.tmp
-        rm -f /tmp/aicommit_msg.tmp
+    if echo "$prompt" | gh copilot suggest --target shell 2>/dev/null | grep -E "^(feat|fix|docs|style|refactor|test|chore|security|perf)" > "$tmp_file"; then
+        cat "$tmp_file"
         return 0
     fi
     

@@ -108,12 +108,9 @@ repos:
           - --max-line-length=88
           - --extend-ignore=E203,W503,E501
           - --max-complexity=15
+          - --exit-zero  # Don't fail on errors
         stages: [commit]
         verbose: true
-        # In rapid mode, flake8 warns but doesn't fail
-        # Set exit code to 0 so it doesn't block
-        entry: bash -c 'flake8 "$@" || true' --
-        language: system
 
   # MyPy: Type checking in warn-only mode
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -200,11 +197,12 @@ repos:
     rev: v0.9.0.6
     hooks:
       - id: shellcheck
-        args: [--severity=error]  # Only error level in rapid mode
+        args:
+          - --severity=error  # Only error level in rapid mode
+          - --format=tty
         stages: [commit]
-        # Warn-only mode
-        entry: bash -c 'shellcheck "$@" || true' --
-        language: system
+        verbose: true
+        # Note: Shellcheck will still warn but not block in rapid mode
 
   # ============================================================================
   # JavaScript/TypeScript - Auto-format

@@ -33,6 +33,7 @@ Version: 1.0.0
 
 import argparse
 import ast
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -452,8 +453,6 @@ def update_readme(readme_path: Path, summary: str) -> None:
     # Look for module section
     if "## Modules" in content:
         # Replace existing module section
-        import re
-
         pattern = r"## Modules\s*\n\n.*?(?=\n##|\Z)"
         content = re.sub(pattern, summary.rstrip() + "\n\n", content, flags=re.DOTALL)
         print(f"✅ Updated module section in {readme_path}")
