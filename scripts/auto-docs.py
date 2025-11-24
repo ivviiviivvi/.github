@@ -453,9 +453,20 @@ def update_readme(readme_path: Path, summary: str) -> None:
     # Look for module section
     if "## Modules" in content:
         # Replace existing module section
-        pattern = r"## Modules\s*\n\n.*?(?=\n##|\Z)"
-        content = re.sub(pattern, summary.rstrip() + "\n\n", content, flags=re.DOTALL)
-        print(f"✅ Updated module section in {readme_path}")
+        # Pattern matches "## Modules" followed by table until next ## heading or end
+        pattern = r"## Modules\s*\n+\|.*?\n(?:\|.*?\n)+(?=\n##|\Z)"
+        if re.search(pattern, content, re.DOTALL):
+            content = re.sub(
+                pattern, summary.rstrip() + "\n\n", content, flags=re.DOTALL
+            )
+            print(f"✅ Updated module section in {readme_path}")
+        else:
+            # Fallback: simple replacement if table not found
+            pattern = r"## Modules.*?(?=\n##|\Z)"
+            content = re.sub(
+                pattern, summary.rstrip() + "\n\n", content, flags=re.DOTALL
+            )
+            print(f"✅ Updated module section in {readme_path}")
     else:
         # Append module section
         content += "\n\n" + summary
