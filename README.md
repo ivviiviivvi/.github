@@ -79,7 +79,7 @@ ithub/awesome-copilot](https://github.com/github/awesome-copilot) repository for
 - **Location**: `agents/` directory
 - **Purpose**: Specialized GitHub Copilot agents that integrate with MCP servers
  for enhanced capabilities
-- **Examples**: CSharpExpert, Terraform, ADR Generator, and partner integrations
+- **Examples**: CSharpExpert, Terraform, ADR Generator, Nervous Archaeologist, and partner integrations
 
 #### Instructions
 - **Location**: `instructions/` directory
