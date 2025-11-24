@@ -265,11 +265,11 @@ Comprehensive dependency analysis:
 - Verify respectful communication patterns
 
 ### Organization Standards
-When analyzing Python code, verify:
-- **Python**: PEP 8 compliance, appropriate use of modern Python features
-- **YAML**: 2-space indentation consistency
-- **Markdown**: Consistent formatting and structure
-- **Commits**: Conventional Commits format (`feat:`, `fix:`, `docs:`, `chore:`)
+Verify alignment with organization standards when applicable:
+- **Python Code**: PEP 8 compliance, appropriate use of modern Python features
+- **YAML Files**: 2-space indentation consistency
+- **Markdown Files**: Consistent formatting and structure
+- **Commit Messages**: Conventional Commits format (`feat:`, `fix:`, `docs:`, `chore:`)
 - **Dependencies**: Justified additions, security scanning
 - **Security**: Secrets prevention, pinned action versions
 
