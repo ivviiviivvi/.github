@@ -111,6 +111,7 @@ nized by theme
 es
 
 For detailed documentation on each component, see the `docs/` directory:
+- [Agent Architecture Guide](docs/AGENT_ARCHITECTURE_GUIDE.md) - **NEW**: Comprehensive guide for building agents
 - [Agents Documentation](docs/README.agents.md)
 - [Instructions Documentation](docs/README.instructions.md)
 - [Prompts Documentation](docs/README.prompts.md)
@@ -173,6 +174,7 @@ All our documentation and guides are now located in the `docs/` directory. This 
 
 | Document | Description |
 |----------|-------------|
+| [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md) | Comprehensive guide for building and deploying agents |
 | [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md) | AI-driven organization management guide |
 | [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) | Branch protection rules and configuration |
 | [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist |
