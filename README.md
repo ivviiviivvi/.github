@@ -43,7 +43,7 @@ Read our complete vision in the [Manifesto](docs/MANIFESTO.md).
 
 We follow conventional commit format:
 
-```
+```text
 <type>: <description>
 
 [optional body]
@@ -151,9 +151,6 @@ python scripts/mouthpiece_filter.py "need something that watches APIs and alerts
 
 **Learn More:**
 
-- [Mouthpiece System Overview](MOUTHPIECE_README.md)
-- [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
-- [Examples & Patterns](docs/mouthpiece-examples.md)
 - [Mouthpiece System Overview](MOUTHPIECE_README.md)
 - [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
 - [Examples & Patterns](docs/mouthpiece-examples.md)
@@ -431,15 +428,10 @@ To enhance our organization's GitHub management:
 
 ### GitHub Documentation
 
-- [About default community health files](https://docs.github.com/en/communities/
-setting-up-your-project-for-healthy-contributions/creating-a-default-community-h
-ealth-file)
-- [About organization profiles](https://docs.github.com/en/organizations/collabo
-rating-with-groups-in-organizations/customizing-your-organizations-profile)
-- [Creating workflow templates](https://docs.github.com/en/actions/using-workflo
-ws/creating-starter-workflows-for-your-organization)
-- [Dependabot configuration](https://docs.github.com/en/code-security/dependabot
-/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file)
+- [About default community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
+- [About organization profiles](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/customizing-your-organizations-profile)
+- [Creating workflow templates](https://docs.github.com/en/actions/using-workflows/creating-starter-workflows-for-your-organization)
+- [Dependabot configuration](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file)
 
 ### Organization Documentation
 
@@ -460,9 +452,8 @@ Need help? Have questions?
 - 📖 Check our [Support Documentation](docs/SUPPORT.md) for detailed guidance
 - 🐛 Report issues using our [issue templates](ISSUE_TEMPLATE/)
 - 📧 Contact repository maintainers through GitHub
-- 💬 For general discussions, check if [GitHub Discussions](https://github.com/or
-gs/ivi374forivi/discussions) are enabled
+- 💬 For general discussions, check if [GitHub Discussions](https://github.com/orgs/ivi374forivi/discussions) are enabled
 
 ---
 
-**Built with ❤️ by the ivi374forivi community**
+Built with ❤️ by the ivi374forivi community.
