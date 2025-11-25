@@ -417,11 +417,11 @@ None
 
 ### Upgrade Instructions
 
-\`\`\`bash
+```bash
 git pull origin main
 git checkout v1.2.3
 npm install
-\`\`\`
+```
 
 ### Documentation
 

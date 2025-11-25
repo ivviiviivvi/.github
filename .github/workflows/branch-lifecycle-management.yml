@@ -146,6 +146,8 @@ EOF
       - name: Create cleanup issue
         if: steps.find-stale.outputs.found == 'true'
         uses: actions/github-script@v7
+        env:
+          BRANCHES_FILE: ${{ steps.find-stale.outputs.branches_file }}
         with:
           script: |
             const fs = require('fs');

@@ -597,14 +597,15 @@ Use bullet points when order doesn't matter.
 ### Examples
 
 **Include Complete Examples**:
-```markdown
+
+When documenting examples, include complete working code:
+
 Example:
-\`\`\`bash
+```bash
 git clone https://github.com/user/repo.git
 cd repo
 npm install
 npm start
-\`\`\`
 ```
 
 ### Warnings and Notes
@@ -640,12 +641,12 @@ src/components/Button.js
 ### Commands
 
 **Format as Code Blocks**:
-````markdown
-Run the following command:
+
+When documenting commands, format them as code blocks with the appropriate language identifier:
+
 ```bash
 npm install
 ```
-````
 
 **Include Shell Prompt Carefully**:
 ```bash
