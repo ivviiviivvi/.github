@@ -63,6 +63,8 @@ archive/deprecated-api
 archive/monolith-version
 ```
 
+**Note**: Square brackets indicate placeholders - replace with actual values.
+
 ### Creating Archive Branches
 
 **From Maintenance Branch**:

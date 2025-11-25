@@ -733,14 +733,16 @@ CI/CD
 ### No Emoji Policy
 
 **Avoid Emoji in Documentation**:
+
+Examples of what to avoid:
 ```
-Wrong: Features section header
+Wrong: ## 🚀 Features (emoji in header)
 Right: ## Features
 
-Wrong: Completed task indicator
+Wrong: ✅ Completed (emoji as indicator)
 Right: [x] Completed or "completed"
 
-Wrong: Bug fix label
+Wrong: 🐛 Bug fix (emoji as label)
 Right: Bug fix
 ```
 
@@ -821,6 +823,39 @@ Use heading levels in order (H1 → H2 → H3).
 
 **Headers**:
 Always include table headers for accessibility.
+
+---
+
+## Placeholders and Templates
+
+### Placeholder Notation
+
+When documenting templates or patterns that require user input, use square brackets:
+
+```
+[placeholder-name]
+[version-identifier]
+[feature-description]
+```
+
+**Examples**:
+```markdown
+Branch format: [lifecycle-phase]/[type]/[description]
+Tag format: v[MAJOR].[MINOR].[PATCH]
+Archive: archive/[version-identifier]
+```
+
+**In Use**:
+```markdown
+Template: development/feature/[feature-name]
+Actual: development/feature/user-authentication
+```
+
+**Clarification Note**:
+Always include a note explaining that square brackets are placeholders:
+```markdown
+**Note**: Square brackets indicate placeholders - replace with actual values.
+```
 
 ---
 
