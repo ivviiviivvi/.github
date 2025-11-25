@@ -734,20 +734,20 @@ CI/CD
 
 **Avoid Emoji in Documentation**:
 ```
-Wrong: ## Features ✨
+Wrong: Features section header
 Right: ## Features
 
-Wrong: ✅ Completed
-Right: [x] Completed
+Wrong: Completed task indicator
+Right: [x] Completed or "completed"
 
-Wrong: 🐛 Bug fix
+Wrong: Bug fix label
 Right: Bug fix
 ```
 
 **Use Text Alternatives**:
-- Instead of check marks: [x] or "completed"
+- Instead of visual check marks: [x] or "completed"
 - Instead of warning symbols: "Warning" or "Note"
-- Instead of stars: "Important" or "Highlight"
+- Instead of decorative stars: "Important" or "Highlight"
 
 ### Symbols and Icons
 

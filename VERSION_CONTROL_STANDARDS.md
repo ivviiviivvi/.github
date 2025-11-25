@@ -90,11 +90,11 @@ Is it a breaking change?
 
 ### Branch Hierarchy Format
 
-Branches follow a hierarchical naming structure that visually represents the order and purpose of development:
+Branches follow a hierarchical naming structure that visually represents the order and purpose of development.
 
-```
-[product-lifecycle-phase]/[feature-category]/[feature-name]/[sub-feature]
-```
+**Template**: `lifecycle-phase/type/descriptive-name`
+
+**Note**: Square brackets [ ] in documentation indicate placeholders that should be replaced with actual values.
 
 ### Product Lifecycle Phases
 

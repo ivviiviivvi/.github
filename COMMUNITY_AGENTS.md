@@ -681,29 +681,32 @@ subagents:
 
 ### Agent Design
 
-- [ ] Clear purpose and scope
-- [ ] Well-defined triggers
-- [ ] Appropriate autonomy level
-- [ ] Human oversight for critical actions
-- [ ] Graceful failure handling
-- [ ] Comprehensive logging
+**Requirements**:
+1. Clear purpose and scope
+2. Well-defined triggers
+3. Appropriate autonomy level
+4. Human oversight for critical actions
+5. Graceful failure handling
+6. Comprehensive logging
 
 ### Subagent Design
 
-- [ ] Focused responsibility
-- [ ] Reusable implementation
-- [ ] Clear communication protocol
-- [ ] Error reporting
-- [ ] Status updates
+**Requirements**:
+1. Focused responsibility
+2. Reusable implementation
+3. Clear communication protocol
+4. Error reporting
+5. Status updates
 
 ### Implementation
 
-- [ ] Test thoroughly before deployment
-- [ ] Monitor performance
-- [ ] Gather feedback
-- [ ] Iterate and improve
-- [ ] Document behavior
-- [ ] Provide override mechanisms
+**Checklist**:
+1. Test thoroughly before deployment
+2. Monitor performance
+3. Gather feedback
+4. Iterate and improve
+5. Document behavior
+6. Provide override mechanisms
 
 ---
 

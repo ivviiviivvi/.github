@@ -116,24 +116,35 @@ EOF
           # Get default branch
           DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
           
-          # Create temp file for branch list
+          # Create temp files
           BRANCHES_FILE=$(mktemp)
-          echo "$BRANCHES_FILE" > /tmp/branches_file_path
+          ALL_BRANCHES_FILE=$(mktemp)
           
           # Find merged branches - redirect to file instead of using while read subshell
           git branch -r --merged origin/$DEFAULT_BRANCH | \
             grep -v "HEAD\|$DEFAULT_BRANCH\|main\|master\|develop" | \
             grep "origin/feature/\|origin/fix/\|origin/hotfix/\|origin/release/" | \
-            sed 's/origin\///' > /tmp/all_branches.txt
+            sed 's/origin\///' > "$ALL_BRANCHES_FILE"
           
           # Process branches and filter by age
-          if [ -s /tmp/all_branches.txt ]; then
+          if [ -s "$ALL_BRANCHES_FILE" ]; then
             while IFS= read -r branch; do
               if [ -z "$branch" ]; then
                 continue
               fi
               
+              # Check if remote branch exists before getting commit date
+              if ! git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+                echo "Branch $branch no longer exists on remote, skipping"
+                continue
+              fi
+              
               LAST_COMMIT_DATE=$(git log -1 --format=%ct origin/$branch 2>/dev/null || echo "0")
+              if [ "$LAST_COMMIT_DATE" = "0" ]; then
+                echo "Could not get commit date for $branch, skipping"
+                continue
+              fi
+              
               CURRENT_DATE=$(date +%s)
               DAYS_OLD=$(( ($CURRENT_DATE - $LAST_COMMIT_DATE) / 86400 ))
               
@@ -141,8 +152,11 @@ EOF
                 echo "Branch $branch is $DAYS_OLD days old (merged)"
                 echo "$branch" >> "$BRANCHES_FILE"
               fi
-            done < /tmp/all_branches.txt
+            done < "$ALL_BRANCHES_FILE"
           fi
+          
+          # Cleanup temp file
+          rm -f "$ALL_BRANCHES_FILE"
           
           # Check if any branches found and set output
           if [ -s "$BRANCHES_FILE" ]; then
@@ -152,6 +166,7 @@ EOF
           else
             echo "found=false" >> $GITHUB_OUTPUT
             echo "No stale branches found"
+            rm -f "$BRANCHES_FILE"
           fi
 
       - name: Create cleanup issue
