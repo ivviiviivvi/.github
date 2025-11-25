@@ -6,7 +6,7 @@ Welcome to the **ivi374forivi** organization! We believe in open collaboration,
 transparent development, and building innovative solutions through high-quality
 software and inclusive community practices.
 
-## 📖 About This Repository
+## About This Repository
 
 This is the special `.github` repository for our organization. It serves as the
 central hub for:
@@ -16,7 +16,7 @@ central hub for:
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
 - **Living Document System** - AI-driven governance and management protocols
-- **🎭 Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
+- **Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
 
 When a repository in our organization doesn't have its own community health file
 s, GitHub automatically uses the defaults from this repository.
@@ -26,7 +26,7 @@ ose Analysis](REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why
 this `.github` repository is the appropriate location for organization-wide gove
 rnance, templates, and the Living Document System.
 
-## 🎯 Our Mission
+## Our Mission
 
 At **ivi374forivi**, we are committed to:
 
@@ -68,9 +68,9 @@ Commit tracking runs automatically on:
 Weekly reports are generated every Monday and stored in the `reports/` directory
 .
 
-## 🗂️ What's Inside
+## What's Inside
 
-### 🤖 GitHub Copilot Customizations
+### GitHub Copilot Customizations
 
 This repository includes comprehensive GitHub Copilot customizations from the [github/awesome-copilot](https://github.com/github/awesome-copilot) repository for organization-wide implementation.
 
@@ -115,7 +115,7 @@ For detailed documentation on each component, see the `docs/` directory:
 - [Chat Modes Documentation](docs/README.chatmodes.md)
 - [Collections Documentation](docs/README.collections.md)
 
-### 🎭 Mouthpiece Filter System
+### Mouthpiece Filter System
 
 **Transform your natural human expression into AI-optimized prompts.**
 
@@ -175,6 +175,10 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 
 | Document                                                            | Description                                            |
 | ------------------------------------------------------------------- | ------------------------------------------------------ |
+| [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md)       | Organization-wide version control and branching standards |
+| [STYLE_GUIDE.md](STYLE_GUIDE.md)                                   | Comprehensive English language and documentation style guide |
+| [ARCHIVAL_STRATEGY.md](ARCHIVAL_STRATEGY.md)                       | Version archival, maintenance branches, and preservation |
+| [COMMUNITY_AGENTS.md](COMMUNITY_AGENTS.md)                         | Community engagement, coordination, and monitoring agents |
 | [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)     | Comprehensive guide for building and deploying agents  |
 | [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)       | AI-driven organization management guide                |
 | [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                   | Branch protection rules and configuration              |
@@ -239,7 +243,7 @@ ion for:
 The [profile/README.md](profile/README.md) file is displayed on our organization
 's public profile page.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### For New Repositories
 
@@ -267,7 +271,7 @@ Individual repositories can override these defaults by creating their own versio
 ns of any file. The repository-level file will take precedence over the organiza
 tion default.
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 .github/
@@ -338,7 +342,7 @@ is
 └── for-ai-implementation.txt               # AI management protocol
 ```
 
-## 🤖 AI-Driven Organization Management
+## AI-Driven Organization Management
 
 This organization implements an advanced AI-driven GitHub management system with
  8 core modules:
@@ -359,7 +363,7 @@ Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
 Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
  [Implementation Guide](AI_IMPLEMENTATION_GUIDE.md)
 
-### 🕷️  Active Health Monitoring
+### Active Health Monitoring
 
 The organization now features **automated health monitoring** that brings the AI protocol to life:
 
@@ -373,9 +377,9 @@ The organization now features **automated health monitoring** that brings the AI
 
 📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️  [Scripts Documentation](scripts/README.md)
 
-## 🛠️ Key Features
+## Key Features
 
-### 🤖 PR Automation (NEW!)
+### PR Automation (NEW!)
 
 - **Auto PR Creation**: Automatically creates PRs when feature branches are pushed
 - **Auto Merge**: Intelligently merges PRs when all requirements are met

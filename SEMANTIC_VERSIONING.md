@@ -207,7 +207,7 @@ package = "*"               # Latest (avoid!)
 
 ### What Constitutes a Breaking Change?
 
-✅ **Breaking Changes (MAJOR bump)**:
+**Breaking Changes (MAJOR bump)**:
 - Removing or renaming public API
 - Changing function signatures
 - Removing configuration options
@@ -216,7 +216,7 @@ package = "*"               # Latest (avoid!)
 - Database schema changes requiring migration
 - Changed error codes/messages that clients depend on
 
-❌ **Not Breaking Changes**:
+**Not Breaking Changes**:
 - Adding new features
 - Adding new optional parameters
 - Fixing bugs
@@ -260,7 +260,7 @@ config:
 ```markdown
 ## [2.0.0] - 2024-11-08
 
-### ⚠️ BREAKING CHANGES
+### BREAKING CHANGES
 
 - **Authentication**: Switched from API keys to OAuth2
   - **Migration**: See [migration guide](docs/migration-v2.md)
@@ -466,7 +466,7 @@ version = "1.2.3"
 
 ## Best Practices
 
-### DO ✅
+### DO [x]
 
 1. **Use Conventional Commits**: Enables automation
 2. **Document Breaking Changes**: Always include migration guides
@@ -477,7 +477,7 @@ version = "1.2.3"
 7. **Support Old Versions**: At least one major version back
 8. **Version Everything**: APIs, schemas, configs
 
-### DON'T ❌
+### DON'T [ ]
 
 1. **Skip Versions**: Don't jump from 1.0 to 3.0
 2. **Rewrite History**: Don't change published versions

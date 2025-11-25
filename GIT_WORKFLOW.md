@@ -367,14 +367,14 @@ git push origin --delete hotfix/critical-security-fix
 
 ### Branching
 
-✅ **Do**:
+**Do**:
 - Keep branches short-lived
 - Sync with base branch regularly
 - Use descriptive branch names
 - Delete merged branches
 - One feature per branch
 
-❌ **Don't**:
+**Don't**:
 - Commit directly to main/develop
 - Let branches become stale
 - Mix multiple features in one branch
@@ -383,14 +383,14 @@ git push origin --delete hotfix/critical-security-fix
 
 ### Commits
 
-✅ **Do**:
+**Do**:
 - Write clear commit messages
 - Make atomic commits
 - Commit frequently
 - Use conventional commit format
 - Reference issues
 
-❌ **Don't**:
+**Don't**:
 - Commit generated files
 - Make huge commits
 - Use vague messages like "fix stuff"
@@ -399,7 +399,7 @@ git push origin --delete hotfix/critical-security-fix
 
 ### Pull Requests
 
-✅ **Do**:
+**Do**:
 - Keep PRs small and focused
 - Write detailed descriptions
 - Link related issues
@@ -407,7 +407,7 @@ git push origin --delete hotfix/critical-security-fix
 - Test before requesting review
 - Update documentation
 
-❌ **Don't**:
+**Don't**:
 - Create massive PRs
 - Ignore review feedback
 - Force push after review starts
@@ -446,24 +446,24 @@ git show <commit-hash>
 
 ### Main Branch
 
-- ✅ Require pull request before merging
-- ✅ Require approvals (1+)
-- ✅ Dismiss stale approvals
-- ✅ Require status checks to pass
-- ✅ Require branches to be up to date
-- ✅ Require signed commits
-- ✅ Include administrators
-- ✅ Restrict who can push
-- ✅ Allow force pushes: NO
-- ✅ Allow deletions: NO
+- [x] Require pull request before merging
+- [x] Require approvals (1+)
+- [x] Dismiss stale approvals
+- [x] Require status checks to pass
+- [x] Require branches to be up to date
+- [x] Require signed commits
+- [x] Include administrators
+- [x] Restrict who can push
+- [x] Allow force pushes: NO
+- [x] Allow deletions: NO
 
 ### Develop Branch
 
-- ✅ Require pull request before merging
-- ✅ Require approvals (1+)
-- ✅ Require status checks to pass
-- ✅ Require branches to be up to date
-- ✅ Allow force pushes: NO
+- [x] Require pull request before merging
+- [x] Require approvals (1+)
+- [x] Require status checks to pass
+- [x] Require branches to be up to date
+- [x] Allow force pushes: NO
 
 ---
 
