@@ -1,0 +1,6 @@
+# CodeRabbit Configuration
+# https://docs.coderabbit.ai/reference/configuration
+
+reviews:
+  # Disable review status messages to avoid notification spam for bot-created PRs
+  review_status: false
