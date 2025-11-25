@@ -504,10 +504,12 @@ git branch -d maintenance/v1-maintenance
 ### Philosophy
 
 The Git commit history is the authoritative record of all changes. Each commit represents a discrete change with:
-- What changed (files and code)
-- Why it changed (commit message)
+- What changed (files and code via diffs)
+- Why it changed (commit message explaining the purpose)
 - When it changed (timestamp)
 - Who changed it (author)
+
+The complete version trail includes both the commit messages and the actual code changes (diffs) in the Git history.
 
 ### Best Practices
 
@@ -613,4 +615,3 @@ v2.0.0-beta.1
 ---
 
 **Last Updated**: 2024-11-25
-**Version**: 1.0.0

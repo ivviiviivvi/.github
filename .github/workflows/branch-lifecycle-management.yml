@@ -62,34 +62,35 @@ jobs:
       - name: Create ARCHIVE_NOTICE.md
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          cat > ARCHIVE_NOTICE.md << 'EOF'
-          # ARCHIVED PROJECT
+          ARCHIVE_DATE=$(date +%Y-%m-%d)
+          cat > ARCHIVE_NOTICE.md <<EOF
+# ARCHIVED PROJECT
 
-          **Status**: Archived
-          **Archive Date**: $(date +%Y-%m-%d)
-          **Branch**: $BRANCH_NAME
+**Status**: Archived
+**Archive Date**: ${ARCHIVE_DATE}
+**Branch**: ${BRANCH_NAME}
 
-          ## Important Information
+## Important Information
 
-          This branch is archived and is no longer maintained. It is kept for historical reference only.
+This branch is archived and is no longer maintained. It is kept for historical reference only.
 
-          ## Migration Information
+## Migration Information
 
-          To use the current version, see:
-          - [Current Repository](https://github.com/${{ github.repository }})
-          - [Version Control Standards](VERSION_CONTROL_STANDARDS.md)
+To use the current version, see:
+- [Current Repository](https://github.com/${{ github.repository }})
+- [Version Control Standards](VERSION_CONTROL_STANDARDS.md)
 
-          ## Getting Help
+## Getting Help
 
-          For archived version support:
-          - Check archived documentation
-          - Review closed issues
-          - Contact maintainers
+For archived version support:
+- Check archived documentation
+- Review closed issues
+- Contact maintainers
 
-          ## Last Active
+## Last Active
 
-          - Archive Date: $(date +%Y-%m-%d)
-          EOF
+- Archive Date: ${ARCHIVE_DATE}
+EOF
           
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -108,11 +109,15 @@ jobs:
           fetch-depth: 0
           
       - name: Find stale branches
+        id: find-stale
         run: |
           echo "Finding merged branches older than 30 days..."
           
           # Get default branch
           DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+          
+          # Create temp file for branch list
+          BRANCHES_FILE=$(mktemp)
           
           # Find merged branches
           git branch -r --merged origin/$DEFAULT_BRANCH | \
@@ -126,29 +131,41 @@ jobs:
               
               if [ $DAYS_OLD -gt 30 ]; then
                 echo "Branch $branch is $DAYS_OLD days old (merged)"
-                echo "DELETE_CANDIDATE:$branch" >> $GITHUB_ENV
+                echo "$branch" >> $BRANCHES_FILE
               fi
             done
+          
+          # Check if any branches found
+          if [ -s $BRANCHES_FILE ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "branches_file=$BRANCHES_FILE" >> $GITHUB_OUTPUT
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create cleanup issue
-        if: env.DELETE_CANDIDATE
+        if: steps.find-stale.outputs.found == 'true'
         uses: actions/github-script@v7
         with:
           script: |
-            const branches = process.env.DELETE_CANDIDATE?.split('\n') || [];
+            const fs = require('fs');
+            const branchesFile = process.env.BRANCHES_FILE || '';
+            if (!branchesFile) return;
+            
+            const branches = fs.readFileSync(branchesFile, 'utf8').trim().split('\n');
             if (branches.length === 0) return;
             
             const body = `## Merged Branches Ready for Cleanup
             
             The following branches have been merged and are older than 30 days:
             
-            ${branches.map(b => `- \`${b.replace('DELETE_CANDIDATE:', '')}\``).join('\n')}
+            ${branches.map(b => `- \`${b}\``).join('\n')}
             
             These branches can be safely deleted according to our [retention policy](VERSION_CONTROL_STANDARDS.md#retention-policies).
             
             To delete these branches, run:
             \`\`\`bash
-            ${branches.map(b => `git push origin --delete ${b.replace('DELETE_CANDIDATE:', '')}`).join('\n')}
+            ${branches.map(b => `git push origin --delete ${b}`).join('\n')}
             \`\`\`
             
             Or approve this issue to trigger automatic cleanup.`;

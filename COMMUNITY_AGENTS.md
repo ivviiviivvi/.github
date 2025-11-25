@@ -766,4 +766,3 @@ gh run view <run-id> --log
 ---
 
 **Last Updated**: 2024-11-25
-**Version**: 1.0.0

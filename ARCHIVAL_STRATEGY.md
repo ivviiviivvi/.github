@@ -73,7 +73,12 @@ git checkout -b archive/v1-archive
 git push origin archive/v1-archive
 
 # Add archive notice to README
-echo "# ARCHIVED\n\nThis branch is archived and no longer maintained.\nFor current version, see main branch." > ARCHIVE_NOTICE.md
+cat > ARCHIVE_NOTICE.md <<'EOF'
+# ARCHIVED
+
+This branch is archived and no longer maintained.
+For current version, see main branch.
+EOF
 git add ARCHIVE_NOTICE.md
 git commit -m "docs: add archive notice"
 git push origin archive/v1-archive
@@ -700,4 +705,3 @@ gh release download v1.9.5
 ---
 
 **Last Updated**: 2024-11-25
-**Version**: 1.0.0

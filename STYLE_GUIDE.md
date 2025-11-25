@@ -640,12 +640,12 @@ src/components/Button.js
 ### Commands
 
 **Format as Code Blocks**:
-```markdown
+````markdown
 Run the following command:
-\`\`\`bash
+```bash
 npm install
-\`\`\`
 ```
+````
 
 **Include Shell Prompt Carefully**:
 ```bash
@@ -879,4 +879,3 @@ Document changes to this style guide:
 ---
 
 **Last Updated**: 2024-11-25
-**Version**: 1.0.0
