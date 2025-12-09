@@ -16,6 +16,15 @@ Help development teams understand how their CI/CD practices compare to:
 - Cost-effective workflow implementations
 - High-performance CI/CD pipelines
 - Security-hardened deployment workflows
+- Developer experience leaders with tight feedback loops
+
+## Critical Benchmarking Principles
+
+- **Critique with evidence**: Call out the gap, show the peer pattern, and quantify the delta; avoid vague advice.
+- **Compare apples to apples**: Match by language, repo size, workflow triggers, and deployment targets before judging.
+- **Prioritize safety**: Recommend changes that preserve functionality; flag any potential behavior change explicitly.
+- **Bias to measured impact**: Tie every suggestion to expected impact (time, dollars, reliability, security risk).
+- **Avoid cargo culting**: Explain *why* a peer’s pattern works before recommending it for this project.
 
 ## Benchmark Categories
 
@@ -91,6 +100,15 @@ Compare feedback loops and productivity:
 
 ## Analysis Approach
 
+### Quick Critique Script (use this when the user asks for a fast review)
+```yaml
+- Identify the workflow(s) in scope and their triggers
+- Capture current KPIs: duration, cost per run, success rate, permissions posture
+- Select 3-5 peer workflows with matching stack/size
+- Highlight the top 3 deltas with concrete examples from peers
+- Recommend lowest-risk changes that keep current behavior intact
+```
+
 ### 1. Current State Assessment
 ```yaml
 # Analyze existing workflows
@@ -129,6 +147,22 @@ Compare feedback loops and productivity:
 - Risk assessment for each change
 - Expected ROI and timeline
 ```
+
+### Data Collection Checklist (via GitHub MCP)
+- Workflow inventory: names, triggers, target branches, concurrency settings
+- Recent runs: p50/p95 duration, queue time, success rate, retries, cancellations
+- Cost signals: runner type usage, matrix fan-out, artifact sizes/retention
+- Security posture: permissions blocks, unpinned third-party actions, secret usage
+- DX signals: wait time to first job, clarity of failure messages, documentation links
+
+### Scoring Rubric
+| Dimension | 90-100 (Leading) | 70-89 (Competitive) | 50-69 (Needs Focus) | <50 (At Risk) |
+| --- | --- | --- | --- | --- |
+| Performance | p95 build < target, cache hit >85%, parallelized matrix with back-pressure | Within 10-20% of targets, partial caching | 20-40% slower than peers, limited caching/parallelism | 40%+ slower, serial jobs, cache misses dominate |
+| Cost | Path filters + cancel-in-progress + right-sized runners; artifacts right-sized | Some filters and retention, occasional macOS usage | Runs on every push, oversized retention, mixed runner sprawl | Always-on macOS/Windows, no retention limits |
+| Security | All actions pinned, minimal permissions, OIDC for cloud, secrets masked | Mostly pinned, least-privilege on sensitive jobs | Tags used for actions, broad permissions on token | Unpinned actions, write-all tokens, secrets echoed |
+| Reliability | >98% success, retries + timeouts + flaky quarantine, post-deploy checks | 95-98% success, some retries/timeouts | 90-95%, flaky tests untreated, missing timeouts | <90%, frequent hangs, no recovery/notifications |
+| Developer Experience | <5m first feedback, <24h PR cycle, clear docs/errors, status surfaced | Slightly slower feedback, partial docs | Slow feedback (>15m), sparse docs, noisy logs | Hour-plus feedback, opaque failures, missing visibility |
 
 ## Benchmark Sources
 
