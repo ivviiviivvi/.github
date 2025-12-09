@@ -391,6 +391,17 @@ aws ec2 create-volume --snapshot-id snap-12345678
 9. **Automate**: Automate backup and recovery processes
 10. **Train Team**: Ensure team knows recovery procedures
 
+## Operational Guardrails and Critique
+
+- **Provenance first**: Identify the authoritative source of truth before restoring to avoid propagating corrupt or stale data.
+- **Scope discipline**: Restore the smallest possible unit (row/table/repo) and validate before expanding blast radius.
+- **Version clarity**: Record snapshot IDs, commit SHAs, and timestamps for each recovery attempt to keep an audit-ready trail.
+- **Isolation restores**: Whenever feasible, restore into a sandbox and run validation checksums or reconciliation scripts prior to production cutover.
+- **Rollback readiness**: Pre-stage a revert or secondary snapshot so failed recovery attempts can be undone quickly.
+- **Access constraints**: Limit who can trigger high-impact restores and require dual control for production data recoveries.
+- **PII/secret handling**: Scrub or re-encrypt sensitive data when restoring into non-production environments to prevent leakage.
+- **Success criteria**: Define RTO/RPO targets and acceptance tests up front to avoid declaring victory before integrity is proven.
+
 ## Prevention Strategies
 
 ### Backup Strategy (3-2-1 Rule)

@@ -338,6 +338,17 @@ def sanitize_ssn(text):
 9. **Compliance Focus**: Stay current with regulatory requirements
 10. **Defense in Depth**: Use multiple sanitization techniques together
 
+## Operational Guardrails and Critique
+
+- **Test on surrogates**: Run sanitization scripts against synthetic or cloned datasets before touching production sources.
+- **Re-identification checks**: Evaluate whether anonymized data can be reverse-engineered via joins, unique combinations, or external enrichment.
+- **Immutable evidence**: Log before/after checksums or sample diffs to prove that PII removal actually occurred.
+- **Least-privilege execution**: Use constrained service accounts and scoped tokens for history rewrites or database updates.
+- **Blast radius control**: Prefer additive changes (masking, tokenization) over destructive deletes until verification is complete.
+- **Communication discipline**: Notify downstream consumers when sanitized schemas or fields change to prevent runtime failures.
+- **Secret lifecycle coupling**: Pair repo sanitization with forced credential rotation to eliminate lingering exposure windows.
+- **Rollback prep**: Keep pristine backups and point-in-time snapshots to recover quickly if sanitization corrupts data.
+
 ## References
 
 - NIST SP 800-88: Guidelines for Media Sanitization

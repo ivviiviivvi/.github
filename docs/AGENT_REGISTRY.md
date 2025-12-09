@@ -279,6 +279,25 @@ Agents specialized in data forensics, sanitization, recovery, and secure decommi
 
 ---
 
+#### Choosing the Right Data Management Agent
+
+| Use Case | Recommended Agent | Primary Outcome | Safety Checks |
+| --- | --- | --- | --- |
+| Investigate breaches, integrity issues, or timeline of changes | **Data Forensics** | Evidence-backed incident report with audit-ready artifacts | Preserve evidence snapshots first; record chain of custody; define incident scope before querying |
+| Remove PII/secrets or prepare data for sharing | **Data Sanitization** | Cleaned dataset/repo with documented sanitization steps | Test on surrogates; verify for re-identification risk; rotate any exposed credentials |
+| Recover deleted, corrupted, or overwritten assets | **Data Reclamation** | Restored data with RTO/RPO and integrity validation | Restore in isolation; document snapshot/commit IDs; keep rollback path open |
+| Retire systems, repositories, or infrastructure | **Data Decommissioning** | Verified destruction with compliance-grade evidence | Require approvals; pair teardown with billing checks; issue destruction certificates |
+
+**Category Guardrails**:
+
+- Favor **smallest-possible blast radius** first: start with scoped restores, targeted sanitization, and sandboxed forensics before touching production systems.
+- Keep **evidence and auditability** central: log tool versions, commit/SHA references, timestamps, and approvals so findings withstand external review.
+- **Couple high-risk actions with compensating controls**: dual-control for destructive operations, credential rotation after sanitization, and post-action billing/monitoring verification after decommissions.
+- Define **exit criteria upfront**: success metrics such as RTO/RPO targets, absence of PII matches, or confirmed cost reductions prevent ambiguous closures.
+- Maintain **communication loops**: notify data owners and dependent teams before and after changes to avoid surprises and secondary incidents.
+
+---
+
 ### Security & Compliance
 
 Agents focused on security analysis, vulnerability remediation, incident response, and compliance monitoring.

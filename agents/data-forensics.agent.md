@@ -279,6 +279,17 @@ For each finding:
 9. **Validate Findings**: Cross-reference evidence from multiple sources
 10. **Prepare for Legal**: Ensure evidence is admissible if needed
 
+## Operational Guardrails and Critique
+
+- **Freeze first, analyze second**: Snapshot data sources and repositories before investigation to prevent contamination of evidence.
+- **Chain-of-custody discipline**: Log who accessed what evidence, when, and for which purpose to maintain defensibility.
+- **Bias checks**: Document competing hypotheses to avoid confirmation bias and ensure alternative explanations are considered.
+- **Scope hygiene**: Clearly define the incident window and affected assets to prevent endless or unfocused investigations.
+- **Data minimization**: Collect only the evidence required for the case and redact nonessential PII to reduce secondary exposure risk.
+- **Tool transparency**: Record versions and configurations of tools used (CLI flags, MCP servers, scripts) so findings can be reproduced.
+- **Escalation triggers**: Establish explicit thresholds for notifying legal/HR/compliance (e.g., regulated data touched, insider involvement).
+- **Postmortem readiness**: Structure notes so they can be lifted directly into formal reports, including timelines, findings, and remediation steps.
+
 ## References
 
 - GitHub Audit Log Documentation: https://docs.github.com/en/organizations/keeping-your-organization-secure/reviewing-the-audit-log-for-your-organization
