@@ -6,7 +6,7 @@ Welcome to the **ivi374forivi** organization! We believe in open collaboration,
 transparent development, and building innovative solutions through high-quality
 software and inclusive community practices.
 
-## 📖 About This Repository
+## About This Repository
 
 This is the special `.github` repository for our organization. It serves as the
 central hub for:
@@ -16,7 +16,7 @@ central hub for:
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
 - **Living Document System** - AI-driven governance and management protocols
-- **🎭 Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
+- **Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
 
 When a repository in our organization doesn't have its own community health file
 s, GitHub automatically uses the defaults from this repository.
@@ -26,7 +26,7 @@ ose Analysis](REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why
 this `.github` repository is the appropriate location for organization-wide gove
 rnance, templates, and the Living Document System.
 
-## 🎯 Our Mission
+## Our Mission
 
 At **ivi374forivi**, we are committed to:
 
@@ -68,9 +68,9 @@ Commit tracking runs automatically on:
 Weekly reports are generated every Monday and stored in the `reports/` directory
 .
 
-## 🗂️ What's Inside
+## What's Inside
 
-### 🤖 GitHub Copilot Customizations
+### GitHub Copilot Customizations
 
 This repository includes comprehensive GitHub Copilot customizations from the [github/awesome-copilot](https://github.com/github/awesome-copilot) repository for organization-wide implementation.
 
@@ -78,9 +78,9 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 
 - **Location**: `agents/` directory
 - **Purpose**: Specialized GitHub Copilot agents that integrate with MCP servers for enhanced capabilities
-- **Count**: 22 production-ready agents across 6 categories (Data Management & Governance, Security, Infrastructure, Development, Languages, Documentation)
+- **Count**: 19 production-ready agents across 5 categories (Security, Infrastructure, Development, Languages, Documentation)
 - **Registry**: See [Agent Registry](docs/AGENT_REGISTRY.md) for complete catalog with usage examples
-- **Examples**: CSharpExpert, Terraform, ADR Generator, Security Audit, and partner integrations
+- **Examples**: CSharpExpert, Terraform, ADR Generator, Security Audit, Completionism Specialist, and partner integrations
 
 #### Instructions
 
@@ -115,7 +115,7 @@ For detailed documentation on each component, see the `docs/` directory:
 - [Chat Modes Documentation](docs/README.chatmodes.md)
 - [Collections Documentation](docs/README.collections.md)
 
-### 🎭 Mouthpiece Filter System
+### Mouthpiece Filter System
 
 **Transform your natural human expression into AI-optimized prompts.**
 
@@ -175,6 +175,10 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 
 | Document                                                            | Description                                            |
 | ------------------------------------------------------------------- | ------------------------------------------------------ |
+| [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md)       | Organization-wide version control and branching standards |
+| [STYLE_GUIDE.md](STYLE_GUIDE.md)                                   | Comprehensive English language and documentation style guide |
+| [ARCHIVAL_STRATEGY.md](ARCHIVAL_STRATEGY.md)                       | Version archival, maintenance branches, and preservation |
+| [COMMUNITY_AGENTS.md](COMMUNITY_AGENTS.md)                         | Community engagement, coordination, and monitoring agents |
 | [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)     | Comprehensive guide for building and deploying agents  |
 | [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)       | AI-driven organization management guide                |
 | [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                   | Branch protection rules and configuration              |
@@ -184,19 +188,6 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 | [PR_AUTOMATION.md](PR_AUTOMATION.md)                                | Automated PR creation, push, and merge system          |
 | [for-ai-implementation.txt](for-ai-implementation.txt)              | Complete AI GitHub management protocol                 |
 | [REPOSITORY_PURPOSE_ANALYSIS.md](docs/REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of repository appropriateness for function set |
-
-### Version Control & Standards
-
-Organization-wide standards for version control, branching, releases, and documentation:
-
-| Document                                                            | Description                                            |
-| ------------------------------------------------------------------- | ------------------------------------------------------ |
-| [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md)       | Comprehensive version control standards and practices  |
-| [BRANCH_STRATEGY.md](BRANCH_STRATEGY.md)                           | Branching strategy for development and archival        |
-| [RELEASE_PROCESS.md](RELEASE_PROCESS.md)                           | Release creation and management workflows              |
-| [MARKDOWN_STYLE_GUIDE.md](MARKDOWN_STYLE_GUIDE.md)                 | Living style bible for markdown and English language   |
-| [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md)                   | Detailed semantic versioning guidelines                |
-| [GIT_WORKFLOW.md](GIT_WORKFLOW.md)                                 | Complete Git workflow documentation                    |
 
 
 ### Issue Templates
@@ -252,7 +243,7 @@ ion for:
 The [profile/README.md](profile/README.md) file is displayed on our organization
 's public profile page.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### For New Repositories
 
@@ -280,7 +271,7 @@ Individual repositories can override these defaults by creating their own versio
 ns of any file. The repository-level file will take precedence over the organiza
 tion default.
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 .github/
@@ -299,7 +290,6 @@ tion default.
 │   └── TESTING.md
 ├── .github/
 │   ├── copilot-instructions.md             # Copilot code review instructions
-│   ├── copilot-instructions-rapid-dev.md   # Rapid development mode instructions
 │   └── workflows/                          # GitHub Actions workflows
 ├── profile/
 │   └── README.md                           # Organization profile page
@@ -348,17 +338,11 @@ tion default.
 ├── TESTING.md                              # Testing standards
 ├── REPOSITORY_PURPOSE_ANALYSIS.md           # Repository appropriateness analys
 is
-├── .pre-commit-config.yaml                 # Standard pre-commit configuration
-├── .pre-commit-config-rapid.yaml           # Rapid dev pre-commit configuration
 ├── dependabot.yml                          # Dependabot configuration
-├── scripts/
-│   ├── aicommit.sh                         # AI commit message generator
-│   ├── auto-docs.py                        # Auto-documentation generator
-│   └── ...                                 # Other utility scripts
 └── for-ai-implementation.txt               # AI management protocol
 ```
 
-## 🤖 AI-Driven Organization Management
+## AI-Driven Organization Management
 
 This organization implements an advanced AI-driven GitHub management system with
  8 core modules:
@@ -379,7 +363,7 @@ Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
 Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
  [Implementation Guide](AI_IMPLEMENTATION_GUIDE.md)
 
-### 🕷️  Active Health Monitoring
+### Active Health Monitoring
 
 The organization now features **automated health monitoring** that brings the AI protocol to life:
 
@@ -393,41 +377,15 @@ The organization now features **automated health monitoring** that brings the AI
 
 📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️  [Scripts Documentation](scripts/README.md)
 
-## 🛠️ Key Features
+## Key Features
 
-### 🤖 PR Automation (NEW!)
+### PR Automation (NEW!)
 
 - **Auto PR Creation**: Automatically creates PRs when feature branches are pushed
 - **Auto Merge**: Intelligently merges PRs when all requirements are met
 - **Conflict Resolution**: Automatically resolves merge conflicts when possible
 - **Branch Cleanup**: Removes merged branches automatically
 - **Comprehensive Documentation**: See [PR_AUTOMATION.md](PR_AUTOMATION.md) for details
-
-### ⚡ Rapid Development Optimization Suite (NEW!)
-
-**Optimized for: Lazy Human + Multiple AI Assistants Workflow**
-
-Speed-focused tools and configurations for solo developers working with AI assistants:
-
-- **Rapid Dev Copilot Instructions** - [.github/copilot-instructions-rapid-dev.md](.github/copilot-instructions-rapid-dev.md): Complete guide for AI-accelerated development with auto-fix enforcement, AI-generated commits, and relaxed standards
-- **Auto-fix Pre-commit Config** - [.pre-commit-config-rapid.yaml](.pre-commit-config-rapid.yaml): Never-blocking hooks that auto-fix formatting, imports, and style issues
-- **AI Commit Message Generator** - [scripts/aicommit.sh](scripts/aicommit.sh): Bash script that generates Conventional Commits messages using GitHub Copilot CLI or templates
-- **Auto-documentation Generator** - [scripts/auto-docs.py](scripts/auto-docs.py): Python script that extracts docstrings and generates API documentation
-
-**Quick Start:**
-```bash
-# Activate rapid development mode
-ln -sf .pre-commit-config-rapid.yaml .pre-commit-config.yaml
-pre-commit install
-
-# Generate AI commit message
-./scripts/aicommit.sh
-
-# Auto-generate API docs
-python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme
-```
-
-See also: [AI Rapid Workflow Guide](AI_RAPID_WORKFLOW.md)
 
 ### Automated Security
 

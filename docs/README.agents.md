@@ -40,7 +40,9 @@ These agents are custom-built for the ivviiviivvi organization and are available
 
 | Title | Description | MCP Servers |
 | ----- | ----------- | ----------- |
+| [Completionism Specialist](../agents/completionism-specialist.agent.md) | Ensures every field, form, textbox, and documentation section is thoroughly completed with no blank spaces or missing information - inspired by the lack of repository and organization About bios | [github](https://github.com/mcp/github/github-mcp-server) |
 | [GitHub Organization Manager](../agents/github-org-manager.agent.md) | AI GitHub Organization Manager - Assists with implementing the 8-module AI GitHub Management Protocol for organization governance and automation | [github](https://github.com/mcp/github/github-mcp-server) |
+| [Greener Grass Workflow Benchmark Agent](../agents/greener-grass-workflow-benchmark.agent.md) | Critiques your GitHub Actions workflows against peer benchmarks with scored gap analysis and safety-first recommendations | [github](https://github.com/mcp/github/github-mcp-server) |
 | [Nervous Archaeologist](../agents/nervous-archaeologist.agent.md) | Exhaustive repository analysis agent that performs compulsive data excavation, generates actionable tasks, and creates persistent memories while ensuring comprehensive coverage | [github](https://github.com/mcp/github/github-mcp-server) |
 | [Repository Setup Agent](../agents/repository-setup.agent.md) | Automates the creation and configuration of new repositories following organization standards and best practices | [github](https://github.com/mcp/github/github-mcp-server) |
 | [Security Audit Agent](../agents/security-audit.agent.md) | Performs comprehensive security audits of repositories, workflows, and organizational settings following security best practices | [github](https://github.com/mcp/github/github-mcp-server) |

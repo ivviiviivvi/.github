@@ -596,23 +596,6 @@ auto_merge:
 **Merge:** Preserves all commits with merge commit
 **Rebase:** Replays commits on base branch
 
-#### Merge method selection guidance (critique)
-
-- **Main and release branches:** Prefer **merge commits** to preserve the original commit sequence, which keeps rollback options intact and maintains a faithful audit trail for production functionality.
-- **Feature branches:** Squash merges keep history tidy, but avoid them when the individual commits carry meaningful checkpoints (e.g., staged migrations or config toggles).
-- **Rebase:** Useful for keeping a clean history, but it rewrites commits—avoid rebasing shared release branches where history integrity is required.
-
-To enforce merge commits into `main` while allowing squash elsewhere:
-
-```yaml
-# .github/pr-automation.yml
-auto_merge:
-  merge_method: squash
-  merge_method_by_base:
-    main: merge          # Preserve full history on main
-    release/*: merge     # Keep release sequencing intact
-```
-
 ### Branch-Specific Rules
 
 ```yaml

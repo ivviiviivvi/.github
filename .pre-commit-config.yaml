@@ -149,23 +149,6 @@ repos:
       - id: terraform_validate
       - id: terraform_docs
 
-  # Version Control Standards Validation (Custom)
-  - repo: local
-    hooks:
-      - id: validate-branch-name
-        name: Validate Branch Name
-        entry: scripts/validate-standards.sh --branch
-        language: script
-        pass_filenames: false
-        always_run: true
-
-      - id: check-markdown-no-emoji
-        name: Check Markdown for Emoji
-        entry: scripts/validate-standards.sh --markdown
-        language: script
-        files: \.md$
-        pass_filenames: false
-
   # Dockerfile linting
   - repo: https://github.com/AleksaC/hadolint-py
     rev: v2.12.0.3

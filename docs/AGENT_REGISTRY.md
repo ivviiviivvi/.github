@@ -4,14 +4,13 @@
 
 Welcome to the Agent Registry — your single source of truth for all GitHub Copilot agents available across the organization. This catalog provides comprehensive documentation for discovering, understanding, and using specialized agents that extend GitHub Copilot's capabilities.
 
-**Current Status**: 22 production-ready agents across 6 categories
+**Current Status**: 19 production-ready agents across 5 categories
 
 ## Table of Contents
 
 - [Quick Reference](#quick-reference)
 - [Getting Started](#getting-started)
 - [Agent Categories](#agent-categories)
-  - [Data Management & Governance](#data-management--governance)
   - [Security & Compliance](#security--compliance)
   - [Infrastructure & DevOps](#infrastructure--devops)
   - [Development & Operations](#development--operations)
@@ -29,16 +28,15 @@ Welcome to the Agent Registry — your single source of truth for all GitHub Cop
 | [Amplitude Experiment](#amplitude-experiment-implementation) | Development & Operations | Deploys feature experiments using Amplitude MCP | None | [agents/amplitude-experiment-implementation.agent.md](../agents/amplitude-experiment-implementation.agent.md) |
 | [Arm Migration](#arm-migration-agent) | Infrastructure & DevOps | Migrates x86 workloads to Arm infrastructure | custom-mcp | [agents/arm-migration.agent.md](../agents/arm-migration.agent.md) |
 | [C# Expert](#c-expert) | Language & Framework Experts | .NET project development specialist | None | [agents/CSharpExpert.agent.md](../agents/CSharpExpert.agent.md) |
-| [Data Decommissioning](#data-decommissioning-agent) | Data Management & Governance | Securely removes data and systems following compliance requirements | github | [agents/data-decommissioning.agent.md](../agents/data-decommissioning.agent.md) |
-| [Data Forensics](#data-forensics-agent) | Data Management & Governance | Investigates data issues, security breaches, and audit trails | github | [agents/data-forensics.agent.md](../agents/data-forensics.agent.md) |
-| [Data Reclamation](#data-reclamation-agent) | Data Management & Governance | Recovers and restores lost or corrupted data | github | [agents/data-reclamation.agent.md](../agents/data-reclamation.agent.md) |
-| [Data Sanitization](#data-sanitization-agent) | Data Management & Governance | Cleans and sanitizes data, removes PII, ensures compliance | github | [agents/data-sanitization.agent.md](../agents/data-sanitization.agent.md) |
+| [Completionism Specialist](#completionism-specialist) | Documentation & Analysis | Ensures every field, form, and documentation section is complete | github | [agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md) |
 | [Dynatrace Expert](#dynatrace-expert) | Development & Operations | Observability and security incident response | dynatrace | [agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md) |
 | [GitHub Org Manager](#github-organization-manager) | Infrastructure & DevOps | Organization governance and automation | github | [agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md) |
+| [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent) | Infrastructure & DevOps | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github | [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md) |
 | [JFrog Security](#jfrog-security-agent) | Security & Compliance | Application security remediation | None | [agents/jfrog-sec.agent.md](../agents/jfrog-sec.agent.md) |
 | [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup) | Development & Operations | Automated feature flag cleanup | launchdarkly | [agents/launchdarkly-flag-cleanup.agent.md](../agents/launchdarkly-flag-cleanup.agent.md) |
 | [Neon Migration Specialist](#neon-migration-specialist) | Infrastructure & DevOps | Zero-downtime Postgres migrations | None | [agents/neon-migration-specialist.agent.md](../agents/neon-migration-specialist.agent.md) |
 | [Neon Performance Analyzer](#neon-performance-analyzer) | Infrastructure & DevOps | Postgres query optimization | None | [agents/neon-optimization-analyzer.agent.md](../agents/neon-optimization-analyzer.agent.md) |
+| [Nervous Archaeologist](#nervous-archaeologist) | Documentation & Analysis | Exhaustive repository analysis and data excavation | github | [agents/nervous-archaeologist.agent.md](../agents/nervous-archaeologist.agent.md) |
 | [Octopus Release Notes](#octopus-deploy-release-notes) | Development & Operations | Generates Octopus Deploy release notes | octopus | [agents/octopus-deploy-release-notes-mcp.agent.md](../agents/octopus-deploy-release-notes-mcp.agent.md) |
 | [PagerDuty Responder](#pagerduty-incident-responder) | Security & Compliance | Incident response automation | pagerduty | [agents/pagerduty-incident-responder.agent.md](../agents/pagerduty-incident-responder.agent.md) |
 | [Repository Setup](#repository-setup-agent) | Infrastructure & DevOps | New repository creation and configuration | github | [agents/repository-setup.agent.md](../agents/repository-setup.agent.md) |
@@ -103,201 +101,6 @@ Most agents require:
 - Repository access and permissions
 
 ## Agent Categories
-
-### Data Management & Governance
-
-Agents specialized in data forensics, sanitization, recovery, and secure decommissioning to ensure data integrity, privacy, and compliance.
-
-#### Data Forensics Agent
-
-**Purpose**: Investigates data-related incidents, security breaches, compliance violations, and maintains comprehensive audit trails.
-
-**Key Features**:
-- Security breach investigation and incident analysis
-- Data integrity verification and corruption detection
-- Audit trail investigation across repositories and systems
-- Compliance investigation (GDPR, CCPA, HIPAA, SOC 2, PCI DSS)
-- Data lineage tracing and provenance mapping
-- Repository forensics and commit history analysis
-- Performance investigation and anomaly detection
-- Evidence collection and incident timeline reconstruction
-
-**Prerequisites**:
-- GitHub MCP server access
-- Repository access and audit log permissions
-- Access to relevant logs and monitoring systems
-
-**Invocation Examples**:
-```
-@data-forensics investigate unauthorized access to the production database
-@data-forensics analyze the data breach that occurred last week
-@data-forensics trace the source of data corruption in the users table
-@data-forensics prepare a forensic report for the security incident
-```
-
-**Integration Points**:
-- GitHub API and audit logs
-- Database query logs
-- Application logs
-- CI/CD pipeline history
-- Access control systems
-
-**Related Workflows**:
-- Security scanning workflows
-- Audit logging systems
-- Compliance reporting
-
-**Documentation**: [agents/data-forensics.agent.md](../agents/data-forensics.agent.md)
-
----
-
-#### Data Sanitization Agent
-
-**Purpose**: Cleans and sanitizes data, removes PII, ensures compliance, and prepares data for safe sharing or disposal.
-
-**Key Features**:
-- PII (Personally Identifiable Information) identification and removal
-- Sensitive data redaction and anonymization
-- Code sanitization (secrets, credentials, tokens)
-- Log sanitization and secure data masking
-- Database anonymization and synthetic data generation
-- Git history sanitization and secret removal
-- Compliance-driven sanitization (GDPR, CCPA, HIPAA, PCI DSS)
-- Pattern-based detection and automated cleanup
-
-**Prerequisites**:
-- GitHub MCP server access
-- Repository write permissions
-- Access to data sources requiring sanitization
-
-**Invocation Examples**:
-```
-@data-sanitization remove all PII from application logs
-@data-sanitization clean up the commit history to remove exposed API keys
-@data-sanitization sanitize the database export file before sharing with QA team
-@data-sanitization prepare anonymized dataset for research purposes
-```
-
-**Integration Points**:
-- GitHub API for repository cleanup
-- Secret scanning tools
-- Data anonymization libraries
-- Backup and archival systems
-
-**Related Workflows**:
-- Secret scanning workflows
-- Data export processes
-- Compliance reporting
-
-**Documentation**: [agents/data-sanitization.agent.md](../agents/data-sanitization.agent.md)
-
----
-
-#### Data Reclamation Agent
-
-**Purpose**: Recovers and restores lost, corrupted, or accidentally deleted data from various sources with comprehensive recovery strategies.
-
-**Key Features**:
-- Git repository recovery (deleted branches, commits, files)
-- Database recovery (backups, PITR, transaction logs)
-- File recovery from various sources
-- Configuration and secrets recovery
-- Backup and archive restoration
-- Cloud resource recovery
-- GitHub artifact and release recovery
-- Multi-source data reconstruction
-
-**Prerequisites**:
-- GitHub MCP server access
-- Access to backup systems
-- Repository and database permissions
-- Cloud provider access (AWS, Azure, GCP)
-
-**Invocation Examples**:
-```
-@data-reclamation recover the feature branch that was deleted yesterday
-@data-reclamation restore database records deleted in the last hour
-@data-reclamation recover files from last week's backup
-@data-reclamation restore the repository to its state before the merge
-```
-
-**Integration Points**:
-- GitHub API and reflog
-- Database backup systems
-- Cloud provider APIs
-- Snapshot and versioning systems
-
-**Related Workflows**:
-- Backup automation
-- Disaster recovery procedures
-- Version control systems
-
-**Documentation**: [agents/data-reclamation.agent.md](../agents/data-reclamation.agent.md)
-
----
-
-#### Data Decommissioning Agent
-
-**Purpose**: Securely removes data and systems following compliance requirements, ensuring complete and verifiable data destruction.
-
-**Key Features**:
-- Secure data destruction (crypto-shredding, multi-pass wiping)
-- System and infrastructure decommissioning
-- Repository archival and deletion
-- Cloud infrastructure teardown
-- Database retirement procedures
-- Application and service shutdown
-- Account and access removal
-- Compliance-driven decommissioning (GDPR, NIST SP 800-88, DoD 5220.22-M)
-
-**Prerequisites**:
-- GitHub MCP server access
-- Administrative permissions
-- Cloud provider access
-- Approval for data destruction
-
-**Invocation Examples**:
-```
-@data-decommissioning decommission the staging environment AWS account
-@data-decommissioning securely remove the deprecated user database
-@data-decommissioning archive and delete the legacy-api repository
-@data-decommissioning prepare destruction certificate for HIPAA audit
-```
-
-**Integration Points**:
-- GitHub API for repository management
-- Cloud provider APIs
-- Certificate management systems
-- Compliance documentation systems
-
-**Related Workflows**:
-- Infrastructure teardown automation
-- Compliance certification processes
-- Resource cleanup jobs
-
-**Documentation**: [agents/data-decommissioning.agent.md](../agents/data-decommissioning.agent.md)
-
----
-
-#### Choosing the Right Data Management Agent
-
-| Use Case | Recommended Agent | Primary Outcome | Safety Checks |
-| --- | --- | --- | --- |
-| Investigate breaches, integrity issues, or timeline of changes | **Data Forensics** | Evidence-backed incident report with audit-ready artifacts | Preserve evidence snapshots first; record chain of custody; define incident scope before querying |
-| Remove PII/secrets or prepare data for sharing | **Data Sanitization** | Cleaned dataset/repo with documented sanitization steps | Test on surrogates; verify for re-identification risk; rotate any exposed credentials |
-| Recover deleted, corrupted, or overwritten assets | **Data Reclamation** | Restored data with RTO/RPO and integrity validation | Restore in isolation; document snapshot/commit IDs; keep rollback path open |
-| Retire systems, repositories, or infrastructure | **Data Decommissioning** | Verified destruction with compliance-grade evidence | Require approvals; pair teardown with billing checks; issue destruction certificates |
-
-**Category Guardrails**:
-
-- Favor **smallest-possible blast radius** first: start with scoped restores, targeted sanitization, and sandboxed forensics before touching production systems.
-- Keep **evidence and auditability** central: log tool versions, commit/SHA references, timestamps, and approvals so findings withstand external review.
-- **Couple high-risk actions with compensating controls**: dual-control for destructive operations, credential rotation after sanitization, and post-action billing/monitoring verification after decommissions.
-- Demand **rollback readiness**: keep restorable checkpoints for reclamation/decommissioning work and dry-run dangerous operations in sandboxes first.
-- Define **exit criteria upfront**: success metrics such as RTO/RPO targets, absence of PII matches, or confirmed cost reductions prevent ambiguous closures.
-- Maintain **communication loops**: notify data owners and dependent teams before and after changes to avoid surprises and secondary incidents.
-
----
 
 ### Security & Compliance
 
@@ -712,6 +515,54 @@ Agents for infrastructure management, cloud migrations, database operations, and
 
 ---
 
+#### Greener Grass Workflow Benchmark Agent
+
+**Purpose**: Compares your GitHub Actions workflows against industry best practices and successful patterns to identify improvement opportunities.
+
+**Key Features**:
+- Performance benchmarking against similar projects
+- Cost comparison with peer organizations
+- Security practice assessment vs. industry leaders
+- Reliability metrics comparison
+- Developer experience benchmarking
+- Gap analysis with actionable recommendations
+- Continuous improvement tracking
+
+**Prerequisites**:
+- GitHub MCP server
+- Repository with GitHub Actions workflows
+- Access to workflow run metrics
+
+**Invocation Examples**:
+```
+@greener-grass-workflow-benchmark analyze our CI/CD performance compared to similar projects
+@greener-grass-workflow-benchmark compare our workflows to next.js and identify gaps
+@greener-grass-workflow-benchmark how does our Actions spending compare to peer projects?
+@greener-grass-workflow-benchmark benchmark our workflow security against industry leaders
+@greener-grass-workflow-benchmark generate a comprehensive benchmark report
+```
+
+**Integration Points**:
+- GitHub Actions API
+- Workflow metrics and analytics
+- Industry benchmark databases
+- Open source project analysis
+
+**Benchmark Categories**:
+- Performance (build times, cache effectiveness)
+- Cost (runner utilization, efficiency)
+- Security (permissions, action pinning)
+- Reliability (success rates, MTTR)
+- Developer Experience (feedback speed, documentation)
+
+**Related Workflows**:
+- All `.github/workflows/*.yml` files
+- Workflow run history and metrics
+
+**Documentation**: [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md)
+
+---
+
 ### Development & Operations
 
 Agents for feature management, observability, deployment automation, and operational excellence.
@@ -980,6 +831,89 @@ Agents for documentation creation, architectural decisions, and repository analy
 - Architecture reviews
 
 **Documentation**: [agents/adr-generator.agent.md](../agents/adr-generator.agent.md)
+
+---
+
+#### Completionism Specialist
+
+**Purpose**: Ensures every field, form, textbox, and documentation section is thoroughly completed with no blank spaces or missing information.
+
+**Key Features**:
+- Repository metadata completeness (descriptions, topics, about sections)
+- Organization profile completeness (bio, logo, URL, social links)
+- Documentation completeness (README sections, community health files)
+- Issue and PR template completeness
+- Code documentation verification (docstrings, comments, API docs)
+- Configuration file completeness (package.json, pyproject.toml, etc.)
+- Accessibility and i18n completeness (alt text, translations)
+- Comprehensive completion reporting with priorities
+
+**Prerequisites**:
+- GitHub MCP server access
+- Repository read/write permissions
+
+**Invocation Examples**:
+```
+@completionism-specialist audit this repository for completeness
+@completionism-specialist check all organization repositories for missing descriptions
+@completionism-specialist verify all README files have complete sections
+@completionism-specialist find all repositories without topics
+@completionism-specialist generate a completeness report for the entire organization
+```
+
+**Integration Points**:
+- GitHub API via MCP server
+- Repository metadata
+- Documentation files
+- Community health files
+
+**Related Workflows**:
+- Repository setup
+- Documentation generation
+- Quality assurance
+
+**Documentation**: [agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md)
+
+---
+
+#### Nervous Archaeologist
+
+**Purpose**: Exhaustive repository analysis agent that performs compulsive data excavation, generates actionable tasks, and creates persistent memories.
+
+**Key Features**:
+- Hyper-vigilant repository scanning
+- Stratigraphic code analysis (layer-by-layer examination)
+- Comprehensive artifact cataloging
+- Temporal analysis and change tracking
+- Pattern recognition across codebase
+- Persistent memory creation for findings
+- Actionable task generation
+- Cross-referencing and relationship mapping
+
+**Prerequisites**:
+- GitHub MCP server access
+- Repository read permissions
+
+**Invocation Examples**:
+```
+@nervous-archaeologist perform exhaustive repository analysis
+@nervous-archaeologist scan for overlooked patterns and artifacts
+@nervous-archaeologist generate comprehensive repository report
+@nervous-archaeologist identify historical trends in the codebase
+```
+
+**Integration Points**:
+- GitHub API via MCP server
+- Repository history and commits
+- Code patterns and artifacts
+- Documentation and metadata
+
+**Related Workflows**:
+- Repository audits
+- Code archaeology
+- Technical debt analysis
+
+**Documentation**: [agents/nervous-archaeologist.agent.md](../agents/nervous-archaeologist.agent.md)
 
 ---
 
