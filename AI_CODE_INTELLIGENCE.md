@@ -348,14 +348,15 @@ jobs:
 # Install GitHub App
 # https://github.com/apps/coderabbitai
 
-# Configure .coderabbit.yml
+# Configure .coderabbit.yaml (configured in repository root)
 language: en
 reviews:
   profile: chill
   request_changes_workflow: false
   high_level_summary: true
   poem: false
-  review_status: true
+  # Set to false to disable status messages for bot-created PRs
+  review_status: false
 ```
 
 ### 3. DeepCode (Snyk Code)
