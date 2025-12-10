@@ -4,7 +4,7 @@
 
 Welcome to the Agent Registry — your single source of truth for all GitHub Copilot agents available across the organization. This catalog provides comprehensive documentation for discovering, understanding, and using specialized agents that extend GitHub Copilot's capabilities.
 
-**Current Status**: 19 production-ready agents across 5 categories
+**Current Status**: 25 production-ready agents across 5 categories
 
 ## Table of Contents
 
@@ -29,6 +29,10 @@ Welcome to the Agent Registry — your single source of truth for all GitHub Cop
 | [Arm Migration](#arm-migration-agent) | Infrastructure & DevOps | Migrates x86 workloads to Arm infrastructure | custom-mcp | [agents/arm-migration.agent.md](../agents/arm-migration.agent.md) |
 | [C# Expert](#c-expert) | Language & Framework Experts | .NET project development specialist | None | [agents/CSharpExpert.agent.md](../agents/CSharpExpert.agent.md) |
 | [Completionism Specialist](#completionism-specialist) | Documentation & Analysis | Ensures every field, form, and documentation section is complete | github | [agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md) |
+| [Data Decommissioning](#data-decommissioning-agent) | Security & Compliance | Securely removes data and systems following compliance requirements | github | [agents/data-decommissioning.agent.md](../agents/data-decommissioning.agent.md) |
+| [Data Forensics](#data-forensics-agent) | Security & Compliance | Investigates data issues, security breaches, and compliance violations | github | [agents/data-forensics.agent.md](../agents/data-forensics.agent.md) |
+| [Data Reclamation](#data-reclamation-agent) | Security & Compliance | Recovers lost, corrupted, or accidentally deleted data | github | [agents/data-reclamation.agent.md](../agents/data-reclamation.agent.md) |
+| [Data Sanitization](#data-sanitization-agent) | Security & Compliance | Cleans data, removes PII, ensures compliance | github | [agents/data-sanitization.agent.md](../agents/data-sanitization.agent.md) |
 | [Dynatrace Expert](#dynatrace-expert) | Development & Operations | Observability and security incident response | dynatrace | [agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md) |
 | [GitHub Org Manager](#github-organization-manager) | Infrastructure & DevOps | Organization governance and automation | github | [agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md) |
 | [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent) | Infrastructure & DevOps | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github | [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md) |
