@@ -73,6 +73,16 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 - **Compliance & data handling**: For logging/observability additions, run a **PII data audit** and keep a redaction policy enforced in code linters or centralized middleware.
 - **Ownership clarity**: Assign an **owner per capability** (Testing, Observability, DX, API Docs) with a published escalation path so regressions have clear accountability.
 
+**Execution checkpoints (apply to every new capability)**
+
+| Control | Description | Owner | Exit Criteria |
+|---------|-------------|-------|---------------|
+| Baseline verification | Capture golden paths, error budgets, and latency budgets before rollout. | Capability owner | Baseline metrics stored in runbooks and dashboards. |
+| Rollback readiness | Define rollback/feature-flag plan and verify it in staging. | Capability owner | Documented rollback steps; flag default-off until guardrails pass. |
+| Data handling | Validate PII handling/redaction in logs and traces. | Security/Privacy | Passing lint/redaction checks; audit log captured. |
+| Alert hygiene | Add/validate high-signal alerts with runbook links. | Observability | Alerts linked to runbooks; noise budget ≤ agreed SLA. |
+| Dependency validation | Confirm new tooling versions are pinned and scoped. | Capability owner | Lockfiles updated; supply-chain checks green. |
+
 ---
 
 ## High-Priority Expansions
