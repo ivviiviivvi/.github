@@ -340,14 +340,23 @@ def sanitize_ssn(text):
 
 ## Operational Guardrails and Critique
 
-- **Test on surrogates**: Run sanitization scripts against synthetic or cloned datasets before touching production sources.
-- **Re-identification checks**: Evaluate whether anonymized data can be reverse-engineered via joins, unique combinations, or external enrichment.
-- **Immutable evidence**: Log before/after checksums or sample diffs to prove that PII removal actually occurred.
+**Pre-sanitization**
+- **Test on surrogates first**: Run sanitization scripts against synthetic or cloned datasets before touching production sources and document expected deltas.
+- **Immutable evidence**: Capture before/after checksums, sample diffs, and git SHAs to prove exactly what changed and to anchor audits.
+- **Blast-radius approval**: Confirm scope, ownership, and downstream dependencies; require explicit sign-off for history rewrites or bulk redactions.
+
+**Execution**
 - **Least-privilege execution**: Use constrained service accounts and scoped tokens for history rewrites or database updates.
-- **Blast radius control**: Prefer additive changes (masking, tokenization) over destructive deletes until verification is complete.
-- **Communication discipline**: Notify downstream consumers when sanitized schemas or fields change to prevent runtime failures.
+- **Re-identification checks**: Evaluate whether anonymized data can be reverse-engineered via joins, unique combinations, or external enrichment; rerun detectors after transformations.
+- **Rollback ready**: Keep reversible steps (backups, branch checkpoints, feature flags) and a plan to restore if sanitization overreaches.
+- **Change isolation**: Apply changes in feature branches or isolated environments and run regression tests on sanitized outputs.
 - **Secret lifecycle coupling**: Pair repo sanitization with forced credential rotation to eliminate lingering exposure windows.
-- **Rollback prep**: Keep pristine backups and point-in-time snapshots to recover quickly if sanitization corrupts data.
+- **Toolchain transparency**: Log tool versions, detection rules, patterns, and flags used for sanitization for auditability.
+
+**Post-sanitization**
+- **Verification loop**: Re-scan artifacts, compare hashes, and spot-check samples with another reviewer before promotion.
+- **Communication discipline**: Notify downstream consumers when sanitized schemas or fields change to prevent runtime failures.
+- **Data retention decisions**: Decide what sanitized artifacts should persist and schedule secure destruction of raw copies.
 
 ## References
 

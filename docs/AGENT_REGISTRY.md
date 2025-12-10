@@ -293,6 +293,7 @@ Agents specialized in data forensics, sanitization, recovery, and secure decommi
 - Favor **smallest-possible blast radius** first: start with scoped restores, targeted sanitization, and sandboxed forensics before touching production systems.
 - Keep **evidence and auditability** central: log tool versions, commit/SHA references, timestamps, and approvals so findings withstand external review.
 - **Couple high-risk actions with compensating controls**: dual-control for destructive operations, credential rotation after sanitization, and post-action billing/monitoring verification after decommissions.
+- Demand **rollback readiness**: keep restorable checkpoints for reclamation/decommissioning work and dry-run dangerous operations in sandboxes first.
 - Define **exit criteria upfront**: success metrics such as RTO/RPO targets, absence of PII matches, or confirmed cost reductions prevent ambiguous closures.
 - Maintain **communication loops**: notify data owners and dependent teams before and after changes to avoid surprises and secondary incidents.
 

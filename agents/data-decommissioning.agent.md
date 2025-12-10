@@ -481,14 +481,21 @@ Date: _________________
 
 ## Operational Guardrails and Critique
 
-- **Prioritize evidence over assumptions**: Require verifiable deletion evidence (logs, cost reports, and API confirmations) before closing out a decommissioning effort.
+**Before teardown**
 - **Retain only what's justified**: Challenge retention requests that lack a regulatory or contractual basis to avoid unnecessary archival bloat.
-- **Prove reversibility (or irreversibility)**: Where policies require it, demonstrate the inability to recover deleted assets by attempting restores in a controlled manner.
+- **Dependency inventory**: Map downstream systems, backups, and DNS/identity dependencies to avoid collateral outages.
 - **Timebox risky operations**: Schedule destructive steps with explicit maintenance windows, stakeholder acknowledgements, and fallback checkpoints.
+- **Reversibility check**: Where policies require it, preserve recovery points and test restores in a controlled manner before proceeding with destruction.
+
+**During teardown**
+- **Prioritize evidence over assumptions**: Require verifiable deletion evidence (logs, cost reports, and API confirmations) before closing out a decommissioning effort.
 - **Chain-of-custody rigor**: Track ownership for credentials, encryption keys, storage media, and certificates throughout the destruction workflow to prevent gaps in accountability.
+- **Cost validation**: Pair resource termination with billing diffs to verify spend drops and to catch lingering orphaned services.
 - **Third-party confirmations**: For vendor-managed resources, capture provider-issued destruction certificates or portal evidence instead of relying solely on internal notes.
-- **Audit-friendly messaging**: Document rationale, scope, and controls in language that maps to frameworks such as NIST SP 800-88 and SOC 2 to withstand external scrutiny.
-- **Cost validation**: Pair resource termination with billing diffs to verify that spend drops to near-zero and to catch lingering orphaned services.
+
+**After teardown**
+- **Audit-friendly messaging**: Document rationale, scope, controls, and evidence in language that maps to frameworks such as NIST SP 800-88 and SOC 2 to withstand external scrutiny.
+- **Residual risk review**: Confirm access revocation, DNS cleanup, and monitoring alerts for stragglers; schedule post-change reviews to validate no hidden dependencies remain.
 
 ## Common Mistakes to Avoid
 

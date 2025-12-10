@@ -393,14 +393,22 @@ aws ec2 create-volume --snapshot-id snap-12345678
 
 ## Operational Guardrails and Critique
 
+**Pre-recovery**
 - **Provenance first**: Identify the authoritative source of truth before restoring to avoid propagating corrupt or stale data.
-- **Scope discipline**: Restore the smallest possible unit (row/table/repo) and validate before expanding blast radius.
-- **Version clarity**: Record snapshot IDs, commit SHAs, and timestamps for each recovery attempt to keep an audit-ready trail.
-- **Isolation restores**: Whenever feasible, restore into a sandbox and run validation checksums or reconciliation scripts prior to production cutover.
-- **Rollback readiness**: Pre-stage a revert or secondary snapshot so failed recovery attempts can be undone quickly.
+- **Scope discipline**: Restore the smallest possible unit (row/table/repo) and validate before expanding blast radius; log the decision tree.
+- **Version clarity**: Record snapshot IDs, commit SHAs, timestamps, and owners for each recovery attempt to keep an audit-ready trail.
 - **Access constraints**: Limit who can trigger high-impact restores and require dual control for production data recoveries.
-- **PII/secret handling**: Scrub or re-encrypt sensitive data when restoring into non-production environments to prevent leakage.
-- **Success criteria**: Define RTO/RPO targets and acceptance tests up front to avoid declaring victory before integrity is proven.
+
+**Execution**
+- **Isolation restores**: Restore into a sandbox and run validation checksums or reconciliation scripts prior to production cutover.
+- **Rollback readiness**: Pre-stage a revert or secondary snapshot so failed recovery attempts can be undone quickly.
+- **Data hygiene**: Scrub or re-encrypt sensitive data when restoring into non-production environments to prevent leakage.
+- **Change notice**: Coordinate with dependent services and schedule maintenance windows for cutover steps.
+
+**Validation and closure**
+- **Success criteria**: Define RTO/RPO targets and acceptance tests up front; publish results alongside recovery artifacts.
+- **Post-restore monitoring**: Track error rates, replication lag, and consumer metrics to detect latent corruption after cutover.
+- **Debrief**: Capture lessons, remaining risks, and follow-up backlog items to harden future recoveries.
 
 ## Prevention Strategies
 
