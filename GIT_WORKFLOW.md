@@ -270,6 +270,37 @@ git push
 
 4. **Merge**: Once approved and checks pass
 
+### Merge Strategy Selection (Critique & Guidance)
+
+Choosing the right merge strategy is critical for preserving context and functionality when changes land on `main`.
+
+- **Merge commit (`--no-ff`)**
+  - ✅ **Use when** you want to preserve branch history, keep feature commits grouped, or when the branch includes coordinated work (multi-service changes, release branches).
+  - 🔍 **Critique**: Can increase history noise if used for trivial fixes; avoid for one-line changes unless they are production-impacting hotfixes.
+- **Squash merge**
+  - ✅ **Use when** the branch contains many small or iterative commits that should be represented as a single logical change.
+  - 🔍 **Critique**: Loses granular commit messages and can hide the sequence of decisions; avoid for long-running feature or release branches.
+- **Rebase and merge**
+  - ✅ **Use when** you need a linear history for small, isolated branches.
+  - 🔍 **Critique**: Rewriting history can obscure when changes occurred and may introduce broken intermediate commits if not done carefully. This complicates debugging (e.g., `git bisect`). To mitigate this, use interactive rebase (`git rebase -i`) to ensure each commit is a self-contained, working change. Avoid for shared branches or when strict auditability is required.
+
+**Default Merge Strategies:**
+- **When merging to `main`:** Favor `--no-ff` merge commits for `release/*` and `hotfix/*` branches to preserve history and auditability.
+- **When merging to `develop`:** Use squash merges for `feature/*` branches to keep the integration history clean.
+
+### Functional Preservation Checklist for Merging to Main
+
+Before merging anything into `main`, validate that functionality remains intact:
+
+1. **Test signals**: All required CI checks are green (unit, integration, security scans). Re-run failed flaky tests before merging.
+2. **Backward compatibility**: Review public APIs, data migrations, and config changes for compatibility. Provide migration notes or feature flags when behavior changes.
+3. **Runtime safety**: Confirm feature flags, fallbacks, and rollbacks exist for risky changes. For release branches, ensure staged rollout plans are documented.
+4. **Documentation alignment**: Update README/CHANGELOG and operational runbooks so deployers understand expected behavior.
+5. **Dependency impacts**: Validate dependency updates against lockfiles and downstream consumers; note any manual steps in the PR description.
+6. **Post-merge verification plan**: Define a smoke test or monitoring check to run immediately after the merge to catch regressions early.
+
+> Tip: Treat the merge as a deployment gate—if you would not deploy it, do not merge it into `main`.
+
 ---
 
 ## Release Process
