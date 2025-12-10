@@ -1,0 +1,299 @@
+name: Branch Lifecycle Management
+
+on:
+  create:
+  pull_request:
+    types: [opened, closed]
+  schedule:
+    - cron: '0 0 * * MON'  # Weekly cleanup on Monday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  validate-branch-name:
+    name: Validate Branch Naming Convention
+    if: github.event_name == 'create' && github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Validating branch: $BRANCH_NAME"
+          
+          # Define valid patterns
+          VALID_PATTERNS=(
+            "^(exploration|development|testing|staging|production|maintenance|archive)/.*"
+            "^(feature|fix|hotfix|release|refactor|docs|test|chore)/.*"
+            "^main$"
+            "^master$"
+            "^develop$"
+          )
+          
+          VALID=false
+          for pattern in "${VALID_PATTERNS[@]}"; do
+            if [[ $BRANCH_NAME =~ $pattern ]]; then
+              VALID=true
+              break
+            fi
+          done
+          
+          if [ "$VALID" = false ]; then
+            echo "::error::Branch name '$BRANCH_NAME' does not follow naming conventions."
+            echo "::error::Expected format: [lifecycle-phase]/[type]/[description]"
+            echo "::error::Examples: development/feature/user-auth, testing/fix/login-bug"
+            echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
+            exit 1
+          fi
+          
+          echo "Branch name is valid"
+
+  tag-archive-branch:
+    name: Tag Archive Branch
+    if: github.event_name == 'create' && github.ref_type == 'branch' && startsWith(github.ref, 'refs/heads/archive/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Create ARCHIVE_NOTICE.md
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          ARCHIVE_DATE=$(date +%Y-%m-%d)
+          cat > ARCHIVE_NOTICE.md <<EOF
+# ARCHIVED PROJECT
+
+**Status**: Archived
+**Archive Date**: ${ARCHIVE_DATE}
+**Branch**: ${BRANCH_NAME}
+
+## Important Information
+
+This branch is archived and is no longer maintained. It is kept for historical reference only.
+
+## Migration Information
+
+To use the current version, see:
+- [Current Repository](https://github.com/${{ github.repository }})
+- [Version Control Standards](VERSION_CONTROL_STANDARDS.md)
+
+## Getting Help
+
+For archived version support:
+- Check archived documentation
+- Review closed issues
+- Contact maintainers
+
+## Last Active
+
+- Archive Date: ${ARCHIVE_DATE}
+EOF
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ARCHIVE_NOTICE.md
+          git commit -m "docs: add archive notice"
+          git push
+
+  cleanup-merged-branches:
+    name: Cleanup Merged Branches
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Find stale branches
+        id: find-stale
+        run: |
+          echo "Finding merged branches older than 30 days..."
+          
+          # Get default branch
+          DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+          
+          # Create temp files
+          BRANCHES_FILE=$(mktemp)
+          ALL_BRANCHES_FILE=$(mktemp)
+          
+          # Find merged branches - redirect to file instead of using while read subshell
+          git branch -r --merged origin/$DEFAULT_BRANCH | \
+            grep -v "HEAD\|$DEFAULT_BRANCH\|main\|master\|develop" | \
+            grep "origin/feature/\|origin/fix/\|origin/hotfix/\|origin/release/" | \
+            sed 's/origin\///' > "$ALL_BRANCHES_FILE"
+          
+          # Process branches and filter by age
+          if [ -s "$ALL_BRANCHES_FILE" ]; then
+            while IFS= read -r branch; do
+              if [ -z "$branch" ]; then
+                continue
+              fi
+              
+              # Check if remote branch exists before getting commit date
+              if ! git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+                echo "Branch $branch no longer exists on remote, skipping"
+                continue
+              fi
+              
+              LAST_COMMIT_DATE=$(git log -1 --format=%ct origin/$branch 2>/dev/null || echo "0")
+              if [ "$LAST_COMMIT_DATE" = "0" ]; then
+                echo "Could not get commit date for $branch, skipping"
+                continue
+              fi
+              
+              CURRENT_DATE=$(date +%s)
+              DAYS_OLD=$(( ($CURRENT_DATE - $LAST_COMMIT_DATE) / 86400 ))
+              
+              if [ $DAYS_OLD -gt 30 ]; then
+                echo "Branch $branch is $DAYS_OLD days old (merged)"
+                echo "$branch" >> "$BRANCHES_FILE"
+              fi
+            done < "$ALL_BRANCHES_FILE"
+          fi
+          
+          # Cleanup temp file
+          rm -f "$ALL_BRANCHES_FILE"
+          
+          # Check if any branches found and set output
+          if [ -s "$BRANCHES_FILE" ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "branches_file=$BRANCHES_FILE" >> $GITHUB_OUTPUT
+            echo "Found stale branches: $(wc -l < $BRANCHES_FILE)"
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+            echo "No stale branches found"
+            rm -f "$BRANCHES_FILE"
+          fi
+
+      - name: Create cleanup issue
+        if: steps.find-stale.outputs.found == 'true'
+        uses: actions/github-script@v7
+        env:
+          BRANCHES_FILE: ${{ steps.find-stale.outputs.branches_file }}
+        with:
+          script: |
+            const fs = require('fs');
+            const branchesFile = process.env.BRANCHES_FILE || '';
+            
+            if (!branchesFile) {
+              console.log('No branches file specified');
+              return;
+            }
+            
+            // Check if file exists and read it
+            if (!fs.existsSync(branchesFile)) {
+              console.log('Branches file does not exist');
+              return;
+            }
+            
+            const content = fs.readFileSync(branchesFile, 'utf8').trim();
+            if (!content) {
+              console.log('Branches file is empty');
+              return;
+            }
+            
+            const branches = content.split('\n').filter(b => b.trim() !== '');
+            if (branches.length === 0) {
+              console.log('No valid branches found');
+              return;
+            }
+            
+            console.log(`Found ${branches.length} stale branches`);
+            
+            const body = `## Merged Branches Ready for Cleanup
+            
+            The following branches have been merged and are older than 30 days:
+            
+            ${branches.map(b => `- \`${b}\``).join('\n')}
+            
+            These branches can be safely deleted according to our [retention policy](VERSION_CONTROL_STANDARDS.md#retention-policies).
+            
+            To delete these branches, run:
+            \`\`\`bash
+            ${branches.map(b => `git push origin --delete ${b}`).join('\n')}
+            \`\`\`
+            
+            Or approve this issue to trigger automatic cleanup.`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Branch Cleanup: Merged branches ready for deletion',
+              body: body,
+              labels: ['maintenance', 'automated']
+            });
+
+  promote-to-maintenance:
+    name: Promote to Maintenance Branch
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Create maintenance branch
+        run: |
+          # This is a manual workflow that can be triggered
+          # to create maintenance branches from releases
+          echo "To create a maintenance branch:"
+          echo "1. Identify the last release tag (e.g., v1.9.5)"
+          echo "2. git checkout v1.9.5"
+          echo "3. git checkout -b maintenance/v1-maintenance"
+          echo "4. git push origin maintenance/v1-maintenance"
+          echo ""
+          echo "See ARCHIVAL_STRATEGY.md for details"
+
+  lifecycle-report:
+    name: Branch Lifecycle Report
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Generate lifecycle report
+        run: |
+          echo "# Branch Lifecycle Report" > lifecycle-report.md
+          echo "Generated: $(date)" >> lifecycle-report.md
+          echo "" >> lifecycle-report.md
+          
+          # Count branches by lifecycle phase
+          echo "## Branches by Lifecycle Phase" >> lifecycle-report.md
+          echo "" >> lifecycle-report.md
+          
+          for phase in exploration development testing staging production maintenance archive; do
+            COUNT=$(git branch -r | grep "origin/$phase/" | wc -l)
+            echo "- **$phase**: $COUNT branches" >> lifecycle-report.md
+          done
+          
+          echo "" >> lifecycle-report.md
+          echo "## Active Development Branches" >> lifecycle-report.md
+          echo "" >> lifecycle-report.md
+          git branch -r | grep "origin/development/\|origin/testing/" | sed 's/origin\///' >> lifecycle-report.md
+          
+          echo "" >> lifecycle-report.md
+          echo "## Maintenance Branches" >> lifecycle-report.md
+          echo "" >> lifecycle-report.md
+          git branch -r | grep "origin/maintenance/" | sed 's/origin\///' >> lifecycle-report.md
+          
+          echo "" >> lifecycle-report.md
+          echo "## Archive Branches" >> lifecycle-report.md
+          echo "" >> lifecycle-report.md
+          git branch -r | grep "origin/archive/" | sed 's/origin\///' >> lifecycle-report.md
+          
+          cat lifecycle-report.md
+          
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lifecycle-report
+          path: lifecycle-report.md
+          retention-days: 90

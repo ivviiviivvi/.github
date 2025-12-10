@@ -4,13 +4,27 @@ Organization-wide standards for version control, branching, tagging, and release
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Semantic Versioning](#semantic-versioning)
 - [Branch Naming Conventions](#branch-naming-conventions)
-- [Git History as Version Trail](#git-history-as-version-trail)
-- [Tag Standards](#tag-standards)
-- [Branch Types](#branch-types)
-- [Commit Guidelines](#commit-guidelines)
-- [Integration with Existing Standards](#integration-with-existing-standards)
+- [Commit Message Standards](#commit-message-standards)
+- [Tagging Strategy](#tagging-strategy)
+- [Release Management](#release-management)
+- [Maintenance and Archival](#maintenance-and-archival)
+
+---
+
+## Overview
+
+This document establishes organization-wide standards for version control practices. These standards ensure consistency, traceability, and clarity across all repositories.
+
+### Core Principles
+
+1. **Git History as Version Trail**: The Git commit history serves as the detailed version trail
+2. **Semantic Versioning**: Use tags for releases following semver (v1.0.0, v1.0.1, v1.1.0)
+3. **Descriptive Branching**: Branch names visually communicate development phase and purpose
+4. **Conventional Commits**: Structured commit messages enable automated tooling
+5. **Automated Releases**: Tools auto-increment versions based on commit analysis
 
 ---
 
@@ -18,330 +32,155 @@ Organization-wide standards for version control, branching, tagging, and release
 
 ### Version Format
 
-All releases MUST follow semantic versioning: **MAJOR.MINOR.PATCH**
-
 ```
-v1.0.0
-v1.0.1
-v1.1.0
-v2.0.0
+MAJOR.MINOR.PATCH
+
+Example: v1.2.3
 ```
 
-### Version Increment Rules
+- **MAJOR**: Incompatible API changes, breaking changes
+- **MINOR**: New features, backward compatible functionality
+- **PATCH**: Bug fixes, backward compatible corrections
 
-| Change Type | Version Component | Example | When to Use |
-|-------------|------------------|---------|-------------|
-| Breaking Changes | MAJOR | v1.0.0 → v2.0.0 | API changes, removed features, incompatible changes |
-| New Features | MINOR | v1.0.0 → v1.1.0 | New functionality, backward-compatible additions |
-| Bug Fixes | PATCH | v1.0.0 → v1.0.1 | Bug fixes, security patches, backward-compatible fixes |
+### Version Examples
+
+```
+v0.1.0  - Initial development
+v0.2.0  - Added new feature
+v0.2.1  - Fixed bug
+v1.0.0  - First stable release
+v1.1.0  - Added backward-compatible feature
+v1.1.1  - Fixed bug
+v2.0.0  - Breaking API change
+```
 
 ### Pre-release Versions
 
-For development and testing phases:
+Pre-release versions follow this format:
 
 ```
-v1.0.0-alpha.1
-v1.0.0-beta.1
-v1.0.0-rc.1
-v1.0.0
+MAJOR.MINOR.PATCH-prerelease.number
+
+Examples:
+v1.2.3-alpha.1
+v1.2.3-beta.2
+v1.2.3-rc.1
 ```
 
-See [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) for detailed guidelines.
+**Pre-release Stages**:
+- **alpha**: Early testing, unstable, for developers
+- **beta**: Feature complete, moderate stability, for early adopters
+- **rc** (release candidate): Stable, for QA testing
+
+### Version Increment Decision Tree
+
+```
+Is it a breaking change?
+├─ YES → Increment MAJOR version
+└─ NO → Is it a new feature?
+    ├─ YES → Increment MINOR version
+    └─ NO → Is it a bug fix?
+        ├─ YES → Increment PATCH version
+        └─ NO → No version change (documentation, chores)
+```
 
 ---
 
 ## Branch Naming Conventions
 
-### Standard Format
+### Branch Hierarchy Format
 
-Branches MUST follow a hierarchical naming structure that visually represents development order and product lifecycle:
+Branches follow a hierarchical naming structure that visually represents the order and purpose of development.
 
+**Template**: `lifecycle-phase/type/descriptive-name`
+
+**Note**: Square brackets [ ] in documentation indicate placeholders that should be replaced with actual values.
+
+### Product Lifecycle Phases
+
+Use these lifecycle phase prefixes to indicate the maturity and purpose:
+
+1. **exploration/** - Experimental features, proof of concepts
+2. **development/** - Active feature development
+3. **testing/** - Features in testing phase
+4. **staging/** - Features ready for staging environment
+5. **production/** - Production-ready features (typically merged to main)
+6. **maintenance/** - Long-term maintenance branches
+7. **archive/** - Archived branches for historical reference
+
+### Branch Type Indicators
+
+Within lifecycle phases, use these type indicators:
+
+- **feature/** - New features or enhancements
+- **fix/** - Bug fixes
+- **hotfix/** - Critical production fixes
+- **release/** - Release preparation
+- **refactor/** - Code refactoring
+- **docs/** - Documentation updates
+- **test/** - Test-related changes
+- **chore/** - Maintenance tasks
+
+### Branch Naming Examples
+
+**Good Examples**:
 ```
-<lifecycle-phase>/<feature-type>/<component>/<subcomponent>
-```
-
-### Lifecycle Phases
-
-Primary branch prefixes indicate the product lifecycle phase:
-
-- `develop/` - Active development features
-- `experimental/` - Proof-of-concept and experimentation
-- `production/` - Production-ready features
-- `maintenance/` - Maintenance and support
-- `deprecated/` - Features being phased out
-- `archive/` - Historical reference branches
-
-### Feature Types (Second Level)
-
-- `feature/` - New feature development
-- `bugfix/` - Non-critical bug fixes
-- `hotfix/` - Critical production fixes
-- `enhancement/` - Improvements to existing features
-- `refactor/` - Code refactoring
-- `docs/` - Documentation updates
-- `test/` - Test additions or improvements
-- `chore/` - Maintenance tasks
-
-### Examples
-
-```bash
-# Active development of a new user interface feature
-develop/feature/user-interface/authentication-flow
-
-# Production feature for payment system
-production/feature/payment-gateway/stripe-integration
-
-# Experimental AI feature with multiple components
-experimental/feature/ai-assistant/natural-language-processing
-
-# Maintenance work on legacy API
-maintenance/bugfix/api-v1/rate-limiting
-
-# Documentation for a specific component
-develop/docs/deployment-guide/kubernetes-setup
-
-# Archive of old version
-archive/v1/feature/legacy-authentication
-```
-
-### Multi-Component Features
-
-For complex features spanning multiple components:
-
-```bash
-develop/feature/dashboard-redesign/frontend
-develop/feature/dashboard-redesign/backend
-develop/feature/dashboard-redesign/api
-
-# Or with deeper hierarchy
-production/feature/payment-system/checkout/ui-components
-production/feature/payment-system/checkout/validation-logic
-```
-
-### Branch Naming Rules
-
-1. Use lowercase letters only
-2. Use hyphens (not underscores or spaces) to separate words
-3. Be descriptive but concise
-4. Maximum 4 levels deep in hierarchy
-5. Avoid generic names like "fix" or "update"
-6. Include ticket/issue numbers when applicable: `develop/feature/AUTH-123-oauth-integration`
-
-### Legacy Branch Names
-
-**AVOID** version-numbered branches like `v2`, `v3` as primary development branches. Instead:
-
-```bash
-# Instead of:
-v2
-v3-rewrite
-
-# Use:
-develop/feature/api-v2/endpoints
-experimental/feature/architecture-v3/microservices
-```
-
----
-
-## Git History as Version Trail
-
-### Principle
-
-Git commit history serves as the **detailed version trail** of the project. Each commit represents a point in the project's evolution.
-
-### Guidelines
-
-1. **Commit Frequently**: Small, atomic commits create a clear trail
-2. **Descriptive Messages**: Each commit message should explain what and why
-3. **Conventional Commits**: Follow conventional commit format for automation
-4. **Never Rewrite Public History**: Preserve the integrity of the version trail
-5. **Tag Releases**: Use annotated tags for all releases
-
-### Viewing Version History
-
-```bash
-# View commit history
-git log --oneline --graph --all --decorate
-
-# View history for specific file
-git log --follow -- path/to/file
-
-# View changes between versions
-git log v1.0.0..v2.0.0
-
-# Find when a bug was introduced
-git bisect start
-```
-
-### Commit Message as Documentation
-
-Each commit message becomes part of the version documentation:
-
-```bash
-# Good commit messages become version trail entries
-git commit -m "feat(auth): add OAuth2 authentication flow
-
-Implements OAuth2 authentication with support for Google and GitHub
-providers. This enables users to sign in with their existing accounts.
-
-Closes #123"
-```
-
----
-
-## Tag Standards
-
-### Release Tags
-
-All releases MUST be tagged with annotated tags following semantic versioning:
-
-```bash
-# Create annotated release tag
-git tag -a v1.0.0 -m "Release version 1.0.0"
-
-# Push tag to remote
-git push origin v1.0.0
-
-# Push all tags
-git push origin --tags
-```
-
-### Tag Format
-
-```
-v<MAJOR>.<MINOR>.<PATCH>[-<pre-release>]
-
-Examples:
-v1.0.0
-v1.0.1
-v1.1.0
-v2.0.0
-v1.0.0-alpha.1
-v1.0.0-beta.1
-v1.0.0-rc.1
-```
-
-### Tag Guidelines
-
-1. **Always Use Annotated Tags**: Include message with release information
-2. **Never Delete Published Tags**: Tags are permanent version markers
-3. **Tag on Main Branch**: Production releases tagged on main/master only
-4. **Pre-release Tags**: Use for alpha, beta, and RC versions on appropriate branches
-5. **Include Changelog**: Reference or include changelog in tag message
-
-### Tag Message Template
-
-```bash
-git tag -a v1.2.0 -m "Release v1.2.0
-
-Features:
-- Added user authentication system
-- Implemented dashboard redesign
-- Added export functionality
-
-Bug Fixes:
-- Fixed memory leak in data processor
-- Resolved login timeout issue
-
-Breaking Changes:
-- API endpoint /users now requires authentication
-
-See CHANGELOG.md for full details."
-```
-
----
-
-## Branch Types
-
-### Main Branches
-
-#### `main` (or `master`)
-- **Purpose**: Production-ready code
-- **Lifetime**: Permanent
-- **Protection**: Highest level
-- **Tagging**: All production releases tagged here
-- **Deployment**: Auto-deploys to production
-
-#### `develop`
-- **Purpose**: Integration branch for active development
-- **Lifetime**: Permanent
-- **Protection**: High level
-- **Deployment**: Auto-deploys to staging
-- **Source for**: Feature branches
-
-### Supporting Branches
-
-#### Feature Branches (`<lifecycle>/feature/<name>`)
-- **Purpose**: New features and enhancements
-- **Created from**: `develop`
-- **Merged to**: `develop`
-- **Lifetime**: Temporary (delete after merge)
-- **Naming**: `develop/feature/component-name`
-
-#### Hotfix Branches (`production/hotfix/<name>`)
-- **Purpose**: Critical production fixes
-- **Created from**: `main`
-- **Merged to**: Both `main` and `develop`
-- **Lifetime**: Temporary (delete after merge)
-- **Naming**: `production/hotfix/critical-security-fix`
-
-#### Release Branches (`release/v<version>`)
-- **Purpose**: Release preparation and stabilization
-- **Created from**: `develop`
-- **Merged to**: Both `main` and `develop`
-- **Lifetime**: Temporary (delete after release)
-- **Naming**: `release/v1.2.0`
-
-### Long-Lived Maintenance Branches
-
-For supporting older versions:
-
-```bash
-# Maintenance branches for specific versions
+development/feature/user-authentication
+development/feature/payment-integration/stripe-setup
+testing/feature/dashboard-redesign
 maintenance/v1-maintenance
 maintenance/v2-maintenance
-
-# Or with more detail
-maintenance/v1.x/security-patches
-maintenance/v2.x/bug-fixes
+exploration/feature/ai-integration/model-testing
+production/hotfix/critical-security-fix
+staging/release/v2.1.0
+archive/v1-legacy
 ```
 
-**Purpose**: Provide bug fixes and security patches for older major versions
-
-**Guidelines**:
-1. Create when a new major version is released
-2. Only accept critical bug fixes and security patches
-3. Never add new features
-4. Tag patch releases: v1.2.3, v1.2.4, etc.
-
-### Archive Branches
-
-For historical reference:
-
-```bash
-# Archive old development branches
-archive/v1/original-implementation
-archive/legacy/old-authentication-system
-archive/experimental/failed-ml-approach
-
-# Archive completed project phases
-archive/phase1/initial-mvp
-archive/phase2/feature-expansion
+**Avoid These**:
+```
+v2                          # Use: development/feature/v2-redesign
+update                      # Use: development/feature/specific-update-name
+john-branch                 # Use: development/feature/descriptive-name
+feature-123                 # Use: development/feature/ticket-123-description
 ```
 
-**Purpose**: Preserve historical development without cluttering active branches
+### Branch Lifecycle Flow
 
-**Guidelines**:
-1. Move old work that's no longer actively maintained
-2. Never delete - keep for historical reference
-3. Clearly mark in branch name
-4. Document reason for archival in README or commit message
+```
+exploration/feature/new-idea
+    ↓
+development/feature/new-idea
+    ↓
+testing/feature/new-idea
+    ↓
+staging/release/v1.2.0
+    ↓
+main (tagged as v1.2.0)
+    ↓
+maintenance/v1-maintenance (if needed)
+    ↓
+archive/v1-archive (when obsolete)
+```
+
+### Long-lived Branches
+
+**Main Branches**:
+- `main` or `master` - Production code, always stable
+- `develop` - Integration branch for features
+
+**Maintenance Branches**:
+- `maintenance/v1-maintenance` - Support for v1.x releases
+- `maintenance/v2-maintenance` - Support for v2.x releases
+
+**Archive Branches**:
+- `archive/v1-archive` - Archived v1 code for reference
+- `archive/legacy-system` - Old systems preserved for history
 
 ---
 
-## Commit Guidelines
+## Commit Message Standards
 
-All commits MUST follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+### Conventional Commits Format
 
 ```
 <type>(<scope>): <subject>
@@ -353,174 +192,426 @@ All commits MUST follow [Conventional Commits](https://www.conventionalcommits.o
 
 ### Commit Types
 
-- `feat`: New feature (MINOR version bump)
-- `fix`: Bug fix (PATCH version bump)
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Test changes
-- `build`: Build system changes
-- `ci`: CI/CD changes
-- `chore`: Maintenance tasks
-- `revert`: Revert previous commit
+| Type | Description | Version Impact |
+|------|-------------|----------------|
+| `feat` | New feature | MINOR |
+| `fix` | Bug fix | PATCH |
+| `docs` | Documentation only | PATCH |
+| `style` | Code style (formatting) | PATCH |
+| `refactor` | Code refactoring | PATCH |
+| `perf` | Performance improvement | PATCH |
+| `test` | Adding or updating tests | PATCH |
+| `build` | Build system changes | PATCH |
+| `ci` | CI/CD changes | PATCH |
+| `chore` | Maintenance tasks | No bump |
+| `revert` | Revert previous commit | PATCH |
 
 ### Breaking Changes
 
-Mark breaking changes with `!` or `BREAKING CHANGE:` footer (MAJOR version bump):
+Breaking changes trigger a MAJOR version bump. Indicate them using:
 
-```bash
-feat!: redesign API authentication
-
-BREAKING CHANGE: Authentication now requires OAuth2 tokens
-instead of API keys. All clients must migrate.
+**Method 1: Exclamation mark**
+```
+feat!: redesign authentication API
+fix!: change response format
 ```
 
-See [GIT_WORKFLOW.md](GIT_WORKFLOW.md) for detailed commit guidelines.
+**Method 2: Footer**
+```
+feat: redesign authentication API
+
+BREAKING CHANGE: Authentication now requires OAuth2.
+API keys are no longer supported.
+```
+
+### Commit Message Examples
+
+**Simple commit**:
+```
+feat: add user authentication
+```
+
+**With scope**:
+```
+feat(auth): implement OAuth2 login
+fix(api): resolve timeout in user service
+docs(readme): update installation instructions
+```
+
+**With body and footer**:
+```
+fix(database): resolve race condition in user creation
+
+The race condition occurred when multiple users were created
+simultaneously. This fix implements a database lock to prevent
+duplicate user creation.
+
+Closes #123
+Fixes #456
+```
+
+**Breaking change**:
+```
+feat(api)!: change response format for /users endpoint
+
+BREAKING CHANGE: The /users endpoint now returns an array
+instead of an object. Update all clients accordingly.
+
+Migration guide: docs/migration-v2.md
+```
+
+### Commit Message Guidelines
+
+**Subject Line**:
+- Maximum 50 characters
+- Imperative mood ("add" not "added")
+- No period at the end
+- Capitalize first letter
+- Descriptive and specific
+
+**Body** (optional):
+- Wrap at 72 characters
+- Explain what and why, not how
+- Separate from subject with blank line
+- Can have multiple paragraphs
+
+**Footer** (optional):
+- Reference issues: `Closes #123`, `Fixes #456`
+- Breaking changes: `BREAKING CHANGE: description`
+- Co-authors: `Co-authored-by: Name <email>`
 
 ---
 
-## Integration with Existing Standards
+## Tagging Strategy
 
-This document consolidates and extends the following existing standards:
+### Tag Format
 
-- **[SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md)**: Detailed versioning and automated release information
-- **[GIT_WORKFLOW.md](GIT_WORKFLOW.md)**: Comprehensive Git workflow and branching strategies
-- **[CHANGELOG.md](CHANGELOG.md)**: Automated changelog generation and maintenance
-- **[BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)**: Branch protection rules and enforcement
+Tags follow semantic versioning with a `v` prefix:
 
-### Key Differences from Existing Docs
+```
+v[MAJOR].[MINOR].[PATCH]
 
-1. **Branch Naming**: Introduces lifecycle-phase prefix system for visual ordering
-2. **Archive Strategy**: Formalizes archive branch naming and usage
-3. **Maintenance Branches**: Defines long-lived maintenance branch strategy
-4. **History as Trail**: Emphasizes Git history as primary version documentation
+Examples:
+v1.0.0
+v1.2.3
+v2.0.0
+```
 
-### Migration Path
+### Creating Tags
 
-**For Existing Repositories**:
+**Annotated Tags** (recommended):
+```bash
+git tag -a v1.2.3 -m "Release version 1.2.3"
+git push origin v1.2.3
+```
 
-1. Continue using current main/develop branches
-2. Adopt new naming convention for new feature branches
-3. Create maintenance branches when releasing new major versions
-4. Archive old branches following new naming conventions
-5. Update branch protection rules to recognize new patterns
+**Lightweight Tags** (not recommended):
+```bash
+git tag v1.2.3
+git push origin v1.2.3
+```
 
-**For New Repositories**:
+### Tag Annotations
 
-1. Start with main and develop branches
-2. Use lifecycle-phase naming from day one
-3. Set up automated tagging and changelog generation
-4. Configure branch protection rules
+Tag messages should include:
+- Version number
+- Release date
+- Brief description of changes
+- Link to changelog
+
+Example:
+```bash
+git tag -a v1.2.3 -m "Release v1.2.3 (2024-11-25)
+
+Features:
+- User authentication system
+- Dashboard redesign
+
+Bug Fixes:
+- Memory leak in data processor
+- API timeout issues
+
+See CHANGELOG.md for full details"
+```
+
+### Pre-release Tags
+
+```bash
+git tag -a v1.2.3-alpha.1 -m "Alpha release for testing"
+git tag -a v1.2.3-beta.1 -m "Beta release for early adopters"
+git tag -a v1.2.3-rc.1 -m "Release candidate for v1.2.3"
+```
+
+---
+
+## Release Management
+
+### Automated Releases
+
+Releases are automatically created based on conventional commits using semantic-release.
+
+**Process**:
+1. Commits are analyzed for type (feat, fix, BREAKING CHANGE)
+2. Next version is calculated based on commit types
+3. CHANGELOG.md is automatically generated
+4. Git tag is created
+5. GitHub Release is published
+6. Packages are published (if configured)
+
+### Manual Release Process
+
+For manual releases:
+
+1. **Create Release Branch**:
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b staging/release/v1.2.0
+```
+
+2. **Prepare Release**:
+```bash
+# Update version files
+# Update CHANGELOG.md
+# Final testing
+git add .
+git commit -m "chore(release): prepare v1.2.0"
+```
+
+3. **Merge to Main**:
+```bash
+git checkout main
+git merge --no-ff staging/release/v1.2.0
+git tag -a v1.2.0 -m "Release version 1.2.0"
+git push origin main --tags
+```
+
+4. **Merge Back to Develop**:
+```bash
+git checkout develop
+git merge --no-ff staging/release/v1.2.0
+git push origin develop
+```
+
+5. **Cleanup**:
+```bash
+git branch -d staging/release/v1.2.0
+git push origin --delete staging/release/v1.2.0
+```
+
+### Release Notes
+
+Each release should include:
+- Version number
+- Release date
+- Summary of changes
+- New features
+- Bug fixes
+- Breaking changes (if any)
+- Migration guide (for breaking changes)
+- Known issues
+- Contributors
+
+### GitHub Releases
+
+GitHub Releases provide clean version downloads for non-technical stakeholders:
+
+- Source code (zip and tar.gz)
+- Compiled binaries (if applicable)
+- CHANGELOG.md
+- Documentation
+- Migration guides
+
+---
+
+## Maintenance and Archival
+
+### Maintenance Branches
+
+Create maintenance branches for long-term support of major versions:
+
+**When to Create**:
+- After releasing a new major version
+- When continued support is needed for previous version
+- When customers require stability for older versions
+
+**Naming Convention**:
+```
+maintenance/v1-maintenance
+maintenance/v2-maintenance
+```
+
+**Workflow**:
+```bash
+# Create maintenance branch from last v1 release
+git checkout v1.9.5
+git checkout -b maintenance/v1-maintenance
+git push origin maintenance/v1-maintenance
+
+# Apply hotfix
+git checkout -b production/hotfix/security-fix maintenance/v1-maintenance
+# Make changes
+git commit -m "fix: security vulnerability"
+git checkout maintenance/v1-maintenance
+git merge --no-ff production/hotfix/security-fix
+git tag -a v1.9.6 -m "Hotfix v1.9.6"
+git push origin maintenance/v1-maintenance --tags
+```
+
+### Archive Branches
+
+Archive old versions for historical reference:
+
+**When to Archive**:
+- Version is no longer supported
+- Major rewrite makes old code obsolete
+- Project direction changes significantly
+
+**Naming Convention**:
+```
+archive/v1-archive
+archive/legacy-system
+archive/old-implementation
+```
+
+**Workflow**:
+```bash
+# Create archive branch
+git checkout maintenance/v1-maintenance
+git checkout -b archive/v1-archive
+git push origin archive/v1-archive
+
+# Optional: Delete maintenance branch
+git push origin --delete maintenance/v1-maintenance
+git branch -d maintenance/v1-maintenance
+```
+
+### Branch Retention Policy
+
+**Retention Guidelines**:
+- **main/master**: Permanent
+- **develop**: Permanent
+- **feature branches**: Delete after merge
+- **release branches**: Delete after merge
+- **hotfix branches**: Delete after merge
+- **maintenance branches**: Keep for support period (1-2 years)
+- **archive branches**: Permanent (for reference)
+
+---
+
+## Git History as Version Trail
+
+### Philosophy
+
+The Git commit history is the authoritative record of all changes. Each commit represents a discrete change with:
+- What changed (files and code via diffs)
+- Why it changed (commit message explaining the purpose)
+- When it changed (timestamp)
+- Who changed it (author)
+
+The complete version trail includes both the commit messages and the actual code changes (diffs) in the Git history.
+
+### Best Practices
+
+**Atomic Commits**:
+- Each commit should represent one logical change
+- Commits should be complete and functional
+- Don't mix unrelated changes
+
+**Commit Frequency**:
+- Commit often to capture progress
+- Don't wait until end of day
+- Create checkpoints at logical stages
+
+**Commit Clarity**:
+- Write clear, descriptive commit messages
+- Include context in the body
+- Reference issues and tickets
+
+**History Cleanliness**:
+- Avoid "WIP" or "fix typo" commits in main branches
+- Use interactive rebase to clean up feature branch history
+- Squash related commits before merging (if appropriate)
+
+### Viewing History
+
+```bash
+# View commit history
+git log --oneline --graph --all
+
+# View history for specific file
+git log --follow -- path/to/file
+
+# View history with diffs
+git log -p
+
+# View history by author
+git log --author="Name"
+
+# View history by date range
+git log --since="2024-01-01" --until="2024-12-31"
+
+# Find when a line was changed
+git blame path/to/file
+```
 
 ---
 
 ## Quick Reference
 
-### Creating a New Feature
+### Branch Naming Template
 
-```bash
-# Update develop
-git checkout develop
-git pull origin develop
+```
+[lifecycle-phase]/[type]/[descriptive-name]
 
-# Create feature branch with lifecycle phase
-git checkout -b develop/feature/user-profile/avatar-upload
-
-# Work and commit
-git add .
-git commit -m "feat(profile): add avatar upload functionality"
-
-# Push and create PR
-git push -u origin develop/feature/user-profile/avatar-upload
+Examples:
+development/feature/user-authentication
+testing/feature/payment-gateway
+maintenance/v2-maintenance
+archive/v1-archive
 ```
 
-### Creating a Release
+### Commit Message Template
 
-```bash
-# Create release branch
-git checkout develop
-git pull origin develop
-git checkout -b release/v1.2.0
+```
+<type>(<scope>): <subject>
 
-# Prepare release (version bumps, changelog updates)
-# Make final adjustments
+<body>
 
-# Merge to main
-git checkout main
-git merge --no-ff release/v1.2.0
+<footer>
 
-# Tag release
-git tag -a v1.2.0 -m "Release version 1.2.0"
-
-# Push
-git push origin main --tags
-
-# Merge back to develop
-git checkout develop
-git merge --no-ff release/v1.2.0
-git push origin develop
-
-# Delete release branch
-git branch -d release/v1.2.0
-git push origin --delete release/v1.2.0
+Examples:
+feat(auth): add OAuth2 support
+fix: resolve memory leak
+docs: update API documentation
 ```
 
-### Creating Maintenance Branch
+### Tagging Template
 
-```bash
-# When releasing v2.0.0, create maintenance branch for v1.x
-git checkout v1.9.0  # Last v1 release
-git checkout -b maintenance/v1-maintenance
-git push -u origin maintenance/v1-maintenance
-
-# Apply security patches to v1.x
-git checkout maintenance/v1-maintenance
-git checkout -b maintenance/v1.x/security-patch-openssl
-# Make fixes
-git commit -m "fix(security): update OpenSSL dependency"
-# Merge and tag v1.9.1
 ```
+v<MAJOR>.<MINOR>.<PATCH>[-prerelease.number]
 
-### Archiving Old Branch
-
-```bash
-# Rename to archive
-git branch -m old-feature-branch archive/v1/old-feature-implementation
-git push origin archive/v1/old-feature-implementation
-
-# Or create new archive branch
-git checkout old-feature-branch
-git checkout -b archive/experimental/ml-approach-2023
-git push -u origin archive/experimental/ml-approach-2023
-
-# Delete old branch
-git push origin --delete old-feature-branch
+Examples:
+v1.0.0
+v1.2.3
+v2.0.0-beta.1
 ```
 
 ---
 
-## Enforcement
+## Compliance Checklist
 
-These standards are enforced through:
-
-1. **Branch Protection Rules**: Configured in repository settings
-2. **GitHub Actions**: Automated validation of branch names and commit messages
-3. **PR Templates**: Require adherence to conventions
-4. **Code Review**: Manual verification during review process
-5. **Pre-commit Hooks**: Local validation before commits
-
----
-
-## Related Documentation
-
-- [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) - Detailed semantic versioning guide
-- [GIT_WORKFLOW.md](GIT_WORKFLOW.md) - Complete Git workflow documentation
-- [CHANGELOG.md](CHANGELOG.md) - Changelog format and maintenance
-- [RELEASE_PROCESS.md](RELEASE_PROCESS.md) - Release creation and management
-- [BRANCH_STRATEGY.md](BRANCH_STRATEGY.md) - Comprehensive branching strategies
-- [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) - Branch protection configuration
+- [ ] All releases use semantic versioning (v1.0.0 format)
+- [ ] Branch names follow lifecycle/type/description format
+- [ ] Commit messages follow conventional commits format
+- [ ] Git history is clean and descriptive
+- [ ] Tags are created for all releases
+- [ ] CHANGELOG.md is maintained and updated
+- [ ] Maintenance branches exist for supported versions
+- [ ] Old versions are archived when no longer supported
+- [ ] GitHub Releases are created for each version
+- [ ] Documentation reflects current version
 
 ---
 
-**Last Updated**: 2025-11-25
+**Last Updated**: 2024-11-25
