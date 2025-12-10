@@ -286,6 +286,7 @@ tion default.
 │   └── TESTING.md
 ├── .github/
 │   ├── copilot-instructions.md             # Copilot code review instructions
+│   ├── copilot-instructions-rapid-dev.md   # Rapid development mode instructions
 │   └── workflows/                          # GitHub Actions workflows
 ├── profile/
 │   └── README.md                           # Organization profile page
@@ -334,7 +335,13 @@ tion default.
 ├── TESTING.md                              # Testing standards
 ├── REPOSITORY_PURPOSE_ANALYSIS.md           # Repository appropriateness analys
 is
+├── .pre-commit-config.yaml                 # Standard pre-commit configuration
+├── .pre-commit-config-rapid.yaml           # Rapid dev pre-commit configuration
 ├── dependabot.yml                          # Dependabot configuration
+├── scripts/
+│   ├── aicommit.sh                         # AI commit message generator
+│   ├── auto-docs.py                        # Auto-documentation generator
+│   └── ...                                 # Other utility scripts
 └── for-ai-implementation.txt               # AI management protocol
 ```
 
@@ -382,6 +389,32 @@ The organization now features **automated health monitoring** that brings the AI
 - **Conflict Resolution**: Automatically resolves merge conflicts when possible
 - **Branch Cleanup**: Removes merged branches automatically
 - **Comprehensive Documentation**: See [PR_AUTOMATION.md](PR_AUTOMATION.md) for details
+
+### ⚡ Rapid Development Optimization Suite (NEW!)
+
+**Optimized for: Lazy Human + Multiple AI Assistants Workflow**
+
+Speed-focused tools and configurations for solo developers working with AI assistants:
+
+- **Rapid Dev Copilot Instructions** - [.github/copilot-instructions-rapid-dev.md](.github/copilot-instructions-rapid-dev.md): Complete guide for AI-accelerated development with auto-fix enforcement, AI-generated commits, and relaxed standards
+- **Auto-fix Pre-commit Config** - [.pre-commit-config-rapid.yaml](.pre-commit-config-rapid.yaml): Never-blocking hooks that auto-fix formatting, imports, and style issues
+- **AI Commit Message Generator** - [scripts/aicommit.sh](scripts/aicommit.sh): Bash script that generates Conventional Commits messages using GitHub Copilot CLI or templates
+- **Auto-documentation Generator** - [scripts/auto-docs.py](scripts/auto-docs.py): Python script that extracts docstrings and generates API documentation
+
+**Quick Start:**
+```bash
+# Activate rapid development mode
+ln -sf .pre-commit-config-rapid.yaml .pre-commit-config.yaml
+pre-commit install
+
+# Generate AI commit message
+./scripts/aicommit.sh
+
+# Auto-generate API docs
+python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme
+```
+
+See also: [AI Rapid Workflow Guide](AI_RAPID_WORKFLOW.md)
 
 ### Automated Security
 
