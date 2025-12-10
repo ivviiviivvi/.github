@@ -4,7 +4,7 @@
 
 Welcome to the Agent Registry — your single source of truth for all GitHub Copilot agents available across the organization. This catalog provides comprehensive documentation for discovering, understanding, and using specialized agents that extend GitHub Copilot's capabilities.
 
-**Current Status**: 20 production-ready agents across 5 categories
+**Current Status**: 19 production-ready agents across 5 categories
 
 ## Table of Contents
 
@@ -31,6 +31,7 @@ Welcome to the Agent Registry — your single source of truth for all GitHub Cop
 | [Completionism Specialist](#completionism-specialist) | Documentation & Analysis | Ensures every field, form, and documentation section is complete | github | [agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md) |
 | [Dynatrace Expert](#dynatrace-expert) | Development & Operations | Observability and security incident response | dynatrace | [agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md) |
 | [GitHub Org Manager](#github-organization-manager) | Infrastructure & DevOps | Organization governance and automation | github | [agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md) |
+| [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent) | Infrastructure & DevOps | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github | [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md) |
 | [JFrog Security](#jfrog-security-agent) | Security & Compliance | Application security remediation | None | [agents/jfrog-sec.agent.md](../agents/jfrog-sec.agent.md) |
 | [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup) | Development & Operations | Automated feature flag cleanup | launchdarkly | [agents/launchdarkly-flag-cleanup.agent.md](../agents/launchdarkly-flag-cleanup.agent.md) |
 | [Neon Migration Specialist](#neon-migration-specialist) | Infrastructure & DevOps | Zero-downtime Postgres migrations | None | [agents/neon-migration-specialist.agent.md](../agents/neon-migration-specialist.agent.md) |
@@ -511,6 +512,54 @@ Agents for infrastructure management, cloud migrations, database operations, and
 - All `.github/workflows/*.yml` files
 
 **Documentation**: [agents/workflow-optimizer.agent.md](../agents/workflow-optimizer.agent.md)
+
+---
+
+#### Greener Grass Workflow Benchmark Agent
+
+**Purpose**: Compares your GitHub Actions workflows against industry best practices and successful patterns to identify improvement opportunities.
+
+**Key Features**:
+- Performance benchmarking against similar projects
+- Cost comparison with peer organizations
+- Security practice assessment vs. industry leaders
+- Reliability metrics comparison
+- Developer experience benchmarking
+- Gap analysis with actionable recommendations
+- Continuous improvement tracking
+
+**Prerequisites**:
+- GitHub MCP server
+- Repository with GitHub Actions workflows
+- Access to workflow run metrics
+
+**Invocation Examples**:
+```
+@greener-grass-workflow-benchmark analyze our CI/CD performance compared to similar projects
+@greener-grass-workflow-benchmark compare our workflows to next.js and identify gaps
+@greener-grass-workflow-benchmark how does our Actions spending compare to peer projects?
+@greener-grass-workflow-benchmark benchmark our workflow security against industry leaders
+@greener-grass-workflow-benchmark generate a comprehensive benchmark report
+```
+
+**Integration Points**:
+- GitHub Actions API
+- Workflow metrics and analytics
+- Industry benchmark databases
+- Open source project analysis
+
+**Benchmark Categories**:
+- Performance (build times, cache effectiveness)
+- Cost (runner utilization, efficiency)
+- Security (permissions, action pinning)
+- Reliability (success rates, MTTR)
+- Developer Experience (feedback speed, documentation)
+
+**Related Workflows**:
+- All `.github/workflows/*.yml` files
+- Workflow run history and metrics
+
+**Documentation**: [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md)
 
 ---
 
