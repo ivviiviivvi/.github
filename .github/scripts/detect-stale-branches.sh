@@ -15,10 +15,18 @@ if [ -z "$REPO" ]; then
   exit 1
 fi
 
-STALE_DATE=$(date -d "$STALE_DAYS days ago" +%Y-%m-%d 2>/dev/null || date -v -${STALE_DAYS}d +%Y-%m-%d 2>/dev/null)
+# Calculate stale date with better error handling
+if command -v date >/dev/null 2>&1; then
+  # Try GNU date first (Linux)
+  STALE_DATE=$(date -d "$STALE_DAYS days ago" +%Y-%m-%d 2>/dev/null || \
+               date -v -${STALE_DAYS}d +%Y-%m-%d 2>/dev/null || echo "")
+else
+  echo "Error: 'date' command not found"
+  exit 1
+fi
 
 if [ -z "$STALE_DATE" ]; then
-  echo "Error: Unable to calculate stale date"
+  echo "Error: Unable to calculate stale date. Ensure 'date' command supports -d or -v flag."
   exit 1
 fi
 

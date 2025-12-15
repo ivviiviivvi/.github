@@ -36,12 +36,15 @@ jobs:
           chmod +x ./.github/scripts/detect-stale-branches.sh
           
           # Detect branches older than 14 days
-          STALE_BRANCHES=$(./.github/scripts/detect-stale-branches.sh "${{ github.repository }}" 14 || echo "")
+          STALE_BRANCHES=$(./.github/scripts/detect-stale-branches.sh "${{ github.repository }}" 14 2>&1 || echo "")
           
-          if [ -n "$STALE_BRANCHES" ] && [ "$STALE_BRANCHES" != "BRANCH NAME"* ]; then
+          # Check if we have actual branch data (more than just headers)
+          BRANCH_COUNT=$(echo "$STALE_BRANCHES" | grep -v "^BRANCH NAME" | grep -v "^=" | grep -v "^Note:" | grep -v "^Run with:" | grep -v "^Detecting" | grep -v "^$" | wc -l)
+          
+          if [ "$BRANCH_COUNT" -gt 0 ]; then
             echo "found=true" >> $GITHUB_OUTPUT
             echo "$STALE_BRANCHES" > stale-branches.txt
-            echo "Found stale branches"
+            echo "Found $BRANCH_COUNT stale branches"
           else
             echo "found=false" >> $GITHUB_OUTPUT
             echo "No stale branches found"
@@ -60,16 +63,17 @@ jobs:
           
           if [ -n "$EXISTING_ISSUE" ]; then
             echo "Issue already exists: #$EXISTING_ISSUE"
+            CURRENT_DATE=$(date -u +'%Y-%m-%d %H:%M UTC')
             cat > issue-comment.md << 'COMMENT_EOF'
           **Updated stale branch list:**
           
           ```
           COMMENT_EOF
             echo "$BRANCHES" >> issue-comment.md
-            cat >> issue-comment.md << 'COMMENT_EOF'
-          ```
+            cat >> issue-comment.md << COMMENT_EOF
+          \`\`\`
           
-          Updated: $(date -u +"%Y-%m-%d %H:%M UTC")
+          Updated: ${CURRENT_DATE}
           COMMENT_EOF
             gh issue comment "$EXISTING_ISSUE" --body-file issue-comment.md
           else
