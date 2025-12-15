@@ -176,6 +176,7 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 | Document                                                            | Description                                            |
 | ------------------------------------------------------------------- | ------------------------------------------------------ |
 | [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md)       | Organization-wide version control and branching standards |
+| [logical-branch-policy.md](.github/logical-branch-policy.md)        | "Main only" branch model policy with cleanup automation |
 | [STYLE_GUIDE.md](STYLE_GUIDE.md)                                   | Comprehensive English language and documentation style guide |
 | [ARCHIVAL_STRATEGY.md](ARCHIVAL_STRATEGY.md)                       | Version archival, maintenance branches, and preservation |
 | [COMMUNITY_AGENTS.md](COMMUNITY_AGENTS.md)                         | Community engagement, coordination, and monitoring agents |
