@@ -7,6 +7,8 @@ Implements AI-GH-06, AI-GH-07, and AI-GH-08 modules
 import os
 import re
 import json
+import socket
+import ipaddress
 import requests
 import urllib.parse
 from datetime import datetime
@@ -105,8 +107,54 @@ class OrganizationCrawler:
 
         return results
 
+    def _is_url_safe(self, url: str) -> bool:
+        """
+        Validate URL to prevent Server-Side Request Forgery (SSRF).
+        Checks if the hostname resolves to a private or reserved IP address.
+        """
+        try:
+            parsed = urllib.parse.urlparse(url)
+            hostname = parsed.hostname
+            if not hostname:
+                return False
+
+            # Resolve hostname to IP(s)
+            try:
+                # getaddrinfo supports both IPv4 and IPv6
+                addr_info = socket.getaddrinfo(hostname, None)
+            except socket.gaierror:
+                return False
+
+            for res in addr_info:
+                # res[4][0] is the IP address string
+                ip_str = res[4][0]
+                # Remove scope ID if present
+                if '%' in ip_str:
+                    ip_str = ip_str.split('%')[0]
+
+                try:
+                    ip_obj = ipaddress.ip_address(ip_str)
+
+                    if (ip_obj.is_private or
+                        ip_obj.is_loopback or
+                        ip_obj.is_link_local or
+                        ip_obj.is_reserved or
+                        ip_obj.is_multicast):
+                        return False
+
+                except ValueError:
+                    continue
+
+            return True
+
+        except Exception:
+            return False
+
     def _check_link(self, url: str, timeout: int = 10) -> int:
         """Check if a link is accessible"""
+        if not self._is_url_safe(url):
+            return 403
+
         try:
             response = self.session.head(
                 url,
