@@ -163,8 +163,6 @@ class OrganizationCrawler:
                 else:
                     health_metrics['stale_repos'] += 1
 
-                time.sleep(0.3)  # Rate limiting
-
         except Exception as e:
             print(f"  ✗ Error analyzing repositories: {e}")
             health_metrics['error'] = str(e)
