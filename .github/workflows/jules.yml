@@ -34,6 +34,9 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
+      - name: Setup GitHub Copilot Actions Environment
+        uses: github/copilot-actions-setup@v1
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
