@@ -29,20 +29,22 @@ class EcosystemVisualizer:
 
         em = self.report_data['ecosystem_map']
 
-        diagram = """```mermaid
+        # Use a list for efficient string concatenation
+        parts = []
+        parts.append("""```mermaid
 graph TD
     %% Styles
-    classDef organization fill:#0969da,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef workflow fill:#8250df,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef copilot fill:#1f883d,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef tech fill:#57606a,stroke:#fff,stroke-width:1px,color:#fff;
+    classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
+    classDef workflow fill:#ddf4ff,stroke:#54aeff,color:#24292f,stroke-width:1px;
+    classDef agent fill:#fff8c5,stroke:#d4a72c,color:#24292f,stroke-width:1px;
+    classDef tech fill:#dafbe1,stroke:#4ac26b,color:#24292f,stroke-width:1px;
 
     subgraph "GitHub Organization"
-        ORG[Organization Root]:::organization
+        ORG[Organization Root]:::org
     end
 
     subgraph "Automation Layer"
-"""
+""")
 
         # Add workflows
         workflows = em.get('workflows', [])
@@ -51,57 +53,57 @@ graph TD
             diagram += f"        {workflow_id}[{workflow}]:::workflow\n"
             diagram += f"        ORG --> {workflow_id}\n"
 
-        diagram += "    end\n\n"
+        parts.append("    end\n\n")
 
         # Add Copilot customizations
-        diagram += """    subgraph "GitHub Copilot Customizations"
-"""
+        parts.append("""    subgraph "GitHub Copilot Customizations"
+""")
 
         agents = em.get('copilot_agents', [])
         if agents:
-            diagram += "        AGENTS[Agents]:::copilot\n"
-            diagram += f"        AGENTS_COUNT[{len(agents)} agents]:::copilot\n"
+            diagram += "        AGENTS[Agents]:::agent\n"
+            diagram += f"        AGENTS_COUNT[{len(agents)} agents]:::agent\n"
             diagram += "        AGENTS --> AGENTS_COUNT\n"
             diagram += "        ORG --> AGENTS\n"
 
         instructions = em.get('copilot_instructions', [])
         if instructions:
-            diagram += "        INSTR[Instructions]:::copilot\n"
-            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]:::copilot\n"
+            diagram += "        INSTR[Instructions]:::agent\n"
+            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]:::agent\n"
             diagram += "        INSTR --> INSTR_COUNT\n"
             diagram += "        ORG --> INSTR\n"
 
         prompts = em.get('copilot_prompts', [])
         if prompts:
-            diagram += "        PROMPTS[Prompts]:::copilot\n"
-            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]:::copilot\n"
+            diagram += "        PROMPTS[Prompts]:::agent\n"
+            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]:::agent\n"
             diagram += "        PROMPTS --> PROMPTS_COUNT\n"
             diagram += "        ORG --> PROMPTS\n"
 
         chatmodes = em.get('copilot_chatmodes', [])
         if chatmodes:
-            diagram += "        CHATMODES[Chat Modes]:::copilot\n"
-            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::copilot\n"
+            diagram += "        CHATMODES[Chat Modes]:::agent\n"
+            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::agent\n"
             diagram += "        CHATMODES --> CHATMODES_COUNT\n"
             diagram += "        ORG --> CHATMODES\n"
 
-        diagram += "    end\n\n"
+        parts.append("    end\n\n")
 
         # Add technologies
         technologies = em.get('technologies', [])
         if technologies:
-            diagram += """    subgraph "Technologies"
-"""
+            parts.append("""    subgraph "Technologies"
+""")
             for i, tech in enumerate(technologies[:15]):  # Limit to first 15
                 tech_id = f"TECH{i}"
                 safe_tech = tech.replace('-', '_').replace('.', '_')
                 diagram += f"        {tech_id}[{tech}]:::tech\n"
 
-            diagram += "    end\n"
+            parts.append("    end\n")
 
-        diagram += "```\n"
+        parts.append("```\n")
 
-        return diagram
+        return "".join(parts)
 
     def generate_dashboard_markdown(self, output_path: Path = None) -> str:
         """Generate a comprehensive dashboard in Markdown"""
@@ -109,7 +111,9 @@ graph TD
         if not self.report_data:
             return "No report data available"
 
-        dashboard = f"""# 🎯 Organization Ecosystem Dashboard
+        # Use a list for efficient string concatenation
+        parts = []
+        parts.append(f"""# 🎯 Organization Ecosystem Dashboard
 
 **Last Updated**: {self.report_data.get('timestamp', 'Unknown')}
 **Organization**: {self.report_data.get('organization', 'Unknown')}
@@ -118,12 +122,12 @@ graph TD
 
 ## 📊 Quick Stats
 
-"""
+""")
 
         # Ecosystem stats
         if 'ecosystem_map' in self.report_data:
             em = self.report_data['ecosystem_map']
-            dashboard += f"""| Category | Count |
+            parts.append(f"""| Category | Count |
 |----------|-------|
 | GitHub Actions Workflows | {len(em.get('workflows', []))} |
 | Copilot Agents | {len(em.get('copilot_agents', []))} |
@@ -132,7 +136,7 @@ graph TD
 | Copilot Chat Modes | {len(em.get('copilot_chatmodes', []))} |
 | Technologies Supported | {len(em.get('technologies', []))} |
 
-"""
+""")
 
         # Repository health
         if 'repository_health' in self.report_data:
@@ -143,7 +147,15 @@ graph TD
 
             if total > 0:
                 active_pct = (active / total * 100) if total > 0 else 0
+
+                # Create progress bar
+                bar_length = 20
+                filled_length = int(bar_length * active_pct / 100)
+                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+
                 dashboard += f"""## 🏥 Repository Health
+
+{bar} {active_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -153,7 +165,7 @@ graph TD
 
 ### Health Score: {active_pct:.0f}/100
 
-"""
+""")
 
         # Link validation
         if 'link_validation' in self.report_data and self.report_data['link_validation']:
@@ -164,7 +176,7 @@ graph TD
 
             if total_links > 0:
                 valid_pct = (valid / total_links * 100) if total_links > 0 else 0
-                dashboard += f"""## 🔗 Link Health
+                parts.append(f"""## 🔗 Link Health
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -172,37 +184,37 @@ graph TD
 | Broken | {broken} | {100 - valid_pct:.1f}% |
 | **Total** | **{total_links}** | **100%** |
 
-"""
+""")
 
         # Alerts
         blind_spots = self.report_data.get('blind_spots', [])
         shatter_points = self.report_data.get('shatter_points', [])
 
         if blind_spots or shatter_points:
-            dashboard += "## ⚠️  Alerts\n\n"
+            parts.append("## ⚠️  Alerts\n\n")
 
             if blind_spots:
-                dashboard += f"### 🔦 Blind Spots ({len(blind_spots)})\n\n"
+                parts.append(f"### 🔦 Blind Spots ({len(blind_spots)})\n\n")
                 for spot in blind_spots:
                     severity = spot.get('severity', 'unknown').upper()
                     emoji = {'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
-                    dashboard += f"{emoji} **{spot.get('category')}** ({severity})\n"
-                    dashboard += f"  - {spot.get('description')}\n\n"
+                    parts.append(f"{emoji} **{spot.get('category')}** ({severity})\n")
+                    parts.append(f"  - {spot.get('description')}\n\n")
 
             if shatter_points:
-                dashboard += f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n"
+                parts.append(f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n")
                 for point in shatter_points:
                     severity = point.get('severity', 'unknown').upper()
                     emoji = {'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
-                    dashboard += f"{emoji} **{point.get('category')}** ({severity})\n"
-                    dashboard += f"  - {point.get('description')}\n"
+                    parts.append(f"{emoji} **{point.get('category')}** ({severity})\n")
+                    parts.append(f"  - {point.get('description')}\n")
                     if 'recommendation' in point:
-                        dashboard += f"  - 💡 {point['recommendation']}\n"
-                    dashboard += "\n"
+                        parts.append(f"  - 💡 {point['recommendation']}\n")
+                    parts.append("\n")
 
         # Ecosystem diagram
-        dashboard += "\n## 🗺️  Ecosystem Map\n\n"
-        dashboard += self.generate_mermaid_diagram()
+        parts.append("\n## 🗺️  Ecosystem Map\n\n")
+        parts.append(self.generate_mermaid_diagram())
 
         # Technology coverage
         if 'ecosystem_map' in self.report_data:
@@ -210,16 +222,16 @@ graph TD
             technologies = em.get('technologies', [])
 
             if technologies:
-                dashboard += f"\n## 🛠️  Technology Coverage\n\n"
-                dashboard += "Supported languages and frameworks:\n\n"
+                parts.append(f"\n## 🛠️  Technology Coverage\n\n")
+                parts.append("Supported languages and frameworks:\n\n")
 
                 # Group into columns
                 cols = 4
                 for i in range(0, len(technologies), cols):
                     row_techs = technologies[i:i+cols]
-                    dashboard += "| " + " | ".join(f"`{t}`" for t in row_techs) + " |\n"
+                    parts.append("| " + " | ".join(f"`{t}`" for t in row_techs) + " |\n")
                     if i == 0:
-                        dashboard += "| " + " | ".join(["---"] * len(row_techs)) + " |\n"
+                        parts.append("| " + " | ".join(["---"] * len(row_techs)) + " |\n")
 
         # Top workflows
         if 'ecosystem_map' in self.report_data:
@@ -227,12 +239,14 @@ graph TD
             workflows = em.get('workflows', [])
 
             if workflows:
-                dashboard += f"\n## ⚙️  Active Workflows ({len(workflows)})\n\n"
+                parts.append(f"\n## ⚙️  Active Workflows ({len(workflows)})\n\n")
                 for workflow in sorted(workflows):
-                    dashboard += f"- `{workflow}`\n"
+                    parts.append(f"- `{workflow}`\n")
 
-        dashboard += "\n---\n\n"
-        dashboard += "*Dashboard generated by Ecosystem Visualizer*\n"
+        parts.append("\n---\n\n")
+        parts.append("*Dashboard generated by Ecosystem Visualizer*\n")
+
+        dashboard = "".join(parts)
 
         if output_path:
             output_path.write_text(dashboard)
