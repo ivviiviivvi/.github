@@ -31,8 +31,14 @@ class EcosystemVisualizer:
 
         diagram = """```mermaid
 graph TD
+    %% Styles
+    classDef organization fill:#0969da,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef workflow fill:#8250df,stroke:#fff,stroke-width:1px,color:#fff;
+    classDef copilot fill:#1f883d,stroke:#fff,stroke-width:1px,color:#fff;
+    classDef tech fill:#57606a,stroke:#fff,stroke-width:1px,color:#fff;
+
     subgraph "GitHub Organization"
-        ORG[Organization Root]
+        ORG[Organization Root]:::organization
     end
 
     subgraph "Automation Layer"
@@ -42,7 +48,7 @@ graph TD
         workflows = em.get('workflows', [])
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
-            diagram += f"        {workflow_id}[{workflow}]\n"
+            diagram += f"        {workflow_id}[{workflow}]:::workflow\n"
             diagram += f"        ORG --> {workflow_id}\n"
 
         diagram += "    end\n\n"
@@ -53,29 +59,29 @@ graph TD
 
         agents = em.get('copilot_agents', [])
         if agents:
-            diagram += "        AGENTS[Agents]\n"
-            diagram += f"        AGENTS_COUNT[{len(agents)} agents]\n"
+            diagram += "        AGENTS[Agents]:::copilot\n"
+            diagram += f"        AGENTS_COUNT[{len(agents)} agents]:::copilot\n"
             diagram += "        AGENTS --> AGENTS_COUNT\n"
             diagram += "        ORG --> AGENTS\n"
 
         instructions = em.get('copilot_instructions', [])
         if instructions:
-            diagram += "        INSTR[Instructions]\n"
-            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]\n"
+            diagram += "        INSTR[Instructions]:::copilot\n"
+            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]:::copilot\n"
             diagram += "        INSTR --> INSTR_COUNT\n"
             diagram += "        ORG --> INSTR\n"
 
         prompts = em.get('copilot_prompts', [])
         if prompts:
-            diagram += "        PROMPTS[Prompts]\n"
-            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]\n"
+            diagram += "        PROMPTS[Prompts]:::copilot\n"
+            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]:::copilot\n"
             diagram += "        PROMPTS --> PROMPTS_COUNT\n"
             diagram += "        ORG --> PROMPTS\n"
 
         chatmodes = em.get('copilot_chatmodes', [])
         if chatmodes:
-            diagram += "        CHATMODES[Chat Modes]\n"
-            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]\n"
+            diagram += "        CHATMODES[Chat Modes]:::copilot\n"
+            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::copilot\n"
             diagram += "        CHATMODES --> CHATMODES_COUNT\n"
             diagram += "        ORG --> CHATMODES\n"
 
@@ -89,7 +95,7 @@ graph TD
             for i, tech in enumerate(technologies[:15]):  # Limit to first 15
                 tech_id = f"TECH{i}"
                 safe_tech = tech.replace('-', '_').replace('.', '_')
-                diagram += f"        {tech_id}[{tech}]\n"
+                diagram += f"        {tech_id}[{tech}]:::tech\n"
 
             diagram += "    end\n"
 
