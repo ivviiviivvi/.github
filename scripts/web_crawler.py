@@ -9,6 +9,8 @@ import re
 import json
 import requests
 import urllib.parse
+import socket
+import ipaddress
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
@@ -105,8 +107,40 @@ class OrganizationCrawler:
 
         return results
 
+    def _is_safe_url(self, url: str) -> bool:
+        """
+        Validate that the URL does not point to a private or loopback address.
+        Prevents SSRF attacks.
+        """
+        try:
+            parsed = urllib.parse.urlparse(url)
+            hostname = parsed.hostname
+            if not hostname:
+                return False
+
+            # Resolve hostname to IP
+            # Use getaddrinfo to cover both IPv4 and IPv6
+            for _, _, _, _, sockaddr in socket.getaddrinfo(hostname, None):
+                ip = sockaddr[0]
+                ip_obj = ipaddress.ip_address(ip)
+
+                # Check if private or loopback
+                if ip_obj.is_private or ip_obj.is_loopback:
+                    print(f"  ⚠️  Blocked unsafe URL {url} (IP: {ip})")
+                    return False
+
+            return True
+        except Exception as e:
+            print(f"  ⚠️  Error validating URL {url}: {e}")
+            # If we can't validate it, fail safe (block)
+            return False
+
     def _check_link(self, url: str, timeout: int = 10) -> int:
         """Check if a link is accessible"""
+        # SSRF Protection
+        if not self._is_safe_url(url):
+            return 403  # Forbidden
+
         try:
             response = self.session.head(
                 url,
