@@ -9,11 +9,15 @@ import re
 import json
 import requests
 import urllib.parse
+import socket
+import ipaddress
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 from collections import defaultdict
 import time
+import socket
+import ipaddress
 
 
 class OrganizationCrawler:
@@ -105,27 +109,69 @@ class OrganizationCrawler:
 
         return results
 
-    def _check_link(self, url: str, timeout: int = 10) -> int:
-        """Check if a link is accessible"""
+    def _is_safe_url(self, url: str) -> bool:
+        """Check if URL resolves to a safe (non-local) IP address"""
         try:
-            response = self.session.head(
-                url,
-                timeout=timeout,
-                allow_redirects=True,
-                headers={'User-Agent': 'Mozilla/5.0 GitHub Organization Health Crawler'}
-            )
+            parsed = urllib.parse.urlparse(url)
+            hostname = parsed.hostname
+            if not hostname:
+                return False
 
-            # Some servers don't support HEAD, try GET
-            if response.status_code >= 400:
-                response = self.session.get(url, timeout=timeout, allow_redirects=True)
+            # Resolve hostname
+            ip = socket.gethostbyname(hostname)
+            ip_obj = ipaddress.ip_address(ip)
 
-            return response.status_code
-        except requests.exceptions.Timeout:
-            return 408
-        except requests.exceptions.TooManyRedirects:
-            return 310
-        except requests.exceptions.RequestException:
-            return 500
+            # Check for private/loopback/link-local
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                return False
+
+            return True
+        except Exception:
+            return False
+
+    def _check_link(self, url: str, timeout: int = 10) -> int:
+        """Check if a link is accessible with SSRF protection"""
+        target = url
+        for _ in range(5):  # Limit redirects
+            if not self._is_safe_url(target):
+                print(f"  ⚠️  {target} (blocked: internal/private IP)")
+                return 403
+
+            try:
+                response = self.session.head(
+                    target,
+                    timeout=timeout,
+                    allow_redirects=False,
+                    headers={'User-Agent': 'Mozilla/5.0 GitHub Organization Health Crawler'}
+                )
+
+                # Handle Redirects
+                if 300 <= response.status_code < 400:
+                    loc = response.headers.get('Location')
+                    if not loc:
+                        return response.status_code
+                    target = urllib.parse.urljoin(target, loc)
+                    continue
+
+                # Some servers don't support HEAD, try GET
+                if response.status_code >= 400:
+                    response = self.session.get(target, timeout=timeout, allow_redirects=False)
+                    # If GET returns redirect
+                    if 300 <= response.status_code < 400:
+                        loc = response.headers.get('Location')
+                        if not loc:
+                            return response.status_code
+                        target = urllib.parse.urljoin(target, loc)
+                        continue
+
+                return response.status_code
+
+            except requests.exceptions.Timeout:
+                return 408
+            except requests.exceptions.RequestException:
+                return 500
+
+        return 310  # Too many redirects
 
     def analyze_repository_health(self) -> Dict:
         """Analyze health metrics across organization repositories (AI-GH-07)"""
@@ -162,8 +208,6 @@ class OrganizationCrawler:
                     health_metrics['active_repos'] += 1
                 else:
                     health_metrics['stale_repos'] += 1
-
-                time.sleep(0.3)  # Rate limiting
 
         except Exception as e:
             print(f"  ✗ Error analyzing repositories: {e}")
