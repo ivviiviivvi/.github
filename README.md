@@ -182,6 +182,7 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 | [COMMUNITY_AGENTS.md](COMMUNITY_AGENTS.md)                         | Community engagement, coordination, and monitoring agents |
 | [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)     | Comprehensive guide for building and deploying agents  |
 | [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)       | AI-driven organization management guide                |
+| [GITHUB_COPILOT_ACTIONS_SETUP.md](docs/GITHUB_COPILOT_ACTIONS_SETUP.md) | GitHub Copilot Actions setup and troubleshooting    |
 | [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                   | Branch protection rules and configuration              |
 | [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist                         |
 | [LABELS.md](docs/LABELS.md)                                         | Standard label set for consistent tagging              |
