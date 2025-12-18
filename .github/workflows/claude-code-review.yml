@@ -26,6 +26,9 @@ jobs:
       id-token: write
 
     steps:
+      - name: Setup GitHub Copilot Actions Environment
+        uses: github/copilot-actions-setup@v1
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
