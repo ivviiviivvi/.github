@@ -31,8 +31,14 @@ class EcosystemVisualizer:
 
         diagram = """```mermaid
 graph TD
+    %% Styles
+    classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
+    classDef workflow fill:#ddf4ff,stroke:#54aeff,color:#24292f,stroke-width:1px;
+    classDef agent fill:#fff8c5,stroke:#d4a72c,color:#24292f,stroke-width:1px;
+    classDef tech fill:#dafbe1,stroke:#4ac26b,color:#24292f,stroke-width:1px;
+
     subgraph "GitHub Organization"
-        ORG[Organization Root]
+        ORG[Organization Root]:::org
     end
 
     subgraph "Automation Layer"
@@ -42,7 +48,7 @@ graph TD
         workflows = em.get('workflows', [])
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
-            diagram += f"        {workflow_id}[{workflow}]\n"
+            diagram += f"        {workflow_id}[{workflow}]:::workflow\n"
             diagram += f"        ORG --> {workflow_id}\n"
 
         diagram += "    end\n\n"
@@ -53,29 +59,29 @@ graph TD
 
         agents = em.get('copilot_agents', [])
         if agents:
-            diagram += "        AGENTS[Agents]\n"
-            diagram += f"        AGENTS_COUNT[{len(agents)} agents]\n"
+            diagram += "        AGENTS[Agents]:::agent\n"
+            diagram += f"        AGENTS_COUNT[{len(agents)} agents]:::agent\n"
             diagram += "        AGENTS --> AGENTS_COUNT\n"
             diagram += "        ORG --> AGENTS\n"
 
         instructions = em.get('copilot_instructions', [])
         if instructions:
-            diagram += "        INSTR[Instructions]\n"
-            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]\n"
+            diagram += "        INSTR[Instructions]:::agent\n"
+            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]:::agent\n"
             diagram += "        INSTR --> INSTR_COUNT\n"
             diagram += "        ORG --> INSTR\n"
 
         prompts = em.get('copilot_prompts', [])
         if prompts:
-            diagram += "        PROMPTS[Prompts]\n"
-            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]\n"
+            diagram += "        PROMPTS[Prompts]:::agent\n"
+            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]:::agent\n"
             diagram += "        PROMPTS --> PROMPTS_COUNT\n"
             diagram += "        ORG --> PROMPTS\n"
 
         chatmodes = em.get('copilot_chatmodes', [])
         if chatmodes:
-            diagram += "        CHATMODES[Chat Modes]\n"
-            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]\n"
+            diagram += "        CHATMODES[Chat Modes]:::agent\n"
+            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::agent\n"
             diagram += "        CHATMODES --> CHATMODES_COUNT\n"
             diagram += "        ORG --> CHATMODES\n"
 
@@ -89,7 +95,7 @@ graph TD
             for i, tech in enumerate(technologies[:15]):  # Limit to first 15
                 tech_id = f"TECH{i}"
                 safe_tech = tech.replace('-', '_').replace('.', '_')
-                diagram += f"        {tech_id}[{tech}]\n"
+                diagram += f"        {tech_id}[{tech}]:::tech\n"
 
             diagram += "    end\n"
 
@@ -137,7 +143,15 @@ graph TD
 
             if total > 0:
                 active_pct = (active / total * 100) if total > 0 else 0
+
+                # Create progress bar
+                bar_length = 20
+                filled_length = int(bar_length * active_pct / 100)
+                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+
                 dashboard += f"""## 🏥 Repository Health
+
+{bar} {active_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
