@@ -7,6 +7,8 @@ Implements AI-GH-06, AI-GH-07, and AI-GH-08 modules
 import os
 import re
 import json
+import socket
+import ipaddress
 import requests
 import urllib.parse
 import socket
