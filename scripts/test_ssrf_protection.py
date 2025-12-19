@@ -67,5 +67,28 @@ class TestSSRFProtection(unittest.TestCase):
             print("❌ BROKEN: Public IP request was blocked!")
             self.fail("Public IP request was blocked")
 
+    @patch('socket.getaddrinfo')
+    def test_blocks_mixed_ips(self, mock_getaddrinfo):
+        """Verify that if ANY resolved IP is private, it is blocked (DNS Rebinding/Dual-stack protection)"""
+        mock_getaddrinfo.return_value = [
+            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 80)),      # Public
+            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.168.1.1', 80))   # Private
+        ]
+
+        print(f"\nTesting URL: http://risky.com (resolves to mixed IPs)")
+        result = self.crawler._is_safe_url("http://risky.com")
+        self.assertFalse(result, "Should return False if any resolved IP is private")
+
+    @patch('socket.getaddrinfo')
+    def test_blocks_ipv6_private(self, mock_getaddrinfo):
+        """Verify that IPv6 private addresses are blocked"""
+        mock_getaddrinfo.return_value = [
+            (socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('::1', 80, 0, 0))
+        ]
+
+        print(f"\nTesting URL: http://localhost6 (resolves to IPv6 loopback)")
+        result = self.crawler._is_safe_url("http://localhost6")
+        self.assertFalse(result, "Should return False for IPv6 loopback")
+
 if __name__ == '__main__':
     unittest.main()

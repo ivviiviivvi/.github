@@ -117,13 +117,24 @@ class OrganizationCrawler:
             if not hostname:
                 return False
 
-            # Resolve hostname
-            ip = socket.gethostbyname(hostname)
-            ip_obj = ipaddress.ip_address(ip)
-
-            # Check for private/loopback/link-local
-            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+            # Resolve hostname to check ALL IPs (IPv4 and IPv6) to prevent evasion
+            try:
+                addr_info = socket.getaddrinfo(hostname, None)
+            except socket.gaierror:
                 return False
+
+            for res in addr_info:
+                # sockaddr is index 4. For IPv4: (ip, port). IPv6: (ip, port, flow, scope)
+                ip = res[4][0]
+                try:
+                    ip_obj = ipaddress.ip_address(ip)
+                    if (ip_obj.is_private or ip_obj.is_loopback or
+                        ip_obj.is_link_local or ip_obj.is_multicast or
+                        ip_obj.is_reserved):
+                        print(f"  ⚠️  Blocked IP: {ip} for {hostname}")
+                        return False
+                except ValueError:
+                    continue
 
             return True
         except Exception:
