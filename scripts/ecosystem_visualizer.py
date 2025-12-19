@@ -228,10 +228,18 @@ graph TD
                 # Group into columns
                 cols = 4
                 for i in range(0, len(technologies), cols):
-                    row_techs = technologies[i:i+cols]
-                    parts.append("| " + " | ".join(f"`{t}`" for t in row_techs) + " |\n")
+                    row_techs = technologies[i : i + cols]
+
+                    # Pad with empty strings if needed
+                    current_len = len(row_techs)
+                    if current_len < cols:
+                        row_techs.extend([""] * (cols - current_len))
+
+                    formatted_cells = [f"`{t}`" if t else "" for t in row_techs]
+                    parts.append("| " + " | ".join(formatted_cells) + " |\n")
+
                     if i == 0:
-                        parts.append("| " + " | ".join(["---"] * len(row_techs)) + " |\n")
+                        parts.append("| " + " | ".join(["---"] * cols) + " |\n")
 
         # Top workflows
         if 'ecosystem_map' in self.report_data:
