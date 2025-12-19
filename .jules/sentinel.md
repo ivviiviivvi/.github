@@ -1,4 +1,6 @@
-## 2025-12-17 - SSRF in Organization Crawler
-**Vulnerability:** The `OrganizationCrawler` in `scripts/web_crawler.py` was vulnerable to Server-Side Request Forgery (SSRF) because it validated links by making HTTP requests to them without checking if they resolved to private IP addresses.
-**Learning:** Even internal tools running in CI/CD environments (like GitHub Actions) are attack vectors if they process untrusted input (markdown files) and can access metadata services (e.g., AWS IMDS, localhost).
-**Prevention:** Implement strict DNS resolution checks before making requests. Resolve the hostname to an IP and verify it is not in a private or reserved range using `ipaddress` module.
+# Sentinel Journal
+
+## 2025-12-18 - Unchecked URL Access in Web Crawler
+**Vulnerability:** The `scripts/web_crawler.py` script was vulnerable to Server-Side Request Forgery (SSRF). It blindly followed links found in markdown files, allowing a malicious actor (or a mistake in a markdown file) to trigger requests to internal services or private IP addresses from the runner environment.
+**Learning:** Tools that fetch external resources (crawlers, link checkers) must always validate the destination IP address, not just the URL scheme. `requests` does not inherently block private ranges.
+**Prevention:** Always resolve the hostname to an IP address and check if it falls within private or loopback ranges before making a request. Use a helper function like `_is_safe_url` to enforce this check globally for the crawler.

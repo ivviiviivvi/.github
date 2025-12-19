@@ -25,6 +25,9 @@ jobs:
       issues: 'write'
       pull-requests: 'write'
     steps:
+      - name: Setup GitHub Copilot Actions Environment
+        uses: github/copilot-actions-setup@v1
+
       - name: 'Mint identity token'
         id: 'mint_identity_token'
         if: |-
