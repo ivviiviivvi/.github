@@ -1,0 +1,212 @@
+# Vue.js Application Walkthrough Configuration
+# This configuration is optimized for Vue.js applications including Vue CLI, Nuxt.js, and Vite
+
+# Application Type
+app_type: vue
+
+# Core Configuration
+start_command: "npm run serve"
+port: 8080
+install_command: "npm install"
+
+# Walkthrough Settings
+duration: 60  # seconds
+voiceover_style: "casual"  # Options: professional, casual, technical
+
+# Focus Areas
+# List the key features and components you want to highlight
+focus_areas:
+  - "Reactive data binding and computed properties"
+  - "Component composition and props"
+  - "Vue Router navigation"
+  - "Vuex state management"
+  - "Form handling and validation"
+
+# Demo Flow
+# Define the step-by-step journey through your application
+demo_flow:
+  - "Navigate to application homepage"
+  - "Demonstrate reactive data updates"
+  - "Show component interactions and props"
+  - "Navigate using Vue Router"
+  - "Demonstrate form input and validation"
+  - "Show state management with Vuex/Pinia"
+  - "Display computed properties and watchers"
+  - "Demonstrate lifecycle hooks in action"
+  - "Show dynamic component rendering"
+  - "Display custom directives"
+
+# Environment Variables (optional)
+environment_variables:
+  NODE_ENV: development
+  VUE_APP_API_URL: "http://localhost:8080"
+  VUE_APP_DEBUG: "true"
+
+# Additional Settings
+startup_wait: 20  # seconds to wait for Vue dev server to be ready
+browser: chrome
+viewport:
+  width: 1920
+  height: 1080
+
+# Feature Highlights
+# Specific UI elements or functionality to emphasize
+feature_highlights:
+  - element: "#app"
+    description: "Main Vue application mount point"
+    duration: 2
+  
+  - element: ".navbar"
+    description: "Navigation component with router-links"
+    duration: 3
+  
+  - element: "#reactive-demo"
+    description: "Reactive data binding demonstration"
+    duration: 5
+  
+  - element: ".form-container"
+    description: "Form with v-model and validation"
+    duration: 4
+  
+  - element: ".data-display"
+    description: "Dynamic data rendering"
+    duration: 4
+
+# Vue-Specific Demonstrations
+vue_features_to_show:
+  - "v-model two-way binding"
+  - "v-if and v-show conditional rendering"
+  - "v-for list rendering"
+  - "Event handling with @click, @input"
+  - "Custom components and props"
+  - "Slots and scoped slots"
+  - "Composition API (if used)"
+  - "Mixins or composables"
+
+# Custom Scripts (optional)
+pre_demo_script: |
+  # Build production assets if needed
+  # npm run build
+  
+  # Seed mock data
+  node scripts/seed-demo-data.js
+
+post_demo_script: |
+  # Cleanup
+  node scripts/cleanup-demo.js
+
+# Notes for AI Narrator
+narration_notes: |
+  This is a Vue.js application showcasing the progressive JavaScript framework.
+  Highlight Vue's reactive data system, component-based architecture, and ease of use.
+  Emphasize the declarative rendering and how data changes automatically update the view.
+  Show the developer-friendly syntax and intuitive API.
+
+# Customization Options
+customization:
+  show_console_logs: false
+  show_vue_devtools: false  # For production demos
+  highlight_clicks: true
+  mouse_cursor_visible: true
+  include_mobile_view: false
+  show_hot_reload: false  # Don't show HMR in demo
+
+# Performance Considerations
+performance:
+  enable_animations: true
+  reduce_motion: false
+  throttle_network: false
+  lazy_load_components: true
+
+# State Management
+state_management:
+  tool: "vuex"  # Options: vuex, pinia, none
+  demonstrate_state_changes: true
+  show_state_devtools: false
+
+# Routing
+routing:
+  show_navigation: true
+  demonstrate_params: true
+  show_nested_routes: false
+  include_route_guards: false
+
+# Accessibility Features
+accessibility:
+  include_keyboard_navigation: true
+  demonstrate_screen_reader: false
+  show_focus_indicators: true
+  aria_labels_visible: false
+
+# Additional Context
+additional_context: |
+  This Vue.js application demonstrates modern frontend development with Vue 3.
+  
+  Key technologies:
+  - Vue 3.x+ (Composition API or Options API)
+  - Vue Router for navigation
+  - Vuex or Pinia for state management
+  - Vite or Vue CLI for build tooling
+  - Component library (Vuetify, Element Plus, etc.)
+  
+  The application showcases:
+  - Reactive data binding
+  - Component composition
+  - Single-file components (.vue)
+  - Scoped CSS and styling
+  - Modern ES6+ JavaScript
+
+# ---
+
+# Usage Instructions
+
+# 1. Copy this file to your Vue project root or .github directory
+# 2. Customize the values above to match your application
+# 3. Test your start command locally: npm install && npm run serve
+# 4. Commit the configuration file to your repository
+# 5. Run the "Generate Application Walkthrough" GitHub Action
+
+# Example Workflow Dispatch:
+# Navigate to: Actions > Generate Application Walkthrough > Run workflow
+# The workflow will automatically detect this configuration file
+
+# ---
+
+# Tips for Best Results
+
+# ✅ Show reactive features - they're Vue's strength!
+# ✅ Demonstrate v-model and computed properties
+# ✅ Include router navigation if using Vue Router
+# ✅ Keep duration 60-90 seconds for Vue apps
+# ✅ Use casual or professional style based on audience
+# ✅ Highlight component communication (props, events, slots)
+# ✅ Show state management if using Vuex/Pinia
+# ✅ Include form validation examples
+
+# ---
+
+# Common Vue App Variations
+
+# Vue CLI (Vue 2):
+# start_command: "npm run serve"
+# port: 8080
+
+# Vue CLI (Vue 3):
+# start_command: "npm run serve"
+# port: 8080
+
+# Vite + Vue:
+# start_command: "npm run dev"
+# port: 5173
+
+# Nuxt.js (Vue):
+# start_command: "npm run dev"
+# port: 3000
+
+# Custom port:
+# start_command: "npm run serve -- --port 3000"
+# port: 3000
+
+# Production build preview:
+# start_command: "npm run build && npm run preview"
+# port: 4173

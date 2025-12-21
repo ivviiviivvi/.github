@@ -1,0 +1,316 @@
+# Full-Stack Application Walkthrough Configuration
+# This configuration handles applications with multiple services (Frontend + Backend + Database)
+
+# Application Type
+app_type: fullstack
+
+# Multi-Service Configuration
+services:
+  # Backend Service
+  - name: backend
+    type: express
+    start_command: "cd backend && npm start"
+    port: 5000
+    install_command: "cd backend && npm install"
+    startup_wait: 10
+    health_check: "http://localhost:5000/api/health"
+  
+  # Frontend Service
+  - name: frontend
+    type: react
+    start_command: "cd frontend && npm start"
+    port: 3000
+    install_command: "cd frontend && npm install"
+    startup_wait: 20
+    depends_on:
+      - backend
+
+  # Database Service (optional - usually docker-compose)
+  - name: database
+    type: mongodb
+    start_command: "docker-compose up -d mongodb"
+    port: 27017
+    startup_wait: 5
+
+# Walkthrough Settings
+duration: 120  # seconds (full-stack demos need more time)
+voiceover_style: "professional"  # Options: professional, casual, technical
+
+# Focus Areas
+# Complete user journey across frontend and backend
+focus_areas:
+  - "End-to-end user authentication flow"
+  - "Frontend to backend API communication"
+  - "Database operations and data persistence"
+  - "Real-time updates and WebSocket connections"
+  - "Complete CRUD operations workflow"
+
+# Demo Flow
+# Comprehensive demonstration of the entire application stack
+demo_flow:
+  - "Show application architecture overview"
+  - "Navigate to frontend homepage"
+  - "Demonstrate user registration flow"
+  - "Show backend API request handling"
+  - "Display database record creation"
+  - "Demonstrate user login and JWT authentication"
+  - "Show authenticated API requests"
+  - "Display data fetching from backend"
+  - "Demonstrate CRUD operations (Create)"
+  - "Show data being saved to database"
+  - "Display updated data in frontend"
+  - "Demonstrate real-time updates (WebSockets)"
+  - "Show error handling across the stack"
+  - "Display user logout and session cleanup"
+
+# Environment Variables
+environment_variables:
+  # Backend
+  NODE_ENV: development
+  PORT: 5000
+  MONGODB_URI: "mongodb://localhost:27017/demo-db"
+  JWT_SECRET: "dev-secret-not-for-production"
+  API_URL: "http://localhost:5000"
+  
+  # Frontend
+  REACT_APP_API_URL: "http://localhost:5000/api"
+  REACT_APP_WS_URL: "ws://localhost:5000"
+
+# Additional Settings
+browser: chrome
+viewport:
+  width: 1920
+  height: 1080
+
+# Feature Highlights - Full Stack Features
+feature_highlights:
+  - component: "authentication-flow"
+    description: "Complete auth flow from frontend to backend to database"
+    duration: 15
+    stack_layers:
+      - "Frontend login form"
+      - "Backend authentication endpoint"
+      - "Database user query"
+      - "JWT token generation"
+      - "Frontend token storage"
+  
+  - component: "data-crud"
+    description: "Full CRUD operation demonstration"
+    duration: 20
+    stack_layers:
+      - "Frontend form submission"
+      - "Backend API validation"
+      - "Database write operation"
+      - "Backend response"
+      - "Frontend UI update"
+  
+  - component: "real-time-updates"
+    description: "WebSocket communication"
+    duration: 10
+    stack_layers:
+      - "Frontend WebSocket connection"
+      - "Backend WebSocket server"
+      - "Real-time data push"
+      - "Frontend live updates"
+
+# API Integration Points
+api_integration:
+  endpoints:
+    - method: POST
+      path: "/api/auth/register"
+      frontend_component: "RegisterForm.jsx"
+      backend_handler: "authController.register"
+      database_operation: "User.create()"
+    
+    - method: POST
+      path: "/api/auth/login"
+      frontend_component: "LoginForm.jsx"
+      backend_handler: "authController.login"
+      database_operation: "User.findOne()"
+    
+    - method: GET
+      path: "/api/posts"
+      frontend_component: "PostList.jsx"
+      backend_handler: "postController.getAll"
+      database_operation: "Post.find()"
+    
+    - method: POST
+      path: "/api/posts"
+      frontend_component: "CreatePost.jsx"
+      backend_handler: "postController.create"
+      database_operation: "Post.create()"
+
+# Database Seeding
+database_setup:
+  pre_demo_script: |
+    # Start database
+    docker-compose up -d mongodb
+    
+    # Wait for database to be ready
+    sleep 5
+    
+    # Run migrations
+    cd backend && npm run migrate
+    
+    # Seed demo data
+    cd backend && npm run seed-demo
+
+  post_demo_script: |
+    # Cleanup
+    cd backend && npm run cleanup
+    docker-compose down
+
+# Custom Scripts
+pre_demo_script: |
+  # Install all dependencies
+  cd backend && npm install
+  cd ../frontend && npm install
+  
+  # Setup database
+  docker-compose up -d mongodb
+  sleep 5
+  
+  # Run migrations and seed
+  cd backend && npm run migrate && npm run seed-demo
+
+post_demo_script: |
+  # Cleanup
+  cd backend && npm run cleanup
+  docker-compose down -v
+
+# Notes for AI Narrator
+narration_notes: |
+  This is a full-stack application demonstrating modern web development practices.
+  The application uses a Node.js/Express backend, React frontend, and MongoDB database.
+  
+  Highlight the separation of concerns, RESTful API design, and seamless integration
+  between frontend and backend. Emphasize the complete data flow from user interaction
+  through the entire stack to data persistence and back.
+  
+  Show how the application handles:
+  - User authentication and authorization
+  - API communication
+  - Database operations
+  - Real-time updates
+  - Error handling at each layer
+
+# Technology Stack
+tech_stack:
+  frontend:
+    framework: "React"
+    state_management: "Redux / Context API"
+    styling: "CSS Modules / Styled Components"
+    http_client: "Axios / Fetch"
+  
+  backend:
+    framework: "Express.js"
+    authentication: "JWT / Passport.js"
+    validation: "Joi / Express-validator"
+    orm: "Mongoose / Sequelize"
+  
+  database:
+    type: "MongoDB"
+    driver: "Mongoose"
+  
+  additional:
+    - "Socket.io for real-time"
+    - "Docker for containerization"
+    - "REST API architecture"
+
+# Customization Options
+customization:
+  show_console_logs: false
+  show_network_requests: true
+  show_database_queries: false
+  highlight_clicks: true
+  split_screen_view: false  # Show frontend and backend logs side-by-side
+  show_api_responses: true
+
+# Performance Considerations
+performance:
+  enable_animations: true
+  concurrent_service_start: false  # Start services sequentially for stability
+  health_check_retries: 3
+
+# Security Features to Highlight
+security:
+  demonstrate_jwt_auth: true
+  show_password_hashing: false  # Technical detail, may skip
+  highlight_input_validation: true
+  show_cors_configuration: false
+  demonstrate_rate_limiting: false
+
+# Additional Context
+additional_context: |
+  This full-stack application follows industry best practices:
+  
+  Architecture:
+  - Three-tier architecture (Frontend, Backend, Database)
+  - RESTful API design
+  - Stateless authentication with JWT
+  - Responsive frontend design
+  
+  Key Features:
+  - User authentication and authorization
+  - CRUD operations for main entities
+  - Real-time updates via WebSockets
+  - Form validation on frontend and backend
+  - Error handling and user feedback
+  - Database indexing for performance
+  
+  Development Tools:
+  - Docker for local development
+  - ESLint and Prettier for code quality
+  - Jest for testing
+  - GitHub Actions for CI/CD
+
+# ---
+
+# Usage Instructions
+
+# 1. Copy this file to your project root
+# 2. Customize service configurations
+# 3. Ensure docker-compose.yml exists for database
+# 4. Test all services start correctly:
+#    - Backend: cd backend && npm install && npm start
+#    - Frontend: cd frontend && npm install && npm start
+#    - Database: docker-compose up -d
+# 5. Commit configuration to repository
+# 6. Run "Generate Application Walkthrough" GitHub Action
+
+# ---
+
+# Tips for Best Results
+
+# ✅ Start with backend service first (frontend depends on it)
+# ✅ Use health checks to ensure services are ready
+# ✅ Demonstrate complete user journeys, not isolated features
+# ✅ Keep duration 90-120 seconds for full-stack apps
+# ✅ Show data flow from frontend → backend → database → back
+# ✅ Include authentication flow as it's common to all apps
+# ✅ Prepare demo data to make walkthrough more realistic
+# ✅ Test locally before running automated walkthrough
+
+# ---
+
+# Common Full-Stack Variations
+
+# MERN Stack (MongoDB, Express, React, Node):
+# backend: Express on port 5000
+# frontend: React on port 3000
+# database: MongoDB on port 27017
+
+# PERN Stack (PostgreSQL, Express, React, Node):
+# backend: Express on port 5000
+# frontend: React on port 3000
+# database: PostgreSQL on port 5432
+
+# MEAN Stack (MongoDB, Express, Angular, Node):
+# backend: Express on port 5000
+# frontend: Angular on port 4200
+# database: MongoDB on port 27017
+
+# Python Full-Stack (Flask + React):
+# backend: Flask on port 5000
+# frontend: React on port 3000
+# database: PostgreSQL on port 5432

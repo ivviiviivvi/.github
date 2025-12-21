@@ -1,0 +1,403 @@
+# Scheduled Walkthrough Generator Configuration
+# Configure automated, recurring walkthrough generation for organization repositories
+
+# Schedule Configuration
+schedule:
+  # Frequency of automatic walkthrough generation
+  # Options: weekly, biweekly, monthly, on-release
+  frequency: weekly
+  
+  # Day of week for weekly/biweekly (Monday = 1, Sunday = 7)
+  day_of_week: 1  # Monday
+  
+  # Time of day in UTC (24-hour format)
+  time: "09:00"
+  
+  # For biweekly, start date (YYYY-MM-DD)
+  biweekly_start: "2025-01-06"
+  
+  # For monthly, day of month (1-31)
+  monthly_day: 1
+
+# Repository Discovery
+repository_discovery:
+  # Default target repositories
+  # Options: all, active, release-only, custom
+  default_target: active
+  
+  # Include archived repositories
+  include_archived: false
+  
+  # Activity threshold for "active" repos (days since last update)
+  active_threshold_days: 30
+  
+  # Minimum stars for inclusion (0 = no minimum)
+  min_stars: 0
+  
+  # Include private repositories
+  include_private: true
+  
+  # Repositories to always include (even if they don't meet criteria)
+  always_include:
+    - example-react-app
+    - example-vue-dashboard
+    # Add more repository names as needed
+  
+  # Repositories to always exclude
+  always_exclude:
+    - .github
+    - .github-private
+    - test-repo
+    - archived-project
+    # Add more repository names as needed
+  
+  # Filter by language (empty = all languages)
+  languages:
+    - JavaScript
+    - TypeScript
+    - Python
+    - Ruby
+    - Go
+    # Add more languages as needed (leave empty for all)
+
+# Change Detection
+change_detection:
+  # Only generate walkthrough if changes detected since last generation
+  enabled: true
+  
+  # What constitutes a "change" requiring new walkthrough
+  triggers:
+    - new_commits: true
+    - new_release: true
+    - major_version_bump: true
+    - significant_file_changes: true
+  
+  # Minimum commits since last walkthrough to trigger regeneration
+  min_commits: 5
+  
+  # Paths that trigger regeneration when changed
+  significant_paths:
+    - src/
+    - app/
+    - components/
+    - pages/
+    - api/
+    - public/
+  
+  # Ignore changes in these paths
+  ignore_paths:
+    - docs/
+    - .github/
+    - tests/
+    - "*.md"
+
+# Walkthrough Generation Settings
+generation_settings:
+  # Default voiceover style
+  # Options: professional, casual, technical
+  default_voiceover_style: professional
+  
+  # Default duration in seconds
+  default_duration: 60
+  
+  # Per-repository overrides (optional)
+  repository_overrides:
+    example-react-app:
+      voiceover_style: casual
+      duration: 90
+      focus_areas:
+        - "Todo list management"
+        - "User authentication"
+    
+    example-flask-api:
+      voiceover_style: technical
+      duration: 45
+      focus_areas:
+        - "REST API endpoints"
+        - "Database operations"
+    
+    example-vue-dashboard:
+      voiceover_style: professional
+      duration: 75
+      focus_areas:
+        - "Data visualization"
+        - "Real-time updates"
+
+# Batch Processing
+batch_processing:
+  # Maximum number of repositories to process concurrently
+  max_parallel: 3
+  
+  # Continue processing even if one repo fails
+  fail_fast: false
+  
+  # Delay between starting each repo (seconds) to avoid rate limits
+  delay_between_repos: 10
+  
+  # Maximum total execution time (minutes)
+  max_execution_time: 180
+  
+  # Priority order for processing
+  # Options: alphabetical, stars, last_updated, custom
+  processing_order: last_updated
+  
+  # Custom processing order (only if processing_order = custom)
+  custom_order:
+    - high-priority-app
+    - main-product
+    - customer-facing-app
+    # Add more repository names in priority order
+
+# Rate Limiting
+rate_limiting:
+  # GitHub API rate limit handling
+  respect_rate_limits: true
+  
+  # Maximum API requests per minute
+  max_requests_per_minute: 60
+  
+  # Wait time when approaching rate limit (seconds)
+  rate_limit_cooldown: 60
+
+# Pull Request Configuration
+pull_request:
+  # Automatically create PR with generated walkthrough
+  auto_create_pr: true
+  
+  # Target branch for PR
+  target_branch: main
+  
+  # PR title template
+  title_template: "🎥 Automated Walkthrough - {date}"
+  
+  # PR labels
+  labels:
+    - automated
+    - walkthrough
+    - documentation
+  
+  # Assignees (GitHub usernames)
+  assignees:
+    - 4444JPP
+  
+  # Reviewers
+  reviewers:
+    - 4444JPP
+  
+  # Draft PR or ready for review
+  draft: false
+  
+  # Auto-approve PRs (requires separate approval workflow)
+  auto_approve: false
+  
+  # Auto-merge approved PRs
+  auto_merge: false
+  
+  # PR body template
+  body_template: |
+    ## Automated Walkthrough Generated
+    
+    This PR contains an automatically generated application walkthrough video.
+    
+    ### Details
+    - **Generated**: {date} {time} UTC
+    - **Repository**: {repo_name}
+    - **Voiceover**: {voiceover_style}
+    - **Duration**: {duration} seconds
+    - **Workflow Run**: {workflow_url}
+    
+    ### Changes Detected
+    {changes_summary}
+    
+    ### Artifact
+    The walkthrough video is available as an artifact in the workflow run linked above.
+    
+    ### Review Checklist
+    - [ ] Video plays correctly
+    - [ ] Audio quality is acceptable
+    - [ ] All key features are demonstrated
+    - [ ] Duration is appropriate
+    - [ ] Ready to share with team/clients
+    
+    ---
+    *Generated by Scheduled Walkthrough Generator*
+
+# Notifications
+notifications:
+  # Enable notifications
+  enabled: true
+  
+  # Notification channels
+  channels:
+    # GitHub Issues
+    github_issues:
+      enabled: true
+      on_failure: true
+      on_success: false
+      assignee: 4444JPP
+    
+    # GitHub Discussions
+    github_discussions:
+      enabled: false
+      category: "Announcements"
+    
+    # Email (requires additional setup)
+    email:
+      enabled: false
+      recipients:
+        - admin@example.com
+      on_failure: true
+      on_success: true
+    
+    # Slack (requires webhook setup)
+    slack:
+      enabled: false
+      webhook_url_secret: SLACK_WEBHOOK_URL
+      channel: "#dev-notifications"
+      on_failure: true
+      on_success: true
+      mention_on_failure: "@here"
+  
+  # Summary report
+  summary_report:
+    enabled: true
+    include_links_to_prs: true
+    include_statistics: true
+    include_failed_repos: true
+
+# Artifact Management
+artifacts:
+  # Artifact retention period (days)
+  retention_days: 90
+  
+  # Artifact naming pattern
+  name_pattern: "walkthrough-{repo_name}-{date}"
+  
+  # Include metadata file with artifact
+  include_metadata: true
+  
+  # Compress artifacts
+  compress: true
+
+# Performance Optimization
+performance:
+  # Cache dependencies between runs
+  cache_dependencies: true
+  
+  # Reuse previous builds when possible
+  incremental_builds: true
+  
+  # Skip dependency installation if no changes to package files
+  smart_dependency_install: true
+
+# Error Handling
+error_handling:
+  # Maximum retries per repository
+  max_retries: 2
+  
+  # Retry delay (seconds)
+  retry_delay: 30
+  
+  # Continue to next repo on failure
+  skip_failed_repos: true
+  
+  # Create issue for failed repos
+  create_issue_on_failure: true
+
+# Reporting
+reporting:
+  # Generate detailed report
+  generate_report: true
+  
+  # Include in workflow summary
+  post_to_summary: true
+  
+  # Save report as artifact
+  save_as_artifact: true
+  
+  # Report format
+  # Options: markdown, html, json
+  format: markdown
+  
+  # Report sections
+  sections:
+    - summary
+    - repository_list
+    - success_count
+    - failure_count
+    - pr_links
+    - artifact_links
+    - execution_time
+    - next_scheduled_run
+
+# Advanced Configuration
+advanced:
+  # Enable debug logging
+  debug_mode: false
+  
+  # Dry run mode (discover repos but don't generate)
+  dry_run: false
+  
+  # Custom scripts
+  pre_execution_script: ""
+  post_execution_script: ""
+  
+  # Environment variables for all generations
+  global_environment_variables:
+    CI: true
+    AUTOMATED_WALKTHROUGH: true
+
+# ---
+
+# Usage Notes
+
+# This configuration file controls the behavior of the scheduled walkthrough generator.
+# It is automatically loaded by .github/workflows/scheduled-walkthrough-generator.yml
+
+# Customization:
+# 1. Adjust schedule frequency and timing
+# 2. Configure repository discovery criteria
+# 3. Set default walkthrough preferences
+# 4. Enable/disable notifications
+# 5. Configure PR creation behavior
+
+# Repository-specific settings can override defaults in generation_settings.repository_overrides
+
+# Testing:
+# Use workflow_dispatch with custom inputs to test configuration without waiting for schedule
+
+# Maintenance:
+# Review and update always_include/always_exclude lists as repositories change
+# Adjust active_threshold_days based on organization activity patterns
+# Update assignees/reviewers as team members change
+
+# ---
+
+# Example Scenarios
+
+# Scenario 1: Weekly walkthroughs for active repos
+# frequency: weekly
+# default_target: active
+# active_threshold_days: 30
+
+# Scenario 2: Monthly walkthroughs for all repos
+# frequency: monthly
+# default_target: all
+# monthly_day: 1
+
+# Scenario 3: Walkthroughs only on new releases
+# frequency: on-release
+# change_detection.triggers.new_release: true
+
+# Scenario 4: Custom repo list
+# default_target: custom
+# Define specific repos in always_include
+
+# ---
+
+# Contact
+# For questions or issues with scheduled walkthrough generation:
+# GitHub: @4444JPP
+# Repository: https://github.com/ivviiviivvi/.github
+
+# Last updated: 2025-12-21

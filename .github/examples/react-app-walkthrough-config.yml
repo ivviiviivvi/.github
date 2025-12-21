@@ -1,0 +1,166 @@
+# React Application Walkthrough Configuration
+# This configuration is optimized for React applications including Create React App, Next.js, and similar frameworks
+
+# Application Type
+app_type: react
+
+# Core Configuration
+start_command: "npm start"
+port: 3000
+install_command: "npm install"
+
+# Walkthrough Settings
+duration: 60  # seconds
+voiceover_style: "professional"  # Options: professional, casual, technical
+
+# Focus Areas
+# List the key features and components you want to highlight in the walkthrough
+focus_areas:
+  - "Application homepage and navigation"
+  - "Interactive UI components (buttons, forms, modals)"
+  - "State management and data flow"
+  - "User authentication flow"
+  - "Main dashboard or primary feature"
+
+# Demo Flow
+# Define the step-by-step journey through your application
+demo_flow:
+  - "Navigate to application homepage"
+  - "Demonstrate responsive navigation menu"
+  - "Show user login/authentication"
+  - "Navigate to main dashboard"
+  - "Interact with primary features"
+  - "Demonstrate form submissions"
+  - "Show state updates and reactivity"
+  - "Display data visualization components"
+  - "Navigate through different routes"
+  - "Demonstrate user profile or settings"
+
+# Environment Variables (optional)
+# Add any required environment variables for development
+environment_variables:
+  NODE_ENV: development
+  REACT_APP_API_URL: "http://localhost:3000"
+  REACT_APP_DEBUG: "true"
+
+# Additional Settings
+startup_wait: 15  # seconds to wait for app to be ready after starting
+browser: chrome  # Browser to use for recording: chrome, firefox, edge
+viewport:
+  width: 1920
+  height: 1080
+
+# Feature Highlights
+# Specific UI elements or functionality to emphasize
+feature_highlights:
+  - element: "#login-button"
+    description: "User authentication entry point"
+    duration: 3  # seconds to focus on this element
+  
+  - element: ".dashboard-widgets"
+    description: "Interactive dashboard components"
+    duration: 5
+  
+  - element: "#user-profile"
+    description: "User profile management"
+    duration: 4
+
+# Custom Scripts (optional)
+# Run additional scripts before or after main demo
+pre_demo_script: |
+  # Seed database with demo data
+  npm run seed-demo-data
+
+post_demo_script: |
+  # Cleanup demo data
+  npm run cleanup-demo
+
+# Notes for AI Narrator
+narration_notes: |
+  This is a modern React application built with Create React App.
+  Highlight the responsive design, smooth state transitions, and user-friendly interface.
+  Emphasize the component-based architecture and reusability.
+  Focus on the real-time updates and interactive features.
+
+# Customization Options
+customization:
+  show_console_logs: false
+  show_network_requests: false
+  highlight_clicks: true
+  mouse_cursor_visible: true
+  include_mobile_view: false  # Set to true for responsive demo
+
+# Performance Considerations
+performance:
+  enable_animations: true
+  reduce_motion: false
+  throttle_network: false  # Simulate slower connections
+
+# Accessibility Features
+accessibility:
+  include_keyboard_navigation: true
+  demonstrate_screen_reader: false
+  show_focus_indicators: true
+
+# Additional Context
+# Any other information that helps generate a better walkthrough
+additional_context: |
+  This React application showcases modern frontend development practices.
+  It uses hooks for state management, React Router for navigation,
+  and follows component composition patterns for maintainability.
+  
+  Key technologies:
+  - React 18+
+  - React Router
+  - Styled Components / CSS Modules
+  - Context API for global state
+  
+  The application is optimized for both desktop and mobile viewing.
+
+# ---
+
+# Usage Instructions
+
+# 1. Copy this file to your React project root or .github directory
+# 2. Customize the values above to match your application
+# 3. Test your start command locally: npm install && npm start
+# 4. Commit the configuration file to your repository
+# 5. Run the "Generate Application Walkthrough" GitHub Action
+
+# Example Workflow Dispatch:
+# Navigate to: Actions > Generate Application Walkthrough > Run workflow
+# The workflow will automatically detect this configuration file
+
+# For manual configuration, you can override these settings in the workflow inputs
+
+# ---
+
+# Tips for Best Results
+
+# ✅ Be specific with focus areas - list actual features, not generic terms
+# ✅ Test your start command locally before running the workflow
+# ✅ Keep duration between 45-90 seconds for React apps
+# ✅ Use professional style for client demos, technical for developer docs
+# ✅ List demo flow steps in the order users would naturally navigate
+# ✅ Include environment variables if your app requires them
+# ✅ Consider creating multiple configs for different demo scenarios
+
+# ---
+
+# Common React App Variations
+
+# Create React App (standard):
+# start_command: "npm start"
+# port: 3000
+
+# Next.js:
+# start_command: "npm run dev"
+# port: 3000
+
+# Vite:
+# start_command: "npm run dev"
+# port: 5173
+
+# Custom port:
+# start_command: "PORT=8080 npm start"
+# port: 8080
