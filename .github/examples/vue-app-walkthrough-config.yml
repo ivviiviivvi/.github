@@ -55,19 +55,19 @@ feature_highlights:
   - element: "#app"
     description: "Main Vue application mount point"
     duration: 2
-  
+
   - element: ".navbar"
     description: "Navigation component with router-links"
     duration: 3
-  
+
   - element: "#reactive-demo"
     description: "Reactive data binding demonstration"
     duration: 5
-  
+
   - element: ".form-container"
     description: "Form with v-model and validation"
     duration: 4
-  
+
   - element: ".data-display"
     description: "Dynamic data rendering"
     duration: 4
@@ -87,7 +87,7 @@ vue_features_to_show:
 pre_demo_script: |
   # Build production assets if needed
   # npm run build
-  
+
   # Seed mock data
   node scripts/seed-demo-data.js
 
@@ -141,14 +141,14 @@ accessibility:
 # Additional Context
 additional_context: |
   This Vue.js application demonstrates modern frontend development with Vue 3.
-  
+
   Key technologies:
   - Vue 3.x+ (Composition API or Options API)
   - Vue Router for navigation
   - Vuex or Pinia for state management
   - Vite or Vue CLI for build tooling
   - Component library (Vuetify, Element Plus, etc.)
-  
+
   The application showcases:
   - Reactive data binding
   - Component composition

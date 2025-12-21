@@ -7,7 +7,7 @@ on:
   # Scheduled execution - runs weekly on Monday at 9 AM UTC
   schedule:
     - cron: '0 9 * * 1'  # Weekly, Monday 9 AM
-  
+
   # Manual trigger with options
   workflow_dispatch:
     inputs:
@@ -21,18 +21,18 @@ on:
           - active
           - release-only
           - custom
-      
+
       custom_repo_list:
         description: 'Custom repo list (comma-separated, only if target_repos=custom)'
         required: false
         default: ''
-      
+
       force_regenerate:
         description: 'Force regenerate even if no changes detected'
         required: false
         default: false
         type: boolean
-      
+
       voiceover_style:
         description: 'Voiceover style for all walkthroughs'
         required: false
@@ -56,16 +56,16 @@ jobs:
     outputs:
       repo-matrix: ${{ steps.discover.outputs.repos }}
       repo-count: ${{ steps.discover.outputs.count }}
-    
+
     steps:
       - name: Checkout configuration
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Discover organization repositories
         id: discover
         env:
@@ -78,10 +78,10 @@ jobs:
           if [ -f ".github/scheduled-walkthrough-config.yml" ]; then
             echo "Loading configuration from .github/scheduled-walkthrough-config.yml"
           fi
-          
+
           # Discover repos based on criteria
           echo "Discovering repositories with target: $TARGET_REPOS"
-          
+
           # Query organization repositories
           REPOS=$(gh api graphql -f query='
             query($org: String!) {
@@ -107,10 +107,10 @@ jobs:
               }
             }
           ' -f org="${{ github.repository_owner }}")
-          
+
           # Filter repos based on criteria
           FILTERED_REPOS="[]"
-          
+
           if [ "$TARGET_REPOS" = "custom" ] && [ -n "$CUSTOM_REPOS" ]; then
             # Use custom list
             FILTERED_REPOS=$(echo "$CUSTOM_REPOS" | jq -R 'split(",") | map(gsub("^\\s+|\\s+$";"")) | map({name: .})')
@@ -124,21 +124,21 @@ jobs:
             # All non-archived repos
             FILTERED_REPOS=$(echo "$REPOS" | jq '[.data.organization.repositories.nodes[] | select(.isArchived == false)] | map({name: .name, language: .primaryLanguage.name})')
           fi
-          
+
           # Check for changes since last walkthrough
           if [ "$FORCE_REGENERATE" = "false" ]; then
             echo "Checking for repos with changes since last walkthrough..."
             # TODO: Implement change detection logic
           fi
-          
+
           # Output matrix
           REPO_COUNT=$(echo "$FILTERED_REPOS" | jq 'length')
           echo "repos=$FILTERED_REPOS" >> $GITHUB_OUTPUT
           echo "count=$REPO_COUNT" >> $GITHUB_OUTPUT
-          
+
           echo "Discovered $REPO_COUNT repositories for walkthrough generation"
           echo "$FILTERED_REPOS" | jq '.'
-      
+
       - name: Create summary
         run: |
           echo "## Repository Discovery Summary" >> $GITHUB_STEP_SUMMARY
@@ -158,13 +158,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: discover-repos
     if: needs.discover-repos.outputs.repo-count > 0
-    
+
     strategy:
       max-parallel: 3  # Process 3 repos at a time to avoid rate limits
       fail-fast: false
       matrix:
         repo: ${{ fromJson(needs.discover-repos.outputs.repo-matrix) }}
-    
+
     steps:
       - name: Checkout target repository
         uses: actions/checkout@v4
@@ -172,7 +172,7 @@ jobs:
           repository: ${{ github.repository_owner }}/${{ matrix.repo.name }}
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
-      
+
       - name: Check for walkthrough configuration
         id: check-config
         run: |
@@ -186,12 +186,12 @@ jobs:
             echo "config_exists=false" >> $GITHUB_OUTPUT
             echo "No walkthrough configuration found, will use defaults"
           fi
-      
+
       - name: Setup environment
         if: steps.check-config.outputs.config_exists == 'true' || github.event.inputs.force_regenerate == 'true'
         run: |
           echo "Setting up environment for ${{ matrix.repo.name }}"
-          
+
           # Install dependencies based on detected language
           if [ -f "package.json" ]; then
             echo "Node.js project detected"
@@ -203,7 +203,7 @@ jobs:
             echo "Ruby project detected"
             bundle install || true
           fi
-      
+
       - name: Generate walkthrough video
         id: generate
         if: steps.check-config.outputs.config_exists == 'true' || github.event.inputs.force_regenerate == 'true'
@@ -211,19 +211,19 @@ jobs:
           VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
         run: |
           echo "Generating walkthrough for ${{ matrix.repo.name }}"
-          
+
           # TODO: Call walkthrough generation workflow or script
           # This would integrate with the main generate-walkthrough.yml workflow
-          
+
           # Placeholder for demonstration
           echo "Walkthrough generation would happen here"
           echo "Repository: ${{ matrix.repo.name }}"
           echo "Voiceover style: $VOICEOVER_STYLE"
-          
+
           # Simulate success
           echo "status=success" >> $GITHUB_OUTPUT
           echo "video_path=walkthrough-video.mp4" >> $GITHUB_OUTPUT
-      
+
       - name: Create pull request with walkthrough
         if: steps.generate.outputs.status == 'success'
         env:
@@ -232,20 +232,20 @@ jobs:
           # Create new branch
           BRANCH_NAME="automated-walkthrough-$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH_NAME"
-          
+
           # Commit video artifact reference (actual video would be uploaded separately)
           mkdir -p docs/walkthroughs
           echo "# Automated Walkthrough - $(date +%Y-%m-%d)" > docs/walkthroughs/latest.md
           echo "" >> docs/walkthroughs/latest.md
           echo "Generated automatically by scheduled workflow." >> docs/walkthroughs/latest.md
           echo "Download video artifact from workflow run." >> docs/walkthroughs/latest.md
-          
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/walkthroughs/latest.md
           git commit -m "chore: add automated walkthrough video"
           git push origin "$BRANCH_NAME"
-          
+
           # Create pull request
           gh pr create \
             --title "🎥 Automated Walkthrough - $(date +%Y-%m-%d)" \
@@ -270,9 +270,9 @@ jobs:
             --label "automated,walkthrough,documentation" \
             --base main \
             --head "$BRANCH_NAME"
-          
+
           echo "Pull request created successfully"
-      
+
       - name: Upload walkthrough artifact
         if: steps.generate.outputs.status == 'success'
         uses: actions/upload-artifact@v4
@@ -287,18 +287,18 @@ jobs:
     runs-on: ubuntu-latest
     needs: [discover-repos, generate-walkthroughs]
     if: always()
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Compile results
         id: compile
         run: |
           echo "Compiling results from all walkthrough generations..."
-          
+
           # TODO: Aggregate results from all matrix jobs
-          
+
           echo "## Scheduled Walkthrough Generation Report" > report.md
           echo "" >> report.md
           echo "**Date**: $(date +%Y-%m-%d %H:%M:%S UTC)" >> report.md
@@ -313,13 +313,13 @@ jobs:
           echo "1. Review created pull requests" >> report.md
           echo "2. Download video artifacts for verification" >> report.md
           echo "3. Merge PRs for approved walkthroughs" >> report.md
-          
+
           cat report.md
-      
+
       - name: Post to workflow summary
         run: |
           cat report.md >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Send notification
         if: failure()
         env:
@@ -328,7 +328,7 @@ jobs:
           # Send notification on failure
           echo "Scheduled walkthrough generation failed"
           echo "Creating issue for visibility..."
-          
+
           gh issue create \
             --title "Scheduled Walkthrough Generation Failed - $(date +%Y-%m-%d)" \
             --body "The scheduled walkthrough generation workflow failed.
