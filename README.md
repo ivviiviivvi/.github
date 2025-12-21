@@ -247,6 +247,8 @@ All our documentation and guides are located in the `docs/` directory. Highlight
 | [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)     | Comprehensive guide for building and deploying agents  |
 | [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)       | AI-driven organization management guide                |
 | [GITHUB_COPILOT_ACTIONS_SETUP.md](docs/GITHUB_COPILOT_ACTIONS_SETUP.md) | GitHub Copilot Actions setup and troubleshooting    |
+| [WALKTHROUGH_ANNOUNCEMENT.md](docs/WALKTHROUGH_ANNOUNCEMENT.md)     | Autonomous walkthrough generation system guide         |
+| [SECRETS_SETUP.md](docs/SECRETS_SETUP.md)                          | API keys and integrations setup for walkthrough system |
 | [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                   | Branch protection rules and configuration              |
 | [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist                         |
 | [LABELS.md](docs/LABELS.md)                                         | Standard label set for consistent tagging              |
@@ -264,6 +266,7 @@ Comprehensive templates to help contributors submit high-quality issues:
 - **Feature Requests** - Structured templates for proposing new features
 - **Documentation** - Template for documentation improvements
 - **Questions** - Template for asking questions
+- **Walkthrough Requests** - Request custom video walkthroughs for applications ([Guide](docs/WALKTHROUGH_ANNOUNCEMENT.md))
 
 Configuration: [ISSUE_TEMPLATE/config.yml](ISSUE_TEMPLATE/config.yml)
 

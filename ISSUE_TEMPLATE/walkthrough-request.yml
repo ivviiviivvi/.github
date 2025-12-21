@@ -1,0 +1,206 @@
+name: 🎬 Walkthrough Request
+description: Request a custom video walkthrough for your application
+title: "[Walkthrough]: "
+labels: ["walkthrough", "feature-request", "documentation"]
+assignees:
+  - 4444JPP
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎬 Autonomous Walkthrough Generation Request
+        
+        Thank you for requesting a custom video walkthrough! This system will automatically generate a professional walkthrough video of your application.
+        
+        **What you'll get:**
+        - Automated video recording of your application
+        - Professional voiceover narration
+        - Highlighting of key features and functionality
+        - Ready-to-share demonstration video
+        
+        Please fill out the form below to help us create the perfect walkthrough for your needs.
+        
+        📚 **Need help?** Check out the [Secrets Setup Guide](../docs/SECRETS_SETUP.md) for configuration details.
+
+  - type: input
+    id: app-name
+    attributes:
+      label: Application Name
+      description: What is the name of your application?
+      placeholder: "e.g., My Awesome App"
+    validations:
+      required: true
+
+  - type: input
+    id: repo-url
+    attributes:
+      label: Repository URL
+      description: Link to the application repository
+      placeholder: "https://github.com/organization/repository"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tech-stack
+    attributes:
+      label: Tech Stack
+      description: What technologies does your application use?
+      placeholder: |
+        e.g., 
+        - Frontend: React, TypeScript, Tailwind CSS
+        - Backend: Node.js, Express, PostgreSQL
+        - Deployment: Docker, AWS
+    validations:
+      required: true
+
+  - type: textarea
+    id: key-features
+    attributes:
+      label: Key Features to Highlight
+      description: What features should the walkthrough focus on?
+      placeholder: |
+        e.g.,
+        - User authentication and registration
+        - Dashboard with real-time analytics
+        - Data export functionality
+        - Mobile responsive design
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target-audience
+    attributes:
+      label: Target Audience
+      description: Who is this walkthrough intended for?
+      options:
+        - Internal team members
+        - External users/customers
+        - Potential investors
+        - Open source contributors
+        - Technical documentation
+        - Marketing/promotional use
+    validations:
+      required: true
+
+  - type: dropdown
+    id: voiceover-style
+    attributes:
+      label: Preferred Voiceover Style
+      description: What narration style would you prefer?
+      options:
+        - Professional (formal, business-oriented)
+        - Casual (friendly, conversational)
+        - Technical (detailed, developer-focused)
+        - Educational (tutorial-style, step-by-step)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: duration
+    attributes:
+      label: Duration Preference
+      description: How long should the walkthrough be?
+      options:
+        - Quick (1-2 minutes) - Brief overview
+        - Standard (3-5 minutes) - Comprehensive tour
+        - Detailed (5-10 minutes) - In-depth demonstration
+        - Custom (specify in additional details)
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-flows
+    attributes:
+      label: User Flows to Demonstrate
+      description: Describe specific user journeys or workflows to showcase
+      placeholder: |
+        e.g.,
+        1. User signs up for an account
+        2. User configures their profile settings
+        3. User creates their first project
+        4. User invites team members
+    validations:
+      required: false
+
+  - type: textarea
+    id: special-requirements
+    attributes:
+      label: Special Requirements or Customizations
+      description: Any specific requirements, branding guidelines, or customizations?
+      placeholder: |
+        e.g.,
+        - Include company logo in intro
+        - Use specific background music
+        - Highlight security features
+        - Show mobile and desktop views
+        - Blur sensitive data
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How urgent is this walkthrough request?
+      options:
+        - Critical (needed ASAP)
+        - High (needed within a week)
+        - Medium (needed within a month)
+        - Low (no rush)
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What criteria must be met for this walkthrough to be considered complete?
+      placeholder: |
+        - [ ] All key features are demonstrated
+        - [ ] Video quality is clear and professional
+        - [ ] Voiceover is audible and matches the preferred style
+        - [ ] Duration matches the specified preference
+        - [ ] Sensitive data is properly obscured
+        - [ ] Video includes introduction and conclusion
+      value: |
+        - [ ] All key features are demonstrated
+        - [ ] Video quality is clear and professional
+        - [ ] Voiceover is audible and matches the preferred style
+        - [ ] Duration matches the specified preference
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that would help create the perfect walkthrough?
+      placeholder: Links to existing demos, screenshots, design mockups, or other relevant materials
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: environment-setup
+    attributes:
+      label: Environment Setup
+      description: Confirm the following are ready
+      options:
+        - label: The application is deployed and accessible
+          required: false
+        - label: Test credentials are available (if needed)
+          required: false
+        - label: Required API keys are configured in GitHub Secrets
+          required: false
+        - label: I have reviewed the [Secrets Setup Guide](../docs/SECRETS_SETUP.md)
+          required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our guidelines
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
+        - label: I understand this is an automated system and may require iterations
+          required: true
