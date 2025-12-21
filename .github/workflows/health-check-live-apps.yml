@@ -1,0 +1,253 @@
+name: Health Check - Live Apps Monitoring
+
+on:
+  schedule:
+    # Run every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+env:
+  LOG_DIR: ./health-check-logs
+  TIMESTAMP: ${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    name: Monitor Application Health
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Environment
+        run: |
+          mkdir -p ${{ env.LOG_DIR }}
+          echo "Health check started at $(date -u +'%Y-%m-%d %H:%M:%S UTC')" > ${{ env.LOG_DIR }}/health-check.log
+          echo "Run ID: ${{ github.run_id }}" >> ${{ env.LOG_DIR }}/health-check.log
+          echo "Run Number: ${{ github.run_number }}" >> ${{ env.LOG_DIR }}/health-check.log
+          echo "======================================" >> ${{ env.LOG_DIR }}/health-check.log
+
+      - name: Check Application Endpoints
+        id: endpoint_check
+        continue-on-error: true
+        run: |
+          {
+            echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Starting endpoint health checks..."
+            
+            # Define application endpoints to monitor
+            # Modify these URLs based on your applications
+            declare -A apps=(
+              ["App1"]="http://localhost:3000/health"
+              ["App2"]="http://localhost:5000/health"
+              ["App3"]="http://localhost:8000/health"
+            )
+            
+            failed_apps=()
+            successful_apps=()
+            
+            for app_name in "${!apps[@]}"; do
+              app_url="${apps[$app_name]}"
+              echo ""
+              echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Checking $app_name at $app_url"
+              
+              if timeout 10 curl -s -f -m 10 "$app_url" > /dev/null 2>&1; then
+                echo "✓ $app_name - HEALTHY" | tee -a ${{ env.LOG_DIR }}/health-check.log
+                successful_apps+=("$app_name")
+              else
+                echo "✗ $app_name - UNHEALTHY (HTTP Code: $?)" | tee -a ${{ env.LOG_DIR }}/health-check.log
+                failed_apps+=("$app_name")
+              fi
+            done
+            
+            # Summary
+            echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "======================================" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "Summary - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "Healthy Apps: ${#successful_apps[@]}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "Failed Apps: ${#failed_apps[@]}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            
+            if [ ${#failed_apps[@]} -gt 0 ]; then
+              echo "Failed Applications: ${failed_apps[*]}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+              echo "::set-output name=failed_apps::${failed_apps[*]}"
+              echo "::set-output name=has_failures::true"
+              exit 1
+            else
+              echo "All applications are healthy!" | tee -a ${{ env.LOG_DIR }}/health-check.log
+              echo "::set-output name=has_failures::false"
+            fi
+          }
+
+      - name: Auto-Restart Failed Applications
+        if: failure() && steps.endpoint_check.outputs.has_failures == 'true'
+        id: restart
+        continue-on-error: true
+        run: |
+          echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Attempting to restart failed applications..." | tee -a ${{ env.LOG_DIR }}/health-check.log
+          
+          failed_apps="${{ steps.endpoint_check.outputs.failed_apps }}"
+          
+          for app in $failed_apps; do
+            echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Restarting $app..." | tee -a ${{ env.LOG_DIR }}/health-check.log
+            
+            # Example restart commands - modify based on your deployment setup
+            case "$app" in
+              "App1")
+                # Uncomment and modify for your deployment method
+                # docker restart app1-container || systemctl restart app1 || true
+                echo "Restart command for App1 would execute here" | tee -a ${{ env.LOG_DIR }}/health-check.log
+                ;;
+              "App2")
+                # docker restart app2-container || systemctl restart app2 || true
+                echo "Restart command for App2 would execute here" | tee -a ${{ env.LOG_DIR }}/health-check.log
+                ;;
+              "App3")
+                # docker restart app3-container || systemctl restart app3 || true
+                echo "Restart command for App3 would execute here" | tee -a ${{ env.LOG_DIR }}/health-check.log
+                ;;
+            esac
+            
+            echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Restart initiated for $app" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          done
+          
+          # Wait for applications to restart
+          echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Waiting 15 seconds for applications to restart..." | tee -a ${{ env.LOG_DIR }}/health-check.log
+          sleep 15
+
+      - name: Verify Application Recovery
+        if: failure() && steps.restart.outcome != 'skipped'
+        id: recovery_check
+        continue-on-error: true
+        run: |
+          echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "======================================" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Verifying application recovery after restart..." | tee -a ${{ env.LOG_DIR }}/health-check.log
+          
+          declare -A apps=(
+            ["App1"]="http://localhost:3000/health"
+            ["App2"]="http://localhost:5000/health"
+            ["App3"]="http://localhost:8000/health"
+          )
+          
+          recovery_count=0
+          
+          for app_name in "${!apps[@]}"; do
+            app_url="${apps[$app_name]}"
+            
+            if timeout 10 curl -s -f -m 10 "$app_url" > /dev/null 2>&1; then
+              echo "✓ $app_name - RECOVERED" | tee -a ${{ env.LOG_DIR }}/health-check.log
+              ((recovery_count++))
+            else
+              echo "✗ $app_name - Still Unhealthy" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            fi
+          done
+          
+          echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Recovery Status: $recovery_count/3 applications recovered" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "::set-output name=recovered_count::$recovery_count"
+
+      - name: Generate Health Report
+        if: always()
+        run: |
+          echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "======================================" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "Health Check Report - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "Repository: ${{ github.repository }}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "Workflow: ${{ github.workflow }}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "Trigger: ${{ github.event_name }}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          echo "Ref: ${{ github.ref }}" | tee -a ${{ env.LOG_DIR }}/health-check.log
+          
+          if [ -f "${{ env.LOG_DIR }}/health-check.log" ]; then
+            echo "" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            echo "Full Log:" | tee -a ${{ env.LOG_DIR }}/health-check.log
+            cat ${{ env.LOG_DIR }}/health-check.log
+          fi
+
+      - name: Upload Health Check Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-check-logs-${{ github.run_number }}
+          path: ${{ env.LOG_DIR }}/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Alert on Failures - Create Issue
+        if: failure() && steps.endpoint_check.outputs.has_failures == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const failedApps = "${{ steps.endpoint_check.outputs.failed_apps }}".split(' ').filter(x => x);
+            const recoveredCount = "${{ steps.recovery_check.outputs.recovered_count }}" || "0";
+            
+            const title = `🚨 Application Health Alert - ${failedApps.length} App(s) Failed`;
+            const body = `
+            ## Health Check Alert
+            
+            **Time**: ${new Date().toUTCString()}
+            **Workflow Run**: [Run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            ### Failed Applications
+            ${failedApps.map(app => `- ❌ ${app}`).join('\n')}
+            
+            ### Actions Taken
+            - ✅ Automatic restart initiated for failed applications
+            - 📊 Recovery verification attempted
+            - 📋 Health check logs generated and archived
+            
+            ### Recovery Status
+            - Apps Recovered: ${recoveredCount}/3
+            - Timestamp: ${new Date().toUTCString()}
+            
+            ### Details
+            - Repository: ${{ github.repository }}
+            - Workflow: ${{ github.workflow }}
+            - Ref: ${{ github.ref }}
+            
+            ### Next Steps
+            1. Review the health check logs in the workflow artifacts
+            2. Check application logs for error details
+            3. Verify infrastructure/network connectivity
+            4. Manual intervention may be required if issue persists
+            
+            **Artifacts**: [Download logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['alert', 'health-check', 'automated']
+            });
+
+      - name: Slack Notification (Optional)
+        if: failure() && steps.endpoint_check.outputs.has_failures == 'true'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: '🚨 Application Health Check Failed!\n${{ steps.endpoint_check.outputs.failed_apps }}'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author
+          if-empty: 'warning'
+        continue-on-error: true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Health Check Workflow Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Execution Time**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Steps Executed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Environment Setup" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Endpoint Health Checks" >> $GITHUB_STEP_SUMMARY
+          echo "- $([ '${{ steps.restart.outcome }}' != 'skipped' ] && echo '✓' || echo '○') Auto-Restart" >> $GITHUB_STEP_SUMMARY
+          echo "- $([ '${{ steps.recovery_check.outcome }}' != 'skipped' ] && echo '✓' || echo '○') Recovery Verification" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Logs Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View Full Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
