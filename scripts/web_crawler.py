@@ -111,9 +111,15 @@ class OrganizationCrawler:
         return results
 
     @functools.lru_cache(maxsize=1024)
-    def _resolve_hostname(self, hostname: str) -> str:
-        """Resolve hostname to IP with caching"""
-        return socket.gethostbyname(hostname)
+    def _resolve_hostname(self, hostname: str) -> List[str]:
+        """Resolve hostname to list of IPs with caching"""
+        # getaddrinfo returns list of (family, type, proto, canonname, sockaddr)
+        # We want sockaddr[0] (the IP address)
+        try:
+            results = socket.getaddrinfo(hostname, None)
+            return list(set(item[4][0] for item in results))
+        except socket.gaierror:
+            return []
 
     def _is_safe_url(self, url: str) -> bool:
         """Check if URL resolves to a safe (non-local) IP address"""
@@ -124,12 +130,20 @@ class OrganizationCrawler:
                 return False
 
             # Resolve hostname
-            ip = self._resolve_hostname(hostname)
-            ip_obj = ipaddress.ip_address(ip)
+            ips = self._resolve_hostname(hostname)
 
-            # Check for private/loopback/link-local
-            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+            if not ips:
                 return False
+
+            for ip in ips:
+                # Handle IPv6 scope ids if present (e.g., fe80::1%en0)
+                if '%' in ip:
+                    ip = ip.split('%')[0]
+
+                ip_obj = ipaddress.ip_address(ip)
+                # Check for private/loopback/link-local
+                if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                    return False
 
             return True
         except Exception:
