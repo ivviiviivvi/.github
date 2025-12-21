@@ -220,9 +220,9 @@ To change styles, simply select a different option when running the workflow.
 ## Getting Help
 
 ### FAQ and Documentation
-- **Full Documentation**: [Walkthrough System Guide](../WALKTHROUGH_GUIDE.md)
-- **Setup Instructions**: [Secrets Setup Guide](SECRETS_SETUP.md)
 - **Configuration Examples**: [Example Configs](../examples/)
+- **Scheduled Automation**: [Automated Walkthrough Setup](../workflows/scheduled-walkthrough-generator.yml)
+- **Organization Repository**: [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)
 
 ### Support Channels
 
@@ -258,13 +258,13 @@ To change styles, simply select a different option when running the workflow.
 **Advanced topics:**
 - [Example Configurations](../examples/README.md) - Templates for different app types
 - [Scheduled Automation](../workflows/scheduled-walkthrough-generator.yml) - Automated recurring walkthroughs
-- [Contributing](CONTRIBUTING.md) - Help improve the walkthrough system
+- [Contributing](../../docs/CONTRIBUTING.md) - Help improve the system
 
 ---
 
-**Questions?** Check our [FAQ](../WALKTHROUGH_GUIDE.md#faq) or [open a discussion](https://github.com/ivviiviivvi/.github/discussions).
+**Questions?** [Open a discussion](https://github.com/ivviiviivvi/.github/discussions).
 
-**Found a bug?** [Report it here](https://github.com/ivviiviivvi/.github/issues/new?template=walkthrough-request.md).
+**Found a bug?** [Report it here](https://github.com/ivviiviivvi/.github/issues/new).
 
 ---
 

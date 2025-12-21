@@ -367,8 +367,8 @@ startup_wait: 30  # seconds to wait after starting
 ## Need Help?
 
 - **Quick Start Guide**: [Get started in 5 minutes](../docs/QUICK_START.md)
-- **Full Documentation**: [Walkthrough System Guide](../WALKTHROUGH_GUIDE.md)
 - **GitHub Issues**: [Report problems](https://github.com/ivviiviivvi/.github/issues)
+- **Discussions**: [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
 - **Contact**: [@4444JPP](https://github.com/4444JPP)
 
 ---
