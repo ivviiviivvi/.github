@@ -14,7 +14,7 @@ services:
     install_command: "cd backend && npm install"
     startup_wait: 10
     health_check: "http://localhost:5000/api/health"
-  
+
   # Frontend Service
   - name: frontend
     type: react
@@ -71,7 +71,7 @@ environment_variables:
   MONGODB_URI: "mongodb://localhost:27017/demo-db"
   JWT_SECRET: "dev-secret-not-for-production"
   API_URL: "http://localhost:5000"
-  
+
   # Frontend
   REACT_APP_API_URL: "http://localhost:5000/api"
   REACT_APP_WS_URL: "ws://localhost:5000"
@@ -93,7 +93,7 @@ feature_highlights:
       - "Database user query"
       - "JWT token generation"
       - "Frontend token storage"
-  
+
   - component: "data-crud"
     description: "Full CRUD operation demonstration"
     duration: 20
@@ -103,7 +103,7 @@ feature_highlights:
       - "Database write operation"
       - "Backend response"
       - "Frontend UI update"
-  
+
   - component: "real-time-updates"
     description: "WebSocket communication"
     duration: 10
@@ -121,19 +121,19 @@ api_integration:
       frontend_component: "RegisterForm.jsx"
       backend_handler: "authController.register"
       database_operation: "User.create()"
-    
+
     - method: POST
       path: "/api/auth/login"
       frontend_component: "LoginForm.jsx"
       backend_handler: "authController.login"
       database_operation: "User.findOne()"
-    
+
     - method: GET
       path: "/api/posts"
       frontend_component: "PostList.jsx"
       backend_handler: "postController.getAll"
       database_operation: "Post.find()"
-    
+
     - method: POST
       path: "/api/posts"
       frontend_component: "CreatePost.jsx"
@@ -145,13 +145,13 @@ database_setup:
   pre_demo_script: |
     # Start database
     docker-compose up -d mongodb
-    
+
     # Wait for database to be ready
     sleep 5
-    
+
     # Run migrations
     cd backend && npm run migrate
-    
+
     # Seed demo data
     cd backend && npm run seed-demo
 
@@ -165,11 +165,11 @@ pre_demo_script: |
   # Install all dependencies
   cd backend && npm install
   cd ../frontend && npm install
-  
+
   # Setup database
   docker-compose up -d mongodb
   sleep 5
-  
+
   # Run migrations and seed
   cd backend && npm run migrate && npm run seed-demo
 
@@ -182,11 +182,11 @@ post_demo_script: |
 narration_notes: |
   This is a full-stack application demonstrating modern web development practices.
   The application uses a Node.js/Express backend, React frontend, and MongoDB database.
-  
+
   Highlight the separation of concerns, RESTful API design, and seamless integration
   between frontend and backend. Emphasize the complete data flow from user interaction
   through the entire stack to data persistence and back.
-  
+
   Show how the application handles:
   - User authentication and authorization
   - API communication
@@ -201,17 +201,17 @@ tech_stack:
     state_management: "Redux / Context API"
     styling: "CSS Modules / Styled Components"
     http_client: "Axios / Fetch"
-  
+
   backend:
     framework: "Express.js"
     authentication: "JWT / Passport.js"
     validation: "Joi / Express-validator"
     orm: "Mongoose / Sequelize"
-  
+
   database:
     type: "MongoDB"
     driver: "Mongoose"
-  
+
   additional:
     - "Socket.io for real-time"
     - "Docker for containerization"
@@ -243,13 +243,13 @@ security:
 # Additional Context
 additional_context: |
   This full-stack application follows industry best practices:
-  
+
   Architecture:
   - Three-tier architecture (Frontend, Backend, Database)
   - RESTful API design
   - Stateless authentication with JWT
   - Responsive frontend design
-  
+
   Key Features:
   - User authentication and authorization
   - CRUD operations for main entities
@@ -257,7 +257,7 @@ additional_context: |
   - Form validation on frontend and backend
   - Error handling and user feedback
   - Database indexing for performance
-  
+
   Development Tools:
   - Docker for local development
   - ESLint and Prettier for code quality

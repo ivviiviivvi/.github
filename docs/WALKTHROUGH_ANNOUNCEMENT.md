@@ -1,7 +1,7 @@
 # 🎬 Introducing: Autonomous Walkthrough Generation for All Repos
 
-**Date:** December 21, 2025  
-**Category:** Announcements  
+**Date:** December 21, 2025
+**Category:** Announcements
 **Contact:** @4444JPP
 
 ---
@@ -14,10 +14,10 @@ We're thrilled to announce the launch of our **Autonomous Walkthrough Generation
 
 The Autonomous Walkthrough Generation System is an intelligent automation that:
 
-✨ **Records** your application in action  
-🎤 **Narrates** features with professional voiceover  
-🎬 **Produces** polished demonstration videos  
-📦 **Delivers** ready-to-share walkthrough content  
+✨ **Records** your application in action
+🎤 **Narrates** features with professional voiceover
+🎬 **Produces** polished demonstration videos
+📦 **Delivers** ready-to-share walkthrough content
 
 All of this happens automatically through GitHub Actions workflows!
 
@@ -209,19 +209,19 @@ STORAGE_API_KEY       # For long-term artifact storage
 
 ### Common Issues
 
-**Issue**: Workflow fails with authentication error  
+**Issue**: Workflow fails with authentication error
 **Solution**: Verify your `GITHUB_TOKEN` has proper permissions. See [SECRETS_SETUP.md](./SECRETS_SETUP.md#troubleshooting).
 
-**Issue**: Video quality is poor  
+**Issue**: Video quality is poor
 **Solution**: Ensure your application is fully loaded before recording starts. Adjust the `initial-delay` parameter.
 
-**Issue**: Voiceover doesn't match the video  
+**Issue**: Voiceover doesn't match the video
 **Solution**: Check your application's accessibility labels and ARIA attributes. The system uses these for narration.
 
-**Issue**: Recording misses important features  
+**Issue**: Recording misses important features
 **Solution**: Provide a more detailed feature list in the workflow parameters or issue template.
 
-**Issue**: Workflow timeout  
+**Issue**: Workflow timeout
 **Solution**: Complex applications may need longer. Increase the `timeout-minutes` in your workflow configuration.
 
 ### Getting Help
@@ -319,10 +319,10 @@ Have questions or need help getting started?
 
 ---
 
-**Ready to create your first walkthrough?** 
+**Ready to create your first walkthrough?**
 
-👉 [Create a Walkthrough Request Issue](../ISSUE_TEMPLATE/walkthrough-request.yml)  
-👉 [Read the Setup Guide](./SECRETS_SETUP.md)  
+👉 [Create a Walkthrough Request Issue](../ISSUE_TEMPLATE/walkthrough-request.yml)
+👉 [Read the Setup Guide](./SECRETS_SETUP.md)
 👉 [Join the Discussion](https://github.com/orgs/ivviiviivvi/discussions)
 
 Happy walkthrough generating! 🎬✨

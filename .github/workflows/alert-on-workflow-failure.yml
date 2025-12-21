@@ -15,7 +15,7 @@ jobs:
           echo "WORKFLOW FAILED: ${{ github.event.workflow_run.name }}"
           echo "Repo: ${{ github.event.workflow_run.repository.full_name }}"
           echo "Run: https://github.com/${{ github.event.workflow_run.repository.full_name }}/actions/runs/${{ github.event.workflow_run.id }}"
-      
+
       - name: Post to GitHub Discussion
         uses: actions/github-script@v7
         with:

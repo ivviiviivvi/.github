@@ -174,7 +174,7 @@ done
 
 validate_environment() {
     print_info "Validating environment..."
-    
+
     # Check for required commands
     local required_commands=("gh" "git" "jq" "curl")
     for cmd in "${required_commands[@]}"; do
@@ -184,35 +184,35 @@ validate_environment() {
             exit 1
         fi
     done
-    
+
     # Check GitHub token
     if [ -z "$GITHUB_TOKEN" ]; then
         print_error "GitHub token not provided"
         echo "Please set GITHUB_TOKEN environment variable or use --token option"
         exit 1
     fi
-    
+
     # Validate GitHub token
     if ! gh auth status &> /dev/null; then
         print_error "GitHub CLI authentication failed"
         echo "Please run: gh auth login"
         exit 1
     fi
-    
+
     # Check if workflow files exist
     local workflow_file="${REPO_ROOT}/.github/workflows/generate-walkthrough.yml"
     local config_file="${REPO_ROOT}/.github/walkthrough-config.yml"
-    
+
     if [ ! -f "$workflow_file" ]; then
         print_error "Workflow file not found: $workflow_file"
         exit 1
     fi
-    
+
     if [ ! -f "$config_file" ]; then
         print_error "Configuration file not found: $config_file"
         exit 1
     fi
-    
+
     print_success "Environment validation complete"
 }
 
@@ -222,14 +222,14 @@ validate_environment() {
 
 is_excluded_repo() {
     local repo_name="$1"
-    
+
     # Check exact matches
     for excluded in "${EXCLUDED_REPOS[@]}"; do
         if [ "$repo_name" = "$excluded" ]; then
             return 0
         fi
     done
-    
+
     # Check patterns from config
     if [[ "$repo_name" =~ ^test-.* ]] || \
        [[ "$repo_name" =~ ^demo-.* ]] || \
@@ -237,24 +237,24 @@ is_excluded_repo() {
        [[ "$repo_name" =~ .*-deprecated$ ]]; then
         return 0
     fi
-    
+
     return 1
 }
 
 get_repositories() {
     print_info "Fetching repositories from organization: $ORG_NAME"
-    
+
     local filter_archived=""
     local filter_forks=""
-    
+
     if [ "$SKIP_ARCHIVED" = true ]; then
         filter_archived="--archived=false"
     fi
-    
+
     if [ "$SKIP_FORKS" = true ]; then
         filter_forks="--no-forks"
     fi
-    
+
     # Get repositories using GitHub CLI with pagination support
     # Default limit is high but should handle most organizations
     local repos=$(gh repo list "$ORG_NAME" \
@@ -262,64 +262,64 @@ get_repositories() {
         --json name,isArchived,isFork,isPrivate \
         $filter_archived \
         | jq -r '.[].name')
-    
+
     # Warn if approaching limit
     local count=$(echo "$repos" | wc -l)
     if [ "$count" -ge 900 ]; then
         print_warning "Approaching repository limit (${count}/1000). Some repos may be missed."
         print_warning "Consider filtering by topic or other criteria."
     fi
-    
+
     echo "$repos"
 }
 
 clone_repository() {
     local repo_name="$1"
     local temp_dir="$2"
-    
+
     print_info "Cloning repository: $repo_name"
-    
+
     if [ "$DRY_RUN" = true ]; then
         print_warning "[DRY RUN] Would clone: $ORG_NAME/$repo_name"
         return 0
     fi
-    
+
     gh repo clone "$ORG_NAME/$repo_name" "$temp_dir/$repo_name" -- --quiet 2>/dev/null || {
         print_error "Failed to clone repository: $repo_name"
         return 1
     }
-    
+
     return 0
 }
 
 copy_workflow_files() {
     local repo_dir="$1"
     local repo_name="$2"
-    
+
     print_info "Copying workflow files to: $repo_name"
-    
+
     if [ "$DRY_RUN" = true ]; then
         print_warning "[DRY RUN] Would copy workflow files to: $repo_name"
         return 0
     fi
-    
+
     # Create .github/workflows directory if it doesn't exist
     mkdir -p "$repo_dir/.github/workflows"
-    
+
     # Copy workflow file
     cp "${REPO_ROOT}/.github/workflows/generate-walkthrough.yml" \
        "$repo_dir/.github/workflows/" || {
         print_error "Failed to copy workflow file"
         return 1
     }
-    
+
     # Copy configuration file
     cp "${REPO_ROOT}/.github/walkthrough-config.yml" \
        "$repo_dir/.github/" || {
         print_error "Failed to copy configuration file"
         return 1
     }
-    
+
     print_success "Files copied successfully"
     return 0
 }
@@ -327,24 +327,24 @@ copy_workflow_files() {
 create_pr() {
     local repo_dir="$1"
     local repo_name="$2"
-    
+
     print_info "Creating pull request for: $repo_name"
-    
+
     cd "$repo_dir" || return 1
-    
+
     # Configure git
     git config user.name "github-actions[bot]"
     git config user.email "github-actions[bot]@users.noreply.github.com"
-    
+
     # Create branch
     local branch_name="feature/add-video-walkthrough-$(date +%Y%m%d)"
     local unique_suffix=""
-    
+
     if [ "$DRY_RUN" = true ]; then
         print_warning "[DRY RUN] Would create PR in: $repo_name"
         return 0
     fi
-    
+
     # Check if branch already exists and add unique identifier
     if git ls-remote --heads origin "$branch_name" | grep -q "$branch_name"; then
         print_warning "Branch already exists: $branch_name"
@@ -352,21 +352,21 @@ create_pr() {
         unique_suffix="-${repo_name}-$(date +%H%M%S)"
         branch_name="${branch_name}${unique_suffix}"
     fi
-    
+
     git checkout -b "$branch_name" 2>/dev/null || {
         print_error "Failed to create branch"
         return 1
     }
-    
+
     # Add files
     git add .github/workflows/generate-walkthrough.yml .github/walkthrough-config.yml
-    
+
     # Check if there are changes to commit
     if git diff --staged --quiet; then
         print_warning "No changes to commit for: $repo_name"
         return 0
     fi
-    
+
     # Commit changes
     git commit -m "feat: add video walkthrough generation
 
@@ -383,13 +383,13 @@ https://github.com/$ORG_NAME/.github/blob/main/.github/WALKTHROUGH_GUIDE.md" || 
         print_error "Failed to commit changes"
         return 1
     }
-    
+
     # Push branch
     git push origin "$branch_name" || {
         print_error "Failed to push branch"
         return 1
     }
-    
+
     # Create PR using GitHub CLI
     gh pr create \
         --title "feat: Add video walkthrough generation" \
@@ -441,7 +441,7 @@ After merging, you can trigger the workflow manually to generate your first walk
         print_error "Failed to create PR"
         return 1
     }
-    
+
     print_success "PR created successfully for: $repo_name"
     return 0
 }
@@ -449,42 +449,42 @@ After merging, you can trigger the workflow manually to generate your first walk
 process_repository() {
     local repo_name="$1"
     local temp_dir="$2"
-    
+
     echo ""
     print_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     print_info "Processing repository: $repo_name"
     print_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     # Check if repository should be excluded
     if is_excluded_repo "$repo_name"; then
         print_warning "Skipping excluded repository: $repo_name"
         SKIPPED_REPOS=$((SKIPPED_REPOS + 1))
         return 0
     fi
-    
+
     # Clone repository
     if ! clone_repository "$repo_name" "$temp_dir"; then
         FAILED_REPOS=$((FAILED_REPOS + 1))
         return 1
     fi
-    
+
     local repo_dir="$temp_dir/$repo_name"
-    
+
     # Copy workflow files
     if ! copy_workflow_files "$repo_dir" "$repo_name"; then
         FAILED_REPOS=$((FAILED_REPOS + 1))
         return 1
     fi
-    
+
     # Create PR
     if ! create_pr "$repo_dir" "$repo_name"; then
         FAILED_REPOS=$((FAILED_REPOS + 1))
         return 1
     fi
-    
+
     SUCCESS_REPOS=$((SUCCESS_REPOS + 1))
     PROCESSED_REPOS=$((PROCESSED_REPOS + 1))
-    
+
     print_success "Successfully processed: $repo_name"
     return 0
 }
@@ -495,10 +495,10 @@ process_repository() {
 
 main() {
     print_header
-    
+
     # Validate environment
     validate_environment
-    
+
     # Show configuration
     echo ""
     print_info "Configuration:"
@@ -509,18 +509,18 @@ main() {
     echo "  Skip Forks: $SKIP_FORKS"
     echo "  Excluded Repos: ${EXCLUDED_REPOS[*]:-none}"
     echo ""
-    
+
     # Get repositories
     local repos=$(get_repositories)
     TOTAL_REPOS=$(echo "$repos" | wc -l)
-    
+
     if [ -z "$repos" ]; then
         print_error "No repositories found in organization: $ORG_NAME"
         exit 1
     fi
-    
+
     print_success "Found $TOTAL_REPOS repositories"
-    
+
     # Confirm before proceeding
     if [ "$DRY_RUN" = false ]; then
         echo ""
@@ -532,27 +532,27 @@ main() {
             exit 0
         fi
     fi
-    
+
     # Create temporary directory
     local temp_dir=$(mktemp -d)
     trap "rm -rf $temp_dir" EXIT
-    
+
     # Process repositories
     local count=0
     for repo in $repos; do
         count=$((count + 1))
-        
+
         print_info "Progress: $count/$TOTAL_REPOS"
-        
+
         process_repository "$repo" "$temp_dir" || true
-        
+
         # Batch processing delay
         if [ $((count % BATCH_SIZE)) -eq 0 ] && [ "$DRY_RUN" = false ]; then
             print_info "Batch complete. Waiting 10 seconds..."
             sleep 10
         fi
     done
-    
+
     # Print summary
     echo ""
     echo ""
@@ -565,13 +565,13 @@ main() {
     echo "  Skipped: $SKIPPED_REPOS"
     echo "  Failed: $FAILED_REPOS"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     if [ $FAILED_REPOS -gt 0 ]; then
         echo ""
         print_warning "Some repositories failed to process. Please review the logs above."
         exit 1
     fi
-    
+
     if [ "$DRY_RUN" = true ]; then
         echo ""
         print_info "Dry run complete. Run without --dry-run to apply changes."

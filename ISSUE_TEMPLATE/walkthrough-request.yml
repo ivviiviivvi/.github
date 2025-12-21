@@ -9,17 +9,17 @@ body:
     attributes:
       value: |
         ## 🎬 Autonomous Walkthrough Generation Request
-        
+
         Thank you for requesting a custom video walkthrough! This system will automatically generate a professional walkthrough video of your application.
-        
+
         **What you'll get:**
         - Automated video recording of your application
         - Professional voiceover narration
         - Highlighting of key features and functionality
         - Ready-to-share demonstration video
-        
+
         Please fill out the form below to help us create the perfect walkthrough for your needs.
-        
+
         📚 **Need help?** Check out the [Secrets Setup Guide](../docs/SECRETS_SETUP.md) for configuration details.
 
   - type: input
@@ -46,7 +46,7 @@ body:
       label: Tech Stack
       description: What technologies does your application use?
       placeholder: |
-        e.g., 
+        e.g.,
         - Frontend: React, TypeScript, Tailwind CSS
         - Backend: Node.js, Express, PostgreSQL
         - Deployment: Docker, AWS

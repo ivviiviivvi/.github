@@ -2,8 +2,8 @@
 
 > Comprehensive guide for configuring API keys and optional integrations
 
-**Last Updated:** December 21, 2025  
-**Maintainer:** @4444JPP  
+**Last Updated:** December 21, 2025
+**Maintainer:** @4444JPP
 **Support:** [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
 
 ---
@@ -347,7 +347,7 @@ For permanent storage without external services:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-**Pros**: Free, no external service, permanent storage  
+**Pros**: Free, no external service, permanent storage
 **Cons**: Clutters releases, large files count against repository size
 
 ---
@@ -896,8 +896,8 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 
 ---
 
-**Last Updated:** December 21, 2025  
-**Version:** 1.0.0  
+**Last Updated:** December 21, 2025
+**Version:** 1.0.0
 **Feedback:** [Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)
 
 ---

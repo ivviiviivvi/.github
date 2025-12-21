@@ -163,12 +163,12 @@ The Video Walkthrough Generation system automatically creates professional 1-min
 
 #### Key Features
 
-✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites  
-✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles  
-✅ **Zero Manual Intervention** - Fully automated workflow execution  
-✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts  
-✅ **Organization-Wide Deployment** - Single-command rollout to all repositories  
-✅ **Customizable Settings** - Duration, style, focus areas, and more  
+✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites
+✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles
+✅ **Zero Manual Intervention** - Fully automated workflow execution
+✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts
+✅ **Organization-Wide Deployment** - Single-command rollout to all repositories
+✅ **Customizable Settings** - Duration, style, focus areas, and more
 
 #### Components
 

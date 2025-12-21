@@ -56,11 +56,11 @@ feature_highlights:
   - element: "#login-button"
     description: "User authentication entry point"
     duration: 3  # seconds to focus on this element
-  
+
   - element: ".dashboard-widgets"
     description: "Interactive dashboard components"
     duration: 5
-  
+
   - element: "#user-profile"
     description: "User profile management"
     duration: 4
@@ -108,13 +108,13 @@ additional_context: |
   This React application showcases modern frontend development practices.
   It uses hooks for state management, React Router for navigation,
   and follows component composition patterns for maintainability.
-  
+
   Key technologies:
   - React 18+
   - React Router
   - Styled Components / CSS Modules
   - Context API for global state
-  
+
   The application is optimized for both desktop and mobile viewing.
 
 # ---
