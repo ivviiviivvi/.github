@@ -1,0 +1,221 @@
+# Flask Application Walkthrough Configuration
+# This configuration is optimized for Python Flask applications and REST APIs
+
+# Application Type
+app_type: flask
+
+# Core Configuration
+start_command: "python app.py"
+port: 5000
+install_command: "pip install -r requirements.txt"
+
+# Walkthrough Settings
+duration: 45  # seconds (APIs typically need less time)
+voiceover_style: "technical"  # Options: professional, casual, technical
+
+# Focus Areas
+# List the key API endpoints and functionality you want to highlight
+focus_areas:
+  - "REST API endpoints and routing"
+  - "Request/response handling"
+  - "Database operations and ORM"
+  - "Authentication and authorization"
+  - "Error handling and validation"
+
+# Demo Flow
+# Define the step-by-step demonstration of your API
+demo_flow:
+  - "Show API documentation or landing page"
+  - "Demonstrate GET requests to list resources"
+  - "Show POST request to create new resource"
+  - "Demonstrate authentication flow"
+  - "Show PUT/PATCH request to update resource"
+  - "Demonstrate DELETE request"
+  - "Display error handling (404, 401, etc.)"
+  - "Show response format and status codes"
+  - "Demonstrate query parameters and filtering"
+  - "Show database queries and data persistence"
+
+# Environment Variables (optional)
+# Add any required environment variables for development
+environment_variables:
+  FLASK_APP: "app.py"
+  FLASK_ENV: "development"
+  FLASK_DEBUG: "1"
+  DATABASE_URL: "sqlite:///dev.db"
+  SECRET_KEY: "dev-secret-key-not-for-production"
+
+# Additional Settings
+startup_wait: 10  # seconds to wait for Flask server to be ready
+browser: chrome  # Browser to use for API testing visualization
+viewport:
+  width: 1920
+  height: 1080
+
+# API Endpoints to Demonstrate
+# Specific endpoints to showcase in the walkthrough
+api_endpoints:
+  - method: GET
+    path: "/api/health"
+    description: "Health check endpoint"
+    demo_action: "Show successful response"
+  
+  - method: GET
+    path: "/api/users"
+    description: "List all users"
+    demo_action: "Display paginated user list"
+  
+  - method: POST
+    path: "/api/users"
+    description: "Create new user"
+    demo_action: "Submit user creation form"
+    sample_data:
+      name: "Demo User"
+      email: "demo@example.com"
+  
+  - method: GET
+    path: "/api/users/1"
+    description: "Get specific user"
+    demo_action: "Show user details"
+  
+  - method: PUT
+    path: "/api/users/1"
+    description: "Update user"
+    demo_action: "Update user information"
+  
+  - method: DELETE
+    path: "/api/users/1"
+    description: "Delete user"
+    demo_action: "Confirm deletion"
+
+# Database Setup (optional)
+# Scripts to prepare database for demo
+database_setup:
+  - "flask db init"
+  - "flask db migrate"
+  - "flask db upgrade"
+  - "python seed_demo_data.py"
+
+# Custom Scripts (optional)
+pre_demo_script: |
+  # Initialize database and seed demo data
+  python -c "from app import db; db.create_all()"
+  python seed_demo_data.py
+
+post_demo_script: |
+  # Cleanup demo database
+  python -c "from app import db; db.drop_all()"
+
+# Notes for AI Narrator
+narration_notes: |
+  This is a Flask REST API application demonstrating modern backend development practices.
+  Highlight the clean API design, proper HTTP methods, and RESTful principles.
+  Emphasize the request/response cycle, data validation, and error handling.
+  Show how the API integrates with a database for data persistence.
+
+# API Documentation Tool
+# Which tool to use for visualizing API calls
+api_demo_tool: "postman"  # Options: postman, swagger-ui, curl, httpie, browser-devtools
+
+# Postman Collection (if applicable)
+postman_collection: "./postman/flask-api-collection.json"
+
+# Swagger/OpenAPI (if applicable)
+swagger_ui_enabled: true
+swagger_ui_path: "/api/docs"
+
+# Customization Options
+customization:
+  show_request_headers: true
+  show_response_headers: true
+  show_request_body: true
+  show_response_body: true
+  show_status_codes: true
+  highlight_authentication: true
+  show_database_queries: false  # For debugging/teaching purposes
+
+# Performance Considerations
+performance:
+  enable_query_logging: false
+  show_response_time: true
+  demonstrate_caching: false
+
+# Security Features to Highlight
+security:
+  demonstrate_authentication: true
+  show_authorization_checks: true
+  highlight_input_validation: true
+  show_cors_configuration: false
+
+# Additional Context
+# Any other information that helps generate a better walkthrough
+additional_context: |
+  This Flask API follows RESTful design principles and modern Python best practices.
+  
+  Key technologies:
+  - Flask 2.x+
+  - SQLAlchemy ORM
+  - Flask-RESTful or Flask-RESTX
+  - JWT Authentication
+  - PostgreSQL/MySQL/SQLite
+  
+  The API is designed for scalability and includes:
+  - Input validation with Marshmallow
+  - Token-based authentication
+  - Comprehensive error handling
+  - Database migrations with Flask-Migrate
+  - Unit and integration tests
+
+# ---
+
+# Usage Instructions
+
+# 1. Copy this file to your Flask project root or .github directory
+# 2. Customize the values above to match your application
+# 3. Ensure requirements.txt is up to date
+# 4. Test your start command locally: pip install -r requirements.txt && python app.py
+# 5. Commit the configuration file to your repository
+# 6. Run the "Generate Application Walkthrough" GitHub Action
+
+# Example Workflow Dispatch:
+# Navigate to: Actions > Generate Application Walkthrough > Run workflow
+# The workflow will automatically detect this configuration file
+
+# ---
+
+# Tips for Best Results
+
+# ✅ List actual API endpoints with their HTTP methods
+# ✅ Prepare sample data for POST/PUT requests
+# ✅ Initialize database with demo data before walkthrough
+# ✅ Keep duration 30-60 seconds for focused API demos
+# ✅ Use technical voiceover style for developer-focused content
+# ✅ Show both successful responses and error cases
+# ✅ Document authentication requirements
+# ✅ Include API documentation endpoint if available
+
+# ---
+
+# Common Flask App Variations
+
+# Standard Flask app:
+# start_command: "python app.py"
+# port: 5000
+
+# Flask with gunicorn:
+# start_command: "gunicorn app:app --bind 0.0.0.0:5000"
+# port: 5000
+
+# Flask-RESTX with Swagger:
+# start_command: "python app.py"
+# port: 5000
+# swagger_ui_enabled: true
+
+# Custom port:
+# start_command: "python app.py"
+# port: 8000
+# (Ensure app.py uses: app.run(port=8000))
+
+# With environment variables:
+# start_command: "FLASK_ENV=development python app.py"
+# port: 5000
