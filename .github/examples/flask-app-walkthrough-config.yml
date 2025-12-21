@@ -166,7 +166,7 @@ additional_context: |
   - Database migrations with Flask-Migrate
   - Unit and integration tests
 
----
+# ---
 
 # Usage Instructions
 
@@ -181,7 +181,7 @@ additional_context: |
 # Navigate to: Actions > Generate Application Walkthrough > Run workflow
 # The workflow will automatically detect this configuration file
 
----
+# ---
 
 # Tips for Best Results
 
@@ -194,7 +194,7 @@ additional_context: |
 # ✅ Document authentication requirements
 # ✅ Include API documentation endpoint if available
 
----
+# ---
 
 # Common Flask App Variations
 

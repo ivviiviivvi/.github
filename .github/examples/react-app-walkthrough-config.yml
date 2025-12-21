@@ -117,7 +117,7 @@ additional_context: |
   
   The application is optimized for both desktop and mobile viewing.
 
----
+# ---
 
 # Usage Instructions
 
@@ -133,7 +133,7 @@ additional_context: |
 
 # For manual configuration, you can override these settings in the workflow inputs
 
----
+# ---
 
 # Tips for Best Results
 
@@ -145,7 +145,7 @@ additional_context: |
 # ✅ Include environment variables if your app requires them
 # ✅ Consider creating multiple configs for different demo scenarios
 
----
+# ---
 
 # Common React App Variations
 

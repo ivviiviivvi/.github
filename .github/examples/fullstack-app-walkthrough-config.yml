@@ -264,7 +264,7 @@ additional_context: |
   - Jest for testing
   - GitHub Actions for CI/CD
 
----
+# ---
 
 # Usage Instructions
 
@@ -278,7 +278,7 @@ additional_context: |
 # 5. Commit configuration to repository
 # 6. Run "Generate Application Walkthrough" GitHub Action
 
----
+# ---
 
 # Tips for Best Results
 
@@ -291,7 +291,7 @@ additional_context: |
 # ✅ Prepare demo data to make walkthrough more realistic
 # ✅ Test locally before running automated walkthrough
 
----
+# ---
 
 # Common Full-Stack Variations
 

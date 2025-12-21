@@ -347,7 +347,7 @@ advanced:
     CI: true
     AUTOMATED_WALKTHROUGH: true
 
----
+# ---
 
 # Usage Notes
 
@@ -371,7 +371,7 @@ advanced:
 # Adjust active_threshold_days based on organization activity patterns
 # Update assignees/reviewers as team members change
 
----
+# ---
 
 # Example Scenarios
 
@@ -393,7 +393,7 @@ advanced:
 # default_target: custom
 # Define specific repos in always_include
 
----
+# ---
 
 # Contact
 # For questions or issues with scheduled walkthrough generation:
