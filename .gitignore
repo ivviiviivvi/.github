@@ -1,3 +1,8 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
 
 # Ignore automatically generated direnv output
 .direnv
