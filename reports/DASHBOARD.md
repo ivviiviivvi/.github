@@ -38,68 +38,74 @@
 
 ```mermaid
 graph TD
+    %% Styles
+    classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
+    classDef workflow fill:#ddf4ff,stroke:#54aeff,color:#24292f,stroke-width:1px;
+    classDef agent fill:#fff8c5,stroke:#d4a72c,color:#24292f,stroke-width:1px;
+    classDef tech fill:#dafbe1,stroke:#4ac26b,color:#24292f,stroke-width:1px;
+
     subgraph "GitHub Organization"
-        ORG[Organization Root]
+        ORG[Organization Root]:::org
     end
 
     subgraph "Automation Layer"
-        WF0[gemini_workflow.yml]
+        WF0[gemini_workflow.yml]:::workflow
         ORG --> WF0
-        WF1[repo-metrics.yml]
+        WF1[repo-metrics.yml]:::workflow
         ORG --> WF1
-        WF2[jules.yml]
+        WF2[jules.yml]:::workflow
         ORG --> WF2
-        WF3[semgrep.yml]
+        WF3[semgrep.yml]:::workflow
         ORG --> WF3
-        WF4[codeql-analysis.yml]
+        WF4[codeql-analysis.yml]:::workflow
         ORG --> WF4
-        WF5[welcome.yml]
+        WF5[welcome.yml]:::workflow
         ORG --> WF5
-        WF6[pr-quality-checks.yml]
+        WF6[pr-quality-checks.yml]:::workflow
         ORG --> WF6
-        WF7[orchestrator.yml]
+        WF7[orchestrator.yml]:::workflow
         ORG --> WF7
-        WF8[reset_quotas.yml]
+        WF8[reset_quotas.yml]:::workflow
         ORG --> WF8
-        WF9[dependency-review.yml]
+        WF9[dependency-review.yml]:::workflow
         ORG --> WF9
     end
 
     subgraph "GitHub Copilot Customizations"
-        AGENTS[Agents]
-        AGENTS_COUNT[14 agents]
+        AGENTS[Agents]:::agent
+        AGENTS_COUNT[14 agents]:::agent
         AGENTS --> AGENTS_COUNT
         ORG --> AGENTS
-        INSTR[Instructions]
-        INSTR_COUNT[109 instructions]
+        INSTR[Instructions]:::agent
+        INSTR_COUNT[109 instructions]:::agent
         INSTR --> INSTR_COUNT
         ORG --> INSTR
-        PROMPTS[Prompts]
-        PROMPTS_COUNT[114 prompts]
+        PROMPTS[Prompts]:::agent
+        PROMPTS_COUNT[114 prompts]:::agent
         PROMPTS --> PROMPTS_COUNT
         ORG --> PROMPTS
-        CHATMODES[Chat Modes]
-        CHATMODES_COUNT[87 modes]
+        CHATMODES[Chat Modes]:::agent
+        CHATMODES_COUNT[87 modes]:::agent
         CHATMODES --> CHATMODES_COUNT
         ORG --> CHATMODES
     end
 
     subgraph "Technologies"
-        TECH0[a11y]
-        TECH1[ai-prompt-engineering-safety-best-practices]
-        TECH2[angular]
-        TECH3[ansible]
-        TECH4[aspnet-rest-apis]
-        TECH5[astro]
-        TECH6[azure-devops-pipelines]
-        TECH7[azure-functions-typescript]
-        TECH8[azure-logic-apps-power-automate]
-        TECH9[azure-verified-modules-terraform]
-        TECH10[bicep-code-best-practices]
-        TECH11[blazor]
-        TECH12[clojure]
-        TECH13[cmake-vcpkg]
-        TECH14[codexer]
+        TECH0[a11y]:::tech
+        TECH1[ai-prompt-engineering-safety-best-practices]:::tech
+        TECH2[angular]:::tech
+        TECH3[ansible]:::tech
+        TECH4[aspnet-rest-apis]:::tech
+        TECH5[astro]:::tech
+        TECH6[azure-devops-pipelines]:::tech
+        TECH7[azure-functions-typescript]:::tech
+        TECH8[azure-logic-apps-power-automate]:::tech
+        TECH9[azure-verified-modules-terraform]:::tech
+        TECH10[bicep-code-best-practices]:::tech
+        TECH11[blazor]:::tech
+        TECH12[clojure]:::tech
+        TECH13[cmake-vcpkg]:::tech
+        TECH14[codexer]:::tech
     end
 ```
 
@@ -135,7 +141,7 @@ Supported languages and frameworks:
 | `swift-mcp-server` | `taming-copilot` | `tanstack-start-shadcn-tailwind` | `task-implementation` |
 | `tasksync` | `terraform` | `terraform-azure` | `terraform-sap-btp` |
 | `typescript-5-es2022` | `typescript-mcp-server` | `update-code-from-shorthand` | `vuejs3` |
-| `wordpress` |
+| `wordpress` |  |  |  |
 
 ## ⚙️  Active Workflows (32)
 

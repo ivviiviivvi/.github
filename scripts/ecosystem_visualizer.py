@@ -50,8 +50,9 @@ graph TD
         workflows = em.get('workflows', [])
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
-            diagram += f"        {workflow_id}[{workflow}]:::workflow\n"
-            diagram += f"        ORG --> {workflow_id}\n"
+            # OPTIMIZATION: Use list append instead of string concatenation for better performance
+            parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
+            parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
 
@@ -61,31 +62,31 @@ graph TD
 
         agents = em.get('copilot_agents', [])
         if agents:
-            diagram += "        AGENTS[Agents]:::agent\n"
-            diagram += f"        AGENTS_COUNT[{len(agents)} agents]:::agent\n"
-            diagram += "        AGENTS --> AGENTS_COUNT\n"
-            diagram += "        ORG --> AGENTS\n"
+            parts.append("        AGENTS[Agents]:::agent\n")
+            parts.append(f"        AGENTS_COUNT[{len(agents)} agents]:::agent\n")
+            parts.append("        AGENTS --> AGENTS_COUNT\n")
+            parts.append("        ORG --> AGENTS\n")
 
         instructions = em.get('copilot_instructions', [])
         if instructions:
-            diagram += "        INSTR[Instructions]:::agent\n"
-            diagram += f"        INSTR_COUNT[{len(instructions)} instructions]:::agent\n"
-            diagram += "        INSTR --> INSTR_COUNT\n"
-            diagram += "        ORG --> INSTR\n"
+            parts.append("        INSTR[Instructions]:::agent\n")
+            parts.append(f"        INSTR_COUNT[{len(instructions)} instructions]:::agent\n")
+            parts.append("        INSTR --> INSTR_COUNT\n")
+            parts.append("        ORG --> INSTR\n")
 
         prompts = em.get('copilot_prompts', [])
         if prompts:
-            diagram += "        PROMPTS[Prompts]:::agent\n"
-            diagram += f"        PROMPTS_COUNT[{len(prompts)} prompts]:::agent\n"
-            diagram += "        PROMPTS --> PROMPTS_COUNT\n"
-            diagram += "        ORG --> PROMPTS\n"
+            parts.append("        PROMPTS[Prompts]:::agent\n")
+            parts.append(f"        PROMPTS_COUNT[{len(prompts)} prompts]:::agent\n")
+            parts.append("        PROMPTS --> PROMPTS_COUNT\n")
+            parts.append("        ORG --> PROMPTS\n")
 
         chatmodes = em.get('copilot_chatmodes', [])
         if chatmodes:
-            diagram += "        CHATMODES[Chat Modes]:::agent\n"
-            diagram += f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::agent\n"
-            diagram += "        CHATMODES --> CHATMODES_COUNT\n"
-            diagram += "        ORG --> CHATMODES\n"
+            parts.append("        CHATMODES[Chat Modes]:::agent\n")
+            parts.append(f"        CHATMODES_COUNT[{len(chatmodes)} modes]:::agent\n")
+            parts.append("        CHATMODES --> CHATMODES_COUNT\n")
+            parts.append("        ORG --> CHATMODES\n")
 
         parts.append("    end\n\n")
 
@@ -97,7 +98,7 @@ graph TD
             for i, tech in enumerate(technologies[:15]):  # Limit to first 15
                 tech_id = f"TECH{i}"
                 safe_tech = tech.replace('-', '_').replace('.', '_')
-                diagram += f"        {tech_id}[{tech}]:::tech\n"
+                parts.append(f"        {tech_id}[{tech}]:::tech\n")
 
             parts.append("    end\n")
 
@@ -153,7 +154,8 @@ graph TD
                 filled_length = int(bar_length * active_pct / 100)
                 bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
-                dashboard += f"""## 🏥 Repository Health
+                # OPTIMIZATION: Use list append instead of string concatenation
+                parts.append(f"""## 🏥 Repository Health
 
 {bar} {active_pct:.1f}%
 
