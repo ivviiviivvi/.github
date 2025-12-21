@@ -24,7 +24,7 @@ jobs:
       pull-requests: read
       issues: write
       actions: read
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
 
           class DeploymentMetadataReconciler:
               """Reconciles deployment metadata with GitHub API state"""
-              
+
               def __init__(self):
                   self.github_token = os.getenv('GITHUB_TOKEN')
                   self.repo = os.getenv('GITHUB_REPOSITORY')
@@ -72,23 +72,23 @@ jobs:
                       'Accept': 'application/vnd.github.v3+json',
                       'X-GitHub-Api-Version': '2022-11-28'
                   }
-                  
+
                   self.discrepancies = []
                   self.auto_repairs = []
                   self.critical_issues = []
                   self.warnings = []
                   self.metadata_file = '.deployments.yml'
-                  
+
               def log_output(self, message: str, level: str = 'info'):
                   """Log message with timestamp"""
                   timestamp = datetime.utcnow().isoformat()
                   print(f'[{timestamp}] [{level.upper()}] {message}')
-                  
+
               def set_workflow_output(self, name: str, value: str):
                   """Set GitHub Actions workflow output"""
                   with open(os.getenv('GITHUB_OUTPUT', '/dev/null'), 'a') as f:
                       f.write(f'{name}={value}\n')
-                  
+
               def load_metadata(self) -> Dict[str, Any]:
                   """Load deployment metadata from file"""
                   try:
@@ -104,14 +104,14 @@ jobs:
                       self.log_output(f'Error loading metadata: {str(e)}', 'error')
                       self.critical_issues.append(f'Failed to load metadata file: {str(e)}')
                       return {}
-                  
+
               def fetch_github_deployments(self) -> List[Dict[str, Any]]:
                   """Fetch all deployments from GitHub API"""
                   try:
                       url = f'{self.base_url}/repos/{self.repo}/deployments'
                       deployments = []
                       page = 1
-                      
+
                       while True:
                           response = requests.get(
                               url,
@@ -120,20 +120,20 @@ jobs:
                           )
                           response.raise_for_status()
                           page_data = response.json()
-                          
+
                           if not page_data:
                               break
-                          
+
                           deployments.extend(page_data)
                           page += 1
-                          
+
                       self.log_output(f'Fetched {len(deployments)} deployments from GitHub API')
                       return deployments
                   except Exception as e:
                       self.log_output(f'Error fetching deployments: {str(e)}', 'error')
                       self.critical_issues.append(f'Failed to fetch deployments from API: {str(e)}')
                       return []
-                  
+
               def fetch_deployment_statuses(self, deployment_id: int) -> List[Dict[str, Any]]:
                   """Fetch statuses for a specific deployment"""
                   try:
@@ -144,15 +144,15 @@ jobs:
                   except Exception as e:
                       self.log_output(f'Error fetching statuses for deployment {deployment_id}: {str(e)}', 'error')
                       return []
-                  
+
               def verify_consistency(self, metadata: Dict, api_deployments: List) -> None:
                   """Verify consistency between metadata and API state"""
                   self.log_output('Starting consistency verification...')
-                  
+
                   metadata_deployments = metadata.get('deployments', {})
                   api_deployment_ids = {d['id'] for d in api_deployments}
                   metadata_ids = set(metadata_deployments.keys())
-                  
+
                   # Check for deployments in metadata but not in API
                   orphaned_ids = metadata_ids - api_deployment_ids
                   if orphaned_ids:
@@ -160,12 +160,12 @@ jobs:
                           issue = f'Deployment {dep_id} exists in metadata but not in GitHub API'
                           self.discrepancies.append(issue)
                           self.log_output(issue, 'warning')
-                          
+
                           if self.auto_repair:
                               self.log_output(f'Auto-repairing: Removing orphaned deployment {dep_id}', 'info')
                               del metadata_deployments[dep_id]
                               self.auto_repairs.append(f'Removed orphaned deployment {dep_id}')
-                  
+
                   # Check for deployments in API but not in metadata
                   missing_ids = api_deployment_ids - metadata_ids
                   if missing_ids:
@@ -174,7 +174,7 @@ jobs:
                               issue = f'Deployment {deployment["id"]} exists in API but not in metadata'
                               self.discrepancies.append(issue)
                               self.log_output(issue, 'warning')
-                              
+
                               if self.auto_repair:
                                   self.log_output(f'Auto-repairing: Adding deployment {deployment["id"]} to metadata', 'info')
                                   metadata_deployments[str(deployment['id'])] = {
@@ -186,29 +186,29 @@ jobs:
                                       'updated_at': deployment['updated_at']
                                   }
                                   self.auto_repairs.append(f'Added missing deployment {deployment["id"]} to metadata')
-                  
+
                   # Verify deployment details
                   for deployment in api_deployments:
                       dep_id = str(deployment['id'])
                       if dep_id in metadata_deployments:
                           meta_dep = metadata_deployments[dep_id]
-                          
+
                           # Check SHA consistency
                           if meta_dep.get('sha') != deployment['sha']:
                               issue = f'SHA mismatch for deployment {dep_id}: metadata={meta_dep.get("sha")} vs api={deployment["sha"]}'
                               self.discrepancies.append(issue)
                               self.log_output(issue, 'warning')
-                              
+
                               if self.auto_repair:
                                   meta_dep['sha'] = deployment['sha']
                                   self.auto_repairs.append(f'Fixed SHA for deployment {dep_id}')
-                          
+
                           # Check environment consistency
                           if meta_dep.get('environment') != deployment['environment']:
                               issue = f'Environment mismatch for deployment {dep_id}: metadata={meta_dep.get("environment")} vs api={deployment["environment"]}'
                               self.critical_issues.append(issue)
                               self.log_output(issue, 'error')
-                          
+
                           # Check status consistency
                           statuses = self.fetch_deployment_statuses(deployment['id'])
                           if statuses:
@@ -217,22 +217,22 @@ jobs:
                                   issue = f'Status mismatch for deployment {dep_id}: metadata={meta_dep.get("status")} vs api={latest_status}'
                                   self.discrepancies.append(issue)
                                   self.log_output(issue, 'warning')
-                                  
+
                                   if self.auto_repair:
                                       meta_dep['status'] = latest_status
                                       self.auto_repairs.append(f'Updated status for deployment {dep_id} to {latest_status}')
-                  
+
               def validate_metadata_structure(self, metadata: Dict) -> None:
                   """Validate metadata file structure"""
                   self.log_output('Validating metadata structure...')
-                  
+
                   required_fields = ['version', 'deployments']
                   for field in required_fields:
                       if field not in metadata:
                           warning = f'Missing required field in metadata: {field}'
                           self.warnings.append(warning)
                           self.log_output(warning, 'warning')
-                          
+
                           if self.auto_repair:
                               if field == 'version':
                                   metadata[field] = '1.0.0'
@@ -240,7 +240,7 @@ jobs:
                               elif field == 'deployments':
                                   metadata[field] = {}
                                   self.auto_repairs.append('Added missing deployments field')
-                  
+
               def save_metadata(self, metadata: Dict) -> bool:
                   """Save updated metadata back to file"""
                   try:
@@ -252,7 +252,7 @@ jobs:
                       self.log_output(f'Error saving metadata: {str(e)}', 'error')
                       self.critical_issues.append(f'Failed to save metadata file: {str(e)}')
                       return False
-                  
+
               def generate_report(self) -> str:
                   """Generate reconciliation report"""
                   report = []
@@ -260,77 +260,77 @@ jobs:
                   report.append(f'\n**Timestamp:** {datetime.utcnow().isoformat()}')
                   report.append(f'**Repository:** {self.repo}')
                   report.append(f'**Auto-Repair Enabled:** {self.auto_repair}')
-                  
+
                   # Summary
                   report.append('\n## Summary')
                   report.append(f'- **Discrepancies Found:** {len(self.discrepancies)}')
                   report.append(f'- **Auto-Repairs Applied:** {len(self.auto_repairs)}')
                   report.append(f'- **Critical Issues:** {len(self.critical_issues)}')
                   report.append(f'- **Warnings:** {len(self.warnings)}')
-                  
+
                   # Auto-Repairs
                   if self.auto_repairs:
                       report.append('\n## Auto-Repairs Applied ✅')
                       for repair in self.auto_repairs:
                           report.append(f'- {repair}')
-                  
+
                   # Discrepancies
                   if self.discrepancies:
                       report.append('\n## Discrepancies Found ⚠️')
                       for discrepancy in self.discrepancies:
                           report.append(f'- {discrepancy}')
-                  
+
                   # Critical Issues
                   if self.critical_issues:
                       report.append('\n## Critical Issues 🚨')
                       for issue in self.critical_issues:
                           report.append(f'- {issue}')
-                  
+
                   # Warnings
                   if self.warnings:
                       report.append('\n## Warnings ⚠️')
                       for warning in self.warnings:
                           report.append(f'- {warning}')
-                  
+
                   if not any([self.auto_repairs, self.discrepancies, self.critical_issues, self.warnings]):
                       report.append('\n## Status ✅')
                       report.append('All deployment metadata is consistent with GitHub API state.')
-                  
+
                   return '\n'.join(report)
-                  
+
               def run(self) -> int:
                   """Execute reconciliation workflow"""
                   self.log_output('Starting deployment metadata reconciliation...')
-                  
+
                   # Load metadata
                   metadata = self.load_metadata()
-                  
+
                   # Validate structure
                   self.validate_metadata_structure(metadata)
-                  
+
                   # Fetch API data
                   api_deployments = self.fetch_github_deployments()
-                  
+
                   # Verify consistency
                   if metadata and api_deployments:
                       self.verify_consistency(metadata, api_deployments)
-                  
+
                   # Save updated metadata if repairs were applied
                   if self.auto_repairs and metadata:
                       self.save_metadata(metadata)
-                  
+
                   # Generate report
                   report = self.generate_report()
                   print('\n' + '='*80)
                   print(report)
                   print('='*80)
-                  
+
                   # Set workflow outputs
                   self.set_workflow_output('report', report)
                   self.set_workflow_output('discrepancies_found', str(len(self.discrepancies)))
                   self.set_workflow_output('critical_issues_found', str(len(self.critical_issues)))
                   self.set_workflow_output('repairs_applied', str(len(self.auto_repairs)))
-                  
+
                   # Return exit code (fail if critical issues)
                   if self.critical_issues:
                       self.log_output(f'Reconciliation completed with {len(self.critical_issues)} critical issue(s)', 'error')
@@ -352,7 +352,7 @@ jobs:
           script: |
             const report = `${{ steps.reconcile.outputs.report }}`;
             const criticalCount = parseInt(`${{ steps.reconcile.outputs.critical_issues_found }}`);
-            
+
             if (criticalCount > 0) {
               github.rest.issues.create({
                 owner: context.repo.owner,
@@ -371,12 +371,12 @@ jobs:
             const discrepancies = parseInt(`${{ steps.reconcile.outputs.discrepancies_found }}`);
             const repairs = parseInt(`${{ steps.reconcile.outputs.repairs_applied }}`);
             const criticalCount = parseInt(`${{ steps.reconcile.outputs.critical_issues_found }}`);
-            
+
             let summary = `**Reconciliation Summary:**\n`;
             summary += `- Discrepancies: ${discrepancies}\n`;
             summary += `- Auto-Repairs: ${repairs}\n`;
             summary += `- Critical Issues: ${criticalCount}`;
-            
+
             if (criticalCount > 0) {
               core.setFailed(summary);
             } else {
@@ -400,10 +400,10 @@ jobs:
             const discrepancies = parseInt(`${{ steps.reconcile.outputs.discrepancies_found }}`);
             const repairs = parseInt(`${{ steps.reconcile.outputs.repairs_applied }}`);
             const criticalCount = parseInt(`${{ steps.reconcile.outputs.critical_issues_found }}`);
-            
+
             const conclusion = criticalCount > 0 ? 'failure' : discrepancies > 0 ? 'neutral' : 'success';
             const status = criticalCount > 0 ? '🚨 Failed' : discrepancies > 0 ? '⚠️ Warning' : '✅ Passed';
-            
+
             core.summary
               .addHeading('Deployment Metadata Reconciliation Results', 2)
               .addRaw(`**Status:** ${status}\n`)

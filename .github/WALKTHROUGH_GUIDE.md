@@ -8,13 +8,13 @@ The Video Walkthrough Generation system is a comprehensive GitHub Actions-based 
 
 ### Key Features
 
-✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites  
-✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles  
-✅ **Automatic Subtitle Generation** - Accessibility-first approach  
-✅ **Zero Manual Intervention** - Fully automated workflow execution  
-✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts  
-✅ **Organization-Wide Deployment** - Single-command rollout to all repositories  
-✅ **Customizable Settings** - Duration, style, focus areas, and more  
+✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites
+✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles
+✅ **Automatic Subtitle Generation** - Accessibility-first approach
+✅ **Zero Manual Intervention** - Fully automated workflow execution
+✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts
+✅ **Organization-Wide Deployment** - Single-command rollout to all repositories
+✅ **Customizable Settings** - Duration, style, focus areas, and more
 ✅ **90-Day Artifact Retention** - Long-term storage of video walkthroughs
 
 ---
@@ -386,7 +386,7 @@ Modify in configuration:
 ```yaml
 quality:
   quality_preset: "high"  # Options: low, medium, high, ultra
-  
+
   # Custom encoding settings
   encoding:
     codec: libx264

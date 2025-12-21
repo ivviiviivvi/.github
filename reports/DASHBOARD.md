@@ -5,6 +5,18 @@
 
 ---
 
+## 📋 Table of Contents
+
+- [Quick Stats](#-quick-stats)
+- [Repository Health](#-repository-health)
+- [Link Health](#-link-health)
+- [Alerts](#-alerts)
+- [Ecosystem Map](#-ecosystem-map)
+- [Technology Coverage](#-technology-coverage)
+- [Active Workflows](#-active-workflows)
+
+---
+
 ## 📊 Quick Stats
 
 | Category | Count |
@@ -15,6 +27,8 @@
 | Copilot Prompts | 114 |
 | Copilot Chat Modes | 87 |
 | Technologies Supported | 109 |
+
+[Back to Top](#organization-ecosystem-dashboard)
 
 ## ⚠️  Alerts
 
@@ -33,6 +47,8 @@
   - Critical workflow deployment.yml not found
   - 💡 Implement deployment.yml to ensure automated deployment
 
+[Back to Top](#organization-ecosystem-dashboard)
+
 
 ## 🗺️  Ecosystem Map
 
@@ -40,9 +56,9 @@
 graph TD
     %% Styles
     classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
-    classDef workflow fill:#ddf4ff,stroke:#54aeff,color:#24292f,stroke-width:1px;
-    classDef agent fill:#fff8c5,stroke:#d4a72c,color:#24292f,stroke-width:1px;
-    classDef tech fill:#dafbe1,stroke:#4ac26b,color:#24292f,stroke-width:1px;
+    classDef workflow fill:#8250df,stroke:#54aeff,color:#fff,stroke-width:1px;
+    classDef agent fill:#1f883d,stroke:#d4a72c,color:#fff,stroke-width:1px;
+    classDef tech fill:#57606a,stroke:#4ac26b,color:#fff,stroke-width:1px;
 
     subgraph "GitHub Organization"
         ORG[Organization Root]:::org
@@ -109,9 +125,14 @@ graph TD
     end
 ```
 
+[Back to Top](#organization-ecosystem-dashboard)
+
 ## 🛠️  Technology Coverage
 
 Supported languages and frameworks:
+
+<details>
+<summary>View all 109 technologies</summary>
 
 | `a11y` | `ai-prompt-engineering-safety-best-practices` | `angular` | `ansible` |
 | --- | --- | --- | --- |
@@ -143,7 +164,14 @@ Supported languages and frameworks:
 | `typescript-5-es2022` | `typescript-mcp-server` | `update-code-from-shorthand` | `vuejs3` |
 | `wordpress` |  |  |  |
 
-## ⚙️  Active Workflows (32)
+</details>
+
+[Back to Top](#organization-ecosystem-dashboard)
+
+## ⚙️  Active Workflows
+
+<details>
+<summary>View all 32 workflows</summary>
 
 - `accessibility-testing.yml`
 - `auto-assign.yml`
@@ -177,6 +205,10 @@ Supported languages and frameworks:
 - `version-bump.yml`
 - `weekly-commit-report.yml`
 - `welcome.yml`
+
+</details>
+
+[Back to Top](#organization-ecosystem-dashboard)
 
 ---
 
