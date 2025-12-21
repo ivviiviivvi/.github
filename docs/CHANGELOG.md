@@ -8,24 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial repository setup with comprehensive community health files
 - GitHub Actions workflows for automation
 - Issue and PR templates
 - Security policies and scanning
 
 ### Changed
-- N/A
+
+- [e3a533e](https://github.com/ivviiviivvi/.github/commit/e3a533e3f06f38d6c1c3f6f3cd0dd2e22853a2e4) - Consolidated documentation into structured docs/ subdirectories and centralized config files
 
 ### Deprecated
+
 - N/A
 
 ### Removed
+
 - N/A
 
 ### Fixed
+
 - N/A
 
 ### Security
+
 - N/A
 
 ---
@@ -49,19 +55,23 @@ When making changes to the project, please update this changelog following these
 ## [1.0.0] - 2024-01-15
 
 ### Added
+
 - New user authentication system
 - API endpoint for user registration
 - Email verification workflow
 
 ### Changed
+
 - Updated database schema to support new user fields
 - Improved error handling in API responses
 
 ### Fixed
+
 - Fixed memory leak in background processing
 - Resolved race condition in concurrent requests
 
 ### Security
+
 - Patched XSS vulnerability in user input handling
 ```
 
