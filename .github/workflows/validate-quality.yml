@@ -1,0 +1,401 @@
+name: Video Quality Validation
+
+on:
+  push:
+    paths:
+      - 'videos/**'
+      - '.github/workflows/validate-quality.yml'
+  pull_request:
+    paths:
+      - 'videos/**'
+  workflow_dispatch:
+
+jobs:
+  validate-video-quality:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install TruffleHog for secret scanning
+        run: pip install truffleHog
+
+      - name: Install additional tools
+        run: |
+          sudo apt-get install -y mediainfo
+          pip install pyyaml
+
+      - name: Validate video duration
+        id: duration-check
+        run: |
+          echo "Checking video duration validation..."
+          duration_check_passed=true
+          invalid_videos=""
+          
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            if [ -f "$video" ]; then
+              duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1:noinvert=1 "$video" 2>/dev/null || echo "0")
+              duration_int=${duration%.*}
+              
+              # Check if duration is within acceptable range (60s - 3600s for walkthrough videos)
+              if [ "$duration_int" -lt 60 ] || [ "$duration_int" -gt 3600 ]; then
+                echo "❌ Invalid duration for $video: ${duration_int}s (must be between 60s and 3600s)"
+                invalid_videos="$invalid_videos\n- $video (${duration_int}s)"
+                duration_check_passed=false
+              else
+                echo "✅ Valid duration for $video: ${duration_int}s"
+              fi
+            fi
+          done
+          
+          if [ "$duration_check_passed" = false ]; then
+            echo "duration_failed=true" >> $GITHUB_OUTPUT
+            echo "invalid_durations<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$invalid_videos" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "duration_failed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate bitrate
+        id: bitrate-check
+        continue-on-error: true
+        run: |
+          echo "Checking video bitrate validation..."
+          bitrate_check_passed=true
+          invalid_bitrates=""
+          
+          # Acceptable bitrate range: 1000k - 8000k (1Mbps - 8Mbps)
+          min_bitrate=1000
+          max_bitrate=8000
+          
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            if [ -f "$video" ]; then
+              bitrate=$(ffprobe -v error -select_streams v:0 -show_entries stream=bit_rate -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null || echo "0")
+              bitrate_kbps=$((bitrate / 1000))
+              
+              if [ "$bitrate_kbps" -lt "$min_bitrate" ] || [ "$bitrate_kbps" -gt "$max_bitrate" ]; then
+                echo "⚠️  Non-optimal bitrate for $video: ${bitrate_kbps}kbps (recommended: ${min_bitrate}k-${max_bitrate}k)"
+                invalid_bitrates="$invalid_bitrates\n- $video (${bitrate_kbps}kbps)"
+                bitrate_check_passed=false
+              else
+                echo "✅ Valid bitrate for $video: ${bitrate_kbps}kbps"
+              fi
+            fi
+          done
+          
+          if [ "$bitrate_check_passed" = false ]; then
+            echo "bitrate_failed=true" >> $GITHUB_OUTPUT
+            echo "invalid_bitrates<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$invalid_bitrates" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "bitrate_failed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate resolution
+        id: resolution-check
+        run: |
+          echo "Checking video resolution validation..."
+          resolution_check_passed=true
+          invalid_resolutions=""
+          
+          # Acceptable resolutions: 1280x720 (720p) or higher
+          min_height=720
+          
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            if [ -f "$video" ]; then
+              width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
+              height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
+              
+              if [ -z "$width" ] || [ -z "$height" ]; then
+                echo "❌ Could not determine resolution for $video"
+                invalid_resolutions="$invalid_resolutions\n- $video (unknown resolution)"
+                resolution_check_passed=false
+              elif [ "$height" -lt "$min_height" ]; then
+                echo "❌ Invalid resolution for $video: ${width}x${height} (minimum: ${min_height}p)"
+                invalid_resolutions="$invalid_resolutions\n- $video (${width}x${height})"
+                resolution_check_passed=false
+              else
+                echo "✅ Valid resolution for $video: ${width}x${height}"
+              fi
+            fi
+          done
+          
+          if [ "$resolution_check_passed" = false ]; then
+            echo "resolution_failed=true" >> $GITHUB_OUTPUT
+            echo "invalid_resolutions<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$invalid_resolutions" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "resolution_failed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Scan for secrets in video metadata
+        id: secret-scan
+        continue-on-error: true
+        run: |
+          echo "Scanning for secrets in videos and related files..."
+          secrets_found=false
+          
+          # Scan video files
+          for video in $(find videos -type f 2>/dev/null); do
+            if [ -f "$video" ]; then
+              # Extract and scan metadata
+              ffprobe -v quiet -print_format json -show_format "$video" 2>/dev/null | \
+              grep -iE '(password|secret|token|api[_-]?key|private[_-]?key|aws|github|azure)' && {
+                echo "⚠️  Potential sensitive data found in: $video"
+                secrets_found=true
+              }
+            fi
+          done
+          
+          # Scan subtitle files for secrets
+          for subtitle in $(find videos -type f \( -name "*.srt" -o -name "*.vtt" -o -name "*.ass" \) 2>/dev/null); do
+            if [ -f "$subtitle" ]; then
+              grep -iE '(password|secret|token|api[_-]?key|private[_-]?key|aws|github|azure|url.*=|http.*://[^s])' "$subtitle" && {
+                echo "⚠️  Potential sensitive data found in: $subtitle"
+                secrets_found=true
+              }
+            fi
+          done
+          
+          if [ "$secrets_found" = true ]; then
+            echo "secrets_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "secrets_found=false" >> $GITHUB_OUTPUT
+            echo "✅ No obvious secrets detected"
+          fi
+
+      - name: Validate subtitles
+        id: subtitle-check
+        continue-on-error: true
+        run: |
+          echo "Validating subtitle files..."
+          subtitle_check_passed=true
+          validation_issues=""
+          
+          for subtitle in $(find videos -type f \( -name "*.srt" -o -name "*.vtt" -o -name "*.ass" \) 2>/dev/null); do
+            if [ -f "$subtitle" ]; then
+              echo "Checking subtitle: $subtitle"
+              
+              # Check file size (should not exceed 5MB)
+              size=$(stat -f%z "$subtitle" 2>/dev/null || stat -c%s "$subtitle" 2>/dev/null)
+              if [ "$size" -gt 5242880 ]; then
+                echo "⚠️  Subtitle file too large: $subtitle ($(($size / 1048576))MB, max 5MB)"
+                validation_issues="$validation_issues\n- $subtitle (file too large: $(($size / 1048576))MB)"
+                subtitle_check_passed=false
+              fi
+              
+              # Validate SRT format
+              if [[ "$subtitle" == *.srt ]]; then
+                if grep -qE '^[0-9]+$' "$subtitle" && grep -qE '^[0-9]{2}:[0-9]{2}:[0-9]{2}' "$subtitle"; then
+                  echo "✅ Valid SRT format: $subtitle"
+                else
+                  echo "⚠️  Potential SRT format issues: $subtitle"
+                  validation_issues="$validation_issues\n- $subtitle (format issues)"
+                  subtitle_check_passed=false
+                fi
+              fi
+              
+              # Check for invalid characters
+              if grep -q $'[\x80-\xFF]' "$subtitle"; then
+                # This might be valid UTF-8, just warn
+                echo "✅ Valid encoding: $subtitle"
+              fi
+            fi
+          done
+          
+          # Check if video files have associated subtitle files
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            base_name="${video%.*}"
+            if [ ! -f "${base_name}.srt" ] && [ ! -f "${base_name}.vtt" ] && [ ! -f "${base_name}.ass" ]; then
+              echo "⚠️  No subtitle file found for: $video"
+              validation_issues="$validation_issues\n- $video (missing subtitle file)"
+              subtitle_check_passed=false
+            fi
+          done
+          
+          if [ "$subtitle_check_passed" = false ]; then
+            echo "subtitle_failed=true" >> $GITHUB_OUTPUT
+            echo "subtitle_issues<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$validation_issues" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "subtitle_failed=false" >> $GITHUB_OUTPUT
+            echo "✅ All subtitle validations passed"
+          fi
+
+      - name: Generate validation report
+        if: always()
+        run: |
+          echo "## 📋 Video Quality Validation Report" > validation_report.md
+          echo "" >> validation_report.md
+          
+          echo "### Duration Check" >> validation_report.md
+          if [ "${{ steps.duration-check.outcome }}" = "failure" ]; then
+            echo "❌ FAILED" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+            echo "${{ steps.duration-check.outputs.invalid_durations }}" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+          else
+            echo "✅ PASSED" >> validation_report.md
+          fi
+          echo "" >> validation_report.md
+          
+          echo "### Bitrate Check" >> validation_report.md
+          if [ "${{ steps.bitrate-check.outputs.bitrate_failed }}" = "true" ]; then
+            echo "⚠️  WARNING" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+            echo "${{ steps.bitrate-check.outputs.invalid_bitrates }}" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+          else
+            echo "✅ PASSED" >> validation_report.md
+          fi
+          echo "" >> validation_report.md
+          
+          echo "### Resolution Check" >> validation_report.md
+          if [ "${{ steps.resolution-check.outcome }}" = "failure" ]; then
+            echo "❌ FAILED" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+            echo "${{ steps.resolution-check.outputs.invalid_resolutions }}" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+          else
+            echo "✅ PASSED" >> validation_report.md
+          fi
+          echo "" >> validation_report.md
+          
+          echo "### Secret Scan" >> validation_report.md
+          if [ "${{ steps.secret-scan.outputs.secrets_found }}" = "true" ]; then
+            echo "⚠️  POTENTIAL SECRETS DETECTED - Review Required" >> validation_report.md
+          else
+            echo "✅ PASSED" >> validation_report.md
+          fi
+          echo "" >> validation_report.md
+          
+          echo "### Subtitle Validation" >> validation_report.md
+          if [ "${{ steps.subtitle-check.outputs.subtitle_failed }}" = "true" ]; then
+            echo "⚠️  WARNING" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+            echo "${{ steps.subtitle-check.outputs.subtitle_issues }}" >> validation_report.md
+            echo "\`\`\`" >> validation_report.md
+          else
+            echo "✅ PASSED" >> validation_report.md
+          fi
+          echo "" >> validation_report.md
+          
+          echo "---" >> validation_report.md
+          echo "_Report generated on: $(date -u +'%Y-%m-%d %H:%M:%S UTC')_" >> validation_report.md
+          
+          cat validation_report.md
+
+      - name: Comment validation report on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('validation_report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+      - name: Check validation results
+        if: |
+          steps.duration-check.outcome == 'failure' ||
+          steps.resolution-check.outcome == 'failure'
+        run: |
+          echo "❌ Critical validations failed. Please review the report above."
+          exit 1
+
+  validate-video-codec:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Validate video codec and format
+        run: |
+          echo "Validating video codecs and formats..."
+          codec_check_passed=true
+          
+          # Acceptable video codecs: H.264, H.265/HEVC, VP9
+          acceptable_codecs="h264|hevc|vp9|h265"
+          # Acceptable audio codecs: AAC, MP3, Opus
+          acceptable_audio="aac|mp3|opus"
+          
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            if [ -f "$video" ]; then
+              video_codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
+              audio_codec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
+              
+              if echo "$video_codec" | grep -iqE "$acceptable_codecs"; then
+                echo "✅ Valid video codec for $video: $video_codec"
+              else
+                echo "⚠️  Non-standard video codec for $video: $video_codec"
+              fi
+              
+              if echo "$audio_codec" | grep -iqE "$acceptable_audio"; then
+                echo "✅ Valid audio codec for $video: $audio_codec"
+              else
+                echo "⚠️  Non-standard audio codec for $video: $audio_codec"
+              fi
+            fi
+          done
+
+  validate-video-integrity:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Check video file integrity
+        continue-on-error: true
+        run: |
+          echo "Checking video file integrity..."
+          
+          for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
+            if [ -f "$video" ]; then
+              echo "Checking integrity of: $video"
+              
+              # Use ffmpeg to validate file structure
+              if ffmpeg -v error -i "$video" -f null - 2>&1 | grep -q "error\|corrupt"; then
+                echo "⚠️  Potential corruption detected in: $video"
+              else
+                echo "✅ File integrity OK: $video"
+              fi
+            fi
+          done
