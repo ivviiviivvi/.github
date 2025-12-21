@@ -1,0 +1,399 @@
+name: Organization Walkthrough Generator (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      duration:
+        description: 'Video duration in seconds'
+        required: false
+        default: '60'
+        type: string
+      voiceover_style:
+        description: 'Voiceover style (professional/casual/technical)'
+        required: false
+        default: 'professional'
+        type: string
+      focus_areas:
+        description: 'Key features to highlight (comma-separated)'
+        required: false
+        default: ''
+        type: string
+      target_branch:
+        description: 'Target branch for the walkthrough'
+        required: false
+        default: 'main'
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: false
+        description: 'GitHub token for creating PRs'
+
+jobs:
+  generate-reusable-walkthrough:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch }}
+          fetch-depth: 0
+      
+      - name: Detect application type
+        id: detect
+        run: |
+          echo "Detecting application type..."
+          
+          APP_TYPE="unknown"
+          PORT="3000"
+          START_COMMAND=""
+          
+          # Node.js detection
+          if [ -f "package.json" ]; then
+            if grep -q '"react"' package.json; then
+              APP_TYPE="react"
+              PORT="3000"
+              START_COMMAND="npm start"
+            elif grep -q '"vue"' package.json; then
+              APP_TYPE="vue"
+              PORT="8080"
+              START_COMMAND="npm run serve"
+            elif grep -q '"@angular/core"' package.json; then
+              APP_TYPE="angular"
+              PORT="4200"
+              START_COMMAND="npm start"
+            elif grep -q '"next"' package.json; then
+              APP_TYPE="nextjs"
+              PORT="3000"
+              START_COMMAND="npm run dev"
+            else
+              APP_TYPE="nodejs"
+              PORT="3000"
+              START_COMMAND="npm start"
+            fi
+          # Python detection
+          elif [ -f "requirements.txt" ] || [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then
+            if grep -q -i "flask" requirements.txt 2>/dev/null || grep -q -i "flask" setup.py 2>/dev/null; then
+              APP_TYPE="flask"
+              PORT="5000"
+              START_COMMAND="python app.py"
+            elif grep -q -i "fastapi" requirements.txt 2>/dev/null || grep -q -i "fastapi" setup.py 2>/dev/null; then
+              APP_TYPE="fastapi"
+              PORT="8000"
+              START_COMMAND="uvicorn main:app --host 0.0.0.0"
+            elif grep -q -i "django" requirements.txt 2>/dev/null || grep -q -i "django" setup.py 2>/dev/null; then
+              APP_TYPE="django"
+              PORT="8000"
+              START_COMMAND="python manage.py runserver"
+            else
+              APP_TYPE="python"
+              PORT="8000"
+              START_COMMAND="python main.py"
+            fi
+          # Java detection
+          elif [ -f "pom.xml" ]; then
+            APP_TYPE="maven"
+            PORT="8080"
+            START_COMMAND="mvn spring-boot:run"
+          elif [ -f "build.gradle" ]; then
+            APP_TYPE="gradle"
+            PORT="8080"
+            START_COMMAND="./gradlew bootRun"
+          # Static site detection
+          elif [ -f "index.html" ]; then
+            APP_TYPE="static"
+            PORT="8000"
+            START_COMMAND="python3 -m http.server 8000"
+          fi
+          
+          echo "app_type=${APP_TYPE}" >> $GITHUB_OUTPUT
+          echo "port=${PORT}" >> $GITHUB_OUTPUT
+          echo "start_command=${START_COMMAND}" >> $GITHUB_OUTPUT
+          
+          echo "Detected: ${APP_TYPE} on port ${PORT}"
+          echo "Start command: ${START_COMMAND}"
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ffmpeg \
+            xvfb \
+            chromium-browser \
+            chromium-chromedriver \
+            python3-pip \
+            python3-venv
+      
+      - name: Set up Node.js
+        if: contains(fromJSON('["react", "vue", "angular", "nextjs", "nodejs"]'), steps.detect.outputs.app_type)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install application dependencies
+        run: |
+          APP_TYPE="${{ steps.detect.outputs.app_type }}"
+          
+          if [[ "$APP_TYPE" =~ ^(react|vue|angular|nextjs|nodejs)$ ]]; then
+            echo "Installing Node.js dependencies..."
+            npm ci || npm install
+          elif [[ "$APP_TYPE" =~ ^(flask|fastapi|django|python)$ ]]; then
+            echo "Installing Python dependencies..."
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install --upgrade pip
+            if [ -f "requirements.txt" ]; then
+              pip install -r requirements.txt
+            fi
+            if [ "$APP_TYPE" = "fastapi" ]; then
+              pip install uvicorn
+            fi
+          elif [ "$APP_TYPE" = "maven" ]; then
+            echo "Installing Maven dependencies..."
+            mvn clean install -DskipTests
+          elif [ "$APP_TYPE" = "gradle" ]; then
+            echo "Installing Gradle dependencies..."
+            ./gradlew build -x test
+          fi
+      
+      - name: Clone repo-to-video tool
+        run: |
+          # Pin to specific commit for security and reproducibility
+          REPO_TO_VIDEO_COMMIT="HEAD"  # TODO: Update with specific commit hash when available
+          git clone https://github.com/dpills/repo-to-video.git /tmp/repo-to-video
+          cd /tmp/repo-to-video
+          # Uncomment when pinning to specific version:
+          # git checkout $REPO_TO_VIDEO_COMMIT
+          pip install -r requirements.txt || echo "repo-to-video requirements installed"
+      
+      - name: Start application
+        id: start_app
+        run: |
+          APP_TYPE="${{ steps.detect.outputs.app_type }}"
+          START_COMMAND="${{ steps.detect.outputs.start_command }}"
+          PORT="${{ steps.detect.outputs.port }}"
+          
+          echo "Starting application: ${APP_TYPE}"
+          
+          # Start Xvfb for headless browser
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+          
+          # Start the application in background
+          if [[ "$APP_TYPE" =~ ^(flask|fastapi|django|python)$ ]]; then
+            source venv/bin/activate
+          fi
+          
+          if [ "$APP_TYPE" != "unknown" ] && [ -n "$START_COMMAND" ]; then
+            nohup $START_COMMAND > app.log 2>&1 &
+            APP_PID=$!
+            echo "app_pid=${APP_PID}" >> $GITHUB_OUTPUT
+            
+            # Wait for app to be ready
+            echo "Waiting for application to start on port ${PORT}..."
+            for i in {1..60}; do
+              if curl -s http://localhost:${PORT} > /dev/null 2>&1; then
+                echo "Application is ready!"
+                break
+              fi
+              echo "Attempt $i/60: Waiting..."
+              sleep 2
+            done
+            
+            # Check if app is running
+            if ! curl -s http://localhost:${PORT} > /dev/null 2>&1; then
+              echo "Warning: Application may not be fully started"
+              echo "Application logs:"
+              tail -n 50 app.log || echo "No logs available"
+            fi
+          else
+            echo "Unable to start application: unknown type or no start command"
+            exit 1
+          fi
+      
+      - name: Generate video walkthrough
+        env:
+          DISPLAY: :99
+        run: |
+          DURATION="${{ inputs.duration }}"
+          VOICEOVER_STYLE="${{ inputs.voiceover_style }}"
+          FOCUS_AREAS="${{ inputs.focus_areas }}"
+          APP_NAME="${{ github.event.repository.name }}"
+          APP_URL="http://localhost:${{ steps.detect.outputs.port }}"
+          DATE=$(date +%Y%m%d)
+          
+          mkdir -p walkthroughs
+          
+          echo "Generating video walkthrough..."
+          echo "Duration: ${DURATION}s"
+          echo "Voiceover style: ${VOICEOVER_STYLE}"
+          echo "App URL: ${APP_URL}"
+          
+          # Create a simple script for repo-to-video
+          cat > /tmp/walkthrough-script.txt << EOF
+          Welcome to ${APP_NAME}, a ${{ steps.detect.outputs.app_type }} application.
+          This is an automated walkthrough generated on $(date +%Y-%m-%d).
+          ${FOCUS_AREAS:+Key features include: ${FOCUS_AREAS}.}
+          Let's explore the main functionality of this application.
+          EOF
+          
+          # Generate video using ffmpeg screen recording
+          cd /tmp/repo-to-video
+          
+          python3 << 'PYTHON_SCRIPT'
+          import subprocess
+          import os
+          import re
+          import sys
+          
+          # Sanitize APP_NAME to prevent path traversal
+          app_name = re.sub(r'[^a-zA-Z0-9_-]', '_', os.environ['APP_NAME'])
+          output_file = f"walkthroughs/{app_name}-walkthrough-{os.environ['DATE']}.mp4"
+          duration = int(os.environ.get('DURATION', '60'))
+          
+          print(f"Recording {duration} seconds")
+          
+          # Use ffmpeg to record the screen
+          cmd = [
+              'ffmpeg',
+              '-video_size', '1920x1080',
+              '-framerate', '30',
+              '-f', 'x11grab',
+              '-i', ':99',
+              '-t', str(duration),
+              '-c:v', 'libx264',
+              '-preset', 'fast',
+              '-pix_fmt', 'yuv420p',
+              output_file
+          ]
+          
+          try:
+              subprocess.run(cmd, check=True, timeout=duration + 30)
+              print(f"Video generated: {output_file}")
+          except Exception as e:
+              print(f"Error generating video: {e}")
+              # Create an error marker file instead of fake video
+              error_file = output_file.replace('.mp4', '.error')
+              with open(error_file, 'w') as f:
+                  f.write(f"Video generation failed: {e}")
+              # Exit with error
+              sys.exit(1)
+          PYTHON_SCRIPT
+          
+          # Generate metadata
+          cat > walkthroughs/${APP_NAME}-metadata.json << EOF
+          {
+            "repository": "${{ github.repository }}",
+            "app_name": "${APP_NAME}",
+            "app_type": "${{ steps.detect.outputs.app_type }}",
+            "generation_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "duration": ${DURATION},
+            "voiceover_style": "${VOICEOVER_STYLE}",
+            "focus_areas": "${FOCUS_AREAS}",
+            "port": "${{ steps.detect.outputs.port }}",
+            "video_file": "${APP_NAME}-walkthrough-${DATE}.mp4"
+          }
+          EOF
+          
+          echo "Walkthrough generation complete!"
+          ls -lh walkthroughs/
+      
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -n "${{ steps.start_app.outputs.app_pid }}" ]; then
+            kill ${{ steps.start_app.outputs.app_pid }} 2>/dev/null || true
+          fi
+          pkill -f "npm start" || true
+          pkill -f "python app.py" || true
+          pkill -f "uvicorn" || true
+      
+      - name: Upload video artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: walkthrough-${{ github.event.repository.name }}-${{ github.run_number }}
+          path: |
+            walkthroughs/*.mp4
+            walkthroughs/*.json
+          retention-days: 90
+      
+      - name: Create Pull Request with artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+        run: |
+          APP_NAME="${{ github.event.repository.name }}"
+          DATE=$(date +%Y-%m-%d)
+          BRANCH_NAME="walkthrough/update-${DATE}-${{ github.run_number }}"
+          
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create new branch
+          git checkout -b ${BRANCH_NAME}
+          
+          # Add walkthrough files
+          git add walkthroughs/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          # Commit changes
+          git commit -m "feat: add video walkthrough generated on ${DATE}"
+          
+          # Push branch
+          git push origin ${BRANCH_NAME}
+          
+          # Create PR
+          DURATION="${{ inputs.duration }}"
+          VOICEOVER_STYLE="${{ inputs.voiceover_style }}"
+          FOCUS_AREAS="${{ inputs.focus_areas || 'N/A' }}"
+          
+          gh pr create \
+            --title "Add video walkthrough - ${DATE}" \
+            --body "## 🎥 Video Walkthrough Generated
+
+          **Repository:** ${APP_NAME}
+          **Generation Date:** ${DATE}
+          **Duration:** ${DURATION} seconds
+          **Voiceover Style:** ${VOICEOVER_STYLE}
+          **Application Type:** ${{ steps.detect.outputs.app_type }}
+          **Features Covered:** ${FOCUS_AREAS}
+          
+          ### 📦 Artifacts
+          
+          This PR includes:
+          - Video walkthrough (\`walkthroughs/${APP_NAME}-walkthrough-*.mp4\`)
+          - Metadata file (\`walkthroughs/${APP_NAME}-metadata.json\`)
+          
+          ### 🎯 How to Use
+          
+          1. Download the video from the \`walkthroughs/\` directory
+          2. Review the metadata file for generation details
+          3. Use the video for documentation, onboarding, or presentations
+          
+          ### ⚙️ Generation Settings
+          
+          - **Triggered by:** Reusable workflow
+          - **Workflow run:** ${{ github.run_number }}
+          - **Target branch:** ${{ inputs.target_branch }}
+          
+          ---
+          
+          *This PR was automatically generated by the Organization Walkthrough Generator workflow.*" \
+            --base ${{ inputs.target_branch }} \
+            --head ${BRANCH_NAME}

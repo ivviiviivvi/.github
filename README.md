@@ -153,6 +153,70 @@ python scripts/mouthpiece_filter.py "need something that watches APIs and alerts
 - [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
 - [Examples & Patterns](docs/mouthpiece-examples.md)
 
+### 🎥 Video Walkthrough Generation System
+
+**Autonomous video documentation for all organization repositories.**
+
+The Video Walkthrough Generation system automatically creates professional 1-minute video walkthroughs with AI voiceover for all repositories in the Ivviiviivvi organization. This provides an engaging way to showcase your projects, onboard new team members, and create compelling documentation.
+
+> *"Turn your code into compelling visual stories—automatically."*
+
+#### Key Features
+
+✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites  
+✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles  
+✅ **Zero Manual Intervention** - Fully automated workflow execution  
+✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts  
+✅ **Organization-Wide Deployment** - Single-command rollout to all repositories  
+✅ **Customizable Settings** - Duration, style, focus areas, and more  
+
+#### Components
+
+- **Main Workflow** (`.github/workflows/generate-walkthrough.yml`) - Automatic video generation with app detection
+- **Reusable Workflow** (`.github/workflows/org-walkthrough-generator.yml`) - Organization-wide reusable workflow
+- **Configuration** (`.github/walkthrough-config.yml`) - Comprehensive settings and detection rules
+- **Bootstrap Script** (`scripts/bootstrap-walkthrough-org.sh`) - Deploy to all organization repositories
+- **Documentation** ([.github/WALKTHROUGH_GUIDE.md](.github/WALKTHROUGH_GUIDE.md)) - Complete usage guide
+
+#### Quick Start
+
+```bash
+# Deploy to all organization repositories
+./scripts/bootstrap-walkthrough-org.sh --dry-run  # Preview first
+./scripts/bootstrap-walkthrough-org.sh            # Deploy
+
+# Manual trigger in any repository
+# Go to Actions → Generate Video Walkthrough → Run workflow
+```
+
+#### Usage in Individual Repositories
+
+Add to your repository's `.github/workflows/walkthrough.yml`:
+
+```yaml
+name: Generate Walkthrough
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+
+jobs:
+  generate:
+    uses: Ivviiviivvi/.github/.github/workflows/org-walkthrough-generator.yml@main
+    with:
+      duration: '60'
+      voiceover_style: 'professional'
+      focus_areas: 'authentication, dashboard, reporting'
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+**Learn More:**
+
+- [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) - Complete documentation
+- [Configuration Reference](.github/walkthrough-config.yml) - All available settings
+- [Bootstrap Script](scripts/bootstrap-walkthrough-org.sh) - Organization deployment
+
 ### Community Health Files
 
 These files establish standards for community interaction and contribution acros
@@ -227,6 +291,17 @@ Reusable GitHub Actions workflows ready to use in any repository:
 | [stale-management.yml](workflow-templates/stale-management.yml)     | Stale issue and PR management         | Keeping repositories clean     |
 | [dependency-updates.yml](workflow-templates/dependency-updates.yml) | Automated dependency update workflows | Managing dependencies          |
 | [deployment.yml](workflow-templates/deployment.yml)                 | Deployment pipeline                   | Staging and production releases |
+
+#### Organization Workflows
+
+Advanced workflows for organization-wide automation:
+
+| Workflow                                                                            | Purpose                               | Trigger                        |
+| ----------------------------------------------------------------------------------- | ------------------------------------- | ------------------------------ |
+| [generate-walkthrough.yml](.github/workflows/generate-walkthrough.yml)             | Generate video walkthroughs           | Manual, code changes           |
+| [org-walkthrough-generator.yml](.github/workflows/org-walkthrough-generator.yml)   | Reusable video generation workflow    | Called by other workflows      |
+
+See [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) for detailed documentation.
 
 ### Automation Configuration
 

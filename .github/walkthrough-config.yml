@@ -1,0 +1,349 @@
+# Video Walkthrough Configuration
+# This file configures the automatic video walkthrough generation system
+
+# Default Settings
+defaults:
+  # Default video duration in seconds
+  duration: 60
+  
+  # Default voiceover style: professional, casual, or technical
+  voiceover_style: professional
+  
+  # Default frame rate for video recording
+  framerate: 30
+  
+  # Default video resolution
+  resolution:
+    width: 1920
+    height: 1080
+  
+  # Video encoding settings
+  encoding:
+    codec: libx264
+    preset: fast
+    pixel_format: yuv420p
+  
+  # Artifact retention period in days
+  artifact_retention_days: 90
+
+# Application Detection Rules
+detection_rules:
+  # Node.js frameworks
+  nodejs:
+    - framework: react
+      indicators:
+        - file: package.json
+          contains: '"react"'
+      default_port: 3000
+      start_command: "npm start"
+      install_command: "npm ci || npm install"
+      
+    - framework: vue
+      indicators:
+        - file: package.json
+          contains: '"vue"'
+      default_port: 8080
+      start_command: "npm run serve"
+      install_command: "npm ci || npm install"
+      
+    - framework: angular
+      indicators:
+        - file: package.json
+          contains: '"@angular/core"'
+      default_port: 4200
+      start_command: "npm start"
+      install_command: "npm ci || npm install"
+      
+    - framework: nextjs
+      indicators:
+        - file: package.json
+          contains: '"next"'
+      default_port: 3000
+      start_command: "npm run dev"
+      install_command: "npm ci || npm install"
+      
+    - framework: nodejs
+      indicators:
+        - file: package.json
+      default_port: 3000
+      start_command: "npm start"
+      install_command: "npm ci || npm install"
+  
+  # Python frameworks
+  python:
+    - framework: flask
+      indicators:
+        - file: requirements.txt
+          contains: "flask"
+        - file: setup.py
+          contains: "flask"
+      default_port: 5000
+      start_command: "python app.py"
+      install_command: "pip install -r requirements.txt"
+      
+    - framework: fastapi
+      indicators:
+        - file: requirements.txt
+          contains: "fastapi"
+        - file: setup.py
+          contains: "fastapi"
+      default_port: 8000
+      start_command: "uvicorn main:app --host 0.0.0.0"
+      install_command: "pip install -r requirements.txt && pip install uvicorn"
+      
+    - framework: django
+      indicators:
+        - file: requirements.txt
+          contains: "django"
+        - file: setup.py
+          contains: "django"
+      default_port: 8000
+      start_command: "python manage.py runserver"
+      install_command: "pip install -r requirements.txt"
+      
+    - framework: python
+      indicators:
+        - file: requirements.txt
+        - file: setup.py
+        - file: pyproject.toml
+      default_port: 8000
+      start_command: "python main.py"
+      install_command: "pip install -r requirements.txt"
+  
+  # Java frameworks
+  java:
+    - framework: maven
+      indicators:
+        - file: pom.xml
+      default_port: 8080
+      start_command: "mvn spring-boot:run"
+      install_command: "mvn clean install -DskipTests"
+      
+    - framework: gradle
+      indicators:
+        - file: build.gradle
+      default_port: 8080
+      start_command: "./gradlew bootRun"
+      install_command: "./gradlew build -x test"
+  
+  # Static sites
+  static:
+    - framework: static
+      indicators:
+        - file: index.html
+      default_port: 8000
+      start_command: "python3 -m http.server 8000"
+      install_command: "echo 'No dependencies to install'"
+
+# Output Configuration
+output:
+  # Directory for generated walkthroughs
+  directory: "walkthroughs"
+  
+  # Naming pattern for video files
+  # Available variables: {app_name}, {date}, {timestamp}, {type}
+  video_filename_pattern: "{app_name}-walkthrough-{date}.mp4"
+  
+  # Naming pattern for metadata files
+  metadata_filename_pattern: "{app_name}-metadata.json"
+  
+  # Include in PR
+  include_in_pr: true
+  
+  # Commit message template
+  commit_message_template: "feat: add video walkthrough generated on {date}"
+  
+  # PR title template
+  pr_title_template: "Add video walkthrough - {date}"
+
+# Voiceover Styles
+voiceover_styles:
+  professional:
+    description: "Clear, formal narration suitable for business presentations"
+    tone: "formal"
+    pace: "moderate"
+    
+  casual:
+    description: "Friendly, conversational narration for informal settings"
+    tone: "informal"
+    pace: "relaxed"
+    
+  technical:
+    description: "Detailed, technical narration for developer audiences"
+    tone: "technical"
+    pace: "measured"
+
+# Repository Exclusion List
+# Repositories matching these patterns will be skipped
+exclusions:
+  # Exact repository names
+  exact:
+    - ".github"
+    - "docs"
+    - "documentation"
+    - "wiki"
+  
+  # Pattern-based exclusions (regex)
+  patterns:
+    - "^test-.*"
+    - "^demo-.*"
+    - ".*-archive$"
+    - ".*-deprecated$"
+  
+  # Topic-based exclusions
+  topics:
+    - "archived"
+    - "deprecated"
+    - "template"
+    - "fork"
+
+# Automation Settings
+automation:
+  # Trigger conditions
+  triggers:
+    # Automatically trigger on push to these branches
+    branches:
+      - main
+      - master
+      - develop
+    
+    # Only trigger when these file types change
+    file_patterns:
+      - "**.js"
+      - "**.jsx"
+      - "**.ts"
+      - "**.tsx"
+      - "**.py"
+      - "**.vue"
+      - "**.json"
+      - "**.html"
+      - "**.css"
+      - "package.json"
+      - "requirements.txt"
+      - "pom.xml"
+      - "build.gradle"
+  
+  # Batch processing settings
+  batch_mode:
+    enabled: false
+    max_concurrent_jobs: 3
+    retry_on_failure: true
+    max_retries: 2
+  
+  # Rate limiting
+  rate_limiting:
+    enabled: true
+    max_runs_per_day: 10
+    cooldown_minutes: 30
+
+# System Dependencies
+# These will be installed before running the application
+system_dependencies:
+  - ffmpeg
+  - xvfb
+  - chromium-browser
+  - chromium-chromedriver
+  - python3-pip
+  - python3-venv
+
+# Advanced Settings
+advanced:
+  # Timeout for application startup (seconds)
+  app_startup_timeout: 120
+  
+  # Timeout for video generation (seconds)
+  video_generation_timeout: 300
+  
+  # Maximum workflow execution time (minutes)
+  max_workflow_timeout: 30
+  
+  # Enable debug logging
+  debug_mode: false
+  
+  # Capture application logs
+  capture_app_logs: true
+  
+  # Maximum log size to include in PR (bytes)
+  max_log_size: 10485760  # 10 MB
+
+# Organization Context
+organization:
+  name: "Ivviiviivvi"
+  owner: "4444JPP"
+  
+  # Default labels for PRs
+  pr_labels:
+    - "automated"
+    - "walkthrough"
+    - "documentation"
+  
+  # Default reviewers (optional)
+  pr_reviewers: []
+  
+  # Auto-merge settings
+  auto_merge:
+    enabled: false
+    require_reviews: 1
+    require_status_checks: true
+
+# Quality Settings
+quality:
+  # Minimum video duration (seconds)
+  min_duration: 30
+  
+  # Maximum video duration (seconds)
+  max_duration: 300
+  
+  # Video quality preset
+  quality_preset: "high"  # low, medium, high, ultra
+  
+  # Audio settings (for voiceover)
+  audio:
+    enabled: true
+    sample_rate: 44100
+    bitrate: "128k"
+  
+  # Subtitle settings
+  subtitles:
+    enabled: true
+    language: "en"
+    format: "srt"
+
+# Notification Settings
+notifications:
+  # Enable notifications
+  enabled: true
+  
+  # Notification channels
+  channels:
+    # GitHub Issues
+    github_issues:
+      enabled: false
+      on_failure: true
+      on_success: false
+    
+    # GitHub Discussions
+    github_discussions:
+      enabled: false
+      category: "Announcements"
+    
+    # PR comments
+    pr_comments:
+      enabled: true
+      include_preview: true
+
+# Monitoring & Analytics
+monitoring:
+  # Track generation metrics
+  enabled: true
+  
+  # Metrics to track
+  metrics:
+    - generation_time
+    - video_size
+    - app_startup_time
+    - success_rate
+  
+  # Store metrics in repository
+  store_metrics: true
+  metrics_file: "reports/walkthrough-metrics.json"
