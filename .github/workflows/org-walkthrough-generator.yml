@@ -169,8 +169,12 @@ jobs:
       
       - name: Clone repo-to-video tool
         run: |
+          # Pin to specific commit for security and reproducibility
+          REPO_TO_VIDEO_COMMIT="HEAD"  # TODO: Update with specific commit hash when available
           git clone https://github.com/dpills/repo-to-video.git /tmp/repo-to-video
           cd /tmp/repo-to-video
+          # Uncomment when pinning to specific version:
+          # git checkout $REPO_TO_VIDEO_COMMIT
           pip install -r requirements.txt || echo "repo-to-video requirements installed"
       
       - name: Start application
@@ -250,8 +254,12 @@ jobs:
           python3 << 'PYTHON_SCRIPT'
           import subprocess
           import os
+          import re
+          import sys
           
-          output_file = f"walkthroughs/{os.environ['APP_NAME']}-walkthrough-{os.environ['DATE']}.mp4"
+          # Sanitize APP_NAME to prevent path traversal
+          app_name = re.sub(r'[^a-zA-Z0-9_-]', '_', os.environ['APP_NAME'])
+          output_file = f"walkthroughs/{app_name}-walkthrough-{os.environ['DATE']}.mp4"
           duration = int(os.environ.get('DURATION', '60'))
           
           print(f"Recording {duration} seconds")
@@ -275,8 +283,12 @@ jobs:
               print(f"Video generated: {output_file}")
           except Exception as e:
               print(f"Error generating video: {e}")
-              with open(output_file, 'w') as f:
-                  f.write("Video generation placeholder")
+              # Create an error marker file instead of fake video
+              error_file = output_file.replace('.mp4', '.error')
+              with open(error_file, 'w') as f:
+                  f.write(f"Video generation failed: {e}")
+              # Exit with error
+              sys.exit(1)
           PYTHON_SCRIPT
           
           # Generate metadata

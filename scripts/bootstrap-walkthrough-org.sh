@@ -255,12 +255,20 @@ get_repositories() {
         filter_forks="--no-forks"
     fi
     
-    # Get repositories using GitHub CLI
+    # Get repositories using GitHub CLI with pagination support
+    # Default limit is high but should handle most organizations
     local repos=$(gh repo list "$ORG_NAME" \
         --limit 1000 \
         --json name,isArchived,isFork,isPrivate \
         $filter_archived \
         | jq -r '.[].name')
+    
+    # Warn if approaching limit
+    local count=$(echo "$repos" | wc -l)
+    if [ "$count" -ge 900 ]; then
+        print_warning "Approaching repository limit (${count}/1000). Some repos may be missed."
+        print_warning "Consider filtering by topic or other criteria."
+    fi
     
     echo "$repos"
 }
@@ -330,16 +338,19 @@ create_pr() {
     
     # Create branch
     local branch_name="feature/add-video-walkthrough-$(date +%Y%m%d)"
+    local unique_suffix=""
     
     if [ "$DRY_RUN" = true ]; then
         print_warning "[DRY RUN] Would create PR in: $repo_name"
         return 0
     fi
     
-    # Check if branch already exists
+    # Check if branch already exists and add unique identifier
     if git ls-remote --heads origin "$branch_name" | grep -q "$branch_name"; then
         print_warning "Branch already exists: $branch_name"
-        branch_name="${branch_name}-$(date +%H%M%S)"
+        # Use repository name and timestamp for uniqueness
+        unique_suffix="-${repo_name}-$(date +%H%M%S)"
+        branch_name="${branch_name}${unique_suffix}"
     fi
     
     git checkout -b "$branch_name" 2>/dev/null || {
