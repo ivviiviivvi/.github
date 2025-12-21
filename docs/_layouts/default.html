@@ -502,18 +502,19 @@
       const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            const video = entry.target;
-            if (video.dataset.src) {
-              video.src = video.dataset.src;
+            const source = entry.target;
+            const video = source.parentElement;
+            if (source.dataset.src) {
+              source.src = source.dataset.src;
               video.load();
-              videoObserver.unobserve(video);
+              videoObserver.unobserve(source);
             }
           }
         });
       });
 
-      document.querySelectorAll('video[data-src]').forEach(video => {
-        videoObserver.observe(video);
+      document.querySelectorAll('source[data-src]').forEach(source => {
+        videoObserver.observe(source);
       });
     }
   </script>

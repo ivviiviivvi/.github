@@ -99,7 +99,7 @@ jobs:
           # Counter for walkthroughs found
           WALKTHROUGH_COUNT=0
 
-          # Process each repository
+          # Process each repository (use process substitution to maintain variable scope)
           while IFS= read -r repo; do
             REPO_NAME=$(echo "$repo" | jq -r '.name')
             REPO_FULL_NAME=$(echo "$repo" | jq -r '.full_name')

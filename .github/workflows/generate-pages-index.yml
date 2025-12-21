@@ -68,13 +68,13 @@ jobs:
             --paginate \
             --jq '.[] | select(.archived == false)' > /tmp/repos.json
 
-          REPO_COUNT=$(jq -s 'length' /tmp/repos.json)
+          REPO_COUNT=$(grep -c '\"name\"' /tmp/repos.json)
           echo "Found $REPO_COUNT active repositories"
 
           WALKTHROUGH_COUNT=0
           DEMO_COUNT=0
 
-          # Process each repository
+          # Process each repository (use process substitution to maintain variable scope)
           while IFS= read -r repo; do
             REPO_NAME=$(echo "$repo" | jq -r '.name')
             REPO_FULL_NAME=$(echo "$repo" | jq -r '.full_name')
@@ -183,7 +183,7 @@ jobs:
               fi
             fi
 
-          done < <(jq -c '.' /tmp/repos.json)
+          done < <(jq -c '.' /tmp/repos.json 2>/dev/null || echo '{}')
 
           # Output statistics
           echo "repository_count=$REPO_COUNT" >> $GITHUB_OUTPUT

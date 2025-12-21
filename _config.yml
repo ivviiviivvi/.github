@@ -18,7 +18,6 @@ organization:
 
 # Build settings
 markdown: kramdown
-theme: minima
 permalink: pretty
 
 # Kramdown settings
