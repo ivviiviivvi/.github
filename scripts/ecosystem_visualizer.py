@@ -105,6 +105,43 @@ graph TD
 
         return "".join(parts)
 
+    def _render_grouped_section(self, items: List[Dict]) -> List[str]:
+        """Helper to render grouped alerts/points"""
+        parts = []
+
+        # Group items by category
+        grouped = {}
+        for item in items:
+            cat = item.get('category', 'Unknown')
+            if cat not in grouped:
+                grouped[cat] = []
+            grouped[cat].append(item)
+
+        for category, grouped_items in grouped.items():
+            # Determine highest severity for the category
+            severities = [i.get('severity', 'unknown').upper() for i in grouped_items]
+            if 'CRITICAL' in severities:
+                severity = 'CRITICAL'
+            elif 'HIGH' in severities:
+                severity = 'HIGH'
+            elif 'MEDIUM' in severities:
+                severity = 'MEDIUM'
+            elif 'LOW' in severities:
+                severity = 'LOW'
+            else:
+                severity = 'UNKNOWN'
+
+            emoji = {'CRITICAL': '🔴', 'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
+
+            parts.append(f"{emoji} **{category}** ({severity})\n")
+            for item in grouped_items:
+                parts.append(f"  - {item.get('description')}\n")
+                if 'recommendation' in item:
+                    parts.append(f"    - 💡 {item['recommendation']}\n")
+            parts.append("\n")
+
+        return parts
+
     def generate_dashboard_markdown(self, output_path: Path = None) -> str:
         """Generate a comprehensive dashboard in Markdown"""
 
@@ -113,9 +150,18 @@ graph TD
 
         # Use a list for efficient string concatenation
         parts = []
+        # Format timestamp
+        timestamp = self.report_data.get('timestamp', 'Unknown')
+        try:
+            if timestamp != 'Unknown':
+                dt = datetime.fromisoformat(timestamp)
+                timestamp = dt.strftime("%B %d, %Y at %I:%M %p")
+        except ValueError:
+            pass
+
         parts.append(f"""# 🎯 Organization Ecosystem Dashboard
 
-**Last Updated**: {self.report_data.get('timestamp', 'Unknown')}
+**Last Updated**: {timestamp}
 **Organization**: {self.report_data.get('organization', 'Unknown')}
 
 ---
@@ -210,22 +256,11 @@ graph TD
 
             if blind_spots:
                 parts.append(f"### 🔦 Blind Spots ({len(blind_spots)})\n\n")
-                for spot in blind_spots:
-                    severity = spot.get('severity', 'unknown').upper()
-                    emoji = {'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
-                    parts.append(f"{emoji} **{spot.get('category')}** ({severity})\n")
-                    parts.append(f"  - {spot.get('description')}\n\n")
+                parts.extend(self._render_grouped_section(blind_spots))
 
             if shatter_points:
                 parts.append(f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n")
-                for point in shatter_points:
-                    severity = point.get('severity', 'unknown').upper()
-                    emoji = {'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
-                    parts.append(f"{emoji} **{point.get('category')}** ({severity})\n")
-                    parts.append(f"  - {point.get('description')}\n")
-                    if 'recommendation' in point:
-                        parts.append(f"  - 💡 {point['recommendation']}\n")
-                    parts.append("\n")
+                parts.extend(self._render_grouped_section(shatter_points))
 
             parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 

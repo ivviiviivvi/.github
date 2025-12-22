@@ -14,3 +14,8 @@
 
 **Learning:** Large lists in Markdown reports (like technology coverage or workflow lists) can overwhelm the user and make navigation difficult.
 **Action:** Wrap long lists in HTML `<details>` and `<summary>` tags to make them collapsible by default, improving the initial scanability of the report.
+
+## 2025-12-21 - [Alert Grouping in Dashboards]
+
+**Learning:** Repetitive alerts in health dashboards (e.g., multiple "Missing Critical Workflow" alerts) create visual noise and reduce the impact of the message. Grouping them by category significantly improves readability.
+**Action:** When generating reports with potential duplicate or categorical alerts, implement a grouping logic to display the category once as a header and list individual items underneath.
