@@ -18,6 +18,11 @@ on:
           - codespaces
           - documentation-only
         default: 'auto'
+      force_deploy:
+        description: 'Force deployment even if no changes detected'
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: 'pages-live-deploy-${{ github.ref }}'
@@ -51,10 +56,6 @@ jobs:
           CONFIG_FILE=".github/app-deployment-config.yml"
           
           if [ -f "$CONFIG_FILE" ]; then
-            # Install yq if config file exists
-            sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-            sudo chmod +x /usr/local/bin/yq
-            
             echo "enabled=$(yq eval '.deployment.enabled // true' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
             echo "strategy=$(yq eval '.deployment.strategy // "auto"' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
             echo "startup_command=$(yq eval '.deployment.startup_command // ""' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
@@ -161,18 +162,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: 'Install dependencies'
-        run: |
-          if [ -f "package-lock.json" ]; then
-            echo "package-lock.json found, installing dependencies with npm ci"
-            npm ci
-          elif [ -f "package.json" ]; then
-            echo "package-lock.json not found, installing dependencies with npm install"
-            npm install
-          else
-            echo "No package.json or package-lock.json found, skipping dependency installation"
-          fi
+        run: npm ci
 
       - name: 'Build application'
         run: |
@@ -185,111 +178,33 @@ jobs:
       - name: 'Setup Pages'
         uses: actions/configure-pages@v4
 
-      - name: 'Determine build directory'
-        id: detect-build-dir
-        run: |
-          app_type="${{ needs.detect-app-type.outputs.app_type }}"
-          build_dir="dist"
-
-          # Prefer framework-specific defaults when app_type is known
-          if [ -n "$app_type" ]; then
-            case "$app_type" in
-              react)
-                build_dir="build"
-                ;;
-              next)
-                build_dir="out"
-                ;;
-              angular)
-                if [ -d "dist" ]; then
-                  first_subdir="$(ls -1 dist 2>/dev/null | head -n 1)"
-                  if [ -n "$first_subdir" ] && [ -d "dist/$first_subdir" ]; then
-                    build_dir="dist/$first_subdir"
-                  else
-                    build_dir="dist"
-                  fi
-                fi
-                ;;
-            esac
-          fi
-
-          # Fallback: use the first existing common build directory
-          if [ ! -d "$build_dir" ]; then
-            for dir in dist build out; do
-              if [ -d "$dir" ]; then
-                build_dir="$dir"
-                break
-              fi
-            done
-          fi
-
-          echo "Using build directory: $build_dir"
-          echo "build_dir=$build_dir" >> "$GITHUB_OUTPUT"
-
       - name: 'Upload artifact'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.detect-build-dir.outputs.build_dir }}
+          path: './dist'
 
       - name: 'Deploy to GitHub Pages'
         id: deployment
         uses: actions/deploy-pages@v4
 
       - name: 'Update deployment registry'
-        uses: actions/github-script@v7
-        env:
-          APP_TYPE: ${{ needs.detect-app-type.outputs.app_type }}
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-        with:
-          script: |
-            const path = 'docs/_data/app-deployments.yml';
-            const { owner, repo } = context.repo;
-
-            // Build the deployment record YAML content
-            const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-            const repositoryFullName = `${owner}/${repo}`;
-            const appType = process.env.APP_TYPE || '';
-            const pageUrl = process.env.PAGE_URL || '';
-
-            const newEntry = [
-              `- repository: "${repositoryFullName}"`,
-              `  app_type: "${appType}"`,
-              `  deployment_strategy: "pages-direct"`,
-              `  deployment_url: "${pageUrl}"`,
-              `  deployed_at: "${now}"`,
-              `  status: "active"`,
-              `  health_check_url: "${pageUrl}"`
-            ].join('\n') + '\n';
-
-            let sha, existingContent = '';
-            try {
-              const { data } = await github.rest.repos.getContent({
-                owner,
-                repo,
-                path,
-              });
-              if (!Array.isArray(data)) {
-                sha = data.sha;
-                existingContent = Buffer.from(data.content, 'base64').toString('utf8');
-              }
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error;
-              }
-              // File does not exist yet; it will be created.
-            }
-
-            // Append new entry to existing content
-            const content = existingContent ? existingContent + newEntry : newEntry;
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path,
-              message: 'chore: update app deployment registry [skip ci]',
-              content: Buffer.from(content, 'utf8').toString('base64'),
-              sha,
-            });
+        run: |
+          mkdir -p docs/_data
+          cat > docs/_data/app-deployments.yml << EOF
+          - repository: "${{ github.repository }}"
+            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
+            deployment_strategy: "pages-direct"
+            deployment_url: "${{ steps.deployment.outputs.page_url }}"
+            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            status: "active"
+            health_check_url: "${{ steps.deployment.outputs.page_url }}"
+          EOF
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_data/app-deployments.yml
+          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   deploy-docker:
     needs: detect-app-type
@@ -302,14 +217,6 @@ jobs:
 
       - name: 'Set up Docker Buildx'
         uses: docker/setup-buildx-action@v3
-
-      - name: 'Validate Docker credentials'
-        if: github.event_name != 'pull_request'
-        run: |
-          if [ -z "${{ secrets.DOCKER_USERNAME }}" ] || [ -z "${{ secrets.DOCKER_PASSWORD }}" ]; then
-            echo "::error::DOCKER_USERNAME or DOCKER_PASSWORD secrets are not set. Please configure these secrets in repository settings."
-            exit 1
-          fi
 
       - name: 'Log in to Docker Hub'
         if: github.event_name != 'pull_request'
@@ -357,57 +264,23 @@ jobs:
           git push || echo "No changes to push"
 
       - name: 'Update deployment registry'
-        uses: actions/github-script@v7
-        env:
-          APP_TYPE: ${{ needs.detect-app-type.outputs.app_type }}
-          DOCKER_TAGS: ${{ steps.meta.outputs.tags }}
-        with:
-          script: |
-            const path = 'docs/_data/app-deployments.yml';
-            const { owner, repo } = context.repo;
-
-            const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-            const repositoryFullName = `${owner}/${repo}`;
-            const appType = process.env.APP_TYPE || '';
-            const dockerTags = process.env.DOCKER_TAGS || '';
-
-            const newEntry = [
-              `- repository: "${repositoryFullName}"`,
-              `  app_type: "${appType}"`,
-              `  deployment_strategy: "docker"`,
-              `  docker_image: "${dockerTags}"`,
-              `  deployed_at: "${now}"`,
-              `  status: "active"`,
-              `  embed_url: "${context.payload.repository.html_url}/blob/main/docs/live-apps/${repo}.md"`
-            ].join('\n') + '\n';
-
-            let sha, existingContent = '';
-            try {
-              const { data } = await github.rest.repos.getContent({
-                owner,
-                repo,
-                path,
-              });
-              if (!Array.isArray(data)) {
-                sha = data.sha;
-                existingContent = Buffer.from(data.content, 'base64').toString('utf8');
-              }
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error;
-              }
-            }
-
-            const content = existingContent ? existingContent + newEntry : newEntry;
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path,
-              message: 'chore: update app deployment registry [skip ci]',
-              content: Buffer.from(content, 'utf8').toString('base64'),
-              sha,
-            });
+        run: |
+          mkdir -p docs/_data
+          cat > docs/_data/app-deployments.yml << EOF
+          - repository: "${{ github.repository }}"
+            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
+            deployment_strategy: "docker"
+            docker_image: "${{ steps.meta.outputs.tags }}"
+            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            status: "active"
+            embed_url: "${{ github.event.repository.html_url }}/blob/main/docs/live-apps/${{ github.event.repository.name }}.md"
+          EOF
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_data/app-deployments.yml
+          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   deploy-codespaces:
     needs: detect-app-type
@@ -445,54 +318,22 @@ jobs:
           git push || echo "No changes to push"
 
       - name: 'Update deployment registry'
-        uses: actions/github-script@v7
-        env:
-          APP_TYPE: ${{ needs.detect-app-type.outputs.app_type }}
-        with:
-          script: |
-            const path = 'docs/_data/app-deployments.yml';
-            const { owner, repo } = context.repo;
-
-            const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-            const repositoryFullName = `${owner}/${repo}`;
-            const appType = process.env.APP_TYPE || '';
-
-            const newEntry = [
-              `- repository: "${repositoryFullName}"`,
-              `  app_type: "${appType}"`,
-              `  deployment_strategy: "codespaces"`,
-              `  codespaces_url: "https://github.com/${repositoryFullName}/codespaces"`,
-              `  deployed_at: "${now}"`,
-              `  status: "active"`
-            ].join('\n') + '\n';
-
-            let sha, existingContent = '';
-            try {
-              const { data } = await github.rest.repos.getContent({
-                owner,
-                repo,
-                path,
-              });
-              if (!Array.isArray(data)) {
-                sha = data.sha;
-                existingContent = Buffer.from(data.content, 'base64').toString('utf8');
-              }
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error;
-              }
-            }
-
-            const content = existingContent ? existingContent + newEntry : newEntry;
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path,
-              message: 'chore: update app deployment registry [skip ci]',
-              content: Buffer.from(content, 'utf8').toString('base64'),
-              sha,
-            });
+        run: |
+          mkdir -p docs/_data
+          cat > docs/_data/app-deployments.yml << EOF
+          - repository: "${{ github.repository }}"
+            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
+            deployment_strategy: "codespaces"
+            codespaces_url: "https://github.com/${{ github.repository }}/codespaces"
+            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            status: "active"
+          EOF
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_data/app-deployments.yml
+          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
   deploy-documentation-only:
     needs: detect-app-type
@@ -504,51 +345,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 'Update deployment registry'
-        uses: actions/github-script@v7
-        env:
-          APP_TYPE: ${{ needs.detect-app-type.outputs.app_type }}
-        with:
-          script: |
-            const path = 'docs/_data/app-deployments.yml';
-            const { owner, repo } = context.repo;
-
-            const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-            const repositoryFullName = `${owner}/${repo}`;
-            const appType = process.env.APP_TYPE || '';
-
-            const newEntry = [
-              `- repository: "${repositoryFullName}"`,
-              `  app_type: "${appType}"`,
-              `  deployment_strategy: "documentation-only"`,
-              `  deployed_at: "${now}"`,
-              `  status: "documentation"`,
-              `  documentation_url: "${context.payload.repository.html_url}/blob/main/README.md"`
-            ].join('\n') + '\n';
-
-            let sha, existingContent = '';
-            try {
-              const { data } = await github.rest.repos.getContent({
-                owner,
-                repo,
-                path,
-              });
-              if (!Array.isArray(data)) {
-                sha = data.sha;
-                existingContent = Buffer.from(data.content, 'base64').toString('utf8');
-              }
-            } catch (error) {
-              if (error.status !== 404) {
-                throw error;
-              }
-            }
-
-            const content = existingContent ? existingContent + newEntry : newEntry;
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path,
-              message: 'chore: update app deployment registry [skip ci]',
-              content: Buffer.from(content, 'utf8').toString('base64'),
-              sha,
-            });
+        run: |
+          mkdir -p docs/_data
+          cat > docs/_data/app-deployments.yml << EOF
+          - repository: "${{ github.repository }}"
+            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
+            deployment_strategy: "documentation-only"
+            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            status: "documentation"
+            documentation_url: "${{ github.event.repository.html_url }}/blob/main/README.md"
+          EOF
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_data/app-deployments.yml
+          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"

@@ -1,0 +1,435 @@
+name: 'Admin Approval Dashboard'
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - review-pending
+          - approve-all
+          - reject-all
+          - approve-specific
+          - reject-specific
+        default: 'review-pending'
+      video_id:
+        description: 'Specific video ID (for approve/reject-specific)'
+        required: false
+        type: string
+      reason:
+        description: 'Reason for approval/rejection'
+        required: false
+        type: string
+  repository_dispatch:
+    types:
+      - request-approval
+      - batch-approval-needed
+  schedule:
+    # Check for pending approvals daily at 9 AM UTC
+    - cron: '0 9 * * *'
+
+permissions:
+  contents: write
+  issues: write
+  discussions: write
+  pull-requests: write
+
+env:
+  APPROVAL_DIR: .github/approvals
+  PENDING_DIR: .github/approvals/pending
+  APPROVED_DIR: .github/approvals/approved
+  REJECTED_DIR: .github/approvals/rejected
+
+jobs:
+  setup-directories:
+    runs-on: ubuntu-latest
+    name: 'Setup Approval Infrastructure'
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 'Create directory structure'
+        run: |
+          mkdir -p ${{ env.PENDING_DIR }}
+          mkdir -p ${{ env.APPROVED_DIR }}
+          mkdir -p ${{ env.REJECTED_DIR }}
+          
+          # Create tracking file if it doesn't exist
+          if [ ! -f "${{ env.APPROVAL_DIR }}/tracking.json" ]; then
+            cat > ${{ env.APPROVAL_DIR }}/tracking.json << 'EOF'
+          {
+            "version": "1.0",
+            "last_updated": "",
+            "statistics": {
+              "total_submitted": 0,
+              "total_approved": 0,
+              "total_rejected": 0,
+              "pending": 0
+            },
+            "approvals": []
+          }
+          EOF
+          fi
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.APPROVAL_DIR }}
+          git commit -m "chore: setup approval infrastructure [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+  review-pending:
+    runs-on: ubuntu-latest
+    name: 'Review Pending Approvals'
+    needs: setup-directories
+    if: github.event.inputs.action == 'review-pending' || github.event_name == 'schedule' || github.event_name == 'repository_dispatch'
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 'Install dependencies'
+        run: |
+          pip install pyyaml jinja2
+
+      - name: 'Scan for pending approvals'
+        id: scan
+        run: |
+          PENDING_COUNT=$(find ${{ env.PENDING_DIR }} -name "*.json" 2>/dev/null | wc -l)
+          echo "pending_count=$PENDING_COUNT" >> $GITHUB_OUTPUT
+          
+          if [ "$PENDING_COUNT" -eq 0 ]; then
+            echo "✅ No pending approvals"
+            exit 0
+          fi
+          
+          echo "📋 Found $PENDING_COUNT pending approvals"
+          
+          # List pending items
+          find ${{ env.PENDING_DIR }} -name "*.json" -exec basename {} \; | sed 's/.json$//' > pending_list.txt
+
+      - name: 'Generate approval dashboard'
+        if: steps.scan.outputs.pending_count != '0'
+        run: |
+          cat > generate_dashboard.py << 'EOF'
+          import json
+          import os
+          from datetime import datetime
+          from pathlib import Path
+          
+          pending_dir = Path(os.environ['PENDING_DIR'])
+          
+          dashboard = {
+              'generated_at': datetime.utcnow().isoformat() + 'Z',
+              'pending_items': []
+          }
+          
+          for pending_file in pending_dir.glob('*.json'):
+              with open(pending_file, 'r') as f:
+                  item = json.load(f)
+                  dashboard['pending_items'].append({
+                      'id': pending_file.stem,
+                      'type': item.get('type', 'unknown'),
+                      'repository': item.get('repository', 'unknown'),
+                      'video_url': item.get('video_url', ''),
+                      'submitted_at': item.get('submitted_at', ''),
+                      'title': item.get('title', ''),
+                      'description': item.get('description', '')
+                  })
+          
+          # Sort by submission date
+          dashboard['pending_items'].sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
+          
+          with open('dashboard.json', 'w') as f:
+              json.dump(dashboard, f, indent=2)
+          
+          print(f"Generated dashboard with {len(dashboard['pending_items'])} items")
+          EOF
+          
+          python generate_dashboard.py
+
+      - name: 'Create GitHub Issue for approval'
+        if: steps.scan.outputs.pending_count != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let dashboard;
+            try {
+              dashboard = JSON.parse(fs.readFileSync('dashboard.json', 'utf8'));
+            } catch (error) {
+              console.log('No dashboard data available');
+              return;
+            }
+            
+            const pendingCount = dashboard.pending_items.length;
+            
+            let body = `## 📋 Approval Dashboard - ${new Date().toLocaleString()}
+            
+            **Pending Approvals**: ${pendingCount}
+            
+            ### Items Awaiting Approval
+            
+            `;
+            
+            dashboard.pending_items.forEach((item, index) => {
+              body += `
+            #### ${index + 1}. ${item.title || item.id}
+            
+            - **ID**: \`${item.id}\`
+            - **Type**: ${item.type}
+            - **Repository**: ${item.repository}
+            - **Submitted**: ${item.submitted_at}
+            ${item.video_url ? `- **Video Preview**: [Watch](${item.video_url})` : ''}
+            ${item.description ? `- **Description**: ${item.description}` : ''}
+            
+            **Actions**:
+            - ✅ Approve: Run workflow with \`approve-specific\` and ID \`${item.id}\`
+            - ❌ Reject: Run workflow with \`reject-specific\` and ID \`${item.id}\`
+            
+            ---
+            `;
+            });
+            
+            body += `
+            
+            ### Quick Actions
+            
+            - **Approve All**: Run this workflow with action \`approve-all\`
+            - **Reject All**: Run this workflow with action \`reject-all\`
+            - **Review Specific**: Run this workflow with action \`approve-specific\` or \`reject-specific\` and provide the ID
+            
+            ### How to Run Actions
+            
+            1. Go to [Actions](${{ github.server_url }}/${{ github.repository }}/actions/workflows/admin-approval-dashboard.yml)
+            2. Click "Run workflow"
+            3. Select the desired action
+            4. Provide required inputs (ID, reason)
+            5. Click "Run workflow"
+            `;
+            
+            // Check if issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'approval-dashboard'
+            });
+            
+            const existingIssue = issues.data.find(issue => issue.title.includes('Approval Dashboard'));
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                title: `📋 Approval Dashboard - ${pendingCount} Pending`,
+                body: body
+              });
+              console.log(`Updated existing issue #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `📋 Approval Dashboard - ${pendingCount} Pending`,
+                body: body,
+                labels: ['approval-dashboard', 'admin-only']
+              });
+              console.log(`Created new issue #${issue.data.number}`);
+            }
+
+  approve-item:
+    runs-on: ubuntu-latest
+    name: 'Approve Item(s)'
+    needs: setup-directories
+    if: github.event.inputs.action == 'approve-all' || github.event.inputs.action == 'approve-specific'
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Process approval'
+        id: approve
+        run: |
+          ACTION="${{ github.event.inputs.action }}"
+          VIDEO_ID="${{ github.event.inputs.video_id }}"
+          REASON="${{ github.event.inputs.reason }}"
+          
+          APPROVED_COUNT=0
+          
+          if [ "$ACTION" = "approve-all" ]; then
+            echo "📋 Approving all pending items..."
+            
+            for pending_file in ${{ env.PENDING_DIR }}/*.json; do
+              if [ -f "$pending_file" ]; then
+                filename=$(basename "$pending_file")
+                
+                # Add approval metadata
+                cat "$pending_file" | jq ". += {
+                  \"approved_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
+                  \"approved_by\": \"${{ github.actor }}\",
+                  \"approval_reason\": \"$REASON\",
+                  \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                }" > "${{ env.APPROVED_DIR }}/$filename"
+                
+                rm "$pending_file"
+                APPROVED_COUNT=$((APPROVED_COUNT + 1))
+                echo "✅ Approved: $filename"
+              fi
+            done
+            
+          elif [ "$ACTION" = "approve-specific" ] && [ -n "$VIDEO_ID" ]; then
+            echo "📋 Approving specific item: $VIDEO_ID"
+            
+            pending_file="${{ env.PENDING_DIR }}/${VIDEO_ID}.json"
+            
+            if [ -f "$pending_file" ]; then
+              # Add approval metadata
+              cat "$pending_file" | jq ". += {
+                \"approved_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
+                \"approved_by\": \"${{ github.actor }}\",
+                \"approval_reason\": \"$REASON\",
+                \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }" > "${{ env.APPROVED_DIR }}/${VIDEO_ID}.json"
+              
+              rm "$pending_file"
+              APPROVED_COUNT=1
+              echo "✅ Approved: $VIDEO_ID"
+            else
+              echo "❌ Error: Item not found: $VIDEO_ID"
+              exit 1
+            fi
+          fi
+          
+          echo "approved_count=$APPROVED_COUNT" >> $GITHUB_OUTPUT
+          echo "✅ Approved $APPROVED_COUNT item(s)"
+
+      - name: 'Update tracking'
+        run: |
+          # Update tracking.json
+          cat ${{ env.APPROVAL_DIR }}/tracking.json | jq ".statistics.total_approved += ${{ steps.approve.outputs.approved_count }} | .statistics.pending -= ${{ steps.approve.outputs.approved_count }} | .last_updated = \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"" > temp.json
+          mv temp.json ${{ env.APPROVAL_DIR }}/tracking.json
+
+      - name: 'Commit changes'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.APPROVAL_DIR }}
+          git commit -m "chore: approve ${{ steps.approve.outputs.approved_count }} item(s) [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: 'Trigger deployment'
+        if: steps.approve.outputs.approved_count != '0'
+        run: |
+          echo "🚀 Triggering deployment for approved items..."
+          # Dispatch event to build-pages-site workflow
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/dispatches \
+            -d '{"event_type":"approval-processed"}'
+
+  reject-item:
+    runs-on: ubuntu-latest
+    name: 'Reject Item(s)'
+    needs: setup-directories
+    if: github.event.inputs.action == 'reject-all' || github.event.inputs.action == 'reject-specific'
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Process rejection'
+        id: reject
+        run: |
+          ACTION="${{ github.event.inputs.action }}"
+          VIDEO_ID="${{ github.event.inputs.video_id }}"
+          REASON="${{ github.event.inputs.reason }}"
+          
+          REJECTED_COUNT=0
+          
+          if [ "$ACTION" = "reject-all" ]; then
+            echo "📋 Rejecting all pending items..."
+            
+            for pending_file in ${{ env.PENDING_DIR }}/*.json; do
+              if [ -f "$pending_file" ]; then
+                filename=$(basename "$pending_file")
+                
+                # Add rejection metadata
+                cat "$pending_file" | jq ". += {
+                  \"rejected_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
+                  \"rejected_by\": \"${{ github.actor }}\",
+                  \"rejection_reason\": \"$REASON\",
+                  \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                }" > "${{ env.REJECTED_DIR }}/$filename"
+                
+                rm "$pending_file"
+                REJECTED_COUNT=$((REJECTED_COUNT + 1))
+                echo "❌ Rejected: $filename"
+              fi
+            done
+            
+          elif [ "$ACTION" = "reject-specific" ] && [ -n "$VIDEO_ID" ]; then
+            echo "📋 Rejecting specific item: $VIDEO_ID"
+            
+            pending_file="${{ env.PENDING_DIR }}/${VIDEO_ID}.json"
+            
+            if [ -f "$pending_file" ]; then
+              # Add rejection metadata
+              cat "$pending_file" | jq ". += {
+                \"rejected_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
+                \"rejected_by\": \"${{ github.actor }}\",
+                \"rejection_reason\": \"$REASON\",
+                \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }" > "${{ env.REJECTED_DIR }}/${VIDEO_ID}.json"
+              
+              rm "$pending_file"
+              REJECTED_COUNT=1
+              echo "❌ Rejected: $VIDEO_ID"
+            else
+              echo "❌ Error: Item not found: $VIDEO_ID"
+              exit 1
+            fi
+          fi
+          
+          echo "rejected_count=$REJECTED_COUNT" >> $GITHUB_OUTPUT
+          echo "❌ Rejected $REJECTED_COUNT item(s)"
+
+      - name: 'Update tracking'
+        run: |
+          # Update tracking.json
+          cat ${{ env.APPROVAL_DIR }}/tracking.json | jq ".statistics.total_rejected += ${{ steps.reject.outputs.rejected_count }} | .statistics.pending -= ${{ steps.reject.outputs.rejected_count }} | .last_updated = \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"" > temp.json
+          mv temp.json ${{ env.APPROVAL_DIR }}/tracking.json
+
+      - name: 'Commit changes'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.APPROVAL_DIR }}
+          git commit -m "chore: reject ${{ steps.reject.outputs.rejected_count }} item(s) [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: 'Notify submitters'
+        if: steps.reject.outputs.rejected_count != '0'
+        run: |
+          echo "📧 Sending notifications to submitters..."
+          # This would typically send notifications via email or GitHub mentions
+          # Implementation depends on your notification preferences

@@ -1,0 +1,381 @@
+---
+layout: default
+title: Live App Demo
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} - {{ site.title }}</title>
+  
+  <style>
+    .app-demo-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .demo-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    .demo-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+    
+    .demo-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .demo-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .demo-content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .demo-main {
+      background: var(--surface-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .demo-sidebar {
+      background: var(--surface-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+    
+    .demo-tabs {
+      display: flex;
+      background: var(--background-color);
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    .demo-tab {
+      padding: 1rem 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .demo-tab:hover {
+      background: var(--hover-color);
+      color: var(--text-color);
+    }
+    
+    .demo-tab.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+    
+    .demo-panel {
+      display: none;
+      padding: 0;
+    }
+    
+    .demo-panel.active {
+      display: block;
+    }
+    
+    .app-frame {
+      width: 100%;
+      height: 800px;
+      border: none;
+      background: white;
+    }
+    
+    .demo-info h3 {
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+    
+    .demo-info-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .demo-info-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .demo-info-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .demo-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .demo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .demo-btn.secondary {
+      background: var(--secondary-color);
+    }
+    
+    .demo-btn.outline {
+      background: transparent;
+      border: 2px solid var(--border-color);
+      color: var(--text-color);
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .status-badge.active {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-badge.inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .deployment-strategy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--hover-color);
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .demo-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .demo-sidebar {
+        position: static;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .demo-tabs {
+        overflow-x: auto;
+      }
+      
+      .demo-tab {
+        white-space: nowrap;
+      }
+      
+      .app-frame {
+        height: 600px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-demo-container">
+    <div class="demo-header">
+      <h1>{{ page.title }}</h1>
+      
+      <div class="demo-meta">
+        <div class="demo-meta-item">
+          <span>📦 Repository:</span>
+          <a href="https://github.com/{{ page.repository }}" target="_blank">{{ page.repository }}</a>
+        </div>
+        {% if page.deployment_strategy %}
+        <div class="demo-meta-item">
+          <span>🚀 Strategy:</span>
+          <span>{{ page.deployment_strategy }}</span>
+        </div>
+        {% endif %}
+        {% if page.status %}
+        <div class="demo-meta-item">
+          <span class="status-badge {{ page.status }}">{{ page.status | capitalize }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="demo-content">
+      <div class="demo-main">
+        <div class="demo-tabs">
+          <button class="demo-tab active" onclick="switchTab('live')">🌐 Live Demo</button>
+          <button class="demo-tab" onclick="switchTab('docs')">📖 Documentation</button>
+          <button class="demo-tab" onclick="switchTab('code')">💻 Source Code</button>
+        </div>
+        
+        <div id="live-panel" class="demo-panel active">
+          {% include live-app-embed.html 
+             deployment_url=page.deployment_url 
+             docker_image=page.docker_image 
+             deployment_strategy=page.deployment_strategy 
+          %}
+        </div>
+        
+        <div id="docs-panel" class="demo-panel">
+          <div style="padding: 2rem;">
+            {{ content }}
+            
+            {% if page.readme_url %}
+            <h3>README</h3>
+            <iframe 
+              src="{{ page.readme_url }}" 
+              style="width: 100%; height: 600px; border: 1px solid var(--border-color); border-radius: 4px;"
+            ></iframe>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div id="code-panel" class="demo-panel">
+          <div style="padding: 2rem;">
+            <h3>Source Code</h3>
+            <p>View the complete source code on GitHub:</p>
+            <a href="https://github.com/{{ page.repository }}" class="demo-btn" target="_blank">
+              <span>📁 View on GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="demo-sidebar">
+        <div class="demo-info">
+          <h3>🔧 Deployment Info</h3>
+          <ul class="demo-info-list">
+            {% if page.deployment_strategy %}
+            <li>
+              <span>Strategy:</span>
+              <strong>{{ page.deployment_strategy }}</strong>
+            </li>
+            {% endif %}
+            
+            {% if page.deployed_at %}
+            <li>
+              <span>Deployed:</span>
+              <strong>{{ page.deployed_at | date: "%Y-%m-%d" }}</strong>
+            </li>
+            {% endif %}
+            
+            {% if page.app_type %}
+            <li>
+              <span>Type:</span>
+              <strong>{{ page.app_type }}</strong>
+            </li>
+            {% endif %}
+            
+            {% if page.language %}
+            <li>
+              <span>Language:</span>
+              <strong>{{ page.language }}</strong>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        
+        <div class="demo-actions">
+          <a href="https://github.com/{{ page.repository }}" class="demo-btn" target="_blank">
+            <span>⭐ Star on GitHub</span>
+          </a>
+          
+          {% if page.deployment_url %}
+          <a href="{{ page.deployment_url }}" class="demo-btn secondary" target="_blank">
+            <span>🔗 Open in New Tab</span>
+          </a>
+          {% endif %}
+          
+          {% if page.docker_image %}
+          <button class="demo-btn outline" onclick="copyDockerCommand()">
+            <span>🐳 Copy Docker Command</span>
+          </button>
+          {% endif %}
+          
+          <a href="https://github.com/{{ page.repository }}/fork" class="demo-btn outline" target="_blank">
+            <span>🍴 Fork Repository</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function switchTab(tabName) {
+      // Hide all panels
+      document.querySelectorAll('.demo-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.demo-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected panel
+      document.getElementById(tabName + '-panel').classList.add('active');
+      
+      // Add active class to clicked tab
+      event.target.classList.add('active');
+    }
+    
+    function copyDockerCommand() {
+      const dockerImage = '{{ page.docker_image }}';
+      const command = `docker pull ${dockerImage} && docker run -p 3000:3000 ${dockerImage}`;
+      
+      navigator.clipboard.writeText(command).then(() => {
+        alert('Docker command copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+  </script>
+</body>
+</html>

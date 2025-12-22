@@ -100,10 +100,6 @@ class OrganizationCrawler:
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers = 10 to be respectful but faster than serial
-        # Collect results in thread-safe manner to avoid race conditions
-        import threading
-        results_lock = threading.Lock()
-        
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             future_to_link = {executor.submit(self._check_link, link): link for link in links_to_check}
 
@@ -111,23 +107,20 @@ class OrganizationCrawler:
                 link = future_to_link[future]
                 try:
                     status = future.result()
-                    with results_lock:
-                        if status == 200:
-                            results['valid'] += 1
-                            print(f"  ✓ {link}")
-                        elif status == 999:  # Rate limited or blocked
-                            results['warnings'].append({'url': link, 'reason': 'Rate limited or blocked by server'})
-                            print(f"  ⚠️  {link} (rate limited)")
-                        else:
-                            results['broken'] += 1
-                            results['broken_links'].append({'url': link, 'status': status})
-                            print(f"  ✗ {link} (HTTP {status})")
-                except Exception as exc:
-                    # Include exception type for better debugging
-                    with results_lock:
+                    if status == 200:
+                        results['valid'] += 1
+                        print(f"  ✓ {link}")
+                    elif status == 999:  # Rate limited or blocked
+                        results['warnings'].append({'url': link, 'reason': 'Rate limited or blocked by server'})
+                        print(f"  ⚠️  {link} (rate limited)")
+                    else:
                         results['broken'] += 1
-                        results['broken_links'].append({'url': link, 'status': f'{type(exc).__name__}: {exc}'})
-                        print(f"  ✗ {link} ({type(exc).__name__}: {exc})")
+                        results['broken_links'].append({'url': link, 'status': status})
+                        print(f"  ✗ {link} (HTTP {status})")
+                except Exception as exc:
+                    results['broken'] += 1
+                    results['broken_links'].append({'url': link, 'status': f'Exception: {exc}'})
+                    print(f"  ✗ {link} (Exception: {exc})")
 
         return results
 

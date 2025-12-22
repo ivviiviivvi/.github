@@ -1,0 +1,106 @@
+# App Deployment Configuration
+# This file configures how your application is deployed to GitHub Pages
+
+deployment:
+  # Enable/disable automated deployment
+  enabled: true
+  
+  # Deployment strategy: auto, pages-direct, docker, codespaces, documentation-only
+  strategy: auto
+  
+  # Custom startup command (optional)
+  # startup_command: "npm run start:prod"
+  
+  # Build configuration
+  build:
+    # Build command (leave empty for auto-detect)
+    command: ""
+    
+    # Build output directory (leave empty for auto-detect: dist, build, public, etc.)
+    output_dir: ""
+    
+    # Environment variables for build
+    env:
+      NODE_ENV: production
+  
+  # Docker configuration (for docker strategy)
+  docker:
+    # Custom Dockerfile path (default: ./Dockerfile)
+    dockerfile: Dockerfile
+    
+    # Exposed ports
+    ports:
+      - 3000
+      - 5000
+      - 8000
+    
+    # Build arguments
+    build_args: {}
+  
+  # Pages configuration (for pages-direct strategy)
+  pages:
+    # Custom domain (optional)
+    custom_domain: ""
+    
+    # Base URL path (for project pages, e.g., /my-app)
+    base_path: ""
+  
+  # Health check configuration
+  health_check:
+    # Enable health checks
+    enabled: true
+    
+    # Health check endpoint (default: /)
+    endpoint: "/"
+    
+    # Expected HTTP status code
+    expected_status: 200
+    
+    # Check interval (minutes)
+    interval: 5
+  
+  # Metadata
+  metadata:
+    # Application title
+    title: ""
+    
+    # Short description
+    description: ""
+    
+    # Tags/keywords
+    tags: []
+    
+    # Language/framework
+    language: ""
+    framework: ""
+
+# Quality gates
+quality:
+  # Minimum test coverage required (percentage)
+  min_coverage: 0
+  
+  # Run tests before deployment
+  run_tests: false
+  
+  # Run linting before deployment
+  run_lint: false
+
+# Approval settings
+approval:
+  # Require manual approval before deployment
+  required: false
+  
+  # Approvers (GitHub usernames)
+  approvers: []
+
+# Notifications
+notifications:
+  # Notify on deployment success
+  on_success: true
+  
+  # Notify on deployment failure
+  on_failure: true
+  
+  # Notification channels (issues, discussions, email)
+  channels:
+    - issues

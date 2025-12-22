@@ -157,7 +157,6 @@ graph TD
                 dt = datetime.fromisoformat(timestamp)
                 timestamp = dt.strftime("%B %d, %Y at %I:%M %p")
         except ValueError:
-            # If the timestamp is not in ISO format, leave it as-is rather than failing dashboard generation.
             pass
 
         parts.append(f"""# 🎯 Organization Ecosystem Dashboard
