@@ -1,0 +1,605 @@
+name: 'Safeguard 8: Usage Monitoring & Reporting'
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      report_period:
+        description: 'Reporting period'
+        required: false
+        default: 'daily'
+        type: choice
+        options:
+          - 'daily'
+          - 'weekly'
+          - 'monthly'
+
+permissions:
+  contents: write
+  actions: read
+  issues: write
+
+jobs:
+  collect-usage-metrics:
+    name: 'Collect GitHub Actions Usage Metrics'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 'Set up Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 'Install dependencies'
+        run: |
+          pip install requests python-dateutil pyyaml
+
+      - name: 'Fetch workflow runs'
+        id: fetch_runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ORG: ${{ github.repository_owner }}
+          REPORT_PERIOD: ${{ github.event.inputs.report_period || 'daily' }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+          from datetime import datetime, timedelta
+          from dateutil import parser
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          org = os.getenv('GITHUB_ORG')
+          report_period = os.getenv('REPORT_PERIOD', 'daily')
+          
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          # Determine lookback period
+          if report_period == 'daily':
+              lookback_days = 1
+          elif report_period == 'weekly':
+              lookback_days = 7
+          else:  # monthly
+              lookback_days = 30
+
+          cutoff_date = datetime.utcnow() - timedelta(days=lookback_days)
+
+          # Fetch workflow runs across organization repos
+          all_runs = []
+          
+          # Get organization repos
+          repos_url = f'https://api.github.com/orgs/{org}/repos'
+          repos_response = requests.get(repos_url, headers=headers, params={'per_page': 100})
+          repos = repos_response.json() if repos_response.status_code == 200 else []
+
+          print(f"Analyzing {len(repos)} repositories...")
+
+          for repo in repos[:50]:  # Limit to 50 repos to avoid rate limits
+              repo_name = repo['full_name']
+              
+              # Fetch workflow runs for this repo
+              runs_url = f'https://api.github.com/repos/{repo_name}/actions/runs'
+              params = {
+                  'per_page': 100,
+                  'status': 'completed'
+              }
+              
+              try:
+                  runs_response = requests.get(runs_url, headers=headers, params=params, timeout=10)
+                  if runs_response.status_code == 200:
+                      runs_data = runs_response.json()
+                      
+                      for run in runs_data.get('workflow_runs', []):
+                          run_date = parser.isoparse(run['created_at'].replace('Z', '+00:00'))
+                          
+                          if run_date >= cutoff_date.replace(tzinfo=run_date.tzinfo):
+                              # Extract relevant metrics
+                              all_runs.append({
+                                  'repo': repo_name,
+                                  'workflow': run['name'],
+                                  'id': run['id'],
+                                  'status': run['status'],
+                                  'conclusion': run['conclusion'],
+                                  'created_at': run['created_at'],
+                                  'run_started_at': run.get('run_started_at'),
+                                  'updated_at': run['updated_at']
+                              })
+              except Exception as e:
+                  print(f"Error fetching runs for {repo_name}: {e}")
+
+          print(f"Collected {len(all_runs)} workflow runs")
+
+          # Save runs data
+          with open('workflow_runs.json', 'w') as f:
+              json.dump(all_runs, f, indent=2)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"total_runs={len(all_runs)}\n")
+              f.write(f"lookback_days={lookback_days}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Fetch Actions billing info'
+        id: billing
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ORG: ${{ github.repository_owner }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          org = os.getenv('GITHUB_ORG')
+          
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          # Fetch Actions billing info (requires org admin permissions)
+          billing_url = f'https://api.github.com/orgs/{org}/settings/billing/actions'
+          
+          try:
+              response = requests.get(billing_url, headers=headers, timeout=10)
+              
+              if response.status_code == 200:
+                  billing_data = response.json()
+                  
+                  total_minutes = billing_data.get('total_minutes_used', 0)
+                  included_minutes = billing_data.get('included_minutes', 0)
+                  total_paid_minutes = billing_data.get('total_paid_minutes_used', 0)
+                  
+                  print(f"Total minutes used: {total_minutes}")
+                  print(f"Included minutes: {included_minutes}")
+                  print(f"Paid minutes: {total_paid_minutes}")
+                  
+                  # Calculate percentage of quota used
+                  if included_minutes > 0:
+                      quota_percent = (total_minutes / included_minutes) * 100
+                  else:
+                      quota_percent = 0
+                  
+                  with open('billing_info.json', 'w') as f:
+                      json.dump({
+                          'total_minutes_used': total_minutes,
+                          'included_minutes': included_minutes,
+                          'total_paid_minutes_used': total_paid_minutes,
+                          'quota_percentage': round(quota_percent, 2),
+                          'remaining_minutes': max(0, included_minutes - total_minutes)
+                      }, f, indent=2)
+                  
+                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                      f.write(f"total_minutes={total_minutes}\n")
+                      f.write(f"included_minutes={included_minutes}\n")
+                      f.write(f"quota_percentage={round(quota_percent, 2)}\n")
+                      f.write(f"remaining_minutes={max(0, included_minutes - total_minutes)}\n")
+                      f.write(f"billing_available=true\n")
+              else:
+                  print(f"Unable to fetch billing info: {response.status_code}")
+                  print("This may require organization admin permissions")
+                  
+                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                      f.write(f"billing_available=false\n")
+                      f.write(f"total_minutes=0\n")
+                      f.write(f"included_minutes=0\n")
+                      f.write(f"quota_percentage=0\n")
+                      f.write(f"remaining_minutes=0\n")
+          
+          except Exception as e:
+              print(f"Error fetching billing info: {e}")
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f"billing_available=false\n")
+          PYTHON_SCRIPT
+
+      - name: 'Calculate walkthrough-specific metrics'
+        id: walkthrough_metrics
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from collections import defaultdict
+          from datetime import datetime
+          from dateutil import parser
+
+          with open('workflow_runs.json', 'r') as f:
+              runs = json.load(f)
+
+          # Filter walkthrough-related workflows
+          walkthrough_keywords = ['walkthrough', 'video', 'agentsphere', 'pages']
+          walkthrough_runs = [
+              run for run in runs
+              if any(keyword in run['workflow'].lower() for keyword in walkthrough_keywords)
+          ]
+
+          print(f"Walkthrough-related runs: {len(walkthrough_runs)}")
+
+          # Calculate statistics
+          by_workflow = defaultdict(list)
+          by_status = defaultdict(int)
+          by_repo = defaultdict(int)
+
+          for run in walkthrough_runs:
+              by_workflow[run['workflow']].append(run)
+              by_status[run['conclusion']] += 1
+              by_repo[run['repo']] += 1
+
+          # Calculate success rate
+          total = len(walkthrough_runs)
+          succeeded = by_status.get('success', 0)
+          failed = by_status.get('failure', 0)
+          success_rate = (succeeded / total * 100) if total > 0 else 0
+
+          metrics = {
+              'total_runs': total,
+              'succeeded': succeeded,
+              'failed': failed,
+              'cancelled': by_status.get('cancelled', 0),
+              'success_rate': round(success_rate, 2),
+              'unique_workflows': len(by_workflow),
+              'unique_repos': len(by_repo),
+              'by_workflow': {k: len(v) for k, v in by_workflow.items()},
+              'by_repo': dict(sorted(by_repo.items(), key=lambda x: x[1], reverse=True)[:10])
+          }
+
+          with open('walkthrough_metrics.json', 'w') as f:
+              json.dump(metrics, f, indent=2)
+
+          print(json.dumps(metrics, indent=2))
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"walkthrough_runs={total}\n")
+              f.write(f"success_rate={round(success_rate, 2)}\n")
+              f.write(f"failed_runs={failed}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Estimate minutes consumed by walkthroughs'
+        id: estimate
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from dateutil import parser
+
+          with open('walkthrough_metrics.json', 'r') as f:
+              metrics = json.load(f)
+
+          # Average walkthrough generation time: ~15 minutes
+          # (includes app startup, recording, encoding, PR creation)
+          avg_minutes_per_run = 15
+
+          estimated_minutes = metrics['total_runs'] * avg_minutes_per_run
+
+          print(f"Estimated minutes consumed by walkthroughs: {estimated_minutes}")
+
+          # Calculate cost (rough estimate: $0.008/minute for standard runners)
+          estimated_cost = estimated_minutes * 0.008
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"estimated_minutes={estimated_minutes}\n")
+              f.write(f"estimated_cost={round(estimated_cost, 2)}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Check quota thresholds'
+        id: check_thresholds
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+
+          quota_percentage = float(os.getenv('QUOTA_PERCENTAGE', '0'))
+          remaining = int(os.getenv('REMAINING_MINUTES', '0'))
+
+          # Define alert thresholds
+          critical_threshold = 95
+          warning_threshold = 85
+          caution_threshold = 70
+
+          alert_level = 'normal'
+          
+          if quota_percentage >= critical_threshold:
+              alert_level = 'critical'
+              print(f"🔴 CRITICAL: {quota_percentage}% of quota used!")
+          elif quota_percentage >= warning_threshold:
+              alert_level = 'warning'
+              print(f"🟡 WARNING: {quota_percentage}% of quota used!")
+          elif quota_percentage >= caution_threshold:
+              alert_level = 'caution'
+              print(f"🟠 CAUTION: {quota_percentage}% of quota used")
+          else:
+              print(f"🟢 NORMAL: {quota_percentage}% of quota used")
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"alert_level={alert_level}\n")
+              f.write(f"should_alert={'true' if alert_level in ['critical', 'warning'] else 'false'}\n")
+          
+          env_vars = {
+              'QUOTA_PERCENTAGE': os.getenv('QUOTA_PERCENTAGE', '0'),
+              'REMAINING_MINUTES': os.getenv('REMAINING_MINUTES', '0')
+          }
+          print(f"Environment: {env_vars}")
+          PYTHON_SCRIPT
+        env:
+          QUOTA_PERCENTAGE: ${{ steps.billing.outputs.quota_percentage }}
+          REMAINING_MINUTES: ${{ steps.billing.outputs.remaining_minutes }}
+
+      - name: 'Generate usage report'
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from datetime import datetime
+
+          # Load data
+          with open('walkthrough_metrics.json', 'r') as f:
+              metrics = json.load(f)
+
+          billing_available = os.getenv('BILLING_AVAILABLE', 'false') == 'true'
+          
+          if billing_available:
+              with open('billing_info.json', 'r') as f:
+                  billing = json.load(f)
+          else:
+              billing = {
+                  'total_minutes_used': 'N/A',
+                  'included_minutes': 'N/A',
+                  'quota_percentage': 'N/A',
+                  'remaining_minutes': 'N/A'
+              }
+
+          estimated_minutes = os.getenv('ESTIMATED_MINUTES', '0')
+          estimated_cost = os.getenv('ESTIMATED_COST', '0')
+          alert_level = os.getenv('ALERT_LEVEL', 'normal')
+          lookback_days = os.getenv('LOOKBACK_DAYS', '1')
+
+          # Generate markdown report
+          report = f"""# GitHub Actions Usage Report
+
+**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}  
+**Report Period:** Last {lookback_days} day(s)  
+**Alert Level:** {alert_level.upper()}
+
+## Executive Summary
+
+### Overall Actions Usage
+
+| Metric | Value |
+|--------|-------|
+| Total Minutes Used | {billing['total_minutes_used']} |
+| Included Minutes | {billing['included_minutes']} |
+| Quota Used | {billing['quota_percentage']}% |
+| Remaining Minutes | {billing['remaining_minutes']} |
+
+### Walkthrough-Specific Metrics
+
+| Metric | Value |
+|--------|-------|
+| Total Walkthrough Runs | {metrics['total_runs']} |
+| Successful Runs | {metrics['succeeded']} |
+| Failed Runs | {metrics['failed']} |
+| Success Rate | {metrics['success_rate']}% |
+| Estimated Minutes Consumed | {estimated_minutes} |
+| Estimated Cost | ${estimated_cost} |
+
+## Alert Status
+
+"""
+
+          # Add alert-specific messaging
+          if alert_level == 'critical':
+              report += """### 🔴 CRITICAL ALERT
+
+**Quota nearly exhausted!** You have used {quota}% of your GitHub Actions minutes.
+
+**Immediate Actions Required:**
+1. ⛔ PAUSE all non-essential workflow runs
+2. 🔍 Review workflow efficiency
+3. 📊 Consider upgrading Actions plan
+4. ⏰ Enable staggered scheduling (Safeguard 7)
+
+**Remaining capacity:** {remaining} minutes ({days} days at current rate)
+
+""".format(
+                  quota=billing['quota_percentage'],
+                  remaining=billing['remaining_minutes'],
+                  days=round(int(billing['remaining_minutes']) / (int(estimated_minutes) / int(lookback_days))) if int(estimated_minutes) > 0 else 'N/A'
+              )
+          elif alert_level == 'warning':
+              report += """### 🟡 WARNING
+
+**Quota consumption is high.** You have used {quota}% of your GitHub Actions minutes.
+
+**Recommended Actions:**
+1. ⏰ Enable staggered scheduling (Safeguard 7)
+2. 🔍 Review workflow efficiency
+3. 📊 Monitor daily usage
+4. 🚦 Consider throttling walkthrough generation
+
+""".format(quota=billing['quota_percentage'])
+          else:
+              report += """### 🟢 NORMAL
+
+Quota consumption is within normal parameters. Continue monitoring.
+
+"""
+
+          report += f"""
+## Walkthrough Workflows
+
+### By Workflow Type
+
+| Workflow | Runs |
+|----------|------|
+"""
+
+          for workflow, count in sorted(metrics['by_workflow'].items(), key=lambda x: x[1], reverse=True):
+              report += f"| {workflow} | {count} |\n"
+
+          report += f"""
+### Top Repositories
+
+| Repository | Runs |
+|------------|------|
+"""
+
+          for repo, count in list(metrics['by_repo'].items())[:10]:
+              report += f"| {repo} | {count} |\n"
+
+          report += """
+## Recommendations
+
+### Optimization Strategies
+
+1. **Enable Staggered Scheduling (Safeguard 7)**
+   - Spread walkthrough generation across multiple days
+   - Prevent quota exhaustion
+   - Target: 20 repos/day maximum
+
+2. **Prioritize Critical Repositories**
+   - Focus on Tier 1 (critical) repos first
+   - Reduce frequency for Tier 3 (normal) repos
+   - Consider manual generation for rarely-updated repos
+
+3. **Optimize Workflow Efficiency**
+   - Cache dependencies more aggressively
+   - Reduce video quality for non-critical repos
+   - Skip generation if no code changes
+
+4. **Monitor Continuously**
+   - Review this report daily
+   - Set up alerts for 85% and 95% thresholds
+   - Track trends over time
+
+### Cost Savings Opportunities
+
+- **Estimated savings with staggered scheduling:** 30-40% reduction in peak usage
+- **Potential monthly cost:** ${estimated_cost} → ${ round(float(estimated_cost) * 0.6, 2) } (40% reduction)
+
+---
+
+**This report was generated by Safeguard 8: Usage Monitoring & Reporting**
+"""
+
+          # Save report
+          with open('usage_report.md', 'w') as f:
+              f.write(report)
+
+          print(report)
+          PYTHON_SCRIPT
+        env:
+          BILLING_AVAILABLE: ${{ steps.billing.outputs.billing_available }}
+          ESTIMATED_MINUTES: ${{ steps.estimate.outputs.estimated_minutes }}
+          ESTIMATED_COST: ${{ steps.estimate.outputs.estimated_cost }}
+          ALERT_LEVEL: ${{ steps.check_thresholds.outputs.alert_level }}
+          LOOKBACK_DAYS: ${{ steps.fetch_runs.outputs.lookback_days }}
+
+      - name: 'Commit report to repository'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          mkdir -p .github/usage-reports
+          
+          # Save with timestamp
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          cp usage_report.md ".github/usage-reports/usage-report-${TIMESTAMP}.md"
+          
+          # Also save as latest
+          cp usage_report.md ".github/usage-reports/usage-report-latest.md"
+          
+          # Save metrics as JSON
+          cp walkthrough_metrics.json ".github/usage-reports/metrics-${TIMESTAMP}.json"
+          
+          if [ -f "billing_info.json" ]; then
+            cp billing_info.json ".github/usage-reports/billing-${TIMESTAMP}.json"
+          fi
+          
+          git add .github/usage-reports/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: add usage report for $(date +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: 'Create alert issue if needed'
+        if: steps.check_thresholds.outputs.should_alert == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('usage_report.md', 'utf8');
+            const alertLevel = '${{ steps.check_thresholds.outputs.alert_level }}';
+            const quotaPercentage = '${{ steps.billing.outputs.quota_percentage }}';
+            const remainingMinutes = '${{ steps.billing.outputs.remaining_minutes }}';
+            
+            const emoji = alertLevel === 'critical' ? '🔴' : '🟡';
+            const title = `${emoji} GitHub Actions Quota Alert: ${quotaPercentage}% Used`;
+            const body = `
+            ## ${emoji} GitHub Actions Quota Alert
+            
+            **Alert Level:** ${alertLevel.toUpperCase()}  
+            **Quota Used:** ${quotaPercentage}%  
+            **Remaining Minutes:** ${remainingMinutes}
+            
+            ### Immediate Actions Required
+            
+            ${alertLevel === 'critical' ? 
+              '⛔ **CRITICAL:** Quota nearly exhausted! Pause non-essential workflows immediately.' :
+              '⚠️ **WARNING:** High quota usage detected. Review and optimize workflows.'}
+            
+            ### Usage Report
+            
+            ${report}
+            
+            ### Next Steps
+            
+            1. Review the full usage report above
+            2. Enable Safeguard 7 (Staggered Scheduling) if not already active
+            3. Consider workflow optimizations
+            4. Monitor usage daily until levels normalize
+            
+            ### Files
+            
+            - Full report: \`.github/usage-reports/usage-report-latest.md\`
+            - Metrics: \`.github/usage-reports/metrics-*.json\`
+            - Billing: \`.github/usage-reports/billing-*.json\`
+            
+            ---
+            
+            **This alert was generated by Safeguard 8: Usage Monitoring & Reporting**
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['quota-alert', 'urgent', 'safeguard-8', alertLevel]
+            });
+
+      - name: 'Upload report artifacts'
+        uses: actions/upload-artifact@v4
+        with:
+          name: usage-report-${{ github.run_number }}
+          path: |
+            usage_report.md
+            walkthrough_metrics.json
+            billing_info.json
+            workflow_runs.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: 'Generate workflow summary'
+        run: |
+          cat usage_report.md >> $GITHUB_STEP_SUMMARY
