@@ -1,0 +1,385 @@
+name: 'Phase 3: Deploy Live App to Pages'
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'Application name to deploy'
+        required: true
+        type: string
+      app_type:
+        description: 'Application type'
+        required: true
+        type: choice
+        options:
+          - 'react'
+          - 'vue'
+          - 'angular'
+          - 'nextjs'
+          - 'static'
+          - 'nodejs'
+      port:
+        description: 'Application port (default: auto-detect)'
+        required: false
+        default: ''
+        type: string
+  repository_dispatch:
+    types: [deploy-live-app]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  packages: write
+
+concurrency:
+  group: 'pages-deploy-${{ github.event.inputs.app_name || github.event.client_payload.app_name }}'
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: 'Build and Deploy Application'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Load configuration'
+        id: config
+        run: |
+          APP_NAME="${{ github.event.inputs.app_name || github.event.client_payload.app_name }}"
+          APP_TYPE="${{ github.event.inputs.app_type || github.event.client_payload.app_type }}"
+          PORT="${{ github.event.inputs.port || github.event.client_payload.port || '' }}"
+          
+          echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
+          echo "app_type=${APP_TYPE}" >> $GITHUB_OUTPUT
+          echo "port=${PORT}" >> $GITHUB_OUTPUT
+          
+          # Set default port if not provided
+          if [ -z "$PORT" ]; then
+            case "$APP_TYPE" in
+              react|nextjs|nodejs) PORT="3000" ;;
+              vue) PORT="8080" ;;
+              angular) PORT="4200" ;;
+              static) PORT="8000" ;;
+              *) PORT="3000" ;;
+            esac
+          fi
+          
+          echo "port=${PORT}" >> $GITHUB_OUTPUT
+          echo "Deploying ${APP_NAME} (${APP_TYPE}) on port ${PORT}"
+
+      - name: 'Setup Node.js'
+        if: contains(fromJSON('["react", "vue", "angular", "nextjs", "nodejs"]'), steps.config.outputs.app_type)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 'Install dependencies'
+        run: |
+          APP_TYPE="${{ steps.config.outputs.app_type }}"
+          
+          if [[ "$APP_TYPE" =~ ^(react|vue|angular|nextjs|nodejs)$ ]]; then
+            echo "Installing Node.js dependencies..."
+            npm ci || npm install
+          fi
+
+      - name: 'Build application'
+        id: build
+        run: |
+          APP_TYPE="${{ steps.config.outputs.app_type }}"
+          APP_NAME="${{ steps.config.outputs.app_name }}"
+          
+          echo "Building ${APP_TYPE} application..."
+          
+          case "$APP_TYPE" in
+            react)
+              npm run build
+              BUILD_DIR="build"
+              ;;
+            vue)
+              npm run build
+              BUILD_DIR="dist"
+              ;;
+            angular)
+              npm run build -- --configuration production
+              BUILD_DIR="dist/${APP_NAME}"
+              ;;
+            nextjs)
+              npm run build
+              npm run export || echo "Next.js static export (if configured)"
+              BUILD_DIR="out"
+              ;;
+            static)
+              BUILD_DIR="."
+              ;;
+            nodejs)
+              # For Node.js apps, we'll need to build a Docker container
+              echo "Node.js app requires containerization"
+              BUILD_DIR="."
+              ;;
+          esac
+          
+          echo "build_dir=${BUILD_DIR}" >> $GITHUB_OUTPUT
+          
+          if [ -d "$BUILD_DIR" ]; then
+            echo "✅ Build successful. Output directory: ${BUILD_DIR}"
+            ls -la "${BUILD_DIR}"
+          else
+            echo "❌ Build directory not found: ${BUILD_DIR}"
+            exit 1
+          fi
+
+      - name: 'Create deployment manifest'
+        run: |
+          APP_NAME="${{ steps.config.outputs.app_name }}"
+          APP_TYPE="${{ steps.config.outputs.app_type }}"
+          PORT="${{ steps.config.outputs.port }}"
+          BUILD_DIR="${{ steps.build.outputs.build_dir }}"
+          
+          mkdir -p .github/deployments
+          
+          cat > ".github/deployments/${APP_NAME}-manifest.json" << EOF
+          {
+            "app_name": "${APP_NAME}",
+            "app_type": "${APP_TYPE}",
+            "port": ${PORT},
+            "build_dir": "${BUILD_DIR}",
+            "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit_sha": "${{ github.sha }}",
+            "workflow_run": "${{ github.run_id }}",
+            "status": "deployed",
+            "health_endpoint": "/health",
+            "pages_url": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${APP_NAME}"
+          }
+          EOF
+          
+          echo "Created deployment manifest"
+          cat ".github/deployments/${APP_NAME}-manifest.json"
+
+      - name: 'Deploy to GitHub Pages subdirectory'
+        run: |
+          APP_NAME="${{ steps.config.outputs.app_name }}"
+          BUILD_DIR="${{ steps.build.outputs.build_dir }}"
+          
+          # Setup Pages directory structure
+          mkdir -p pages-deploy/apps/${APP_NAME}
+          
+          # Copy built app to Pages directory
+          cp -r ${BUILD_DIR}/* pages-deploy/apps/${APP_NAME}/
+          
+          # Create index redirect if needed
+          if [ ! -f "pages-deploy/apps/${APP_NAME}/index.html" ]; then
+            cat > "pages-deploy/apps/${APP_NAME}/index.html" << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Application</title>
+          </head>
+          <body>
+            <div id="app">Loading...</div>
+            <script>
+              // App-specific initialization can go here
+              console.log('App loaded');
+            </script>
+          </body>
+          </html>
+          EOF
+          fi
+          
+          echo "Prepared deployment to pages-deploy/apps/${APP_NAME}"
+          ls -la "pages-deploy/apps/${APP_NAME}"
+
+      - name: 'Update deployment registry'
+        run: |
+          APP_NAME="${{ steps.config.outputs.app_name }}"
+          
+          # Load existing registry or create new
+          REGISTRY_FILE=".github/deployments/app-deployments.yml"
+          
+          if [ ! -f "$REGISTRY_FILE" ]; then
+            echo "deployments:" > "$REGISTRY_FILE"
+          fi
+          
+          # Append or update deployment entry
+          python3 << 'PYTHON_SCRIPT'
+          import yaml
+          import json
+          from pathlib import Path
+          from datetime import datetime
+
+          registry_file = Path('.github/deployments/app-deployments.yml')
+          manifest_file = Path('.github/deployments/${{ steps.config.outputs.app_name }}-manifest.json')
+
+          # Load registry
+          if registry_file.exists():
+              with open(registry_file, 'r') as f:
+                  registry = yaml.safe_load(f) or {}
+          else:
+              registry = {}
+
+          if 'deployments' not in registry:
+              registry['deployments'] = []
+
+          # Load manifest
+          with open(manifest_file, 'r') as f:
+              manifest = json.load(f)
+
+          # Remove existing deployment for this app
+          registry['deployments'] = [
+              d for d in registry['deployments']
+              if d.get('app_name') != manifest['app_name']
+          ]
+
+          # Add new deployment
+          registry['deployments'].append(manifest)
+
+          # Sort by deployment date
+          registry['deployments'].sort(key=lambda x: x['deployed_at'], reverse=True)
+
+          # Save registry
+          registry_file.parent.mkdir(parents=True, exist_ok=True)
+          with open(registry_file, 'w') as f:
+              yaml.dump(registry, f, default_flow_style=False, sort_keys=False)
+
+          print(f"Updated registry with {len(registry['deployments'])} deployments")
+          PYTHON_SCRIPT
+
+      - name: 'Commit deployment files'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add .github/deployments/
+          git add pages-deploy/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "deploy: add ${{ steps.config.outputs.app_name }} to GitHub Pages"
+            git push
+          fi
+
+      - name: 'Trigger Pages rebuild'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Trigger the build-pages-site workflow
+          gh workflow run build-pages-site.yml
+
+      - name: 'Verify deployment'
+        id: verify
+        run: |
+          APP_NAME="${{ steps.config.outputs.app_name }}"
+          APP_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/apps/${APP_NAME}"
+          
+          echo "Waiting for deployment to be available..."
+          sleep 30
+          
+          # Try to reach the deployed app (will likely need Pages to build first)
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL" || echo "000")
+          
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "✅ Deployment accessible at ${APP_URL}"
+            echo "deployment_url=${APP_URL}" >> $GITHUB_OUTPUT
+            echo "deployment_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Deployment may not be accessible yet (HTTP ${HTTP_CODE})"
+            echo "Pages build may still be in progress"
+            echo "deployment_url=${APP_URL}" >> $GITHUB_OUTPUT
+            echo "deployment_status=pending" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 'Create deployment issue'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const appName = '${{ steps.config.outputs.app_name }}';
+            const appType = '${{ steps.config.outputs.app_type }}';
+            const deploymentUrl = '${{ steps.verify.outputs.deployment_url }}';
+            const status = '${{ steps.verify.outputs.deployment_status }}';
+            
+            const statusEmoji = status === 'success' ? '✅' : '⏳';
+            const title = `${statusEmoji} Live App Deployed: ${appName}`;
+            
+            const body = `
+            ## ${statusEmoji} Live Application Deployment
+            
+            **Application:** ${appName}  
+            **Type:** ${appType}  
+            **Status:** ${status}  
+            **Deployment URL:** ${deploymentUrl}
+            
+            ### Deployment Details
+            
+            - **Commit:** ${context.sha.substring(0, 7)}
+            - **Workflow Run:** [View Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+            - **Deployed At:** ${new Date().toISOString()}
+            
+            ### Access the Application
+            
+            ${status === 'success' ? 
+              \`🌐 **[Launch Application](\${deploymentUrl})**\` :
+              \`⏳ The application is deploying. It may take 5-10 minutes for GitHub Pages to build and publish.
+              
+Check back soon at: \${deploymentUrl}\`}
+            
+            ### Health Monitoring
+            
+            This application is now monitored by:
+            - ✅ Safeguard 2: Health Check Live Apps (every 5 minutes)
+            - ✅ Safeguard 3: Metadata Reconciliation (every 6 hours)
+            
+            ### Deployment Registry
+            
+            This deployment has been registered in:
+            - \`.github/deployments/app-deployments.yml\`
+            - \`.github/deployments/\${appName}-manifest.json\`
+            
+            ### Next Steps
+            
+            1. Wait for GitHub Pages to build (if status is pending)
+            2. Verify the application loads correctly
+            3. Check health monitoring status
+            4. Add to AgentSphere gallery for visibility
+            
+            ---
+            
+            **This deployment was created by Phase 3: Deploy Live App to Pages**
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['deployment', 'live-app', 'phase-3']
+            });
+
+      - name: 'Generate summary'
+        run: |
+          echo "## 🚀 Live App Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Application:** ${{ steps.config.outputs.app_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Type:** ${{ steps.config.outputs.app_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Port:** ${{ steps.config.outputs.port }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.verify.outputs.deployment_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.verify.outputs.deployment_status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Files Updated" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployment manifest: \`.github/deployments/${{ steps.config.outputs.app_name }}-manifest.json\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Registry: \`.github/deployments/app-deployments.yml\`" >> $GITHUB_STEP_SUMMARY
+          echo "- App files: \`pages-deploy/apps/${{ steps.config.outputs.app_name }}/\`" >> $GITHUB_STEP_SUMMARY
