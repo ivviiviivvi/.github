@@ -158,7 +158,7 @@ jobs:
           git commit -m "chore: update staggered schedule [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
 
-      - name: 'Check today\'s schedule'
+      - name: "Check today's schedule"
         id: check-today
         run: |
           if [ ! -f "${{ env.SCHEDULE_FILE }}" ]; then
@@ -178,7 +178,7 @@ jobs:
             echo "✅ No repositories scheduled for today"
           fi
 
-      - name: 'Upload today\'s schedule'
+      - name: "Upload today's schedule"
         if: steps.check-today.outputs.repos_today != '0'
         uses: actions/upload-artifact@v4
         with:
@@ -190,13 +190,13 @@ jobs:
     needs: calculate-schedule
     if: needs.calculate-schedule.outputs.repos_today != '0'
     runs-on: ubuntu-latest
-    name: 'Execute Today\'s Scheduled Workflows'
+    name: "Execute Today's Scheduled Workflows"
     
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
-      - name: 'Download today\'s schedule'
+      - name: "Download today's schedule"
         uses: actions/download-artifact@v4
         with:
           name: todays-schedule
@@ -259,7 +259,7 @@ jobs:
           chmod +x execute_schedule.sh
           bash execute_schedule.sh
 
-      - name: 'Update schedule status'
+      - name: "Update schedule status"
         if: always()
         run: |
           TODAY=$(date -u +%Y-%m-%d)
