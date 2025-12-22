@@ -11,9 +11,7 @@ import socket
 import ipaddress
 import requests
 import urllib.parse
-import socket
-import ipaddress
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 from collections import defaultdict
@@ -25,15 +23,16 @@ import concurrent.futures
 class OrganizationCrawler:
     """Crawls and analyzes organization repositories and documentation"""
 
-    def __init__(self, github_token: str = None, org_name: str = None):
+    def __init__(self, github_token: str = None, org_name: str = None, max_workers: int = 10):
         self.github_token = github_token or os.environ.get('GITHUB_TOKEN')
         self.org_name = org_name or os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
+        self.max_workers = max_workers
         self.session = requests.Session()
         if self.github_token:
             self.session.headers.update({'Authorization': f'token {self.github_token}'})
 
         self.results = {
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'organization': self.org_name,
             'link_validation': {},
             'repository_health': {},
@@ -99,8 +98,8 @@ class OrganizationCrawler:
             links_to_check.append(link)
 
         # Use ThreadPoolExecutor for parallel link checking
-        # Max workers = 10 to be respectful but faster than serial
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        # Max workers to be respectful but faster than serial
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             future_to_link = {executor.submit(self._check_link, link): link for link in links_to_check}
 
             for future in concurrent.futures.as_completed(future_to_link):
@@ -255,20 +254,28 @@ class OrganizationCrawler:
         print(f"  📊 Analyzing {name}...")
 
         # Calculate days since last update
-        updated_at = datetime.fromisoformat(repo['updated_at'].replace('Z', '+00:00'))
-        days_since_update = (datetime.now(updated_at.tzinfo) - updated_at).days
+        try:
+            updated_at = datetime.fromisoformat(repo['updated_at'].replace('Z', '+00:00'))
+            if updated_at.tzinfo is None:
+                updated_at = updated_at.replace(tzinfo=timezone.utc)
+
+            now = datetime.now(timezone.utc)
+            days_since_update = (now - updated_at).days
+        except Exception as e:
+            print(f"  ⚠️ Error parsing date for {name}: {e}")
+            days_since_update = 999  # Assume stale if date parsing fails
 
         return {
             'name': name,
             'full_name': repo['full_name'],
             'is_active': days_since_update < 90,
             'days_since_update': days_since_update,
-            'stars': repo['stargazers_count'],
-            'open_issues': repo['open_issues_count'],
-            'language': repo['language'],
-            'has_wiki': repo['has_wiki'],
-            'has_pages': repo['has_pages'],
-            'visibility': repo['visibility']
+            'stars': repo.get('stargazers_count', 0),
+            'open_issues': repo.get('open_issues_count', 0),
+            'language': repo.get('language', 'Unknown'),
+            'has_wiki': repo.get('has_wiki', False),
+            'has_pages': repo.get('has_pages', False),
+            'visibility': repo.get('visibility', 'public')
         }
 
     def map_ecosystem(self, base_dir: Path) -> Dict:
@@ -292,20 +299,28 @@ class OrganizationCrawler:
                 ecosystem['workflows'].append(workflow_file.name)
 
         # Scan Copilot customizations
-        for agent_file in (base_dir / 'agents').glob('*.md'):
-            ecosystem['copilot_agents'].append(agent_file.stem)
+        agents_dir = base_dir / 'agents'
+        if agents_dir.exists():
+             for agent_file in agents_dir.glob('*.md'):
+                ecosystem['copilot_agents'].append(agent_file.stem)
 
-        for instruction_file in (base_dir / 'instructions').glob('*.md'):
-            ecosystem['copilot_instructions'].append(instruction_file.stem)
-            # Extract technology from filename
-            tech = instruction_file.stem.split('.')[0]
-            ecosystem['technologies'].add(tech)
+        instructions_dir = base_dir / 'instructions'
+        if instructions_dir.exists():
+             for instruction_file in instructions_dir.glob('*.md'):
+                ecosystem['copilot_instructions'].append(instruction_file.stem)
+                # Extract technology from filename
+                tech = instruction_file.stem.split('.')[0]
+                ecosystem['technologies'].add(tech)
 
-        for prompt_file in (base_dir / 'prompts').glob('*.md'):
-            ecosystem['copilot_prompts'].append(prompt_file.stem)
+        prompts_dir = base_dir / 'prompts'
+        if prompts_dir.exists():
+             for prompt_file in prompts_dir.glob('*.md'):
+                ecosystem['copilot_prompts'].append(prompt_file.stem)
 
-        for chatmode_file in (base_dir / 'chatmodes').glob('*.md'):
-            ecosystem['copilot_chatmodes'].append(chatmode_file.stem)
+        chatmodes_dir = base_dir / 'chatmodes'
+        if chatmodes_dir.exists():
+             for chatmode_file in chatmodes_dir.glob('*.md'):
+                ecosystem['copilot_chatmodes'].append(chatmode_file.stem)
 
         # Convert sets to lists for JSON serialization
         ecosystem['technologies'] = sorted(list(ecosystem['technologies']))
@@ -331,7 +346,6 @@ class OrganizationCrawler:
                 })
 
         # Check for missing documentation
-        required_docs = ['README.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'SECURITY.md']
         # This would need actual file checking in the implementation
 
         # Check for workflow coverage
@@ -370,7 +384,7 @@ class OrganizationCrawler:
         """Generate comprehensive analysis report"""
         print("\n📝 Generating report...")
 
-        report_filename = f"org_health_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+        report_filename = f"org_health_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
         report_path = output_dir / report_filename
 
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -510,12 +524,15 @@ def main():
                         help='GitHub API token (or set GITHUB_TOKEN env var)')
     parser.add_argument('--org-name', type=str,
                         help='GitHub organization name (or set from GITHUB_REPOSITORY)')
+    parser.add_argument('--max-workers', type=int, default=10,
+                        help='Maximum number of threads for link validation (default: 10)')
 
     args = parser.parse_args()
 
     crawler = OrganizationCrawler(
         github_token=args.github_token,
-        org_name=args.org_name
+        org_name=args.org_name,
+        max_workers=args.max_workers
     )
 
     results = crawler.run_full_analysis(
