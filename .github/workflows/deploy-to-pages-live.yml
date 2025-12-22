@@ -1,4 +1,4 @@
-name: 'Deploy Live App to GitHub Pages'
+name: "Deploy Live App to GitHub Pages"
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       deployment_strategy:
-        description: 'Deployment strategy to use'
+        description: "Deployment strategy to use"
         required: false
         type: choice
         options:
@@ -17,15 +17,27 @@ on:
           - docker
           - codespaces
           - documentation-only
-        default: 'auto'
+        default: "auto"
       force_deploy:
-        description: 'Force deployment even if no changes detected'
+        description: "Force deployment even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      deployment_strategy:
+        description: "Deployment strategy to use"
+        required: false
+        type: string
+        default: "auto"
+      force_deploy:
+        description: "Force deployment even if no changes detected"
         required: false
         type: boolean
         default: false
 
 concurrency:
-  group: 'pages-live-deploy-${{ github.ref }}'
+  group: "pages-live-deploy-${{ github.ref }}"
   cancel-in-progress: false
 
 permissions:
@@ -43,18 +55,18 @@ jobs:
       has_frontend: ${{ steps.detect.outputs.has_frontend }}
       has_backend: ${{ steps.detect.outputs.has_backend }}
       startup_command: ${{ steps.detect.outputs.startup_command }}
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: 'Load deployment configuration'
+      - name: "Load deployment configuration"
         id: load-config
         run: |
           CONFIG_FILE=".github/app-deployment-config.yml"
-          
+
           if [ -f "$CONFIG_FILE" ]; then
             echo "enabled=$(yq eval '.deployment.enabled // true' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
             echo "strategy=$(yq eval '.deployment.strategy // "auto"' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
@@ -65,19 +77,31 @@ jobs:
             echo "startup_command=" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Detect application type'
+      - name: "Detect application type"
         id: detect
+        env:
+          INPUT_DEPLOYMENT_STRATEGY: ${{ inputs.deployment_strategy }}
+          EVENT_DEPLOYMENT_STRATEGY: ${{ github.event.inputs.deployment_strategy }}
+          INPUT_FORCE_DEPLOY: ${{ inputs.force_deploy }}
+          EVENT_FORCE_DEPLOY: ${{ github.event.inputs.force_deploy }}
         run: |
           echo "🔍 Detecting application type..."
-          
-          # Use manual override if specified
-          STRATEGY="${{ github.event.inputs.deployment_strategy }}"
+
+          # Resolve strategy input (workflow_call or workflow_dispatch)
+          STRATEGY="$INPUT_DEPLOYMENT_STRATEGY"
+          if [ -z "$STRATEGY" ]; then
+            STRATEGY="$EVENT_DEPLOYMENT_STRATEGY"
+          fi
+          if [ -z "$STRATEGY" ]; then
+            STRATEGY="auto"
+          fi
+
           if [ -n "$STRATEGY" ] && [ "$STRATEGY" != "auto" ]; then
             echo "deployment_strategy=$STRATEGY" >> $GITHUB_OUTPUT
             echo "app_type=manual" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Use config file strategy if specified
           CONFIG_STRATEGY="${{ steps.load-config.outputs.strategy }}"
           if [ -n "$CONFIG_STRATEGY" ] && [ "$CONFIG_STRATEGY" != "auto" ]; then
@@ -85,13 +109,13 @@ jobs:
             echo "app_type=configured" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Auto-detect based on project files
           HAS_FRONTEND=false
           HAS_BACKEND=false
           APP_TYPE="unknown"
           DEPLOYMENT_STRATEGY="documentation-only"
-          
+
           # Check for frontend frameworks
           if [ -f "package.json" ]; then
             if grep -q '"react"' package.json || grep -q '"next"' package.json || grep -q '"vue"' package.json || grep -q '"angular"' package.json; then
@@ -100,7 +124,7 @@ jobs:
               DEPLOYMENT_STRATEGY="pages-direct"
             fi
           fi
-          
+
           # Check for backend frameworks
           if [ -f "package.json" ]; then
             if grep -q '"express"' package.json || grep -q '"fastify"' package.json || grep -q '"koa"' package.json; then
@@ -109,7 +133,7 @@ jobs:
               DEPLOYMENT_STRATEGY="docker"
             fi
           fi
-          
+
           if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
             if grep -qE "(flask|django|fastapi)" requirements.txt 2>/dev/null || grep -qE "(flask|django|fastapi)" pyproject.toml 2>/dev/null; then
               HAS_BACKEND=true
@@ -117,7 +141,7 @@ jobs:
               DEPLOYMENT_STRATEGY="docker"
             fi
           fi
-          
+
           # Check for static sites
           if [ -f "index.html" ] || [ -d "public" ] || [ -d "dist" ] || [ -d "build" ]; then
             if [ "$HAS_FRONTEND" = "false" ]; then
@@ -126,13 +150,13 @@ jobs:
               DEPLOYMENT_STRATEGY="pages-direct"
             fi
           fi
-          
+
           # Full-stack apps
           if [ "$HAS_FRONTEND" = "true" ] && [ "$HAS_BACKEND" = "true" ]; then
             APP_TYPE="fullstack"
             DEPLOYMENT_STRATEGY="docker"
           fi
-          
+
           # CLI/Library projects
           if [ -f "setup.py" ] || [ -f "Cargo.toml" ] || grep -q '"bin"' package.json 2>/dev/null; then
             if [ "$HAS_FRONTEND" = "false" ] && [ "$HAS_BACKEND" = "false" ]; then
@@ -140,34 +164,34 @@ jobs:
               DEPLOYMENT_STRATEGY="documentation-only"
             fi
           fi
-          
+
           echo "app_type=$APP_TYPE" >> $GITHUB_OUTPUT
           echo "deployment_strategy=$DEPLOYMENT_STRATEGY" >> $GITHUB_OUTPUT
           echo "has_frontend=$HAS_FRONTEND" >> $GITHUB_OUTPUT
           echo "has_backend=$HAS_BACKEND" >> $GITHUB_OUTPUT
           echo "startup_command=${{ steps.load-config.outputs.startup_command }}" >> $GITHUB_OUTPUT
-          
+
           echo "✅ Detected: $APP_TYPE - Strategy: $DEPLOYMENT_STRATEGY"
 
   deploy-pages-direct:
     needs: detect-app-type
     if: needs.detect-app-type.outputs.deployment_strategy == 'pages-direct'
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: 'Setup Node.js'
+      - name: "Setup Node.js"
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: npm ci
 
-      - name: 'Build application'
+      - name: "Build application"
         run: |
           if [ -f "package.json" ] && grep -q '"build"' package.json; then
             npm run build
@@ -175,63 +199,67 @@ jobs:
             echo "No build script found, skipping build step"
           fi
 
-      - name: 'Setup Pages'
+      - name: "Setup Pages"
         uses: actions/configure-pages@v4
 
-      - name: 'Upload artifact'
+      - name: "Upload artifact"
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: "./dist"
 
-      - name: 'Deploy to GitHub Pages'
+      - name: "Deploy to GitHub Pages"
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: 'Update deployment registry'
+      - name: "Generate deployment metadata"
         run: |
-          mkdir -p docs/_data
-          cat > docs/_data/app-deployments.yml << EOF
-          - repository: "${{ github.repository }}"
-            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
-            deployment_strategy: "pages-direct"
-            deployment_url: "${{ steps.deployment.outputs.page_url }}"
-            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            status: "active"
-            health_check_url: "${{ steps.deployment.outputs.page_url }}"
-          EOF
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/_data/app-deployments.yml
-          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          DEPLOY_URL="${{ steps.deployment.outputs.page_url }}"
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "pages-direct",
+  "live_url": "$DEPLOY_URL",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
 
   deploy-docker:
     needs: detect-app-type
     if: needs.detect-app-type.outputs.deployment_strategy == 'docker'
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: 'Set up Docker Buildx'
+      - name: "Set up Docker Buildx"
         uses: docker/setup-buildx-action@v3
 
-      - name: 'Log in to Docker Hub'
+      - name: "Log in to Docker Hub"
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 'Extract metadata'
+      - name: "Extract metadata"
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ github.repository }}
 
-      - name: 'Build and push Docker image'
+      - name: "Build and push Docker image"
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -241,7 +269,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 'Create embed page'
+      - name: "Create embed page"
         run: |
           mkdir -p docs/live-apps
           cat > docs/live-apps/${{ github.event.repository.name }}.md << EOF
@@ -251,50 +279,55 @@ jobs:
           repository: "${{ github.repository }}"
           docker_image: "${{ steps.meta.outputs.tags }}"
           ---
-          
+
           # Live Demo: ${{ github.event.repository.name }}
-          
+
           This is a live demonstration of the application running in a Docker container.
           EOF
-          
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/live-apps/
           git commit -m "chore: add live app embed page [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
 
-      - name: 'Update deployment registry'
+      - name: "Generate deployment metadata"
         run: |
-          mkdir -p docs/_data
-          cat > docs/_data/app-deployments.yml << EOF
-          - repository: "${{ github.repository }}"
-            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
-            deployment_strategy: "docker"
-            docker_image: "${{ steps.meta.outputs.tags }}"
-            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            status: "active"
-            embed_url: "${{ github.event.repository.html_url }}/blob/main/docs/live-apps/${{ github.event.repository.name }}.md"
-          EOF
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/_data/app-deployments.yml
-          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          TAGS="${{ steps.meta.outputs.tags }}"
+          PRIMARY_TAG=$(echo "$TAGS" | head -n 1)
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "docker",
+  "docker_image": "$PRIMARY_TAG",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
 
   deploy-codespaces:
     needs: detect-app-type
     if: needs.detect-app-type.outputs.deployment_strategy == 'codespaces'
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: 'Create Codespaces configuration'
+      - name: "Create Codespaces configuration"
         run: |
           mkdir -p .devcontainer
-          
+
           if [ ! -f ".devcontainer/devcontainer.json" ]; then
             cat > .devcontainer/devcontainer.json << EOF
           {
@@ -310,54 +343,62 @@ jobs:
           }
           EOF
           fi
-          
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .devcontainer/
           git commit -m "chore: add Codespaces configuration [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
 
-      - name: 'Update deployment registry'
+      - name: "Generate deployment metadata"
         run: |
-          mkdir -p docs/_data
-          cat > docs/_data/app-deployments.yml << EOF
-          - repository: "${{ github.repository }}"
-            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
-            deployment_strategy: "codespaces"
-            codespaces_url: "https://github.com/${{ github.repository }}/codespaces"
-            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            status: "active"
-          EOF
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/_data/app-deployments.yml
-          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "codespaces",
+  "codespaces_url": "https://github.com/${{ github.repository }}/codespaces",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
 
   deploy-documentation-only:
     needs: detect-app-type
     if: needs.detect-app-type.outputs.deployment_strategy == 'documentation-only'
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: 'Update deployment registry'
+      - name: "Generate deployment metadata"
         run: |
-          mkdir -p docs/_data
-          cat > docs/_data/app-deployments.yml << EOF
-          - repository: "${{ github.repository }}"
-            app_type: "${{ needs.detect-app-type.outputs.app_type }}"
-            deployment_strategy: "documentation-only"
-            deployed_at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            status: "documentation"
-            documentation_url: "${{ github.event.repository.html_url }}/blob/main/README.md"
-          EOF
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/_data/app-deployments.yml
-          git commit -m "chore: update app deployment registry [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "documentation-only",
+  "documentation_url": "${{ github.event.repository.html_url }}/blob/main/README.md",
+  "status": "documentation",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7

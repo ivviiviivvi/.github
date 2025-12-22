@@ -1,178 +1,317 @@
 <!-- Live App Embed Component -->
 {% if include.deployment_strategy == 'pages-direct' %}
-  <!-- GitHub Pages Direct Deployment -->
-  <div class="live-app-embed">
-    <iframe 
-      src="{{ include.deployment_url }}" 
-      class="app-frame"
-      title="Live Application Demo"
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-      loading="lazy"
-    ></iframe>
-  </div>
+<!-- GitHub Pages Direct Deployment -->
+<div class="live-app-embed">
+  <iframe
+    src="{{ include.deployment_url }}"
+    class="app-frame"
+    title="Live Application Demo"
+    sandbox="allow-scripts allow-forms allow-popups"
+    loading="lazy"
+  ></iframe>
+</div>
 
 {% elsif include.deployment_strategy == 'docker' %}
-  <!-- Docker Deployment with Instructions -->
-  <div class="docker-embed">
-    <div style="padding: 2rem; background: var(--surface-color);">
-      <h3>🐳 Docker Deployment</h3>
-      <p>This application is deployed as a Docker container. Run it locally with:</p>
-      
-      <div class="code-block" style="background: #24292e; color: #e1e4e8; padding: 1rem; border-radius: 6px; margin: 1rem 0; overflow-x: auto;">
-        <code style="font-family: 'Courier New', monospace;">
-          # Pull the image<br>
-          docker pull {{ include.docker_image }}<br>
-          <br>
-          # Run the container<br>
-          docker run -p 3000:3000 -p 5000:5000 -p 8000:8000 {{ include.docker_image }}<br>
-          <br>
-          # Access at: http://localhost:3000 (or appropriate port)
-        </code>
-      </div>
-      
-      <div class="docker-info" style="margin-top: 2rem;">
-        <h4>📋 Quick Start</h4>
-        <ol style="line-height: 2;">
-          <li>Install <a href="https://www.docker.com/get-started" target="_blank">Docker Desktop</a></li>
-          <li>Copy the commands above</li>
-          <li>Run in your terminal</li>
-          <li>Access the application in your browser</li>
-        </ol>
-      </div>
-      
-      <div class="docker-links" style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
-        <a href="https://hub.docker.com/r/{{ include.docker_image | split: ':' | first }}" 
-           class="demo-btn" 
-           target="_blank"
-           style="background: #2496ed;">
-          🐳 View on Docker Hub
-        </a>
-        <a href="https://github.com/{{ page.repository }}/blob/main/Dockerfile" 
-           class="demo-btn outline" 
-           target="_blank">
-          📄 View Dockerfile
-        </a>
-      </div>
+<!-- Docker Deployment with Instructions -->
+<div class="docker-embed">
+  <div style="padding: 2rem; background: var(--surface-color)">
+    <h3>🐳 Docker Deployment</h3>
+    <p>
+      This application is deployed as a Docker container. Run it locally with:
+    </p>
+
+    <div
+      class="code-block"
+      style="
+        background: #24292e;
+        color: #e1e4e8;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        overflow-x: auto;
+      "
+    >
+      <code style="font-family: 'Courier New', monospace">
+        # Pull the image<br />
+        docker pull {{ include.docker_image }}<br />
+        <br />
+        # Run the container<br />
+        docker run -p 3000:3000 -p 5000:5000 -p 8000:8000 {{
+        include.docker_image }}<br />
+        <br />
+        # Access at: http://localhost:3000 (or appropriate port)
+      </code>
+    </div>
+
+    <div class="docker-info" style="margin-top: 2rem">
+      <h4>📋 Quick Start</h4>
+      <ol style="line-height: 2">
+        <li>
+          Install
+          <a href="https://www.docker.com/get-started" target="_blank"
+            >Docker Desktop</a
+          >
+        </li>
+        <li>Copy the commands above</li>
+        <li>Run in your terminal</li>
+        <li>Access the application in your browser</li>
+      </ol>
+    </div>
+
+    <div
+      class="docker-links"
+      style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap"
+    >
+      <a
+        href="https://hub.docker.com/r/{{ include.docker_image | split: ':' | first }}"
+        class="demo-btn"
+        target="_blank"
+        style="background: #2496ed"
+      >
+        🐳 View on Docker Hub
+      </a>
+      <a
+        href="https://github.com/{{ page.repository }}/blob/main/Dockerfile"
+        class="demo-btn outline"
+        target="_blank"
+      >
+        📄 View Dockerfile
+      </a>
     </div>
   </div>
+</div>
 
 {% elsif include.deployment_strategy == 'codespaces' %}
-  <!-- GitHub Codespaces Integration -->
-  <div class="codespaces-embed">
-    <div style="padding: 2rem; background: var(--surface-color); text-align: center;">
-      <h3>☁️ GitHub Codespaces</h3>
-      <p>This application runs in a full development environment using GitHub Codespaces.</p>
-      
-      <div style="margin: 2rem 0;">
-        <img src="https://github.githubassets.com/images/modules/site/codespaces/hero-sm.png" 
-             alt="GitHub Codespaces" 
-             style="max-width: 400px; width: 100%; border-radius: 8px; box-shadow: var(--shadow);">
-      </div>
-      
-      <div class="codespaces-info" style="text-align: left; margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-        <h4>🚀 Getting Started</h4>
-        <ol style="line-height: 2;">
-          <li>Click the "Open in Codespaces" button below</li>
-          <li>Wait for the environment to initialize (1-2 minutes)</li>
-          <li>The application will start automatically</li>
-          <li>Access via the forwarded ports panel</li>
-        </ol>
-        
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="https://github.com/{{ page.repository }}/codespaces/new" 
-             class="demo-btn" 
-             target="_blank"
-             style="background: #24292e;">
-            ☁️ Open in Codespaces
-          </a>
-          <a href="https://github.com/features/codespaces" 
-             class="demo-btn outline" 
-             target="_blank">
-            📖 Learn About Codespaces
-          </a>
-        </div>
-      </div>
-      
-      <div class="codespaces-features" style="margin-top: 3rem; padding: 1.5rem; background: var(--background-color); border-radius: 6px; text-align: left;">
-        <h4>✨ What You Get</h4>
-        <ul style="line-height: 2; list-style-position: inside;">
-          <li>🖥️ Full VS Code in your browser</li>
-          <li>⚡ Pre-configured development environment</li>
-          <li>🔧 All dependencies installed automatically</li>
-          <li>🌐 Live preview with port forwarding</li>
-          <li>💾 Persistent storage for your session</li>
-        </ul>
+<!-- GitHub Codespaces Integration -->
+<div class="codespaces-embed">
+  <div
+    style="padding: 2rem; background: var(--surface-color); text-align: center"
+  >
+    <h3>☁️ GitHub Codespaces</h3>
+    <p>
+      This application runs in a full development environment using GitHub
+      Codespaces.
+    </p>
+
+    <div style="margin: 2rem 0">
+      <img
+        src="https://github.githubassets.com/images/modules/site/codespaces/hero-sm.png"
+        alt="GitHub Codespaces"
+        style="
+          max-width: 400px;
+          width: 100%;
+          border-radius: 8px;
+          box-shadow: var(--shadow);
+        "
+      />
+    </div>
+
+    <div
+      class="codespaces-info"
+      style="
+        text-align: left;
+        margin-top: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      "
+    >
+      <h4>🚀 Getting Started</h4>
+      <ol style="line-height: 2">
+        <li>Click the "Open in Codespaces" button below</li>
+        <li>Wait for the environment to initialize (1-2 minutes)</li>
+        <li>The application will start automatically</li>
+        <li>Access via the forwarded ports panel</li>
+      </ol>
+
+      <div
+        style="
+          margin-top: 2rem;
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        "
+      >
+        <a
+          href="https://github.com/{{ page.repository }}/codespaces/new"
+          class="demo-btn"
+          target="_blank"
+          style="background: #24292e"
+        >
+          ☁️ Open in Codespaces
+        </a>
+        <a
+          href="https://github.com/features/codespaces"
+          class="demo-btn outline"
+          target="_blank"
+        >
+          📖 Learn About Codespaces
+        </a>
       </div>
     </div>
+
+    <div
+      class="codespaces-features"
+      style="
+        margin-top: 3rem;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: 6px;
+        text-align: left;
+      "
+    >
+      <h4>✨ What You Get</h4>
+      <ul style="line-height: 2; list-style-position: inside">
+        <li>🖥️ Full VS Code in your browser</li>
+        <li>⚡ Pre-configured development environment</li>
+        <li>🔧 All dependencies installed automatically</li>
+        <li>🌐 Live preview with port forwarding</li>
+        <li>💾 Persistent storage for your session</li>
+      </ul>
+    </div>
   </div>
+</div>
 
 {% elsif include.deployment_strategy == 'documentation-only' %}
-  <!-- Documentation Only (CLI/Library) -->
-  <div class="documentation-embed">
-    <div style="padding: 2rem; background: var(--surface-color); text-align: center;">
-      <h3>📚 Documentation & Installation</h3>
-      <p>This is a CLI tool or library. See the documentation for installation and usage instructions.</p>
-      
-      <div style="margin: 2rem 0;">
-        <svg width="200" height="200" viewBox="0 0 200 200" style="opacity: 0.7;">
-          <rect x="40" y="40" width="120" height="120" fill="none" stroke="currentColor" stroke-width="3"/>
-          <line x1="60" y1="70" x2="140" y2="70" stroke="currentColor" stroke-width="2"/>
-          <line x1="60" y1="90" x2="140" y2="90" stroke="currentColor" stroke-width="2"/>
-          <line x1="60" y1="110" x2="120" y2="110" stroke="currentColor" stroke-width="2"/>
-          <line x1="60" y1="130" x2="130" y2="130" stroke="currentColor" stroke-width="2"/>
-        </svg>
-      </div>
-      
-      <div class="install-info" style="text-align: left; max-width: 600px; margin: 2rem auto;">
-        <h4>🔧 Installation</h4>
-        
-        <div class="code-block" style="background: #24292e; color: #e1e4e8; padding: 1rem; border-radius: 6px; margin: 1rem 0; overflow-x: auto;">
-          <code style="font-family: 'Courier New', monospace;">
-            # npm package<br>
-            npm install {{ page.repository | split: '/' | last }}<br>
-            <br>
-            # pip package<br>
-            pip install {{ page.repository | split: '/' | last }}<br>
-            <br>
-            # Or clone from GitHub<br>
-            git clone https://github.com/{{ page.repository }}.git
-          </code>
-        </div>
-      </div>
-      
-      <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
-        <a href="https://github.com/{{ page.repository }}#readme" 
-           class="demo-btn" 
-           target="_blank">
-          📖 View Documentation
-        </a>
-        <a href="https://github.com/{{ page.repository }}" 
-           class="demo-btn outline" 
-           target="_blank">
-          📁 View Repository
-        </a>
+<!-- Documentation Only (CLI/Library) -->
+<div class="documentation-embed">
+  <div
+    style="padding: 2rem; background: var(--surface-color); text-align: center"
+  >
+    <h3>📚 Documentation & Installation</h3>
+    <p>
+      This is a CLI tool or library. See the documentation for installation and
+      usage instructions.
+    </p>
+
+    <div style="margin: 2rem 0">
+      <svg width="200" height="200" viewBox="0 0 200 200" style="opacity: 0.7">
+        <rect
+          x="40"
+          y="40"
+          width="120"
+          height="120"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+        />
+        <line
+          x1="60"
+          y1="70"
+          x2="140"
+          y2="70"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="90"
+          x2="140"
+          y2="90"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="110"
+          x2="120"
+          y2="110"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="130"
+          x2="130"
+          y2="130"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+      </svg>
+    </div>
+
+    <div
+      class="install-info"
+      style="text-align: left; max-width: 600px; margin: 2rem auto"
+    >
+      <h4>🔧 Installation</h4>
+
+      <div
+        class="code-block"
+        style="
+          background: #24292e;
+          color: #e1e4e8;
+          padding: 1rem;
+          border-radius: 6px;
+          margin: 1rem 0;
+          overflow-x: auto;
+        "
+      >
+        <code style="font-family: 'Courier New', monospace">
+          # npm package<br />
+          npm install {{ page.repository | split: '/' | last }}<br />
+          <br />
+          # pip package<br />
+          pip install {{ page.repository | split: '/' | last }}<br />
+          <br />
+          # Or clone from GitHub<br />
+          git clone https://github.com/{{ page.repository }}.git
+        </code>
       </div>
     </div>
+
+    <div
+      style="
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      "
+    >
+      <a
+        href="https://github.com/{{ page.repository }}#readme"
+        class="demo-btn"
+        target="_blank"
+      >
+        📖 View Documentation
+      </a>
+      <a
+        href="https://github.com/{{ page.repository }}"
+        class="demo-btn outline"
+        target="_blank"
+      >
+        📁 View Repository
+      </a>
+    </div>
   </div>
+</div>
 
 {% else %}
-  <!-- Fallback: Link to Repository -->
-  <div class="fallback-embed">
-    <div style="padding: 3rem; text-align: center; background: var(--surface-color);">
-      <h3>🔗 View Application</h3>
-      <p>This application's live demo is not available in an embedded view.</p>
-      <p style="margin-top: 1rem;">Visit the repository for setup instructions and source code.</p>
-      
-      <div style="margin-top: 2rem;">
-        <a href="https://github.com/{{ page.repository }}" 
-           class="demo-btn" 
-           target="_blank"
-           style="display: inline-flex; align-items: center; gap: 0.5rem;">
-          <span>📁 Open Repository</span>
-        </a>
-      </div>
+<!-- Fallback: Link to Repository -->
+<div class="fallback-embed">
+  <div
+    style="padding: 3rem; text-align: center; background: var(--surface-color)"
+  >
+    <h3>🔗 View Application</h3>
+    <p>This application's live demo is not available in an embedded view.</p>
+    <p style="margin-top: 1rem">
+      Visit the repository for setup instructions and source code.
+    </p>
+
+    <div style="margin-top: 2rem">
+      <a
+        href="https://github.com/{{ page.repository }}"
+        class="demo-btn"
+        target="_blank"
+        style="display: inline-flex; align-items: center; gap: 0.5rem"
+      >
+        <span>📁 Open Repository</span>
+      </a>
     </div>
   </div>
+</div>
 {% endif %}
 
 <style>
@@ -182,30 +321,30 @@
     min-height: 800px;
     background: white;
   }
-  
+
   .app-frame {
     width: 100%;
     height: 800px;
     border: none;
     background: white;
   }
-  
+
   .code-block {
     position: relative;
   }
-  
+
   .code-block code {
     display: block;
     white-space: pre;
     font-size: 0.9rem;
     line-height: 1.5;
   }
-  
+
   @media (max-width: 768px) {
     .app-frame {
       height: 600px;
     }
-    
+
     .live-app-embed {
       min-height: 600px;
     }

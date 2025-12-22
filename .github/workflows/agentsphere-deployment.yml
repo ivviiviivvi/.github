@@ -1,4 +1,4 @@
-name: 'AgentSphere Live Demo Deployment'
+name: "AgentSphere Live Demo Deployment"
 
 on:
   push:
@@ -8,17 +8,28 @@ on:
   workflow_dispatch:
     inputs:
       force_deploy:
-        description: 'Force deployment even if app type cannot be detected'
+        description: "Force deployment even if app type cannot be detected"
         required: false
         type: boolean
         default: false
       custom_command:
-        description: 'Custom startup command (optional)'
+        description: "Custom startup command (optional)"
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      force_deploy:
+        description: "Force deployment even if app type cannot be detected"
+        required: false
+        type: boolean
+        default: false
+      custom_command:
+        description: "Custom startup command (optional)"
         required: false
         type: string
 
 concurrency:
-  group: '${{ github.workflow }}-${{ github.ref }}'
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 permissions:
@@ -32,12 +43,12 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 'Load AgentSphere configuration'
+      - name: "Load AgentSphere configuration"
         id: load-config
         run: |
           CONFIG_FILE=".github/agentsphere-config.yml"
@@ -68,9 +79,14 @@ jobs:
           echo "badge_style=$BADGE_STYLE" >> $GITHUB_OUTPUT
           echo "badge_position=$BADGE_POSITION" >> $GITHUB_OUTPUT
 
-      - name: 'Detect application type'
+      - name: "Detect application type"
         id: detect-app
         if: steps.load-config.outputs.enabled == 'true'
+        env:
+          INPUT_CUSTOM_COMMAND: ${{ inputs.custom_command }}
+          EVENT_CUSTOM_COMMAND: ${{ github.event.inputs.custom_command }}
+          INPUT_FORCE_DEPLOY: ${{ inputs.force_deploy }}
+          EVENT_FORCE_DEPLOY: ${{ github.event.inputs.force_deploy }}
         run: |
           echo "🔍 Detecting application type..."
 
@@ -78,6 +94,11 @@ jobs:
           STARTUP_CMD=""
           PORT=""
           BUILD_CMD=""
+
+          FORCE_DEPLOY_INPUT="$INPUT_FORCE_DEPLOY"
+          if [ -z "$FORCE_DEPLOY_INPUT" ]; then
+            FORCE_DEPLOY_INPUT="$EVENT_FORCE_DEPLOY"
+          fi
 
           # Check for Node.js
           if [ -f "package.json" ]; then
@@ -183,8 +204,12 @@ jobs:
           fi
 
           # Use custom command if provided
-          if [ -n "${{ github.event.inputs.custom_command }}" ]; then
-            STARTUP_CMD="${{ github.event.inputs.custom_command }}"
+          CUSTOM_CMD="$INPUT_CUSTOM_COMMAND"
+          if [ -z "$CUSTOM_CMD" ]; then
+            CUSTOM_CMD="$EVENT_CUSTOM_COMMAND"
+          fi
+          if [ -n "$CUSTOM_CMD" ]; then
+            STARTUP_CMD="$CUSTOM_CMD"
             echo "  → Using custom startup command: $STARTUP_CMD"
           fi
 
@@ -194,14 +219,14 @@ jobs:
           echo "build_command=$BUILD_CMD" >> $GITHUB_OUTPUT
           echo "port=$PORT" >> $GITHUB_OUTPUT
 
-          if [ "$APP_TYPE" = "unknown" ] && [ "${{ github.event.inputs.force_deploy }}" != "true" ]; then
+          if [ "$APP_TYPE" = "unknown" ] && [ "$FORCE_DEPLOY_INPUT" != "true" ]; then
             echo "⚠️ Deployment skipped - unknown application type"
             exit 1
           fi
 
-      - name: 'Register with AgentSphere'
+      - name: "Register with AgentSphere"
         id: register
-        if: steps.detect-app.outputs.app_type != 'unknown' || github.event.inputs.force_deploy == 'true'
+        if: steps.detect-app.outputs.app_type != 'unknown' || inputs.force_deploy == true || github.event.inputs.force_deploy == 'true'
         run: |
           echo "🚀 Registering application with AgentSphere..."
 
@@ -243,7 +268,7 @@ jobs:
           echo "demo_id=$DEMO_ID" >> $GITHUB_OUTPUT
           echo "deployment_status=success" >> $GITHUB_OUTPUT
 
-      - name: 'Generate README badge'
+      - name: "Generate README badge"
         id: generate-badge
         if: steps.register.outputs.deployment_status == 'success'
         run: |
@@ -259,7 +284,7 @@ jobs:
 
           echo "Generated badge: $BADGE_MD"
 
-      - name: 'Update README with badge'
+      - name: "Update README with badge"
         if: steps.register.outputs.deployment_status == 'success'
         run: |
           if [ ! -f "README.md" ]; then
@@ -290,13 +315,13 @@ jobs:
 
           echo "✅ Badge added to README.md"
 
-      - name: 'Create pull request'
+      - name: "Create pull request"
         if: steps.register.outputs.deployment_status == 'success'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'feat: add AgentSphere live demo badge to README'
-          title: '🚀 Add Live Demo Badge'
+          commit-message: "feat: add AgentSphere live demo badge to README"
+          title: "🚀 Add Live Demo Badge"
           body: |
             ## Live Demo Deployment
 
@@ -324,10 +349,10 @@ jobs:
             ---
 
             _Automated by [AgentSphere Deployment Workflow](.github/workflows/agentsphere-deployment.yml)_
-          branch: 'agentsphere/add-live-demo-badge'
+          branch: "agentsphere/add-live-demo-badge"
           delete-branch: true
 
-      - name: 'Deployment summary'
+      - name: "Deployment summary"
         if: always()
         run: |
           echo "## AgentSphere Deployment Summary" >> $GITHUB_STEP_SUMMARY

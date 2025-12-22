@@ -1,11 +1,13 @@
-name: 'Generate Pages Index'
+name: "Generate Pages Index"
 
 on:
   # Run on schedule (every 6 hours)
   schedule:
-    - cron: '30 */6 * * *'
+    - cron: "30 */6 * * *"
   # Manual trigger
   workflow_dispatch:
+  # Allow reuse from other repositories
+  workflow_call:
   # Trigger when new repositories are created or updated
   repository_dispatch:
     types:
@@ -13,7 +15,7 @@ on:
       - repository-updated
 
 concurrency:
-  group: 'pages-index-generation'
+  group: "pages-index-generation"
   cancel-in-progress: false
 
 permissions:
@@ -25,18 +27,18 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Setup Node.js'
+      - name: "Setup Node.js"
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
-      - name: 'Query GitHub API for walkthroughs'
+      - name: "Query GitHub API for walkthroughs"
         id: query
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -195,7 +197,7 @@ jobs:
           echo "   Walkthroughs: $WALKTHROUGH_COUNT"
           echo "   Live Demos: $DEMO_COUNT"
 
-      - name: 'Generate statistics file'
+      - name: "Generate statistics file"
         run: |
           cat > docs/_data/statistics.yml <<EOF
           # Statistics
@@ -209,7 +211,7 @@ jobs:
 
           echo "✅ Statistics file created"
 
-      - name: 'Check for changes'
+      - name: "Check for changes"
         id: changes
         run: |
           git add docs/_data/*.yml
@@ -222,7 +224,7 @@ jobs:
             echo "✓ Changes detected"
           fi
 
-      - name: 'Commit and push changes'
+      - name: "Commit and push changes"
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -240,7 +242,7 @@ jobs:
 
           echo "✅ Changes committed and pushed"
 
-      - name: 'Trigger Pages build'
+      - name: "Trigger Pages build"
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           # Trigger build-pages-site workflow
@@ -249,7 +251,7 @@ jobs:
 
           echo "✅ Pages build triggered"
 
-      - name: 'Generate summary'
+      - name: "Generate summary"
         if: always()
         run: |
           echo "## Pages Index Generation Summary" >> $GITHUB_STEP_SUMMARY

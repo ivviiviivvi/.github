@@ -18,14 +18,15 @@ Complete reference for all automation, tooling, and integrations in this gold st
 
 ### What Happens Automatically?
 
-| Event | Automated Actions | Workflows |
-|-------|-------------------|-----------|
-| **Push to main** | Security scan, deploy, metrics, release | 10+ workflows |
-| **Pull Request** | Tests, linting, coverage, quality checks, review, **auto-merge** | 13+ workflows |
-| **Feature Branch Push** | **Auto-PR creation**, auto-assign, auto-label | 2+ workflows |
-| **New Issue** | Auto-label, auto-assign, welcome message | 3 workflows |
-| **Schedule** | Dependency updates, stale cleanup, metrics | 5 workflows |
-| **Release Tag** | Changelog, GitHub release, package publish | 2 workflows |
+| Trigger               | Automated Actions                                           | Workflow Count |
+| --------------------- | ----------------------------------------------------------- | -------------- |
+| **Push (any branch)** | Security scans, releases, metrics, repo orchestration       | 18             |
+| **Pull Request**      | Tests, linting, coverage, review automation, **auto-merge** | 21             |
+| **Issue Events**      | Auto-triage, labeling, responder playbooks, welcome flows   | 21             |
+| **Scheduled Jobs**    | Dependency updates, stale cleanup, metrics, governance      | 20             |
+| **Manual Dispatch**   | On-demand governance utilities and recovery scripts         | 35             |
+
+> Counts reflect distinct workflow files containing the listed triggers (overlap expected because many workflows listen to multiple events). Issue Events aggregates workflows listening to `issues`, `issue_comment`, `pull_request_review`, or `pull_request_review_comment`.
 
 ### Automation Coverage
 
@@ -49,6 +50,7 @@ Complete reference for all automation, tooling, and integrations in this gold st
 **Tools**: pre-commit hooks (`.pre-commit-config.yaml`)
 
 **Checks**:
+
 - Code formatting (Black, Prettier, etc.)
 - Linting (ESLint, flake8, etc.)
 - Type checking (mypy, TypeScript)
@@ -57,6 +59,7 @@ Complete reference for all automation, tooling, and integrations in this gold st
 - File size limits
 
 **Bypass** (use sparingly):
+
 ```bash
 git commit --no-verify -m "WIP: quick fix"
 ```
@@ -65,9 +68,10 @@ git commit --no-verify -m "WIP: quick fix"
 
 **Runs**: On push/PR
 
-**Workflows**: 20+ automated workflows
+**Workflows**: 59 automated workflows
 
 **Categories**:
+
 1. **Security**: CodeQL, Semgrep, Dependency review, Secret scanning
 2. **Quality**: Linting, testing, coverage, code review
 3. **Performance**: Benchmarks, bundle size, load testing
@@ -78,6 +82,7 @@ git commit --no-verify -m "WIP: quick fix"
 **Runs**: On schedule (cron)
 
 **Workflows**:
+
 - Daily: Security scans
 - Weekly: Dependency updates, link checks, stale management
 - Monthly: Repository metrics, contributor updates
@@ -87,6 +92,7 @@ git commit --no-verify -m "WIP: quick fix"
 **Runs**: On tag/merge to main
 
 **Actions**:
+
 - Semantic versioning
 - Changelog generation
 - Package publishing
@@ -98,6 +104,7 @@ git commit --no-verify -m "WIP: quick fix"
 **Runs**: On issue/PR/comment events
 
 **Actions**:
+
 - Auto-labeling
 - Auto-assignment
 - Welcome messages
@@ -111,41 +118,53 @@ git commit --no-verify -m "WIP: quick fix"
 ### Security Workflows (6)
 
 #### 1. CodeQL Analysis
+
 **File**: `.github/workflows/codeql-analysis.yml`
+
 - **Trigger**: Push, PR, Weekly schedule
 - **Languages**: JavaScript, Python (configurable)
 - **Output**: SARIF to Security tab
 - **Runtime**: ~5-10 minutes
 
 #### 2. Semgrep Security
+
 **File**: `.github/workflows/semgrep.yml`
+
 - **Trigger**: Push, PR, Daily schedule
 - **Rules**: OWASP Top 10, CWE Top 25, Custom rules
 - **Output**: SARIF + PR comments
 - **Runtime**: ~2-3 minutes
 
 #### 3. Dependency Review
+
 **File**: `.github/workflows/dependency-review.yml`
+
 - **Trigger**: Pull requests
 - **Checks**: Vulnerabilities, licenses
 - **Thresholds**: Moderate+ severity
 - **Runtime**: ~1 minute
 
 #### 4. SBOM Generation
+
 **File**: `.github/workflows/sbom-generation.yml`
+
 - **Trigger**: Release, Push to main
 - **Formats**: SPDX, CycloneDX
 - **Output**: Artifacts, Dependency graph
 - **Runtime**: ~2 minutes
 
 #### 5. Secret Scanning
+
 **Feature**: Built-in GitHub feature
+
 - **Trigger**: Every push
 - **Detection**: API keys, tokens, credentials
 - **Action**: Block push (if push protection enabled)
 
 #### 6. Container Scanning
+
 **File**: `.github/workflows/ci-advanced.yml` (Docker job)
+
 - **Tool**: Trivy
 - **Checks**: Vulnerabilities, misconfigurations
 - **Runtime**: ~3 minutes
@@ -153,45 +172,59 @@ git commit --no-verify -m "WIP: quick fix"
 ### Quality Workflows (7)
 
 #### 1. Advanced CI Pipeline
+
 **File**: `.github/workflows/ci-advanced.yml`
+
 - **Languages**: Auto-detects (Python, Node, Go, Rust)
 - **Platforms**: Ubuntu, Windows, macOS
 - **Versions**: Matrix testing
 - **Runtime**: ~10-20 minutes
 
 #### 2. Code Coverage
+
 **File**: `.github/workflows/code-coverage.yml`
+
 - **Integration**: Codecov
 - **Threshold**: 70% minimum
 - **Output**: PR comments, badges
 - **Runtime**: ~5 minutes
 
 #### 3. PR Quality Checks
+
 **File**: `.github/workflows/pr-quality-checks.yml`
+
 - **Validates**: Title, description, size, conflicts
 - **Comments**: Helpful suggestions
 - **Runtime**: ~1 minute
 
 #### 4. Auto-Labeler
+
 **File**: `.github/workflows/auto-labeler.yml`
+
 - **Based on**: File paths, content, size
 - **Labels**: Language, type, size
 - **Runtime**: ~30 seconds
 
 #### 5. Link Checker
+
 **File**: `.github/workflows/link-checker.yml`
+
 - **Tools**: Lychee, markdown-link-check
 - **Frequency**: Weekly + on doc changes
 - **Runtime**: ~2-3 minutes
 
 #### 6. Claude Code Review
+
 **File**: `.github/workflows/claude-code-review.yml`
+
 - **Trigger**: Pull requests
 - **Analysis**: Best practices, security, performance
 - **Runtime**: ~3-5 minutes
 
 #### 7. Performance Benchmark
+
 **File**: `.github/workflows/performance-benchmark.yml`
+
 - **Tests**: Benchmarks, Lighthouse, bundle size
 - **Alerts**: 150% regression threshold
 - **Runtime**: ~5-10 minutes
@@ -199,7 +232,9 @@ git commit --no-verify -m "WIP: quick fix"
 ### PR Automation Workflows (2)
 
 #### 1. Auto PR Creation
+
 **File**: `.github/workflows/auto-pr-create.yml`
+
 - **Trigger**: Push to feature/bugfix/hotfix/release branches
 - **Actions**: Creates PR, assigns author, adds labels
 - **Smart**: Auto-detects base branch (develop/main)
@@ -208,6 +243,7 @@ git commit --no-verify -m "WIP: quick fix"
 - **Documentation**: [PR_AUTOMATION.md](PR_AUTOMATION.md)
 
 **Features**:
+
 - Automatic PR creation for all feature branches
 - Generates comprehensive PR description with commit history
 - Applies appropriate labels based on branch type
@@ -216,7 +252,9 @@ git commit --no-verify -m "WIP: quick fix"
 - Skip with `[skip-auto-pr]` in commit message
 
 #### 2. Auto Merge
+
 **File**: `.github/workflows/auto-merge.yml`
+
 - **Trigger**: PR updates, reviews, check completions
 - **Eligibility**: Auto-created PRs or labeled `auto-merge`
 - **Validates**: Approvals, checks, conflicts
@@ -225,6 +263,7 @@ git commit --no-verify -m "WIP: quick fix"
 - **Configuration**: `.github/pr-automation.yml`
 
 **Features**:
+
 - Intelligent auto-merge when all conditions met
 - Automatic merge conflict resolution
 - Configurable approval requirements by branch type
@@ -233,6 +272,7 @@ git commit --no-verify -m "WIP: quick fix"
 - Comprehensive status reporting
 
 **Merge Requirements**:
+
 - All status checks pass
 - Required approvals obtained (0-2 based on branch type)
 - No merge conflicts (auto-resolved if possible)
@@ -240,6 +280,7 @@ git commit --no-verify -m "WIP: quick fix"
 - No blocking labels (`do-not-merge`, `wip`)
 
 **Configuration**: Edit `.github/pr-automation.yml` to customize:
+
 - Merge methods (squash/merge/rebase)
 - Approval requirements
 - Conflict resolution behavior
@@ -249,21 +290,27 @@ git commit --no-verify -m "WIP: quick fix"
 ### Release Workflows (3)
 
 #### 1. Semantic Release
+
 **File**: `.github/workflows/semantic-release.yml`
+
 - **Versioning**: Automatic based on commits
 - **Outputs**: Tag, release, changelog
 - **Publishing**: npm, PyPI, containers
 - **Runtime**: ~3-5 minutes
 
 #### 2. Release Management
+
 **File**: `.github/workflows/release.yml`
+
 - **Trigger**: Version tags
 - **Actions**: Create release, generate notes
 - **Assets**: Binaries, changelog
 - **Runtime**: ~5 minutes
 
 #### 3. Version Bump
+
 **File**: `.github/workflows/version-bump.yml`
+
 - **Trigger**: Manual
 - **Creates**: PR with version update
 - **Supports**: npm, Python, Go, Rust
@@ -272,25 +319,33 @@ git commit --no-verify -m "WIP: quick fix"
 ### Community Workflows (4)
 
 #### 1. Welcome Bot
+
 **File**: `.github/workflows/welcome.yml`
+
 - **Trigger**: First issue/PR
 - **Action**: Post welcome message
 - **Runtime**: ~10 seconds
 
 #### 2. Auto-Assign
+
 **File**: `.github/workflows/auto-assign.yml`
+
 - **PR**: Assign to author
 - **Issues**: Distribute to maintainers
 - **Runtime**: ~10 seconds
 
 #### 3. Community Health
+
 **File**: `.github/workflows/community-health.yml`
+
 - **Frequency**: Weekly
 - **Actions**: Stale management, metrics, contributors
 - **Runtime**: ~2-3 minutes
 
 #### 4. Repository Metrics
+
 **File**: `.github/workflows/repo-metrics.yml`
+
 - **Frequency**: Monthly
 - **Generates**: Stats, contributor lists, insights
 - **Runtime**: ~3-5 minutes
@@ -301,42 +356,42 @@ git commit --no-verify -m "WIP: quick fix"
 
 ### Analysis & Security
 
-| Tool | Purpose | Integration | Cost |
-|------|---------|-------------|------|
-| **CodeQL** | SAST | Workflow | Free |
-| **Semgrep** | Pattern-based SAST | Workflow | Free |
-| **Trivy** | Container scanning | Workflow | Free |
-| **Dependabot** | Dependency updates | Config file | Free |
-| **Renovate** | Advanced dependency mgmt | Config file | Free |
-| **Snyk** | Multi-purpose security | Optional | Freemium |
+| Tool           | Purpose                  | Integration | Cost     |
+| -------------- | ------------------------ | ----------- | -------- |
+| **CodeQL**     | SAST                     | Workflow    | Free     |
+| **Semgrep**    | Pattern-based SAST       | Workflow    | Free     |
+| **Trivy**      | Container scanning       | Workflow    | Free     |
+| **Dependabot** | Dependency updates       | Config file | Free     |
+| **Renovate**   | Advanced dependency mgmt | Config file | Free     |
+| **Snyk**       | Multi-purpose security   | Optional    | Freemium |
 
 ### Code Quality
 
-| Tool | Purpose | Integration | Cost |
-|------|---------|-------------|------|
-| **Prettier** | Code formatting | Pre-commit | Free |
-| **ESLint** | JavaScript linting | Pre-commit | Free |
-| **Black** | Python formatting | Pre-commit | Free |
-| **flake8** | Python linting | Pre-commit | Free |
-| **mypy** | Python type checking | Pre-commit | Free |
-| **Codecov** | Coverage tracking | Workflow | Freemium |
+| Tool         | Purpose              | Integration | Cost     |
+| ------------ | -------------------- | ----------- | -------- |
+| **Prettier** | Code formatting      | Pre-commit  | Free     |
+| **ESLint**   | JavaScript linting   | Pre-commit  | Free     |
+| **Black**    | Python formatting    | Pre-commit  | Free     |
+| **flake8**   | Python linting       | Pre-commit  | Free     |
+| **mypy**     | Python type checking | Pre-commit  | Free     |
+| **Codecov**  | Coverage tracking    | Workflow    | Freemium |
 
 ### AI & Intelligence
 
-| Tool | Purpose | Integration | Cost |
-|------|---------|-------------|------|
-| **GitHub Copilot** | Code completion | IDE | Paid |
-| **Claude Code** | PR reviews | Workflow | Varies |
-| **Sourcegraph** | Code search | Optional | Freemium |
-| **Cody** | AI assistant | IDE | Freemium |
+| Tool               | Purpose         | Integration | Cost     |
+| ------------------ | --------------- | ----------- | -------- |
+| **GitHub Copilot** | Code completion | IDE         | Paid     |
+| **Claude Code**    | PR reviews      | Workflow    | Varies   |
+| **Sourcegraph**    | Code search     | Optional    | Freemium |
+| **Cody**           | AI assistant    | IDE         | Freemium |
 
 ### Release & Versioning
 
-| Tool | Purpose | Integration | Cost |
-|------|---------|-------------|------|
-| **semantic-release** | Automated releases | Workflow | Free |
-| **GoReleaser** | Go releases | Workflow | Free |
-| **Changesets** | Monorepo versioning | Optional | Free |
+| Tool                 | Purpose             | Integration | Cost |
+| -------------------- | ------------------- | ----------- | ---- |
+| **semantic-release** | Automated releases  | Workflow    | Free |
+| **GoReleaser**       | Go releases         | Workflow    | Free |
+| **Changesets**       | Monorepo versioning | Optional    | Free |
 
 ---
 
@@ -400,6 +455,7 @@ git commit --no-verify -m "WIP: quick fix"
 ### Enable/Disable Workflows
 
 **Disable a workflow**:
+
 ```yaml
 # Add to workflow file
 on:
@@ -412,31 +468,35 @@ on:
 ```
 
 **Enable additional languages**:
+
 ```yaml
 # .github/workflows/codeql-analysis.yml
 matrix:
-  language: [ 'javascript', 'python', 'go', 'java' ]
+  language: ["javascript", "python", "go", "java"]
 ```
 
 ### Adjust Thresholds
 
 **Coverage threshold**:
+
 ```yaml
 # .github/workflows/code-coverage.yml
 - name: Coverage check
-  run: pytest --cov-fail-under=80  # Change from 70 to 80
+  run: pytest --cov-fail-under=80 # Change from 70 to 80
 ```
 
 **Performance threshold**:
+
 ```yaml
 # .github/workflows/performance-benchmark.yml
 with:
-  alert-threshold: '120%'  # Change from 150% to 120%
+  alert-threshold: "120%" # Change from 150% to 120%
 ```
 
 ### Add Custom Rules
 
 **Semgrep custom rules**:
+
 ```yaml
 # .semgrep/rules.yml
 rules:
@@ -448,6 +508,7 @@ rules:
 ```
 
 **Pre-commit hooks**:
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -462,6 +523,7 @@ repos:
 ### Configure Notifications
 
 **Slack notifications**:
+
 ```yaml
 # Add to workflow
 - name: Notify Slack
@@ -472,6 +534,7 @@ repos:
 ```
 
 **Email notifications**:
+
 ```yaml
 # Settings → Notifications → configure per workflow
 ```
@@ -487,6 +550,7 @@ repos:
 **Problem**: Workflow doesn't trigger
 
 **Solutions**:
+
 1. Check workflow syntax: `gh workflow view workflow-name`
 2. Verify triggers match event
 3. Check branch name matches trigger
@@ -498,6 +562,7 @@ repos:
 **Problem**: Hooks block commits
 
 **Solutions**:
+
 ```bash
 # Skip hooks temporarily (not recommended)
 git commit --no-verify
@@ -517,6 +582,7 @@ pre-commit run hook-id --all-files
 **Problem**: Below threshold
 
 **Solutions**:
+
 1. Add tests for uncovered code
 2. Adjust threshold temporarily
 3. Exclude test files from coverage
@@ -527,6 +593,7 @@ pre-commit run hook-id --all-files
 **Problem**: No release created
 
 **Solutions**:
+
 1. Verify commit message format
 2. Check branch is main/master
 3. Ensure commits since last release
@@ -555,6 +622,7 @@ gh run cancel <run-id>
 ### Performance Optimization
 
 **Slow workflows**:
+
 ```yaml
 # Add concurrency limits
 concurrency:
@@ -579,17 +647,20 @@ strategy:
 ## Maintenance Schedule
 
 ### Daily
+
 - [ ] Review failed workflows
 - [ ] Check security alerts
 - [ ] Merge Dependabot PRs (if auto-merge disabled)
 
 ### Weekly
+
 - [ ] Review stale issues/PRs
 - [ ] Check coverage trends
 - [ ] Update documentation
 - [ ] Review performance metrics
 
 ### Monthly
+
 - [ ] Audit workflow efficiency
 - [ ] Update tool versions
 - [ ] Review and update custom rules
@@ -597,6 +668,7 @@ strategy:
 - [ ] Review access permissions
 
 ### Quarterly
+
 - [ ] Security audit
 - [ ] Dependency major version updates
 - [ ] Workflow optimization review
@@ -650,7 +722,7 @@ gh secret remove SECRET_NAME
 
 ## Conclusion
 
-This repository includes **20+ automated workflows**, **30+ pre-commit hooks**, and **10+ integrations** providing:
+This repository includes **59 automated workflows**, **30+ pre-commit hooks**, and **10+ integrations** providing:
 
 - 🔒 **Security**: 6 layers of security scanning
 - ✅ **Quality**: Automated testing and coverage

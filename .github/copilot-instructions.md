@@ -28,7 +28,7 @@ The following instructions are only to be applied when performing a code review.
 
 *   [ ] The instruction has markdown front matter.
 *   [ ] The instruction has a `description` field.
-*   [ ] The instruction has a `description` field is not empty.
+*   [ ] The `description` field is not empty.
 *   [ ] The `description` field value is wrapped in single quotes.
 *   [ ] The file name is lower case, with words separated by hyphens.
 *   [ ] The instruction has an `applyTo` field that specifies the file or files to which the instructions apply. If they wish to specify multiple file paths they should be formated like `'**.js, **.ts'`.
@@ -39,8 +39,21 @@ The following instructions are only to be applied when performing a code review.
 
 *   [ ] The chat mode has markdown front matter.
 *   [ ] The chat mode has a `description` field.
-*   [ ] The `description` field is not empty.
+*   [ ] The chat mode has a `description` field is not empty.
 *   [ ] The `description` field value is wrapped in single quotes.
 *   [ ] The file name is lower case, with words separated by hyphens.
 *   [ ] Encourage the use of `tools`, but it's not required.
 *   [ ] Strongly encourage the use of `model` to specify the model that the chat mode is optimised for.
+
+## Code Review Workflow Rules
+
+When performing a code review, pay close attention to the following:
+
+*   **Security:**
+    *   High - If an iframe embed runs with `sandbox="allow-scripts allow-same-origin ..."`, flag it. Allowing both script execution and same-origin breaks the sandbox boundary, so a compromised demo can read or inject content into the parent gallery. The sandbox should be tightened or the content proxied.
+
+*   **Workflow Reusability:**
+    *   High - Check if new workflows expose a `workflow_call` trigger. If the `on:` blocks only listen to pushes on the current repository, other org repos cannot invoke them. The workflows should be reusable across the organization.
+
+*   **Deployment Registry and Data Aggregation:**
+    *   High - Ensure that deployment workflows are not overwriting a central YAML file (`app-deployments.yml`) inside the source repo, especially if the gallery is in a separate `.github` repo and the index job only queries GitHub APIs. Commits to the source repo will not reach the gallery site, and the deployment registry will remain empty, preventing live demos from being surfaced in the UI.

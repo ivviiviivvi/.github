@@ -1,4 +1,4 @@
-name: 'Build and Deploy GitHub Pages Site'
+name: "Build and Deploy GitHub Pages Site"
 
 on:
   # Trigger when walkthroughs are generated (via workflow_dispatch or repository_dispatch)
@@ -8,21 +8,23 @@ on:
       - walkthrough-updated
   # Trigger on schedule (every 6 hours)
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   # Manual trigger
   workflow_dispatch:
+  # Reusable workflow support
+  workflow_call:
   # Trigger on changes to Jekyll configuration or layout files
   push:
     branches:
       - main
     paths:
-      - '_config.yml'
-      - 'docs/_layouts/**'
-      - 'docs/_includes/**'
-      - '.github/workflows/build-pages-site.yml'
+      - "_config.yml"
+      - "docs/_layouts/**"
+      - "docs/_includes/**"
+      - ".github/workflows/build-pages-site.yml"
 
 concurrency:
-  group: 'pages-build-${{ github.ref }}'
+  group: "pages-build-${{ github.ref }}"
   cancel-in-progress: false
 
 permissions:
@@ -36,25 +38,25 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 'Setup Ruby'
+      - name: "Setup Ruby"
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: "3.2"
           bundler-cache: true
 
-      - name: 'Setup Node.js'
+      - name: "Setup Node.js"
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: |
           # Create Gemfile if it doesn't exist
           if [ ! -f "Gemfile" ]; then
@@ -73,7 +75,7 @@ jobs:
 
           bundle install
 
-      - name: 'Aggregate walkthrough metadata'
+      - name: "Aggregate walkthrough metadata"
         id: aggregate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -149,7 +151,7 @@ jobs:
             echo "[]" > docs/_data/walkthroughs.yml
           fi
 
-      - name: 'Create index page'
+      - name: "Create index page"
         run: |
           # Create index page if it doesn't exist
           if [ ! -f "docs/index.md" ]; then
@@ -166,11 +168,11 @@ jobs:
 
           echo "✅ Index page ready"
 
-      - name: 'Setup GitHub Pages'
+      - name: "Setup GitHub Pages"
         id: pages
         uses: actions/configure-pages@v4
 
-      - name: 'Build Jekyll site'
+      - name: "Build Jekyll site"
         env:
           JEKYLL_ENV: production
         run: |
@@ -189,7 +191,7 @@ jobs:
           echo "Generated files:"
           find ./_site -type f | head -20
 
-      - name: 'Optimize assets'
+      - name: "Optimize assets"
         run: |
           echo "⚡ Optimizing site assets..."
 
@@ -201,12 +203,12 @@ jobs:
 
           echo "✅ Assets optimized"
 
-      - name: 'Upload artifact'
+      - name: "Upload artifact"
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './_site'
+          path: "./_site"
 
-      - name: 'Build summary'
+      - name: "Build summary"
         run: |
           echo "## GitHub Pages Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -228,11 +230,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: 'Deploy to GitHub Pages'
+      - name: "Deploy to GitHub Pages"
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: 'Deployment summary'
+      - name: "Deployment summary"
         run: |
           echo "## GitHub Pages Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -248,13 +250,13 @@ jobs:
     if: always()
 
     steps:
-      - name: 'Checkout repository'
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: gh-pages
 
-      - name: 'Cleanup old builds'
+      - name: "Cleanup old builds"
         run: |
           echo "🧹 Cleaning up old builds (90-day retention)..."
 
