@@ -19,6 +19,7 @@ from typing import Dict, List, Set, Tuple
 from collections import defaultdict
 import time
 import functools
+import concurrent.futures
 
 
 class OrganizationCrawler:
@@ -85,6 +86,7 @@ class OrganizationCrawler:
 
         results['total_links'] = len(all_links)
 
+        links_to_check = []
         for link in sorted(all_links):
             # Skip internal anchors and relative paths
             if link.startswith('#') or link.startswith('./') or link.startswith('../'):
@@ -94,19 +96,31 @@ class OrganizationCrawler:
             if not link.startswith('http'):
                 continue
 
-            status = self._check_link(link)
-            if status == 200:
-                results['valid'] += 1
-                print(f"  ✓ {link}")
-            elif status == 999:  # Rate limited or blocked
-                results['warnings'].append({'url': link, 'reason': 'Rate limited or blocked by server'})
-                print(f"  ⚠️  {link} (rate limited)")
-            else:
-                results['broken'] += 1
-                results['broken_links'].append({'url': link, 'status': status})
-                print(f"  ✗ {link} (HTTP {status})")
+            links_to_check.append(link)
 
-            time.sleep(0.5)  # Be respectful with requests
+        # Use ThreadPoolExecutor for parallel link checking
+        # Max workers = 10 to be respectful but faster than serial
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            future_to_link = {executor.submit(self._check_link, link): link for link in links_to_check}
+
+            for future in concurrent.futures.as_completed(future_to_link):
+                link = future_to_link[future]
+                try:
+                    status = future.result()
+                    if status == 200:
+                        results['valid'] += 1
+                        print(f"  ✓ {link}")
+                    elif status == 999:  # Rate limited or blocked
+                        results['warnings'].append({'url': link, 'reason': 'Rate limited or blocked by server'})
+                        print(f"  ⚠️  {link} (rate limited)")
+                    else:
+                        results['broken'] += 1
+                        results['broken_links'].append({'url': link, 'status': status})
+                        print(f"  ✗ {link} (HTTP {status})")
+                except Exception as exc:
+                    results['broken'] += 1
+                    results['broken_links'].append({'url': link, 'status': f'Exception: {exc}'})
+                    print(f"  ✗ {link} (Exception: {exc})")
 
         return results
 
