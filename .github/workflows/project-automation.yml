@@ -6,9 +6,19 @@ on:
   pull_request:
     types: [opened, reopened, labeled]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   project-management:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Parse Issue
         uses: github/issue-parser@v3
