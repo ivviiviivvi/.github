@@ -1,0 +1,239 @@
+name: Reusable API Call with Retry
+
+on:
+  workflow_call:
+    inputs:
+      api_endpoint:
+        description: 'API endpoint to call'
+        required: true
+        type: string
+      method:
+        description: 'HTTP method (GET, POST, PUT, DELETE)'
+        required: false
+        type: string
+        default: 'GET'
+      body:
+        description: 'Request body (JSON string)'
+        required: false
+        type: string
+        default: ''
+      headers:
+        description: 'Additional headers (JSON string)'
+        required: false
+        type: string
+        default: '{}'
+      max_retries:
+        description: 'Maximum number of retries'
+        required: false
+        type: number
+        default: 3
+      retry_delay:
+        description: 'Delay between retries in seconds'
+        required: false
+        type: number
+        default: 5
+      timeout:
+        description: 'Request timeout in seconds'
+        required: false
+        type: number
+        default: 30
+      expect_json:
+        description: 'Whether to parse response as JSON'
+        required: false
+        type: boolean
+        default: true
+    outputs:
+      response:
+        description: 'API response body'
+        value: ${{ jobs.api-call.outputs.response }}
+      status_code:
+        description: 'HTTP status code'
+        value: ${{ jobs.api-call.outputs.status_code }}
+      success:
+        description: 'Whether the API call succeeded'
+        value: ${{ jobs.api-call.outputs.success }}
+    secrets:
+      AUTH_TOKEN:
+        description: 'Authentication token (optional)'
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  api-call:
+    name: API Call with Retry Logic
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      response: ${{ steps.api-call.outputs.response }}
+      status_code: ${{ steps.api-call.outputs.status_code }}
+      success: ${{ steps.api-call.outputs.success }}
+    
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl
+      
+      - name: Call API with retry logic
+        id: api-call
+        env:
+          API_ENDPOINT: ${{ inputs.api_endpoint }}
+          METHOD: ${{ inputs.method }}
+          BODY: ${{ inputs.body }}
+          HEADERS: ${{ inputs.headers }}
+          MAX_RETRIES: ${{ inputs.max_retries }}
+          RETRY_DELAY: ${{ inputs.retry_delay }}
+          TIMEOUT: ${{ inputs.timeout }}
+          EXPECT_JSON: ${{ inputs.expect_json }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        run: |
+          # Function to make API call
+          make_api_call() {
+            local attempt=$1
+            echo "🔄 Attempt $attempt of $MAX_RETRIES..."
+            
+            # Build curl command
+            curl_cmd="curl -s -w '\n%{http_code}' --max-time $TIMEOUT"
+            
+            # Add method
+            curl_cmd="$curl_cmd -X $METHOD"
+            
+            # Add auth header if token provided
+            if [ -n "$AUTH_TOKEN" ]; then
+              curl_cmd="$curl_cmd -H 'Authorization: Bearer $AUTH_TOKEN'"
+            fi
+            
+            # Add custom headers
+            if [ "$HEADERS" != "{}" ]; then
+              echo "$HEADERS" | jq -r 'to_entries[] | "-H \"\(.key): \(.value)\""' | while read -r header; do
+                curl_cmd="$curl_cmd $header"
+              done
+            fi
+            
+            # Add body if provided
+            if [ -n "$BODY" ] && [ "$BODY" != "" ]; then
+              curl_cmd="$curl_cmd -H 'Content-Type: application/json' -d '$BODY'"
+            fi
+            
+            # Add endpoint
+            curl_cmd="$curl_cmd '$API_ENDPOINT'"
+            
+            # Execute curl command
+            response=$(eval $curl_cmd)
+            
+            # Extract status code (last line)
+            status_code=$(echo "$response" | tail -n 1)
+            
+            # Extract body (all but last line)
+            body=$(echo "$response" | sed '$d')
+            
+            echo "Status code: $status_code"
+            
+            # Check if successful (2xx or 3xx)
+            if [ "$status_code" -ge 200 ] && [ "$status_code" -lt 400 ]; then
+              echo "✅ API call succeeded"
+              echo "$body" > /tmp/api_response.txt
+              echo "$status_code" > /tmp/api_status.txt
+              return 0
+            else
+              echo "❌ API call failed with status $status_code"
+              echo "$body" > /tmp/api_response.txt
+              echo "$status_code" > /tmp/api_status.txt
+              return 1
+            fi
+          }
+          
+          # Retry logic with exponential backoff
+          attempt=1
+          success=false
+          
+          while [ $attempt -le $MAX_RETRIES ]; do
+            if make_api_call $attempt; then
+              success=true
+              break
+            fi
+            
+            if [ $attempt -lt $MAX_RETRIES ]; then
+              # Calculate backoff delay (exponential with jitter)
+              delay=$((RETRY_DELAY * attempt))
+              jitter=$((RANDOM % 3))
+              total_delay=$((delay + jitter))
+              
+              echo "⏳ Waiting ${total_delay}s before retry..."
+              sleep $total_delay
+            fi
+            
+            attempt=$((attempt + 1))
+          done
+          
+          # Read results
+          response=$(cat /tmp/api_response.txt)
+          status_code=$(cat /tmp/api_status.txt)
+          
+          # Validate JSON if expected
+          if [ "$EXPECT_JSON" = "true" ]; then
+            if echo "$response" | jq . > /dev/null 2>&1; then
+              echo "✅ Response is valid JSON"
+            else
+              echo "⚠️ Response is not valid JSON"
+            fi
+          fi
+          
+          # Set outputs (escape for GitHub Actions)
+          echo "response<<EOF" >> $GITHUB_OUTPUT
+          echo "$response" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "status_code=$status_code" >> $GITHUB_OUTPUT
+          echo "success=$success" >> $GITHUB_OUTPUT
+          
+          # Create summary
+          echo "## 🌐 API Call Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Endpoint**: \`$API_ENDPOINT\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Method**: $METHOD" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: $status_code" >> $GITHUB_STEP_SUMMARY
+          echo "**Attempts**: $attempt of $MAX_RETRIES" >> $GITHUB_STEP_SUMMARY
+          echo "**Success**: $success" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "$success" = "true" ]; then
+            echo "✅ **Result**: Success" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Result**: Failed after $MAX_RETRIES attempts" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Exit with failure if not successful
+          if [ "$success" = "false" ]; then
+            exit 1
+          fi
+      
+      - name: Display response preview
+        if: always()
+        run: |
+          response="${{ steps.api-call.outputs.response }}"
+          
+          echo "📥 Response Preview:"
+          echo "$response" | head -n 20
+          
+          if [ $(echo "$response" | wc -l) -gt 20 ]; then
+            echo "... (truncated, see full output in artifacts)"
+          fi
+      
+      - name: Save full response as artifact
+        if: always()
+        run: |
+          mkdir -p /tmp/api-artifacts
+          echo "${{ steps.api-call.outputs.response }}" > /tmp/api-artifacts/response.txt
+          echo "${{ steps.api-call.outputs.status_code }}" > /tmp/api-artifacts/status_code.txt
+          echo "${{ steps.api-call.outputs.success }}" > /tmp/api-artifacts/success.txt
+      
+      - name: Upload response artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-call-response
+          path: /tmp/api-artifacts/
+          retention-days: 7
