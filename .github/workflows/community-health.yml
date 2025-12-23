@@ -6,8 +6,12 @@ on:
     - cron: '0 9 * * 0'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 permissions:
-  contents: write
+  contents: read
   issues: write
   pull-requests: write
 
@@ -15,9 +19,10 @@ jobs:
   stale-management:
     name: Manage Stale Issues and PRs
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Close Stale Issues and PRs
-        uses: actions/stale@v9
+        uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e # v9.0.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           # Issues

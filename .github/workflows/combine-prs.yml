@@ -5,9 +5,18 @@ on:
   schedule:
     - cron: '0 0 * * 1' # Weekly on Mondays
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   combine-prs:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: github/combine-prs@v5.0.0
         with:
