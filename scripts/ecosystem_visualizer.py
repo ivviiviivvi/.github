@@ -187,12 +187,12 @@ graph TD
             em = self.report_data['ecosystem_map']
             parts.append(f"""| Category | Count |
 |----------|-------|
-| GitHub Actions Workflows | {len(em.get('workflows', []))} |
-| Copilot Agents | {len(em.get('copilot_agents', []))} |
-| Copilot Instructions | {len(em.get('copilot_instructions', []))} |
-| Copilot Prompts | {len(em.get('copilot_prompts', []))} |
-| Copilot Chat Modes | {len(em.get('copilot_chatmodes', []))} |
-| Technologies Supported | {len(em.get('technologies', []))} |
+| ⚡ GitHub Actions Workflows | {len(em.get('workflows', []))} |
+| 🤖 Copilot Agents | {len(em.get('copilot_agents', []))} |
+| 📝 Copilot Instructions | {len(em.get('copilot_instructions', []))} |
+| 💬 Copilot Prompts | {len(em.get('copilot_prompts', []))} |
+| 🎭 Copilot Chat Modes | {len(em.get('copilot_chatmodes', []))} |
+| 🛠️  Technologies Supported | {len(em.get('technologies', []))} |
 
 """)
         parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
