@@ -1,98 +1,261 @@
-# AgentSphere Live Demo Configuration
-# This file controls how your applications are deployed to AgentSphere
+# AgentSphere Configuration
+# This file controls how applications are automatically deployed to AgentSphere cloud sandbox
+# for live demo generation and testing
 
-# Enable/disable AgentSphere deployment
-enable: true
+# Enable or disable automatic deployment
+enabled: true
 
-# Automatically deploy on push to main branch
-auto_deploy: true
+# Global settings
+global:
+  # API endpoint for AgentSphere
+  api_endpoint: 'https://api.agentsphere.dev/v1'
 
-# Startup scripts for different application types
-# These are the default commands - they can be overridden per repository
-startup_scripts:
-  nodejs: npm start
-  nodejs_dev: npm run dev
-  react: npm start
-  vue: npm run serve
-  angular: npm start
-  express: npm start
-  python: python app.py
-  flask: python -m flask run --host=0.0.0.0
-  fastapi: uvicorn main:app --host 0.0.0.0 --port 8000
-  django: python manage.py runserver 0.0.0.0:8000
-  java: java -jar target/*.jar
-  spring_boot_gradle: gradle bootRun
-  spring_boot_maven: mvn spring-boot:run
-  static: none
+  # Timeout for application startup (seconds)
+  startup_timeout: 60
 
-# Badge configuration
-badge:
-  position: after_title  # Options: after_title, top, bottom
-  style: for-the-badge   # Options: flat, flat-square, plastic, for-the-badge, social
-  color: blue           # Options: brightgreen, green, yellowgreen, yellow, orange, red, blue, lightgrey
+  # Health check interval (seconds)
+  health_check_interval: 30
 
-# Access control settings
-access_control:
-  visibility: public    # Options: public, private, organization
-  require_auth: false   # Require GitHub authentication to access
-  rate_limit: 100       # Requests per minute per IP
-  cors_enabled: true    # Enable CORS for API endpoints
+  # Maximum retries for failed deployments
+  max_retries: 3
 
-# Monitoring and health checks
-monitoring:
-  auto_restart: true    # Automatically restart if app crashes
-  health_check_interval: 60  # Seconds between health checks
-  health_check_timeout: 30   # Seconds to wait for health check response
-  health_check_endpoint: /   # Endpoint to check for health status
-  max_restarts: 5            # Maximum automatic restarts per hour
-  log_retention_days: 7      # Days to keep application logs
+  # Badge configuration
+  badge:
+    # Style: flat, flat-square, for-the-badge, plastic, social
+    style: 'for-the-badge'
+    # Color: success, blue, green, brightgreen, etc.
+    color: 'brightgreen'
+    # Label text
+    label: 'Live Demo'
+    # Position in README (options: top, after-title, before-installation)
+    position: 'after-title'
 
-# Environment variables per stack
-# These are default environment variables applied to all deployments
-environment:
-  common:
-    NODE_ENV: production
-    PYTHON_ENV: production
-    FLASK_ENV: production
-    DJANGO_SETTINGS_MODULE: config.settings.production
+  # Access control
+  access:
+    # Visibility: public, private, organization
+    visibility: 'public'
+    # Require authentication
+    require_auth: false
+    # Rate limiting (requests per minute)
+    rate_limit: 100
+
+  # Auto-restart policy
+  auto_restart:
+    enabled: true
+    # Restart on crash
+    on_crash: true
+    # Maximum restart attempts
+    max_attempts: 5
+    # Backoff delay (seconds)
+    backoff_delay: 10
+
+# Tech stack specific configurations
+tech_stacks:
+  # Node.js applications
   nodejs:
-    PORT: 3000
-    HOST: 0.0.0.0
+    enabled: true
+    # Detection patterns (file existence)
+    detection:
+      - 'package.json'
+    # Startup commands (tried in order)
+    startup_commands:
+      - 'npm start'
+      - 'npm run dev'
+      - 'npm run serve'
+      - 'node index.js'
+      - 'node app.js'
+      - 'node server.js'
+    # Environment variables
+    environment:
+      NODE_ENV: 'production'
+      PORT: '3000'
+    # Port to expose
+    port: 3000
+    # Build command (if needed)
+    build_command: 'npm install'
+    # Health check path
+    health_check_path: '/'
+
+  # Python applications
   python:
-    PORT: 8000
-    HOST: 0.0.0.0
+    enabled: true
+    detection:
+      - 'requirements.txt'
+      - 'Pipfile'
+      - 'pyproject.toml'
+      - 'setup.py'
+    startup_commands:
+      - 'python app.py'
+      - 'python main.py'
+      - 'python -m flask run'
+      - 'uvicorn app:app --host 0.0.0.0 --port 8000'
+      - 'gunicorn app:app --bind 0.0.0.0:8000'
+      - 'python manage.py runserver 0.0.0.0:8000'
+    environment:
+      PYTHONUNBUFFERED: '1'
+      FLASK_ENV: 'production'
+      PORT: '8000'
+    port: 8000
+    build_command: 'pip install -r requirements.txt'
+    health_check_path: '/'
+
+  # Vue.js applications
+  vue:
+    enabled: true
+    detection:
+      - 'vue.config.js'
+      - 'vite.config.js'
+    startup_commands:
+      - 'npm run serve'
+      - 'npm run dev'
+      - 'npm start'
+    environment:
+      NODE_ENV: 'production'
+      PORT: '8080'
+    port: 8080
+    build_command: 'npm install'
+    health_check_path: '/'
+
+  # React applications
+  react:
+    enabled: true
+    detection:
+      - 'src/App.jsx'
+      - 'src/App.tsx'
+      - 'src/App.js'
+    startup_commands:
+      - 'npm start'
+      - 'npm run dev'
+      - 'npm run serve'
+    environment:
+      NODE_ENV: 'production'
+      PORT: '3000'
+    port: 3000
+    build_command: 'npm install'
+    health_check_path: '/'
+
+  # Java applications
   java:
-    SERVER_PORT: 8080
-    JAVA_OPTS: -Xmx512m
+    enabled: true
+    detection:
+      - 'pom.xml'
+      - 'build.gradle'
+      - 'build.gradle.kts'
+    startup_commands:
+      - 'java -jar target/*.jar'
+      - 'gradle bootRun'
+      - 'mvn spring-boot:run'
+      - './gradlew bootRun'
+    environment:
+      JAVA_OPTS: '-Xmx512m'
+      PORT: '8080'
+    port: 8080
+    build_command: 'mvn clean install -DskipTests'
+    health_check_path: '/actuator/health'
 
-# Resource limits
-resources:
-  cpu_limit: 1.0        # CPU cores
-  memory_limit: 512M    # Memory limit
-  disk_limit: 1G        # Disk storage limit
-  timeout: 300          # Request timeout in seconds
+  # Go applications
+  go:
+    enabled: true
+    detection:
+      - 'go.mod'
+      - 'main.go'
+    startup_commands:
+      - './main'
+      - 'go run main.go'
+      - 'go run .'
+    environment:
+      PORT: '8080'
+    port: 8080
+    build_command: 'go build -o main .'
+    health_check_path: '/'
 
-# Deployment settings
-deployment:
-  timeout: 120          # Deployment timeout in seconds
-  strategy: rolling     # Options: rolling, blue_green, canary
-  rollback_on_failure: true
-  pre_deploy_checks: true
-  post_deploy_checks: true
+  # Ruby applications
+  ruby:
+    enabled: true
+    detection:
+      - 'Gemfile'
+      - 'config.ru'
+    startup_commands:
+      - 'bundle exec rails server -b 0.0.0.0 -p 3000'
+      - 'bundle exec puma -p 3000'
+      - 'ruby app.rb'
+    environment:
+      RAILS_ENV: 'production'
+      PORT: '3000'
+    port: 3000
+    build_command: 'bundle install'
+    health_check_path: '/'
+
+  # .NET applications
+  dotnet:
+    enabled: true
+    detection:
+      - '*.csproj'
+      - '*.sln'
+    startup_commands:
+      - 'dotnet run'
+      - 'dotnet run --project src/*.csproj'
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Production'
+      ASPNETCORE_URLS: 'http://+:5000'
+      PORT: '5000'
+    port: 5000
+    build_command: 'dotnet restore && dotnet build'
+    health_check_path: '/health'
+
+# Custom overrides (repository-specific)
+# Can be overridden by creating .agentsphere.yml in the repository root
+custom_overrides:
+  # Allow custom startup commands
+  allow_custom_commands: true
+  # Allow custom environment variables
+  allow_custom_env: true
+  # Allow custom ports
+  allow_custom_ports: true
 
 # Notifications
 notifications:
-  on_success: false     # Notify on successful deployment
-  on_failure: true      # Notify on failed deployment
-  channels:
-    - github_issues     # Create issue on failure
-    - github_pr         # Comment on PR
+  # Notify on deployment success
+  on_success: true
+  # Notify on deployment failure
+  on_failure: true
+  # Notification methods: pr_comment, issue_comment, slack
+  methods:
+    - 'pr_comment'
 
-# Advanced settings
-advanced:
-  cache_dependencies: true   # Cache npm/pip dependencies
-  build_timeout: 600         # Build timeout in seconds
-  custom_domains: []         # List of custom domains to map
-  ssl_enabled: true          # Enable SSL/TLS
-  http2_enabled: true        # Enable HTTP/2
-  compression_enabled: true  # Enable gzip compression
+# Security settings
+security:
+  # Scan for secrets before deployment
+  scan_secrets: true
+  # Validate startup commands
+  validate_commands: true
+  # Sandbox isolation level: basic, standard, enhanced
+  isolation_level: 'standard'
+  # Network restrictions
+  network_restrictions:
+    # Allow outbound connections
+    allow_outbound: true
+    # Allow inbound connections (from internet)
+    allow_inbound: true
+    # Whitelist domains (empty = allow all)
+    whitelist_domains: []
+
+# Logging and monitoring
+logging:
+  # Log level: debug, info, warning, error
+  level: 'info'
+  # Retain logs for (days)
+  retention_days: 30
+  # Export logs to
+  export_to: []
+
+# Cleanup policy
+cleanup:
+  # Auto-cleanup after inactivity (hours)
+  inactive_after: 24
+  # Keep live demo active for (days)
+  max_lifetime: 7
+  # Cleanup on PR close
+  on_pr_close: true
+  # Cleanup on branch delete
+  on_branch_delete: true

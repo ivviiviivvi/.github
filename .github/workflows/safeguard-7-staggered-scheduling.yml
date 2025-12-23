@@ -1,0 +1,466 @@
+name: 'Safeguard 7: Staggered Scheduling'
+
+on:
+  schedule:
+    # Run weekly on Mondays at 02:00 UTC to plan the week's walkthroughs
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+    inputs:
+      repos_per_day:
+        description: 'Maximum repositories to process per day'
+        required: false
+        default: '20'
+        type: string
+      priority_tier:
+        description: 'Priority tier to schedule (1=critical, 2=important, 3=normal, all=all tiers)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - '1'
+          - '2'
+          - '3'
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+jobs:
+  plan-staggered-schedule:
+    name: 'Plan Staggered Walkthrough Schedule'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 'Set up Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 'Install dependencies'
+        run: |
+          pip install pyyaml requests python-dateutil
+
+      - name: 'Fetch organization repositories'
+        id: fetch_repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ORG: ${{ github.repository_owner }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+          from datetime import datetime, timedelta
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          org = os.getenv('GITHUB_ORG')
+          
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          # Fetch all repositories in the organization
+          repos = []
+          page = 1
+          per_page = 100
+
+          while True:
+              url = f'https://api.github.com/orgs/{org}/repos'
+              params = {
+                  'type': 'all',
+                  'sort': 'updated',
+                  'per_page': per_page,
+                  'page': page
+              }
+              
+              response = requests.get(url, headers=headers, params=params)
+              if response.status_code != 200:
+                  print(f"Error fetching repos: {response.status_code}")
+                  break
+              
+              batch = response.json()
+              if not batch:
+                  break
+              
+              repos.extend(batch)
+              page += 1
+              
+              if len(batch) < per_page:
+                  break
+
+          print(f"Found {len(repos)} repositories in organization")
+
+          # Filter to eligible repos (has code, not archived, not .github)
+          eligible_repos = []
+          for repo in repos:
+              if not repo['archived'] and repo['name'] != '.github':
+                  # Check for common application indicators
+                  has_code = (
+                      repo['language'] is not None or
+                      repo['size'] > 100  # Has some content
+                  )
+                  
+                  if has_code:
+                      eligible_repos.append({
+                          'name': repo['name'],
+                          'full_name': repo['full_name'],
+                          'language': repo['language'],
+                          'updated_at': repo['updated_at'],
+                          'size': repo['size'],
+                          'default_branch': repo['default_branch']
+                      })
+
+          print(f"Found {len(eligible_repos)} eligible repositories")
+
+          # Save repository list
+          with open('eligible_repos.json', 'w') as f:
+              json.dump(eligible_repos, f, indent=2)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"total_repos={len(repos)}\n")
+              f.write(f"eligible_repos={len(eligible_repos)}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Assign priority tiers'
+        id: prioritize
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from datetime import datetime, timedelta
+          from pathlib import Path
+
+          with open('eligible_repos.json', 'r') as f:
+              repos = json.load(f)
+
+          # Load existing priority configuration if it exists
+          config_file = Path('.github/walkthrough-priority-config.yml')
+          priority_overrides = {}
+          
+          if config_file.exists():
+              import yaml
+              with open(config_file, 'r') as f:
+                  config = yaml.safe_load(f) or {}
+                  priority_overrides = config.get('repository_priorities', {})
+
+          # Assign priority tiers
+          for repo in repos:
+              # Check for manual override
+              if repo['name'] in priority_overrides:
+                  repo['priority_tier'] = priority_overrides[repo['name']]
+              else:
+                  # Auto-assign based on heuristics
+                  updated = datetime.fromisoformat(repo['updated_at'].replace('Z', '+00:00'))
+                  days_since_update = (datetime.now(updated.tzinfo) - updated).days
+                  
+                  # Tier 1 (Critical): Recently updated, larger projects
+                  if days_since_update < 7 and repo['size'] > 1000:
+                      repo['priority_tier'] = 1
+                  # Tier 2 (Important): Moderately active
+                  elif days_since_update < 30:
+                      repo['priority_tier'] = 2
+                  # Tier 3 (Normal): Less active
+                  else:
+                      repo['priority_tier'] = 3
+
+          # Sort by priority tier, then by updated date
+          repos.sort(key=lambda r: (r['priority_tier'], r['updated_at']), reverse=True)
+
+          # Save prioritized list
+          with open('prioritized_repos.json', 'w') as f:
+              json.dump(repos, f, indent=2)
+
+          # Count by tier
+          tier_counts = {1: 0, 2: 0, 3: 0}
+          for repo in repos:
+              tier_counts[repo['priority_tier']] += 1
+
+          print(f"Priority distribution:")
+          print(f"  Tier 1 (Critical): {tier_counts[1]}")
+          print(f"  Tier 2 (Important): {tier_counts[2]}")
+          print(f"  Tier 3 (Normal): {tier_counts[3]}")
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"tier1_count={tier_counts[1]}\n")
+              f.write(f"tier2_count={tier_counts[2]}\n")
+              f.write(f"tier3_count={tier_counts[3]}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Generate staggered schedule'
+        id: schedule
+        env:
+          REPOS_PER_DAY: ${{ github.event.inputs.repos_per_day || '20' }}
+          PRIORITY_FILTER: ${{ github.event.inputs.priority_tier || 'all' }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from datetime import datetime, timedelta
+          from pathlib import Path
+
+          repos_per_day = int(os.getenv('REPOS_PER_DAY', '20'))
+          priority_filter = os.getenv('PRIORITY_FILTER', 'all')
+
+          with open('prioritized_repos.json', 'r') as f:
+              all_repos = json.load(f)
+
+          # Filter by priority if specified
+          if priority_filter != 'all':
+              target_tier = int(priority_filter)
+              repos = [r for r in all_repos if r['priority_tier'] == target_tier]
+          else:
+              repos = all_repos
+
+          # Generate schedule
+          schedule = []
+          start_date = datetime.now()
+          current_day = 0
+          
+          for i, repo in enumerate(repos):
+              day_offset = i // repos_per_day
+              scheduled_date = start_date + timedelta(days=day_offset)
+              
+              schedule.append({
+                  'repo': repo['full_name'],
+                  'name': repo['name'],
+                  'priority_tier': repo['priority_tier'],
+                  'scheduled_date': scheduled_date.strftime('%Y-%m-%d'),
+                  'day_offset': day_offset,
+                  'batch': i // repos_per_day + 1
+              })
+
+          # Save schedule
+          with open('staggered_schedule.json', 'w') as f:
+              json.dump(schedule, f, indent=2)
+
+          # Calculate totals
+          total_days = (len(repos) + repos_per_day - 1) // repos_per_day
+          
+          print(f"Scheduled {len(repos)} repositories over {total_days} days")
+          print(f"Schedule: {repos_per_day} repos/day")
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"scheduled_repos={len(repos)}\n")
+              f.write(f"total_days={total_days}\n")
+              f.write(f"repos_per_day={repos_per_day}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Generate schedule report'
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          from datetime import datetime
+          from collections import defaultdict
+
+          with open('staggered_schedule.json', 'r') as f:
+              schedule = json.load(f)
+
+          # Group by date
+          by_date = defaultdict(list)
+          for item in schedule:
+              by_date[item['scheduled_date']].append(item)
+
+          # Generate markdown report
+          report = f"""# Staggered Walkthrough Schedule
+
+**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}  
+**Total Repositories:** {len(schedule)}  
+**Total Days:** {len(by_date)}
+
+## Schedule Overview
+
+| Date | Batch | Repos | Priority Distribution |
+|------|-------|-------|----------------------|
+"""
+          
+          for date in sorted(by_date.keys()):
+              items = by_date[date]
+              tier_dist = defaultdict(int)
+              for item in items:
+                  tier_dist[item['priority_tier']] += 1
+              
+              batch_num = items[0]['batch']
+              priority_str = f"T1:{tier_dist[1]} T2:{tier_dist[2]} T3:{tier_dist[3]}"
+              report += f"| {date} | {batch_num} | {len(items)} | {priority_str} |\n"
+
+          report += "\n## Detailed Schedule\n\n"
+
+          for date in sorted(by_date.keys()):
+              report += f"\n### {date}\n\n"
+              items = by_date[date]
+              for item in items:
+                  tier_emoji = {1: '🔴', 2: '🟡', 3: '🟢'}[item['priority_tier']]
+                  report += f"- {tier_emoji} **{item['name']}** (Tier {item['priority_tier']})\n"
+
+          # Save report
+          with open('schedule_report.md', 'w') as f:
+              f.write(report)
+
+          print(report)
+          PYTHON_SCRIPT
+
+      - name: 'Commit schedule to repository'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          mkdir -p .github/schedules
+          
+          # Move schedule files
+          mv staggered_schedule.json .github/schedules/
+          mv schedule_report.md .github/schedules/
+          mv prioritized_repos.json .github/schedules/
+          mv eligible_repos.json .github/schedules/
+          
+          # Add timestamp file
+          echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')" > .github/schedules/last_updated.txt
+          
+          git add .github/schedules/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update staggered walkthrough schedule"
+            git push
+          fi
+
+      - name: 'Create workflow dispatch files for each batch'
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import os
+          from pathlib import Path
+          from collections import defaultdict
+
+          with open('.github/schedules/staggered_schedule.json', 'r') as f:
+              schedule = json.load(f)
+
+          # Group by batch
+          by_batch = defaultdict(list)
+          for item in schedule:
+              by_batch[item['batch']].append(item['repo'])
+
+          # Create batch files
+          batch_dir = Path('.github/schedules/batches')
+          batch_dir.mkdir(parents=True, exist_ok=True)
+
+          for batch_num, repos in by_batch.items():
+              batch_file = batch_dir / f'batch-{batch_num}.json'
+              with open(batch_file, 'w') as f:
+                  json.dump({
+                      'batch': batch_num,
+                      'repos': repos,
+                      'count': len(repos)
+                  }, f, indent=2)
+              print(f"Created {batch_file} with {len(repos)} repos")
+          PYTHON_SCRIPT
+
+      - name: 'Commit batch files'
+        run: |
+          git add .github/schedules/batches/
+          
+          if git diff --staged --quiet; then
+            echo "No batch changes to commit"
+          else
+            git commit -m "chore: generate batch files for staggered schedule"
+            git push
+          fi
+
+      - name: 'Create summary issue'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('.github/schedules/schedule_report.md', 'utf8');
+            
+            const title = `📅 Staggered Walkthrough Schedule - Week of ${new Date().toISOString().split('T')[0]}`;
+            const body = `
+            ## Staggered Walkthrough Schedule Generated
+            
+            A new staggered schedule has been generated to distribute walkthrough generation across multiple days.
+            
+            ### Summary
+            
+            - **Scheduled Repositories:** ${{ steps.schedule.outputs.scheduled_repos }}
+            - **Total Days:** ${{ steps.schedule.outputs.total_days }}
+            - **Repos per Day:** ${{ steps.schedule.outputs.repos_per_day }}
+            
+            ### Priority Distribution
+            
+            - **Tier 1 (Critical):** ${{ steps.prioritize.outputs.tier1_count }}
+            - **Tier 2 (Important):** ${{ steps.prioritize.outputs.tier2_count }}
+            - **Tier 3 (Normal):** ${{ steps.prioritize.outputs.tier3_count }}
+            
+            ### Why Staggered Scheduling?
+            
+            Staggered scheduling prevents:
+            - ✅ GitHub Actions quota exhaustion
+            - ✅ API rate limit violations
+            - ✅ Resource contention
+            - ✅ Service degradation
+            
+            ### Schedule Details
+            
+            ${report}
+            
+            ### How to Execute
+            
+            The schedule is now saved in \`.github/schedules/\`. To execute:
+            
+            1. **Automatic:** Enable scheduled workflow runs (coming soon)
+            2. **Manual:** Trigger \`generate-walkthrough\` for each batch
+            3. **API:** Use GitHub API to dispatch workflows per schedule
+            
+            ### Files Generated
+            
+            - \`staggered_schedule.json\` - Complete schedule
+            - \`schedule_report.md\` - Human-readable report
+            - \`prioritized_repos.json\` - Repositories with priority tiers
+            - \`batches/batch-*.json\` - Per-batch repository lists
+            
+            ---
+            
+            **This schedule was generated by Safeguard 7: Staggered Scheduling**
+            `;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['schedule', 'automation', 'safeguard-7']
+            });
+
+      - name: 'Upload schedule artifacts'
+        uses: actions/upload-artifact@v4
+        with:
+          name: staggered-schedule-${{ github.run_number }}
+          path: .github/schedules/
+          retention-days: 90
+
+      - name: 'Generate workflow summary'
+        run: |
+          echo "## 📅 Staggered Schedule Generated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scheduled Repositories:** ${{ steps.schedule.outputs.scheduled_repos }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Days:** ${{ steps.schedule.outputs.total_days }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Repos per Day:** ${{ steps.schedule.outputs.repos_per_day }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Priority Distribution" >> $GITHUB_STEP_SUMMARY
+          echo "- Tier 1 (Critical): ${{ steps.prioritize.outputs.tier1_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Tier 2 (Important): ${{ steps.prioritize.outputs.tier2_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Tier 3 (Normal): ${{ steps.prioritize.outputs.tier3_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Benefits" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Prevents quota exhaustion" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Distributes load over time" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Prioritizes critical repositories" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Enables predictable resource usage" >> $GITHUB_STEP_SUMMARY

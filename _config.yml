@@ -1,100 +1,229 @@
-# Jekyll Configuration for Ivviiviivvi Applications Gallery
+# Jekyll Configuration for Walkthrough Gallery
+# This site showcases all walkthrough videos and live demos for Ivviiviivvi organization
 
-# Site Settings
-title: "Ivviiviivvi Applications"
-description: "Explore live demos and tutorials for all Ivviiviivvi organization applications"
-url: "https://ivviiviivvi.github.io"
-baseurl: ""
-author: "Ivviiviivvi Organization"
-email: ""
+# Site settings
+title: 'Ivviiviivvi Walkthrough Gallery'
+description: 'Comprehensive gallery of application walkthroughs and live demos for all Ivviiviivvi organization repositories'
+url: 'https://ivviiviivvi.github.io'
+baseurl: '/.github'
+author: '4444JPP'
+email: 'support@ivviiviivvi.dev'
 
-# Theme
-theme: minima
-remote_theme: pages-themes/minimal@v0.2.0
+# Organization settings
+organization:
+  name: 'Ivviiviivvi'
+  github_url: 'https://github.com/ivviiviivvi'
+  logo_url: ''
+  tagline: 'Building innovative solutions through automation and AI'
 
-# Collections
-collections:
-  walkthroughs:
-    output: true
-    permalink: /tutorials/:name/
-  apps:
-    output: true
-    permalink: /apps/:name/
+# Build settings
+markdown: kramdown
+permalink: pretty
 
-# Default front matter
-defaults:
-  - scope:
-      path: ""
-      type: "walkthroughs"
-    values:
-      layout: "default"
-  - scope:
-      path: ""
-      type: "apps"
-    values:
-      layout: "app-demo"
-  - scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "default"
+# Kramdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
 
 # Plugins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-relative-links
 
-# Build settings
-markdown: kramdown
-highlighter: rouge
-permalink: pretty
+# Collections
+collections:
+  walkthroughs:
+    output: true
+    permalink: /:collection/:name
 
-# Exclude from processing
+# Defaults
+defaults:
+  - scope:
+      path: ''
+      type: 'walkthroughs'
+    values:
+      layout: 'walkthrough'
+  - scope:
+      path: ''
+      type: 'pages'
+    values:
+      layout: 'default'
+
+# Exclude from build
 exclude:
-  - Gemfile
-  - Gemfile.lock
+  - .git
+  - .github
+  - .gitignore
+  - .pre-commit-config.yaml
+  - .releaserc.json
+  - .semgrep
+  - .vscode
   - node_modules
   - vendor
-  - .sass-cache
-  - .jekyll-cache
-  - .github
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
   - README.md
   - LICENSE
+  - scripts
+  - tmp
+  - cache
 
-# Include files
+# Include in build
 include:
-  - _pages
+  - _data
+  - _includes
+  - _layouts
+  - assets
 
-# Sass/SCSS settings
-sass:
-  style: compressed
-
-# SEO settings
-twitter:
-  username: ivviiviivvi
-  card: summary_large_image
-
-social:
-  name: Ivviiviivvi
-  links:
-    - https://github.com/ivviiviivvi
-
-github:
-  owner_name: ivviiviivvi
-  owner_url: https://github.com/ivviiviivvi
-
-# Custom settings for gallery
+# Gallery settings
 gallery:
-  items_per_page: 12
+  # Number of videos per page
+  videos_per_page: 12
+  # Enable search
   enable_search: true
-  enable_filters: true
-  video_autoplay: false
-  show_source_links: true
+  # Enable filtering
+  enable_filtering: true
+  # Sort order: date, name, repository
+  default_sort: 'date'
+  # Sort direction: asc, desc
+  default_sort_direction: 'desc'
+  # Video player settings
+  video_player:
+    autoplay: false
+    controls: true
+    loop: false
+    muted: false
+    preload: 'metadata'
+  # Thumbnail settings
+  thumbnail:
+    width: 320
+    height: 180
+    fallback_image: '/assets/images/video-placeholder.png'
+
+# Search settings
+search:
+  # Search fields: title, description, repository, tags
+  fields:
+    - 'title'
+    - 'description'
+    - 'repository'
+    - 'tags'
+  # Minimum search length
+  min_length: 2
+  # Case sensitive
+  case_sensitive: false
+
+# Theme customization
+theme_customization:
+  # Primary color
+  primary_color: '#2ea44f'
+  # Secondary color
+  secondary_color: '#0969da'
+  # Background color
+  background_color: '#ffffff'
+  # Text color
+  text_color: '#24292f'
+  # Header background (gradient)
+  header_gradient_start: '#2ea44f'
+  header_gradient_end: '#0969da'
+  # Dark mode
+  dark_mode:
+    enabled: true
+    # Auto-detect user preference
+    auto_detect: true
+    # Dark mode colors
+    background_color: '#0d1117'
+    text_color: '#c9d1d9'
+    primary_color: '#58a6ff'
+    secondary_color: '#238636'
+
+# Footer settings
+footer:
+  show_social_links: true
+  show_copyright: true
+  copyright_year: 2025
+  links:
+    - title: 'GitHub'
+      url: 'https://github.com/ivviiviivvi'
+      icon: 'github'
+    - title: 'Documentation'
+      url: 'https://github.com/ivviiviivvi/.github/tree/main/docs'
+      icon: 'book'
+    - title: 'Support'
+      url: 'https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md'
+      icon: 'help'
 
 # Analytics (optional)
-# google_analytics: UA-XXXXXXXXX-X
+analytics:
+  enabled: false
+  provider: 'google'
+  tracking_id: ''
 
-# Comments (optional)
-# disqus:
-#   shortname: your-disqus-shortname
+# SEO settings
+seo:
+  twitter_card: 'summary_large_image'
+  twitter_creator: '@4444JPP'
+  og_image: '/assets/images/og-image.png'
+
+# Performance settings
+performance:
+  # Enable compression
+  compress_html: true
+  # Enable caching
+  enable_caching: true
+  # Cache duration (seconds)
+  cache_duration: 3600
+
+# Deployment settings
+deployment:
+  # Branch for GitHub Pages
+  branch: 'gh-pages'
+  # Build on schedule
+  schedule_enabled: true
+  # Build interval (hours)
+  build_interval: 6
+  # Retention period for old builds (days)
+  retention_days: 90
+
+# Data sources
+data_sources:
+  # Walkthrough metadata file
+  walkthroughs_data: '_data/walkthroughs.yml'
+  # Repositories metadata file
+  repositories_data: '_data/repositories.yml'
+  # Live demos metadata file
+  live_demos_data: '_data/live_demos.yml'
+
+# Feature flags
+features:
+  # Enable video gallery
+  video_gallery: true
+  # Enable live demos section
+  live_demos: true
+  # Enable repository statistics
+  repository_stats: true
+  # Enable download links
+  download_links: true
+  # Enable embed codes
+  embed_codes: true
+  # Enable comments (via GitHub Discussions)
+  comments: false
+
+# Locale settings
+locale: 'en_US'
+timezone: 'UTC'
+
+# Safe mode (GitHub Pages compatible)
+safe: true
+lsi: false
+incremental: false

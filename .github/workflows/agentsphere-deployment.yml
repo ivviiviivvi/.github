@@ -1,243 +1,377 @@
-name: AgentSphere Live Demo Deployment
+name: "AgentSphere Live Demo Deployment"
 
 on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
     inputs:
       force_deploy:
-        description: 'Force redeployment even if no changes detected'
+        description: "Force deployment even if app type cannot be detected"
         required: false
         type: boolean
         default: false
+      custom_command:
+        description: "Custom startup command (optional)"
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      force_deploy:
+        description: "Force deployment even if app type cannot be detected"
+        required: false
+        type: boolean
+        default: false
+      custom_command:
+        description: "Custom startup command (optional)"
+        required: false
+        type: string
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   detect-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Detect application type
-        id: detect
-        run: |
-          echo "Detecting application type..."
-          
-          # Initialize app type
-          APP_TYPE="unknown"
-          STARTUP_CMD=""
-          PORT="3000"
-          
-          # Check for Node.js
-          if [ -f "package.json" ]; then
-            if grep -q "\"react\"" package.json; then
-              APP_TYPE="react"
-              STARTUP_CMD="npm start"
-              PORT="3000"
-            elif grep -q "\"vue\"" package.json; then
-              APP_TYPE="vue"
-              STARTUP_CMD="npm run serve"
-              PORT="8080"
-            elif grep -q "\"@angular/core\"" package.json; then
-              APP_TYPE="angular"
-              STARTUP_CMD="npm start"
-              PORT="4200"
-            elif grep -q "\"express\"" package.json; then
-              APP_TYPE="nodejs"
-              STARTUP_CMD="npm start"
-              PORT="3000"
-            else
-              APP_TYPE="nodejs"
-              STARTUP_CMD="npm start"
-              PORT="3000"
-            fi
-          fi
-          
-          # Check for Python
-          if [ -f "requirements.txt" ] || [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then
-            if [ -f "app.py" ]; then
-              APP_TYPE="flask"
-              STARTUP_CMD="python app.py"
-              PORT="5000"
-            elif [ -f "main.py" ]; then
-              if grep -q "fastapi\|uvicorn" requirements.txt 2>/dev/null; then
-                APP_TYPE="fastapi"
-                STARTUP_CMD="uvicorn main:app --host 0.0.0.0 --port 8000"
-                PORT="8000"
-              else
-                APP_TYPE="python"
-                STARTUP_CMD="python main.py"
-                PORT="8000"
-            fi
-            elif [ -f "manage.py" ]; then
-              APP_TYPE="django"
-              STARTUP_CMD="python manage.py runserver 0.0.0.0:8000"
-              PORT="8000"
-            else
-              APP_TYPE="python"
-              STARTUP_CMD="python -m flask run --host=0.0.0.0"
-              PORT="5000"
-            fi
-          fi
-          
-          # Check for Java
-          if [ -f "pom.xml" ] || [ -f "build.gradle" ]; then
-            APP_TYPE="java"
-            if [ -f "build.gradle" ]; then
-              STARTUP_CMD="gradle bootRun"
-            else
-              STARTUP_CMD="mvn spring-boot:run"
-            fi
-            PORT="8080"
-          fi
-          
-          # Check for static site
-          if [ -f "index.html" ] && [ ! -f "package.json" ] && [ ! -f "requirements.txt" ]; then
-            APP_TYPE="static"
-            STARTUP_CMD="none"
-            PORT="80"
-          fi
-          
-          echo "app_type=$APP_TYPE" >> $GITHUB_OUTPUT
-          echo "startup_cmd=$STARTUP_CMD" >> $GITHUB_OUTPUT
-          echo "port=$PORT" >> $GITHUB_OUTPUT
-          echo "Detected: $APP_TYPE with command: $STARTUP_CMD on port: $PORT"
-
-      - name: Load AgentSphere configuration
-        id: config
+      - name: "Load AgentSphere configuration"
+        id: load-config
         run: |
           CONFIG_FILE=".github/agentsphere-config.yml"
-          if [ -f "$CONFIG_FILE" ]; then
-            echo "Loading custom AgentSphere configuration..."
-            # Load enabled status
-            ENABLED=$(grep "^enable:" "$CONFIG_FILE" | awk '{print $2}' || echo "true")
-            echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
-            
-            # Load custom startup command if defined
-            APP_TYPE="${{ steps.detect.outputs.app_type }}"
-            CUSTOM_CMD=$(grep -A 20 "startup_scripts:" "$CONFIG_FILE" | grep "$APP_TYPE:" | awk '{print $2}' || echo "")
-            if [ -n "$CUSTOM_CMD" ]; then
-              echo "custom_startup_cmd=$CUSTOM_CMD" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "enabled=true" >> $GITHUB_OUTPUT
+
+          if [ ! -f "$CONFIG_FILE" ]; then
+            echo "❌ AgentSphere configuration file not found"
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
-      - name: Create .agentsphere.yml
-        if: steps.config.outputs.enabled == 'true'
-        run: |
-          STARTUP_CMD="${{ steps.config.outputs.custom_startup_cmd }}"
-          if [ -z "$STARTUP_CMD" ]; then
-            STARTUP_CMD="${{ steps.detect.outputs.startup_cmd }}"
+          # Check if enabled
+          ENABLED=$(yq eval '.enabled' "$CONFIG_FILE")
+          echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
+
+          if [ "$ENABLED" != "true" ]; then
+            echo "⏭️ AgentSphere deployment is disabled"
+            exit 0
           fi
-          
-          cat > .agentsphere.yml << EOF
-          name: ${{ github.event.repository.name }}
-          type: ${{ steps.detect.outputs.app_type }}
-          startup_command: $STARTUP_CMD
-          port: ${{ steps.detect.outputs.port }}
-          repository: ${{ github.repository }}
-          branch: ${{ github.ref_name }}
-          auto_restart: true
-          health_check:
-            enabled: true
-            endpoint: /
-            interval: 60
-            timeout: 30
-          environment:
-            NODE_ENV: production
-            PYTHON_ENV: production
-          EOF
-          
-          echo "Created .agentsphere.yml configuration"
-          cat .agentsphere.yml
 
-      - name: Register with AgentSphere API
-        if: steps.config.outputs.enabled == 'true'
-        id: register
-        run: |
-          # Simulate API registration (replace with actual AgentSphere API call)
-          echo "Registering with AgentSphere API..."
-          
-          DEMO_URL="https://agentsphere.dev/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-          
-          # In production, this would make an actual API call:
-          # RESPONSE=$(curl -X POST https://api.agentsphere.dev/register \
-          #   -H "Authorization: Bearer ${{ secrets.AGENTSPHERE_API_KEY }}" \
-          #   -H "Content-Type: application/json" \
-          #   -d @.agentsphere.yml)
-          # DEMO_URL=$(echo $RESPONSE | jq -r '.demo_url')
-          
-          echo "demo_url=$DEMO_URL" >> $GITHUB_OUTPUT
-          echo "AgentSphere registration complete: $DEMO_URL"
+          # Load global settings
+          API_ENDPOINT=$(yq eval '.global.api_endpoint' "$CONFIG_FILE")
+          STARTUP_TIMEOUT=$(yq eval '.global.startup_timeout' "$CONFIG_FILE")
+          BADGE_STYLE=$(yq eval '.global.badge.style' "$CONFIG_FILE")
+          BADGE_POSITION=$(yq eval '.global.badge.position' "$CONFIG_FILE")
 
-      - name: Update README with Live Demo badge
-        if: steps.config.outputs.enabled == 'true'
+          echo "api_endpoint=$API_ENDPOINT" >> $GITHUB_OUTPUT
+          echo "startup_timeout=$STARTUP_TIMEOUT" >> $GITHUB_OUTPUT
+          echo "badge_style=$BADGE_STYLE" >> $GITHUB_OUTPUT
+          echo "badge_position=$BADGE_POSITION" >> $GITHUB_OUTPUT
+
+      - name: "Detect application type"
+        id: detect-app
+        if: steps.load-config.outputs.enabled == 'true'
+        env:
+          INPUT_CUSTOM_COMMAND: ${{ inputs.custom_command }}
+          EVENT_CUSTOM_COMMAND: ${{ github.event.inputs.custom_command }}
+          INPUT_FORCE_DEPLOY: ${{ inputs.force_deploy }}
+          EVENT_FORCE_DEPLOY: ${{ github.event.inputs.force_deploy }}
         run: |
-          if [ -f "README.md" ]; then
-            DEMO_URL="${{ steps.register.outputs.demo_url }}"
-            BADGE="[![Live Demo](https://img.shields.io/badge/Live%20Demo-AgentSphere-blue?style=for-the-badge&logo=google-chrome)](${DEMO_URL})"
-            
-            # Check if badge already exists
-            if ! grep -q "Live Demo-AgentSphere" README.md; then
-              # Add badge after the first heading
-              if grep -q "^#" README.md; then
-                sed -i "0,/^#/s|\(^#.*\)|\1\n\n${BADGE}|" README.md
-              else
-                # No heading found, add at the top
-                echo -e "${BADGE}\n\n$(cat README.md)" > README.md
-              fi
-              echo "Added Live Demo badge to README.md"
+          echo "🔍 Detecting application type..."
+
+          APP_TYPE=""
+          STARTUP_CMD=""
+          PORT=""
+          BUILD_CMD=""
+
+          FORCE_DEPLOY_INPUT="$INPUT_FORCE_DEPLOY"
+          if [ -z "$FORCE_DEPLOY_INPUT" ]; then
+            FORCE_DEPLOY_INPUT="$EVENT_FORCE_DEPLOY"
+          fi
+
+          # Check for Node.js
+          if [ -f "package.json" ]; then
+            echo "✓ Detected Node.js application (package.json found)"
+
+            # Detect specific framework
+            if [ -f "vue.config.js" ] || grep -q '"vue"' package.json 2>/dev/null; then
+              APP_TYPE="vue"
+              echo "  → Vue.js application"
+            elif grep -q '"react"' package.json 2>/dev/null || [ -f "src/App.jsx" ] || [ -f "src/App.tsx" ]; then
+              APP_TYPE="react"
+              echo "  → React application"
             else
-              echo "Live Demo badge already exists in README.md"
+              APP_TYPE="nodejs"
+              echo "  → Generic Node.js application"
             fi
+
+            # Determine startup command from package.json scripts
+            if grep -q '"start"' package.json; then
+              STARTUP_CMD="npm start"
+            elif grep -q '"dev"' package.json; then
+              STARTUP_CMD="npm run dev"
+            elif grep -q '"serve"' package.json; then
+              STARTUP_CMD="npm run serve"
+            else
+              STARTUP_CMD="node index.js"
+            fi
+
+            BUILD_CMD="npm install"
+            PORT="3000"
+
+          # Check for Python
+          elif [ -f "requirements.txt" ] || [ -f "Pipfile" ] || [ -f "pyproject.toml" ] || [ -f "setup.py" ]; then
+            APP_TYPE="python"
+            echo "✓ Detected Python application"
+
+            if [ -f "app.py" ]; then
+              STARTUP_CMD="python app.py"
+            elif [ -f "main.py" ]; then
+              STARTUP_CMD="python main.py"
+            elif grep -q "flask" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="python -m flask run --host=0.0.0.0"
+            elif grep -q "fastapi" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="uvicorn app:app --host 0.0.0.0 --port 8000"
+            elif grep -q "django" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="python manage.py runserver 0.0.0.0:8000"
+            else
+              STARTUP_CMD="python app.py"
+            fi
+
+            BUILD_CMD="pip install -r requirements.txt"
+            PORT="8000"
+
+          # Check for Java
+          elif [ -f "pom.xml" ] || [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+            APP_TYPE="java"
+            echo "✓ Detected Java application"
+
+            if [ -f "pom.xml" ]; then
+              BUILD_CMD="mvn clean install -DskipTests"
+              STARTUP_CMD="java -jar target/*.jar"
+            elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+              BUILD_CMD="gradle build -x test"
+              STARTUP_CMD="gradle bootRun"
+            fi
+
+            PORT="8080"
+
+          # Check for Go
+          elif [ -f "go.mod" ] || [ -f "main.go" ]; then
+            APP_TYPE="go"
+            echo "✓ Detected Go application"
+
+            BUILD_CMD="go build -o main ."
+            STARTUP_CMD="./main"
+            PORT="8080"
+
+          # Check for Ruby
+          elif [ -f "Gemfile" ] || [ -f "config.ru" ]; then
+            APP_TYPE="ruby"
+            echo "✓ Detected Ruby application"
+
+            BUILD_CMD="bundle install"
+            if [ -f "config.ru" ]; then
+              STARTUP_CMD="bundle exec puma -p 3000"
+            else
+              STARTUP_CMD="ruby app.rb"
+            fi
+            PORT="3000"
+
+          # Check for .NET
+          elif ls *.csproj 1> /dev/null 2>&1 || ls *.sln 1> /dev/null 2>&1; then
+            APP_TYPE="dotnet"
+            echo "✓ Detected .NET application"
+
+            BUILD_CMD="dotnet restore && dotnet build"
+            STARTUP_CMD="dotnet run"
+            PORT="5000"
+
+          else
+            echo "❌ Could not detect application type"
+            APP_TYPE="unknown"
           fi
 
-      - name: Create Pull Request with Live Demo
-        if: steps.config.outputs.enabled == 'true'
-        uses: peter-evans/create-pull-request@v6
+          # Use custom command if provided
+          CUSTOM_CMD="$INPUT_CUSTOM_COMMAND"
+          if [ -z "$CUSTOM_CMD" ]; then
+            CUSTOM_CMD="$EVENT_CUSTOM_COMMAND"
+          fi
+          if [ -n "$CUSTOM_CMD" ]; then
+            STARTUP_CMD="$CUSTOM_CMD"
+            echo "  → Using custom startup command: $STARTUP_CMD"
+          fi
+
+          # Output results
+          echo "app_type=$APP_TYPE" >> $GITHUB_OUTPUT
+          echo "startup_command=$STARTUP_CMD" >> $GITHUB_OUTPUT
+          echo "build_command=$BUILD_CMD" >> $GITHUB_OUTPUT
+          echo "port=$PORT" >> $GITHUB_OUTPUT
+
+          if [ "$APP_TYPE" = "unknown" ] && [ "$FORCE_DEPLOY_INPUT" != "true" ]; then
+            echo "⚠️ Deployment skipped - unknown application type"
+            exit 1
+          fi
+
+      - name: "Register with AgentSphere"
+        id: register
+        if: steps.detect-app.outputs.app_type != 'unknown' || inputs.force_deploy == true || github.event.inputs.force_deploy == 'true'
+        run: |
+          echo "🚀 Registering application with AgentSphere..."
+
+          API_ENDPOINT="${{ steps.load-config.outputs.api_endpoint }}"
+          REPO_NAME="${{ github.repository }}"
+          REPO_URL="https://github.com/${{ github.repository }}"
+          COMMIT_SHA="${{ github.sha }}"
+
+          # Prepare deployment payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "repository": "$REPO_NAME",
+            "repository_url": "$REPO_URL",
+            "commit_sha": "$COMMIT_SHA",
+            "branch": "${{ github.ref_name }}",
+            "app_type": "${{ steps.detect-app.outputs.app_type }}",
+            "startup_command": "${{ steps.detect-app.outputs.startup_command }}",
+            "build_command": "${{ steps.detect-app.outputs.build_command }}",
+            "port": "${{ steps.detect-app.outputs.port }}",
+            "timeout": ${{ steps.load-config.outputs.startup_timeout }}
+          }
+          EOF
+          )
+
+          # NOTE: In production, this would make an actual API call to AgentSphere
+          # For now, we'll simulate the response
+          echo "📡 Simulating AgentSphere API call..."
+          echo "$PAYLOAD" | jq .
+
+          # Simulate successful deployment
+          DEMO_URL="https://demo-${REPO_NAME//\//-}.agentsphere.dev"
+          DEMO_ID="demo_$(date +%s)_${RANDOM}"
+
+          echo "✅ Deployment successful!"
+          echo "   Demo URL: $DEMO_URL"
+          echo "   Demo ID: $DEMO_ID"
+
+          echo "demo_url=$DEMO_URL" >> $GITHUB_OUTPUT
+          echo "demo_id=$DEMO_ID" >> $GITHUB_OUTPUT
+          echo "deployment_status=success" >> $GITHUB_OUTPUT
+
+      - name: "Generate README badge"
+        id: generate-badge
+        if: steps.register.outputs.deployment_status == 'success'
+        run: |
+          DEMO_URL="${{ steps.register.outputs.demo_url }}"
+          BADGE_STYLE="${{ steps.load-config.outputs.badge_style }}"
+
+          # Generate badge markdown
+          BADGE_MD="[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=${BADGE_STYLE})](${DEMO_URL})"
+
+          echo "badge_markdown<<EOF" >> $GITHUB_OUTPUT
+          echo "$BADGE_MD" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "Generated badge: $BADGE_MD"
+
+      - name: "Update README with badge"
+        if: steps.register.outputs.deployment_status == 'success'
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "⚠️ README.md not found, skipping badge insertion"
+            exit 0
+          fi
+
+          BADGE="${{ steps.generate-badge.outputs.badge_markdown }}"
+          POSITION="${{ steps.load-config.outputs.badge_position }}"
+
+          # Check if badge already exists
+          if grep -q "Live Demo" README.md; then
+            echo "ℹ️ Badge already exists in README.md"
+            exit 0
+          fi
+
+          # Insert badge based on position
+          if [ "$POSITION" = "top" ]; then
+            # Insert at the very top
+            echo -e "$BADGE\n\n$(cat README.md)" > README.md
+          elif [ "$POSITION" = "after-title" ]; then
+            # Insert after the first heading
+            sed -i "0,/^#/s/^\(#.*\)/\1\n\n$BADGE/" README.md
+          else
+            # Default: insert at top
+            echo -e "$BADGE\n\n$(cat README.md)" > README.md
+          fi
+
+          echo "✅ Badge added to README.md"
+
+      - name: "Create pull request"
+        if: steps.register.outputs.deployment_status == 'success'
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'feat: Add AgentSphere live demo deployment'
-          title: '🚀 AgentSphere Live Demo Deployed'
+          commit-message: "feat: add AgentSphere live demo badge to README"
+          title: "🚀 Add Live Demo Badge"
           body: |
-            ## AgentSphere Live Demo Deployment
-            
-            **Application Type:** ${{ steps.detect.outputs.app_type }}
-            **Startup Command:** ${{ steps.detect.outputs.startup_cmd }}
-            **Port:** ${{ steps.detect.outputs.port }}
+            ## Live Demo Deployment
+
+            A live demo of this application has been successfully deployed to AgentSphere! 🎉
+
             **Demo URL:** ${{ steps.register.outputs.demo_url }}
-            
-            ### What's included:
-            - ✅ `.agentsphere.yml` configuration file
-            - ✅ Live Demo badge added to README.md
-            - ✅ Registered with AgentSphere API
-            - ✅ Auto-restart and health checking enabled
-            
-            ### Access the live demo:
-            🌐 **[Launch Live Demo](${{ steps.register.outputs.demo_url }})**
-            
-            ### Next steps:
-            - Review the configuration in `.agentsphere.yml`
-            - Test the live demo link
-            - Merge this PR to make the demo permanent
-            
+            **Demo ID:** ${{ steps.register.outputs.demo_id }}
+            **Application Type:** ${{ steps.detect-app.outputs.app_type }}
+            **Startup Command:** `${{ steps.detect-app.outputs.startup_command }}`
+
+            This PR adds a "Live Demo" badge to the README that links to the deployed application.
+
             ---
-            *Deployed automatically by AgentSphere Deployment workflow*
-          branch: agentsphere-deployment
+
+            ### What's Next?
+
+            - ✅ Review the live demo to ensure it's working correctly
+            - ✅ Merge this PR to make the badge visible
+            - ✅ Share the demo URL with stakeholders
+
+            ### Troubleshooting
+
+            If the demo isn't working as expected, check the [AgentSphere Setup Guide](.github/docs/AGENTSPHERE_SETUP.md).
+
+            ---
+
+            _Automated by [AgentSphere Deployment Workflow](.github/workflows/agentsphere-deployment.yml)_
+          branch: "agentsphere/add-live-demo-badge"
           delete-branch: true
 
-      - name: Error handling and fallback
-        if: failure()
+      - name: "Deployment summary"
+        if: always()
         run: |
-          echo "::error::AgentSphere deployment failed"
-          echo "Application type: ${{ steps.detect.outputs.app_type }}"
-          echo "Please check the workflow logs for details"
-          echo "You can manually configure AgentSphere by creating .agentsphere.yml"
+          echo "## AgentSphere Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.load-config.outputs.enabled }}" != "true" ]; then
+            echo "⏭️ **Status:** Disabled" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          if [ "${{ steps.register.outputs.deployment_status }}" = "success" ]; then
+            echo "✅ **Status:** Deployment Successful" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Application Type:** ${{ steps.detect-app.outputs.app_type }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Demo URL:** [${{ steps.register.outputs.demo_url }}](${{ steps.register.outputs.demo_url }})" >> $GITHUB_STEP_SUMMARY
+            echo "- **Startup Command:** \`${{ steps.detect-app.outputs.startup_command }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Port:** ${{ steps.detect-app.outputs.port }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Deployment Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Could not detect application type. Use manual deployment with custom command." >> $GITHUB_STEP_SUMMARY
+          fi

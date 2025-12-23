@@ -1,320 +1,385 @@
-name: Docker Build and Push
+name: "Docker Build and Push"
 
 on:
   push:
     branches:
       - main
+      - master
     paths:
-      - 'Dockerfile'
-      - 'docker-compose.yml'
-      - 'docker-compose.yaml'
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - "src/**"
+      - "package.json"
+      - "requirements.txt"
+      - ".github/workflows/docker-build-push.yml"
+  pull_request:
+    branches:
+      - main
+      - master
   workflow_dispatch:
+    inputs:
+      push_to_registry:
+        description: "Push to Docker Hub"
+        required: false
+        type: boolean
+        default: true
+      platforms:
+        description: "Target platforms (comma-separated)"
+        required: false
+        type: string
+        default: "linux/amd64,linux/arm64"
   workflow_call:
+    inputs:
+      push_to_registry:
+        description: "Push to Docker Hub"
+        required: false
+        type: boolean
+        default: true
+      platforms:
+        description: "Target platforms (comma-separated)"
+        required: false
+        type: string
+        default: "linux/amd64,linux/arm64"
+
+concurrency:
+  group: "docker-build-${{ github.ref }}"
+  cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
   packages: write
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: docker.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  check-dockerfile:
+  build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      has_dockerfile: ${{ steps.check.outputs.has_dockerfile }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    timeout-minutes: 30
 
-      - name: Check for Dockerfile
-        id: check
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Set up QEMU"
+        uses: docker/setup-qemu-action@v3
+
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+
+      - name: "Check for Dockerfile"
+        id: check-dockerfile
         run: |
-          if [ -f "Dockerfile" ]; then
-            echo "has_dockerfile=true" >> $GITHUB_OUTPUT
-            echo "Dockerfile found"
-          else
+          if [ ! -f "Dockerfile" ]; then
+            echo "❌ No Dockerfile found, attempting to generate one..."
             echo "has_dockerfile=false" >> $GITHUB_OUTPUT
-            echo "No Dockerfile found"
+          else
+            echo "✅ Dockerfile found"
+            echo "has_dockerfile=true" >> $GITHUB_OUTPUT
           fi
 
-  build-and-push:
-    needs: check-dockerfile
-    if: needs.check-dockerfile.outputs.has_dockerfile == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: "Generate Dockerfile if missing"
+        if: steps.check-dockerfile.outputs.has_dockerfile == 'false'
+        run: |
+          echo "🔧 Generating Dockerfile based on project type..."
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+          # Detect project type and generate appropriate Dockerfile
+          if [ -f "package.json" ]; then
+            echo "Detected Node.js project"
+            cat > Dockerfile << 'EOF'
+          # Node.js Application Dockerfile
+          FROM node:18-alpine AS builder
 
-      - name: Log in to Container Registry
+          WORKDIR /app
+
+          COPY package*.json ./
+          RUN npm ci --only=production
+
+          COPY . .
+          RUN if grep -q '"build"' package.json; then npm run build; fi
+
+          FROM node:18-alpine
+
+          WORKDIR /app
+
+          COPY --from=builder /app/node_modules ./node_modules
+          COPY --from=builder /app .
+
+          EXPOSE 3000
+
+          CMD ["npm", "start"]
+          EOF
+
+          elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+            echo "Detected Python project"
+            cat > Dockerfile << 'EOF'
+          # Python Application Dockerfile
+          FROM python:3.11-slim
+
+          WORKDIR /app
+
+          # Install dependencies
+          COPY requirements.txt* pyproject.toml* poetry.lock* ./
+          RUN pip install --no-cache-dir -r requirements.txt 2>/dev/null || \
+              pip install --no-cache-dir poetry && poetry install --no-dev 2>/dev/null || \
+              echo "No dependencies to install"
+
+          COPY . .
+
+          EXPOSE 8000
+
+          CMD ["python", "app.py"]
+          EOF
+
+          elif [ -f "go.mod" ]; then
+            echo "Detected Go project"
+            cat > Dockerfile << 'EOF'
+          # Go Application Dockerfile
+          FROM golang:1.21-alpine AS builder
+
+          WORKDIR /app
+
+          COPY go.mod go.sum ./
+          RUN go mod download
+
+          COPY . .
+          RUN go build -o main .
+
+          FROM alpine:latest
+
+          WORKDIR /app
+
+          COPY --from=builder /app/main .
+
+          EXPOSE 8080
+
+          CMD ["./main"]
+          EOF
+
+          elif [ -f "Cargo.toml" ]; then
+            echo "Detected Rust project"
+            cat > Dockerfile << 'EOF'
+          # Rust Application Dockerfile
+          FROM rust:1.75-alpine AS builder
+
+          WORKDIR /app
+
+          COPY Cargo.toml Cargo.lock ./
+          COPY src ./src
+
+          RUN cargo build --release
+
+          FROM alpine:latest
+
+          WORKDIR /app
+
+          COPY --from=builder /app/target/release/app .
+
+          EXPOSE 8080
+
+          CMD ["./app"]
+          EOF
+
+          else
+            echo "❌ Cannot auto-generate Dockerfile for unknown project type"
+            exit 1
+          fi
+
+          echo "✅ Dockerfile generated successfully"
+          cat Dockerfile
+
+      - name: "Resolve deployment parameters"
+        id: deployment-inputs
+        run: |
+          PUSH_INPUT="$INPUT_PUSH_TO_REGISTRY"
+          if [ -z "$PUSH_INPUT" ]; then
+            PUSH_INPUT="$EVENT_PUSH_TO_REGISTRY"
+          fi
+          if [ -z "$PUSH_INPUT" ] || [ "$PUSH_INPUT" = "true" ]; then
+            echo "push=true" >> $GITHUB_OUTPUT
+          else
+            echo "push=false" >> $GITHUB_OUTPUT
+          fi
+
+          PLATFORM_INPUT="$INPUT_PLATFORMS"
+          if [ -z "$PLATFORM_INPUT" ]; then
+            PLATFORM_INPUT="$EVENT_PLATFORMS"
+          fi
+          if [ -z "$PLATFORM_INPUT" ]; then
+            PLATFORM_INPUT="linux/amd64,linux/arm64"
+          fi
+          echo "platforms=$PLATFORM_INPUT" >> $GITHUB_OUTPUT
+        env:
+          INPUT_PUSH_TO_REGISTRY: ${{ inputs.push_to_registry }}
+          EVENT_PUSH_TO_REGISTRY: ${{ github.event.inputs.push_to_registry }}
+          INPUT_PLATFORMS: ${{ inputs.platforms }}
+          EVENT_PLATFORMS: ${{ github.event.inputs.platforms }}
+
+      - name: "Log in to Docker Hub"
+        if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: "Log in to GitHub Container Registry"
+        if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
+      - name: "Extract metadata"
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ghcr.io/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value={{date 'YYYYMMDD'}}-{{sha}}
+          flavor: |
+            latest=auto
 
-      - name: Detect application port
-        id: port
-        run: |
-          PORT="3000"
-          
-          # Check Dockerfile for EXPOSE directive
-          if grep -q "^EXPOSE" Dockerfile; then
-            PORT=$(grep "^EXPOSE" Dockerfile | awk '{print $2}' | head -1)
-          fi
-          
-          # Check package.json for common ports
-          if [ -f "package.json" ]; then
-            if grep -q "\"express\"" package.json; then
-              PORT="3000"
-            fi
-          fi
-          
-          # Check for Python frameworks
-          if [ -f "requirements.txt" ]; then
-            if grep -q "flask" requirements.txt; then
-              PORT="5000"
-            elif grep -q "fastapi\|uvicorn" requirements.txt; then
-              PORT="8000"
-            elif grep -q "django" requirements.txt; then
-              PORT="8000"
-            fi
-          fi
-          
-          echo "port=$PORT" >> $GITHUB_OUTPUT
-          echo "Detected port: $PORT"
-
-      - name: Build and push Docker image
-        id: build
+      - name: "Build and push Docker image"
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          platforms: ${{ steps.deployment-inputs.outputs.platforms }}
+          push: ${{ github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
-            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-            REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+            BUILDTIME=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            VERSION=${{ github.sha }}
+            REVISION=${{ github.sha }}
 
-      - name: Generate run instructions
+      - name: "Scan image for vulnerabilities"
+        if: github.event_name != 'pull_request'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+
+      - name: "Upload Trivy scan results"
+        if: github.event_name != 'pull_request'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: "Test Docker image"
+        if: github.event_name != 'pull_request'
         run: |
-          cat > DOCKER_RUN.md << 'EOF'
-          # Docker Run Instructions
-          
-          ## Pull the image
-          
-          ```bash
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          ```
-          
-          ## Run the container
-          
-          ```bash
-          docker run -d \
-            --name ${{ github.event.repository.name }} \
-            -p ${{ steps.port.outputs.port }}:${{ steps.port.outputs.port }} \
+          echo "🧪 Testing Docker image..."
+
+          # Run container for basic smoke test
+          docker run --rm -d --name test-container \
+            -p 8888:3000 -p 8889:5000 -p 8890:8000 -p 8891:8080 \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          ```
-          
-          ## Access the application
-          
-          Open your browser to: http://localhost:${{ steps.port.outputs.port }}
-          
-          ## View logs
-          
-          ```bash
-          docker logs -f ${{ github.event.repository.name }}
-          ```
-          
-          ## Stop the container
-          
-          ```bash
-          docker stop ${{ github.event.repository.name }}
-          docker rm ${{ github.event.repository.name }}
-          ```
-          
-          ## Environment Variables
-          
-          Set environment variables with `-e` flag:
-          
-          ```bash
-          docker run -d \
-            --name ${{ github.event.repository.name }} \
-            -p ${{ steps.port.outputs.port }}:${{ steps.port.outputs.port }} \
-            -e NODE_ENV=production \
-            -e DATABASE_URL=your_database_url \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          ```
-          
-          ## Docker Compose (if available)
-          
-          ```bash
-          docker-compose up -d
-          ```
-          
-          ## Available Tags
-          
-          - `latest` - Latest stable build from main branch
-          - `main` - Latest build from main branch
-          - `sha-<commit>` - Specific commit builds
-          - `YYYYMMDD-<sha>` - Date-stamped builds
-          
-          ## Registry
-          
-          View all tags: https://github.com/${{ github.repository }}/pkgs/container/${{ github.event.repository.name }}
-          EOF
-          
-          echo "Docker run instructions created"
-          cat DOCKER_RUN.md
 
-      - name: Store application metadata
-        run: |
-          cat > docker-metadata.json << EOF
-          {
-            "image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}",
-            "tags": ${{ steps.meta.outputs.json }},
-            "port": "${{ steps.port.outputs.port }}",
-            "digest": "${{ steps.build.outputs.digest }}",
-            "build_date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-            "repository": "${{ github.repository }}",
-            "commit": "${{ github.sha }}",
-            "branch": "${{ github.ref_name }}"
-          }
-          EOF
-          
-          echo "Metadata stored in docker-metadata.json"
-          cat docker-metadata.json
+          # Wait for container to start
+          sleep 10
 
-      - name: Create deployment manifest
-        run: |
-          mkdir -p .github/deployments
-          
-          cat > .github/deployments/docker.yml << EOF
-          # Docker Deployment Manifest
-          # Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          
+          # Check if container is still running
+          if docker ps | grep -q test-container; then
+            echo "✅ Container is running"
+            docker logs test-container
+            docker stop test-container
+          else
+            echo "❌ Container failed to start"
+            docker logs test-container 2>&1 || true
+            exit 1
+          fi
+
+      - name: "Generate SBOM"
+        if: github.event_name != 'pull_request'
+        uses: anchore/sbom-action@v0
+        with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          port: ${{ steps.port.outputs.port }}
-          
-          environment:
-            - NODE_ENV=production
-            - PORT=${{ steps.port.outputs.port }}
-          
-          volumes:
-            - ./data:/app/data
-          
-          healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:${{ steps.port.outputs.port }}/health"]
-            interval: 30s
-            timeout: 10s
-            retries: 3
-            start_period: 40s
-          
-          restart: unless-stopped
-          
-          labels:
-            com.github.repository: "${{ github.repository }}"
-            com.github.sha: "${{ github.sha }}"
-            com.github.ref: "${{ github.ref }}"
-          EOF
-          
-          echo "Deployment manifest created"
+          format: spdx-json
+          output-file: sbom.spdx.json
 
-      - name: Update app deployment registry
-        run: |
-          mkdir -p docs/_data
-          
-          # Create or append to app-deployments.yml
-          if [ ! -f "docs/_data/app-deployments.yml" ]; then
-            echo "apps:" > docs/_data/app-deployments.yml
-          fi
-          
-          cat >> docs/_data/app-deployments.yml << EOF
-            - app_name: "${{ github.event.repository.name }}"
-              deployment_strategy: "docker"
-              docker_image: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-              port: "${{ steps.port.outputs.port }}"
-              status: "deployed"
-              last_updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-              registry_url: "https://github.com/${{ github.repository }}/pkgs/container/${{ github.event.repository.name }}"
-          EOF
+      - name: "Upload SBOM"
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
+          retention-days: 30
 
-      - name: Commit deployment files
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          git add DOCKER_RUN.md docker-metadata.json .github/deployments/ docs/_data/
-          
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: Update Docker deployment files [skip ci]"
-            git push
-          fi
-
-      - name: Log deployment details
-        run: |
-          echo "::notice::Docker image built and pushed successfully"
-          echo "::notice::Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          echo "::notice::Port: ${{ steps.port.outputs.port }}"
-          echo "::notice::Digest: ${{ steps.build.outputs.digest }}"
-          echo "::notice::Run command: docker run -d -p ${{ steps.port.outputs.port }}:${{ steps.port.outputs.port }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-
-      - name: Create summary
+      - name: "Create deployment summary"
+        if: github.event_name != 'pull_request'
         run: |
           cat >> $GITHUB_STEP_SUMMARY << EOF
-          # Docker Build Summary
-          
-          ## Image Details
-          
-          - **Image**: \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest\`
-          - **Port**: \`${{ steps.port.outputs.port }}\`
-          - **Digest**: \`${{ steps.build.outputs.digest }}\`
-          - **Build Date**: \`$(date -u +"%Y-%m-%d %H:%M:%S UTC")\`
-          
-          ## Quick Start
-          
+          ## 🐳 Docker Build Summary
+
+          **Repository:** \`${{ github.repository }}\`
+          **Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\`
+          **Tags:** 
+          $(echo "${{ steps.meta.outputs.tags }}" | sed 's/^/- `/' | sed 's/$/`/')
+
+          **Platforms:** ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
+          **Build Time:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          **Commit:** \`${{ github.sha }}\`
+
+          ### Quick Start
+
           \`\`\`bash
+          # Pull the image
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          docker run -d -p ${{ steps.port.outputs.port }}:${{ steps.port.outputs.port }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+          # Run the container
+          docker run -p 3000:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           \`\`\`
-          
-          ## Registry
-          
-          View all tags: [Container Registry](https://github.com/${{ github.repository }}/pkgs/container/${{ github.event.repository.name }})
-          
-          ## Documentation
-          
-          See [DOCKER_RUN.md](./DOCKER_RUN.md) for detailed run instructions.
+
+          ### Available Tags
+
+          - \`latest\` - Latest stable build from main branch
+          - \`${{ github.sha }}\` - This specific commit
+          - \`${{ github.ref_name }}\` - Latest from this branch
+
+          ---
+
+          ✅ Build completed successfully
           EOF
 
-  skip-build:
-    needs: check-dockerfile
-    if: needs.check-dockerfile.outputs.has_dockerfile == 'false'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Log skip reason
+      - name: "Update README with Docker badge"
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
-          echo "No Dockerfile found in repository"
-          echo "Docker build skipped"
-          echo "To enable Docker deployment, add a Dockerfile to your repository"
+          if [ ! -f "README.md" ]; then
+            echo "No README.md found, skipping badge update"
+            exit 0
+          fi
+
+          BADGE="[![Docker Image](https://img.shields.io/docker/v/${{ github.repository }}?label=docker&logo=docker)](https://hub.docker.com/r/${{ github.repository }})"
+
+          # Check if badge already exists
+          if ! grep -q "Docker Image" README.md; then
+            # Add badge at the top of README
+            echo "$BADGE" | cat - README.md > temp && mv temp README.md
+            
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "docs: add Docker image badge [skip ci]" || echo "No changes to commit"
+            git push || echo "No changes to push"
+          fi

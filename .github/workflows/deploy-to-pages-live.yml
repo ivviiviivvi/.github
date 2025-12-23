@@ -1,21 +1,44 @@
-name: Deploy to GitHub Pages Live
+name: "Deploy Live App to GitHub Pages"
 
 on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
     inputs:
-      force_strategy:
-        description: 'Force specific deployment strategy'
+      deployment_strategy:
+        description: "Deployment strategy to use"
         required: false
         type: choice
         options:
           - auto
-          - pages_direct
+          - pages-direct
           - docker
           - codespaces
-          - none
+          - documentation-only
+        default: "auto"
+      force_deploy:
+        description: "Force deployment even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      deployment_strategy:
+        description: "Deployment strategy to use"
+        required: false
+        type: string
+        default: "auto"
+      force_deploy:
+        description: "Force deployment even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: "pages-live-deploy-${{ github.ref }}"
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -24,357 +47,358 @@ permissions:
   pull-requests: write
 
 jobs:
-  detect-strategy:
+  detect-app-type:
     runs-on: ubuntu-latest
     outputs:
-      strategy: ${{ steps.detect.outputs.strategy }}
       app_type: ${{ steps.detect.outputs.app_type }}
-      port: ${{ steps.detect.outputs.port }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      deployment_strategy: ${{ steps.detect.outputs.deployment_strategy }}
+      has_frontend: ${{ steps.detect.outputs.has_frontend }}
+      has_backend: ${{ steps.detect.outputs.has_backend }}
+      startup_command: ${{ steps.detect.outputs.startup_command }}
 
-      - name: Detect application type and deployment strategy
-        id: detect
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: "Load deployment configuration"
+        id: load-config
         run: |
-          echo "Detecting application type and deployment strategy..."
-          
-          # Check for manual override
-          if [ "${{ github.event.inputs.force_strategy }}" != "" ] && [ "${{ github.event.inputs.force_strategy }}" != "auto" ]; then
-            echo "strategy=${{ github.event.inputs.force_strategy }}" >> $GITHUB_OUTPUT
-            echo "Manual strategy override: ${{ github.event.inputs.force_strategy }}"
+          CONFIG_FILE=".github/app-deployment-config.yml"
+
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "enabled=$(yq eval '.deployment.enabled // true' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
+            echo "strategy=$(yq eval '.deployment.strategy // "auto"' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
+            echo "startup_command=$(yq eval '.deployment.startup_command // ""' "$CONFIG_FILE")" >> $GITHUB_OUTPUT
+          else
+            echo "enabled=true" >> $GITHUB_OUTPUT
+            echo "strategy=auto" >> $GITHUB_OUTPUT
+            echo "startup_command=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "Detect application type"
+        id: detect
+        env:
+          INPUT_DEPLOYMENT_STRATEGY: ${{ inputs.deployment_strategy }}
+          EVENT_DEPLOYMENT_STRATEGY: ${{ github.event.inputs.deployment_strategy }}
+          INPUT_FORCE_DEPLOY: ${{ inputs.force_deploy }}
+          EVENT_FORCE_DEPLOY: ${{ github.event.inputs.force_deploy }}
+        run: |
+          echo "🔍 Detecting application type..."
+
+          # Resolve strategy input (workflow_call or workflow_dispatch)
+          STRATEGY="$INPUT_DEPLOYMENT_STRATEGY"
+          if [ -z "$STRATEGY" ]; then
+            STRATEGY="$EVENT_DEPLOYMENT_STRATEGY"
+          fi
+          if [ -z "$STRATEGY" ]; then
+            STRATEGY="auto"
+          fi
+
+          if [ -n "$STRATEGY" ] && [ "$STRATEGY" != "auto" ]; then
+            echo "deployment_strategy=$STRATEGY" >> $GITHUB_OUTPUT
+            echo "app_type=manual" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
-          # Load config if exists
-          CONFIG_FILE=".github/app-deployment-config.yml"
-          if [ -f "$CONFIG_FILE" ]; then
-            CONFIGURED_STRATEGY=$(grep "^deployment_strategy:" "$CONFIG_FILE" | awk '{print $2}' || echo "auto")
-            if [ "$CONFIGURED_STRATEGY" != "auto" ]; then
-              echo "strategy=$CONFIGURED_STRATEGY" >> $GITHUB_OUTPUT
-              echo "Using configured strategy: $CONFIGURED_STRATEGY"
-              exit 0
-            fi
+
+          # Use config file strategy if specified
+          CONFIG_STRATEGY="${{ steps.load-config.outputs.strategy }}"
+          if [ -n "$CONFIG_STRATEGY" ] && [ "$CONFIG_STRATEGY" != "auto" ]; then
+            echo "deployment_strategy=$CONFIG_STRATEGY" >> $GITHUB_OUTPUT
+            echo "app_type=configured" >> $GITHUB_OUTPUT
+            exit 0
           fi
-          
-          STRATEGY="none"
+
+          # Auto-detect based on project files
+          HAS_FRONTEND=false
+          HAS_BACKEND=false
           APP_TYPE="unknown"
-          PORT="3000"
-          
-          # Strategy A: Static/Frontend Apps (Pages Direct)
+          DEPLOYMENT_STRATEGY="documentation-only"
+
+          # Check for frontend frameworks
           if [ -f "package.json" ]; then
-            if grep -q "\"react\"" package.json; then
-              STRATEGY="pages_direct"
-              APP_TYPE="react"
-              PORT="3000"
-            elif grep -q "\"vue\"" package.json; then
-              STRATEGY="pages_direct"
-              APP_TYPE="vue"
-              PORT="8080"
-            elif grep -q "\"@angular/core\"" package.json; then
-              STRATEGY="pages_direct"
-              APP_TYPE="angular"
-              PORT="4200"
-            elif grep -q "\"next\"" package.json; then
-              STRATEGY="pages_direct"
-              APP_TYPE="nextjs"
-              PORT="3000"
+            if grep -q '"react"' package.json || grep -q '"next"' package.json || grep -q '"vue"' package.json || grep -q '"angular"' package.json; then
+              HAS_FRONTEND=true
+              APP_TYPE="frontend"
+              DEPLOYMENT_STRATEGY="pages-direct"
             fi
           fi
-          
-          # Check for pure static HTML
-          if [ -f "index.html" ] && [ ! -f "package.json" ] && [ ! -f "requirements.txt" ]; then
-            STRATEGY="pages_direct"
-            APP_TYPE="static"
-            PORT="80"
-          fi
-          
-          # Strategy B: Backend Apps (Docker)
-          if [ -f "Dockerfile" ]; then
-            STRATEGY="docker"
-            if [ -f "package.json" ]; then
-              if grep -q "\"express\"" package.json; then
-                APP_TYPE="express"
-                PORT="3000"
-              else
-                APP_TYPE="nodejs-backend"
-                PORT="3000"
-              fi
-            elif [ -f "requirements.txt" ] || [ -f "setup.py" ]; then
-              if [ -f "app.py" ]; then
-                APP_TYPE="flask"
-                PORT="5000"
-              elif grep -q "fastapi\|uvicorn" requirements.txt 2>/dev/null; then
-                APP_TYPE="fastapi"
-                PORT="8000"
-              elif [ -f "manage.py" ]; then
-                APP_TYPE="django"
-                PORT="8000"
-              else
-                APP_TYPE="python-backend"
-                PORT="8000"
-              fi
-            fi
-          fi
-          
-          # Strategy C: Complex Apps (Codespaces)
-          if [ -f "docker-compose.yml" ] || [ -f "docker-compose.yaml" ]; then
-            STRATEGY="codespaces"
-            APP_TYPE="microservices"
-          fi
-          
-          if [ -f ".devcontainer/devcontainer.json" ]; then
-            STRATEGY="codespaces"
-          fi
-          
-          # Strategy D: CLI/Libraries (None)
+
+          # Check for backend frameworks
           if [ -f "package.json" ]; then
-            if grep -q "\"bin\":" package.json; then
-              STRATEGY="none"
-              APP_TYPE="cli"
+            if grep -q '"express"' package.json || grep -q '"fastify"' package.json || grep -q '"koa"' package.json; then
+              HAS_BACKEND=true
+              APP_TYPE="backend"
+              DEPLOYMENT_STRATEGY="docker"
             fi
           fi
-          
-          if [ -f "setup.py" ] && grep -q "entry_points" setup.py; then
-            STRATEGY="none"
-            APP_TYPE="cli"
+
+          if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+            if grep -qE "(flask|django|fastapi)" requirements.txt 2>/dev/null || grep -qE "(flask|django|fastapi)" pyproject.toml 2>/dev/null; then
+              HAS_BACKEND=true
+              APP_TYPE="backend"
+              DEPLOYMENT_STRATEGY="docker"
+            fi
           fi
-          
-          echo "strategy=$STRATEGY" >> $GITHUB_OUTPUT
+
+          # Check for static sites
+          if [ -f "index.html" ] || [ -d "public" ] || [ -d "dist" ] || [ -d "build" ]; then
+            if [ "$HAS_FRONTEND" = "false" ]; then
+              HAS_FRONTEND=true
+              APP_TYPE="static"
+              DEPLOYMENT_STRATEGY="pages-direct"
+            fi
+          fi
+
+          # Full-stack apps
+          if [ "$HAS_FRONTEND" = "true" ] && [ "$HAS_BACKEND" = "true" ]; then
+            APP_TYPE="fullstack"
+            DEPLOYMENT_STRATEGY="docker"
+          fi
+
+          # CLI/Library projects
+          if [ -f "setup.py" ] || [ -f "Cargo.toml" ] || grep -q '"bin"' package.json 2>/dev/null; then
+            if [ "$HAS_FRONTEND" = "false" ] && [ "$HAS_BACKEND" = "false" ]; then
+              APP_TYPE="cli-library"
+              DEPLOYMENT_STRATEGY="documentation-only"
+            fi
+          fi
+
           echo "app_type=$APP_TYPE" >> $GITHUB_OUTPUT
-          echo "port=$PORT" >> $GITHUB_OUTPUT
-          echo "Detected strategy: $STRATEGY, app_type: $APP_TYPE, port: $PORT"
+          echo "deployment_strategy=$DEPLOYMENT_STRATEGY" >> $GITHUB_OUTPUT
+          echo "has_frontend=$HAS_FRONTEND" >> $GITHUB_OUTPUT
+          echo "has_backend=$HAS_BACKEND" >> $GITHUB_OUTPUT
+          echo "startup_command=${{ steps.load-config.outputs.startup_command }}" >> $GITHUB_OUTPUT
+
+          echo "✅ Detected: $APP_TYPE - Strategy: $DEPLOYMENT_STRATEGY"
 
   deploy-pages-direct:
-    needs: detect-strategy
-    if: needs.detect-strategy.outputs.strategy == 'pages_direct'
+    needs: detect-app-type
+    if: needs.detect-app-type.outputs.deployment_strategy == 'pages-direct'
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        if: contains(needs.detect-strategy.outputs.app_type, 'react') || contains(needs.detect-strategy.outputs.app_type, 'vue') || contains(needs.detect-strategy.outputs.app_type, 'angular') || contains(needs.detect-strategy.outputs.app_type, 'next')
+      - name: "Setup Node.js"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
-      - name: Install dependencies
-        if: contains(needs.detect-strategy.outputs.app_type, 'react') || contains(needs.detect-strategy.outputs.app_type, 'vue') || contains(needs.detect-strategy.outputs.app_type, 'angular') || contains(needs.detect-strategy.outputs.app_type, 'next')
+      - name: "Install dependencies"
         run: npm ci
 
-      - name: Build application
-        if: contains(needs.detect-strategy.outputs.app_type, 'react') || contains(needs.detect-strategy.outputs.app_type, 'vue') || contains(needs.detect-strategy.outputs.app_type, 'angular') || contains(needs.detect-strategy.outputs.app_type, 'next')
+      - name: "Build application"
         run: |
-          if [ "${{ needs.detect-strategy.outputs.app_type }}" = "react" ] || [ "${{ needs.detect-strategy.outputs.app_type }}" = "nextjs" ]; then
+          if [ -f "package.json" ] && grep -q '"build"' package.json; then
             npm run build
-          elif [ "${{ needs.detect-strategy.outputs.app_type }}" = "vue" ]; then
-            npm run build
-          elif [ "${{ needs.detect-strategy.outputs.app_type }}" = "angular" ]; then
-            npm run build -- --configuration production
+          else
+            echo "No build script found, skipping build step"
           fi
 
-      - name: Setup Pages
+      - name: "Setup Pages"
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: "Upload artifact"
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            build
-            dist
-            .next
-            out
-            .
+          path: "./dist"
 
-      - name: Deploy to GitHub Pages
+      - name: "Deploy to GitHub Pages"
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Update deployment metadata
+      - name: "Generate deployment metadata"
         run: |
-          echo "Deployment URL: ${{ steps.deployment.outputs.page_url }}"
-          
-          # Update app-deployments registry
-          mkdir -p docs/_data
-          
-          cat >> docs/_data/app-deployments.yml << EOF
-            - app_name: "${{ github.event.repository.name }}"
-              deployment_strategy: "pages_direct"
-              live_url: "${{ steps.deployment.outputs.page_url }}"
-              status: "deployed"
-              last_updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          EOF
+          DEPLOY_URL="${{ steps.deployment.outputs.page_url }}"
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "pages-direct",
+  "live_url": "$DEPLOY_URL",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
 
   deploy-docker:
-    needs: detect-strategy
-    if: needs.detect-strategy.outputs.strategy == 'docker'
+    needs: detect-app-type
+    if: needs.detect-app-type.outputs.deployment_strategy == 'docker'
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: Trigger Docker build workflow
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'docker-build-push.yml',
-              ref: 'main'
-            });
-            console.log('Docker build workflow triggered');
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
 
-      - name: Update deployment metadata
+      - name: "Log in to Docker Hub"
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: "Extract metadata"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ github.repository }}
+
+      - name: "Build and push Docker image"
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: "Create embed page"
         run: |
-          echo "Docker deployment triggered"
-          
-          mkdir -p docs/_data
-          cat >> docs/_data/app-deployments.yml << EOF
-            - app_name: "${{ github.event.repository.name }}"
-              deployment_strategy: "docker"
-              status: "building"
-              last_updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          mkdir -p docs/live-apps
+          cat > docs/live-apps/${{ github.event.repository.name }}.md << EOF
+          ---
+          layout: app-demo
+          title: "Live Demo: ${{ github.event.repository.name }}"
+          repository: "${{ github.repository }}"
+          docker_image: "${{ steps.meta.outputs.tags }}"
+          ---
+
+          # Live Demo: ${{ github.event.repository.name }}
+
+          This is a live demonstration of the application running in a Docker container.
           EOF
 
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/live-apps/
+          git commit -m "chore: add live app embed page [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: "Generate deployment metadata"
+        run: |
+          TAGS="${{ steps.meta.outputs.tags }}"
+          PRIMARY_TAG=$(echo "$TAGS" | head -n 1)
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "docker",
+  "docker_image": "$PRIMARY_TAG",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
+
   deploy-codespaces:
-    needs: detect-strategy
-    if: needs.detect-strategy.outputs.strategy == 'codespaces'
+    needs: detect-app-type
+    if: needs.detect-app-type.outputs.deployment_strategy == 'codespaces'
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: Create/update devcontainer configuration
+      - name: "Create Codespaces configuration"
         run: |
           mkdir -p .devcontainer
-          
+
           if [ ! -f ".devcontainer/devcontainer.json" ]; then
-            cat > .devcontainer/devcontainer.json << 'EOF'
+            cat > .devcontainer/devcontainer.json << EOF
           {
-            "name": "${{ github.event.repository.name }}",
-            "image": "mcr.microsoft.com/devcontainers/universal:latest",
+            "name": "${{ github.event.repository.name }} Development",
+            "image": "mcr.microsoft.com/devcontainers/universal:2",
             "features": {
               "ghcr.io/devcontainers/features/node:1": {},
               "ghcr.io/devcontainers/features/python:1": {},
               "ghcr.io/devcontainers/features/docker-in-docker:2": {}
             },
-            "customizations": {
-              "vscode": {
-                "extensions": [
-                  "dbaeumer.vscode-eslint",
-                  "esbenp.prettier-vscode"
-                ]
-              }
-            },
-            "forwardPorts": [${{ needs.detect-strategy.outputs.port }}],
-            "postCreateCommand": "npm install || pip install -r requirements.txt || true"
+            "postCreateCommand": "echo 'Environment ready!'",
+            "forwardPorts": [3000, 5000, 8000, 8080]
           }
           EOF
           fi
 
-      - name: Generate Codespaces button
-        run: |
-          CODESPACES_URL="https://codespaces.new/${{ github.repository }}"
-          echo "Codespaces URL: $CODESPACES_URL"
-          
-          # Update README with Codespaces badge
-          if [ -f "README.md" ]; then
-            BADGE="[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](${CODESPACES_URL})"
-            
-            if ! grep -q "Open in GitHub Codespaces" README.md; then
-              sed -i "0,/^#/s|\(^#.*\)|\1\n\n${BADGE}|" README.md
-            fi
-          fi
-          
-          # Update deployment metadata
-          mkdir -p docs/_data
-          cat >> docs/_data/app-deployments.yml << EOF
-            - app_name: "${{ github.event.repository.name }}"
-              deployment_strategy: "codespaces"
-              codespaces_url: "$CODESPACES_URL"
-              status: "deployed"
-              last_updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .devcontainer/
+          git commit -m "chore: add Codespaces configuration [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
 
-      - name: Commit changes
+      - name: "Generate deployment metadata"
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          git add .devcontainer/ README.md docs/_data/
-          
-          if ! git diff --staged --quiet; then
-            git commit -m "feat: Add Codespaces configuration [skip ci]"
-            git push
-          fi
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "codespaces",
+  "codespaces_url": "https://github.com/${{ github.repository }}/codespaces",
+  "status": "deployed",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
 
-  skip-deployment:
-    needs: detect-strategy
-    if: needs.detect-strategy.outputs.strategy == 'none'
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7
+
+  deploy-documentation-only:
+    needs: detect-app-type
+    if: needs.detect-app-type.outputs.deployment_strategy == 'documentation-only'
     runs-on: ubuntu-latest
-    steps:
-      - name: Log skip reason
-        run: |
-          echo "Application type: ${{ needs.detect-strategy.outputs.app_type }}"
-          echo "This is a CLI tool or library - no live demo deployment needed"
-          echo "Video walkthrough will be the primary showcase"
 
-      - name: Update deployment metadata
-        run: |
-          mkdir -p docs/_data
-          cat >> docs/_data/app-deployments.yml << EOF
-            - app_name: "${{ github.event.repository.name }}"
-              deployment_strategy: "none"
-              status: "none"
-              reason: "CLI tool or library - no web interface"
-              last_updated: "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          EOF
-
-  create-deployment-pr:
-    needs: [detect-strategy, deploy-pages-direct, deploy-docker, deploy-codespaces, skip-deployment]
-    if: always()
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+      - name: "Generate deployment metadata"
+        run: |
+          TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > deployment-metadata.json <<EOF
+{
+  "repository": "${{ github.repository }}",
+  "source_url": "https://github.com/${{ github.repository }}",
+  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+  "deployment_strategy": "documentation-only",
+  "documentation_url": "${{ github.event.repository.html_url }}/blob/main/README.md",
+  "status": "documentation",
+  "last_updated": "$TIMESTAMP"
+}
+EOF
+
+      - name: "Upload deployment metadata"
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'feat: Update deployment configuration and metadata'
-          title: '🌐 Live Deployment Update - ${{ needs.detect-strategy.outputs.strategy }}'
-          body: |
-            ## Live Deployment Update
-            
-            **Strategy:** ${{ needs.detect-strategy.outputs.strategy }}
-            **App Type:** ${{ needs.detect-strategy.outputs.app_type }}
-            **Port:** ${{ needs.detect-strategy.outputs.port }}
-            
-            ### Deployment Details
-            
-            {% if needs.detect-strategy.outputs.strategy == 'pages_direct' %}
-            ✅ **Static deployment to GitHub Pages**
-            - Built and deployed successfully
-            - Access via GitHub Pages URL
-            {% elsif needs.detect-strategy.outputs.strategy == 'docker' %}
-            🐳 **Docker containerization**
-            - Docker image building
-            - Will be available via container registry
-            {% elsif needs.detect-strategy.outputs.strategy == 'codespaces' %}
-            🚀 **GitHub Codespaces ready**
-            - Devcontainer configuration created
-            - Open in Codespaces button added to README
-            {% else %}
-            📦 **CLI/Library - No live demo**
-            - This application doesn't require live deployment
-            - Video walkthrough is the primary showcase
-            {% endif %}
-            
-            ---
-            *Deployed automatically by Live Deployment workflow*
-          branch: live-deployment-update
-          delete-branch: true
+          name: app-deployment
+          path: deployment-metadata.json
+          retention-days: 7

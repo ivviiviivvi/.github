@@ -1,0 +1,473 @@
+name: 'Usage Monitoring and Budget Tracking'
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+    # Run weekly summary on Mondays at 8 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      report_type:
+        description: 'Type of report to generate'
+        required: false
+        type: choice
+        options:
+          - daily
+          - weekly
+          - monthly
+          - custom
+        default: 'daily'
+      alert_threshold:
+        description: 'Alert threshold percentage (1-100)'
+        required: false
+        type: number
+        default: 80
+
+permissions:
+  contents: write
+  issues: write
+
+env:
+  REPORTS_DIR: .github/reports/usage
+  ALERT_THRESHOLD: 80
+
+jobs:
+  collect-usage-data:
+    runs-on: ubuntu-latest
+    name: 'Collect Usage Metrics'
+    outputs:
+      total_minutes: ${{ steps.billing.outputs.total_minutes }}
+      included_minutes: ${{ steps.billing.outputs.included_minutes }}
+      percentage_used: ${{ steps.billing.outputs.percentage_used }}
+      alert_needed: ${{ steps.billing.outputs.alert_needed }}
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 'Setup Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 'Install dependencies'
+        run: |
+          pip install PyGithub requests python-dateutil matplotlib
+
+      - name: 'Fetch billing information'
+        id: billing
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > fetch_billing.py << 'EOF'
+          import os
+          import json
+          import requests
+          from datetime import datetime
+          
+          token = os.environ['GITHUB_TOKEN']
+          headers = {'Authorization': f'Bearer {token}'}
+          
+          # Fetch Actions billing
+          response = requests.get(
+              'https://api.github.com/orgs/ivviiviivvi/settings/billing/actions',
+              headers=headers
+          )
+          
+          if response.status_code == 200:
+              billing = response.json()
+              
+              total_minutes = billing.get('total_minutes_used', 0)
+              included_minutes = billing.get('included_minutes', 3000)
+              paid_minutes = billing.get('total_paid_minutes_used', 0)
+              
+              percentage_used = (total_minutes / included_minutes * 100) if included_minutes > 0 else 0
+              
+              alert_threshold = int(os.environ.get('ALERT_THRESHOLD', 80))
+              alert_needed = percentage_used >= alert_threshold
+              
+              data = {
+                  'timestamp': datetime.utcnow().isoformat() + 'Z',
+                  'total_minutes_used': total_minutes,
+                  'included_minutes': included_minutes,
+                  'paid_minutes_used': paid_minutes,
+                  'percentage_used': round(percentage_used, 2),
+                  'alert_needed': alert_needed,
+                  'alert_threshold': alert_threshold
+              }
+              
+              with open('billing_data.json', 'w') as f:
+                  json.dump(data, f, indent=2)
+              
+              # Output for GitHub Actions
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f"total_minutes={total_minutes}\n")
+                  f.write(f"included_minutes={included_minutes}\n")
+                  f.write(f"percentage_used={round(percentage_used, 2)}\n")
+                  f.write(f"alert_needed={str(alert_needed).lower()}\n")
+              
+              print(f"📊 Usage: {total_minutes}/{included_minutes} minutes ({percentage_used:.2f}%)")
+              print(f"💰 Paid minutes: {paid_minutes}")
+              print(f"{'⚠️ ALERT' if alert_needed else '✅ OK'}")
+          else:
+              print(f"❌ Failed to fetch billing data: {response.status_code}")
+              print(f"Response: {response.text}")
+              exit(1)
+          EOF
+          
+          python fetch_billing.py
+
+      - name: 'Fetch workflow runs data'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > fetch_workflow_data.py << 'EOF'
+          import os
+          import json
+          from github import Github
+          from datetime import datetime, timedelta
+          from collections import defaultdict
+          
+          g = Github(os.environ['GITHUB_TOKEN'])
+          org = g.get_organization('ivviiviivvi')
+          
+          # Calculate date range (last 30 days)
+          end_date = datetime.utcnow()
+          start_date = end_date - timedelta(days=30)
+          
+          workflow_stats = defaultdict(lambda: {
+              'runs': 0,
+              'success': 0,
+              'failure': 0,
+              'cancelled': 0,
+              'total_duration': 0
+          })
+          
+          repo_count = 0
+          total_runs = 0
+          
+          for repo in org.get_repos():
+              if repo.archived or repo.fork:
+                  continue
+              
+              repo_count += 1
+              
+              try:
+                  workflows = repo.get_workflows()
+                  for workflow in workflows:
+                      workflow_name = workflow.name
+                      
+                      runs = workflow.get_runs()
+                      for run in runs:
+                          if run.created_at < start_date:
+                              break
+                          
+                          workflow_stats[workflow_name]['runs'] += 1
+                          total_runs += 1
+                          
+                          if run.conclusion == 'success':
+                              workflow_stats[workflow_name]['success'] += 1
+                          elif run.conclusion == 'failure':
+                              workflow_stats[workflow_name]['failure'] += 1
+                          elif run.conclusion == 'cancelled':
+                              workflow_stats[workflow_name]['cancelled'] += 1
+                          
+                          # Calculate duration in minutes
+                          if run.updated_at and run.created_at:
+                              duration = (run.updated_at - run.created_at).total_seconds() / 60
+                              workflow_stats[workflow_name]['total_duration'] += duration
+              except Exception as e:
+                  print(f"Error processing {repo.name}: {e}")
+                  continue
+          
+          # Calculate averages and success rates
+          summary_stats = []
+          for workflow_name, stats in workflow_stats.items():
+              if stats['runs'] > 0:
+                  success_rate = (stats['success'] / stats['runs']) * 100
+                  avg_duration = stats['total_duration'] / stats['runs']
+                  
+                  summary_stats.append({
+                      'workflow': workflow_name,
+                      'total_runs': stats['runs'],
+                      'success_rate': round(success_rate, 2),
+                      'avg_duration_minutes': round(avg_duration, 2),
+                      'success': stats['success'],
+                      'failure': stats['failure'],
+                      'cancelled': stats['cancelled']
+                  })
+          
+          # Sort by total runs
+          summary_stats.sort(key=lambda x: x['total_runs'], reverse=True)
+          
+          data = {
+              'period_start': start_date.isoformat() + 'Z',
+              'period_end': end_date.isoformat() + 'Z',
+              'repositories_analyzed': repo_count,
+              'total_workflow_runs': total_runs,
+              'workflow_stats': summary_stats
+          }
+          
+          with open('workflow_data.json', 'w') as f:
+              json.dump(data, f, indent=2)
+          
+          print(f"📈 Analyzed {repo_count} repositories, {total_runs} workflow runs")
+          EOF
+          
+          python fetch_workflow_data.py
+
+      - name: 'Generate usage report'
+        run: |
+          cat > generate_report.py << 'EOF'
+          import json
+          from datetime import datetime
+          
+          # Load data
+          with open('billing_data.json', 'r') as f:
+              billing = json.load(f)
+          
+          with open('workflow_data.json', 'r') as f:
+              workflows = json.load(f)
+          
+          # Generate markdown report
+          report = f"""# GitHub Actions Usage Report
+          
+          **Generated**: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
+          
+          ## 📊 Billing Summary
+          
+          - **Total Minutes Used**: {billing['total_minutes_used']:,} / {billing['included_minutes']:,}
+          - **Usage Percentage**: {billing['percentage_used']:.2f}%
+          - **Paid Minutes**: {billing['paid_minutes_used']:,}
+          - **Status**: {'⚠️ Alert - Usage High' if billing['alert_needed'] else '✅ Normal'}
+          
+          ### Usage Bar
+          ```
+          {'█' * int(billing['percentage_used'] / 2)}{'░' * (50 - int(billing['percentage_used'] / 2))} {billing['percentage_used']:.1f}%
+          ```
+          
+          ## 🔄 Workflow Activity (Last 30 Days)
+          
+          - **Repositories Analyzed**: {workflows['repositories_analyzed']}
+          - **Total Workflow Runs**: {workflows['total_workflow_runs']:,}
+          - **Period**: {workflows['period_start'][:10]} to {workflows['period_end'][:10]}
+          
+          ### Top Workflows by Activity
+          
+          | Workflow | Runs | Success Rate | Avg Duration | Status |
+          |----------|------|--------------|--------------|--------|
+          """
+          
+          for stat in workflows['workflow_stats'][:10]:
+              status = '✅' if stat['success_rate'] >= 90 else '⚠️' if stat['success_rate'] >= 70 else '❌'
+              report += f"| {stat['workflow'][:40]} | {stat['total_runs']} | {stat['success_rate']:.1f}% | {stat['avg_duration_minutes']:.1f}m | {status} |\n"
+          
+          report += f"""
+          
+          ## 💡 Insights
+          
+          ### Efficiency Metrics
+          - **Average Success Rate**: {sum(s['success_rate'] for s in workflows['workflow_stats']) / len(workflows['workflow_stats']):.1f}%
+          - **Total Successful Runs**: {sum(s['success'] for s in workflows['workflow_stats']):,}
+          - **Total Failed Runs**: {sum(s['failure'] for s in workflows['workflow_stats']):,}
+          - **Total Cancelled Runs**: {sum(s['cancelled'] for s in workflows['workflow_stats']):,}
+          
+          ### Recommendations
+          """
+          
+          if billing['percentage_used'] > 90:
+              report += "\n- ⚠️ **Critical**: Usage above 90%. Consider immediate action:\n"
+              report += "  - Reduce scheduled workflow frequency\n"
+              report += "  - Optimize workflow duration\n"
+              report += "  - Upgrade to higher quota plan\n"
+          elif billing['percentage_used'] > 80:
+              report += "\n- ⚠️ **Warning**: Usage above 80%. Monitor closely and consider:\n"
+              report += "  - Review and optimize long-running workflows\n"
+              report += "  - Implement staggered scheduling\n"
+              report += "  - Reduce unnecessary workflow triggers\n"
+          else:
+              report += "\n- ✅ Usage is within acceptable range\n"
+              report += "- Continue monitoring trends\n"
+          
+          # Find workflows with low success rates
+          low_success = [s for s in workflows['workflow_stats'] if s['success_rate'] < 70 and s['total_runs'] > 5]
+          if low_success:
+              report += "\n### Workflows Needing Attention\n\n"
+              for workflow in low_success[:5]:
+                  report += f"- **{workflow['workflow']}**: {workflow['success_rate']:.1f}% success rate ({workflow['failure']} failures)\n"
+          
+          # Estimate remaining minutes
+          days_remaining = 30  # Approximate
+          if billing['percentage_used'] > 0:
+              projected_usage = billing['total_minutes_used'] / (30 - days_remaining) * 30 if days_remaining < 30 else billing['total_minutes_used']
+              report += f"\n### Projected Usage\n\n"
+              report += f"- **Projected Monthly Usage**: ~{projected_usage:.0f} minutes\n"
+              report += f"- **Estimated Remaining**: ~{billing['included_minutes'] - projected_usage:.0f} minutes\n"
+          
+          report += "\n---\n\n"
+          report += f"*Report generated by Usage Monitoring workflow*\n"
+          
+          with open('usage_report.md', 'w') as f:
+              f.write(report)
+          
+          print("✅ Report generated successfully")
+          EOF
+          
+          python generate_report.py
+
+      - name: 'Generate usage chart'
+        run: |
+          cat > generate_chart.py << 'EOF'
+          import json
+          import matplotlib.pyplot as plt
+          import matplotlib
+          matplotlib.use('Agg')
+          
+          with open('billing_data.json', 'r') as f:
+              billing = json.load(f)
+          
+          # Create usage chart
+          fig, ax = plt.subplots(figsize=(10, 6))
+          
+          categories = ['Used', 'Remaining']
+          values = [
+              billing['total_minutes_used'],
+              max(0, billing['included_minutes'] - billing['total_minutes_used'])
+          ]
+          colors = ['#dc3545' if billing['alert_needed'] else '#28a745', '#e9ecef']
+          
+          ax.bar(categories, values, color=colors, edgecolor='black', linewidth=1.5)
+          ax.set_ylabel('Minutes')
+          ax.set_title(f"GitHub Actions Usage: {billing['percentage_used']:.1f}%")
+          ax.set_ylim(0, billing['included_minutes'] * 1.1)
+          
+          # Add value labels on bars
+          for i, v in enumerate(values):
+              ax.text(i, v + billing['included_minutes'] * 0.02, f"{v:,.0f}", 
+                     ha='center', va='bottom', fontweight='bold')
+          
+          # Add threshold line
+          threshold_value = billing['included_minutes'] * (billing['alert_threshold'] / 100)
+          ax.axhline(y=threshold_value, color='orange', linestyle='--', 
+                    label=f"Alert Threshold ({billing['alert_threshold']}%)")
+          
+          ax.legend()
+          plt.tight_layout()
+          plt.savefig('usage_chart.png', dpi=150, bbox_inches='tight')
+          print("✅ Chart generated")
+          EOF
+          
+          python generate_chart.py || echo "Chart generation failed, continuing..."
+
+      - name: 'Save report'
+        run: |
+          mkdir -p ${{ env.REPORTS_DIR }}
+          
+          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
+          cp usage_report.md ${{ env.REPORTS_DIR }}/report-${TIMESTAMP}.md
+          [ -f usage_chart.png ] && cp usage_chart.png ${{ env.REPORTS_DIR }}/chart-${TIMESTAMP}.png || true
+          
+          # Keep latest report easily accessible
+          cp usage_report.md ${{ env.REPORTS_DIR }}/latest.md
+          [ -f usage_chart.png ] && cp usage_chart.png ${{ env.REPORTS_DIR }}/latest.png || true
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.REPORTS_DIR }}
+          git commit -m "chore: add usage report ${TIMESTAMP} [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: 'Upload artifacts'
+        uses: actions/upload-artifact@v4
+        with:
+          name: usage-report
+          path: |
+            usage_report.md
+            usage_chart.png
+            billing_data.json
+            workflow_data.json
+          retention-days: 90
+
+  create-alert:
+    needs: collect-usage-data
+    if: needs.collect-usage-data.outputs.alert_needed == 'true'
+    runs-on: ubuntu-latest
+    name: 'Create Usage Alert'
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+
+      - name: 'Download report'
+        uses: actions/download-artifact@v4
+        with:
+          name: usage-report
+
+      - name: 'Create or update alert issue'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('usage_report.md', 'utf8');
+            
+            const title = `⚠️ GitHub Actions Usage Alert - ${{ needs.collect-usage-data.outputs.percentage_used }}% Used`;
+            
+            // Check if alert issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'usage-alert'
+            });
+            
+            const existingIssue = issues.data.find(issue => issue.title.includes('Usage Alert'));
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                title: title,
+                body: report
+              });
+              console.log(`Updated existing alert issue #${existingIssue.number}`);
+            } else {
+              // Create new alert issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: report,
+                labels: ['usage-alert', 'high-priority', 'actions']
+              });
+              console.log(`Created new alert issue #${issue.data.number}`);
+            }
+
+  post-summary:
+    needs: collect-usage-data
+    if: always()
+    runs-on: ubuntu-latest
+    name: 'Post Summary'
+    
+    steps:
+      - name: 'Download report'
+        uses: actions/download-artifact@v4
+        with:
+          name: usage-report
+        continue-on-error: true
+
+      - name: 'Post to workflow summary'
+        run: |
+          if [ -f "usage_report.md" ]; then
+            cat usage_report.md >> $GITHUB_STEP_SUMMARY
+          else
+            cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          ## Usage Report
+          
+          ⚠️ Report generation failed. Check workflow logs for details.
+          EOF
+          fi

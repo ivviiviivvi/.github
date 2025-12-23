@@ -18,13 +18,9 @@ central hub for:
 - **Living Document System** - AI-driven governance and management protocols
 - **Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
 
-When a repository in our organization doesn't have its own community health file
-s, GitHub automatically uses the defaults from this repository.
+When a repository in our organization doesn't have its own community health files, GitHub automatically uses the defaults from this repository.
 
-> **Is this the right repository for these functions?** See our [Repository Purp
-ose Analysis](REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why
-this `.github` repository is the appropriate location for organization-wide gove
-rnance, templates, and the Living Document System.
+> **Is this the right repository for these functions?** See our [Repository Purpose Analysis](docs/architecture/REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why this `.github` repository is the appropriate location for organization-wide governance, templates, and the Living Document System.
 
 ## Our Mission
 
@@ -54,6 +50,7 @@ We follow conventional commit format:
 **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
 **Examples**:
+
 - `feat: add user authentication`
 - `fix: resolve memory leak in data processor`
 - `docs: update API documentation`
@@ -108,6 +105,7 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 - **Examples**: Azure Cloud Development, Frontend Web Dev, Security Best Practices
 
 For detailed documentation on each component, see the `docs/` directory:
+
 - [**Agent Registry**](docs/AGENT_REGISTRY.md) - Complete catalog of 18 production agents + future roadmap
 - [Agents Documentation](docs/README.agents.md)
 - [Instructions Documentation](docs/README.instructions.md)
@@ -121,7 +119,7 @@ For detailed documentation on each component, see the `docs/` directory:
 
 The Mouthpiece Filter System allows you to write and speak in your authentic voice—with all its imperfections, metaphors, and humanity—and automatically transforms that input into structured, clear prompts that AI systems can understand and act upon.
 
-> *"Write like a human. Let the filter handle the rest."*
+> _"Write like a human. Let the filter handle the rest."_
 
 #### What It Does
 
@@ -149,48 +147,113 @@ python scripts/mouthpiece_filter.py "need something that watches APIs and alerts
 
 **Learn More:**
 
-- [Mouthpiece System Overview](MOUTHPIECE_README.md)
+- [Mouthpiece System Overview](docs/MOUTHPIECE_README.md)
 - [Complete Documentation](docs/MOUTHPIECE_SYSTEM.md)
 - [Examples & Patterns](docs/mouthpiece-examples.md)
+
+### 🎥 Video Walkthrough Generation System
+
+**Autonomous video documentation for all organization repositories.**
+
+The Video Walkthrough Generation system automatically creates professional 1-minute video walkthroughs with AI voiceover for all repositories in the Ivviiviivvi organization. This provides an engaging way to showcase your projects, onboard new team members, and create compelling documentation.
+
+> _"Turn your code into compelling visual stories—automatically."_
+
+#### Key Features
+
+✅ **Automatic Application Detection** - Supports React, Vue, Angular, Next.js, Python (Flask/FastAPI/Django), Java (Spring Boot), and static sites
+✅ **AI-Powered Voiceover** - Professional, casual, or technical narration styles
+✅ **Zero Manual Intervention** - Fully automated workflow execution
+✅ **Intelligent PR Creation** - Automatic pull requests with video artifacts
+✅ **Organization-Wide Deployment** - Single-command rollout to all repositories
+✅ **Customizable Settings** - Duration, style, focus areas, and more
+
+#### Components
+
+- **Main Workflow** (`.github/workflows/generate-walkthrough.yml`) - Automatic video generation with app detection
+- **Reusable Workflow** (`.github/workflows/org-walkthrough-generator.yml`) - Organization-wide reusable workflow
+- **Configuration** (`.github/walkthrough-config.yml`) - Comprehensive settings and detection rules
+- **Bootstrap Script** (`scripts/bootstrap-walkthrough-org.sh`) - Deploy to all organization repositories
+- **Documentation** ([.github/WALKTHROUGH_GUIDE.md](.github/WALKTHROUGH_GUIDE.md)) - Complete usage guide
+
+#### Quick Start
+
+```bash
+# Deploy to all organization repositories
+./scripts/bootstrap-walkthrough-org.sh --dry-run  # Preview first
+./scripts/bootstrap-walkthrough-org.sh            # Deploy
+
+# Manual trigger in any repository
+# Go to Actions → Generate Video Walkthrough → Run workflow
+```
+
+#### Usage in Individual Repositories
+
+Add to your repository's `.github/workflows/walkthrough.yml`:
+
+```yaml
+name: Generate Walkthrough
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+
+jobs:
+  generate:
+    uses: Ivviiviivvi/.github/.github/workflows/org-walkthrough-generator.yml@main
+    with:
+      duration: "60"
+      voiceover_style: "professional"
+      focus_areas: "authentication, dashboard, reporting"
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+**Learn More:**
+
+- [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) - Complete documentation
+- [Configuration Reference](.github/walkthrough-config.yml) - All available settings
+- [Bootstrap Script](scripts/bootstrap-walkthrough-org.sh) - Organization deployment
 
 ### Community Health Files
 
 These files establish standards for community interaction and contribution acros
 s all repositories:
 
-| File | Purpose |
-|------|---------|
+| File                                          | Purpose                                        |
+| --------------------------------------------- | ---------------------------------------------- |
 | [CODE_OF_CONDUCT.md](docs/CODE_OF_CONDUCT.md) | Standards for respectful community interaction |
-| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Guidelines for contributing to our projects |
-| [SECURITY.md](docs/SECURITY.md) | Security policy and vulnerability reporting |
-| [SUPPORT.md](docs/SUPPORT.md) | How to get help and support |
-| [LICENSE](LICENSE) | MIT License for our projects |
-| [FUNDING.yml](FUNDING.yml) | Funding and sponsorship configuration |
-| [GOVERNANCE.md](docs/GOVERNANCE.md) | Project governance and decision-making |
-| [MANIFESTO.md](docs/MANIFESTO.md) | Our core principles and values |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md)       | Guidelines for contributing to our projects    |
+| [SECURITY.md](docs/SECURITY.md)               | Security policy and vulnerability reporting    |
+| [SUPPORT.md](docs/SUPPORT.md)                 | How to get help and support                    |
+| [LICENSE](LICENSE)                            | MIT License for our projects                   |
+| [FUNDING.yml](FUNDING.yml)                    | Funding and sponsorship configuration          |
+| [GOVERNANCE.md](docs/GOVERNANCE.md)           | Project governance and decision-making         |
+| [MANIFESTO.md](docs/MANIFESTO.md)             | Our core principles and values                 |
 
 ### Documentation & Guides
 
 All our documentation and guides are located in the `docs/` directory. Highlights include:
 
-| Document                                                            | Description                                            |
-| ------------------------------------------------------------------- | ------------------------------------------------------ |
-| [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md)       | Organization-wide version control and branching standards |
-| [logical-branch-policy.md](.github/logical-branch-policy.md)        | "Main only" branch model policy with cleanup automation |
-| [STYLE_GUIDE.md](STYLE_GUIDE.md)                                   | Comprehensive English language and documentation style guide |
-| [ARCHIVAL_STRATEGY.md](ARCHIVAL_STRATEGY.md)                       | Version archival, maintenance branches, and preservation |
-| [COMMUNITY_AGENTS.md](COMMUNITY_AGENTS.md)                         | Community engagement, coordination, and monitoring agents |
-| [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)     | Comprehensive guide for building and deploying agents  |
-| [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)       | AI-driven organization management guide                |
-| [GITHUB_COPILOT_ACTIONS_SETUP.md](docs/GITHUB_COPILOT_ACTIONS_SETUP.md) | GitHub Copilot Actions setup and troubleshooting    |
-| [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                   | Branch protection rules and configuration              |
-| [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md) | New repository setup checklist                         |
-| [LABELS.md](docs/LABELS.md)                                         | Standard label set for consistent tagging              |
-| [TESTING.md](docs/TESTING.md)                                       | Testing standards and best practices                   |
-| [PR_AUTOMATION.md](PR_AUTOMATION.md)                                | Automated PR creation, push, and merge system          |
-| [for-ai-implementation.txt](for-ai-implementation.txt)              | Complete AI GitHub management protocol                 |
-| [REPOSITORY_PURPOSE_ANALYSIS.md](docs/REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of repository appropriateness for function set |
-
+| Document                                                                           | Description                                                  |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [VERSION_CONTROL_STANDARDS.md](docs/reference/VERSION_CONTROL_STANDARDS.md)        | Organization-wide version control and branching standards    |
+| [logical-branch-policy.md](.github/logical-branch-policy.md)                       | "Main only" branch model policy with cleanup automation      |
+| [STYLE_GUIDE.md](docs/guides/STYLE_GUIDE.md)                                       | Comprehensive English language and documentation style guide |
+| [ARCHIVAL_STRATEGY.md](docs/reference/ARCHIVAL_STRATEGY.md)                        | Version archival, maintenance branches, and preservation     |
+| [COMMUNITY_AGENTS.md](docs/guides/COMMUNITY_AGENTS.md)                             | Community engagement, coordination, and monitoring agents    |
+| [AGENT_ARCHITECTURE_GUIDE.md](docs/AGENT_ARCHITECTURE_GUIDE.md)                    | Comprehensive guide for building and deploying agents        |
+| [AI_IMPLEMENTATION_GUIDE.md](docs/AI_IMPLEMENTATION_GUIDE.md)                      | AI-driven organization management guide                      |
+| [GITHUB_COPILOT_ACTIONS_SETUP.md](docs/GITHUB_COPILOT_ACTIONS_SETUP.md)            | GitHub Copilot Actions setup and troubleshooting             |
+| [WALKTHROUGH_ANNOUNCEMENT.md](docs/WALKTHROUGH_ANNOUNCEMENT.md)                    | Autonomous walkthrough generation system guide               |
+| [SECRETS_SETUP.md](docs/SECRETS_SETUP.md)                                          | API keys and integrations setup for walkthrough system       |
+| [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)                                  | Branch protection rules and configuration                    |
+| [REPOSITORY_SETUP_CHECKLIST.md](docs/REPOSITORY_SETUP_CHECKLIST.md)                | New repository setup checklist                               |
+| [LABELS.md](docs/LABELS.md)                                                        | Standard label set for consistent tagging                    |
+| [TESTING.md](docs/TESTING.md)                                                      | Testing standards and best practices                         |
+| [PR_AUTOMATION.md](docs/automation/PR_AUTOMATION.md)                               | Automated PR creation, push, and merge system                |
+| [AI_IMPLEMENTATION_NOTES.txt](docs/guides/AI_IMPLEMENTATION_NOTES.txt)             | Complete AI GitHub management protocol                       |
+| [REPOSITORY_PURPOSE_ANALYSIS.md](docs/architecture/REPOSITORY_PURPOSE_ANALYSIS.md) | Analysis of repository appropriateness for function set      |
 
 ### Issue Templates
 
@@ -200,6 +263,7 @@ Comprehensive templates to help contributors submit high-quality issues:
 - **Feature Requests** - Structured templates for proposing new features
 - **Documentation** - Template for documentation improvements
 - **Questions** - Template for asking questions
+- **Walkthrough Requests** - Request custom video walkthroughs for applications ([Guide](docs/WALKTHROUGH_ANNOUNCEMENT.md))
 
 Configuration: [ISSUE_TEMPLATE/config.yml](ISSUE_TEMPLATE/config.yml)
 
@@ -220,25 +284,35 @@ Specialized templates for different types of contributions:
 
 Reusable GitHub Actions workflows ready to use in any repository:
 
-| Template                                                            | Purpose                               | Use Case                       |
-| ------------------------------------------------------------------- | ------------------------------------- | ------------------------------ |
-| [ci.yml](workflow-templates/ci.yml)                                 | Basic CI pipeline                     | Building and testing           |
-| [security-scan.yml](workflow-templates/security-scan.yml)           | CodeQL analysis                       | Vulnerability scanning         |
-| [stale-management.yml](workflow-templates/stale-management.yml)     | Stale issue and PR management         | Keeping repositories clean     |
-| [dependency-updates.yml](workflow-templates/dependency-updates.yml) | Automated dependency update workflows | Managing dependencies          |
+| Template                                                            | Purpose                               | Use Case                        |
+| ------------------------------------------------------------------- | ------------------------------------- | ------------------------------- |
+| [ci.yml](workflow-templates/ci.yml)                                 | Basic CI pipeline                     | Building and testing            |
+| [security-scan.yml](workflow-templates/security-scan.yml)           | CodeQL analysis                       | Vulnerability scanning          |
+| [stale-management.yml](workflow-templates/stale-management.yml)     | Stale issue and PR management         | Keeping repositories clean      |
+| [dependency-updates.yml](workflow-templates/dependency-updates.yml) | Automated dependency update workflows | Managing dependencies           |
 | [deployment.yml](workflow-templates/deployment.yml)                 | Deployment pipeline                   | Staging and production releases |
+
+#### Organization Workflows
+
+Advanced workflows for organization-wide automation:
+
+| Workflow                                                                         | Purpose                            | Trigger                   |
+| -------------------------------------------------------------------------------- | ---------------------------------- | ------------------------- |
+| [generate-walkthrough.yml](.github/workflows/generate-walkthrough.yml)           | Generate video walkthroughs        | Manual, code changes      |
+| [org-walkthrough-generator.yml](.github/workflows/org-walkthrough-generator.yml) | Reusable video generation workflow | Called by other workflows |
+
+See [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) for detailed documentation.
 
 ### Automation Configuration
 
 - **[dependabot.yml](dependabot.yml)** - Organization-wide Dependabot configurat
-ion for:
+  ion for:
   - npm (JavaScript/Node.js)
   - pip (Python)
   - GitHub Actions
   - Docker
   - Go modules
   - Composer (PHP)
-
 
 ### Organization Profile
 
@@ -250,9 +324,10 @@ The [profile/README.md](profile/README.md) file is displayed on our organization
 ### For New Repositories
 
 1. **Automatic Inheritance**: New repositories automatically inherit community h
-ealth files from this repository if they don't have their own versions.
+   ealth files from this repository if they don't have their own versions.
 
 2. **Using Workflow Templates**:
+
    - Navigate to **Actions → New workflow** in your repository
    - Look for templates in the "By your organization" section
    - Select, customize, and commit the workflow
@@ -277,93 +352,115 @@ tion default.
 
 ```text
 .github/
-├── docs/
-│   ├── AI_IMPLEMENTATION_GUIDE.md
-│   ├── BRANCH_PROTECTION.md
-│   ├── CODE_OF_CONDUCT.md
-│   ├── CONTRIBUTING.md
-│   ├── GOVERNANCE.md
-│   ├── LABELS.md
-│   ├── MANIFESTO.md
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   ├── REPOSITORY_SETUP_CHECKLIST.md
-│   ├── SECURITY.md
-│   ├── SUPPORT.md
-│   └── TESTING.md
+├── .config/                                # Configuration files
+│   ├── renovate.json                       # Renovate bot configuration
+│   ├── .releaserc.json                     # Semantic release config
+│   └── mouthpiece-config.example.json      # Mouthpiece filter config example
+├── docs/                                   # Documentation hub
+│   ├── architecture/                       # Architecture & design docs
+│   │   ├── AI_CODE_INTELLIGENCE.md
+│   │   ├── AGENTSPHERE_GITHUB_PAGES_IMPLEMENTATION.md
+│   │   ├── CONTEXT_HANDOFF_IMPLEMENTATION.md
+│   │   ├── LOGICAL_EXPANSIONS.md
+│   │   └── REPOSITORY_PURPOSE_ANALYSIS.md
+│   ├── automation/                         # Automation documentation
+│   │   ├── AUTOMATION_MASTER_GUIDE.md
+│   │   ├── BRANCH_AUTOMATION_LOGIC_REVIEW.md
+│   │   └── PR_AUTOMATION.md
+│   ├── guides/                             # How-to guides & best practices
+│   │   ├── AI_IMPLEMENTATION_NOTES.txt
+│   │   ├── BEST_PRACTICES.md
+│   │   ├── CLAUDE.md
+│   │   ├── COMMUNITY_AGENTS.md
+│   │   ├── DOCKER_BEST_PRACTICES.md
+│   │   ├── GITHUB_APPS_INTEGRATIONS.md
+│   │   ├── MARKDOWN_STYLE_GUIDE.md
+│   │   ├── QUICK_START.md
+│   │   └── STYLE_GUIDE.md
+│   ├── reference/                          # Reference documentation
+│   │   ├── ARCHIVAL_STRATEGY.md
+│   │   ├── SECURITY_ADVANCED.md
+│   │   ├── SEMANTIC_VERSIONING.md
+│   │   └── VERSION_CONTROL_STANDARDS.md
+│   ├── workflows/                          # Workflow documentation
+│   │   ├── AI_RAPID_WORKFLOW.md
+│   │   ├── BRANCH_STRATEGY.md
+│   │   ├── GIT_WORKFLOW.md
+│   │   ├── RAPID_WORKFLOW_QUICK_REF.md
+│   │   └── RELEASE_PROCESS.md
+│   ├── AGENT_ARCHITECTURE_GUIDE.md         # Agent development guide
+│   ├── AGENT_REGISTRY.md                   # Complete agent catalog
+│   ├── AI_IMPLEMENTATION_GUIDE.md          # AI management implementation
+│   ├── BRANCH_PROTECTION.md                # Branch protection setup
+│   ├── CHANGELOG.md                        # Repository changelog
+│   ├── CODE_OF_CONDUCT.md                  # Community standards
+│   ├── CONTRIBUTING.md                     # Contribution guidelines
+│   ├── CONTRIBUTORS.md                     # Contributor acknowledgments
+│   ├── GITHUB_COPILOT_ACTIONS_SETUP.md     # Copilot Actions setup
+│   ├── GITHUB_PAGES_SETUP.md               # GitHub Pages configuration
+│   ├── GOVERNANCE.md                       # Governance model
+│   ├── LABELS.md                           # Standard labels
+│   ├── MANIFESTO.md                        # Organization manifesto
+│   ├── MOUTHPIECE_README.md                # Mouthpiece system overview
+│   ├── MOUTHPIECE_SYSTEM.md                # Complete Mouthpiece docs
+│   ├── POSTING_WALKTHROUGH_ANNOUNCEMENT.md # Walkthrough announcements
+│   ├── PULL_REQUEST_TEMPLATE.md            # Default PR template
+│   ├── README.agents.md                    # Agents documentation
+│   ├── README.chatmodes.md                 # Chat modes documentation
+│   ├── README.collections.md               # Collections documentation
+│   ├── README.instructions.md              # Instructions documentation
+│   ├── README.prompts.md                   # Prompts documentation
+│   ├── REPOSITORY_SETUP_CHECKLIST.md       # New repo setup
+│   ├── SECRETS_SETUP.md                    # Secrets configuration
+│   ├── SECURITY.md                         # Security policy
+│   ├── SUPPORT.md                          # Support information
+│   ├── TESTING.md                          # Testing standards
+│   ├── The Living Document System.pdf      # Living document system
+│   └── WALKTHROUGH_ANNOUNCEMENT.md         # Walkthrough system guide
 ├── .github/
-│   ├── copilot-instructions.md             # Copilot code review instructions
+│   ├── copilot-instructions.md             # Copilot code review rules
+│   ├── dependabot.yml                      # Dependabot configuration
 │   └── workflows/                          # GitHub Actions workflows
-├── profile/
-│   └── README.md                           # Organization profile page
-├── ISSUE_TEMPLATE/
-│   ├── config.yml                          # Issue template configuration
-│   ├── bug_report.md                       # Bug report (markdown)
-│   ├── bug_report_form.yml                 # Bug report (form-based)
-│   ├── feature_request.md                  # Feature request (markdown)
-│   ├── feature_request_form.yml            # Feature request (form-based)
-│   ├── documentation.md                    # Documentation issues
-│   └── question.md                         # Question template
-├── PULL_REQUEST_TEMPLATE/
-│   ├── bug_fix.md                          # Bug fix PR template
-│   ├── feature.md                          # Feature PR template
-│   ├── documentation.md                    # Documentation PR template
-│   ├── refactoring.md                      # Refactoring PR template
-│   └── performance.md                      # Performance PR template
-├── workflow-templates/
-│   ├── ci.yml                              # CI workflow template
-│   ├── ci.properties.json                  # CI metadata
-│   ├── security-scan.yml                   # Security scanning workflow
-│   ├── security-scan.properties.json       # Security scan metadata
-│   ├── stale-management.yml                # Stale issue/PR workflow
-│   ├── stale-management.properties.json    # Stale management metadata
-│   ├── dependency-updates.yml              # Dependency update workflow
-│   ├── dependency-updates.properties.json  # Dependency update metadata
-│   ├── deployment.yml                      # Deployment workflow
-│   └── deployment.properties.json          # Deployment metadata
 ├── agents/                                 # GitHub Copilot custom agents
 ├── chatmodes/                              # GitHub Copilot chat modes
+├── chaos-zone/                             # Temporary workspace
+│   ├── chats/                              # Chat transcripts
+│   ├── drafts/                             # Work-in-progress docs
+│   ├── ideas/                              # Brainstorming notes
+│   └── misc/                               # Miscellaneous content
 ├── collections/                            # Curated Copilot collections
-├── docs/                                   # Copilot customization docs
+├── context-handoff/                        # Context handoff system
 ├── instructions/                           # Copilot coding instructions
+├── ISSUE_TEMPLATE/                         # Issue templates
+├── observability/                          # Monitoring & observability
+├── profile/                                # Organization profile
 ├── prompts/                                # GitHub Copilot prompts
-├── AI_IMPLEMENTATION_GUIDE.md              # AI management implementation guide
-├── BRANCH_PROTECTION.md                    # Branch protection guide
-├── CODE_OF_CONDUCT.md                      # Code of conduct
-├── CONTRIBUTING.md                         # Contributing guidelines
-├── FUNDING.yml                             # Funding configuration
-├── LICENSE                                 # MIT License
-├── MANIFESTO.md                            # Organization manifesto
-├── PULL_REQUEST_TEMPLATE.md                # Default PR template
-├── REPOSITORY_SETUP_CHECKLIST.md           # New repo checklist
-├── SECURITY.md                             # Security policy
-├── SUPPORT.md                              # Support information
-├── TESTING.md                              # Testing standards
-├── REPOSITORY_PURPOSE_ANALYSIS.md           # Repository appropriateness analys
-is
-├── dependabot.yml                          # Dependabot configuration
-└── for-ai-implementation.txt               # AI management protocol
+├── PULL_REQUEST_TEMPLATE/                  # PR templates
+├── reports/                                # Health reports & analytics
+├── scripts/                                # Automation scripts
+├── workflow-templates/                     # Reusable workflow templates
+├── README.md                               # This file
+└── PULL_REQUEST_TEMPLATE.md                # Default PR template
 ```
 
 ## AI-Driven Organization Management
 
 This organization implements an advanced AI-driven GitHub management system with
- 8 core modules:
+8 core modules:
 
 1. **Organization & Repository Administration** - Setup, access control, and bra
-nch protection
+   nch protection
 2. **Project Management & Workflow Automation** - Boards, issues, labels, and au
-tomation
+   tomation
 3. **CI/CD & Development Lifecycle** - Build pipelines, testing, and deployment
 4. **Security & Compliance Operations** - Vulnerability management and complianc
-e
+   e
 5. **Documentation & Knowledge Base** - Maintaining comprehensive documentation
 6. **Ecosystem Integration & Architecture** - Monitoring service dependencies
 7. **Observability & System Health** - Analytics and system monitoring
 8. **Strategic Analysis & Risk Mitigation** - Proactive risk identification
 
-Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) | [Implementation Guide](docs/AI_IMPLEMENTATION_GUIDE.md)
-Read the full protocol: [for-ai-implementation.txt](for-ai-implementation.txt) |
- [Implementation Guide](AI_IMPLEMENTATION_GUIDE.md)
+Read the full protocol: [AI Implementation Notes](docs/guides/AI_IMPLEMENTATION_NOTES.txt) | [Implementation Guide](docs/AI_IMPLEMENTATION_GUIDE.md)
 
 ### Active Health Monitoring
 
@@ -377,7 +474,7 @@ The organization now features **automated health monitoring** that brings the AI
 
 **Current Stats**: 32 workflows • 324 Copilot customizations • 109 technologies supported
 
-📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️  [Scripts Documentation](scripts/README.md)
+📊 View the [Live Dashboard](reports/DASHBOARD.md) | 🛠️ [Scripts Documentation](scripts/README.md)
 
 ## Key Features
 
@@ -387,7 +484,7 @@ The organization now features **automated health monitoring** that brings the AI
 - **Auto Merge**: Intelligently merges PRs when all requirements are met
 - **Conflict Resolution**: Automatically resolves merge conflicts when possible
 - **Branch Cleanup**: Removes merged branches automatically
-- **Comprehensive Documentation**: See [PR_AUTOMATION.md](PR_AUTOMATION.md) for details
+- **Comprehensive Documentation**: See [PR_AUTOMATION.md](docs/automation/PR_AUTOMATION.md) for details
 
 ### Automated Security
 

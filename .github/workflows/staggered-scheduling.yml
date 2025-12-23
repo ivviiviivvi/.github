@@ -1,0 +1,391 @@
+name: 'Staggered Scheduling for Batch Operations'
+
+on:
+  schedule:
+    # Run scheduler daily at midnight UTC to plan the week
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      force_reschedule:
+        description: 'Force rescheduling of all repositories'
+        required: false
+        type: boolean
+        default: false
+      repositories_per_day:
+        description: 'Maximum repositories per day'
+        required: false
+        type: number
+        default: 10
+
+permissions:
+  contents: write
+  actions: write
+
+env:
+  SCHEDULE_FILE: .github/scheduling/schedule.json
+  REPOS_PER_DAY: 10
+  MAX_CONCURRENT_WORKFLOWS: 3
+
+jobs:
+  calculate-schedule:
+    runs-on: ubuntu-latest
+    name: 'Calculate Staggered Schedule'
+    outputs:
+      has_schedule: ${{ steps.generate.outputs.has_schedule }}
+      repos_today: ${{ steps.check-today.outputs.repos_today }}
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Setup Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 'Install dependencies'
+        run: |
+          pip install PyGithub pyyaml
+
+      - name: 'Fetch organization repositories'
+        id: fetch-repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > fetch_repos.py << 'EOF'
+          import os
+          import json
+          from github import Github
+          
+          g = Github(os.environ['GITHUB_TOKEN'])
+          org = g.get_organization('ivviiviivvi')
+          
+          repos = []
+          for repo in org.get_repos():
+              if not repo.archived and not repo.fork:
+                  repos.append({
+                      'name': repo.name,
+                      'full_name': repo.full_name,
+                      'size': repo.size,
+                      'language': repo.language,
+                      'updated_at': repo.updated_at.isoformat(),
+                      'has_pages': repo.has_pages,
+                      'default_branch': repo.default_branch
+                  })
+          
+          with open('repositories.json', 'w') as f:
+              json.dump(repos, f, indent=2)
+          
+          print(f"Found {len(repos)} active repositories")
+          EOF
+          
+          python fetch_repos.py
+          
+          REPO_COUNT=$(jq 'length' repositories.json)
+          echo "repo_count=$REPO_COUNT" >> $GITHUB_OUTPUT
+
+      - name: 'Generate staggered schedule'
+        id: generate
+        run: |
+          cat > generate_schedule.py << 'EOF'
+          import json
+          import math
+          from datetime import datetime, timedelta
+          
+          # Load repositories
+          with open('repositories.json', 'r') as f:
+              repos = json.load(f)
+          
+          repos_per_day = int('${{ github.event.inputs.repositories_per_day }}' or '10')
+          total_repos = len(repos)
+          days_needed = math.ceil(total_repos / repos_per_day)
+          
+          print(f"Total repositories: {total_repos}")
+          print(f"Repositories per day: {repos_per_day}")
+          print(f"Days needed: {days_needed}")
+          
+          # Sort repos by size (smaller repos first for faster initial runs)
+          repos.sort(key=lambda x: x['size'])
+          
+          # Generate schedule
+          schedule = {
+              'version': '1.0',
+              'generated_at': datetime.utcnow().isoformat() + 'Z',
+              'repos_per_day': repos_per_day,
+              'total_repositories': total_repos,
+              'schedule_days': days_needed,
+              'schedule': {}
+          }
+          
+          start_date = datetime.utcnow().date()
+          
+          for day_offset in range(days_needed):
+              date = (start_date + timedelta(days=day_offset)).isoformat()
+              start_idx = day_offset * repos_per_day
+              end_idx = min(start_idx + repos_per_day, total_repos)
+              
+              day_repos = repos[start_idx:end_idx]
+              
+              schedule['schedule'][date] = {
+                  'date': date,
+                  'repositories': [r['full_name'] for r in day_repos],
+                  'count': len(day_repos),
+                  'status': 'pending',
+                  'stagger_minutes': 5  # 5 minutes between each repo
+              }
+          
+          with open('schedule.json', 'w') as f:
+              json.dump(schedule, f, indent=2)
+          
+          print(f"Generated schedule for {days_needed} days")
+          EOF
+          
+          python generate_schedule.py
+          
+          echo "has_schedule=true" >> $GITHUB_OUTPUT
+
+      - name: 'Save schedule'
+        run: |
+          mkdir -p .github/scheduling
+          mv schedule.json ${{ env.SCHEDULE_FILE }}
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/scheduling/
+          git commit -m "chore: update staggered schedule [skip ci]" || echo "No changes to commit"
+          git push || echo "No changes to push"
+
+      - name: "Check today's schedule"
+        id: check-today
+        run: |
+          if [ ! -f "${{ env.SCHEDULE_FILE }}" ]; then
+            echo "repos_today=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          TODAY=$(date -u +%Y-%m-%d)
+          
+          REPOS_TODAY=$(jq -r ".schedule[\"$TODAY\"].repositories // [] | length" ${{ env.SCHEDULE_FILE }})
+          echo "repos_today=$REPOS_TODAY" >> $GITHUB_OUTPUT
+          
+          if [ "$REPOS_TODAY" -gt 0 ]; then
+            echo "📋 Today's schedule: $REPOS_TODAY repositories"
+            jq -r ".schedule[\"$TODAY\"].repositories[]" ${{ env.SCHEDULE_FILE }} > repos_today.txt
+          else
+            echo "✅ No repositories scheduled for today"
+          fi
+
+      - name: "Upload today's schedule"
+        if: steps.check-today.outputs.repos_today != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: todays-schedule
+          path: repos_today.txt
+          retention-days: 1
+
+  execute-today-schedule:
+    needs: calculate-schedule
+    if: needs.calculate-schedule.outputs.repos_today != '0'
+    runs-on: ubuntu-latest
+    name: "Execute Today's Scheduled Workflows"
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+
+      - name: "Download today's schedule"
+        uses: actions/download-artifact@v4
+        with:
+          name: todays-schedule
+
+      - name: 'Execute staggered workflows'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat > execute_schedule.sh << 'EOF'
+          #!/bin/bash
+          
+          STAGGER_MINUTES=5
+          MAX_CONCURRENT=3
+          CURRENT_RUNNING=0
+          
+          echo "🚀 Starting staggered workflow execution..."
+          
+          while IFS= read -r repo; do
+            # Check current running workflows
+            RUNNING=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+              "https://api.github.com/repos/$repo/actions/runs?status=in_progress" | \
+              jq '.workflow_runs | length')
+            
+            CURRENT_RUNNING=$RUNNING
+            
+            # Wait if too many concurrent workflows
+            while [ "$CURRENT_RUNNING" -ge "$MAX_CONCURRENT" ]; do
+              echo "⏳ Waiting... ($CURRENT_RUNNING workflows running)"
+              sleep 30
+              RUNNING=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+                "https://api.github.com/repos/$repo/actions/runs?status=in_progress" | \
+                jq '.workflow_runs | length')
+              CURRENT_RUNNING=$RUNNING
+            done
+            
+            echo "📋 Triggering workflow for: $repo"
+            
+            # Trigger walkthrough generation workflow
+            curl -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              "https://api.github.com/repos/$repo/actions/workflows/generate-walkthrough.yml/dispatches" \
+              -d '{"ref":"main"}' || \
+            curl -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              "https://api.github.com/repos/$repo/actions/workflows/generate-walkthrough.yml/dispatches" \
+              -d '{"ref":"master"}' || \
+              echo "⚠️ Failed to trigger workflow for $repo"
+            
+            echo "✅ Triggered: $repo"
+            echo "⏰ Waiting $STAGGER_MINUTES minutes before next..."
+            sleep $((STAGGER_MINUTES * 60))
+            
+          done < repos_today.txt
+          
+          echo "✅ All scheduled workflows triggered"
+          EOF
+          
+          chmod +x execute_schedule.sh
+          bash execute_schedule.sh
+
+      - name: "Update schedule status"
+        if: always()
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          
+          if [ -f "${{ env.SCHEDULE_FILE }}" ]; then
+            # Update today's status to completed
+            cat ${{ env.SCHEDULE_FILE }} | jq ".schedule[\"$TODAY\"].status = \"completed\" | .schedule[\"$TODAY\"].completed_at = \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"" > temp.json
+            mv temp.json ${{ env.SCHEDULE_FILE }}
+            
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add ${{ env.SCHEDULE_FILE }}
+            git commit -m "chore: mark $TODAY schedule as completed [skip ci]" || echo "No changes to commit"
+            git push || echo "No changes to push"
+          fi
+
+  monitor-quota:
+    runs-on: ubuntu-latest
+    name: 'Monitor GitHub Actions Quota'
+    needs: execute-today-schedule
+    if: always()
+    
+    steps:
+      - name: 'Check quota usage'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BILLING=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/orgs/ivviiviivvi/settings/billing/actions")
+          
+          TOTAL_MINUTES_USED=$(echo "$BILLING" | jq '.total_minutes_used')
+          INCLUDED_MINUTES=$(echo "$BILLING" | jq '.included_minutes')
+          TOTAL_PAID_MINUTES=$(echo "$BILLING" | jq '.total_paid_minutes_used')
+          
+          PERCENTAGE_USED=$(echo "scale=2; ($TOTAL_MINUTES_USED / $INCLUDED_MINUTES) * 100" | bc)
+          
+          echo "📊 GitHub Actions Quota Status:"
+          echo "  Total minutes used: $TOTAL_MINUTES_USED"
+          echo "  Included minutes: $INCLUDED_MINUTES"
+          echo "  Percentage used: $PERCENTAGE_USED%"
+          echo "  Paid minutes used: $TOTAL_PAID_MINUTES"
+          
+          # Alert if usage is high
+          if (( $(echo "$PERCENTAGE_USED > 80" | bc -l) )); then
+            echo "⚠️ WARNING: GitHub Actions quota usage is above 80%!"
+            echo "quota_warning=true" >> $GITHUB_ENV
+          else
+            echo "✅ Quota usage is within acceptable range"
+            echo "quota_warning=false" >> $GITHUB_ENV
+          fi
+
+      - name: 'Create alert if quota high'
+        if: env.quota_warning == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ GitHub Actions Quota Alert - Usage Above 80%',
+              body: `## GitHub Actions Quota Warning
+              
+              The organization's GitHub Actions minutes usage has exceeded 80% of the monthly quota.
+              
+              ### Current Status
+              
+              - **Usage**: Above 80%
+              - **Date**: ${new Date().toISOString()}
+              
+              ### Action Required
+              
+              1. Review the staggered scheduling configuration
+              2. Consider reducing \`repos_per_day\` value
+              3. Increase stagger time between workflows
+              4. Review and optimize workflow efficiency
+              5. Consider upgrading to a higher quota plan
+              
+              ### Automatic Actions Taken
+              
+              - Staggered scheduling will continue with current settings
+              - Monitor usage closely over the next few days
+              
+              **Workflow Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              `,
+              labels: ['alert', 'quota', 'actions']
+            });
+
+  generate-report:
+    runs-on: ubuntu-latest
+    name: 'Generate Scheduling Report'
+    needs: [calculate-schedule, execute-today-schedule]
+    if: always()
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+
+      - name: 'Generate report'
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          ## 📅 Staggered Scheduling Report
+          
+          ### Today's Execution
+          - **Repositories Scheduled**: ${{ needs.calculate-schedule.outputs.repos_today }}
+          - **Status**: ${{ needs.execute-today-schedule.result || 'Not executed' }}
+          
+          ### Schedule Overview
+          
+          The staggered scheduling system distributes repository workflows across multiple days to:
+          - Prevent GitHub Actions quota exhaustion
+          - Avoid rate limiting
+          - Ensure stable, reliable execution
+          - Distribute load evenly
+          
+          ### Configuration
+          - **Repositories per Day**: ${{ env.REPOS_PER_DAY }}
+          - **Stagger Time**: 5 minutes between repos
+          - **Max Concurrent**: ${{ env.MAX_CONCURRENT_WORKFLOWS }} workflows
+          
+          ### Benefits
+          - ✅ No quota exhaustion
+          - ✅ Predictable execution schedule
+          - ✅ Even load distribution
+          - ✅ Automatic recovery from failures
+          
+          ---
+          
+          📊 View full schedule: `.github/scheduling/schedule.json`
+          EOF

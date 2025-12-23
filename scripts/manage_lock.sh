@@ -1,22 +1,22 @@
 #!/bin/bash
 set -e
 
-LOCK_FILE=".github/state.lock"
+LOCK_DIR=".github/state.lock"
 
 function acquire_lock {
-  # Try to create a lock file. If it already exists, another process holds the lock.
+  # Try to create a lock directory. If it already exists, another process holds the lock.
   # We'll wait for a short period for it to be released.
   timeout=60 # seconds
   start_time=$(date +%s)
 
-  while [ -f "$LOCK_FILE" ]; do
+  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
     current_time=$(date +%s)
     elapsed_time=$((current_time - start_time))
 
     if [ "$elapsed_time" -ge "$timeout" ]; then
-      echo "Error: Lock file has been held for too long. Aborting."
+      echo "Error: Lock directory has been held for too long. Aborting."
       # Optionally, remove the stale lock file
-      # rm -f "$LOCK_FILE"
+      # rmdir "$LOCK_DIR"
       exit 1
     fi
 
@@ -24,13 +24,13 @@ function acquire_lock {
     sleep 5
   done
 
-  # Create the lock file
-  touch "$LOCK_FILE"
+  echo "Lock acquired."
 }
 
 function release_lock {
-  # Remove the lock file
-  rm -f "$LOCK_FILE"
+  # Remove the lock directory
+  rmdir "$LOCK_DIR" 2>/dev/null || true
+  echo "Lock released."
 }
 
 # The main logic of the script

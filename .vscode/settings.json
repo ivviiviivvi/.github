@@ -152,5 +152,7 @@
   "workbench.iconTheme": "vs-seti",
   "workbench.startupEditor": "readme",
 
-  "security.workspace.trust.enabled": true
+  "security.workspace.trust.enabled": true,
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python-envs.pythonProjects": []
 }

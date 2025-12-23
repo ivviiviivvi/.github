@@ -1,219 +1,352 @@
 <!-- Live App Embed Component -->
-<!-- Handles different deployment strategies and provides fallbacks -->
-
-{% assign live_url = include.live_url %}
-{% assign deployment_strategy = include.deployment_strategy %}
-{% assign app_name = include.app_name %}
-
-<div class="live-app-embed" style="position: relative; width: 100%; height: 100%; min-height: 600px;">
-  {% if deployment_strategy == 'pages_direct' %}
-    <!-- Strategy A: Direct GitHub Pages embed -->
-    <div class="iframe-container" style="position: relative; width: 100%; height: 100%; min-height: 600px;">
-      <div class="loading-overlay" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--surface); z-index: 10;">
-        <div>
-          <div class="spinner" style="margin: 0 auto 1rem;"></div>
-          <p style="color: var(--text-secondary);">Loading application...</p>
-        </div>
-      </div>
-      
-      <iframe 
-        id="app-frame"
-        src="{{ live_url }}"
-        style="width: 100%; height: 100%; border: none; min-height: 600px;"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
-        loading="lazy"
-        onload="hideLoadingOverlay()"
-        onerror="showErrorState('pages_direct')"
-      ></iframe>
-    </div>
-    
-  {% elsif deployment_strategy == 'docker' %}
-    <!-- Strategy B: Docker container embed -->
-    <div class="docker-embed" style="padding: 2rem; text-align: center;">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <svg style="width: 80px; height: 80px; margin: 0 auto 2rem; fill: #2496ed;" viewBox="0 0 24 24">
-          <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338 0-.676.03-1.01.09-.037-1.974-1.99-2.977-2.1-3.019l-.424-.193-.27.395c-.335.49-.568 1.08-.656 1.692-.11.752.024 1.462.395 2.05-.272.137-.979.402-1.785.406H.848l-.084.591c-.112.938-.065 3.856 1.753 6.102 1.448 1.799 3.592 2.717 6.375 2.717 6.16 0 10.716-2.84 12.875-8.016.807.037 2.567 0 3.456-1.714.025-.049.093-.172.307-.527l.081-.103-.296-.19z"/>
-        </svg>
-        
-        <h3 style="margin-bottom: 1rem;">Docker Container Available</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-          This application runs in a Docker container. Run it locally with:
-        </p>
-        
-        <div style="background: #1e293b; color: #e2e8f0; padding: 1.5rem; border-radius: 0.5rem; text-align: left; font-family: monospace; font-size: 0.875rem; margin-bottom: 2rem;">
-          <div style="margin-bottom: 1rem;">
-            <span style="color: #94a3b8;"># Pull the image</span><br>
-            docker pull {{ include.docker_image }}
-          </div>
-          <div>
-            <span style="color: #94a3b8;"># Run the container</span><br>
-            docker run -d -p {{ include.port }}:{{ include.port }} {{ include.docker_image }}
-          </div>
-        </div>
-        
-        <button onclick="copyDockerCommand()" class="btn">
-          📋 Copy Docker Command
-        </button>
-      </div>
-    </div>
-    
-  {% elsif deployment_strategy == 'codespaces' %}
-    <!-- Strategy C: GitHub Codespaces -->
-    <div class="codespaces-embed" style="padding: 2rem; text-align: center;">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <svg style="width: 80px; height: 80px; margin: 0 auto 2rem;" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M3 3h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m0 2v14h18V5H3m2 2h14v2H5V7m0 4h8v2H5v-2m0 4h10v2H5v-2z"/>
-        </svg>
-        
-        <h3 style="margin-bottom: 1rem;">Open in GitHub Codespaces</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-          This application uses GitHub Codespaces for a complete development environment.
-          Click below to launch it in your browser.
-        </p>
-        
-        <a href="{{ include.codespaces_url }}" class="btn" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #24292f;">
-          <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 16 16">
-            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z"/>
-          </svg>
-          Open in Codespaces
-        </a>
-        
-        <p style="margin-top: 2rem; color: var(--text-secondary); font-size: 0.875rem;">
-          You'll need a GitHub account with Codespaces access
-        </p>
-      </div>
-    </div>
-    
-  {% elsif deployment_strategy == 'none' %}
-    <!-- Strategy D: CLI/Library - No live demo -->
-    <div class="no-demo" style="padding: 2rem; text-align: center;">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <div style="font-size: 5rem; margin-bottom: 1rem;">📦</div>
-        
-        <h3 style="margin-bottom: 1rem;">CLI Tool or Library</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-          This application is a command-line tool or library and doesn't have a web interface.
-          Check the source code and documentation to learn how to use it.
-        </p>
-        
-        {% if include.source_url %}
-        <a href="{{ include.source_url }}" class="btn" target="_blank">
-          View Documentation
-        </a>
-        {% endif %}
-      </div>
-    </div>
-    
-  {% else %}
-    <!-- Fallback: Try AgentSphere demo if available -->
-    <div class="fallback-embed">
-      {% if include.agentsphere_url %}
-        <div class="iframe-container" style="position: relative; width: 100%; height: 100%; min-height: 600px;">
-          <div class="loading-overlay" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--surface); z-index: 10;">
-            <div>
-              <div class="spinner" style="margin: 0 auto 1rem;"></div>
-              <p style="color: var(--text-secondary);">Loading AgentSphere demo...</p>
-            </div>
-          </div>
-          
-          <iframe 
-            src="{{ include.agentsphere_url }}"
-            style="width: 100%; height: 100%; border: none; min-height: 600px;"
-            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
-            loading="lazy"
-            onload="hideLoadingOverlay()"
-            onerror="showErrorState('agentsphere')"
-          ></iframe>
-        </div>
-      {% else %}
-        <div style="padding: 3rem; text-align: center;">
-          <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
-          <h3 style="margin-bottom: 1rem;">No Live Demo Available</h3>
-          <p style="color: var(--text-secondary);">
-            A live demo is not currently available for this application.
-          </p>
-        </div>
-      {% endif %}
-    </div>
-  {% endif %}
+{% if include.deployment_strategy == 'pages-direct' %}
+<!-- GitHub Pages Direct Deployment -->
+<div class="live-app-embed">
+  <iframe
+    src="{{ include.deployment_url }}"
+    class="app-frame"
+    title="Live Application Demo"
+    sandbox="allow-scripts allow-forms allow-popups"
+    loading="lazy"
+  ></iframe>
 </div>
 
-<!-- Error State Template (hidden by default) -->
-<div id="error-state" style="display: none; padding: 3rem; text-align: center;">
-  <div style="font-size: 4rem; margin-bottom: 1rem;">❌</div>
-  <h3 style="margin-bottom: 1rem;">Failed to Load Application</h3>
-  <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-    The application could not be loaded. This might be due to:
-  </p>
-  <ul style="text-align: left; max-width: 500px; margin: 0 auto 2rem; color: var(--text-secondary);">
-    <li>The application is currently offline</li>
-    <li>Network connectivity issues</li>
-    <li>The deployment is being updated</li>
-  </ul>
-  <button onclick="location.reload()" class="btn">
-    🔄 Try Again
-  </button>
+{% elsif include.deployment_strategy == 'docker' %}
+<!-- Docker Deployment with Instructions -->
+<div class="docker-embed">
+  <div style="padding: 2rem; background: var(--surface-color)">
+    <h3>🐳 Docker Deployment</h3>
+    <p>
+      This application is deployed as a Docker container. Run it locally with:
+    </p>
+
+    <div
+      class="code-block"
+      style="
+        background: #24292e;
+        color: #e1e4e8;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        overflow-x: auto;
+      "
+    >
+      <code style="font-family: 'Courier New', monospace">
+        # Pull the image<br />
+        docker pull {{ include.docker_image }}<br />
+        <br />
+        # Run the container<br />
+        docker run -p 3000:3000 -p 5000:5000 -p 8000:8000 {{
+        include.docker_image }}<br />
+        <br />
+        # Access at: http://localhost:3000 (or appropriate port)
+      </code>
+    </div>
+
+    <div class="docker-info" style="margin-top: 2rem">
+      <h4>📋 Quick Start</h4>
+      <ol style="line-height: 2">
+        <li>
+          Install
+          <a href="https://www.docker.com/get-started" target="_blank"
+            >Docker Desktop</a
+          >
+        </li>
+        <li>Copy the commands above</li>
+        <li>Run in your terminal</li>
+        <li>Access the application in your browser</li>
+      </ol>
+    </div>
+
+    <div
+      class="docker-links"
+      style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap"
+    >
+      <a
+        href="https://hub.docker.com/r/{{ include.docker_image | split: ':' | first }}"
+        class="demo-btn"
+        target="_blank"
+        style="background: #2496ed"
+      >
+        🐳 View on Docker Hub
+      </a>
+      <a
+        href="https://github.com/{{ page.repository }}/blob/main/Dockerfile"
+        class="demo-btn outline"
+        target="_blank"
+      >
+        📄 View Dockerfile
+      </a>
+    </div>
+  </div>
 </div>
+
+{% elsif include.deployment_strategy == 'codespaces' %}
+<!-- GitHub Codespaces Integration -->
+<div class="codespaces-embed">
+  <div
+    style="padding: 2rem; background: var(--surface-color); text-align: center"
+  >
+    <h3>☁️ GitHub Codespaces</h3>
+    <p>
+      This application runs in a full development environment using GitHub
+      Codespaces.
+    </p>
+
+    <div style="margin: 2rem 0">
+      <img
+        src="https://github.githubassets.com/images/modules/site/codespaces/hero-sm.png"
+        alt="GitHub Codespaces"
+        style="
+          max-width: 400px;
+          width: 100%;
+          border-radius: 8px;
+          box-shadow: var(--shadow);
+        "
+      />
+    </div>
+
+    <div
+      class="codespaces-info"
+      style="
+        text-align: left;
+        margin-top: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      "
+    >
+      <h4>🚀 Getting Started</h4>
+      <ol style="line-height: 2">
+        <li>Click the "Open in Codespaces" button below</li>
+        <li>Wait for the environment to initialize (1-2 minutes)</li>
+        <li>The application will start automatically</li>
+        <li>Access via the forwarded ports panel</li>
+      </ol>
+
+      <div
+        style="
+          margin-top: 2rem;
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        "
+      >
+        <a
+          href="https://github.com/{{ page.repository }}/codespaces/new"
+          class="demo-btn"
+          target="_blank"
+          style="background: #24292e"
+        >
+          ☁️ Open in Codespaces
+        </a>
+        <a
+          href="https://github.com/features/codespaces"
+          class="demo-btn outline"
+          target="_blank"
+        >
+          📖 Learn About Codespaces
+        </a>
+      </div>
+    </div>
+
+    <div
+      class="codespaces-features"
+      style="
+        margin-top: 3rem;
+        padding: 1.5rem;
+        background: var(--background-color);
+        border-radius: 6px;
+        text-align: left;
+      "
+    >
+      <h4>✨ What You Get</h4>
+      <ul style="line-height: 2; list-style-position: inside">
+        <li>🖥️ Full VS Code in your browser</li>
+        <li>⚡ Pre-configured development environment</li>
+        <li>🔧 All dependencies installed automatically</li>
+        <li>🌐 Live preview with port forwarding</li>
+        <li>💾 Persistent storage for your session</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% elsif include.deployment_strategy == 'documentation-only' %}
+<!-- Documentation Only (CLI/Library) -->
+<div class="documentation-embed">
+  <div
+    style="padding: 2rem; background: var(--surface-color); text-align: center"
+  >
+    <h3>📚 Documentation & Installation</h3>
+    <p>
+      This is a CLI tool or library. See the documentation for installation and
+      usage instructions.
+    </p>
+
+    <div style="margin: 2rem 0">
+      <svg width="200" height="200" viewBox="0 0 200 200" style="opacity: 0.7">
+        <rect
+          x="40"
+          y="40"
+          width="120"
+          height="120"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+        />
+        <line
+          x1="60"
+          y1="70"
+          x2="140"
+          y2="70"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="90"
+          x2="140"
+          y2="90"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="110"
+          x2="120"
+          y2="110"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+        <line
+          x1="60"
+          y1="130"
+          x2="130"
+          y2="130"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+      </svg>
+    </div>
+
+    <div
+      class="install-info"
+      style="text-align: left; max-width: 600px; margin: 2rem auto"
+    >
+      <h4>🔧 Installation</h4>
+
+      <div
+        class="code-block"
+        style="
+          background: #24292e;
+          color: #e1e4e8;
+          padding: 1rem;
+          border-radius: 6px;
+          margin: 1rem 0;
+          overflow-x: auto;
+        "
+      >
+        <code style="font-family: 'Courier New', monospace">
+          # npm package<br />
+          npm install {{ page.repository | split: '/' | last }}<br />
+          <br />
+          # pip package<br />
+          pip install {{ page.repository | split: '/' | last }}<br />
+          <br />
+          # Or clone from GitHub<br />
+          git clone https://github.com/{{ page.repository }}.git
+        </code>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      "
+    >
+      <a
+        href="https://github.com/{{ page.repository }}#readme"
+        class="demo-btn"
+        target="_blank"
+      >
+        📖 View Documentation
+      </a>
+      <a
+        href="https://github.com/{{ page.repository }}"
+        class="demo-btn outline"
+        target="_blank"
+      >
+        📁 View Repository
+      </a>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<!-- Fallback: Link to Repository -->
+<div class="fallback-embed">
+  <div
+    style="padding: 3rem; text-align: center; background: var(--surface-color)"
+  >
+    <h3>🔗 View Application</h3>
+    <p>This application's live demo is not available in an embedded view.</p>
+    <p style="margin-top: 1rem">
+      Visit the repository for setup instructions and source code.
+    </p>
+
+    <div style="margin-top: 2rem">
+      <a
+        href="https://github.com/{{ page.repository }}"
+        class="demo-btn"
+        target="_blank"
+        style="display: inline-flex; align-items: center; gap: 0.5rem"
+      >
+        <span>📁 Open Repository</span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <style>
-  .live-app-embed iframe {
+  .live-app-embed {
+    width: 100%;
+    height: 100%;
+    min-height: 800px;
+    background: white;
+  }
+
+  .app-frame {
+    width: 100%;
+    height: 800px;
+    border: none;
+    background: white;
+  }
+
+  .code-block {
+    position: relative;
+  }
+
+  .code-block code {
     display: block;
+    white-space: pre;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
-  
-  /* Auto-height iframe adjustment */
-  .iframe-container iframe {
-    height: auto;
-    min-height: 600px;
-  }
-  
-  /* Responsive iframe */
+
   @media (max-width: 768px) {
-    .live-app-embed,
-    .iframe-container,
-    .iframe-container iframe {
-      min-height: 400px !important;
+    .app-frame {
+      height: 600px;
+    }
+
+    .live-app-embed {
+      min-height: 600px;
     }
   }
 </style>
-
-<script>
-  function hideLoadingOverlay() {
-    const overlay = document.querySelector('.loading-overlay');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 300);
-    }
-  }
-  
-  function showErrorState(source) {
-    console.error('Failed to load app from:', source);
-    const container = document.querySelector('.live-app-embed');
-    const errorState = document.getElementById('error-state');
-    
-    if (container && errorState) {
-      container.innerHTML = errorState.innerHTML;
-      errorState.style.display = 'block';
-    }
-  }
-  
-  // Iframe communication for auto-height
-  window.addEventListener('message', function(e) {
-    if (e.data.type === 'resize') {
-      const iframe = document.getElementById('app-frame');
-      if (iframe && e.data.height) {
-        iframe.style.height = e.data.height + 'px';
-      }
-    }
-  });
-  
-  // Timeout for loading
-  setTimeout(() => {
-    const overlay = document.querySelector('.loading-overlay');
-    if (overlay && overlay.style.display !== 'none') {
-      console.warn('Loading timeout - showing error state');
-      showErrorState('timeout');
-    }
-  }, 30000); // 30 second timeout
-</script>

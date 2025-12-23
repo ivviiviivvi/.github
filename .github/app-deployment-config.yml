@@ -1,188 +1,106 @@
-# Application Deployment Configuration
-# This file controls how your application is deployed to various platforms
+# App Deployment Configuration
+# This file configures how your application is deployed to GitHub Pages
 
-# Deployment strategy selection
-# Options: pages_direct | docker | codespaces | none | auto
-# - pages_direct: Static sites deployed directly to GitHub Pages (React, Vue, Angular, etc.)
-# - docker: Backend apps deployed as Docker containers
-# - codespaces: Complex apps requiring full development environment
-# - none: CLI tools or libraries with no web interface
-# - auto: Automatically detect based on repository structure (default)
-deployment_strategy: auto
-
-# Application type
-# Used for automatic detection and configuration
-# Options: react, vue, angular, nextjs, static, express, flask, fastapi, django, java, cli, library
-app_type: auto
-
-# Startup command
-# Override the automatic detection with a custom command
-# Examples:
-#   - npm run start:prod
-#   - python -m gunicorn app:app --bind 0.0.0.0:8000
-#   - java -jar target/app.jar
-# Leave empty for auto-detection
-startup_command: ""
-
-# Port configuration
-# The port your application listens on
-# Default values by app type:
-#   - Node.js/React/Express: 3000
-#   - Flask: 5000
-#   - FastAPI/Django: 8000
-#   - Vue: 8080
-#   - Angular: 4200
-port: auto
-
-# Environment variables
-# These are applied during deployment
-# Sensitive values should use GitHub Secrets
-environment_variables:
-  NODE_ENV: production
-  PYTHON_ENV: production
-  # Add your custom variables here
-  # API_URL: https://api.example.com
-  # DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-# Health check configuration
-health_check:
+deployment:
+  # Enable/disable automated deployment
   enabled: true
-  url: /health  # Endpoint to check application health
-  timeout: 30   # Seconds to wait for response
-  interval: 60  # Seconds between checks
-  retries: 3    # Number of retries before marking as unhealthy
+  
+  # Deployment strategy: auto, pages-direct, docker, codespaces, documentation-only
+  strategy: auto
+  
+  # Custom startup command (optional)
+  # startup_command: "npm run start:prod"
+  
+  # Build configuration
+  build:
+    # Build command (leave empty for auto-detect)
+    command: ""
+    
+    # Build output directory (leave empty for auto-detect: dist, build, public, etc.)
+    output_dir: ""
+    
+    # Environment variables for build
+    env:
+      NODE_ENV: production
+  
+  # Docker configuration (for docker strategy)
+  docker:
+    # Custom Dockerfile path (default: ./Dockerfile)
+    dockerfile: Dockerfile
+    
+    # Exposed ports
+    ports:
+      - 3000
+      - 5000
+      - 8000
+    
+    # Build arguments
+    build_args: {}
+  
+  # Pages configuration (for pages-direct strategy)
+  pages:
+    # Custom domain (optional)
+    custom_domain: ""
+    
+    # Base URL path (for project pages, e.g., /my-app)
+    base_path: ""
+  
+  # Health check configuration
+  health_check:
+    # Enable health checks
+    enabled: true
+    
+    # Health check endpoint (default: /)
+    endpoint: "/"
+    
+    # Expected HTTP status code
+    expected_status: 200
+    
+    # Check interval (minutes)
+    interval: 5
+  
+  # Metadata
+  metadata:
+    # Application title
+    title: ""
+    
+    # Short description
+    description: ""
+    
+    # Tags/keywords
+    tags: []
+    
+    # Language/framework
+    language: ""
+    framework: ""
 
-# Deployment timeout
-# Maximum time (in seconds) to wait for deployment to complete
-deployment_timeout: 120
+# Quality gates
+quality:
+  # Minimum test coverage required (percentage)
+  min_coverage: 0
+  
+  # Run tests before deployment
+  run_tests: false
+  
+  # Run linting before deployment
+  run_lint: false
 
-# Maximum retries
-# Number of times to retry deployment on failure
-max_retries: 3
+# Approval settings
+approval:
+  # Require manual approval before deployment
+  required: false
+  
+  # Approvers (GitHub usernames)
+  approvers: []
 
-# Auto-restart configuration
-# Automatically restart the application if it crashes
-auto_restart: true
-
-# Visibility setting
-# Controls who can access the deployed application
-# Options: public | private | organization
-visibility: public
-
-# Build configuration (for pages_direct strategy)
-build:
-  # Build command (auto-detected if not specified)
-  command: ""
-  # Build output directory
-  output_dir: "build"  # React default, change to "dist" for Vue/Angular
-  # Node version for building
-  node_version: "20"
-  # Install command
-  install_command: "npm ci"
-
-# Docker configuration (for docker strategy)
-docker:
-  # Base image (if no Dockerfile exists)
-  base_image: ""
-  # Exposed ports (in addition to main port)
-  expose_ports: []
-  # Volume mounts
-  volumes:
-    - ./data:/app/data
-  # Docker build arguments
-  build_args: {}
-  # Registry to push to (ghcr.io by default)
-  registry: ghcr.io
-
-# Codespaces configuration (for codespaces strategy)
-codespaces:
-  # devcontainer.json will be auto-generated if not present
-  # Machine size: default | large | xlarge
-  machine_size: default
-  # Features to include
-  features:
-    - node
-    - python
-    - docker-in-docker
-  # VS Code extensions to install
-  extensions:
-    - dbaeumer.vscode-eslint
-    - esbenp.prettier-vscode
-  # Post-create command
-  post_create_command: "npm install || pip install -r requirements.txt || true"
-
-# Performance optimization
-performance:
-  # Enable caching of dependencies
-  cache_dependencies: true
-  # Enable compression (gzip)
-  compression: true
-  # Enable CDN acceleration (for Pages)
-  cdn_enabled: true
-
-# Security settings
-security:
-  # Enable HTTPS (automatic for GitHub Pages)
-  https_enabled: true
-  # Enable CORS
-  cors_enabled: true
-  # Allowed origins for CORS
-  cors_origins:
-    - "*"
-  # Security headers
-  headers:
-    X-Frame-Options: "SAMEORIGIN"
-    X-Content-Type-Options: "nosniff"
-    X-XSS-Protection: "1; mode=block"
-
-# Monitoring and logging
-monitoring:
-  # Enable application logging
-  logging_enabled: true
-  # Log level: debug | info | warning | error
-  log_level: info
-  # Log retention (days)
-  log_retention_days: 7
-  # Enable performance monitoring
-  performance_monitoring: false
-
-# Scaling configuration (future feature)
-scaling:
-  # Minimum instances
-  min_instances: 1
-  # Maximum instances
-  max_instances: 1
-  # Auto-scaling based on CPU
-  cpu_threshold: 80
-
-# Custom domains (for Pages deployments)
-custom_domains: []
-# Example:
-#   - app.example.com
-#   - demo.myapp.com
-
-# Deployment notifications
+# Notifications
 notifications:
-  # Notify on successful deployment
-  on_success: false
-  # Notify on failed deployment
+  # Notify on deployment success
+  on_success: true
+  
+  # Notify on deployment failure
   on_failure: true
-  # Notification channels
+  
+  # Notification channels (issues, discussions, email)
   channels:
-    - github_pr      # Comment on pull request
-    - github_issues  # Create issue on failure
-    # - slack        # Requires webhook URL in secrets
-    # - email        # Requires email configuration
-
-# Advanced settings
-advanced:
-  # Pre-deployment checks
-  pre_deploy_checks: true
-  # Post-deployment validation
-  post_deploy_validation: true
-  # Rollback on failure
-  rollback_on_failure: true
-  # Deployment strategy for updates
-  update_strategy: rolling  # rolling | blue_green | canary
-  # Graceful shutdown timeout
-  shutdown_timeout: 30
+    - issues
