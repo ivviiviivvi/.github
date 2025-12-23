@@ -174,16 +174,71 @@ class OrganizationCrawler:
         """Check if a link is accessible with SSRF protection"""
         target = url
         for _ in range(5):  # Limit redirects
-            if not self._is_safe_url(target):
-                print(f"  ⚠️  {target} (blocked: internal/private IP)")
-                return 403
-
             try:
+                # 1. Parse URL
+                parsed = urllib.parse.urlparse(target)
+                hostname = parsed.hostname
+                if not hostname:
+                    return 400
+
+                # 2. Resolve Hostname to IPs
+                ips = self._resolve_hostname(hostname)
+                if not ips:
+                    return 404
+
+                # 3. Validate IPs (SSRF Check)
+                for ip in ips:
+                    if '%' in ip:
+                        ip = ip.split('%')[0]
+                    ip_obj = ipaddress.ip_address(ip)
+                    if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                        print(f"  ⚠️  {target} (blocked: resolved to {ip})")
+                        return 403
+
+                # 4. Use first resolved IP for the request to prevent TOCTOU/DNS Rebinding
+                safe_ip = ips[0]
+
+                # Format IP for URL (IPv6 needs brackets)
+                if ':' in safe_ip:
+                    safe_ip = f"[{safe_ip}]"
+
+                # Construct URL using IP address
+                # We need to reconstruct the URL replacing the hostname with the IP
+                # parsed.netloc includes user:pass@host:port, so we need to be careful
+                # For simplicity in this crawler context, we'll assume no auth and handle port
+                netloc_parts = parsed.netloc.split('@')[-1].split(':')
+                port_suffix = ""
+                if len(netloc_parts) > 1 and netloc_parts[-1].isdigit():
+                     port_suffix = f":{netloc_parts[-1]}"
+                elif parsed.port:
+                     port_suffix = f":{parsed.port}"
+
+                new_netloc = f"{safe_ip}{port_suffix}"
+
+                # Reconstruct URL components
+                new_url_parts = list(parsed)
+                new_url_parts[1] = new_netloc
+                safe_url = urllib.parse.urlunparse(new_url_parts)
+
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 GitHub Organization Health Crawler',
+                    'Host': hostname
+                }
+
+                # 5. Make Request
+                # verify=False is required because we are using IP in URL but Cert matches Hostname
+                # This is a trade-off: We lose Cert verification but gain SSRF protection against DNS Rebinding
+
+                # Suppress urllib3 warnings about unverified HTTPS
+                import urllib3
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
                 response = self.session.head(
-                    target,
+                    safe_url,
                     timeout=timeout,
                     allow_redirects=False,
-                    headers={'User-Agent': 'Mozilla/5.0 GitHub Organization Health Crawler'}
+                    headers=headers,
+                    verify=False
                 )
 
                 # Handle Redirects
@@ -196,7 +251,13 @@ class OrganizationCrawler:
 
                 # Some servers don't support HEAD, try GET
                 if response.status_code >= 400:
-                    response = self.session.get(target, timeout=timeout, allow_redirects=False)
+                    response = self.session.get(
+                        safe_url,
+                        timeout=timeout,
+                        allow_redirects=False,
+                        headers=headers,
+                        verify=False
+                    )
                     # If GET returns redirect
                     if 300 <= response.status_code < 400:
                         loc = response.headers.get('Location')
@@ -209,7 +270,11 @@ class OrganizationCrawler:
 
             except requests.exceptions.Timeout:
                 return 408
-            except requests.exceptions.RequestException:
+            except requests.exceptions.RequestException as e:
+                # print(f"Request error: {e}")
+                return 500
+            except Exception as e:
+                print(f"Error checking link {target}: {e}")
                 return 500
 
         return 310  # Too many redirects
