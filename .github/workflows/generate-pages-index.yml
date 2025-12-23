@@ -39,6 +39,12 @@ jobs:
         with:
           node-version: "18"
 
+      - name: "Install yq"
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
       - name: "Query GitHub API for walkthroughs"
         id: query
         env:
@@ -199,18 +205,10 @@ jobs:
             if [ "$DEPLOY_CONFIG" != "{}" ]; then
               echo "    ✓ Found deployment configuration"
               
-              # Parse deployment config (try yq first, fallback to grep/sed)
-              if command -v yq >/dev/null 2>&1; then
-                DEPLOY_ENABLED=$(echo "$DEPLOY_CONFIG" | jq -r '.content' | base64 -d | yq eval '.deployment.enabled // true' - 2>/dev/null || echo "true")
-                DEPLOY_STRATEGY=$(echo "$DEPLOY_CONFIG" | jq -r '.content' | base64 -d | yq eval '.deployment.strategy // "auto"' - 2>/dev/null || echo "auto")
-              else
-                # Fallback to grep/sed parsing
-                CONFIG_CONTENT=$(echo "$DEPLOY_CONFIG" | jq -r '.content' | base64 -d)
-                DEPLOY_ENABLED=$(echo "$CONFIG_CONTENT" | grep -A 1 "deployment:" | grep "enabled:" | sed 's/.*enabled: *\([^ ]*\).*/\1/' || echo "true")
-                DEPLOY_STRATEGY=$(echo "$CONFIG_CONTENT" | grep -A 1 "deployment:" | grep "strategy:" | sed 's/.*strategy: *\([^ ]*\).*/\1/' || echo "auto")
-                [ -z "$DEPLOY_ENABLED" ] && DEPLOY_ENABLED="true"
-                [ -z "$DEPLOY_STRATEGY" ] && DEPLOY_STRATEGY="auto"
-              fi
+              # Parse deployment config using yq
+              CONFIG_CONTENT=$(echo "$DEPLOY_CONFIG" | jq -r '.content' | base64 -d)
+              DEPLOY_ENABLED=$(echo "$CONFIG_CONTENT" | yq eval '.deployment.enabled // true' - 2>/dev/null || echo "true")
+              DEPLOY_STRATEGY=$(echo "$CONFIG_CONTENT" | yq eval '.deployment.strategy // "auto"' - 2>/dev/null || echo "auto")
               
               if [ "$DEPLOY_ENABLED" = "true" ]; then
                 # Query recent successful deployment runs
@@ -224,7 +222,7 @@ jobs:
                   
                   # Construct deployment URL based on strategy
                   if [ "$DEPLOY_STRATEGY" = "pages-direct" ] || [ "$DEPLOY_STRATEGY" = "auto" ]; then
-                    DEPLOY_URL="https://${{ github.repository_owner }}.github.io/${REPO_NAME}"
+                    DEPLOY_URL="https://${ORG_NAME}.github.io/${REPO_NAME}"
                   elif [ "$DEPLOY_STRATEGY" = "codespaces" ]; then
                     DEPLOY_URL="https://github.com/${REPO_FULL_NAME}/codespaces"
                   else

@@ -150,15 +150,19 @@ PY
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api \
+          if gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             "/repos/${{ github.repository_owner }}/.github/dispatches" \
             -f event_type='deployment-updated' \
             -f "client_payload[repository]=${{ steps.resolve-run.outputs.repository }}" \
             -f "client_payload[run_id]=${{ steps.resolve-run.outputs.run_id }}" \
-            -f "client_payload[triggered_by]=${{ github.event_name }}" \
-          || echo "::warning::Failed to trigger gallery index update"
+            -f "client_payload[triggered_by]=${{ github.event_name }}"; then
+            echo "✅ Successfully triggered gallery index update"
+          else
+            echo "::error::Failed to trigger gallery index update - deployment won't be reflected in gallery"
+            exit 1
+          fi
 
       - name: "Summary"
         if: always()
