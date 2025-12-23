@@ -296,12 +296,15 @@ Reusable GitHub Actions workflows ready to use in any repository:
 
 Advanced workflows for organization-wide automation:
 
-| Workflow                                                                         | Purpose                            | Trigger                   |
-| -------------------------------------------------------------------------------- | ---------------------------------- | ------------------------- |
-| [generate-walkthrough.yml](.github/workflows/generate-walkthrough.yml)           | Generate video walkthroughs        | Manual, code changes      |
-| [org-walkthrough-generator.yml](.github/workflows/org-walkthrough-generator.yml) | Reusable video generation workflow | Called by other workflows |
+| Workflow                                                                                        | Purpose                                   | Trigger                   |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------- |
+| [generate-walkthrough.yml](.github/workflows/generate-walkthrough.yml)                         | Generate video walkthroughs               | Manual, code changes      |
+| [org-walkthrough-generator.yml](.github/workflows/org-walkthrough-generator.yml)               | Reusable video generation workflow        | Called by other workflows |
+| [deploy-to-pages-live.yml](.github/workflows/deploy-to-pages-live.yml)                         | Deploy live apps to GitHub Pages          | Push to main, manual      |
+| [collect-deployment-metadata.yml](.github/workflows/collect-deployment-metadata.yml)           | Collect deployment metadata (reusable)    | Workflow run, workflow_call |
+| [generate-pages-index.yml](.github/workflows/generate-pages-index.yml)                         | Generate gallery index from all org repos | Schedule, repository dispatch |
 
-See [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) for detailed documentation.
+See [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) and [Deployment Metadata Collection Guide](docs/workflows/DEPLOYMENT_METADATA_COLLECTION.md) for detailed documentation.
 
 ### Automation Configuration
 
