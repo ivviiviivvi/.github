@@ -1,0 +1,137 @@
+# Bio and Description Completions Configuration
+# Controls automatic auditing and completion of repository and organization metadata
+
+# Enable or disable completions workflow
+enabled: true
+
+# Minimum length for repository descriptions (in characters)
+min_description_length: 20
+
+# Check for repository topics/tags
+check_topics: true
+
+# Minimum number of recommended topics
+min_topics: 3
+
+# Check for repository website URL
+check_website: true
+
+# Automatically create issues for missing descriptions
+create_issues: true
+
+# Automatically create PRs to fix descriptions (requires additional permissions)
+create_prs: false
+
+# Audit scope options
+audit:
+  # Check organization profile completeness
+  organization_profile: true
+  
+  # Check all organization repositories
+  all_repositories: true
+  
+  # Check for profile README (profile/README.md)
+  profile_readme: true
+  
+  # Check community health files
+  community_files:
+    - CODE_OF_CONDUCT.md
+    - CONTRIBUTING.md
+    - SECURITY.md
+    - LICENSE
+
+# Reporting options
+reporting:
+  # Create a summary report as a GitHub issue
+  create_issue: true
+  
+  # Add labels to created issues
+  issue_labels:
+    - documentation
+    - enhancement
+    - automated
+  
+  # Create a detailed markdown report file
+  generate_report_file: false
+  report_path: "reports/completions-audit.md"
+
+# Description quality checks
+quality:
+  # Check for generic/placeholder descriptions
+  reject_generic: true
+  generic_patterns:
+    - "A project"
+    - "Repository for"
+    - "TODO"
+    - "Add description"
+    - "My project"
+  
+  # Require descriptions to be informative
+  require_keywords: false
+  min_keywords: 3
+
+# Auto-suggestion settings
+suggestions:
+  # Try to suggest descriptions based on repository content
+  auto_suggest: true
+  
+  # Sources to check for description suggestions
+  sources:
+    - package.json
+    - pyproject.toml
+    - Cargo.toml
+    - composer.json
+    - pom.xml
+    - README.md
+    - setup.py
+
+# Notification settings
+notifications:
+  # Create notifications for incomplete repositories
+  enabled: true
+  
+  # Notification threshold (only notify if completion rate is below this percentage)
+  threshold: 80
+  
+  # Channels for notifications
+  channels:
+    github_issues: true
+    github_discussions: false
+
+# Exclusions
+exclude:
+  # Exclude specific repositories from auditing
+  repositories:
+    - ".github"  # This meta repository might not need all checks
+    # - "archived-repo"
+  
+  # Exclude archived repositories
+  exclude_archived: true
+  
+  # Exclude private repositories (if you want to focus on public repos)
+  exclude_private: false
+  
+  # Exclude forked repositories
+  exclude_forks: true
+
+# Priority settings
+priority:
+  # Prioritize repositories with more activity
+  sort_by_activity: true
+  
+  # Focus on public repositories first
+  public_first: true
+  
+  # Prioritize repositories with more stars
+  popular_first: false
+
+# Integration with completionism-specialist agent
+agent_integration:
+  # Use the completionism-specialist agent for deep auditing
+  enabled: true
+  
+  # Agent should provide detailed recommendations
+  detailed_recommendations: true
+  
+  # Agent should attempt to fill in missing information
+  auto_complete: false
