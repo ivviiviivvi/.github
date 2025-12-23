@@ -228,7 +228,17 @@ jobs:
         id: register
         if: steps.detect-app.outputs.app_type != 'unknown' || inputs.force_deploy == true || github.event.inputs.force_deploy == 'true'
         run: |
-          echo "🚀 Registering application with AgentSphere..."
+          echo "⚠️  =============================================="
+          echo "⚠️  SIMULATION MODE - AgentSphere Integration"
+          echo "⚠️  =============================================="
+          echo ""
+          echo "📝 This workflow is currently in SIMULATION mode."
+          echo "📝 Generated URLs are for demonstration and testing purposes only."
+          echo "📝 To implement real AgentSphere integration, see:"
+          echo "📝   - WORKFLOW_OPTIMIZATION_ROADMAP.md"
+          echo "📝   - NEXT_STEPS_IMPLEMENTATION.md"
+          echo ""
+          echo "🚀 Simulating AgentSphere registration..."
 
           API_ENDPOINT="${{ steps.load-config.outputs.api_endpoint }}"
           REPO_NAME="${{ github.repository }}"
@@ -253,16 +263,19 @@ jobs:
 
           # NOTE: In production, this would make an actual API call to AgentSphere
           # For now, we'll simulate the response
-          echo "📡 Simulating AgentSphere API call..."
+          echo "📡 Simulating AgentSphere API call (not making real request)..."
           echo "$PAYLOAD" | jq .
 
           # Simulate successful deployment
           DEMO_URL="https://demo-${REPO_NAME//\//-}.agentsphere.dev"
           DEMO_ID="demo_$(date +%s)_${RANDOM}"
 
-          echo "✅ Deployment successful!"
-          echo "   Demo URL: $DEMO_URL"
-          echo "   Demo ID: $DEMO_ID"
+          echo ""
+          echo "✅ Simulation completed successfully!"
+          echo "   Simulated Demo URL: $DEMO_URL"
+          echo "   Simulated Demo ID: $DEMO_ID"
+          echo ""
+          echo "⚠️  Note: These URLs are simulated and non-functional"
 
           echo "demo_url=$DEMO_URL" >> $GITHUB_OUTPUT
           echo "demo_id=$DEMO_ID" >> $GITHUB_OUTPUT
@@ -320,20 +333,31 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "feat: add AgentSphere live demo badge to README"
-          title: "🚀 Add Live Demo Badge"
+          commit-message: "feat: add AgentSphere live demo badge to README (SIMULATION)"
+          title: "🚀 Add Live Demo Badge (Simulation Mode)"
           body: |
-            ## Live Demo Deployment
-
-            A live demo of this application has been successfully deployed to AgentSphere! 🎉
-
-            **Demo URL:** ${{ steps.register.outputs.demo_url }}
-            **Demo ID:** ${{ steps.register.outputs.demo_id }}
+            ## ⚠️ Live Demo Deployment (SIMULATION MODE)
+            
+            **Important**: This workflow is currently in **simulation mode**. The generated URLs are for demonstration and testing purposes only and do not point to actual live deployments.
+            
+            ### Simulated Deployment Information
+            
+            **Simulated Demo URL:** ${{ steps.register.outputs.demo_url }}
+            **Simulated Demo ID:** ${{ steps.register.outputs.demo_id }}
             **Application Type:** ${{ steps.detect-app.outputs.app_type }}
             **Startup Command:** `${{ steps.detect-app.outputs.startup_command }}`
-
-            This PR adds a "Live Demo" badge to the README that links to the deployed application.
-
+            
+            This PR adds a "Live Demo" badge to the README. However, **the badge links to a simulated URL that is not functional**.
+            
+            ---
+            
+            ### To Implement Real AgentSphere Integration
+            
+            See the implementation guides:
+            - `WORKFLOW_OPTIMIZATION_ROADMAP.md` - Complete implementation plan
+            - `NEXT_STEPS_IMPLEMENTATION.md` - Step-by-step instructions
+            - Week 2-4 tasks include real API integration
+            
             ---
 
             ### What's Next?
