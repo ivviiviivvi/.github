@@ -28,6 +28,10 @@ on:
         required: false
         description: 'GitHub token for creating PRs'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.run_id }}
+  cancel-in-progress: false
+
 jobs:
   generate-reusable-walkthrough:
     runs-on: ubuntu-latest

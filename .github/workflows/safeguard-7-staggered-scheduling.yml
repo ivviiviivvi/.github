@@ -22,6 +22,10 @@ on:
           - '2'
           - '3'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: write

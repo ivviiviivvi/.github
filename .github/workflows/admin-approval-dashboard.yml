@@ -30,6 +30,10 @@ on:
     # Check for pending approvals daily at 9 AM UTC
     - cron: '0 9 * * *'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write
