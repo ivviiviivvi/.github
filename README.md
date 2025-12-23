@@ -215,6 +215,37 @@ jobs:
 - [Configuration Reference](.github/walkthrough-config.yml) - All available settings
 - [Bootstrap Script](scripts/bootstrap-walkthrough-org.sh) - Organization deployment
 
+### Automated PR Merging - The Eternal Solution ✨
+
+**Problem**: Cannot programmatically merge PRs without GitHub API credentials  
+**Solution**: Built-in `GITHUB_TOKEN` with zero configuration needed
+
+#### Quick Start
+
+```bash
+# Enable auto-merge for any PR
+gh pr edit <PR#> --add-label "auto-merge"
+
+# Or include [auto-merge] in the PR title
+gh pr create --title "[auto-merge] Your feature"
+```
+
+**Features:**
+- ✅ **Zero Setup** - Works immediately with built-in workflows
+- ✅ **No Tokens** - Uses GitHub's native `GITHUB_TOKEN`
+- ✅ **Fully Automated** - Monitors and merges 24/7
+- ✅ **Safe** - Respects all branch protection rules
+- ✅ **Eternal** - No maintenance required
+
+**Documentation:**
+- 📖 [Complete Guide](docs/workflows/AUTO_MERGE_GUIDE.md) - Full documentation with examples
+- 🚀 [Quick Reference](docs/workflows/AUTO_MERGE_QUICK_REF.md) - 3-step setup guide
+- 🔧 [Reusable Template](workflow-templates/auto-merge-reusable.yml) - Use in any repo
+
+**Workflows Included:**
+- `.github/workflows/auto-merge.yml` - Main auto-merge orchestrator
+- `.github/workflows/auto-enable-merge.yml` - Auto-enables merge for qualifying PRs
+
 ### Community Health Files
 
 These files establish standards for community interaction and contribution acros
