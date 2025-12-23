@@ -1,6 +1,6 @@
 # 🎯 Organization Ecosystem Dashboard
 
-**Last Updated**: 2025-11-16T13:11:03.971943
+**Last Updated**: December 23, 2025 at 12:57 PM
 **Organization**: 
 
 ---
@@ -21,31 +21,12 @@
 
 | Category | Count |
 |----------|-------|
-| GitHub Actions Workflows | 32 |
-| Copilot Agents | 14 |
-| Copilot Instructions | 109 |
-| Copilot Prompts | 114 |
-| Copilot Chat Modes | 87 |
-| Technologies Supported | 109 |
-
-[Back to Top](#organization-ecosystem-dashboard)
-
-## ⚠️  Alerts
-
-
-### 💥 Shatter Points (3)
-
-🔴 **Missing Critical Workflow** (HIGH)
-  - Critical workflow ci.yml not found
-  - 💡 Implement ci.yml to ensure automated ci
-
-🔴 **Missing Critical Workflow** (HIGH)
-  - Critical workflow security-scan.yml not found
-  - 💡 Implement security-scan.yml to ensure automated security-scan
-
-🔴 **Missing Critical Workflow** (HIGH)
-  - Critical workflow deployment.yml not found
-  - 💡 Implement deployment.yml to ensure automated deployment
+| GitHub Actions Workflows | 73 |
+| Copilot Agents | 25 |
+| Copilot Instructions | 110 |
+| Copilot Prompts | 119 |
+| Copilot Chat Modes | 88 |
+| Technologies Supported | 110 |
 
 [Back to Top](#organization-ecosystem-dashboard)
 
@@ -65,43 +46,43 @@ graph TD
     end
 
     subgraph "Automation Layer"
-        WF0[gemini_workflow.yml]:::workflow
+        WF0[safeguard-7-staggered-scheduling.yml]:::workflow
         ORG --> WF0
-        WF1[repo-metrics.yml]:::workflow
+        WF1[scan-for-secrets.yml]:::workflow
         ORG --> WF1
-        WF2[jules.yml]:::workflow
+        WF2[build-pages-site.yml]:::workflow
         ORG --> WF2
-        WF3[semgrep.yml]:::workflow
+        WF3[grok_workflow.yml]:::workflow
         ORG --> WF3
-        WF4[codeql-analysis.yml]:::workflow
+        WF4[project-automation.yml]:::workflow
         ORG --> WF4
-        WF5[welcome.yml]:::workflow
+        WF5[alert-on-workflow-failure.yml]:::workflow
         ORG --> WF5
-        WF6[pr-quality-checks.yml]:::workflow
+        WF6[weekly-commit-report.yml]:::workflow
         ORG --> WF6
-        WF7[orchestrator.yml]:::workflow
+        WF7[safeguard-8-usage-monitoring.yml]:::workflow
         ORG --> WF7
-        WF8[reset_quotas.yml]:::workflow
+        WF8[health-check-live-apps.yml]:::workflow
         ORG --> WF8
-        WF9[dependency-review.yml]:::workflow
+        WF9[org-health-crawler.yml]:::workflow
         ORG --> WF9
     end
 
     subgraph "GitHub Copilot Customizations"
         AGENTS[Agents]:::agent
-        AGENTS_COUNT[14 agents]:::agent
+        AGENTS_COUNT[25 agents]:::agent
         AGENTS --> AGENTS_COUNT
         ORG --> AGENTS
         INSTR[Instructions]:::agent
-        INSTR_COUNT[109 instructions]:::agent
+        INSTR_COUNT[110 instructions]:::agent
         INSTR --> INSTR_COUNT
         ORG --> INSTR
         PROMPTS[Prompts]:::agent
-        PROMPTS_COUNT[114 prompts]:::agent
+        PROMPTS_COUNT[119 prompts]:::agent
         PROMPTS --> PROMPTS_COUNT
         ORG --> PROMPTS
         CHATMODES[Chat Modes]:::agent
-        CHATMODES_COUNT[87 modes]:::agent
+        CHATMODES_COUNT[88 modes]:::agent
         CHATMODES --> CHATMODES_COUNT
         ORG --> CHATMODES
     end
@@ -132,7 +113,7 @@ graph TD
 Supported languages and frameworks:
 
 <details>
-<summary>View all 109 technologies</summary>
+<summary>View all 110 technologies</summary>
 
 | `a11y` | `ai-prompt-engineering-safety-best-practices` | `angular` | `ansible` |
 | --- | --- | --- | --- |
@@ -161,8 +142,8 @@ Supported languages and frameworks:
 | `spec-driven-workflow-v1` | `springboot` | `sql-sp-generation` | `svelte` |
 | `swift-mcp-server` | `taming-copilot` | `tanstack-start-shadcn-tailwind` | `task-implementation` |
 | `tasksync` | `terraform` | `terraform-azure` | `terraform-sap-btp` |
-| `typescript-5-es2022` | `typescript-mcp-server` | `update-code-from-shorthand` | `vuejs3` |
-| `wordpress` |  |  |  |
+| `typescript-5-es2022` | `typescript-mcp-server` | `update-code-from-shorthand` | `version-control-standards` |
+| `vuejs3` | `wordpress` |  |  |
 
 </details>
 
@@ -171,20 +152,44 @@ Supported languages and frameworks:
 ## ⚙️  Active Workflows
 
 <details>
-<summary>View all 32 workflows</summary>
+<summary>View all 73 workflows</summary>
 
 - `accessibility-testing.yml`
+- `admin-approval-dashboard.yml`
+- `agentsphere-deployment.yml`
+- `alert-on-workflow-failure.yml`
 - `auto-assign.yml`
 - `auto-labeler.yml`
+- `auto-merge.yml`
+- `auto-pr-create.yml`
+- `branch-cleanup-notify.yml`
+- `branch-lifecycle-management.yml`
+- `branch-lifecycle.yml`
+- `build-pages-site.yml`
 - `ci-advanced.yml`
+- `ci.yml`
 - `claude-code-review.yml`
+- `claude.yml`
 - `code-coverage.yml`
 - `codeql-analysis.yml`
+- `collect-deployment-metadata.yml`
+- `combine-prs.yml`
 - `commit-tracking.yml`
 - `community-health.yml`
 - `dependency-review.yml`
+- `deploy-to-pages-live.yml`
+- `deployment.yml`
+- `docker-build-push.yml`
+- `gemini-dispatch.yml`
+- `gemini-invoke.yml`
+- `gemini-review.yml`
+- `gemini-scheduled-triage.yml`
+- `gemini-triage.yml`
 - `gemini_workflow.yml`
+- `generate-pages-index.yml`
+- `generate-walkthrough.yml`
 - `grok_workflow.yml`
+- `health-check-live-apps.yml`
 - `jules.yml`
 - `link-checker.yml`
 - `manual_reset.yml`
@@ -192,17 +197,34 @@ Supported languages and frameworks:
 - `openai_workflow.yml`
 - `orchestrator.yml`
 - `org-health-crawler.yml`
+- `org-walkthrough-generator.yml`
 - `performance-benchmark.yml`
 - `perplexity_workflow.yml`
+- `pr-batch-merge.yml`
 - `pr-quality-checks.yml`
+- `pr-task-catcher.yml`
 - `process_queue.yml`
+- `project-automation.yml`
+- `reconcile-deployments.yml`
 - `release.yml`
 - `repo-metrics.yml`
 - `reset_quotas.yml`
+- `safeguard-5-secret-scanning.yml`
+- `safeguard-6-admin-approval.yml`
+- `safeguard-7-staggered-scheduling.yml`
+- `safeguard-8-usage-monitoring.yml`
 - `sbom-generation.yml`
+- `scan-for-secrets.yml`
+- `scheduled-walkthrough-generator.yml`
+- `security-scan.yml`
 - `semantic-release.yml`
 - `semgrep.yml`
+- `staggered-scheduling.yml`
+- `task-extraction.yml`
+- `usage-monitoring.yml`
+- `validate-quality.yml`
 - `version-bump.yml`
+- `version-control-standards.yml`
 - `weekly-commit-report.yml`
 - `welcome.yml`
 
