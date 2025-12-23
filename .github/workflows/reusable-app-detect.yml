@@ -1,0 +1,213 @@
+name: Reusable App Detection
+
+on:
+  workflow_call:
+    inputs:
+      custom_command:
+        description: 'Custom startup command (optional)'
+        required: false
+        type: string
+      force_deploy:
+        description: 'Force deployment even if app type is unknown'
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      app_type:
+        description: "Detected application type"
+        value: ${{ jobs.detect.outputs.app_type }}
+      startup_command:
+        description: "Recommended startup command"
+        value: ${{ jobs.detect.outputs.startup_command }}
+      build_command:
+        description: "Recommended build command"
+        value: ${{ jobs.detect.outputs.build_command }}
+      port:
+        description: "Default port for the application"
+        value: ${{ jobs.detect.outputs.port }}
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      app_type: ${{ steps.detect.outputs.app_type }}
+      startup_command: ${{ steps.detect.outputs.startup_command }}
+      build_command: ${{ steps.detect.outputs.build_command }}
+      port: ${{ steps.detect.outputs.port }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Detect application type
+        id: detect
+        env:
+          CUSTOM_COMMAND: ${{ inputs.custom_command }}
+          FORCE_DEPLOY: ${{ inputs.force_deploy }}
+        run: |
+          echo "🔍 Detecting application type..."
+          
+          APP_TYPE=""
+          STARTUP_CMD=""
+          PORT=""
+          BUILD_CMD=""
+          
+          # Check for Node.js
+          if [ -f "package.json" ]; then
+            echo "✓ Detected Node.js application (package.json found)"
+            
+            # Detect specific framework
+            if [ -f "vue.config.js" ] || grep -q '"vue"' package.json 2>/dev/null; then
+              APP_TYPE="vue"
+              echo "  → Vue.js application"
+            elif grep -q '"react"' package.json 2>/dev/null || [ -f "src/App.jsx" ] || [ -f "src/App.tsx" ]; then
+              APP_TYPE="react"
+              echo "  → React application"
+            elif grep -q '"next"' package.json 2>/dev/null; then
+              APP_TYPE="nextjs"
+              echo "  → Next.js application"
+            elif grep -q '"angular"' package.json 2>/dev/null; then
+              APP_TYPE="angular"
+              echo "  → Angular application"
+            else
+              APP_TYPE="nodejs"
+              echo "  → Generic Node.js application"
+            fi
+            
+            # Determine startup command from package.json scripts
+            if grep -q '"start"' package.json; then
+              STARTUP_CMD="npm start"
+            elif grep -q '"dev"' package.json; then
+              STARTUP_CMD="npm run dev"
+            elif grep -q '"serve"' package.json; then
+              STARTUP_CMD="npm run serve"
+            else
+              STARTUP_CMD="node index.js"
+            fi
+            
+            BUILD_CMD="npm install"
+            PORT="3000"
+          
+          # Check for Python
+          elif [ -f "requirements.txt" ] || [ -f "Pipfile" ] || [ -f "pyproject.toml" ] || [ -f "setup.py" ]; then
+            APP_TYPE="python"
+            echo "✓ Detected Python application"
+            
+            if [ -f "app.py" ]; then
+              STARTUP_CMD="python app.py"
+            elif [ -f "main.py" ]; then
+              STARTUP_CMD="python main.py"
+            elif grep -q "flask" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="python -m flask run --host=0.0.0.0"
+            elif grep -q "fastapi" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="uvicorn app:app --host 0.0.0.0 --port 8000"
+            elif grep -q "django" requirements.txt 2>/dev/null; then
+              STARTUP_CMD="python manage.py runserver 0.0.0.0:8000"
+            else
+              STARTUP_CMD="python app.py"
+            fi
+            
+            BUILD_CMD="pip install -r requirements.txt"
+            PORT="8000"
+          
+          # Check for Java
+          elif [ -f "pom.xml" ] || [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+            APP_TYPE="java"
+            echo "✓ Detected Java application"
+            
+            if [ -f "pom.xml" ]; then
+              BUILD_CMD="mvn clean install -DskipTests"
+              STARTUP_CMD="java -jar target/*.jar"
+            elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+              BUILD_CMD="gradle build -x test"
+              STARTUP_CMD="gradle bootRun"
+            fi
+            
+            PORT="8080"
+          
+          # Check for Go
+          elif [ -f "go.mod" ] || [ -f "main.go" ]; then
+            APP_TYPE="go"
+            echo "✓ Detected Go application"
+            
+            BUILD_CMD="go build -o main ."
+            STARTUP_CMD="./main"
+            PORT="8080"
+          
+          # Check for Ruby
+          elif [ -f "Gemfile" ] || [ -f "config.ru" ]; then
+            APP_TYPE="ruby"
+            echo "✓ Detected Ruby application"
+            
+            BUILD_CMD="bundle install"
+            if [ -f "config.ru" ]; then
+              STARTUP_CMD="bundle exec puma -p 3000"
+            else
+              STARTUP_CMD="ruby app.rb"
+            fi
+            PORT="3000"
+          
+          # Check for .NET
+          elif ls *.csproj 1> /dev/null 2>&1 || ls *.sln 1> /dev/null 2>&1; then
+            APP_TYPE="dotnet"
+            echo "✓ Detected .NET application"
+            
+            BUILD_CMD="dotnet restore && dotnet build"
+            STARTUP_CMD="dotnet run"
+            PORT="5000"
+          
+          # Check for Rust
+          elif [ -f "Cargo.toml" ]; then
+            APP_TYPE="rust"
+            echo "✓ Detected Rust application"
+            
+            BUILD_CMD="cargo build --release"
+            STARTUP_CMD="./target/release/$(grep '^name' Cargo.toml | head -1 | sed 's/.*"\(.*\)".*/\1/')"
+            PORT="8080"
+          
+          # Check for PHP
+          elif [ -f "composer.json" ] || [ -f "index.php" ]; then
+            APP_TYPE="php"
+            echo "✓ Detected PHP application"
+            
+            BUILD_CMD="composer install"
+            if [ -f "artisan" ]; then
+              STARTUP_CMD="php artisan serve --host=0.0.0.0 --port=8000"
+            else
+              STARTUP_CMD="php -S 0.0.0.0:8000"
+            fi
+            PORT="8000"
+          
+          else
+            echo "❌ Could not detect application type"
+            APP_TYPE="unknown"
+          fi
+          
+          # Use custom command if provided
+          if [ -n "$CUSTOM_COMMAND" ]; then
+            STARTUP_CMD="$CUSTOM_COMMAND"
+            echo "  → Using custom startup command: $STARTUP_CMD"
+          fi
+          
+          # Output results
+          echo "app_type=$APP_TYPE" >> $GITHUB_OUTPUT
+          echo "startup_command=$STARTUP_CMD" >> $GITHUB_OUTPUT
+          echo "build_command=$BUILD_CMD" >> $GITHUB_OUTPUT
+          echo "port=$PORT" >> $GITHUB_OUTPUT
+          
+          echo ""
+          echo "📋 Detection Summary:"
+          echo "   Type: $APP_TYPE"
+          echo "   Build: $BUILD_CMD"
+          echo "   Start: $STARTUP_CMD"
+          echo "   Port: $PORT"
+          
+          if [ "$APP_TYPE" = "unknown" ] && [ "$FORCE_DEPLOY" != "true" ]; then
+            echo ""
+            echo "⚠️ No application type detected. Set force_deploy: true to continue anyway."
+            exit 1
+          fi
