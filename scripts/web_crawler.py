@@ -10,6 +10,7 @@ import json
 import socket
 import ipaddress
 import requests
+from requests.adapters import HTTPAdapter
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +29,13 @@ class OrganizationCrawler:
         self.org_name = org_name or os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
         self.max_workers = max_workers
         self.session = requests.Session()
+
+        # Optimize connection pool size to match workers
+        # Default is 10, which bottlenecks if max_workers > 10
+        adapter = HTTPAdapter(pool_connections=max_workers, pool_maxsize=max_workers)
+        self.session.mount('https://', adapter)
+        self.session.mount('http://', adapter)
+
         if self.github_token:
             self.session.headers.update({'Authorization': f'token {self.github_token}'})
 
