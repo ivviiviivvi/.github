@@ -264,11 +264,12 @@ jobs:
           # Fetch all repositories
           REPOS=$(gh api "orgs/$ORG_NAME/repos?per_page=100" --paginate)
           
-          INCOMPLETE_REPOS=""
+          # Use temporary files to avoid subshell variable scope issues
+          INCOMPLETE_REPOS_FILE=$(mktemp)
           COMPLETE_COUNT=0
           INCOMPLETE_COUNT=0
           
-          echo "$REPOS" | jq -c '.[]' | while read -r repo; do
+          while read -r repo; do
             REPO_NAME=$(echo "$repo" | jq -r '.name')
             DESCRIPTION=$(echo "$repo" | jq -r '.description // ""')
             TOPICS_COUNT=$(echo "$repo" | jq -r '.topics | length')
@@ -296,13 +297,17 @@ jobs:
             fi
             
             if [ "$IS_INCOMPLETE" = true ]; then
-              echo "- ⚠️ $REPO_NAME: ${ISSUES_LIST%;})"
-              INCOMPLETE_REPOS="${INCOMPLETE_REPOS}$REPO_NAME|$ISSUES_LIST\n"
+              echo "- ⚠️ $REPO_NAME: ${ISSUES_LIST%;}"
+              echo "$REPO_NAME|$ISSUES_LIST" >> "$INCOMPLETE_REPOS_FILE"
               INCOMPLETE_COUNT=$((INCOMPLETE_COUNT + 1))
             else
               COMPLETE_COUNT=$((COMPLETE_COUNT + 1))
             fi
-          done
+          done < <(echo "$REPOS" | jq -c '.[]')
+          
+          # Read incomplete repos from file
+          INCOMPLETE_REPOS=$(cat "$INCOMPLETE_REPOS_FILE" | tr '\n' '\\n')
+          rm -f "$INCOMPLETE_REPOS_FILE"
           
           TOTAL_COUNT=$((COMPLETE_COUNT + INCOMPLETE_COUNT))
           COMPLETION_RATE=$(awk "BEGIN {printf \"%.1f\", ($COMPLETE_COUNT / $TOTAL_COUNT) * 100}")

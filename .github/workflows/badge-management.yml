@@ -149,7 +149,7 @@ jobs:
             echo "✓ Detected: Ruby"
           fi
           
-          if [ -f "*.csproj" ] || [ -f "*.sln" ]; then
+          if ls *.csproj 1> /dev/null 2>&1 || ls *.sln 1> /dev/null 2>&1; then
             LANGUAGES="${LANGUAGES}csharp,"
             PACKAGE_MANAGER="nuget"
             echo "✓ Detected: C#/.NET"
