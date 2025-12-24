@@ -421,6 +421,9 @@ Reusable GitHub Actions workflows ready to use in any repository:
 | [stale-management.yml](workflow-templates/stale-management.yml)     | Stale issue and PR management         | Keeping repositories clean      |
 | [dependency-updates.yml](workflow-templates/dependency-updates.yml) | Automated dependency update workflows | Managing dependencies           |
 | [deployment.yml](workflow-templates/deployment.yml)                 | Deployment pipeline                   | Staging and production releases |
+| [repository-bootstrap.yml](workflow-templates/repository-bootstrap.yml) | Repository feature setup              | Automating repository configuration |
+
+💡 **New:** The **repository-bootstrap** workflow automates setup of repository features (Issues, Projects, Discussions, Wiki), creates standard labels, copies workflow templates, and configures branch protection. See [Repository Bootstrap Documentation](docs/workflows/REPOSITORY_BOOTSTRAP.md).
 
 #### Organization Workflows
 
@@ -428,6 +431,7 @@ Advanced workflows for organization-wide automation:
 
 | Workflow                                                                                        | Purpose                                   | Trigger                   |
 | ----------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------- |
+| [repository-bootstrap.yml](.github/workflows/repository-bootstrap.yml)                         | Automate repository feature setup         | Manual, workflow_call     |
 | [generate-walkthrough.yml](.github/workflows/generate-walkthrough.yml)                         | Generate video walkthroughs               | Manual, code changes      |
 | [org-walkthrough-generator.yml](.github/workflows/org-walkthrough-generator.yml)               | Reusable video generation workflow        | Called by other workflows |
 | [deploy-to-pages-live.yml](.github/workflows/deploy-to-pages-live.yml)                         | Deploy live apps to GitHub Pages          | Push to main, manual      |
@@ -436,7 +440,7 @@ Advanced workflows for organization-wide automation:
 | [badge-management.yml](.github/workflows/badge-management.yml)                                 | Generate and manage repository badges     | Push, PR, manual, workflow_call |
 | [bio-description-completions.yml](.github/workflows/bio-description-completions.yml)           | Audit and complete repo/org descriptions  | Weekly schedule, manual   |
 
-See [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) and [Deployment Metadata Collection Guide](docs/workflows/DEPLOYMENT_METADATA_COLLECTION.md) for detailed documentation.
+See [Repository Bootstrap Guide](docs/workflows/REPOSITORY_BOOTSTRAP.md), [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) and [Deployment Metadata Collection Guide](docs/workflows/DEPLOYMENT_METADATA_COLLECTION.md) for detailed documentation.
 
 #### 🚀 Workflow Optimization (NEW!)
 

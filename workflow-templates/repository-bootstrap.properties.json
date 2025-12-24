@@ -1,0 +1,13 @@
+{
+  "name": "Repository Bootstrap Workflow",
+  "description": "Automate repository setup with standard organization features including issues, projects, discussions, wiki, labels, and workflow templates. This workflow helps maintain consistency across all repositories in the organization.",
+  "iconName": "rocket",
+  "categories": [
+    "automation",
+    "deployment",
+    "utilities"
+  ],
+  "filePatterns": [
+    "repository-bootstrap.yml"
+  ]
+}
