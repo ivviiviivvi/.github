@@ -1,0 +1,13 @@
+{
+  "name": "Organization Health Check",
+  "description": "Workflow template for organization-wide health checks. This workflow can be triggered from the .github repository's org-wide-workflow-dispatch workflow.",
+  "iconName": "health",
+  "categories": [
+    "Automation",
+    "Monitoring"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "^README.md$"
+  ]
+}

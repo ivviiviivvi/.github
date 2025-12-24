@@ -281,6 +281,56 @@ gh pr create --title "[auto-merge] Your feature"
 - `.github/workflows/auto-merge.yml` - Main auto-merge orchestrator
 - `.github/workflows/auto-enable-merge.yml` - Auto-enables merge for qualifying PRs
 
+### Organization-Wide Workflow Dispatch 🚀
+
+**Centrally trigger workflows across all organization repositories.**
+
+The Organization-Wide Workflow Dispatch workflow enables you to trigger workflows across all repositories in your organization from a single location. This is perfect for organization-wide operations like security scans, health checks, CI/CD updates, and batch maintenance tasks.
+
+#### Key Features
+
+✅ **Flexible Repository Targeting** - Target all repos, specific repos, or exclude specific repos
+✅ **Smart Discovery** - Automatically discovers repos and verifies workflow existence
+✅ **Safety Features** - Dry-run mode, rate limiting, and comprehensive error handling
+✅ **Custom Inputs** - Pass JSON inputs to target workflows
+✅ **Detailed Reporting** - Success/failure tracking with downloadable results
+
+#### Quick Start
+
+```bash
+# Dry run to preview which repos will be targeted
+gh workflow run org-wide-workflow-dispatch.yml \
+  -f workflow_file="ci.yml" \
+  -f dry_run=true
+
+# Trigger security scans across all active repos
+gh workflow run org-wide-workflow-dispatch.yml \
+  -f workflow_file="security-scan.yml" \
+  -f dry_run=false
+
+# Target specific repositories with custom inputs
+gh workflow run org-wide-workflow-dispatch.yml \
+  -f workflow_file="deploy.yml" \
+  -f target_repos="repo1,repo2,repo3" \
+  -f workflow_inputs='{"environment":"production"}' \
+  -f dry_run=false
+```
+
+**Use Cases:**
+- 🔒 **Security Scans** - Run security audits across all repositories
+- 🏥 **Health Checks** - Verify repository health and compliance
+- 🔄 **CI/CD Updates** - Trigger synchronized build and deploy operations
+- 🧹 **Maintenance Tasks** - Batch updates and cleanup operations
+- 📊 **Data Collection** - Gather metrics from all repositories
+
+**Documentation:**
+- 📖 [Complete Guide](docs/workflows/ORG_WIDE_WORKFLOW_DISPATCH.md) - Full documentation with examples
+- 🔧 [Workflow Template](workflow-templates/org-health-check.yml) - Example dispatchable workflow
+- 🎯 [Main Workflow](.github/workflows/org-wide-workflow-dispatch.yml) - Organization dispatcher
+
+**Workflow Included:**
+- `.github/workflows/org-wide-workflow-dispatch.yml` - Main organization-wide dispatcher
+
 ### Repository Quality and Metadata Management 🎨
 
 **Automated Badge Management** - Keep your repositories looking professional with automatically generated and maintained badges.
