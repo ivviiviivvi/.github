@@ -10,6 +10,7 @@ import json
 import socket
 import ipaddress
 import requests
+import urllib3
 from requests.adapters import HTTPAdapter
 import urllib.parse
 from datetime import datetime, timezone
@@ -29,6 +30,9 @@ class OrganizationCrawler:
         self.org_name = org_name or os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
         self.max_workers = max_workers
         self.session = requests.Session()
+
+        # Disable warnings once at initialization
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         # Optimize connection pool size to match workers
         # Default is 10, which bottlenecks if max_workers > 10
@@ -228,10 +232,6 @@ class OrganizationCrawler:
                 # 5. Make Request
                 # verify=False is required because we are using IP in URL but Cert matches Hostname
                 # This is a trade-off: We lose Cert verification but gain SSRF protection against DNS Rebinding
-
-                # Suppress urllib3 warnings about unverified HTTPS
-                import urllib3
-                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
                 response = self.session.head(
                     safe_url,
