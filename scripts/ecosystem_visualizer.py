@@ -36,7 +36,7 @@ graph TD
     %% Styles
     classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
     classDef workflow fill:#8250df,stroke:#54aeff,color:#fff,stroke-width:1px;
-    classDef agent fill:#1f883d,stroke:#d4a72c,color:#fff,stroke-width:1px;
+    classDef agent fill:#1a7f37,stroke:#d4a72c,color:#fff,stroke-width:1px;
     classDef tech fill:#57606a,stroke:#4ac26b,color:#fff,stroke-width:1px;
 
     subgraph "GitHub Organization"
@@ -161,6 +161,8 @@ graph TD
 
         parts.append(f"""# 🎯 Organization Ecosystem Dashboard
 
+{self.generate_health_badge()}
+
 **Last Updated**: {timestamp}
 **Organization**: {self.report_data.get('organization', 'Unknown')}
 
@@ -251,9 +253,11 @@ graph TD
         blind_spots = self.report_data.get('blind_spots', [])
         shatter_points = self.report_data.get('shatter_points', [])
 
-        if blind_spots or shatter_points:
-            parts.append("## ⚠️  Alerts\n\n")
+        parts.append("## ⚠️  Alerts\n\n")
 
+        if not blind_spots and not shatter_points:
+            parts.append("✅ No alerts found! The ecosystem is healthy.\n\n")
+        else:
             if blind_spots:
                 parts.append(f"### 🔦 Blind Spots ({len(blind_spots)})\n\n")
                 parts.extend(self._render_grouped_section(blind_spots))
@@ -262,7 +266,7 @@ graph TD
                 parts.append(f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n")
                 parts.extend(self._render_grouped_section(shatter_points))
 
-            parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
