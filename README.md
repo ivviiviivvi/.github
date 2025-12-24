@@ -281,6 +281,56 @@ gh pr create --title "[auto-merge] Your feature"
 - `.github/workflows/auto-merge.yml` - Main auto-merge orchestrator
 - `.github/workflows/auto-enable-merge.yml` - Auto-enables merge for qualifying PRs
 
+### 🤖 Automated PR Lifecycle Management (NEW!)
+
+**Complete automation from Draft → Ready → Merge with batch operations for AI agents.**
+
+The PR Lifecycle Management system provides comprehensive automation for managing high volumes of PRs, especially from AI agents like Jules. It handles the complete PR lifecycle automatically while preserving all data and functionality.
+
+#### Key Features
+
+✅ **Draft to Ready Conversion** - Auto-converts draft PRs from trusted AI agents when checks pass  
+✅ **Suggestion Extraction** - Extracts actionable items from PR comments into TODO lists  
+✅ **Batch Operations** - Process multiple PRs simultaneously with filters  
+✅ **Full Pipeline** - Complete draft → ready → merge automation  
+✅ **Data Preservation** - Maintains all PR data, comments, and context  
+
+#### Quick Start
+
+```bash
+# Convert all Jules's draft PRs and merge ready ones
+gh workflow run batch-pr-lifecycle.yml \
+  -f action=full-pipeline \
+  -f author_filter=Jules
+
+# Extract suggestions from a PR into a TODO file
+# (comment on any PR with)
+/implement-suggestions
+
+# Auto-convert a specific draft PR to ready
+gh workflow run draft-to-ready-automation.yml -f pr_number=123
+```
+
+**Common Use Cases:**
+
+1. **AI Agent PR Cleanup** - Jules creates 50 draft PRs → automatically convert to ready → merge when passing
+2. **Suggestion Implementation** - PR has 30 comments with suggestions → extract to TODO file → track implementation
+3. **Batch Operations** - Process all PRs with specific label simultaneously
+4. **Scheduled Cleanup** - Daily automatic processing of accumulated PRs
+
+**Documentation:**
+- 📖 [Complete Guide](docs/PR_LIFECYCLE_AUTOMATION.md) - Full documentation with examples
+- 🚀 [Quick Reference](docs/PR_LIFECYCLE_AUTOMATION.md#quick-start) - Common workflows
+- 🔧 [Configuration Guide](docs/PR_LIFECYCLE_AUTOMATION.md#configuration) - Labels and settings
+
+**Workflows Included:**
+- `.github/workflows/draft-to-ready-automation.yml` - Auto-convert draft PRs
+- `.github/workflows/pr-suggestion-implementation.yml` - Extract and track suggestions
+- `.github/workflows/batch-pr-lifecycle.yml` - Unified batch PR processing
+
+**Integration:**
+Works seamlessly with existing workflows (`auto-merge.yml`, `pr-task-catcher.yml`, `pr-batch-merge.yml`)
+
 ### Organization-Wide Workflow Dispatch 🚀
 
 **Centrally trigger workflows across all organization repositories.**
