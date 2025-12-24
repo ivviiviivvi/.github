@@ -38,18 +38,19 @@ jobs:
 
       - name: Run Perplexity Task
         if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          INPUT_PROMPT: ${{ github.event.inputs.prompt }}
         run: |
-          echo "Running Perplexity task with prompt: ${{ github.event.inputs.prompt }}"
+          echo "Running Perplexity task with prompt: $INPUT_PROMPT"
           # Simulate a variable cost based on prompt length
-          prompt_length=${#${{ github.event.inputs.prompt }}}
+          prompt_length=${#INPUT_PROMPT}
           cost=$(echo "scale=4; $prompt_length * 0.0001" | bc)
           echo "Simulated cost: $cost"
           python scripts/quota_manager.py increment_usage "Perplexity_Pro_API" $cost
 
           # Simulate output
-          echo "This is a simulated output from Perplexity for the prompt: ${{ github.event.inputs.prompt }}" > perplexity_output_${{ github.run_id }}.txt
-        env:
-          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          echo "This is a simulated output from Perplexity for the prompt: $INPUT_PROMPT" > perplexity_output_${{ github.run_id }}.txt
 
       - name: Queue Task
         if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
