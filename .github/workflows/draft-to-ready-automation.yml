@@ -257,22 +257,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `🚀 **Draft PR Auto-Converted to Ready**
-            
-${reason}
-
-This PR has been automatically converted from draft to ready for review.${statusInfo}
-
-**Next Steps:**
-1. Review changes and ensure everything looks good
-2. Wait for CI checks to complete (if not already done)
-3. The auto-merge workflow will handle merging when ready
-
-**To prevent auto-conversion:**
-- Add the \`keep-draft\` label to PRs you want to keep as draft
-- Add the \`skip-auto-ready\` label
-
-_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
+              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
             });
 
       - name: Add Auto-Merge Label
