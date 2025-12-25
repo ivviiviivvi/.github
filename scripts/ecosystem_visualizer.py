@@ -262,7 +262,7 @@ graph TD
                         # Truncate long URLs for display (max 60 characters including ellipsis)
                         display_url = url if len(url) <= 60 else url[:57] + "..."
                         # Escape pipe characters for Markdown table
-                        display_url = display_url.replace('|', '|')
+                        display_url = display_url.replace('|', '\\|')
                         parts.append(f"| `{display_url}` | {status} |\n")
 
                     parts.append("\n</details>\n\n")
