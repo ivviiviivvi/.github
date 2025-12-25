@@ -65,13 +65,21 @@ results = await asyncio.gather(*tasks)
 return [r for r in results if r is not None]
 ```
 
-**Option 3: Use `asyncio.TaskGroup` (Python 3.11+)**
+**Option 3: Use `asyncio.TaskGroup` with exception handling (Python 3.11+)**
 ```python
-async with asyncio.TaskGroup() as tg:
-    tasks = [tg.create_task(self.process_event(event, enrichments)) 
-             for event in events]
-# All tasks complete or first exception is raised
-results = [task.result() for task in tasks]
+from contextlib import suppress
+
+try:
+    async with asyncio.TaskGroup() as tg:
+        tasks = [tg.create_task(self.process_event(event, enrichments)) 
+                 for event in events]
+    # All tasks completed successfully
+    results = [task.result() for task in tasks]
+except* Exception as eg:
+    # Handle ExceptionGroup - TaskGroup raises all exceptions together
+    logger.error(f"Multiple tasks failed: {eg}")
+    # Process partial results from successful tasks
+    results = [task.result() for task in tasks if not task.cancelled() and not task.exception()]
 ```
 
 ### Input Validation and Sanitization
@@ -107,8 +115,8 @@ def validate_origin(origin: str) -> bool:
         # Check hostname exists
         if not result.netloc:
             return False
-        # Additional validation (no spaces, valid characters, etc.)
-        if not re.match(r'^https?://[a-zA-Z0-9\-\.:]+$', origin.strip()):
+        # Check for invalid characters (no spaces or control characters)
+        if ' ' in origin or any(ord(c) < 32 for c in origin):
             return False
         return True
     except Exception:
@@ -388,7 +396,7 @@ def redact_sensitive_data(data: str) -> str:
     # Redact credit card numbers
     data = re.sub(r'\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b', 'XXXX-XXXX-XXXX-XXXX', data)
     # Redact email addresses
-    data = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL]', data)
+    data = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b', '[EMAIL]', data)
     # Redact SSN patterns
     data = re.sub(r'\b\d{3}-\d{2}-\d{4}\b', 'XXX-XX-XXXX', data)
     return data
