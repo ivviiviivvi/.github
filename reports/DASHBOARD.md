@@ -1,6 +1,8 @@
 # 🎯 Organization Ecosystem Dashboard
 
-**Last Updated**: December 23, 2025 at 12:57 PM
+![Health](https://img.shields.io/badge/health-31%25_poor-orange)
+
+**Last Updated**: December 25, 2025 at 02:37 AM
 **Organization**: 
 
 ---
@@ -21,12 +23,56 @@
 
 | Category | Count |
 |----------|-------|
-| GitHub Actions Workflows | 73 |
-| Copilot Agents | 25 |
-| Copilot Instructions | 110 |
-| Copilot Prompts | 119 |
-| Copilot Chat Modes | 88 |
-| Technologies Supported | 110 |
+| ⚡ GitHub Actions Workflows | 88 |
+| 🤖 Copilot Agents | 25 |
+| 📝 Copilot Instructions | 110 |
+| 💬 Copilot Prompts | 119 |
+| 🎭 Copilot Chat Modes | 88 |
+| 🛠️ Technologies Supported | 110 |
+
+[Back to Top](#organization-ecosystem-dashboard)
+
+## 🔗 Link Health
+
+| Status | Count | Percentage |
+|--------|-------|------------|
+| Valid | 125 | 5.1% |
+| Broken | 1426 | 94.9% |
+| **Total** | **2448** | **100%** |
+
+<details>
+<summary>View top 20 broken links (of 1426)</summary>
+
+| URL | Status |
+|---|---|
+| `<invalid or redacted URL>` | 500 |
+| `http://+:8080` | 404 |
+| `http://localhost:3000/health` | 403 |
+| `https://GUI-rs.org),` | 404 |
+| `http://localhost:5000` | 403 |
+| `http://localhost:PORT` | 403 |
+| `http://localhost:3000/sitemap.xml` | 403 |
+| `http://localhost:3000` | 403 |
+| `http://localhost:PORT/mcp` | 403 |
+| `http://localhost:8080/mcp/sse` | 403 |
+| `http://localhost:8080/health` | 403 |
+| `http://localhost:8080` | 403 |
+| `http://localhost:8000/health` | 403 |
+| `https://agentsphere.dev/` | 404 |
+| `http://json-schema.org/draft-04/schema#` | 500 |
+| `https://agentsphere.dev/example)` | 404 |
+| `http://www.w3.org/2001/XMLSchema-instance` | 500 |
+| `https://agentsphere.example.com/demo/your-repo)` | 404 |
+| `https://agentsphere.dev/ivviiviivvi/my-app` | 404 |
+| `http://maven.apache.org/POM/4.0.0` | 404 |
+
+</details>
+
+[Back to Top](#organization-ecosystem-dashboard)
+
+## ⚠️  Alerts
+
+✅ No alerts found! The ecosystem is healthy.
 
 [Back to Top](#organization-ecosystem-dashboard)
 
@@ -38,7 +84,7 @@ graph TD
     %% Styles
     classDef org fill:#0969da,stroke:#0969da,color:#fff,stroke-width:2px;
     classDef workflow fill:#8250df,stroke:#54aeff,color:#fff,stroke-width:1px;
-    classDef agent fill:#1f883d,stroke:#d4a72c,color:#fff,stroke-width:1px;
+    classDef agent fill:#1a7f37,stroke:#d4a72c,color:#fff,stroke-width:1px;
     classDef tech fill:#57606a,stroke:#4ac26b,color:#fff,stroke-width:1px;
 
     subgraph "GitHub Organization"
@@ -46,25 +92,25 @@ graph TD
     end
 
     subgraph "Automation Layer"
-        WF0[safeguard-7-staggered-scheduling.yml]:::workflow
+        WF0[pr-suggestion-implementation.yml]:::workflow
         ORG --> WF0
-        WF1[scan-for-secrets.yml]:::workflow
+        WF1[safeguard-7-staggered-scheduling.yml]:::workflow
         ORG --> WF1
-        WF2[build-pages-site.yml]:::workflow
+        WF2[scan-for-secrets.yml]:::workflow
         ORG --> WF2
-        WF3[grok_workflow.yml]:::workflow
+        WF3[build-pages-site.yml]:::workflow
         ORG --> WF3
-        WF4[project-automation.yml]:::workflow
+        WF4[grok_workflow.yml]:::workflow
         ORG --> WF4
-        WF5[alert-on-workflow-failure.yml]:::workflow
+        WF5[project-automation.yml]:::workflow
         ORG --> WF5
-        WF6[weekly-commit-report.yml]:::workflow
+        WF6[reusable-security-scan.yml]:::workflow
         ORG --> WF6
-        WF7[safeguard-8-usage-monitoring.yml]:::workflow
+        WF7[alert-on-workflow-failure.yml]:::workflow
         ORG --> WF7
-        WF8[health-check-live-apps.yml]:::workflow
+        WF8[weekly-commit-report.yml]:::workflow
         ORG --> WF8
-        WF9[org-health-crawler.yml]:::workflow
+        WF9[safeguard-8-usage-monitoring.yml]:::workflow
         ORG --> WF9
     end
 
@@ -152,16 +198,20 @@ Supported languages and frameworks:
 ## ⚙️  Active Workflows
 
 <details>
-<summary>View all 73 workflows</summary>
+<summary>View all 88 workflows</summary>
 
 - `accessibility-testing.yml`
 - `admin-approval-dashboard.yml`
 - `agentsphere-deployment.yml`
 - `alert-on-workflow-failure.yml`
 - `auto-assign.yml`
+- `auto-enable-merge.yml`
 - `auto-labeler.yml`
 - `auto-merge.yml`
 - `auto-pr-create.yml`
+- `badge-management.yml`
+- `batch-pr-lifecycle.yml`
+- `bio-description-completions.yml`
 - `branch-cleanup-notify.yml`
 - `branch-lifecycle-management.yml`
 - `branch-lifecycle.yml`
@@ -180,6 +230,7 @@ Supported languages and frameworks:
 - `deploy-to-pages-live.yml`
 - `deployment.yml`
 - `docker-build-push.yml`
+- `draft-to-ready-automation.yml`
 - `gemini-dispatch.yml`
 - `gemini-invoke.yml`
 - `gemini-review.yml`
@@ -190,25 +241,35 @@ Supported languages and frameworks:
 - `generate-walkthrough.yml`
 - `grok_workflow.yml`
 - `health-check-live-apps.yml`
+- `health-check.yml`
 - `jules.yml`
 - `link-checker.yml`
 - `manual_reset.yml`
+- `metrics-collection.yml`
+- `metrics-dashboard.yml`
 - `mutation-testing.yml`
 - `openai_workflow.yml`
 - `orchestrator.yml`
 - `org-health-crawler.yml`
 - `org-walkthrough-generator.yml`
+- `org-wide-workflow-dispatch.yml`
 - `performance-benchmark.yml`
 - `perplexity_workflow.yml`
 - `pr-batch-merge.yml`
 - `pr-quality-checks.yml`
+- `pr-suggestion-implementation.yml`
 - `pr-task-catcher.yml`
 - `process_queue.yml`
 - `project-automation.yml`
 - `reconcile-deployments.yml`
 - `release.yml`
 - `repo-metrics.yml`
+- `repository-bootstrap.yml`
 - `reset_quotas.yml`
+- `reusable-api-retry.yml`
+- `reusable-app-detect.yml`
+- `reusable-notify.yml`
+- `reusable-security-scan.yml`
 - `safeguard-5-secret-scanning.yml`
 - `safeguard-6-admin-approval.yml`
 - `safeguard-7-staggered-scheduling.yml`

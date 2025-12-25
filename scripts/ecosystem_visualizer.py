@@ -247,6 +247,26 @@ graph TD
 | **Total** | **{total_links}** | **100%** |
 
 """)
+                # Add broken links details
+                broken_links = lv.get('broken_links', [])
+                if broken_links:
+                    display_count = min(len(broken_links), 20)
+                    parts.append(f"<details>\n<summary>View top {display_count} broken links (of {broken})</summary>\n\n")
+                    parts.append("| URL | Status |\n|---|---|\n")
+
+                    for link in broken_links[:display_count]:
+                        url = link.get('url', 'Unknown')
+                        # Sanitize URL by stripping common trailing punctuation
+                        url = url.rstrip('.,;:)')
+                        status = link.get('status', 'Unknown')
+                        # Truncate long URLs for display (max 60 characters including ellipsis)
+                        display_url = url if len(url) <= 60 else url[:57] + "..."
+                        # Escape pipe characters for Markdown table
+                        display_url = display_url.replace('|', '\\|')
+                        parts.append(f"| `{display_url}` | {status} |\n")
+
+                    parts.append("\n</details>\n\n")
+
                 parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Alerts
