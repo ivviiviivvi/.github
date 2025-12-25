@@ -110,6 +110,7 @@ When creating a pull request:
 2. Keep commits atomic - one logical change per commit
 3. Squash "fix typo" or "address review comments" commits before merging
 4. Reference relevant issues in commit messages or PR description
+5. Review the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) to understand and address automated compliance checks
 
 ### Questions?
 
@@ -135,6 +136,7 @@ Thank you for considering contributing to our projects! We welcome contributions
 3. **Test your changes** to ensure they work as expected
 4. **Commit your changes** with clear, descriptive commit messages
 5. **Push to your fork** and submit a pull request
+6. **Address compliance checks** - Review any automated compliance feedback using the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md)
 
 ### Pull Request Guidelines
 
@@ -144,6 +146,7 @@ Thank you for considering contributing to our projects! We welcome contributions
 - Update documentation as needed
 - Ensure all tests pass before submitting
 - Reference related issues in your PR description
+- Address all compliance check warnings and errors (see [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md))
 
 ### Code Style
 
@@ -161,6 +164,16 @@ Thank you for considering contributing to our projects! We welcome contributions
 ## Code Review Process
 
 All submissions require review before being merged. We aim to review pull requests promptly and provide constructive feedback.
+
+### Automated Compliance Checks
+
+All pull requests are subject to automated compliance checks covering:
+- **Security**: Error handling, input validation, secure coding practices
+- **Code Quality**: Naming conventions, edge case handling, maintainability
+- **Ticket Compliance**: Issue references and traceability
+- **Custom Rules**: Organization-specific best practices
+
+See the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) for detailed information on understanding and addressing compliance check results.
 
 ## Community
 
