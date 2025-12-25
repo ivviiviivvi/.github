@@ -160,12 +160,12 @@ jobs:
           
           echo "🔀 Starting PR consolidation process..."
           
-          # Initialize tracking
-          MERGED_COUNT=0
-          CONFLICT_COUNT=0
-          MERGED_PRS=""
-          CONFLICT_PRS=""
-          MERGE_DETAILS=""
+          # Initialize tracking files
+          echo "0" > /tmp/merged_count.txt
+          echo "0" > /tmp/conflict_count.txt
+          echo "" > /tmp/merged_prs.txt
+          echo "" > /tmp/conflict_prs.txt
+          echo "" > /tmp/merge_details.txt
           
           # Process each PR
           jq -c '.[]' filtered_prs.json | while IFS= read -r pr; do
@@ -182,8 +182,9 @@ jobs:
             
             if [ "$DRY_RUN" = "true" ]; then
               echo "[DRY RUN] Would merge PR #$PR_NUMBER"
-              MERGED_COUNT=$((MERGED_COUNT + 1))
-              MERGED_PRS="${MERGED_PRS}$PR_NUMBER "
+              MERGED_COUNT=$(cat /tmp/merged_count.txt)
+              echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
+              echo "$PR_NUMBER " >> /tmp/merged_prs.txt
               continue
             fi
             
@@ -198,52 +199,72 @@ jobs:
             echo "🔀 Attempting to merge..."
             if git merge --no-ff --no-edit "$PR_BRANCH" -m "Merge PR #$PR_NUMBER: $PR_TITLE"; then
               echo "✅ Successfully merged PR #$PR_NUMBER"
-              MERGED_COUNT=$((MERGED_COUNT + 1))
-              MERGED_PRS="${MERGED_PRS}$PR_NUMBER "
+              MERGED_COUNT=$(cat /tmp/merged_count.txt)
+              echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
+              echo "$PR_NUMBER " >> /tmp/merged_prs.txt
               
               # Record merge details
-              MERGE_DETAILS="${MERGE_DETAILS}\n### ✅ PR #$PR_NUMBER - Merged Successfully\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Title:** $PR_TITLE\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Author:** @$PR_AUTHOR\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Branch:** \`$PR_BRANCH\`\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Status:** Clean merge, no conflicts\n\n"
+              {
+                echo ""
+                echo "### ✅ PR #$PR_NUMBER - Merged Successfully"
+                echo "**Title:** $PR_TITLE"
+                echo "**Author:** @$PR_AUTHOR"
+                echo "**Branch:** \`$PR_BRANCH\`"
+                echo "**Status:** Clean merge, no conflicts"
+                echo ""
+              } >> /tmp/merge_details.txt
             else
               echo "❌ Merge conflict detected for PR #$PR_NUMBER"
-              CONFLICT_COUNT=$((CONFLICT_COUNT + 1))
-              CONFLICT_PRS="${CONFLICT_PRS}$PR_NUMBER "
+              CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
+              echo "$((CONFLICT_COUNT + 1))" > /tmp/conflict_count.txt
+              echo "$PR_NUMBER " >> /tmp/conflict_prs.txt
               
               # Get conflict details
               CONFLICTED_FILES=$(git diff --name-only --diff-filter=U | tr '\n' ', ')
               
               # Record conflict details
-              MERGE_DETAILS="${MERGE_DETAILS}\n### ⚠️ PR #$PR_NUMBER - Merge Conflict\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Title:** $PR_TITLE\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Author:** @$PR_AUTHOR\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Branch:** \`$PR_BRANCH\`\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Status:** Merge conflict\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Conflicted Files:** $CONFLICTED_FILES\n\n"
-              MERGE_DETAILS="${MERGE_DETAILS}**Conflict Details:**\n\`\`\`\n"
-              MERGE_DETAILS="${MERGE_DETAILS}$(git diff --diff-filter=U | head -100)\n"
-              MERGE_DETAILS="${MERGE_DETAILS}\`\`\`\n\n"
+              {
+                echo ""
+                echo "### ⚠️ PR #$PR_NUMBER - Merge Conflict"
+                echo "**Title:** $PR_TITLE"
+                echo "**Author:** @$PR_AUTHOR"
+                echo "**Branch:** \`$PR_BRANCH\`"
+                echo "**Status:** Merge conflict"
+                echo "**Conflicted Files:** $CONFLICTED_FILES"
+                echo ""
+                echo "**Conflict Details:**"
+                echo "\`\`\`"
+                git diff --diff-filter=U | head -100
+                echo "\`\`\`"
+                echo ""
+              } >> /tmp/merge_details.txt
               
               # Abort the merge
               git merge --abort
               
-              # Try to resolve automatically (accept both changes)
+              # Try to resolve automatically (prefer incoming changes with warning)
               echo "🔧 Attempting automatic conflict resolution..."
+              echo "⚠️  Note: Using -X theirs strategy (accepting incoming changes)"
               git merge --no-ff --no-edit "$PR_BRANCH" -X theirs || {
                 echo "❌ Automatic resolution failed"
                 git merge --abort
-                MERGE_DETAILS="${MERGE_DETAILS}**Resolution:** Requires manual intervention\n\n"
+                echo "**Resolution:** Requires manual intervention" >> /tmp/merge_details.txt
+                echo "" >> /tmp/merge_details.txt
                 continue
               }
               
               echo "✅ Conflicts auto-resolved (accepted incoming changes)"
-              MERGE_DETAILS="${MERGE_DETAILS}**Resolution:** Auto-resolved (accepted incoming changes)\n\n"
-              MERGED_COUNT=$((MERGED_COUNT + 1))
-              MERGED_PRS="${MERGED_PRS}$PR_NUMBER "
+              echo "**Resolution:** Auto-resolved (accepted incoming changes - review recommended)" >> /tmp/merge_details.txt
+              echo "" >> /tmp/merge_details.txt
+              MERGED_COUNT=$(cat /tmp/merged_count.txt)
+              echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
+              echo "$PR_NUMBER " >> /tmp/merged_prs.txt
             fi
           done
+          
+          # Read final counts from files
+          MERGED_COUNT=$(cat /tmp/merged_count.txt)
+          CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
           
           # Save merge report
           {
@@ -254,7 +275,7 @@ jobs:
             echo "**Conflicts Encountered:** $CONFLICT_COUNT"
             echo ""
             echo "## Merge Details"
-            echo -e "$MERGE_DETAILS"
+            cat /tmp/merge_details.txt
           } > merge_report.md
           
           cat merge_report.md
@@ -329,7 +350,7 @@ jobs:
               echo ""
             } >> tasks_summary.md
             
-            gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | "**@\(.author.login)** (comment):\n\n\(.body)\n"' >> tasks_summary.md || echo "No comments found" >> tasks_summary.md
+            gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | "**@\(.author.login)** (comment):\n\n\(.body)\n"' 2>/dev/null >> tasks_summary.md || echo "No comments found" >> tasks_summary.md
             
             echo "" >> tasks_summary.md
             echo "---" >> tasks_summary.md
@@ -345,8 +366,10 @@ jobs:
           } >> tasks_summary.md
           
           # Search for TODO/FIXME/NOTE in PR descriptions and comments
-          jq -r '.[] | "PR #\(.number): \(.body // "")"' filtered_prs.json | \
-            grep -iE "(TODO|FIXME|NOTE|ACTION ITEM|TASK):" || echo "- No explicit action items found in PR descriptions" >> tasks_summary.md
+          {
+            jq -r '.[] | "PR #\(.number): \(.body // "")"' filtered_prs.json | \
+              grep -iE "(TODO|FIXME|NOTE|ACTION ITEM|TASK):" || echo "- No explicit action items found in PR descriptions"
+          } >> tasks_summary.md
           
           cat tasks_summary.md
           
