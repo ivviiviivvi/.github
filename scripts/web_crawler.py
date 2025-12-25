@@ -285,6 +285,9 @@ class OrganizationCrawler:
             except (urllib3.exceptions.RequestError, urllib3.exceptions.HTTPError) as e:
                 # print(f"Request error: {e}")
                 return 500
+            except urllib3.exceptions.SSLError as e:
+                print(f"SSL error checking link {target}: {e}")
+                return 500
             except Exception as e:
                 print(f"Error checking link {target}: {e}")
                 return 500
