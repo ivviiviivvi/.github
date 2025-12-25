@@ -40,6 +40,13 @@ class OrganizationCrawler:
         self.session.mount('https://', adapter)
         self.session.mount('http://', adapter)
 
+        # Use urllib3 directly for safe verified requests to IPs
+        self.http = urllib3.PoolManager(
+            num_pools=max_workers,
+            maxsize=max_workers,
+            cert_reqs='CERT_REQUIRED'
+        )
+
         if self.github_token:
             self.session.headers.update({'Authorization': f'token {self.github_token}'})
 
@@ -230,48 +237,56 @@ class OrganizationCrawler:
                 }
 
                 # 5. Make Request
-                # verify=False is required because we are using IP in URL but Cert matches Hostname
-                # This is a trade-off: We lose Cert verification but gain SSRF protection against DNS Rebinding
+                # Use urllib3 to connect to safe_ip but verify the TLS certificate against
+                # the original hostname via assert_hostname. This only provides protection
+                # against MITM when the PoolManager is configured with proper CA certificates
+                # and certificate verification enabled. Ensure this behavior is covered by
+                # tests and review the urllib3 TLS/SSL documentation when changing this code.
 
-                response = self.session.head(
+                response = self.http.request(
+                    'HEAD',
                     safe_url,
                     timeout=timeout,
-                    allow_redirects=False,
+                    retries=False,
                     headers=headers,
-                    verify=False
+                    assert_hostname=hostname
                 )
 
                 # Handle Redirects
-                if 300 <= response.status_code < 400:
+                if 300 <= response.status < 400:
                     loc = response.headers.get('Location')
                     if not loc:
-                        return response.status_code
+                        return response.status
                     target = urllib.parse.urljoin(target, loc)
                     continue
 
                 # Some servers don't support HEAD, try GET
-                if response.status_code >= 400:
-                    response = self.session.get(
+                if response.status >= 400:
+                    response = self.http.request(
+                        'GET',
                         safe_url,
                         timeout=timeout,
-                        allow_redirects=False,
+                        retries=False,
                         headers=headers,
-                        verify=False
+                        assert_hostname=hostname
                     )
                     # If GET returns redirect
-                    if 300 <= response.status_code < 400:
+                    if 300 <= response.status < 400:
                         loc = response.headers.get('Location')
                         if not loc:
-                            return response.status_code
+                            return response.status
                         target = urllib.parse.urljoin(target, loc)
                         continue
 
-                return response.status_code
+                return response.status
 
-            except requests.exceptions.Timeout:
+            except urllib3.exceptions.TimeoutError:
                 return 408
-            except requests.exceptions.RequestException as e:
+            except (urllib3.exceptions.RequestError, urllib3.exceptions.HTTPError) as e:
                 # print(f"Request error: {e}")
+                return 500
+            except urllib3.exceptions.SSLError as e:
+                print(f"SSL error checking link {target}: {e}")
                 return 500
             except Exception as e:
                 print(f"Error checking link {target}: {e}")
