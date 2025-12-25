@@ -237,8 +237,11 @@ class OrganizationCrawler:
                 }
 
                 # 5. Make Request
-                # Use urllib3 to connect to safe_ip but verify cert against hostname
-                # This prevents both SSRF (via IP usage) and MITM (via assert_hostname)
+                # Use urllib3 to connect to safe_ip but verify the TLS certificate against
+                # the original hostname via assert_hostname. This only provides protection
+                # against MITM when the PoolManager is configured with proper CA certificates
+                # and certificate verification enabled. Ensure this behavior is covered by
+                # tests and review the urllib3 TLS/SSL documentation when changing this code.
 
                 response = self.http.request(
                     'HEAD',
