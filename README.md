@@ -331,6 +331,65 @@ gh workflow run draft-to-ready-automation.yml -f pr_number=123
 **Integration:**
 Works seamlessly with existing workflows (`auto-merge.yml`, `pr-task-catcher.yml`, `pr-batch-merge.yml`)
 
+### 🔄 PR Consolidation Workflow (NEW!)
+
+**Roll forward multiple PRs into a single unified PR with automatic conflict resolution.**
+
+The PR Consolidation Workflow consolidates all open pull requests into a single unified PR, resolving merge conflicts automatically and extracting all suggestions and tasks for review. Perfect for managing accumulated PRs or preparing for major releases.
+
+#### Key Features
+
+✅ **Automatic Consolidation** - Merges all open PRs into a single branch  
+✅ **Conflict Resolution** - Automatically resolves merge conflicts where possible  
+✅ **Task Extraction** - Extracts suggestions, TODOs, and action items from all PRs  
+✅ **Functionality Preservation** - Ensures all changes are preserved and documented  
+✅ **Comprehensive Reports** - Generates detailed merge reports and task lists  
+✅ **Clean Closure** - Closes original PRs after successful consolidation  
+
+#### Quick Start
+
+```bash
+# Basic consolidation of all open PRs
+gh workflow run pr-consolidation.yml
+
+# Dry run to preview consolidation
+gh workflow run pr-consolidation.yml -f dry_run=true
+
+# Consolidate specific PRs (exclude others)
+gh workflow run pr-consolidation.yml -f exclude_prs="102,103"
+
+# Custom branch name
+gh workflow run pr-consolidation.yml \
+  -f consolidation_branch="feature-release-2024"
+```
+
+**Common Use Cases:**
+
+1. **Release Preparation** - Consolidate all feature PRs before major release
+2. **Cleanup** - Merge accumulated PRs from AI agents or automated tools
+3. **Feature Grouping** - Combine related PRs for unified review
+4. **Conflict Management** - Resolve dependencies between multiple PRs
+
+**Documentation:**
+- 📖 [Complete Guide](.github/docs/PR_CONSOLIDATION_GUIDE.md) - Full documentation with examples
+- 🚀 [Quick Reference](.github/docs/PR_CONSOLIDATION_GUIDE.md#quick-start) - Common workflows
+- 🔧 [Troubleshooting](.github/docs/PR_CONSOLIDATION_GUIDE.md#troubleshooting) - Solutions to common issues
+
+**Workflow Included:**
+- `.github/workflows/pr-consolidation.yml` - Main PR consolidation orchestrator
+
+**What You Get:**
+
+After running the workflow:
+- ✅ **Single Consolidated PR** - All changes in one place for review
+- ✅ **Merge Report** - Detailed status of each PR merge
+- ✅ **Extracted Tasks** - All suggestions and action items compiled
+- ✅ **Conflict Documentation** - Any issues flagged for decision
+- ✅ **Clean Repository** - Original PRs closed, only main + consolidation branch remain
+
+**Integration:**
+Works seamlessly with existing workflows (`batch-pr-lifecycle.yml`, `pr-batch-merge.yml`, `auto-merge.yml`)
+
 ### Organization-Wide Workflow Dispatch 🚀
 
 **Centrally trigger workflows across all organization repositories.**
