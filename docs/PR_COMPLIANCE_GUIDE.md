@@ -79,11 +79,9 @@ except* Exception as eg:
     # Process partial results from successful tasks only
     results = []
     for task in tasks:
-        if task.done() and not task.cancelled():
-            try:
-                results.append(task.result())
-            except Exception:
-                pass  # Skip failed tasks
+        if task.done() and not task.cancelled() and task.exception() is None:
+            # Only call result() on tasks that completed successfully
+            results.append(task.result())
 ```
 
 ### Input Validation and Sanitization
@@ -400,7 +398,7 @@ def redact_sensitive_data(data: str) -> str:
     # Redact credit card numbers
     data = re.sub(r'\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b', 'XXXX-XXXX-XXXX-XXXX', data)
     # Redact email addresses (simplified pattern for common cases)
-    data = re.sub(r'\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b', '[EMAIL]', data)
+    data = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b', '[EMAIL]', data)
     # Redact SSN patterns
     data = re.sub(r'\b\d{3}-\d{2}-\d{4}\b', 'XXX-XX-XXXX', data)
     return data
