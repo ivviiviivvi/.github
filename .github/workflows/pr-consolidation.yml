@@ -474,11 +474,11 @@ jobs:
             PR_NUMBER=$(echo "$pr" | jq -r '.number')
             
             # Add comment explaining consolidation
-            gh pr comment "$PR_NUMBER" --body "✅ **Consolidated**
+            gh pr comment "$PR_NUMBER" --body "**Consolidated**
 
-This PR has been consolidated into a unified PR on branch \`$BRANCH_NAME\`.
+This PR has been consolidated into a unified PR on branch \\\`${BRANCH_NAME}\\\`.
 
-All changes from this PR have been included in the consolidation. The consolidated PR will be merged to \`main\` after review.
+All changes from this PR have been included in the consolidation. The consolidated PR will be merged to \\\`main\\\` after review.
 
 **Consolidation Details:**
 - Consolidated PRs: ${{ needs.analyze-prs.outputs.pr-count }}
