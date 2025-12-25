@@ -1,0 +1,121 @@
+labels: [showcase]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎉 Show and Tell
+        
+        Share your projects, implementations, or interesting findings with the community!
+        
+        **This is the place to:**
+        - Showcase projects using our workflows or templates
+        - Share interesting implementations or solutions
+        - Demonstrate innovative uses of GitHub features
+        - Highlight community contributions
+
+  - type: input
+    id: title
+    attributes:
+      label: What are you sharing?
+      description: A catchy title for your showcase
+      placeholder: e.g., "Automated Multi-Cloud Deployment Pipeline"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Tell us about what you've built or discovered
+      placeholder: |
+        Describe what you're sharing:
+        - What does it do?
+        - What problem does it solve?
+        - What makes it interesting or unique?
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details
+      description: Share the technical aspects (optional but encouraged)
+      placeholder: |
+        - Technologies used
+        - Architecture or design patterns
+        - Integration points
+        - Performance characteristics
+    validations:
+      required: false
+
+  - type: textarea
+    id: usage
+    attributes:
+      label: How to Use/Access
+      description: How can others use or access what you've built?
+      placeholder: |
+        - Link to repository
+        - Demo link
+        - Installation instructions
+        - Documentation
+    validations:
+      required: false
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of showcase is this?
+      multiple: true
+      options:
+        - Project/Application
+        - Workflow/Automation
+        - Integration
+        - Tool/Utility
+        - Documentation
+        - Best Practice Implementation
+        - Research/Analysis
+        - Other
+
+  - type: textarea
+    id: lessons-learned
+    attributes:
+      label: Lessons Learned
+      description: What did you learn while building this?
+      placeholder: Share insights, challenges overcome, or interesting discoveries...
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Media
+      description: Add screenshots, diagrams, or other media
+      placeholder: |
+        Drag and drop images here, or paste markdown image links:
+        ![Description](image-url)
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: license
+    attributes:
+      label: Sharing & License
+      options:
+        - label: This content is shared under an open source license
+          required: false
+        - label: Others are welcome to use and adapt this work
+          required: false
+        - label: I'm open to collaboration and contributions
+          required: false
+
+  - type: checkboxes
+    id: feedback
+    attributes:
+      label: Feedback Welcome
+      options:
+        - label: I'm looking for feedback and suggestions
+          required: false
+        - label: I'm available to answer questions
+          required: false

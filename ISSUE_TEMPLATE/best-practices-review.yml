@@ -1,0 +1,145 @@
+name: 🏆 Best Practices Review
+description: Request a review of repository best practices implementation
+title: "[Best Practices Review]: "
+labels: ["best-practices", "review", "enhancement"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🏆 Best Practices Review Request
+        
+        Request a comprehensive review of how well a repository implements GitHub best practices.
+        
+        This template helps ensure repositories meet organizational standards for:
+        - Security & Compliance
+        - Code Quality
+        - Documentation
+        - Community Health
+        - CI/CD & Automation
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: Which repository should be reviewed?
+      placeholder: "organization/repository-name"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: review-type
+    attributes:
+      label: Review Type
+      description: What type of review is needed?
+      options:
+        - Comprehensive - Full review of all areas
+        - Focused - Specific areas only
+        - Follow-up - Re-review after improvements
+        - Initial - New repository setup
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: areas
+    attributes:
+      label: Areas to Review
+      description: Select areas for review (check all for comprehensive review)
+      options:
+        - label: Security & Compliance (CodeQL, secret scanning, dependency management)
+        - label: Code Quality (linting, testing, code coverage)
+        - label: Documentation (README, CONTRIBUTING, CODE_OF_CONDUCT)
+        - label: Community Health (issue templates, PR templates, discussions)
+        - label: CI/CD & Automation (workflows, branch protection, releases)
+        - label: Repository Structure (file organization, naming conventions)
+        - label: Dependency Management (Dependabot, license compliance)
+        - label: Accessibility & Inclusivity
+        - label: Performance & Optimization
+        - label: Release Management
+
+  - type: textarea
+    id: specific-concerns
+    attributes:
+      label: Specific Concerns or Focus Areas
+      description: Are there specific areas of concern or particular focus?
+      placeholder: |
+        Describe any specific concerns:
+        - Known issues or gaps
+        - Recent changes needing review
+        - Specific standards to validate against
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this review?
+      options:
+        - Critical - Security concerns or compliance requirements
+        - High - Needed for upcoming release or milestone
+        - Medium - Important but not urgent
+        - Low - Nice to have, no rush
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any additional context for the reviewers?
+      placeholder: |
+        - Repository purpose and scope
+        - Current status (active development, maintenance, etc.)
+        - Recent changes or initiatives
+        - Compliance requirements
+        - Timeline constraints
+    validations:
+      required: false
+
+  - type: dropdown
+    id: output-format
+    attributes:
+      label: Preferred Output Format
+      description: How would you like the review results delivered?
+      options:
+        - Detailed Report - Comprehensive markdown document
+        - Issue List - Individual issues for each finding
+        - Checklist - Simple checklist of items
+        - Discussion - Start a discussion thread
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: follow-up
+    attributes:
+      label: Follow-up Actions
+      options:
+        - label: I need help implementing recommended changes
+          required: false
+        - label: I would like a follow-up review after changes
+          required: false
+        - label: This is part of a regular review cycle
+          required: false
+
+  - type: textarea
+    id: reviewers
+    attributes:
+      label: Suggested Reviewers
+      description: Tag any specific reviewers or teams (optional)
+      placeholder: "@username or @org/team"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: acknowledgment
+    attributes:
+      label: Acknowledgment
+      options:
+        - label: I have reviewed the [Best Practices Guide](../docs/guides/BEST_PRACTICES.md)
+          required: true
+        - label: I have CODEOWNERS or maintainer permission for this repository
+          required: true
+        - label: I am prepared to address findings from this review
+          required: true
