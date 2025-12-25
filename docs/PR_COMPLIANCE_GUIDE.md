@@ -397,8 +397,8 @@ def redact_sensitive_data(data: str) -> str:
     """Redact sensitive information from logs"""
     # Redact credit card numbers
     data = re.sub(r'\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b', 'XXXX-XXXX-XXXX-XXXX', data)
-    # Redact email addresses (simplified pattern for common cases)
-    data = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b', '[EMAIL]', data)
+    # Redact email addresses: mask local part but preserve domain for debugging
+    data = re.sub(r'\b([A-Za-z0-9._%+-]+)@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)\b', r'[EMAIL]@\2', data)
     # Redact SSN patterns
     data = re.sub(r'\b\d{3}-\d{2}-\d{4}\b', 'XXX-XX-XXXX', data)
     return data
