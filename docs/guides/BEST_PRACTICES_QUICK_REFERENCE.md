@@ -296,8 +296,8 @@ Include: Agenda, pre-reading (optional), meeting link
 
 Need assistance?
 
-- 💬 [Start a Discussion](https://github.com/ivviiviivvi/.github/discussions) using our discussion templates
-- 🎫 [Open an Issue](https://github.com/ivviiviivvi/.github/issues/new/choose) for template improvements
+- 💬 [Start a Discussion](https://github.com/ivi374forivi/.github/discussions) using our discussion templates
+- 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose) for template improvements
 - 📖 Review the [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
 - 📚 Check the [Best Practices Guide](./BEST_PRACTICES.md)
 
@@ -307,7 +307,7 @@ Need assistance?
 
 Found these templates helpful? Have improvements to suggest?
 
-- Share your session experiences in [Show and Tell discussions](https://github.com/ivviiviivvi/.github/discussions)
+- Share your session experiences in [Show and Tell discussions](https://github.com/ivi374forivi/.github/discussions)
 - Propose new templates or improvements
 - Document your use cases and lessons learned
 - Help others by answering questions

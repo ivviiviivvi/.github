@@ -330,15 +330,15 @@ Track these metrics to measure impact:
 ## Resources
 
 ### Internal
-- [Complete Sessions Guide](docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
-- [Quick Reference](docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md)
-- [Best Practices Overview](docs/guides/BEST_PRACTICES.md)
-- [Contributing Guidelines](docs/CONTRIBUTING.md)
+- [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
+- [Quick Reference](./BEST_PRACTICES_QUICK_REFERENCE.md)
+- [Best Practices Overview](./BEST_PRACTICES.md)
+- [Contributing Guidelines](../CONTRIBUTING.md)
 
 ### Templates
-- [Discussion Templates](.github/DISCUSSION_TEMPLATE/)
-- [Issue Templates](ISSUE_TEMPLATE/)
-- [PR Templates](PULL_REQUEST_TEMPLATE/)
+- [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
+- [Issue Templates](../../ISSUE_TEMPLATE/)
+- [PR Templates](../../PULL_REQUEST_TEMPLATE/)
 
 ### External
 - [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
@@ -351,10 +351,10 @@ Track these metrics to measure impact:
 
 Need help implementing or using these templates?
 
-- 💬 [Start a Discussion](https://github.com/ivviiviivvi/.github/discussions)
-- 🎫 [Open an Issue](https://github.com/ivviiviivvi/.github/issues/new/choose)
-- 📖 [Read the Docs](docs/guides/)
-- 🤝 [Contributing Guide](docs/CONTRIBUTING.md)
+- 💬 [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)
+- 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
+- 📖 [Read the Docs](../../)
+- 🤝 [Contributing Guide](../CONTRIBUTING.md)
 
 ---
 

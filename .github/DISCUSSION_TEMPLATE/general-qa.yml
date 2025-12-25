@@ -10,8 +10,8 @@ body:
         
         **Before posting:**
         - Search existing discussions to see if your question has been answered
-        - Check the [documentation](https://github.com/ivviiviivvi/.github)
-        - Review our [Best Practices Guide](../docs/guides/BEST_PRACTICES.md)
+        - Check the [documentation](https://github.com/ivi374forivi/.github)
+        - Review our [Best Practices Guide](../../docs/guides/BEST_PRACTICES.md)
 
   - type: textarea
     id: question

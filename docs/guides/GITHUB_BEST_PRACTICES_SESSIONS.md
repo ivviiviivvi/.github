@@ -886,8 +886,8 @@ Overall Health Score: [X/100]
 - [Best Practices Guide](./BEST_PRACTICES.md)
 - [Workflow Optimization Guide](../../WORKFLOW_OPTIMIZATION_INDEX.md)
 - [Security Best Practices](../../WORKFLOW_SECURITY_AUDIT.md)
-- [Contributing Guidelines](./CONTRIBUTING.md)
-- [Community Standards](./CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Community Standards](../CODE_OF_CONDUCT.md)
 
 ### GitHub Documentation
 - [GitHub Actions Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
@@ -1022,8 +1022,8 @@ Ready to run your first session? Here's a simple starter path:
 
 Need help planning or running a session?
 
-- 💬 **Start a [Discussion](https://github.com/ivviiviivvi/.github/discussions)** in the Best Practices category
-- 🎫 **Open an [Issue](https://github.com/ivviiviivvi/.github/issues/new/choose)** using the "Best Practices Review" template
+- 💬 **Start a [Discussion](https://github.com/ivi374forivi/.github/discussions)** in the Best Practices category
+- 🎫 **Open an [Issue](https://github.com/ivi374forivi/.github/issues/new/choose)** using the "Best Practices Review" template
 - 📖 **Review** the [Best Practices Guide](./BEST_PRACTICES.md)
 - 🤝 **Connect** with session facilitators in your organization
 
@@ -1039,7 +1039,7 @@ Have ideas for improving these session guides? We welcome contributions!
 - Suggest new session types
 - Improve existing content
 
-See our [Contributing Guidelines](./CONTRIBUTING.md) for more information.
+See our [Contributing Guidelines](../CONTRIBUTING.md) for more information.
 
 ---
 
