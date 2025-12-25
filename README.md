@@ -814,6 +814,34 @@ The organization now features **automated health monitoring** that brings the AI
 - **Testing Standards**: Documented in [TESTING.md](docs/TESTING.md)
 - **Contribution Guidelines**: Clear expectations in [CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
+### Community & Best Practices
+
+- **Discussion Templates**: Structured templates for Q&A, ideas, showcases, and best practices discussions
+- **Issue Templates**: Comprehensive templates including best practices reviews and community health checks
+- **Best Practices Sessions**: Structured sessions for knowledge sharing, repository reviews, and workflow optimization
+- **Session Guide**: Complete facilitation guide in [GITHUB_BEST_PRACTICES_SESSIONS.md](docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
+
+**New Templates Available**:
+- 💬 **Discussion Templates** (`.github/DISCUSSION_TEMPLATE/`)
+  - General Q&A - Ask questions and get answers
+  - Ideas & Feature Proposals - Share your ideas
+  - Show and Tell - Showcase your work
+  - Best Practices - Discuss and improve standards
+  - Help Wanted - Request or offer help
+- 🎫 **Enhanced Issue Templates** (`ISSUE_TEMPLATE/`)
+  - Best Practices Review - Request repository review
+  - Community Health Check - Evaluate community health
+
+**Best Practices Sessions**:
+- Knowledge Share Sessions (30-60 min)
+- Repository Health Reviews (60-90 min)
+- Workflow Optimization Workshops (2-4 hours)
+- Security & Compliance Sessions (60-90 min)
+- Onboarding & Training Sessions (60-120 min)
+- Retrospective & Improvement Sessions (60 min)
+
+See the [Best Practices Sessions Guide](docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md) for complete templates, facilitation guides, and getting started instructions.
+
 ### Developer Experience
 
 - **Workflow Templates**: Ready-to-use CI/CD pipelines

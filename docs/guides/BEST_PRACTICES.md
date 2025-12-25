@@ -243,6 +243,42 @@ deny-licenses: GPL-3.0, AGPL-3.0
 - Monitor contributor activity
 - Generate health reports
 
+### 5. Best Practices Sessions
+
+**Guide**: [GITHUB_BEST_PRACTICES_SESSIONS.md](./GITHUB_BEST_PRACTICES_SESSIONS.md)
+
+Regular, structured sessions to educate teams, review implementations, and continuously improve development practices:
+
+**Session Types**:
+- **Knowledge Share Sessions** (30-60 min) - Quick education on specific topics
+- **Repository Health Reviews** (60-90 min) - Comprehensive repository evaluation
+- **Workflow Optimization Workshops** (2-4 hours) - Deep dive into CI/CD improvements
+- **Security & Compliance Sessions** (60-90 min) - Security posture review
+- **Onboarding & Training** (60-120 min) - New team member training
+- **Retrospectives** (60 min) - Regular improvement sessions
+
+**Templates & Resources**:
+- Discussion templates for community engagement (`.github/DISCUSSION_TEMPLATE/`)
+- Enhanced issue templates for reviews and health checks (`ISSUE_TEMPLATE/`)
+- Complete facilitation guides with agendas, workbooks, and checklists
+- Pre/post session templates and follow-up tracking
+
+**Getting Started**:
+1. Review the [sessions guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
+2. Choose an appropriate session type for your needs
+3. Use provided templates to plan and facilitate
+4. Track action items and measure impact
+5. Iterate based on feedback
+
+**Benefits**:
+- Spreads expertise across teams
+- Identifies and addresses issues proactively
+- Standardizes practices organization-wide
+- Fosters culture of continuous improvement
+- Improves developer experience and productivity
+
+See the complete guide for detailed templates, facilitation tips, and session planning resources.
+
 ---
 
 ## Code Quality
