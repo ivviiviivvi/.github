@@ -409,7 +409,7 @@ def safe_log_user_action(user_id: str, action: str, details: dict):
     safe_details = {
         k: redact_sensitive_data(str(v)) if isinstance(v, str) else v
         for k, v in details.items()
-        if k not in ['password', 'token', 'api_key', 'secret']
+        if not re.search(r'(password|pass|token|api[_-]?key|secret|access[_-]?token)', k, re.IGNORECASE)
     }
     logger.info(f"User {user_id} performed {action}: {safe_details}")
 ```
