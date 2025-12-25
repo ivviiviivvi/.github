@@ -79,7 +79,21 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
+  id: time-commitment
+  attributes:
+    label: Estimated Time Commitment
+    description: How much time might this require?
+    options:
+      - Quick (< 30 minutes)
+      - Short (30 min to 1 hour)
+      - Medium (1 - 4 hours)
+      - Long (4 - 8 hours)
+      - Very Long (> 8 hours)
+      - Ongoing collaboration
+      - Uncertain
+  validations:
+    required: false
     id: time-commitment
     attributes:
       label: Estimated Time Commitment
