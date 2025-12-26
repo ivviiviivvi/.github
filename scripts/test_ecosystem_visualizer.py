@@ -35,5 +35,13 @@ class TestEcosystemVisualizer(unittest.TestCase):
         expected_link = "- [`test-workflow.yml`](../.github/workflows/test-workflow.yml)"
         self.assertIn(expected_link, dashboard)
 
+    def test_mermaid_clicks(self):
+        """Test that mermaid diagram includes click events"""
+        diagram = self.visualizer.generate_mermaid_diagram()
+
+        # Check for click event
+        expected_click = 'click WF0 "../.github/workflows/test-workflow.yml" "View Workflow"'
+        self.assertIn(expected_click, diagram)
+
 if __name__ == '__main__':
     unittest.main()
