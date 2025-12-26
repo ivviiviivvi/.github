@@ -718,6 +718,7 @@ tion default.
 │   ├── MOUTHPIECE_README.md                # Mouthpiece system overview
 │   ├── MOUTHPIECE_SYSTEM.md                # Complete Mouthpiece docs
 │   ├── POSTING_WALKTHROUGH_ANNOUNCEMENT.md # Walkthrough announcements
+│   ├── PR_COMPLIANCE_GUIDE.md              # PR compliance check guide
 │   ├── PULL_REQUEST_TEMPLATE.md            # Default PR template
 │   ├── README.agents.md                    # Agents documentation
 │   ├── README.chatmodes.md                 # Chat modes documentation
@@ -809,6 +810,7 @@ The organization now features **automated health monitoring** that brings the AI
 
 ### Quality Assurance
 
+- **PR Compliance Guide**: Comprehensive guide for addressing pull request compliance checks - [PR_COMPLIANCE_GUIDE.md](docs/PR_COMPLIANCE_GUIDE.md)
 - **Standardized Templates**: Consistent issue and PR formats
 - **Code Review Guidelines**: Built into PR templates
 - **Testing Standards**: Documented in [TESTING.md](docs/TESTING.md)
