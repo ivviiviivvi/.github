@@ -2,7 +2,6 @@ import unittest
 from pathlib import Path
 import json
 import tempfile
-import os
 from scripts.ecosystem_visualizer import EcosystemVisualizer
 
 class TestEcosystemVisualizer(unittest.TestCase):
