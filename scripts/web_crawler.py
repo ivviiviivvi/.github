@@ -173,8 +173,8 @@ class OrganizationCrawler:
                     ip = ip.split('%')[0]
 
                 ip_obj = ipaddress.ip_address(ip)
-                # Check for private/loopback/link-local
-                if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                # Check if IP is globally reachable and not multicast
+                if not ip_obj.is_global or ip_obj.is_multicast:
                     return False
 
             return True
@@ -202,7 +202,8 @@ class OrganizationCrawler:
                     if '%' in ip:
                         ip = ip.split('%')[0]
                     ip_obj = ipaddress.ip_address(ip)
-                    if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_link_local:
+                    # Block any non-global IP or multicast
+                    if not ip_obj.is_global or ip_obj.is_multicast:
                         print(f"  ⚠️  {target} (blocked: resolved to {ip})")
                         return 403
 

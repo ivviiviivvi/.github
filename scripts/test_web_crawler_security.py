@@ -23,6 +23,29 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         self.assertEqual(status, 403)
         self.crawler.http.request.assert_not_called()
 
+    def test_ssrf_protection_multicast(self):
+        """Verify that multicast IPs are blocked."""
+        # 224.0.0.1 is All Hosts multicast group
+        # We need to mock resolution because this might not resolve in all envs or be routable
+        # But _check_link calls _resolve_hostname.
+        # Let's rely on the fact that if we pass an IP as host, it resolves to itself?
+        # No, _resolve_hostname uses socket.getaddrinfo.
+
+        with patch.object(self.crawler, '_resolve_hostname', return_value=['224.0.0.1']):
+            url = "http://224.0.0.1/stream"
+            status = self.crawler._check_link(url)
+            self.assertEqual(status, 403)
+            self.crawler.http.request.assert_not_called()
+
+    def test_ssrf_protection_reserved(self):
+        """Verify that reserved IPs are blocked."""
+        # 240.0.0.1 is Reserved for future use
+        with patch.object(self.crawler, '_resolve_hostname', return_value=['240.0.0.1']):
+            url = "http://240.0.0.1/secret"
+            status = self.crawler._check_link(url)
+            self.assertEqual(status, 403)
+            self.crawler.http.request.assert_not_called()
+
     @patch('socket.getaddrinfo')
     def test_ssrf_protection_public_ip(self, mock_getaddrinfo):
         """Verify that public IPs are allowed."""
