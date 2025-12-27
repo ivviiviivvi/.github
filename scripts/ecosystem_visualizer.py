@@ -51,6 +51,7 @@ graph TD
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
+            parts.append(f'        click {workflow_id} "../.github/workflows/{workflow}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
@@ -331,7 +332,8 @@ graph TD
                 parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
-                    parts.append(f"- `{workflow}`\n")
+                    workflow_path = f"../.github/workflows/{workflow}"
+                    parts.append(f"- [`{workflow}`]({workflow_path})\n")
                 parts.append("\n</details>\n")
                 parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
@@ -447,7 +449,9 @@ def main():
             return
 
     if not report_path:
-        print("❌ No report specified. Use --report or --find-latest")
+        print("❌ No report specified.")
+        print("💡 Try running with --find-latest to use the most recent report:")
+        print("   python3 scripts/ecosystem_visualizer.py --find-latest")
         return
 
     visualizer = EcosystemVisualizer(report_path)
