@@ -79,12 +79,16 @@ class OrganizationCrawler:
 
     def _extract_links(self, content: str) -> List[str]:
         """Extract URLs from markdown content"""
-        # Match both [text](url) and bare URLs
-        markdown_links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', content)
-        bare_urls = re.findall(r'https?://[^\s<>"{}|\\^`\[\]]+', content)
+        # Match both [text](url) and bare URLs using a single pass to avoid
+        # incorrect matching of bare URLs inside markdown syntax (e.g. "url)")
+        # Group 1: URL inside markdown link [text](URL)
+        # Group 2: Bare URL
+        pattern = r'\[(?:[^\]]+)\]\(([^)]+)\)|(https?://[^\s<>"{}|\\^`\[\]]+)'
+        matches = re.findall(pattern, content)
 
-        urls = [url for _, url in markdown_links] + bare_urls
-        return list(set(urls))  # Remove duplicates
+        # Extract non-empty match from either group
+        urls = {m[0] or m[1] for m in matches}
+        return list(urls)
 
     def validate_links(self, links_by_file: Dict[str, List[str]]) -> Dict:
         """Validate all extracted links"""
