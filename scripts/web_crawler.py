@@ -15,9 +15,7 @@ from requests.adapters import HTTPAdapter
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
-from collections import defaultdict
-import time
+from typing import Dict, List
 import functools
 import concurrent.futures
 
@@ -221,9 +219,9 @@ class OrganizationCrawler:
                 netloc_parts = parsed.netloc.split('@')[-1].split(':')
                 port_suffix = ""
                 if len(netloc_parts) > 1 and netloc_parts[-1].isdigit():
-                     port_suffix = f":{netloc_parts[-1]}"
+                    port_suffix = f":{netloc_parts[-1]}"
                 elif parsed.port:
-                     port_suffix = f":{parsed.port}"
+                    port_suffix = f":{parsed.port}"
 
                 new_netloc = f"{safe_ip}{port_suffix}"
 
@@ -283,7 +281,7 @@ class OrganizationCrawler:
 
             except urllib3.exceptions.TimeoutError:
                 return 408
-            except (urllib3.exceptions.RequestError, urllib3.exceptions.HTTPError) as e:
+            except (urllib3.exceptions.RequestError, urllib3.exceptions.HTTPError):
                 # print(f"Request error: {e}")
                 return 500
             except urllib3.exceptions.SSLError as e:
@@ -390,12 +388,12 @@ class OrganizationCrawler:
         # Scan Copilot customizations
         agents_dir = base_dir / 'agents'
         if agents_dir.exists():
-             for agent_file in agents_dir.glob('*.md'):
+            for agent_file in agents_dir.glob('*.md'):
                 ecosystem['copilot_agents'].append(agent_file.stem)
 
         instructions_dir = base_dir / 'instructions'
         if instructions_dir.exists():
-             for instruction_file in instructions_dir.glob('*.md'):
+            for instruction_file in instructions_dir.glob('*.md'):
                 ecosystem['copilot_instructions'].append(instruction_file.stem)
                 # Extract technology from filename
                 tech = instruction_file.stem.split('.')[0]
@@ -403,12 +401,12 @@ class OrganizationCrawler:
 
         prompts_dir = base_dir / 'prompts'
         if prompts_dir.exists():
-             for prompt_file in prompts_dir.glob('*.md'):
+            for prompt_file in prompts_dir.glob('*.md'):
                 ecosystem['copilot_prompts'].append(prompt_file.stem)
 
         chatmodes_dir = base_dir / 'chatmodes'
         if chatmodes_dir.exists():
-             for chatmode_file in chatmodes_dir.glob('*.md'):
+            for chatmode_file in chatmodes_dir.glob('*.md'):
                 ecosystem['copilot_chatmodes'].append(chatmode_file.stem)
 
         # Convert sets to lists for JSON serialization

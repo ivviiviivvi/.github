@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 from web_crawler import OrganizationCrawler
 
+
 class TestWebCrawlerSecurity(unittest.TestCase):
     def setUp(self):
         self.crawler = OrganizationCrawler()
@@ -62,6 +63,7 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         status = self.crawler._check_link(url)
         self.assertEqual(status, 200)
         self.crawler.http.request.assert_called()
+
 
 if __name__ == '__main__':
     unittest.main()
