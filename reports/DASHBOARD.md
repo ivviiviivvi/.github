@@ -93,24 +93,34 @@ graph TD
 
     subgraph "Automation Layer"
         WF0[pr-suggestion-implementation.yml]:::workflow
+        click WF0 "../.github/workflows/pr-suggestion-implementation.yml" "View Workflow"
         ORG --> WF0
         WF1[safeguard-7-staggered-scheduling.yml]:::workflow
+        click WF1 "../.github/workflows/safeguard-7-staggered-scheduling.yml" "View Workflow"
         ORG --> WF1
         WF2[scan-for-secrets.yml]:::workflow
+        click WF2 "../.github/workflows/scan-for-secrets.yml" "View Workflow"
         ORG --> WF2
         WF3[build-pages-site.yml]:::workflow
+        click WF3 "../.github/workflows/build-pages-site.yml" "View Workflow"
         ORG --> WF3
         WF4[grok_workflow.yml]:::workflow
+        click WF4 "../.github/workflows/grok_workflow.yml" "View Workflow"
         ORG --> WF4
         WF5[project-automation.yml]:::workflow
+        click WF5 "../.github/workflows/project-automation.yml" "View Workflow"
         ORG --> WF5
         WF6[reusable-security-scan.yml]:::workflow
+        click WF6 "../.github/workflows/reusable-security-scan.yml" "View Workflow"
         ORG --> WF6
         WF7[alert-on-workflow-failure.yml]:::workflow
+        click WF7 "../.github/workflows/alert-on-workflow-failure.yml" "View Workflow"
         ORG --> WF7
         WF8[weekly-commit-report.yml]:::workflow
+        click WF8 "../.github/workflows/weekly-commit-report.yml" "View Workflow"
         ORG --> WF8
         WF9[safeguard-8-usage-monitoring.yml]:::workflow
+        click WF9 "../.github/workflows/safeguard-8-usage-monitoring.yml" "View Workflow"
         ORG --> WF9
     end
 
@@ -200,94 +210,94 @@ Supported languages and frameworks:
 <details>
 <summary>View all 88 workflows</summary>
 
-- `accessibility-testing.yml`
-- `admin-approval-dashboard.yml`
-- `agentsphere-deployment.yml`
-- `alert-on-workflow-failure.yml`
-- `auto-assign.yml`
-- `auto-enable-merge.yml`
-- `auto-labeler.yml`
-- `auto-merge.yml`
-- `auto-pr-create.yml`
-- `badge-management.yml`
-- `batch-pr-lifecycle.yml`
-- `bio-description-completions.yml`
-- `branch-cleanup-notify.yml`
-- `branch-lifecycle-management.yml`
-- `branch-lifecycle.yml`
-- `build-pages-site.yml`
-- `ci-advanced.yml`
-- `ci.yml`
-- `claude-code-review.yml`
-- `claude.yml`
-- `code-coverage.yml`
-- `codeql-analysis.yml`
-- `collect-deployment-metadata.yml`
-- `combine-prs.yml`
-- `commit-tracking.yml`
-- `community-health.yml`
-- `dependency-review.yml`
-- `deploy-to-pages-live.yml`
-- `deployment.yml`
-- `docker-build-push.yml`
-- `draft-to-ready-automation.yml`
-- `gemini-dispatch.yml`
-- `gemini-invoke.yml`
-- `gemini-review.yml`
-- `gemini-scheduled-triage.yml`
-- `gemini-triage.yml`
-- `gemini_workflow.yml`
-- `generate-pages-index.yml`
-- `generate-walkthrough.yml`
-- `grok_workflow.yml`
-- `health-check-live-apps.yml`
-- `health-check.yml`
-- `jules.yml`
-- `link-checker.yml`
-- `manual_reset.yml`
-- `metrics-collection.yml`
-- `metrics-dashboard.yml`
-- `mutation-testing.yml`
-- `openai_workflow.yml`
-- `orchestrator.yml`
-- `org-health-crawler.yml`
-- `org-walkthrough-generator.yml`
-- `org-wide-workflow-dispatch.yml`
-- `performance-benchmark.yml`
-- `perplexity_workflow.yml`
-- `pr-batch-merge.yml`
-- `pr-quality-checks.yml`
-- `pr-suggestion-implementation.yml`
-- `pr-task-catcher.yml`
-- `process_queue.yml`
-- `project-automation.yml`
-- `reconcile-deployments.yml`
-- `release.yml`
-- `repo-metrics.yml`
-- `repository-bootstrap.yml`
-- `reset_quotas.yml`
-- `reusable-api-retry.yml`
-- `reusable-app-detect.yml`
-- `reusable-notify.yml`
-- `reusable-security-scan.yml`
-- `safeguard-5-secret-scanning.yml`
-- `safeguard-6-admin-approval.yml`
-- `safeguard-7-staggered-scheduling.yml`
-- `safeguard-8-usage-monitoring.yml`
-- `sbom-generation.yml`
-- `scan-for-secrets.yml`
-- `scheduled-walkthrough-generator.yml`
-- `security-scan.yml`
-- `semantic-release.yml`
-- `semgrep.yml`
-- `staggered-scheduling.yml`
-- `task-extraction.yml`
-- `usage-monitoring.yml`
-- `validate-quality.yml`
-- `version-bump.yml`
-- `version-control-standards.yml`
-- `weekly-commit-report.yml`
-- `welcome.yml`
+- [`accessibility-testing.yml`](../.github/workflows/accessibility-testing.yml)
+- [`admin-approval-dashboard.yml`](../.github/workflows/admin-approval-dashboard.yml)
+- [`agentsphere-deployment.yml`](../.github/workflows/agentsphere-deployment.yml)
+- [`alert-on-workflow-failure.yml`](../.github/workflows/alert-on-workflow-failure.yml)
+- [`auto-assign.yml`](../.github/workflows/auto-assign.yml)
+- [`auto-enable-merge.yml`](../.github/workflows/auto-enable-merge.yml)
+- [`auto-labeler.yml`](../.github/workflows/auto-labeler.yml)
+- [`auto-merge.yml`](../.github/workflows/auto-merge.yml)
+- [`auto-pr-create.yml`](../.github/workflows/auto-pr-create.yml)
+- [`badge-management.yml`](../.github/workflows/badge-management.yml)
+- [`batch-pr-lifecycle.yml`](../.github/workflows/batch-pr-lifecycle.yml)
+- [`bio-description-completions.yml`](../.github/workflows/bio-description-completions.yml)
+- [`branch-cleanup-notify.yml`](../.github/workflows/branch-cleanup-notify.yml)
+- [`branch-lifecycle-management.yml`](../.github/workflows/branch-lifecycle-management.yml)
+- [`branch-lifecycle.yml`](../.github/workflows/branch-lifecycle.yml)
+- [`build-pages-site.yml`](../.github/workflows/build-pages-site.yml)
+- [`ci-advanced.yml`](../.github/workflows/ci-advanced.yml)
+- [`ci.yml`](../.github/workflows/ci.yml)
+- [`claude-code-review.yml`](../.github/workflows/claude-code-review.yml)
+- [`claude.yml`](../.github/workflows/claude.yml)
+- [`code-coverage.yml`](../.github/workflows/code-coverage.yml)
+- [`codeql-analysis.yml`](../.github/workflows/codeql-analysis.yml)
+- [`collect-deployment-metadata.yml`](../.github/workflows/collect-deployment-metadata.yml)
+- [`combine-prs.yml`](../.github/workflows/combine-prs.yml)
+- [`commit-tracking.yml`](../.github/workflows/commit-tracking.yml)
+- [`community-health.yml`](../.github/workflows/community-health.yml)
+- [`dependency-review.yml`](../.github/workflows/dependency-review.yml)
+- [`deploy-to-pages-live.yml`](../.github/workflows/deploy-to-pages-live.yml)
+- [`deployment.yml`](../.github/workflows/deployment.yml)
+- [`docker-build-push.yml`](../.github/workflows/docker-build-push.yml)
+- [`draft-to-ready-automation.yml`](../.github/workflows/draft-to-ready-automation.yml)
+- [`gemini-dispatch.yml`](../.github/workflows/gemini-dispatch.yml)
+- [`gemini-invoke.yml`](../.github/workflows/gemini-invoke.yml)
+- [`gemini-review.yml`](../.github/workflows/gemini-review.yml)
+- [`gemini-scheduled-triage.yml`](../.github/workflows/gemini-scheduled-triage.yml)
+- [`gemini-triage.yml`](../.github/workflows/gemini-triage.yml)
+- [`gemini_workflow.yml`](../.github/workflows/gemini_workflow.yml)
+- [`generate-pages-index.yml`](../.github/workflows/generate-pages-index.yml)
+- [`generate-walkthrough.yml`](../.github/workflows/generate-walkthrough.yml)
+- [`grok_workflow.yml`](../.github/workflows/grok_workflow.yml)
+- [`health-check-live-apps.yml`](../.github/workflows/health-check-live-apps.yml)
+- [`health-check.yml`](../.github/workflows/health-check.yml)
+- [`jules.yml`](../.github/workflows/jules.yml)
+- [`link-checker.yml`](../.github/workflows/link-checker.yml)
+- [`manual_reset.yml`](../.github/workflows/manual_reset.yml)
+- [`metrics-collection.yml`](../.github/workflows/metrics-collection.yml)
+- [`metrics-dashboard.yml`](../.github/workflows/metrics-dashboard.yml)
+- [`mutation-testing.yml`](../.github/workflows/mutation-testing.yml)
+- [`openai_workflow.yml`](../.github/workflows/openai_workflow.yml)
+- [`orchestrator.yml`](../.github/workflows/orchestrator.yml)
+- [`org-health-crawler.yml`](../.github/workflows/org-health-crawler.yml)
+- [`org-walkthrough-generator.yml`](../.github/workflows/org-walkthrough-generator.yml)
+- [`org-wide-workflow-dispatch.yml`](../.github/workflows/org-wide-workflow-dispatch.yml)
+- [`performance-benchmark.yml`](../.github/workflows/performance-benchmark.yml)
+- [`perplexity_workflow.yml`](../.github/workflows/perplexity_workflow.yml)
+- [`pr-batch-merge.yml`](../.github/workflows/pr-batch-merge.yml)
+- [`pr-quality-checks.yml`](../.github/workflows/pr-quality-checks.yml)
+- [`pr-suggestion-implementation.yml`](../.github/workflows/pr-suggestion-implementation.yml)
+- [`pr-task-catcher.yml`](../.github/workflows/pr-task-catcher.yml)
+- [`process_queue.yml`](../.github/workflows/process_queue.yml)
+- [`project-automation.yml`](../.github/workflows/project-automation.yml)
+- [`reconcile-deployments.yml`](../.github/workflows/reconcile-deployments.yml)
+- [`release.yml`](../.github/workflows/release.yml)
+- [`repo-metrics.yml`](../.github/workflows/repo-metrics.yml)
+- [`repository-bootstrap.yml`](../.github/workflows/repository-bootstrap.yml)
+- [`reset_quotas.yml`](../.github/workflows/reset_quotas.yml)
+- [`reusable-api-retry.yml`](../.github/workflows/reusable-api-retry.yml)
+- [`reusable-app-detect.yml`](../.github/workflows/reusable-app-detect.yml)
+- [`reusable-notify.yml`](../.github/workflows/reusable-notify.yml)
+- [`reusable-security-scan.yml`](../.github/workflows/reusable-security-scan.yml)
+- [`safeguard-5-secret-scanning.yml`](../.github/workflows/safeguard-5-secret-scanning.yml)
+- [`safeguard-6-admin-approval.yml`](../.github/workflows/safeguard-6-admin-approval.yml)
+- [`safeguard-7-staggered-scheduling.yml`](../.github/workflows/safeguard-7-staggered-scheduling.yml)
+- [`safeguard-8-usage-monitoring.yml`](../.github/workflows/safeguard-8-usage-monitoring.yml)
+- [`sbom-generation.yml`](../.github/workflows/sbom-generation.yml)
+- [`scan-for-secrets.yml`](../.github/workflows/scan-for-secrets.yml)
+- [`scheduled-walkthrough-generator.yml`](../.github/workflows/scheduled-walkthrough-generator.yml)
+- [`security-scan.yml`](../.github/workflows/security-scan.yml)
+- [`semantic-release.yml`](../.github/workflows/semantic-release.yml)
+- [`semgrep.yml`](../.github/workflows/semgrep.yml)
+- [`staggered-scheduling.yml`](../.github/workflows/staggered-scheduling.yml)
+- [`task-extraction.yml`](../.github/workflows/task-extraction.yml)
+- [`usage-monitoring.yml`](../.github/workflows/usage-monitoring.yml)
+- [`validate-quality.yml`](../.github/workflows/validate-quality.yml)
+- [`version-bump.yml`](../.github/workflows/version-bump.yml)
+- [`version-control-standards.yml`](../.github/workflows/version-control-standards.yml)
+- [`weekly-commit-report.yml`](../.github/workflows/weekly-commit-report.yml)
+- [`welcome.yml`](../.github/workflows/welcome.yml)
 
 </details>
 

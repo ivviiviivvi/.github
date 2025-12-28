@@ -450,7 +450,9 @@ def main():
             return
 
     if not report_path:
-        print("❌ No report specified. Use --report or --find-latest")
+        print("❌ No report specified.")
+        print("💡 Try running with --find-latest to use the most recent report:")
+        print("   python3 scripts/ecosystem_visualizer.py --find-latest")
         return
 
     visualizer = EcosystemVisualizer(report_path)
