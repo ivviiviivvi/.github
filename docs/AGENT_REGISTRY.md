@@ -4,7 +4,7 @@
 
 Welcome to the Agent Registry — your single source of truth for all GitHub Copilot agents available across the organization. This catalog provides comprehensive documentation for discovering, understanding, and using specialized agents that extend GitHub Copilot's capabilities.
 
-**Current Status**: 25 production-ready agents across 5 categories
+**Current Status**: 26 production-ready agents across 5 categories
 
 ## Table of Contents
 
@@ -36,6 +36,7 @@ Welcome to the Agent Registry — your single source of truth for all GitHub Cop
 | [Dynatrace Expert](#dynatrace-expert) | Development & Operations | Observability and security incident response | dynatrace | [agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md) |
 | [GitHub Org Manager](#github-organization-manager) | Infrastructure & DevOps | Organization governance and automation | github | [agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md) |
 | [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent) | Infrastructure & DevOps | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github | [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md) |
+| [House-Keeping PR Branch Deep Cleaner](#house-keeping-pr-branch-deep-cleaner) | Infrastructure & DevOps | Deep housekeeping for comprehensive PR and branch cleanup with task extraction | github | [agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md) |
 | [JFrog Security](#jfrog-security-agent) | Security & Compliance | Application security remediation | None | [agents/jfrog-sec.agent.md](../agents/jfrog-sec.agent.md) |
 | [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup) | Development & Operations | Automated feature flag cleanup | launchdarkly | [agents/launchdarkly-flag-cleanup.agent.md](../agents/launchdarkly-flag-cleanup.agent.md) |
 | [Neon Migration Specialist](#neon-migration-specialist) | Infrastructure & DevOps | Zero-downtime Postgres migrations | None | [agents/neon-migration-specialist.agent.md](../agents/neon-migration-specialist.agent.md) |
@@ -564,6 +565,62 @@ Agents for infrastructure management, cloud migrations, database operations, and
 - Workflow run history and metrics
 
 **Documentation**: [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md)
+
+---
+
+#### House-Keeping PR Branch Deep Cleaner
+
+**Purpose**: Comprehensive repository maintenance agent that performs deep analysis and cleanup of pull requests, branches, and related artifacts to maintain optimal repository health.
+
+**Key Features**:
+- Deep branch health analysis with dependency mapping
+- Stale PR management with intelligent task extraction
+- Automated merged branch cleanup
+- Orphaned branch identification and removal
+- PR metadata cleanup and standardization
+- Repository health scoring and trend analysis
+- Batch operations with safety checks
+- Integration with existing branch lifecycle workflows
+
+**Prerequisites**:
+- GitHub MCP server
+- Repository with branches and pull requests
+- Appropriate repository permissions (write access)
+
+**Invocation Examples**:
+```
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner perform a surface scan
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner clean up all merged branches
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner analyze stale PRs and extract tasks
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner generate repository health report
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner deep forensic scan of all branches
+@House-Keeping--Pull-Request--Branch--Deep-Cleaner batch close stale PRs older than 30 days
+```
+
+**Analysis Modes**:
+- **Surface Scan** (5-10 min): Quick health check with executive summary
+- **Standard Analysis** (15-30 min): Full health assessment with recommendations
+- **Deep Forensic Scan** (30-60 min): Comprehensive history analysis with cleanup plan
+
+**Integration Points**:
+- GitHub API (branches, PRs, commits, issues)
+- Branch lifecycle workflows
+- Branch cleanup notifications
+- Logical branch policy enforcement
+- Task extraction and issue creation
+
+**Safety Features**:
+- Mandatory dry-run mode
+- Task extraction before closure
+- Comprehensive audit trails
+- Risk-based operation approval
+- Rollback support and recovery
+
+**Related Workflows**:
+- `.github/workflows/branch-lifecycle.yml`
+- `.github/workflows/branch-cleanup-notify.yml`
+
+**Documentation**: [agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md)
 
 ---
 
