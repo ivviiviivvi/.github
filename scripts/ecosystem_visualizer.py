@@ -51,6 +51,7 @@ graph TD
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
+            # Add click event to open workflow file
             parts.append(f'        click {workflow_id} "../.github/workflows/{workflow}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
@@ -332,8 +333,8 @@ graph TD
                 parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
-                    workflow_path = f"../.github/workflows/{workflow}"
-                    parts.append(f"- [`{workflow}`]({workflow_path})\n")
+                    # Link to the workflow file (assuming relative path from reports/ to .github/workflows/)
+                    parts.append(f"- [`{workflow}`](../.github/workflows/{workflow})\n")
                 parts.append("\n</details>\n")
                 parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
