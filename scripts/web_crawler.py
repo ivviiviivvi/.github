@@ -155,6 +155,25 @@ class OrganizationCrawler:
         except socket.gaierror:
             return []
 
+    @functools.lru_cache(maxsize=1024)
+    def _is_hostname_safe(self, hostname: str) -> bool:
+        """Check if hostname resolves to safe IPs (cached)"""
+        ips = self._resolve_hostname(hostname)
+        if not ips:
+            return True  # Empty IPs handled by _check_link
+
+        for ip in ips:
+            # Handle IPv6 scope ids if present
+            if '%' in ip:
+                ip = ip.split('%')[0]
+            try:
+                ip_obj = ipaddress.ip_address(ip)
+                if not ip_obj.is_global or ip_obj.is_multicast:
+                    return False
+            except ValueError:
+                return False
+        return True
+
     def _is_safe_url(self, url: str) -> bool:
         """Check if URL resolves to a safe (non-local) IP address"""
         try:
@@ -200,14 +219,9 @@ class OrganizationCrawler:
                     return 404
 
                 # 3. Validate IPs (SSRF Check)
-                for ip in ips:
-                    if '%' in ip:
-                        ip = ip.split('%')[0]
-                    ip_obj = ipaddress.ip_address(ip)
-                    # Block any non-global IP or multicast
-                    if not ip_obj.is_global or ip_obj.is_multicast:
-                        print(f"  ⚠️  {target} (blocked: resolved to {ip})")
-                        return 403
+                if not self._is_hostname_safe(hostname):
+                    print(f"  ⚠️  {target} (blocked: resolved to unsafe IP)")
+                    return 403
 
                 # 4. Use first resolved IP for the request to prevent TOCTOU/DNS Rebinding
                 safe_ip = ips[0]
