@@ -39,8 +39,9 @@ class OrganizationCrawler:
         self.session.mount('http://', adapter)
 
         # Use urllib3 directly for safe verified requests to IPs
+        # Increase num_pools to avoid thrashing when visiting many different hosts
         self.http = urllib3.PoolManager(
-            num_pools=max_workers,
+            num_pools=max(50, max_workers * 5),
             maxsize=max_workers,
             cert_reqs='CERT_REQUIRED'
         )
@@ -106,17 +107,11 @@ class OrganizationCrawler:
 
         results['total_links'] = len(all_links)
 
-        links_to_check = []
-        for link in sorted(all_links):
-            # Skip internal anchors and relative paths
-            if link.startswith('#') or link.startswith('./') or link.startswith('../'):
-                continue
-
-            # Skip mailto: and other protocols
-            if not link.startswith('http'):
-                continue
-
-            links_to_check.append(link)
+        # Filter links efficiently
+        links_to_check = [
+            link for link in sorted(all_links)
+            if link.startswith(('http:', 'https:'))
+        ]
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers to be respectful but faster than serial
