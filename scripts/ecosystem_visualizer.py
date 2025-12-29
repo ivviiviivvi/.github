@@ -51,7 +51,8 @@ graph TD
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
-            parts.append(f'        click {workflow_id} "https://github.com/search?q={workflow}" "Search Workflow on GitHub"\n")
+            # Add click event to open workflow file
+            parts.append(f'        click {workflow_id} "../.github/workflows/{workflow}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
@@ -221,8 +222,8 @@ graph TD
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Active (< 90 days) | {active} | {active_pct:.1f}% |
-| Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
+| 🟢 Active (< 90 days) | {active} | {active_pct:.1f}% |
+| 🟠 Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
 | **Total** | **{total}** | **100%** |
 
 ### Health Score: {active_pct:.0f}/100
@@ -243,8 +244,8 @@ graph TD
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Valid | {valid} | {valid_pct:.1f}% |
-| Broken | {broken} | {100 - valid_pct:.1f}% |
+| ✅ Valid | {valid} | {valid_pct:.1f}% |
+| ❌ Broken | {broken} | {100 - valid_pct:.1f}% |
 | **Total** | **{total_links}** | **100%** |
 
 """)
@@ -260,11 +261,21 @@ graph TD
                         # Sanitize URL by stripping common trailing punctuation
                         url = url.rstrip('.,;:)')
                         status = link.get('status', 'Unknown')
+
+                        # Add status indicator
+                        status_str = str(status)
+                        if status_str.startswith('4'):
+                            status_emoji = '🔴' # Client Error
+                        elif status_str.startswith('5'):
+                            status_emoji = '💥' # Server Error
+                        else:
+                            status_emoji = '⚠️' # Unknown/Other
+
                         # Truncate long URLs for display (max 60 characters including ellipsis)
                         display_url = url if len(url) <= 60 else url[:57] + "..."
                         # Escape pipe characters for Markdown table
                         display_url = display_url.replace('|', '\\|')
-                        parts.append(f"| `{display_url}` | {status} |\n")
+                        parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
 
                     parts.append("\n</details>\n\n")
 
@@ -332,8 +343,8 @@ graph TD
                 parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
-                    workflow_path = Path(os.path.relpath(Path('.github/workflows'), output_path.parent if output_path else Path('reports'))) / workflow
-                    parts.append(f"- [`{workflow}`]({workflow_path.as_posix()})\n")
+                    # Link to the workflow file (assuming relative path from reports/ to .github/workflows/)
+                    parts.append(f"- [`{workflow}`](../.github/workflows/{workflow})\n")
                 parts.append("\n</details>\n")
                 parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 

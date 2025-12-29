@@ -110,7 +110,7 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 
 - **Location**: `agents/` directory
 - **Purpose**: Specialized GitHub Copilot agents that integrate with MCP servers for enhanced capabilities
-- **Count**: 19 production-ready agents across 5 categories (Security, Infrastructure, Development, Languages, Documentation)
+- **Count**: 26 production-ready agents across 5 categories (Security, Infrastructure, Development, Languages, Documentation)
 - **Registry**: See [Agent Registry](docs/AGENT_REGISTRY.md) for complete catalog with usage examples
 - **Examples**: CSharpExpert, Terraform, ADR Generator, Security Audit, Completionism Specialist, and partner integrations
 
@@ -141,7 +141,7 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 
 For detailed documentation on each component, see the `docs/` directory:
 
-- [**Agent Registry**](docs/AGENT_REGISTRY.md) - Complete catalog of 18 production agents + future roadmap
+- [**Agent Registry**](docs/AGENT_REGISTRY.md) - Complete catalog of 26 production agents + future roadmap
 - [Agents Documentation](docs/README.agents.md)
 - [Instructions Documentation](docs/README.instructions.md)
 - [Prompts Documentation](docs/README.prompts.md)
