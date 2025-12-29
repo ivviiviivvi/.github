@@ -240,7 +240,15 @@ graph TD
 
             if total_links > 0:
                 valid_pct = (valid / total_links * 100) if total_links > 0 else 0
+
+                # Create progress bar
+                bar_length = 20
+                filled_length = int(bar_length * valid_pct / 100)
+                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+
                 parts.append(f"""## 🔗 Link Health
+
+{bar} {valid_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
