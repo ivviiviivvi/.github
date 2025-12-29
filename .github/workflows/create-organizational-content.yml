@@ -1,0 +1,824 @@
+name: Create Organizational Content
+on:
+  workflow_dispatch:
+    inputs:
+      content_type:
+        description: 'Type of content to create'
+        required: true
+        type: choice
+        options:
+          - all
+          - issues
+          - discussions
+          - projects
+          - wiki
+      target_repo:
+        description: 'Target repository (leave empty for organization-wide)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (preview only, no creation)'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-issues:
+    if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'issues' }}
+    runs-on: ubuntu-latest
+    name: Create Comprehensive Issues
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create tracking issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          TARGET_REPO: ${{ github.event.inputs.target_repo || github.repository }}
+        run: |
+          echo "Creating issues in: $TARGET_REPO"
+          echo "Dry run: $DRY_RUN"
+          
+          # Define comprehensive issue set
+          declare -a issues=(
+            "Workflow Optimization::Review and optimize all GitHub Actions workflows for performance, security, and cost::enhancement,workflows"
+            "Documentation Audit::Comprehensive audit of all documentation for gaps, outdated content, and improvements::documentation"
+            "Security Hardening::Implement security best practices across all repositories::security,enhancement"
+            "Dependency Management::Audit and update all dependencies across the organization::dependencies"
+            "Testing Coverage::Improve test coverage across all repositories::testing,enhancement"
+            "Performance Benchmarking::Establish performance benchmarks and monitoring::performance"
+            "Accessibility Compliance::Ensure WCAG compliance across all user-facing applications::accessibility"
+            "API Documentation::Complete API documentation for all services::documentation,api"
+            "Error Handling::Standardize error handling across all applications::enhancement"
+            "Logging & Monitoring::Implement comprehensive logging and monitoring::observability"
+            "Code Review Process::Establish and document code review standards::process"
+            "Release Process::Document and automate release processes::process,automation"
+            "Onboarding Improvement::Enhance contributor onboarding experience::community"
+            "Community Health::Improve community health files and engagement::community"
+            "License Compliance::Audit license compliance across all dependencies::legal,compliance"
+            "Data Privacy::Implement GDPR/CCPA compliance measures::privacy,compliance"
+            "Infrastructure Documentation::Document all infrastructure and architecture::documentation,infrastructure"
+            "Disaster Recovery::Establish disaster recovery and backup procedures::infrastructure"
+            "CI/CD Pipeline Optimization::Optimize CI/CD pipelines for speed and reliability::ci-cd"
+            "Technical Debt::Track and address technical debt across projects::technical-debt"
+          )
+          
+          for issue_spec in "${issues[@]}"; do
+            IFS='::' read -r title body labels <<< "$issue_spec"
+            
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Issue: $title"
+            echo "Labels: $labels"
+            echo ""
+            
+            if [ "$DRY_RUN" = "false" ]; then
+              gh issue create \
+                --repo "$TARGET_REPO" \
+                --title "$title" \
+                --body "$body
+
+              ## Context
+              This issue was created as part of comprehensive organizational content creation.
+              
+              ## Related Documentation
+              - [Issue Taxonomy](docs/ISSUE_TAXONOMY.md)
+              - [Project Planning](docs/PROJECTS_GUIDE.md)
+              
+              ## Acceptance Criteria
+              - [ ] Requirements defined
+              - [ ] Implementation planned
+              - [ ] Work completed
+              - [ ] Documentation updated
+              - [ ] Changes verified" \
+                --label "$labels" || echo "Failed to create issue: $title"
+            else
+              echo "[DRY RUN] Would create issue with title: $title"
+            fi
+            echo ""
+          done
+
+      - name: Create meta issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          TARGET_REPO: ${{ github.event.inputs.target_repo || github.repository }}
+        run: |
+          # Create epic tracking issues
+          declare -a epics=(
+            "Infrastructure Modernization Epic::Track all infrastructure modernization initiatives::epic,infrastructure"
+            "Documentation Overhaul Epic::Comprehensive documentation improvement initiative::epic,documentation"
+            "Security Enhancement Epic::Organization-wide security improvements::epic,security"
+            "Developer Experience Epic::Improve contributor and developer experience::epic,dx"
+            "Community Growth Epic::Initiatives to grow and engage community::epic,community"
+          )
+          
+          for epic_spec in "${epics[@]}"; do
+            IFS='::' read -r title body labels <<< "$epic_spec"
+            
+            if [ "$DRY_RUN" = "false" ]; then
+              gh issue create \
+                --repo "$TARGET_REPO" \
+                --title "🎯 $title" \
+                --body "$body
+
+              ## Epic Overview
+              This epic tracks a large initiative spanning multiple sub-issues.
+              
+              ## Related Issues
+              Sub-issues will be linked here as they are created.
+              
+              ## Timeline
+              To be determined based on capacity and priorities.
+              
+              ## Success Metrics
+              - Metric 1: TBD
+              - Metric 2: TBD
+              - Metric 3: TBD" \
+                --label "$labels" || echo "Failed to create epic: $title"
+            else
+              echo "[DRY RUN] Would create epic: $title"
+            fi
+          done
+
+  create-discussion-content:
+    if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'discussions' }}
+    runs-on: ubuntu-latest
+    name: Create Discussion Documentation
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create discussion starter files
+        run: |
+          echo "Creating discussion starter templates..."
+          
+          mkdir -p .github/discussion-starters
+          
+          # Welcome discussion
+          cat > .github/discussion-starters/welcome.md << 'EOF'
+          # 👋 Welcome to Our Community!
+
+          Welcome to the Ivviiviivvi organization! We're excited to have you here.
+
+          ## Getting Started
+
+          - 📖 Read our [Contributing Guide](docs/CONTRIBUTING.md)
+          - 🤝 Review our [Code of Conduct](docs/CODE_OF_CONDUCT.md)
+          - 💡 Check out [Good First Issues](https://github.com/search?q=org:ivviiviivvi+label:"good+first+issue"+state:open&type=issues)
+
+          ## Introduce Yourself
+
+          Tell us about yourself:
+          - What brings you here?
+          - What are you interested in working on?
+          - What's your experience level?
+
+          We're happy to have you in our community! 🎉
+          EOF
+          
+          # Monthly showcase discussion
+          cat > .github/discussion-starters/monthly-showcase.md << 'EOF'
+          # 🏆 Monthly Showcase - {{MONTH}} {{YEAR}}
+
+          Share what you've been building with our projects!
+
+          ## What to Share
+
+          - Projects using our tools
+          - Creative integrations
+          - Tutorial content
+          - Useful scripts or utilities
+
+          ## Template
+
+          **Project Name**: 
+          **Description**: 
+          **Demo**: 
+          **Code**: 
+          **What you learned**: 
+
+          Let's celebrate our community's creativity! 🎨
+          EOF
+          
+          # Best practices discussion
+          cat > .github/discussion-starters/best-practices.md << 'EOF'
+          # 🎯 Best Practices Discussion
+
+          Let's discuss and establish best practices for our projects.
+
+          ## Topics for Discussion
+
+          - Code organization patterns
+          - Testing strategies
+          - Documentation approaches
+          - CI/CD workflows
+          - Security practices
+
+          ## Contributing Your Insights
+
+          Share your experience and help us improve our standards!
+          EOF
+          
+          echo "✓ Discussion starter templates created"
+
+      - name: Document discussion strategy
+        run: |
+          echo "Discussion documentation already created in docs/DISCUSSION_GUIDE.md"
+          ls -la docs/DISCUSSION_GUIDE.md
+
+  create-project-templates:
+    if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'projects' }}
+    runs-on: ubuntu-latest
+    name: Create Project Templates
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create project configuration files
+        run: |
+          echo "Creating project template configurations..."
+          
+          mkdir -p .github/project-templates
+          
+          # Product roadmap project
+          cat > .github/project-templates/product-roadmap.json << 'EOF'
+          {
+            "name": "Product Roadmap",
+            "description": "Track features and releases across quarters",
+            "fields": [
+              {
+                "name": "Status",
+                "type": "single_select",
+                "options": ["Planned", "In Progress", "In Review", "Shipped"]
+              },
+              {
+                "name": "Quarter",
+                "type": "single_select",
+                "options": ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025"]
+              },
+              {
+                "name": "Priority",
+                "type": "single_select",
+                "options": ["P0", "P1", "P2", "P3"]
+              },
+              {
+                "name": "Size",
+                "type": "single_select",
+                "options": ["XS", "S", "M", "L", "XL"]
+              },
+              {
+                "name": "Theme",
+                "type": "single_select",
+                "options": ["Performance", "Security", "UX", "Infrastructure"]
+              }
+            ],
+            "views": [
+              {
+                "name": "Roadmap",
+                "type": "roadmap",
+                "group_by": "Quarter"
+              },
+              {
+                "name": "By Status",
+                "type": "board",
+                "group_by": "Status"
+              },
+              {
+                "name": "By Priority",
+                "type": "table",
+                "group_by": "Priority",
+                "sort_by": "Status"
+              }
+            ]
+          }
+          EOF
+          
+          # Bug triage project
+          cat > .github/project-templates/bug-triage.json << 'EOF'
+          {
+            "name": "Bug Triage & Resolution",
+            "description": "Track and prioritize bug fixes",
+            "fields": [
+              {
+                "name": "Status",
+                "type": "single_select",
+                "options": ["New", "Triaged", "Investigating", "Fixing", "Testing", "Resolved"]
+              },
+              {
+                "name": "Priority",
+                "type": "single_select",
+                "options": ["P0-Critical", "P1-High", "P2-Medium", "P3-Low"]
+              },
+              {
+                "name": "Severity",
+                "type": "single_select",
+                "options": ["Blocker", "Major", "Minor", "Trivial"]
+              },
+              {
+                "name": "Component",
+                "type": "multi_select",
+                "options": ["Frontend", "Backend", "API", "Database", "Infrastructure"]
+              },
+              {
+                "name": "Reproducibility",
+                "type": "single_select",
+                "options": ["Always", "Sometimes", "Once", "Unable"]
+              }
+            ],
+            "views": [
+              {
+                "name": "By Priority",
+                "type": "board",
+                "group_by": "Priority"
+              },
+              {
+                "name": "By Component",
+                "type": "table",
+                "group_by": "Component"
+              },
+              {
+                "name": "Triage Queue",
+                "type": "table",
+                "filter": "Status:New",
+                "sort_by": "Created"
+              }
+            ]
+          }
+          EOF
+          
+          # Sprint planning project
+          cat > .github/project-templates/sprint-planning.json << 'EOF'
+          {
+            "name": "Sprint Planning",
+            "description": "Manage 2-week development sprints",
+            "fields": [
+              {
+                "name": "Status",
+                "type": "single_select",
+                "options": ["Backlog", "Todo", "In Progress", "Review", "Done"]
+              },
+              {
+                "name": "Sprint",
+                "type": "iteration",
+                "duration": 14
+              },
+              {
+                "name": "Story Points",
+                "type": "number"
+              },
+              {
+                "name": "Type",
+                "type": "single_select",
+                "options": ["Feature", "Bug", "Chore", "Spike"]
+              },
+              {
+                "name": "Blocked",
+                "type": "checkbox"
+              }
+            ],
+            "views": [
+              {
+                "name": "Current Sprint",
+                "type": "board",
+                "filter": "Sprint:Current",
+                "group_by": "Status"
+              },
+              {
+                "name": "By Assignee",
+                "type": "table",
+                "group_by": "Assignee"
+              },
+              {
+                "name": "Velocity",
+                "type": "chart",
+                "metric": "Story Points",
+                "group_by": "Sprint"
+              }
+            ]
+          }
+          EOF
+          
+          echo "✓ Project template configurations created"
+
+      - name: Document project setup
+        run: |
+          echo "Project documentation already created in docs/PROJECTS_GUIDE.md"
+          ls -la docs/PROJECTS_GUIDE.md
+
+  create-wiki-structure:
+    if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'wiki' }}
+    runs-on: ubuntu-latest
+    name: Create Wiki Structure Documentation
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create wiki page templates
+        run: |
+          echo "Creating wiki page templates..."
+          
+          mkdir -p .github/wiki-templates
+          
+          # Home page template
+          cat > .github/wiki-templates/Home.md << 'EOF'
+          # {{PROJECT_NAME}} Wiki
+
+          > **Quick Description**: {{PROJECT_DESCRIPTION}}
+
+          Welcome to the {{PROJECT_NAME}} wiki!
+
+          ## 🚀 Quick Links
+
+          - [[Installation]] - Get up and running
+          - [[Quick Start]] - Your first 5 minutes
+          - [[User Guide]] - Complete documentation
+          - [[FAQ]] - Frequently asked questions
+
+          ## 📖 Documentation Sections
+
+          ### For Users
+          - [[Installation]]
+          - [[User Guide]]
+          - [[Tutorials]]
+          - [[FAQ]]
+
+          ### For Developers
+          - [[Development Setup]]
+          - [[Architecture]]
+          - [[API Reference]]
+          - [[Contributing]]
+
+          ### For Administrators
+          - [[Deployment Guide]]
+          - [[Configuration]]
+          - [[Monitoring]]
+
+          ## 🆘 Getting Help
+
+          - 💬 [Discussions]({{DISCUSSIONS_URL}})
+          - 🐛 [Issues]({{ISSUES_URL}})
+          - 📧 [Contact]({{CONTACT_URL}})
+          EOF
+          
+          # Installation template
+          cat > .github/wiki-templates/Installation.md << 'EOF'
+          # Installation
+
+          > **Prerequisites**: {{PREREQUISITES}}
+
+          ## Quick Install
+
+          ```bash
+          {{QUICK_INSTALL_COMMAND}}
+          ```
+
+          ## Detailed Installation
+
+          ### 1. System Requirements
+
+          | Component | Minimum | Recommended |
+          |-----------|---------|-------------|
+          | OS | {{MIN_OS}} | {{REC_OS}} |
+          | RAM | {{MIN_RAM}} | {{REC_RAM}} |
+          | Disk | {{MIN_DISK}} | {{REC_DISK}} |
+
+          ### 2. Install Dependencies
+
+          ```bash
+          {{DEPENDENCY_INSTALL_COMMANDS}}
+          ```
+
+          ### 3. Install {{PROJECT_NAME}}
+
+          ```bash
+          {{INSTALL_COMMANDS}}
+          ```
+
+          ### 4. Verify Installation
+
+          ```bash
+          {{VERIFY_COMMAND}}
+          ```
+
+          ## Next Steps
+
+          - [[Quick Start]]
+          - [[Configuration]]
+          EOF
+          
+          # FAQ template
+          cat > .github/wiki-templates/FAQ.md << 'EOF'
+          # Frequently Asked Questions
+
+          ## General Questions
+
+          ### What is {{PROJECT_NAME}}?
+
+          {{PROJECT_NAME}} is...
+
+          ### Why should I use {{PROJECT_NAME}}?
+
+          You should use {{PROJECT_NAME}} if...
+
+          ## Technical Questions
+
+          ### What are the system requirements?
+
+          See [[Installation#System-Requirements]].
+
+          ### How do I {{COMMON_TASK}}?
+
+          See [[How To: {{COMMON_TASK}}]].
+
+          ## Troubleshooting
+
+          See [[Troubleshooting]] for common issues.
+
+          ## Still Have Questions?
+
+          - 💬 [Ask in Discussions]({{DISCUSSIONS_URL}})
+          - 📧 [Contact us]({{CONTACT_URL}})
+          EOF
+          
+          # Sidebar template
+          cat > .github/wiki-templates/_Sidebar.md << 'EOF'
+          ## Navigation
+
+          **Getting Started**
+          - [[Home]]
+          - [[Installation]]
+          - [[Quick Start]]
+
+          **Guides**
+          - [[User Guide]]
+          - [[Developer Guide]]
+
+          **Reference**
+          - [[API Reference]]
+          - [[Configuration]]
+
+          **Help**
+          - [[FAQ]]
+          - [[Troubleshooting]]
+
+          ---
+
+          📝 [[Edit|_Sidebar]]
+          EOF
+          
+          echo "✓ Wiki templates created"
+
+      - name: Document wiki strategy
+        run: |
+          echo "Wiki documentation already created in docs/WIKI_GUIDE.md"
+          ls -la docs/WIKI_GUIDE.md
+
+  generate-summary:
+    needs: [create-issues, create-discussion-content, create-project-templates, create-wiki-structure]
+    if: always()
+    runs-on: ubuntu-latest
+    name: Generate Summary
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create comprehensive summary
+        run: |
+          cat > ORGANIZATIONAL_CONTENT_SUMMARY.md << 'EOF'
+          # Organizational Content Creation Summary
+
+          **Created**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Overview
+
+          This repository now contains comprehensive documentation, templates, and automation for creating exhaustive organizational content across GitHub's features:
+
+          - ✅ **Issues**: Taxonomy, templates, and tracking
+          - ✅ **Discussions**: Categories, templates, and engagement guide
+          - ✅ **Projects**: Templates, views, and automation
+          - ✅ **Wikis**: Structure, templates, and maintenance guide
+
+          ## Created Documentation
+
+          ### Issue Management
+          - `docs/ISSUE_TAXONOMY.md` - Comprehensive issue classification system
+          - 20+ issue types defined
+          - Priority levels and SLA definitions
+          - Status workflow documented
+
+          ### Discussion Management
+          - `docs/DISCUSSION_GUIDE.md` - Complete discussion framework
+          - 12 discussion categories with templates
+          - Engagement best practices
+          - Moderation guidelines
+
+          ### Project Management
+          - `docs/PROJECTS_GUIDE.md` - GitHub Projects (v2) guide
+          - 10 project templates
+          - Custom field configurations
+          - Automation patterns
+
+          ### Wiki Management
+          - `docs/WIKI_GUIDE.md` - Wiki structure and maintenance
+          - 8 page templates
+          - Content ownership model
+          - Backup and migration strategies
+
+          ## Created Templates
+
+          ### Discussion Templates
+          - `.github/discussion-starters/` - Ready-to-use discussion starters
+          - Welcome discussion
+          - Monthly showcase
+          - Best practices
+
+          ### Project Templates
+          - `.github/project-templates/` - Project configurations
+          - Product roadmap
+          - Bug triage
+          - Sprint planning
+
+          ### Wiki Templates
+          - `.github/wiki-templates/` - Wiki page templates
+          - Home page
+          - Installation guide
+          - FAQ
+          - Sidebar navigation
+
+          ## Automation
+
+          ### Workflows Created
+          - `create-organizational-content.yml` - This workflow for automated content creation
+
+          ### Automation Features
+          - Issue batch creation
+          - Discussion starter generation
+          - Project template export
+          - Wiki structure setup
+
+          ## Next Steps
+
+          ### For Repository Administrators
+
+          1. **Enable Features**:
+             ```bash
+             # Enable Issues (if not enabled)
+             gh repo edit --enable-issues
+             
+             # Enable Discussions
+             gh repo edit --enable-discussions
+             
+             # Enable Wiki
+             gh repo edit --enable-wiki
+             
+             # Enable Projects
+             gh repo edit --enable-projects
+             ```
+
+          2. **Create Initial Content**:
+             - Run this workflow with `dry_run: false`
+             - Review and customize created issues
+             - Set up discussion categories
+             - Create projects from templates
+             - Initialize wiki structure
+
+          3. **Configure Automation**:
+             - Set up issue auto-labeling
+             - Configure discussion auto-responses
+             - Enable project automations
+             - Schedule wiki backups
+
+          ### For Content Maintainers
+
+          1. **Review Documentation**:
+             - Read all guide documents
+             - Understand taxonomy and structure
+             - Familiarize with templates
+
+          2. **Customize for Your Needs**:
+             - Adjust issue labels
+             - Modify discussion categories
+             - Adapt project fields
+             - Tailor wiki structure
+
+          3. **Establish Governance**:
+             - Assign content owners
+             - Set review schedules
+             - Define quality standards
+             - Create maintenance procedures
+
+          ## Usage Examples
+
+          ### Creating Issues
+
+          ```bash
+          # Create from taxonomy
+          gh issue create \
+            --title "Performance: Optimize API response time" \
+            --body "See ISSUE_TAXONOMY.md for context" \
+            --label "performance,enhancement,P1"
+          ```
+
+          ### Starting Discussions
+
+          ```bash
+          # Use discussion starters
+          gh discussion create \
+            --category "Show and Tell" \
+            --title "Monthly Showcase - January 2025" \
+            --body-file .github/discussion-starters/monthly-showcase.md
+          ```
+
+          ### Setting Up Projects
+
+          ```bash
+          # Create project from template
+          # (Use GitHub web UI or API - CLI doesn't support Projects v2 creation yet)
+          # Reference: .github/project-templates/product-roadmap.json
+          ```
+
+          ### Initializing Wiki
+
+          ```bash
+          # Clone wiki repository
+          git clone https://github.com/org/repo.wiki.git
+          
+          # Copy templates
+          cp .github/wiki-templates/*.md repo.wiki/
+          
+          # Customize and push
+          cd repo.wiki
+          # Edit files
+          git add .
+          git commit -m "Initialize wiki from templates"
+          git push
+          ```
+
+          ## Metrics & Success Indicators
+
+          ### Issues
+          - **Target**: 50+ well-categorized issues
+          - **Measure**: Issue distribution across categories
+          - **Success**: All major work areas have tracking issues
+
+          ### Discussions
+          - **Target**: Active discussion in each category
+          - **Measure**: Engagement rate (responses per discussion)
+          - **Success**: Community-driven Q&A and knowledge sharing
+
+          ### Projects
+          - **Target**: 3+ active project boards
+          - **Measure**: Item throughput and velocity
+          - **Success**: Clear visibility into work progress
+
+          ### Wiki
+          - **Target**: Comprehensive documentation coverage
+          - **Measure**: Page views and search success rate
+          - **Success**: Community can self-serve answers
+
+          ## Resources
+
+          ### Documentation
+          - [Issue Taxonomy](docs/ISSUE_TAXONOMY.md)
+          - [Discussion Guide](docs/DISCUSSION_GUIDE.md)
+          - [Projects Guide](docs/PROJECTS_GUIDE.md)
+          - [Wiki Guide](docs/WIKI_GUIDE.md)
+
+          ### GitHub Documentation
+          - [Issues](https://docs.github.com/en/issues)
+          - [Discussions](https://docs.github.com/en/discussions)
+          - [Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
+          - [Wiki](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
+
+          ### Templates
+          - [Discussion Starters](.github/discussion-starters/)
+          - [Project Templates](.github/project-templates/)
+          - [Wiki Templates](.github/wiki-templates/)
+
+          ## Support
+
+          For questions or assistance:
+          - 💬 Open a discussion
+          - 📧 Contact maintainers
+          - 📖 Review documentation guides
+
+          ---
+
+          **Status**: Content creation framework ready for deployment  
+          **Maintained By**: @ivviiviivvi organization  
+          **Last Updated**: $(date -u +"%Y-%m-%d")
+          EOF
+          
+          cat ORGANIZATIONAL_CONTENT_SUMMARY.md
+
+      - name: Commit summary
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'docs: add organizational content creation summary'
+          file_pattern: 'ORGANIZATIONAL_CONTENT_SUMMARY.md .github/discussion-starters/* .github/project-templates/* .github/wiki-templates/*'

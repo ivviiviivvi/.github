@@ -13,6 +13,8 @@ from datetime import datetime
 class EcosystemVisualizer:
     """Generate visual representations of the ecosystem"""
 
+    _WORKFLOW_BASE_PATH = "../.github/workflows/"
+
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
         self.report_data = None
@@ -21,13 +23,56 @@ class EcosystemVisualizer:
             with open(report_path) as f:
                 self.report_data = json.load(f)
 
-    def generate_mermaid_diagram(self) -> str:
+    def _calculate_relative_path(self, output_path: Path, target_path: str) -> str:
+        """
+        Calculate the correct relative path from output_path to target_path.
+        
+        Args:
+            output_path: The path where the dashboard will be written
+            target_path: The target path relative to repository root (e.g., '.github/workflows/')
+        
+        Returns:
+            The correct relative path to use in links
+        """
+        if not output_path:
+            # Default case - assume output is in reports/
+            return f"../{target_path}"
+        
+        # Get the parent directory of the output file
+        # This represents where the file will be located
+        output_dir = output_path.parent
+        
+        # Normalize the path to handle both absolute and relative paths consistently
+        # We only care about the depth of the directory structure, not the absolute location
+        # Convert Path('.') to empty to handle root level
+        if output_dir == Path('.') or str(output_dir) == '.':
+            depth = 0
+        else:
+            # Count directory levels by splitting on path separator
+            # This works for both absolute and relative paths
+            parts = str(output_dir).replace('\\', '/').strip('/').split('/')
+            # Filter out empty parts
+            parts = [p for p in parts if p and p != '.']
+            depth = len(parts)
+        
+        # Build the relative path with the appropriate number of ../
+        if depth == 0:
+            # Root level - no parent references needed
+            return target_path
+        else:
+            parent_refs = "../" * depth
+            return f"{parent_refs}{target_path}"
+
+    def generate_mermaid_diagram(self, output_path: Path = None) -> str:
         """Generate Mermaid diagram of the ecosystem"""
 
         if not self.report_data or 'ecosystem_map' not in self.report_data:
             return "No ecosystem data available"
 
         em = self.report_data['ecosystem_map']
+        
+        # Calculate the correct relative path for workflow links
+        workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
 
         # Use a list for efficient string concatenation
         parts = []
@@ -51,7 +96,8 @@ graph TD
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
-            parts.append(f'        click {workflow_id} "https://github.com/search?q={workflow}" "Search Workflow on GitHub"\n")
+            # Add click event to open workflow file
+            parts.append(f'        click {workflow_id} "{workflow_path}{workflow}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
@@ -221,8 +267,8 @@ graph TD
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Active (< 90 days) | {active} | {active_pct:.1f}% |
-| Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
+| 🟢 Active (< 90 days) | {active} | {active_pct:.1f}% |
+| 🟠 Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
 | **Total** | **{total}** | **100%** |
 
 ### Health Score: {active_pct:.0f}/100
@@ -239,12 +285,20 @@ graph TD
 
             if total_links > 0:
                 valid_pct = (valid / total_links * 100) if total_links > 0 else 0
+
+                # Create progress bar
+                bar_length = 20
+                filled_length = int(bar_length * valid_pct / 100)
+                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+
                 parts.append(f"""## 🔗 Link Health
+
+{bar} {valid_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Valid | {valid} | {valid_pct:.1f}% |
-| Broken | {broken} | {100 - valid_pct:.1f}% |
+| ✅ Valid | {valid} | {valid_pct:.1f}% |
+| ❌ Broken | {broken} | {100 - valid_pct:.1f}% |
 | **Total** | **{total_links}** | **100%** |
 
 """)
@@ -260,11 +314,21 @@ graph TD
                         # Sanitize URL by stripping common trailing punctuation
                         url = url.rstrip('.,;:)')
                         status = link.get('status', 'Unknown')
+
+                        # Add status indicator
+                        status_str = str(status)
+                        if status_str.startswith('4'):
+                            status_emoji = '🔴' # Client Error
+                        elif status_str.startswith('5'):
+                            status_emoji = '💥' # Server Error
+                        else:
+                            status_emoji = '⚠️' # Unknown/Other
+
                         # Truncate long URLs for display (max 60 characters including ellipsis)
                         display_url = url if len(url) <= 60 else url[:57] + "..."
                         # Escape pipe characters for Markdown table
                         display_url = display_url.replace('|', '\\|')
-                        parts.append(f"| `{display_url}` | {status} |\n")
+                        parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
 
                     parts.append("\n</details>\n\n")
 
@@ -291,7 +355,7 @@ graph TD
 
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
-        parts.append(self.generate_mermaid_diagram())
+        parts.append(self.generate_mermaid_diagram(output_path))
         parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Technology coverage
@@ -329,11 +393,14 @@ graph TD
             workflows = em.get('workflows', [])
 
             if workflows:
+                # Calculate the correct relative path for workflow links
+                workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
+                
                 parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
-                    workflow_path = Path(os.path.relpath(Path('.github/workflows'), output_path.parent if output_path else Path('reports'))) / workflow
-                    parts.append(f"- [`{workflow}`]({workflow_path.as_posix()})\n")
+                    # Link to the workflow file with calculated relative path
+                    parts.append(f"- [`{workflow}`]({workflow_path}{workflow})\n")
                 parts.append("\n</details>\n")
                 parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
