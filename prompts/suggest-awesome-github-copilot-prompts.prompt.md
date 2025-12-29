@@ -37,13 +37,48 @@ Analyze current repository context and suggest relevant prompt files from the [G
 
 ## Output Format
 
-Display analysis results in structured table comparing awesome-copilot prompts with existing repository prompts:
+### 🎯 Executive Summary
 
-| Awesome-Copilot Prompt | Description | Already Installed | Similar Local Prompt | Suggestion Rationale |
-|-------------------------|-------------|-------------------|---------------------|---------------------|
-| [code-review.md](https://github.com/github/awesome-copilot/blob/main/prompts/code-review.md) | Automated code review prompts | ❌ No | None | Would enhance development workflow with standardized code review processes |
-| [documentation.md](https://github.com/github/awesome-copilot/blob/main/prompts/documentation.md) | Generate project documentation | ✅ Yes | create_oo_component_documentation.prompt.md | Already covered by existing documentation prompts |
-| [debugging.md](https://github.com/github/awesome-copilot/blob/main/prompts/debugging.md) | Debug assistance prompts | ❌ No | None | Could improve troubleshooting efficiency for development team |
+Provide a quick overview of the analysis:
+- **Total Prompts Analyzed**: X prompts from awesome-copilot
+- **Already Installed**: X prompts (X%)
+- **Recommended**: X high-value additions
+- **Optional**: X nice-to-have prompts
+- **Not Recommended**: X (overlap or low relevance)
+
+### 📊 Recommendations by Priority
+
+Display suggestions grouped by priority with enhanced visual hierarchy:
+
+#### 🔥 High Priority (Immediate Value)
+
+| Priority | Prompt Name | Description | Quality Indicators | Status | Local Alternative | Value Proposition |
+|----------|-------------|-------------|-------------------|--------|-------------------|-------------------|
+| 🔥🔥🔥 | [code-review](https://github.com/github/awesome-copilot/blob/main/prompts/code-review.md) | Automated code review prompts | ⭐ 450 stars · 📈 Trending · 💬 85 discussions | ❌ Missing | None | Critical gap: Would standardize code review process across all repos |
+| 🔥🔥 | [debugging-assistant](https://github.com/github/awesome-copilot/blob/main/prompts/debugging.md) | Advanced debugging workflows | ⭐ 320 stars · 🔥 Popular · ✅ Well-maintained | ❌ Missing | None | High impact: Reduce debugging time by ~40% |
+
+#### ⚡ Medium Priority (Quality Improvements)
+
+| Priority | Prompt Name | Description | Quality Indicators | Status | Local Alternative | Value Proposition |
+|----------|-------------|-------------|-------------------|--------|-------------------|-------------------|
+| ⚡⚡ | [test-generation](https://github.com/github/awesome-copilot/blob/main/prompts/test-gen.md) | Auto-generate test cases | ⭐ 280 stars · 📚 Well-documented | ⚠️ Similar | breakdown-test.prompt.md | Enhancement: More comprehensive than existing test prompt |
+
+#### 💡 Optional (Nice to Have)
+
+| Priority | Prompt Name | Description | Quality Indicators | Status | Local Alternative | Value Proposition |
+|----------|-------------|-------------|-------------------|--------|-------------------|-------------------|
+| 💡 | [documentation](https://github.com/github/awesome-copilot/blob/main/prompts/documentation.md) | Generate project docs | ⭐ 195 stars · 📖 Stable | ✅ Covered | create-readme.prompt.md, documentation-writer.prompt.md | Already well-covered by 2 existing prompts |
+
+### 📈 Quality Indicators Legend
+
+- ⭐ **Stars**: GitHub stars (popularity metric)
+- 📈 **Trending**: Recently gaining traction (>25% growth in 30 days)
+- 🔥 **Popular**: High usage/adoption (top 25%)
+- 💬 **Discussions**: Active community engagement (>50 discussions)
+- ✅ **Well-maintained**: Updated within last 60 days
+- 📚 **Well-documented**: Comprehensive documentation
+- 🎓 **Course Featured**: Mentioned in popular courses
+- 👥 **Team Recommended**: Endorsed by GitHub teams
 
 ## Local Prompts Discovery Process
 
@@ -52,20 +87,61 @@ Display analysis results in structured table comparing awesome-copilot prompts w
 3. Build comprehensive inventory of existing prompts
 4. Use this inventory to avoid suggesting duplicates
 
+## Quality Metrics Analysis
+
+When analyzing prompts from awesome-copilot, gather and display these quality indicators:
+
+1. **Popularity Metrics**:
+   - GitHub stars on the awesome-copilot repository
+   - Number of forks and watchers
+   - Community discussion activity
+
+2. **Quality Signals**:
+   - Last updated date (freshness)
+   - Maintenance frequency
+   - Documentation completeness
+   - Number of contributors
+   - Issue resolution rate
+
+3. **Adoption Indicators**:
+   - Mentioned in GitHub courses/documentation
+   - Featured in GitHub blog posts
+   - Trending status (recent star growth)
+   - External references and citations
+
+4. **Relevance Scoring**:
+   - Match with repository technology stack (0-100%)
+   - Gap analysis score (how much value it adds)
+   - Team need alignment (based on chat history)
+
 ## Requirements
 
-- Use `githubRepo` tool to get content from awesome-copilot repository
+- Use `githubRepo` tool to get content and metadata from awesome-copilot repository
+- Gather popularity and quality metrics from GitHub API (with fallback to cached/estimated values if API unavailable)
 - Scan local file system for existing prompts in `.github/prompts/` directory
 - Read YAML front matter from local prompt files to extract descriptions
 - Compare against existing prompts in this repository to avoid duplicates
+- **PRIORITIZE** prompts with highest quality indicators and relevance scores
 - Focus on gaps in current prompt library coverage
 - Validate that suggested prompts align with repository's purpose and standards
-- Provide clear rationale for each suggestion
+- Provide clear, data-driven rationale for each suggestion with metrics
 - Include links to both awesome-copilot prompts and similar local prompts
-- Don't provide any additional information or context beyond the table and the analysis
+- Group recommendations by priority (High/Medium/Optional)
+- Use visual hierarchy with emojis, badges, and formatting for scannability
+- Provide executive summary with key statistics
+- Don't provide any additional information or context beyond the structured output
 
+## Icons & Status Reference
 
-## Icons Reference
+### Status Indicators
+- ✅ **Covered**: Already installed or well-covered by existing prompts
+- ❌ **Missing**: Not available in repository, recommended for installation
+- ⚠️ **Similar**: Partial coverage, enhancement opportunity
+- 🔄 **Update**: Newer version available
 
-- ✅ Already installed in repo
-- ❌ Not installed in repo
+### Priority Levels
+- 🔥🔥🔥 **Critical**: Must-have, immediate installation recommended
+- 🔥🔥 **High**: Strong recommendation, high value-add
+- ⚡⚡ **Medium**: Quality improvement opportunity
+- 💡 **Optional**: Nice-to-have, consider based on specific needs
+- ⛔ **Not Recommended**: Significant overlap or not relevant

@@ -142,11 +142,26 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 For detailed documentation on each component, see the `docs/` directory:
 
 - [**Agent Registry**](docs/AGENT_REGISTRY.md) - Complete catalog of 26 production agents + future roadmap
+- [**Suggest-Awesome Enhancements**](docs/SUGGEST_AWESOME_ENHANCEMENTS.md) - 🆕 Quality metrics & visual hierarchy for discovering best assets
 - [Agents Documentation](docs/README.agents.md)
 - [Instructions Documentation](docs/README.instructions.md)
 - [Prompts Documentation](docs/README.prompts.md)
 - [Chat Modes Documentation](docs/README.chatmodes.md)
 - [Collections Documentation](docs/README.collections.md)
+
+#### 🆕 Smart Asset Discovery
+
+The repository includes enhanced `suggest-awesome-*` prompts that help you discover the best GitHub Copilot assets with:
+
+- **📊 Quality Metrics**: Star counts, trending indicators, maintenance status, community engagement
+- **🎯 Priority Ranking**: Critical (🔥🔥🔥), High (🔥🔥), Medium (⚡⚡), Optional (💡) recommendations
+- **🗂️ Intelligent Categorization**: By technology, role, integration type, or theme
+- **💰 ROI Analysis**: Setup time, coverage gaps, value propositions, new asset percentages
+- **📈 Visual Hierarchy**: Executive summaries, category breakdowns, detailed comparisons
+
+**Try it**: Use prompts like `/suggest-awesome-github-copilot-collections` to discover curated bundles or `/suggest-awesome-github-copilot-instructions` for language-specific coding standards.
+
+**Learn more**: [Suggest-Awesome Enhancements Guide](docs/SUGGEST_AWESOME_ENHANCEMENTS.md)
 
 ### Mouthpiece Filter System
 
