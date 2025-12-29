@@ -5,6 +5,7 @@ Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring
 """
 
 import json
+import os
 from pathlib import Path
 from typing import Dict, List
 from datetime import datetime
