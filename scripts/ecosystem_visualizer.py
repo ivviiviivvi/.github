@@ -21,13 +21,56 @@ class EcosystemVisualizer:
             with open(report_path) as f:
                 self.report_data = json.load(f)
 
-    def generate_mermaid_diagram(self) -> str:
+    def _calculate_relative_path(self, output_path: Path, target_path: str) -> str:
+        """
+        Calculate the correct relative path from output_path to target_path.
+        
+        Args:
+            output_path: The path where the dashboard will be written
+            target_path: The target path relative to repository root (e.g., '.github/workflows/')
+        
+        Returns:
+            The correct relative path to use in links
+        """
+        if not output_path:
+            # Default case - assume output is in reports/
+            return f"../{target_path}"
+        
+        # Get the parent directory of the output file
+        # This represents where the file will be located
+        output_dir = output_path.parent
+        
+        # Normalize the path to handle both absolute and relative paths consistently
+        # We only care about the depth of the directory structure, not the absolute location
+        # Convert Path('.') to empty to handle root level
+        if output_dir == Path('.') or str(output_dir) == '.':
+            depth = 0
+        else:
+            # Count directory levels by splitting on path separator
+            # This works for both absolute and relative paths
+            parts = str(output_dir).replace('\\', '/').strip('/').split('/')
+            # Filter out empty parts
+            parts = [p for p in parts if p and p != '.']
+            depth = len(parts)
+        
+        # Build the relative path with the appropriate number of ../
+        if depth == 0:
+            # Root level - no parent references needed
+            return target_path
+        else:
+            parent_refs = "../" * depth
+            return f"{parent_refs}{target_path}"
+
+    def generate_mermaid_diagram(self, output_path: Path = None) -> str:
         """Generate Mermaid diagram of the ecosystem"""
 
         if not self.report_data or 'ecosystem_map' not in self.report_data:
             return "No ecosystem data available"
 
         em = self.report_data['ecosystem_map']
+        
+        # Calculate the correct relative path for workflow links
+        workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
 
         # Use a list for efficient string concatenation
         parts = []
@@ -52,7 +95,7 @@ graph TD
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
             # Add click event to open workflow file
-            parts.append(f'        click {workflow_id} "../.github/workflows/{workflow}" "View Workflow"\n')
+            parts.append(f'        click {workflow_id} "{workflow_path}{workflow}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
@@ -310,7 +353,7 @@ graph TD
 
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
-        parts.append(self.generate_mermaid_diagram())
+        parts.append(self.generate_mermaid_diagram(output_path))
         parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Technology coverage
@@ -348,11 +391,14 @@ graph TD
             workflows = em.get('workflows', [])
 
             if workflows:
+                # Calculate the correct relative path for workflow links
+                workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
+                
                 parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
-                    # Link to the workflow file (assuming relative path from reports/ to .github/workflows/)
-                    parts.append(f"- [`{workflow}`](../.github/workflows/{workflow})\n")
+                    # Link to the workflow file with calculated relative path
+                    parts.append(f"- [`{workflow}`]({workflow_path}{workflow})\n")
                 parts.append("\n</details>\n")
                 parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
