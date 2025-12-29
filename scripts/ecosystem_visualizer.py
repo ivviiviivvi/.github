@@ -222,8 +222,8 @@ graph TD
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Active (< 90 days) | {active} | {active_pct:.1f}% |
-| Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
+| 🟢 Active (< 90 days) | {active} | {active_pct:.1f}% |
+| 🟠 Stale (90+ days) | {stale} | {100 - active_pct:.1f}% |
 | **Total** | **{total}** | **100%** |
 
 ### Health Score: {active_pct:.0f}/100
@@ -244,8 +244,8 @@ graph TD
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| Valid | {valid} | {valid_pct:.1f}% |
-| Broken | {broken} | {100 - valid_pct:.1f}% |
+| ✅ Valid | {valid} | {valid_pct:.1f}% |
+| ❌ Broken | {broken} | {100 - valid_pct:.1f}% |
 | **Total** | **{total_links}** | **100%** |
 
 """)
@@ -261,11 +261,21 @@ graph TD
                         # Sanitize URL by stripping common trailing punctuation
                         url = url.rstrip('.,;:)')
                         status = link.get('status', 'Unknown')
+
+                        # Add status indicator
+                        status_str = str(status)
+                        if status_str.startswith('4'):
+                            status_emoji = '🔴' # Client Error
+                        elif status_str.startswith('5'):
+                            status_emoji = '💥' # Server Error
+                        else:
+                            status_emoji = '⚠️' # Unknown/Other
+
                         # Truncate long URLs for display (max 60 characters including ellipsis)
                         display_url = url if len(url) <= 60 else url[:57] + "..."
                         # Escape pipe characters for Markdown table
                         display_url = display_url.replace('|', '\\|')
-                        parts.append(f"| `{display_url}` | {status} |\n")
+                        parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
 
                     parts.append("\n</details>\n\n")
 
