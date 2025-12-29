@@ -5,6 +5,7 @@ Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring
 """
 
 import json
+import os
 from pathlib import Path
 from typing import Dict, List
 from datetime import datetime
@@ -51,7 +52,7 @@ graph TD
         for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
-            parts.append(f'        click {workflow_id} "https://github.com/search?q={workflow}" "Search Workflow on GitHub"\n")
+            parts.append(f'        click {workflow_id} "https://github.com/search?q={workflow}" "Search Workflow on GitHub"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
