@@ -34,22 +34,23 @@ jobs:
               assignees: [context.payload.pull_request.user.login]
             })
 
-      - name: Request review from CODEOWNERS
+      - name: Request review from @copilot
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
-            // You can customize this to request reviews from specific people/teams
-            // based on the files changed or other criteria
-
-            // Example: Request review from a specific team
-            // github.rest.pulls.requestReviewers({
-            //   owner: context.repo.owner,
-            //   repo: context.repo.repo,
-            //   pull_number: context.issue.number,
-            //   team_reviewers: ['core-team']
-            // })
-
-            console.log('CODEOWNERS will be automatically requested for review')
+            // Request review from @copilot
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                reviewers: ['copilot']
+              });
+              console.log('✅ Successfully requested review from @copilot');
+            } catch (error) {
+              console.log(`⚠️ Could not request review from @copilot: ${error.message}`);
+              console.log('Note: CODEOWNERS will still be requested by GitHub automatically');
+            }
 
   auto-assign-issue:
     name: Auto Assign Issue
