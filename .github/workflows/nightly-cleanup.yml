@@ -1,0 +1,535 @@
+name: Nightly Cleanup and Automation
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      skip_pr_cleanup:
+        description: 'Skip PR cleanup'
+        required: false
+        type: boolean
+        default: false
+      skip_branch_cleanup:
+        description: 'Skip branch cleanup'
+        required: false
+        type: boolean
+        default: false
+      skip_draft_conversion:
+        description: 'Skip draft conversion'
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: 'Dry run (no actual changes)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  auto-merge-ready-prs:
+    name: Auto-Merge Ready PRs
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_pr_cleanup != 'true'
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Find Ready PRs
+        id: find-prs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            
+            console.log('🔍 Finding PRs ready for auto-merge...');
+            
+            // Get all open PRs with pagination
+            let prs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              prs = prs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${prs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${prs.length}`);
+            
+            let readyForMerge = [];
+            
+            for (const pr of prs) {
+              // Skip drafts
+              if (pr.draft) continue;
+              
+              // Check for auto-merge label
+              const hasAutoMergeLabel = pr.labels.some(l => 
+                l.name === 'auto-merge' || l.name === 'automerge'
+              );
+              
+              // Check for skip labels
+              const hasSkipLabel = pr.labels.some(l => 
+                l.name === 'skip-auto-merge' || l.name === 'needs-review'
+              );
+              
+              if (!hasAutoMergeLabel || hasSkipLabel) continue;
+              
+              // Check if all checks passed
+              const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha
+              });
+              
+              const { data: checkRuns } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha
+              });
+              
+              const allChecksPass = combinedStatus.state === 'success' &&
+                checkRuns.check_runs.every(check => 
+                  check.conclusion === 'success' || 
+                  check.conclusion === 'skipped' || 
+                  check.conclusion === 'neutral'
+                );
+              
+              // Check if mergeable
+              if (pr.mergeable_state === 'clean' && allChecksPass) {
+                readyForMerge.push({
+                  number: pr.number,
+                  title: pr.title,
+                  author: pr.user.login,
+                  labels: pr.labels.map(l => l.name),
+                  node_id: pr.node_id
+                });
+              }
+            }
+            
+            console.log(`Found ${readyForMerge.length} PRs ready for merge`);
+            readyForMerge.forEach(pr => {
+              console.log(`- PR #${pr.number}: ${pr.title}`);
+            });
+            
+            core.setOutput('count', readyForMerge.length);
+            core.setOutput('prs', JSON.stringify(readyForMerge));
+            
+            return readyForMerge;
+
+      - name: Merge Ready PRs
+        if: steps.find-prs.outputs.count > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const prs = JSON.parse('${{ steps.find-prs.outputs.prs }}');
+            
+            let merged = 0;
+            let failed = 0;
+            
+            for (const pr of prs) {
+              console.log(`\nProcessing PR #${pr.number}...`);
+              
+              if (dryRun) {
+                console.log(`[DRY RUN] Would merge PR #${pr.number}`);
+                merged++;
+                continue;
+              }
+              
+              try {
+                // Enable auto-merge
+                await github.graphql(`
+                  mutation($pullRequestId: ID!) {
+                    enablePullRequestAutoMerge(input: {
+                      pullRequestId: $pullRequestId,
+                      mergeMethod: SQUASH
+                    }) {
+                      pullRequest {
+                        number
+                      }
+                    }
+                  }
+                `, {
+                  pullRequestId: pr.node_id
+                });
+                
+                console.log(`✅ Enabled auto-merge for PR #${pr.number}`);
+                merged++;
+                
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: '🌙 **Nightly Auto-Merge**\n\nThis PR has been queued for automatic merging by the nightly cleanup workflow.\n\n_Automated by [nightly-cleanup.yml](../.github/workflows/nightly-cleanup.yml)_'
+                });
+              } catch (error) {
+                console.error(`❌ Failed to merge PR #${pr.number}: ${error.message}`);
+                failed++;
+              }
+            }
+            
+            console.log(`\n📊 Summary: ${merged} merged, ${failed} failed`);
+            
+            return { merged, failed };
+
+  convert-draft-prs:
+    name: Convert Draft PRs
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_draft_conversion != 'true'
+    timeout-minutes: 20
+    
+    steps:
+      - name: Find and Convert Draft PRs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            
+            console.log('🔍 Finding draft PRs to convert...');
+            
+            // Get all open PRs with pagination
+            let prs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              prs = prs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${prs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${prs.length}`);
+            
+            const draftPRs = prs.filter(pr => pr.draft);
+            console.log(`Found ${draftPRs.length} draft PRs`);
+            
+            const trustedAgents = ['Jules', 'dependabot[bot]', 'github-actions[bot]', 'copilot'];
+            let converted = 0;
+            
+            for (const pr of draftPRs) {
+              const isTrustedAgent = trustedAgents.some(agent => 
+                pr.user.login.toLowerCase().includes(agent.toLowerCase())
+              );
+              
+              const hasAutoReadyLabel = pr.labels.some(l => 
+                l.name === 'auto-ready' || l.name === 'ready-when-green'
+              );
+              
+              const hasSkipLabel = pr.labels.some(l => 
+                l.name === 'keep-draft' || l.name === 'skip-auto-ready'
+              );
+              
+              if (hasSkipLabel || (!isTrustedAgent && !hasAutoReadyLabel)) {
+                continue;
+              }
+              
+              console.log(`Converting PR #${pr.number}: ${pr.title}`);
+              
+              if (dryRun) {
+                console.log(`[DRY RUN] Would convert PR #${pr.number}`);
+                converted++;
+                continue;
+              }
+              
+              try {
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  draft: false
+                });
+                
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  labels: ['auto-merge', 'auto-converted']
+                });
+                
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: '🌙 **Nightly Draft Conversion**\n\nThis PR has been automatically converted from draft to ready by the nightly cleanup workflow.\n\n_Automated by [nightly-cleanup.yml](../.github/workflows/nightly-cleanup.yml)_'
+                });
+                
+                console.log(`✅ Converted PR #${pr.number}`);
+                converted++;
+              } catch (error) {
+                console.error(`❌ Failed to convert PR #${pr.number}: ${error.message}`);
+              }
+            }
+            
+            console.log(`\n📊 Converted ${converted} draft PRs`);
+
+  cleanup-merged-branches:
+    name: Cleanup Merged Branches
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_branch_cleanup != 'true'
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Delete Merged Branches
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            
+            console.log('🧹 Cleaning up merged branches...');
+            
+            // Protected branches
+            const protectedBranches = ['main', 'master', 'develop', 'staging', 'production'];
+            
+            try {
+              // Get all branches
+              const { data: branches } = await github.rest.repos.listBranches({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100
+              });
+              
+              console.log(`Found ${branches.length} total branches`);
+              
+              let deleted = 0;
+              let skipped = 0;
+              let failed = 0;
+              const errors = [];
+              
+              for (const branch of branches) {
+                // Skip protected branches
+                if (protectedBranches.includes(branch.name)) {
+                  console.log(`⏭️  Skipping protected branch: ${branch.name}`);
+                  skipped++;
+                  continue;
+                }
+                
+                try {
+                  // Check if branch is merged
+                  const { data: comparison } = await github.rest.repos.compareCommits({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    base: 'main',
+                    head: branch.name
+                  });
+                  
+                  if (comparison.status !== 'identical' && comparison.behind_by > 0) {
+                    console.log(`⏭️  Skipping ${branch.name} (not fully merged)`);
+                    skipped++;
+                    continue;
+                  }
+                  
+                  // Check for open PRs
+                  const { data: prs } = await github.rest.pulls.list({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'open',
+                    head: `${context.repo.owner}:${branch.name}`,
+                    per_page: 1
+                  });
+                  
+                  if (prs.length > 0) {
+                    console.log(`⏭️  Skipping ${branch.name} (has open PRs)`);
+                    skipped++;
+                    continue;
+                  }
+                  
+                  // Delete branch
+                  console.log(`🗑️  Deleting merged branch: ${branch.name}`);
+                  
+                  if (dryRun) {
+                    console.log(`[DRY RUN] Would delete branch: ${branch.name}`);
+                    deleted++;
+                  } else {
+                    await github.rest.git.deleteRef({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      ref: `heads/${branch.name}`
+                    });
+                    console.log(`✅ Successfully deleted ${branch.name}`);
+                    deleted++;
+                  }
+                } catch (error) {
+                  console.error(`❌ Error processing branch ${branch.name}: ${error.message}`);
+                  failed++;
+                  errors.push({ branch: branch.name, error: error.message });
+                }
+              }
+              
+              // Summary
+              console.log('\n📊 Branch Cleanup Summary:');
+              console.log(`   Deleted: ${deleted}`);
+              console.log(`   Skipped: ${skipped}`);
+              console.log(`   Failed: ${failed}`);
+              
+              if (errors.length > 0) {
+                console.error('\n❌ Errors encountered:');
+                errors.forEach(e => console.error(`   ${e.branch}: ${e.error}`));
+                core.warning(`Failed to delete ${failed} branch(es). Check logs for details.`);
+              }
+            } catch (error) {
+              console.error(`❌ Critical error in branch cleanup: ${error.message}`);
+              throw error;
+            }
+
+  close-stale-prs:
+    name: Close Stale PRs
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_pr_cleanup != 'true'
+    timeout-minutes: 15
+    
+    steps:
+      - name: Find and Close Stale PRs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            
+            console.log('🔍 Finding stale PRs...');
+            
+            // Get all open PRs with pagination
+            let prs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              prs = prs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${prs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${prs.length}`);
+            
+            const now = new Date();
+            const staleDays = 90; // PRs inactive for 90+ days
+            let closed = 0;
+            
+            for (const pr of prs) {
+              const updatedAt = new Date(pr.updated_at);
+              const daysSinceUpdate = (now - updatedAt) / (1000 * 60 * 60 * 24);
+              
+              // Skip if not stale or has keep-open label
+              if (daysSinceUpdate < staleDays) continue;
+              if (pr.labels.some(l => l.name === 'keep-open')) continue;
+              
+              console.log(`Found stale PR #${pr.number}: ${pr.title} (${Math.floor(daysSinceUpdate)} days old)`);
+              
+              if (dryRun) {
+                console.log(`[DRY RUN] Would close PR #${pr.number}`);
+                closed++;
+                continue;
+              }
+              
+              try {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: `🌙 **Nightly Cleanup: Closing Stale PR**\n\nThis PR has been inactive for ${Math.floor(daysSinceUpdate)} days and is being closed to keep the repository clean.\n\nIf you'd like to continue work on this PR:\n1. Reopen it\n2. Add the \`keep-open\` label to prevent auto-closure\n3. Push updates to show activity\n\n_Automated by [nightly-cleanup.yml](../.github/workflows/nightly-cleanup.yml)_`
+                });
+                
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  state: 'closed'
+                });
+                
+                console.log(`✅ Closed stale PR #${pr.number}`);
+                closed++;
+              } catch (error) {
+                console.error(`❌ Failed to close PR #${pr.number}: ${error.message}`);
+              }
+            }
+            
+            console.log(`\n📊 Closed ${closed} stale PRs`);
+
+  summary:
+    name: Cleanup Summary
+    runs-on: ubuntu-latest
+    needs: [auto-merge-ready-prs, convert-draft-prs, cleanup-merged-branches, close-stale-prs]
+    if: always()
+    
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "### 🌙 Nightly Cleanup Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "⚠️ **DRY RUN MODE** - No actual changes were made" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "#### Jobs Completed:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Auto-merge ready PRs" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Convert draft PRs" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Cleanup merged branches" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Close stale PRs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Next run: Tomorrow at 2 AM UTC_" >> $GITHUB_STEP_SUMMARY

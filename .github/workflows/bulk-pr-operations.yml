@@ -1,0 +1,455 @@
+name: Bulk PR Operations
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Operation to perform'
+        required: true
+        type: choice
+        options:
+          - approve-all-automated
+          - approve-all-dependabot
+          - merge-all-ready
+          - close-all-stale
+          - convert-all-drafts
+          - label-all-dependencies
+          - label-all-automated
+      filter_label:
+        description: 'Filter by label (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (no actual changes)'
+        required: false
+        type: boolean
+        default: true
+      max_prs:
+        description: 'Maximum number of PRs to process (safety limit)'
+        required: false
+        type: number
+        default: 50
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.operation }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  bulk-operation:
+    name: Execute Bulk Operation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Validate Inputs
+        run: |
+          echo "🔍 Validating inputs..."
+          echo "Operation: ${{ github.event.inputs.operation }}"
+          echo "Filter Label: ${{ github.event.inputs.filter_label || 'none' }}"
+          echo "Dry Run: ${{ github.event.inputs.dry_run }}"
+          echo "Max PRs: ${{ github.event.inputs.max_prs }}"
+          
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "⚠️  DRY RUN MODE - No actual changes will be made"
+          else
+            echo "⚠️  LIVE MODE - Changes will be applied!"
+          fi
+
+      - name: Execute Bulk Operation
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const operation = '${{ github.event.inputs.operation }}';
+            const filterLabel = '${{ github.event.inputs.filter_label }}' || null;
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            
+            // Validate and sanitize max_prs input
+            let maxPRs = 50; // default
+            const maxPRsInput = '${{ github.event.inputs.max_prs }}';
+            if (maxPRsInput) {
+              const parsed = parseInt(maxPRsInput, 10);
+              if (isNaN(parsed) || parsed < 1 || parsed > 200) {
+                throw new Error(`Invalid max_prs value: ${maxPRsInput}. Must be a number between 1 and 200.`);
+              }
+              maxPRs = parsed;
+            }
+            
+            console.log(`🚀 Executing bulk operation: ${operation}`);
+            console.log(`   Filter: ${filterLabel || 'none'}`);
+            console.log(`   Dry Run: ${dryRun}`);
+            console.log(`   Max PRs: ${maxPRs}`);
+            
+            // Get all open PRs with pagination
+            let allPRs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              allPRs = allPRs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${allPRs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${allPRs.length}`);
+            
+            // Apply filter if specified
+            let prs = allPRs;
+            if (filterLabel) {
+              prs = prs.filter(pr => 
+                pr.labels.some(l => l.name === filterLabel)
+              );
+            }
+            
+            // Limit number of PRs for safety
+            if (prs.length > maxPRs) {
+              console.log(`⚠️  Found ${prs.length} PRs, limiting to ${maxPRs} for safety`);
+              prs = prs.slice(0, maxPRs);
+            }
+            
+            console.log(`\n📊 Processing ${prs.length} PRs`);
+            
+            let processed = 0;
+            let succeeded = 0;
+            let failed = 0;
+            const errors = [];
+            
+            // Execute operation based on type
+            switch (operation) {
+              case 'approve-all-automated':
+              case 'approve-all-dependabot':
+                // Define automated agents
+                const automatedAgents = [
+                  'dependabot[bot]',
+                  'Jules',
+                  'github-actions[bot]',
+                  'renovate[bot]',
+                  'copilot'
+                ];
+                
+                for (const pr of prs) {
+                  const isAutomated = operation === 'approve-all-automated'
+                    ? automatedAgents.some(agent => pr.user.login.toLowerCase().includes(agent.toLowerCase()))
+                    : pr.user.login === 'dependabot[bot]';
+                  
+                  if (!isAutomated) continue;
+                  
+                  processed++;
+                  console.log(`\nProcessing PR #${pr.number} (@${pr.user.login})`);
+                  
+                  if (dryRun) {
+                    console.log('[DRY RUN] Would approve PR');
+                    succeeded++;
+                    continue;
+                  }
+                  
+                  try {
+                    await github.rest.pulls.createReview({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: pr.number,
+                      event: 'APPROVE',
+                      body: '✅ Bulk approved by automation'
+                    });
+                    
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: pr.number,
+                      labels: ['auto-merge']
+                    });
+                    
+                    console.log('✅ Approved');
+                    succeeded++;
+                  } catch (error) {
+                    console.error(`❌ Failed to approve PR #${pr.number}: ${error.status || 'unknown error'}`);
+                    failed++;
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to approve` });
+                  }
+                }
+                break;
+                
+              case 'merge-all-ready':
+                for (const pr of prs) {
+                  if (pr.draft) continue;
+                  
+                  // Check if checks passed
+                  const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: pr.head.sha
+                  });
+                  
+                  const { data: checkRuns } = await github.rest.checks.listForRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: pr.head.sha
+                  });
+                  
+                  const allChecksPass = combinedStatus.state === 'success' &&
+                    checkRuns.check_runs.every(check => 
+                      check.conclusion === 'success' || 
+                      check.conclusion === 'skipped' || 
+                      check.conclusion === 'neutral'
+                    );
+                  
+                  if (!allChecksPass || pr.mergeable_state !== 'clean') {
+                    console.log(`⏭️  Skipping PR #${pr.number} (not ready)`);
+                    continue;
+                  }
+                  
+                  processed++;
+                  console.log(`\nProcessing PR #${pr.number}`);
+                  
+                  if (dryRun) {
+                    console.log('[DRY RUN] Would merge PR');
+                    succeeded++;
+                    continue;
+                  }
+                  
+                  try {
+                    await github.rest.pulls.merge({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: pr.number,
+                      merge_method: 'squash'
+                    });
+                    
+                    console.log('✅ Merged');
+                    succeeded++;
+                  } catch (error) {
+                    console.error(`❌ Failed to merge PR #${pr.number}: ${error.status || 'unknown error'}`);
+                    failed++;
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to merge` });
+                  }
+                }
+                break;
+                
+              case 'close-all-stale':
+                const now = new Date();
+                const staleDays = 90;
+                
+                for (const pr of prs) {
+                  const updatedAt = new Date(pr.updated_at);
+                  const daysSinceUpdate = (now - updatedAt) / (1000 * 60 * 60 * 24);
+                  
+                  if (daysSinceUpdate < staleDays) continue;
+                  if (pr.labels.some(l => l.name === 'keep-open')) continue;
+                  
+                  processed++;
+                  console.log(`\nProcessing PR #${pr.number}: ${pr.title} (${Math.floor(daysSinceUpdate)} days old)`);
+                  
+                  if (dryRun) {
+                    console.log('[DRY RUN] Would close PR');
+                    succeeded++;
+                    continue;
+                  }
+                  
+                  try {
+                    await github.rest.issues.createComment({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: pr.number,
+                      body: `🧹 **Bulk Operation: Closing Stale PR**\n\nThis PR has been inactive for ${Math.floor(daysSinceUpdate)} days and is being closed.\n\n_Bulk operation by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`
+                    });
+                    
+                    await github.rest.pulls.update({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: pr.number,
+                      state: 'closed'
+                    });
+                    
+                    console.log('✅ Closed');
+                    succeeded++;
+                  } catch (error) {
+                    console.error(`❌ Failed to close PR #${pr.number}: ${error.status || 'unknown error'}`);
+                    failed++;
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to close` });
+                  }
+                }
+                break;
+                
+              case 'convert-all-drafts':
+                for (const pr of prs) {
+                  if (!pr.draft) continue;
+                  if (pr.labels.some(l => l.name === 'keep-draft')) continue;
+                  
+                  processed++;
+                  console.log(`\nProcessing PR #${pr.number}: ${pr.title}`);
+                  
+                  if (dryRun) {
+                    console.log('[DRY RUN] Would convert to ready');
+                    succeeded++;
+                    continue;
+                  }
+                  
+                  try {
+                    await github.rest.pulls.update({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: pr.number,
+                      draft: false
+                    });
+                    
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: pr.number,
+                      labels: ['auto-converted']
+                    });
+                    
+                    console.log('✅ Converted');
+                    succeeded++;
+                  } catch (error) {
+                    console.error(`❌ Failed to convert PR #${pr.number}: ${error.status || 'unknown error'}`);
+                    failed++;
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to convert` });
+                  }
+                }
+                break;
+                
+              case 'label-all-dependencies':
+              case 'label-all-automated':
+                const automatedAgentsForLabeling = [
+                  'dependabot[bot]',
+                  'Jules',
+                  'github-actions[bot]',
+                  'renovate[bot]',
+                  'copilot'
+                ];
+                
+                for (const pr of prs) {
+                  let shouldLabel = false;
+                  let labelsToAdd = [];
+                  
+                  if (operation === 'label-all-dependencies') {
+                    shouldLabel = 
+                      pr.user.login === 'dependabot[bot]' ||
+                      pr.labels.some(l => l.name === 'dependencies') ||
+                      pr.title.toLowerCase().includes('bump') ||
+                      pr.title.toLowerCase().includes('update');
+                    labelsToAdd = ['dependencies', 'auto-merge'];
+                  } else { // label-all-automated
+                    shouldLabel = automatedAgentsForLabeling.some(agent => 
+                      pr.user.login.toLowerCase().includes(agent.toLowerCase())
+                    );
+                    labelsToAdd = ['automated', 'auto-merge'];
+                  }
+                  
+                  if (!shouldLabel) continue;
+                  
+                  processed++;
+                  console.log(`\nProcessing PR #${pr.number}: ${pr.title} (@${pr.user.login})`);
+                  
+                  if (dryRun) {
+                    console.log(`[DRY RUN] Would add labels: ${labelsToAdd.join(', ')}`);
+                    succeeded++;
+                    continue;
+                  }
+                  
+                  try {
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: pr.number,
+                      labels: labelsToAdd
+                    });
+                    
+                    console.log('✅ Labeled');
+                    succeeded++;
+                  } catch (error) {
+                    console.error(`❌ Failed to label PR #${pr.number}: ${error.status || 'unknown error'}`);
+                    failed++;
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to label` });
+                  }
+                }
+                break;
+            }
+            
+            // Summary
+            console.log('\n' + '='.repeat(50));
+            console.log('📊 BULK OPERATION SUMMARY');
+            console.log('='.repeat(50));
+            console.log(`Operation: ${operation}`);
+            console.log(`Dry Run: ${dryRun}`);
+            console.log(`Processed: ${processed} PRs`);
+            console.log(`Succeeded: ${succeeded}`);
+            console.log(`Failed: ${failed}`);
+            
+            if (errors.length > 0) {
+              console.log('\nErrors:');
+              errors.forEach(e => {
+                console.log(`  PR #${e.pr}: ${e.error}`);
+              });
+            }
+            
+            // Create summary issue if not dry run and had significant activity
+            if (!dryRun && processed > 0) {
+              const errorSection = errors.length > 0 
+                ? `### Errors\n\n${errors.map(e => `- PR #${e.pr}: ${e.error}`).join('\n')}` 
+                : '';
+              
+              const issueBody = `## Bulk Operation Summary\n\n` +
+                `**Operation:** ${operation}\n` +
+                `**Date:** ${new Date().toISOString()}\n` +
+                `**Filter Label:** ${filterLabel || 'none'}\n\n` +
+                `### Results\n` +
+                `- **Processed:** ${processed} PRs\n` +
+                `- **Succeeded:** ${succeeded}\n` +
+                `- **Failed:** ${failed}\n\n` +
+                `${errorSection}\n\n` +
+                `---\n` +
+                `_Automated by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`;
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Bulk Operation Summary: ${operation} (${new Date().toISOString().split('T')[0]})`,
+                body: issueBody,
+                labels: ['automation', 'bulk-operation']
+              });
+            }
+            
+            return { processed, succeeded, failed };
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### 🚀 Bulk PR Operation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Operation:** ${{ github.event.inputs.operation }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Filter:** ${{ github.event.inputs.filter_label || 'none' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Dry Run:** ${{ github.event.inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "⚠️ **DRY RUN MODE** - No actual changes were made" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "To apply changes, run again with dry_run=false" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **LIVE MODE** - Changes have been applied" >> $GITHUB_STEP_SUMMARY
+          fi

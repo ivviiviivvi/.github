@@ -1,0 +1,433 @@
+name: Auto-Batch Automated PRs
+
+on:
+  pull_request:
+    types: [opened, labeled]
+  schedule:
+    # Run every day at 4 AM UTC (after automated tools run)
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      auto_merge:
+        description: 'Automatically merge batch if all checks pass'
+        required: false
+        type: boolean
+        default: true
+      include_manual_prs:
+        description: 'Include manually created PRs with auto-batch label'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  batch-automated-prs:
+    name: Batch Automated PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Find Automated PRs
+        id: find-prs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            console.log('🔍 Finding automated PRs to batch...');
+            
+            const includeManualPRs = '${{ github.event.inputs.include_manual_prs }}' === 'true';
+            
+            // Fetch all open PRs with pagination
+            let prs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              prs = prs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${prs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${prs.length}`);
+            
+            // Define automated agents/bots
+            const automatedAgents = [
+              'dependabot[bot]',
+              'Jules',
+              'github-actions[bot]',
+              'renovate[bot]',
+              'copilot'
+            ];
+            
+            // Filter automated PRs or PRs with auto-batch label
+            const automatedPRs = prs.filter(pr => {
+              if (pr.draft) return false;
+              if (pr.labels.some(l => l.name === 'skip-auto-batch')) return false;
+              
+              // Check if from automated agent
+              const isAutomated = automatedAgents.some(agent => 
+                pr.user.login.toLowerCase().includes(agent.toLowerCase())
+              );
+              
+              // Check if has auto-batch label (for manual PRs)
+              const hasAutoBatchLabel = pr.labels.some(l => 
+                l.name === 'auto-batch' || l.name === 'batch-me'
+              );
+              
+              return isAutomated || (includeManualPRs && hasAutoBatchLabel);
+            });
+            
+            console.log(`Found ${automatedPRs.length} automated PRs`);
+            
+            // Group by source and category
+            const groups = {
+              'dependabot-npm': [],
+              'dependabot-pip': [],
+              'dependabot-github-actions': [],
+              'dependabot-docker': [],
+              'dependabot-gomod': [],
+              'dependabot-composer': [],
+              'dependabot-other': [],
+              'jules': [],
+              'github-actions': [],
+              'renovate': [],
+              'copilot': [],
+              'manual': []
+            };
+            
+            for (const pr of automatedPRs) {
+              let category = 'manual';
+              const author = pr.user.login.toLowerCase();
+              
+              // Categorize by author
+              if (author.includes('dependabot')) {
+                // Sub-categorize dependabot by ecosystem
+                let ecosystem = 'other';
+                
+                // Check labels first
+                for (const label of pr.labels) {
+                  const labelName = label.name.toLowerCase();
+                  if (labelName === 'npm' || labelName === 'javascript') ecosystem = 'npm';
+                  else if (labelName === 'pip' || labelName === 'python') ecosystem = 'pip';
+                  else if (labelName === 'github-actions' || labelName === 'actions') ecosystem = 'github-actions';
+                  else if (labelName === 'docker') ecosystem = 'docker';
+                  else if (labelName === 'go' || labelName === 'gomod') ecosystem = 'gomod';
+                  else if (labelName === 'php' || labelName === 'composer') ecosystem = 'composer';
+                }
+                
+                // Check title if not found in labels
+                if (ecosystem === 'other') {
+                  const title = pr.title.toLowerCase();
+                  if (title.includes('npm') || title.includes('package.json')) ecosystem = 'npm';
+                  else if (title.includes('pip') || title.includes('requirements')) ecosystem = 'pip';
+                  else if (title.includes('actions') || title.includes('.github/workflows')) ecosystem = 'github-actions';
+                  else if (title.includes('docker')) ecosystem = 'docker';
+                  else if (title.includes('go.mod')) ecosystem = 'gomod';
+                  else if (title.includes('composer')) ecosystem = 'composer';
+                }
+                
+                category = `dependabot-${ecosystem}`;
+              } else if (author.includes('jules')) {
+                category = 'jules';
+              } else if (author.includes('github-actions')) {
+                category = 'github-actions';
+              } else if (author.includes('renovate')) {
+                category = 'renovate';
+              } else if (author.includes('copilot')) {
+                category = 'copilot';
+              }
+              
+              if (groups[category]) {
+                groups[category].push({
+                  number: pr.number,
+                  title: pr.title,
+                  head: pr.head.ref,
+                  base: pr.base.ref,
+                  author: pr.user.login
+                });
+              }
+            }
+            
+            // Log groups
+            for (const [category, prs] of Object.entries(groups)) {
+              if (prs.length > 0) {
+                console.log(`\n${category}: ${prs.length} PRs`);
+                prs.forEach(pr => console.log(`  - #${pr.number}: ${pr.title} (@${pr.author})`));
+              }
+            }
+            
+            const totalPRs = Object.values(groups).reduce((sum, prs) => sum + prs.length, 0);
+            
+            core.setOutput('groups', JSON.stringify(groups));
+            core.setOutput('total', totalPRs);
+            
+            return groups;
+
+      - name: Apply Batch Labels
+        if: steps.find-prs.outputs.total > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            
+            // Create batch labels for each category with PRs
+            for (const [category, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              const batchLabel = `batch:${category}`;
+              const today = new Date().toISOString().split('T')[0];
+              
+              console.log(`\nProcessing batch: ${batchLabel} (${prs.length} PRs)`);
+              
+              // Create the label if it doesn't exist
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: batchLabel,
+                  color: '0366d6',
+                  description: `Automated ${category} batch for ${today}`
+                });
+              } catch (error) {
+                // Label might already exist
+              }
+              
+              // Apply label to all PRs in this batch
+              for (const pr of prs) {
+                try {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    labels: [batchLabel, 'auto-merge', 'auto-batch']
+                  });
+                  
+                  console.log(`  ✅ Labeled PR #${pr.number}`);
+                } catch (error) {
+                  console.error(`  ❌ Failed to label PR #${pr.number}: ${error.message}`);
+                }
+              }
+            }
+
+      - name: Comment on Batches
+        if: steps.find-prs.outputs.total > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            const autoMerge = '${{ github.event.inputs.auto_merge }}' !== 'false';
+            
+            for (const [category, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              const batchLabel = `batch:${category}`;
+              const categoryName = category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+              
+              const prList = prs.map(pr => `- #${pr.number}: ${pr.title} (@${pr.author})`).join('\n');
+              const mergeStatus = autoMerge 
+                ? '✅ **Auto-merge enabled** - This batch will be merged automatically when all PRs pass checks.' 
+                : '⏸️ **Manual merge required** - Trigger batch merge manually once all PRs are ready.';
+              
+              const comment = `🤖 **Auto-Batch: ${categoryName}**\n\n` +
+                `This PR has been grouped with ${prs.length - 1} other automated PR(s) for batch processing.\n\n` +
+                `**Batch Label:** \`${batchLabel}\`\n\n` +
+                `**PRs in this batch:**\n${prList}\n\n` +
+                `${mergeStatus}\n\n` +
+                `**To merge this batch manually:**\n\`\`\`\n/merge-batch ${category}\n\`\`\`\n\n` +
+                `_Automated by [auto-batch-prs.yml](../.github/workflows/auto-batch-prs.yml)_`;
+              
+              for (const pr of prs) {
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    body: comment
+                  });
+                } catch (error) {
+                  console.error(`Failed to comment on PR #${pr.number}: ${error.message}`);
+                }
+              }
+            }
+
+      - name: Check Batch Readiness
+        id: check-ready
+        if: steps.find-prs.outputs.total > 0 && github.event.inputs.auto_merge != 'false'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            
+            let readyBatches = [];
+            
+            for (const [category, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              console.log(`\nChecking batch readiness: ${category}`);
+              
+              let allReady = true;
+              
+              for (const pr of prs) {
+                const { data: fullPR } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number
+                });
+                
+                // Check status
+                const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: fullPR.head.sha
+                });
+                
+                const { data: checkRuns } = await github.rest.checks.listForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: fullPR.head.sha
+                });
+                
+                const checksPass = combinedStatus.state === 'success' &&
+                  checkRuns.check_runs.every(check => 
+                    check.conclusion === 'success' || 
+                    check.conclusion === 'skipped' || 
+                    check.conclusion === 'neutral'
+                  );
+                
+                const isClean = fullPR.mergeable_state === 'clean';
+                
+                console.log(`  PR #${pr.number}: checks=${checksPass}, mergeable=${isClean}`);
+                
+                if (!checksPass || !isClean) {
+                  allReady = false;
+                  break;
+                }
+              }
+              
+              if (allReady) {
+                console.log(`✅ Batch ${category} is ready for merge`);
+                readyBatches.push(category);
+              } else {
+                console.log(`⏳ Batch ${category} not yet ready`);
+              }
+            }
+            
+            core.setOutput('ready-batches', JSON.stringify(readyBatches));
+            core.setOutput('has-ready', readyBatches.length > 0 ? 'true' : 'false');
+            
+            return readyBatches;
+
+      - name: Trigger Batch Merge
+        if: steps.check-ready.outputs.has-ready == 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const readyBatches = JSON.parse('${{ steps.check-ready.outputs.ready-batches }}');
+            
+            console.log('🚀 Triggering batch merge for ready batches...');
+            
+            // Verify pr-batch-merge.yml workflow exists
+            try {
+              const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              
+              const batchMergeWorkflow = workflows.workflows.find(w => 
+                w.path === '.github/workflows/pr-batch-merge.yml'
+              );
+              
+              if (!batchMergeWorkflow) {
+                console.error('❌ pr-batch-merge.yml workflow not found');
+                throw new Error('Required workflow pr-batch-merge.yml does not exist');
+              }
+              
+              console.log(`✅ Found pr-batch-merge workflow (ID: ${batchMergeWorkflow.id})`);
+              
+              // Trigger workflow for each ready batch
+              const results = [];
+              for (const category of readyBatches) {
+                const batchLabel = `batch:${category}`;
+                console.log(`\nTriggering merge for: ${batchLabel}`);
+                
+                try {
+                  await github.rest.actions.createWorkflowDispatch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    workflow_id: batchMergeWorkflow.id,
+                    ref: 'main',
+                    inputs: {
+                      batch_label: batchLabel
+                    }
+                  });
+                  
+                  console.log(`✅ Successfully triggered batch merge for ${batchLabel}`);
+                  results.push({ category, success: true });
+                } catch (error) {
+                  console.error(`❌ Failed to trigger batch merge for ${batchLabel}: ${error.message}`);
+                  results.push({ category, success: false, error: error.message });
+                }
+              }
+              
+              // Summary
+              const succeeded = results.filter(r => r.success).length;
+              const failed = results.filter(r => !r.success).length;
+              console.log(`\n📊 Batch merge triggers: ${succeeded} succeeded, ${failed} failed`);
+              
+              if (failed > 0) {
+                const failedCategories = results.filter(r => !r.success).map(r => r.category).join(', ');
+                core.warning(`Failed to trigger batch merge for: ${failedCategories}`);
+              }
+            } catch (error) {
+              console.error(`❌ Critical error in batch merge trigger: ${error.message}`);
+              throw error;
+            }
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### 🤖 Auto-Batch PRs Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Automated PRs:** ${{ steps.find-prs.outputs.total }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.find-prs.outputs.total }}" -gt 0 ]; then
+            echo "✅ PRs have been organized into batches by source/category" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Includes PRs from:** Dependabot, Jules, GitHub Actions, Renovate, Copilot, and manual PRs with auto-batch label" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${{ steps.check-ready.outputs.has-ready }}" = "true" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "🚀 **Ready batches triggered for merge**" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "ℹ️ No automated PRs found to batch" >> $GITHUB_STEP_SUMMARY
+          fi

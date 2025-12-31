@@ -17,10 +17,39 @@ central hub for:
 - **Organization-wide configuration** and documentation standards
 - **Living Document System** - AI-driven governance and management protocols
 - **Mouthpiece Filter System** - Transform natural human expression into AI-optimized prompts
+- **🤖 PR & Dependency Automation** - Comprehensive automation for managing PRs at scale
 
 When a repository in our organization doesn't have its own community health files, GitHub automatically uses the defaults from this repository.
 
 > **Is this the right repository for these functions?** See our [Repository Purpose Analysis](docs/architecture/REPOSITORY_PURPOSE_ANALYSIS.md) for a detailed explanation of why this `.github` repository is the appropriate location for organization-wide governance, templates, and the Living Document System.
+
+## 🚀 PR & Dependency Automation (NEW!)
+
+**Tired of managing 100+ PRs from Dependabot, Jules, and other automated tools?** We've got you covered!
+
+Our comprehensive automation system handles ALL automated PRs:
+- ✅ **Automated PR batching** - Groups PRs from Dependabot, Jules, GitHub Actions, Copilot, Renovate
+- ✅ **Nightly cleanup** - Auto-merges ready PRs, deletes merged branches, closes stale PRs
+- ✅ **Bulk operations** - Emergency batch actions for large PR volumes from any source
+- ✅ **Auto-conversion** - Draft PRs from AI agents (Jules, Copilot, etc.) automatically become ready
+- ✅ **Smart assignment** - Copilot auto-assigned to all PRs
+
+**Quick Start:**
+```bash
+# Approve all automated PRs (Jules, Dependabot, etc.)
+gh workflow run bulk-pr-operations.yml -f operation=approve-all-automated -f dry_run=false
+
+# Merge all ready PRs (from any source)
+gh workflow run bulk-pr-operations.yml -f operation=merge-all-ready -f dry_run=false
+
+# Batch merge Jules PRs
+gh workflow run pr-batch-merge.yml -f batch_label="batch:jules"
+```
+
+**Learn More:**
+- 📖 [Full Documentation](PR_AUTOMATION_GUIDE.md)
+- ⚡ [Quick Reference](PR_AUTOMATION_QUICK_REF.md)
+- ⚙️ [Configuration](.github/dependabot.yml)
 
 ## Our Mission
 
