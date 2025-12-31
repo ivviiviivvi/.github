@@ -343,21 +343,21 @@ jobs:
             
             // Create summary issue if not dry run and had significant activity
             if (!dryRun && processed > 0) {
-              const issueBody = `## Bulk Operation Summary
-
-**Operation:** ${operation}
-**Date:** ${new Date().toISOString()}
-**Filter Label:** ${filterLabel || 'none'}
-
-### Results
-- **Processed:** ${processed} PRs
-- **Succeeded:** ${succeeded}
-- **Failed:** ${failed}
-
-${errors.length > 0 ? `### Errors\n\n${errors.map(e => `- PR #${e.pr}: ${e.error}`).join('\n')}` : ''}
-
----
-_Automated by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`;
+              const errorSection = errors.length > 0 
+                ? `### Errors\n\n${errors.map(e => `- PR #${e.pr}: ${e.error}`).join('\n')}` 
+                : '';
+              
+              const issueBody = `## Bulk Operation Summary\n\n` +
+                `**Operation:** ${operation}\n` +
+                `**Date:** ${new Date().toISOString()}\n` +
+                `**Filter Label:** ${filterLabel || 'none'}\n\n` +
+                `### Results\n` +
+                `- **Processed:** ${processed} PRs\n` +
+                `- **Succeeded:** ${succeeded}\n` +
+                `- **Failed:** ${failed}\n\n` +
+                `${errorSection}\n\n` +
+                `---\n` +
+                `_Automated by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`;
               
               await github.rest.issues.create({
                 owner: context.repo.owner,

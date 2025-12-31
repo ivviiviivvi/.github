@@ -172,23 +172,18 @@ jobs:
               
               const batchLabel = `batch:dependabot-${ecosystem}`;
               
-              const comment = `🤖 **Auto-Batch: Dependabot ${ecosystem}**
-
-This PR has been grouped with ${prs.length - 1} other dependabot PR(s) for batch processing.
-
-**Batch Label:** \`${batchLabel}\`
-
-**PRs in this batch:**
-${prs.map(pr => `- #${pr.number}: ${pr.title}`).join('\n')}
-
-${autoMerge ? '✅ **Auto-merge enabled** - This batch will be merged automatically when all PRs pass checks.' : '⏸️ **Manual merge required** - Trigger batch merge manually once all PRs are ready.'}
-
-**To merge this batch manually:**
-\`\`\`
-/merge-batch dependabot-${ecosystem}
-\`\`\`
-
-_Automated by [auto-batch-dependabot.yml](../.github/workflows/auto-batch-dependabot.yml)_`;
+              const prList = prs.map(pr => `- #${pr.number}: ${pr.title}`).join('\n');
+              const mergeStatus = autoMerge 
+                ? '✅ **Auto-merge enabled** - This batch will be merged automatically when all PRs pass checks.' 
+                : '⏸️ **Manual merge required** - Trigger batch merge manually once all PRs are ready.';
+              
+              const comment = `🤖 **Auto-Batch: Dependabot ${ecosystem}**\n\n` +
+                `This PR has been grouped with ${prs.length - 1} other dependabot PR(s) for batch processing.\n\n` +
+                `**Batch Label:** \`${batchLabel}\`\n\n` +
+                `**PRs in this batch:**\n${prList}\n\n` +
+                `${mergeStatus}\n\n` +
+                `**To merge this batch manually:**\n\`\`\`\n/merge-batch dependabot-${ecosystem}\n\`\`\`\n\n` +
+                `_Automated by [auto-batch-dependabot.yml](../.github/workflows/auto-batch-dependabot.yml)_`;
               
               for (const pr of prs) {
                 try {
