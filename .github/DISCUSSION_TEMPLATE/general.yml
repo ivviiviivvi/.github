@@ -1,0 +1,101 @@
+labels: [discussion]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 General Discussion
+        
+        Start a general discussion about the project, community, or related topics.
+        
+        **This is the place for:**
+        - Open-ended conversations
+        - Community topics
+        - Meta discussions about the project
+        - Brainstorming sessions
+        - General feedback
+
+  - type: input
+    id: discussion-title
+    attributes:
+      label: Discussion Title
+      description: A descriptive title for your discussion topic
+      placeholder: e.g., "Let's discuss improving our CI/CD workflow"
+    validations:
+      required: true
+
+  - type: textarea
+    id: discussion-topic
+    attributes:
+      label: Discussion Topic
+      description: What would you like to discuss?
+      placeholder: |
+        Introduce your topic and what you'd like to explore or discuss.
+        Feel free to share thoughts, observations, or start a conversation...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Topic Category
+      description: What category does this discussion fall under?
+      multiple: true
+      options:
+        - Project Direction
+        - Best Practices
+        - Workflows & Automation
+        - Community
+        - Documentation
+        - Tooling & Infrastructure
+        - Security & Compliance
+        - Developer Experience
+        - Meta (about the project itself)
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: background
+    attributes:
+      label: Background/Context
+      description: Provide any relevant background or context
+      placeholder: Share relevant information that helps frame the discussion...
+    validations:
+      required: false
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions to Explore
+      description: Are there specific questions you'd like the community to consider?
+      placeholder: |
+        - Question 1?
+        - Question 2?
+        - Question 3?
+    validations:
+      required: false
+
+  - type: textarea
+    id: goals
+    attributes:
+      label: Discussion Goals
+      description: What are you hoping to achieve with this discussion?
+      placeholder: |
+        What outcomes are you looking for?
+        - Gather opinions
+        - Build consensus
+        - Explore possibilities
+        - Share knowledge
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: moderation
+    attributes:
+      label: Discussion Guidelines
+      options:
+        - label: I will keep the discussion respectful and constructive
+          required: true
+        - label: I am open to different perspectives and opinions
+          required: true

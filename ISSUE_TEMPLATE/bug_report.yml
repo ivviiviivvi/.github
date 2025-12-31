@@ -1,6 +1,6 @@
-name: 🐛 Bug Report (Form)
+name: 🐛 Bug Report
 description: File a bug report using a structured form
-title: "[Bug]: "
+title: "[Bug] "
 labels: ["bug", "triage"]
 assignees:
   - 
@@ -48,6 +48,15 @@ body:
     validations:
       required: true
   
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe the actual behavior you observed
+    validations:
+      required: true
+  
   - type: dropdown
     id: severity
     attributes:
@@ -70,32 +79,24 @@ body:
     validations:
       required: false
   
-  - type: dropdown
-    id: os
+  - type: textarea
+    id: environment
     attributes:
-      label: Operating System
-      description: What OS are you using?
-      multiple: true
-      options:
-        - Windows
-        - macOS
-        - Linux
-        - iOS
-        - Android
-        - Other
+      label: Environment
+      description: Provide details about your environment (OS, Browser, Version, etc.)
+      placeholder: |
+        - OS: [e.g., Windows 11, macOS 14, Ubuntu 22.04]
+        - Browser: [e.g., Chrome 120, Firefox 121, Safari 17]
+        - Version: [e.g., 1.0.0]
+        - Additional environment details
+    validations:
+      required: true
   
-  - type: dropdown
-    id: browsers
+  - type: textarea
+    id: screenshots
     attributes:
-      label: Browser (if applicable)
-      description: What browser(s) are you seeing the problem on?
-      multiple: true
-      options:
-        - Chrome
-        - Firefox
-        - Safari
-        - Edge
-        - Other
+      label: Screenshots
+      description: Add screenshots to help explain the problem (optional)
   
   - type: textarea
     id: logs

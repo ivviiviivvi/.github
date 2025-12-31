@@ -3,6 +3,9 @@ contact_links:
   - name: 🔒 Security Issue
     url: https://github.com/ivi374forivi/.github/security/advisories/new
     about: Please report security vulnerabilities privately
+  - name: 💬 Discussions
+    url: https://github.com/ivi374forivi/.github/discussions
+    about: Ask questions and discuss ideas with the community
   - name: 📚 Best Practices Sessions
     url: https://github.com/ivi374forivi/.github/blob/main/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md
     about: Learn about GitHub best practices sessions and how to participate

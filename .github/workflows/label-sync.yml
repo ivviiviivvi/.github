@@ -1,0 +1,57 @@
+name: Label Sync
+
+on:
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Perform a dry run (no changes will be made)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: '20'
+
+      - name: Install github-label-sync
+        run: npm install -g github-label-sync
+
+      - name: Sync labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Running in dry-run mode - no changes will be made"
+            github-label-sync --access-token "$GITHUB_TOKEN" --labels .github/labels.yml --dry-run ${{ github.repository }}
+          else
+            echo "Syncing labels..."
+            github-label-sync --access-token "$GITHUB_TOKEN" --labels .github/labels.yml ${{ github.repository }}
+          fi
+
+      - name: Report results
+        if: always()
+        run: |
+          echo "Label sync completed for ${{ github.repository }}"
+          echo "Check the logs above for details"
