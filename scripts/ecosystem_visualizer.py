@@ -248,6 +248,7 @@ graph TD
         parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Repository health
+        parts.append("## 🏥 Repository Health\n\n")
         if 'repository_health' in self.report_data:
             rh = self.report_data['repository_health']
             total = rh.get('total_repos', 0)
@@ -255,16 +256,14 @@ graph TD
             stale = rh.get('stale_repos', 0)
 
             if total > 0:
-                active_pct = (active / total * 100) if total > 0 else 0
+                active_pct = (active / total * 100)
 
                 # Create progress bar
                 bar_length = 20
                 filled_length = int(bar_length * active_pct / 100)
                 bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
-                parts.append(f"""## 🏥 Repository Health
-
-{bar} {active_pct:.1f}%
+                parts.append(f"""{bar} {active_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -275,9 +274,15 @@ graph TD
 ### Health Score: {active_pct:.0f}/100
 
 """)
-                parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+            else:
+                parts.append("No repositories found to analyze.\n\n")
+        else:
+            parts.append("No repository health data available.\n\n")
+
+        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Link validation
+        parts.append("## 🔗 Link Health\n\n")
         if 'link_validation' in self.report_data and self.report_data['link_validation']:
             lv = self.report_data['link_validation']
             total_links = lv.get('total_links', 0)
@@ -292,9 +297,7 @@ graph TD
                 filled_length = int(bar_length * valid_pct / 100)
                 bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
-                parts.append(f"""## 🔗 Link Health
-
-{bar} {valid_pct:.1f}%
+                parts.append(f"""{bar} {valid_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -332,8 +335,12 @@ graph TD
                         parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
 
                     parts.append("\n</details>\n\n")
+            else:
+                parts.append("No links found to validate.\n\n")
+        else:
+            parts.append("No link validation data available.\n\n")
 
-                parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Alerts
         blind_spots = self.report_data.get('blind_spots', [])
@@ -360,12 +367,12 @@ graph TD
         parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Technology coverage
+        parts.append("\n## 🛠️  Technology Coverage\n\n")
         if 'ecosystem_map' in self.report_data:
             em = self.report_data['ecosystem_map']
             technologies = em.get('technologies', [])
 
             if technologies:
-                parts.append(f"\n## 🛠️  Technology Coverage\n\n")
                 parts.append("Supported languages and frameworks:\n\n")
                 parts.append(f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n")
 
@@ -386,9 +393,15 @@ graph TD
                         parts.append("| " + " | ".join(["---"] * cols) + " |\n")
 
                 parts.append("\n</details>\n")
-                parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
+            else:
+                parts.append("No technologies detected.\n")
+        else:
+            parts.append("No technology data available.\n")
+
+        parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Top workflows
+        parts.append("\n## ⚙️  Active Workflows\n\n")
         if 'ecosystem_map' in self.report_data:
             em = self.report_data['ecosystem_map']
             workflows = em.get('workflows', [])
@@ -397,13 +410,17 @@ graph TD
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
-                parts.append(f"\n## ⚙️  Active Workflows\n\n")
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
                 for workflow in sorted(workflows):
                     # Link to the workflow file with calculated relative path
                     parts.append(f"- [`{workflow}`]({workflow_path}{workflow})\n")
                 parts.append("\n</details>\n")
-                parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
+            else:
+                parts.append("No active workflows detected.\n")
+        else:
+            parts.append("No workflow data available.\n")
+
+        parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
         parts.append("\n---\n\n")
         parts.append("*Dashboard generated by Ecosystem Visualizer*\n")
