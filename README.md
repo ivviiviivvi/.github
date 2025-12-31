@@ -183,6 +183,7 @@ This repository includes comprehensive GitHub Copilot customizations from the [g
 
 **New to GitHub Copilot customizations?** Start here:
 
+- **[📚 Complete Index](docs/COPILOT_ENHANCEMENTS_INDEX.md)** - Central hub for all resources
 - **[📘 Quick Start Guide](docs/COPILOT_QUICK_START.md)** - Get up and running in 15 minutes
 - **[🔧 Custom Instructions Setup](docs/CUSTOM_INSTRUCTIONS_SETUP.md)** - Configure coding standards and best practices
 - **[🔌 MCP Server Setup](docs/MCP_SERVER_SETUP.md)** - Extend Copilot with Model Context Protocol servers
