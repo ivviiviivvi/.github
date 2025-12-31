@@ -324,21 +324,69 @@ jobs:
 
       - name: Trigger Batch Merge
         if: steps.check-ready.outputs.has-ready == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          READY_BATCHES='${{ steps.check-ready.outputs.ready-batches }}'
-          
-          echo "🚀 Triggering batch merge for ready batches..."
-          echo "$READY_BATCHES" | jq -r '.[]' | while read -r category; do
-            BATCH_LABEL="batch:${category}"
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const readyBatches = JSON.parse('${{ steps.check-ready.outputs.ready-batches }}');
             
-            echo "Triggering merge for: $BATCH_LABEL"
+            console.log('🚀 Triggering batch merge for ready batches...');
             
-            gh workflow run pr-batch-merge.yml \
-              -f batch_label="$BATCH_LABEL" \
-              2>&1 || echo "Failed to trigger batch merge for $BATCH_LABEL"
-          done
+            // Verify pr-batch-merge.yml workflow exists
+            try {
+              const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              
+              const batchMergeWorkflow = workflows.workflows.find(w => 
+                w.path === '.github/workflows/pr-batch-merge.yml'
+              );
+              
+              if (!batchMergeWorkflow) {
+                console.error('❌ pr-batch-merge.yml workflow not found');
+                throw new Error('Required workflow pr-batch-merge.yml does not exist');
+              }
+              
+              console.log(`✅ Found pr-batch-merge workflow (ID: ${batchMergeWorkflow.id})`);
+              
+              // Trigger workflow for each ready batch
+              const results = [];
+              for (const category of readyBatches) {
+                const batchLabel = `batch:${category}`;
+                console.log(`\nTriggering merge for: ${batchLabel}`);
+                
+                try {
+                  await github.rest.actions.createWorkflowDispatch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    workflow_id: batchMergeWorkflow.id,
+                    ref: 'main',
+                    inputs: {
+                      batch_label: batchLabel
+                    }
+                  });
+                  
+                  console.log(`✅ Successfully triggered batch merge for ${batchLabel}`);
+                  results.push({ category, success: true });
+                } catch (error) {
+                  console.error(`❌ Failed to trigger batch merge for ${batchLabel}: ${error.message}`);
+                  results.push({ category, success: false, error: error.message });
+                }
+              }
+              
+              // Summary
+              const succeeded = results.filter(r => r.success).length;
+              const failed = results.filter(r => !r.success).length;
+              console.log(`\n📊 Batch merge triggers: ${succeeded} succeeded, ${failed} failed`);
+              
+              if (failed > 0) {
+                const failedCategories = results.filter(r => !r.success).map(r => r.category).join(', ');
+                core.warning(`Failed to trigger batch merge for: ${failedCategories}`);
+              }
+            } catch (error) {
+              console.error(`❌ Critical error in batch merge trigger: ${error.message}`);
+              throw error;
+            }
 
       - name: Summary
         if: always()

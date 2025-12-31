@@ -71,7 +71,17 @@ jobs:
             const operation = '${{ github.event.inputs.operation }}';
             const filterLabel = '${{ github.event.inputs.filter_label }}' || null;
             const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
-            const maxPRs = parseInt('${{ github.event.inputs.max_prs }}') || 50;
+            
+            // Validate and sanitize max_prs input
+            let maxPRs = 50; // default
+            const maxPRsInput = '${{ github.event.inputs.max_prs }}';
+            if (maxPRsInput) {
+              const parsed = parseInt(maxPRsInput, 10);
+              if (isNaN(parsed) || parsed < 1 || parsed > 200) {
+                throw new Error(`Invalid max_prs value: ${maxPRsInput}. Must be a number between 1 and 200.`);
+              }
+              maxPRs = parsed;
+            }
             
             console.log(`🚀 Executing bulk operation: ${operation}`);
             console.log(`   Filter: ${filterLabel || 'none'}`);
@@ -128,7 +138,7 @@ jobs:
                   if (!isAutomated) continue;
                   
                   processed++;
-                  console.log(`\nProcessing PR #${pr.number}: ${pr.title} (@${pr.user.login})`);
+                  console.log(`\nProcessing PR #${pr.number} (@${pr.user.login})`);
                   
                   if (dryRun) {
                     console.log('[DRY RUN] Would approve PR');
@@ -155,9 +165,9 @@ jobs:
                     console.log('✅ Approved');
                     succeeded++;
                   } catch (error) {
-                    console.error(`❌ Failed: ${error.message}`);
+                    console.error(`❌ Failed to approve PR #${pr.number}: ${error.status || 'unknown error'}`);
                     failed++;
-                    errors.push({ pr: pr.number, error: error.message });
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to approve` });
                   }
                 }
                 break;
@@ -192,7 +202,7 @@ jobs:
                   }
                   
                   processed++;
-                  console.log(`\nProcessing PR #${pr.number}: ${pr.title}`);
+                  console.log(`\nProcessing PR #${pr.number}`);
                   
                   if (dryRun) {
                     console.log('[DRY RUN] Would merge PR');
@@ -211,9 +221,9 @@ jobs:
                     console.log('✅ Merged');
                     succeeded++;
                   } catch (error) {
-                    console.error(`❌ Failed: ${error.message}`);
+                    console.error(`❌ Failed to merge PR #${pr.number}: ${error.status || 'unknown error'}`);
                     failed++;
-                    errors.push({ pr: pr.number, error: error.message });
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to merge` });
                   }
                 }
                 break;
@@ -256,9 +266,9 @@ jobs:
                     console.log('✅ Closed');
                     succeeded++;
                   } catch (error) {
-                    console.error(`❌ Failed: ${error.message}`);
+                    console.error(`❌ Failed to close PR #${pr.number}: ${error.status || 'unknown error'}`);
                     failed++;
-                    errors.push({ pr: pr.number, error: error.message });
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to close` });
                   }
                 }
                 break;
@@ -295,9 +305,9 @@ jobs:
                     console.log('✅ Converted');
                     succeeded++;
                   } catch (error) {
-                    console.error(`❌ Failed: ${error.message}`);
+                    console.error(`❌ Failed to convert PR #${pr.number}: ${error.status || 'unknown error'}`);
                     failed++;
-                    errors.push({ pr: pr.number, error: error.message });
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to convert` });
                   }
                 }
                 break;
@@ -352,9 +362,9 @@ jobs:
                     console.log('✅ Labeled');
                     succeeded++;
                   } catch (error) {
-                    console.error(`❌ Failed: ${error.message}`);
+                    console.error(`❌ Failed to label PR #${pr.number}: ${error.status || 'unknown error'}`);
                     failed++;
-                    errors.push({ pr: pr.number, error: error.message });
+                    errors.push({ pr: pr.number, error: `${error.status || 'Error'} - Failed to label` });
                   }
                 }
                 break;

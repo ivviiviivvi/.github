@@ -280,49 +280,106 @@ jobs:
           fetch-depth: 0
 
       - name: Delete Merged Branches
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          DRY_RUN="${{ github.event.inputs.dry_run }}"
-          
-          echo "🧹 Cleaning up merged branches..."
-          
-          # Get all merged branches
-          git fetch --all --prune
-          
-          # Protected branches
-          PROTECTED="main master develop staging production"
-          
-          DELETED=0
-          
-          # Find branches that have been merged
-          for branch in $(git branch -r --merged origin/main | grep -v '\->' | sed 's/origin\///'); do
-            # Skip protected branches
-            if echo "$PROTECTED" | grep -wq "$branch"; then
-              echo "⏭️  Skipping protected branch: $branch"
-              continue
-            fi
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
             
-            # Check if branch still has open PRs
-            OPEN_PRS=$(gh pr list --head "$branch" --state open --json number --jq length || echo 0)
+            console.log('🧹 Cleaning up merged branches...');
             
-            if [ "$OPEN_PRS" -gt 0 ]; then
-              echo "⏭️  Skipping $branch (has open PRs)"
-              continue
-            fi
+            // Protected branches
+            const protectedBranches = ['main', 'master', 'develop', 'staging', 'production'];
             
-            echo "🗑️  Deleting merged branch: $branch"
-            
-            if [ "$DRY_RUN" = "true" ]; then
-              echo "[DRY RUN] Would delete branch: $branch"
-            else
-              git push origin --delete "$branch" 2>/dev/null || echo "Failed to delete $branch"
-            fi
-            
-            DELETED=$((DELETED + 1))
-          done
-          
-          echo "📊 Deleted $DELETED merged branches"
+            try {
+              // Get all branches
+              const { data: branches } = await github.rest.repos.listBranches({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100
+              });
+              
+              console.log(`Found ${branches.length} total branches`);
+              
+              let deleted = 0;
+              let skipped = 0;
+              let failed = 0;
+              const errors = [];
+              
+              for (const branch of branches) {
+                // Skip protected branches
+                if (protectedBranches.includes(branch.name)) {
+                  console.log(`⏭️  Skipping protected branch: ${branch.name}`);
+                  skipped++;
+                  continue;
+                }
+                
+                try {
+                  // Check if branch is merged
+                  const { data: comparison } = await github.rest.repos.compareCommits({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    base: 'main',
+                    head: branch.name
+                  });
+                  
+                  if (comparison.status !== 'identical' && comparison.behind_by > 0) {
+                    console.log(`⏭️  Skipping ${branch.name} (not fully merged)`);
+                    skipped++;
+                    continue;
+                  }
+                  
+                  // Check for open PRs
+                  const { data: prs } = await github.rest.pulls.list({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'open',
+                    head: `${context.repo.owner}:${branch.name}`,
+                    per_page: 1
+                  });
+                  
+                  if (prs.length > 0) {
+                    console.log(`⏭️  Skipping ${branch.name} (has open PRs)`);
+                    skipped++;
+                    continue;
+                  }
+                  
+                  // Delete branch
+                  console.log(`🗑️  Deleting merged branch: ${branch.name}`);
+                  
+                  if (dryRun) {
+                    console.log(`[DRY RUN] Would delete branch: ${branch.name}`);
+                    deleted++;
+                  } else {
+                    await github.rest.git.deleteRef({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      ref: `heads/${branch.name}`
+                    });
+                    console.log(`✅ Successfully deleted ${branch.name}`);
+                    deleted++;
+                  }
+                } catch (error) {
+                  console.error(`❌ Error processing branch ${branch.name}: ${error.message}`);
+                  failed++;
+                  errors.push({ branch: branch.name, error: error.message });
+                }
+              }
+              
+              // Summary
+              console.log('\n📊 Branch Cleanup Summary:');
+              console.log(`   Deleted: ${deleted}`);
+              console.log(`   Skipped: ${skipped}`);
+              console.log(`   Failed: ${failed}`);
+              
+              if (errors.length > 0) {
+                console.error('\n❌ Errors encountered:');
+                errors.forEach(e => console.error(`   ${e.branch}: ${e.error}`));
+                core.warning(`Failed to delete ${failed} branch(es). Check logs for details.`);
+              }
+            } catch (error) {
+              console.error(`❌ Critical error in branch cleanup: ${error.message}`);
+              throw error;
+            }
 
   close-stale-prs:
     name: Close Stale PRs
