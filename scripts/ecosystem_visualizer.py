@@ -15,6 +15,13 @@ class EcosystemVisualizer:
     """Generate visual representations of the ecosystem"""
 
     _WORKFLOW_BASE_PATH = "../.github/workflows/"
+    
+    # Configuration: Maximum workflows to display in Mermaid diagram
+    # Rationale: Mermaid diagrams become cluttered and less readable with too many nodes.
+    # All workflows are still listed in the "Active Workflows" section below the diagram.
+    # This limit ensures the diagram remains visually clear and interactive.
+    # Users can adjust this value if needed based on their diagram rendering environment.
+    MAX_DIAGRAM_WORKFLOWS = 10
 
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
@@ -92,9 +99,11 @@ graph TD
     subgraph "Automation Layer"
 """)
 
-        # Add workflows
+        # Add workflows (limited to MAX_DIAGRAM_WORKFLOWS for readability)
+        # Note: All workflows are listed in the "Active Workflows" section below
         workflows = em.get('workflows', [])
-        for i, workflow in enumerate(workflows[:10]):  # Limit to first 10
+        displayed_workflows = workflows[:self.MAX_DIAGRAM_WORKFLOWS]
+        for i, workflow in enumerate(displayed_workflows):
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
             # Add click event to open workflow file
@@ -358,6 +367,15 @@ graph TD
 
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
+        
+        # Add note about workflow display limit if there are more workflows than the limit
+        if 'ecosystem_map' in self.report_data:
+            em = self.report_data['ecosystem_map']
+            workflows = em.get('workflows', [])
+            if len(workflows) > self.MAX_DIAGRAM_WORKFLOWS:
+                parts.append(f"ℹ️  *The diagram below displays the first {self.MAX_DIAGRAM_WORKFLOWS} workflows for readability. ")
+                parts.append(f"All {len(workflows)} workflows are listed in the [Active Workflows](#-active-workflows) section.*\n\n")
+        
         parts.append(self.generate_mermaid_diagram(output_path))
         parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
 

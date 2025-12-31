@@ -104,5 +104,71 @@ class TestEcosystemVisualizer(unittest.TestCase):
         path_none = self.visualizer._calculate_relative_path(None, ".github/workflows/")
         self.assertEqual(path_none, "../.github/workflows/")
 
+    def test_workflow_limit_applies(self):
+        """Test that workflow diagram respects MAX_DIAGRAM_WORKFLOWS limit"""
+        # Create report with more than MAX_DIAGRAM_WORKFLOWS
+        workflows = [f"workflow-{i}.yml" for i in range(15)]
+        
+        self.report_data['ecosystem_map']['workflows'] = workflows
+        with open(self.report_path, "w") as f:
+            json.dump(self.report_data, f)
+        
+        visualizer = EcosystemVisualizer(self.report_path)
+        diagram = visualizer.generate_mermaid_diagram(Path("reports/DASHBOARD.md"))
+        
+        # Should only contain first MAX_DIAGRAM_WORKFLOWS (default 10)
+        for i in range(visualizer.MAX_DIAGRAM_WORKFLOWS):
+            self.assertIn(f"WF{i}", diagram)
+            self.assertIn(f"workflow-{i}.yml", diagram)
+        
+        # Should NOT contain workflows beyond the limit
+        for i in range(visualizer.MAX_DIAGRAM_WORKFLOWS, 15):
+            self.assertNotIn(f"WF{i}", diagram)
+
+    def test_workflow_limit_note_in_dashboard(self):
+        """Test that dashboard includes a note when workflows exceed limit"""
+        # Create report with more than MAX_DIAGRAM_WORKFLOWS
+        workflows = [f"workflow-{i}.yml" for i in range(15)]
+        
+        self.report_data['ecosystem_map']['workflows'] = workflows
+        with open(self.report_path, "w") as f:
+            json.dump(self.report_data, f)
+        
+        visualizer = EcosystemVisualizer(self.report_path)
+        dashboard = visualizer.generate_dashboard_markdown(Path("reports/DASHBOARD.md"))
+        
+        # Should contain informative note about the limit
+        self.assertIn("first 10 workflows", dashboard.lower())
+        self.assertIn("all 15 workflows", dashboard.lower())
+        self.assertIn("active workflows", dashboard.lower())
+
+    def test_no_workflow_limit_note_when_under_limit(self):
+        """Test that no limit note appears when workflow count is under limit"""
+        # Use default report with just 1 workflow
+        visualizer = EcosystemVisualizer(self.report_path)
+        dashboard = visualizer.generate_dashboard_markdown(Path("reports/DASHBOARD.md"))
+        
+        # Should NOT contain the limit note
+        self.assertNotIn("first 10 workflows", dashboard.lower())
+
+    def test_all_workflows_listed_in_active_section(self):
+        """Test that all workflows are listed in Active Workflows section regardless of diagram limit"""
+        # Create report with more than MAX_DIAGRAM_WORKFLOWS
+        workflows = [f"workflow-{i}.yml" for i in range(15)]
+        
+        self.report_data['ecosystem_map']['workflows'] = workflows
+        with open(self.report_path, "w") as f:
+            json.dump(self.report_data, f)
+        
+        visualizer = EcosystemVisualizer(self.report_path)
+        dashboard = visualizer.generate_dashboard_markdown(Path("reports/DASHBOARD.md"))
+        
+        # All workflows should appear in the Active Workflows section
+        for workflow in workflows:
+            self.assertIn(workflow, dashboard)
+        
+        # Should show correct total count
+        self.assertIn("View all 15 workflows", dashboard)
+
 if __name__ == '__main__':
     unittest.main()
