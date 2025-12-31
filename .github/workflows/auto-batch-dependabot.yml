@@ -1,0 +1,311 @@
+name: Auto-Batch Dependabot PRs
+
+on:
+  pull_request:
+    types: [opened, labeled]
+  schedule:
+    # Run every day at 4 AM UTC (after dependabot runs)
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      auto_merge:
+        description: 'Automatically merge batch if all checks pass'
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  batch-dependabot-prs:
+    name: Batch Dependabot PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Find Dependabot PRs
+        id: find-prs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            console.log('🔍 Finding dependabot PRs to batch...');
+            
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+            
+            // Filter dependabot PRs
+            const dependabotPRs = prs.filter(pr => 
+              pr.user.login === 'dependabot[bot]' &&
+              !pr.draft &&
+              !pr.labels.some(l => l.name === 'skip-auto-batch')
+            );
+            
+            console.log(`Found ${dependabotPRs.length} dependabot PRs`);
+            
+            // Group by ecosystem
+            const groups = {
+              npm: [],
+              pip: [],
+              'github-actions': [],
+              docker: [],
+              gomod: [],
+              composer: []
+            };
+            
+            for (const pr of dependabotPRs) {
+              let ecosystem = 'other';
+              
+              // Detect ecosystem from labels
+              for (const label of pr.labels) {
+                if (label.name === 'dependencies') continue;
+                if (groups[label.name]) {
+                  ecosystem = label.name;
+                  break;
+                }
+              }
+              
+              // Try to detect from title if not in labels
+              if (ecosystem === 'other') {
+                const title = pr.title.toLowerCase();
+                if (title.includes('npm') || title.includes('package.json')) ecosystem = 'npm';
+                else if (title.includes('pip') || title.includes('requirements')) ecosystem = 'pip';
+                else if (title.includes('actions') || title.includes('.github/workflows')) ecosystem = 'github-actions';
+                else if (title.includes('docker')) ecosystem = 'docker';
+                else if (title.includes('go.mod')) ecosystem = 'gomod';
+                else if (title.includes('composer')) ecosystem = 'composer';
+              }
+              
+              if (groups[ecosystem]) {
+                groups[ecosystem].push({
+                  number: pr.number,
+                  title: pr.title,
+                  head: pr.head.ref,
+                  base: pr.base.ref
+                });
+              }
+            }
+            
+            // Log groups
+            for (const [ecosystem, prs] of Object.entries(groups)) {
+              if (prs.length > 0) {
+                console.log(`\n${ecosystem}: ${prs.length} PRs`);
+                prs.forEach(pr => console.log(`  - #${pr.number}: ${pr.title}`));
+              }
+            }
+            
+            core.setOutput('groups', JSON.stringify(groups));
+            core.setOutput('total', dependabotPRs.length);
+            
+            return groups;
+
+      - name: Apply Batch Labels
+        if: steps.find-prs.outputs.total > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            
+            // Create batch labels for each ecosystem with PRs
+            for (const [ecosystem, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              const batchLabel = `batch:dependabot-${ecosystem}`;
+              const today = new Date().toISOString().split('T')[0];
+              
+              console.log(`\nProcessing batch: ${batchLabel} (${prs.length} PRs)`);
+              
+              // Create the label if it doesn't exist
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: batchLabel,
+                  color: '0366d6',
+                  description: `Dependabot ${ecosystem} batch for ${today}`
+                });
+              } catch (error) {
+                // Label might already exist
+              }
+              
+              // Apply label to all PRs in this batch
+              for (const pr of prs) {
+                try {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    labels: [batchLabel, 'auto-merge', 'auto-batch']
+                  });
+                  
+                  console.log(`  ✅ Labeled PR #${pr.number}`);
+                } catch (error) {
+                  console.error(`  ❌ Failed to label PR #${pr.number}: ${error.message}`);
+                }
+              }
+            }
+
+      - name: Comment on Batches
+        if: steps.find-prs.outputs.total > 0
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            const autoMerge = '${{ github.event.inputs.auto_merge }}' !== 'false';
+            
+            for (const [ecosystem, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              const batchLabel = `batch:dependabot-${ecosystem}`;
+              
+              const comment = `🤖 **Auto-Batch: Dependabot ${ecosystem}**
+
+This PR has been grouped with ${prs.length - 1} other dependabot PR(s) for batch processing.
+
+**Batch Label:** \`${batchLabel}\`
+
+**PRs in this batch:**
+${prs.map(pr => `- #${pr.number}: ${pr.title}`).join('\n')}
+
+${autoMerge ? '✅ **Auto-merge enabled** - This batch will be merged automatically when all PRs pass checks.' : '⏸️ **Manual merge required** - Trigger batch merge manually once all PRs are ready.'}
+
+**To merge this batch manually:**
+\`\`\`
+/merge-batch dependabot-${ecosystem}
+\`\`\`
+
+_Automated by [auto-batch-dependabot.yml](../.github/workflows/auto-batch-dependabot.yml)_`;
+              
+              for (const pr of prs) {
+                try {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    body: comment
+                  });
+                } catch (error) {
+                  console.error(`Failed to comment on PR #${pr.number}: ${error.message}`);
+                }
+              }
+            }
+
+      - name: Check Batch Readiness
+        id: check-ready
+        if: steps.find-prs.outputs.total > 0 && github.event.inputs.auto_merge != 'false'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+            
+            let readyBatches = [];
+            
+            for (const [ecosystem, prs] of Object.entries(groups)) {
+              if (prs.length === 0) continue;
+              
+              console.log(`\nChecking batch readiness: ${ecosystem}`);
+              
+              let allReady = true;
+              
+              for (const pr of prs) {
+                const { data: fullPR } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number
+                });
+                
+                // Check status
+                const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: fullPR.head.sha
+                });
+                
+                const { data: checkRuns } = await github.rest.checks.listForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: fullPR.head.sha
+                });
+                
+                const checksPass = combinedStatus.state === 'success' &&
+                  checkRuns.check_runs.every(check => 
+                    check.conclusion === 'success' || 
+                    check.conclusion === 'skipped' || 
+                    check.conclusion === 'neutral'
+                  );
+                
+                const isClean = fullPR.mergeable_state === 'clean';
+                
+                console.log(`  PR #${pr.number}: checks=${checksPass}, mergeable=${isClean}`);
+                
+                if (!checksPass || !isClean) {
+                  allReady = false;
+                  break;
+                }
+              }
+              
+              if (allReady) {
+                console.log(`✅ Batch ${ecosystem} is ready for merge`);
+                readyBatches.push(ecosystem);
+              } else {
+                console.log(`⏳ Batch ${ecosystem} not yet ready`);
+              }
+            }
+            
+            core.setOutput('ready-batches', JSON.stringify(readyBatches));
+            core.setOutput('has-ready', readyBatches.length > 0 ? 'true' : 'false');
+            
+            return readyBatches;
+
+      - name: Trigger Batch Merge
+        if: steps.check-ready.outputs.has-ready == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          READY_BATCHES='${{ steps.check-ready.outputs.ready-batches }}'
+          
+          echo "🚀 Triggering batch merge for ready batches..."
+          echo "$READY_BATCHES" | jq -r '.[]' | while read -r ecosystem; do
+            BATCH_LABEL="batch:dependabot-${ecosystem}"
+            
+            echo "Triggering merge for: $BATCH_LABEL"
+            
+            gh workflow run pr-batch-merge.yml \
+              -f batch_label="$BATCH_LABEL" \
+              2>&1 || echo "Failed to trigger batch merge for $BATCH_LABEL"
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### 🤖 Dependabot Auto-Batch Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Dependabot PRs:** ${{ steps.find-prs.outputs.total }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.find-prs.outputs.total }}" -gt 0 ]; then
+            echo "✅ PRs have been organized into batches by ecosystem" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${{ steps.check-ready.outputs.has-ready }}" = "true" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "🚀 **Ready batches triggered for merge**" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "ℹ️ No dependabot PRs found to batch" >> $GITHUB_STEP_SUMMARY
+          fi

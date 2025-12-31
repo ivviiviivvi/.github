@@ -10,15 +10,33 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     reviewers:
       - "organization-team"
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      npm-production:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
+      npm-development:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      npm-types:
+        patterns:
+          - "@types/*"
   
   # Enable version updates for pip (Python)
   - package-ecosystem: "pip"
@@ -27,15 +45,23 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     reviewers:
       - "organization-team"
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -44,13 +70,18 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "github-actions"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "ci"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
   
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -59,13 +90,18 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "docker"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "build"
+    groups:
+      docker-images:
+        patterns:
+          - "*"
   
   # Enable version updates for Go modules
   - package-ecosystem: "gomod"
@@ -74,13 +110,21 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "go"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "chore"
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   
   # Enable version updates for Composer (PHP)
   - package-ecosystem: "composer"
@@ -89,10 +133,18 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "php"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "chore"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
