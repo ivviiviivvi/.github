@@ -248,22 +248,21 @@ graph TD
         parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Repository health
-        parts.append(f"## 🏥 Repository Health\n\n")
-        if 'repository_health' in self.report_data:
+        parts.append("## 🏥 Repository Health\n\n")
+        if 'repository_health' in self.report_data and self.report_data['repository_health'].get('total_repos', 0) > 0:
             rh = self.report_data['repository_health']
             total = rh.get('total_repos', 0)
             active = rh.get('active_repos', 0)
             stale = rh.get('stale_repos', 0)
 
-            if total > 0:
-                active_pct = (active / total * 100) if total > 0 else 0
+            active_pct = (active / total * 100) if total > 0 else 0
 
-                # Create progress bar
-                bar_length = 20
-                filled_length = int(bar_length * active_pct / 100)
-                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+            # Create progress bar
+            bar_length = 20
+            filled_length = int(bar_length * active_pct / 100)
+            bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
-                parts.append(f"""{bar} {active_pct:.1f}%
+            parts.append(f"""{bar} {active_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -274,30 +273,28 @@ graph TD
 ### Health Score: {active_pct:.0f}/100
 
 """)
-            else:
-                parts.append("No repository data available.\n\n")
         else:
-            parts.append("No repository health data available.\n\n")
+            error = self.report_data.get('repository_health', {}).get('error', 'No data available')
+            parts.append(f"⚠️ **Data Unavailable**: {error}\n\n")
 
         parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Link validation
-        parts.append(f"## 🔗 Link Health\n\n")
-        if 'link_validation' in self.report_data and self.report_data['link_validation']:
+        parts.append("## 🔗 Link Health\n\n")
+        if 'link_validation' in self.report_data and self.report_data['link_validation'] and self.report_data['link_validation'].get('total_links', 0) > 0:
             lv = self.report_data['link_validation']
             total_links = lv.get('total_links', 0)
             valid = lv.get('valid', 0)
             broken = lv.get('broken', 0)
 
-            if total_links > 0:
-                valid_pct = (valid / total_links * 100) if total_links > 0 else 0
+            valid_pct = (valid / total_links * 100) if total_links > 0 else 0
 
-                # Create progress bar
-                bar_length = 20
-                filled_length = int(bar_length * valid_pct / 100)
-                bar = '█' * filled_length + '░' * (bar_length - filled_length)
+            # Create progress bar
+            bar_length = 20
+            filled_length = int(bar_length * valid_pct / 100)
+            bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
-                parts.append(f"""{bar} {valid_pct:.1f}%
+            parts.append(f"""{bar} {valid_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -306,39 +303,37 @@ graph TD
 | **Total** | **{total_links}** | **100%** |
 
 """)
-                # Add broken links details
-                broken_links = lv.get('broken_links', [])
-                if broken_links:
-                    display_count = min(len(broken_links), 20)
-                    parts.append(f"<details>\n<summary>View top {display_count} broken links (of {broken})</summary>\n\n")
-                    parts.append("| URL | Status |\n|---|---|\n")
+            # Add broken links details
+            broken_links = lv.get('broken_links', [])
+            if broken_links:
+                display_count = min(len(broken_links), 20)
+                parts.append(f"<details>\n<summary>View top {display_count} broken links (of {broken})</summary>\n\n")
+                parts.append("| URL | Status |\n|---|---|\n")
 
-                    for link in broken_links[:display_count]:
-                        url = link.get('url', 'Unknown')
-                        # Sanitize URL by stripping common trailing punctuation
-                        url = url.rstrip('.,;:)')
-                        status = link.get('status', 'Unknown')
+                for link in broken_links[:display_count]:
+                    url = link.get('url', 'Unknown')
+                    # Sanitize URL by stripping common trailing punctuation
+                    url = url.rstrip('.,;:)')
+                    status = link.get('status', 'Unknown')
 
-                        # Add status indicator
-                        status_str = str(status)
-                        if status_str.startswith('4'):
-                            status_emoji = '🔴' # Client Error
-                        elif status_str.startswith('5'):
-                            status_emoji = '💥' # Server Error
-                        else:
-                            status_emoji = '⚠️' # Unknown/Other
+                    # Add status indicator
+                    status_str = str(status)
+                    if status_str.startswith('4'):
+                        status_emoji = '🔴' # Client Error
+                    elif status_str.startswith('5'):
+                        status_emoji = '💥' # Server Error
+                    else:
+                        status_emoji = '⚠️' # Unknown/Other
 
-                        # Truncate long URLs for display (max 60 characters including ellipsis)
-                        display_url = url if len(url) <= 60 else url[:57] + "..."
-                        # Escape pipe characters for Markdown table
-                        display_url = display_url.replace('|', '\\|')
-                        parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
+                    # Truncate long URLs for display (max 60 characters including ellipsis)
+                    display_url = url if len(url) <= 60 else url[:57] + "..."
+                    # Escape pipe characters for Markdown table
+                    display_url = display_url.replace('|', '\\|')
+                    parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
 
-                    parts.append("\n</details>\n\n")
-            else:
-                parts.append("No links found to validate.\n\n")
+                parts.append("\n</details>\n\n")
         else:
-            parts.append("No link validation data available.\n\n")
+            parts.append("ℹ️ **No Data**: External link validation was skipped or found no links.\n\n")
 
         parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
 
@@ -394,9 +389,9 @@ graph TD
 
                 parts.append("\n</details>\n")
             else:
-                parts.append("No technologies detected.\n")
+                 parts.append("No technologies detected.\n")
         else:
-            parts.append("No technology data available.\n")
+             parts.append("No technology data available.\n")
 
         parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
@@ -416,9 +411,9 @@ graph TD
                     parts.append(f"- [`{workflow}`]({workflow_path}{workflow})\n")
                 parts.append("\n</details>\n")
             else:
-                parts.append("No active workflows detected.\n")
+                 parts.append("No active workflows detected.\n")
         else:
-            parts.append("No workflow data available.\n")
+             parts.append("No workflow data available.\n")
 
         parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
 
