@@ -611,7 +611,7 @@ on:
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [FFmpeg Documentation](https://ffmpeg.org/documentation.html)
-- [Workflow Configuration Reference](.github/walkthrough-config.yml)
+- [Workflow Configuration Reference](walkthrough-config.yml)
 
 ### Getting Help
 
@@ -621,7 +621,7 @@ on:
 
 ### Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
+Contributions are welcome! See [CONTRIBUTING.md](../docs/CONTRIBUTING.md) for guidelines.
 
 ---
 
