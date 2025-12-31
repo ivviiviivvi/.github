@@ -12,10 +12,10 @@
 - [Quick Stats](#-quick-stats)
 - [Repository Health](#-repository-health)
 - [Link Health](#-link-health)
-- [Alerts](#-alerts)
-- [Ecosystem Map](#-ecosystem-map)
-- [Technology Coverage](#-technology-coverage)
-- [Active Workflows](#-active-workflows)
+- [Alerts](#--alerts)
+- [Ecosystem Map](#--ecosystem-map)
+- [Technology Coverage](#--technology-coverage)
+- [Active Workflows](#--active-workflows)
 
 ---
 
@@ -30,25 +30,25 @@
 | 🎭 Copilot Chat Modes | 88 |
 | 🛠️  Technologies Supported | 110 |
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ## 🏥 Repository Health
 
 ⚠️ **Data Unavailable**: No GitHub token provided
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ## 🔗 Link Health
 
 ℹ️ **No Data**: External link validation was skipped or found no links.
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ## ⚠️  Alerts
 
 ✅ No alerts found! The ecosystem is healthy.
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 
 ## 🗺️  Ecosystem Map
@@ -136,7 +136,7 @@ graph TD
     end
 ```
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ## 🛠️  Technology Coverage
 
@@ -177,7 +177,7 @@ Supported languages and frameworks:
 
 </details>
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ## ⚙️  Active Workflows
 
@@ -277,7 +277,7 @@ Supported languages and frameworks:
 
 </details>
 
-[Back to Top](#organization-ecosystem-dashboard)
+[Back to Top](#-organization-ecosystem-dashboard)
 
 ---
 

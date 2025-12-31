@@ -17,6 +17,15 @@
     },
     {
       "pattern": "^https://ffmpeg.org/"
+    },
+    {
+      "pattern": "^https://learn.microsoft.com/"
+    },
+    {
+      "pattern": "^https://keepachangelog.com/"
+    },
+    {
+      "pattern": "^https://semver.org/"
     }
   ],
   "replacementPatterns": [],
