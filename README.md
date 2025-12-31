@@ -278,7 +278,7 @@ The Mouthpiece Filter System allows you to write and speak in your authentic voi
 - **Filter Script** (`scripts/mouthpiece_filter.py`) - CLI transformation engine
 - **Chat Mode** (`chatmodes/mouthpiece.chatmode.md`) - Interactive AI persona
 - **Prompt Template** (`prompts/mouthpiece-transform.prompt.md`) - Quick transformations
-- **Documentation** ([MOUTHPIECE_README.md](MOUTHPIECE_README.md)) - Complete guide
+- **Documentation** ([MOUTHPIECE_README.md](docs/MOUTHPIECE_README.md)) - Complete guide
 
 #### Quick Start
 
@@ -740,7 +740,7 @@ See [Repository Bootstrap Guide](docs/workflows/REPOSITORY_BOOTSTRAP.md), [Video
 
 ### Automation Configuration
 
-- **[dependabot.yml](dependabot.yml)** - Organization-wide Dependabot configurat
+- **[dependabot.yml](.github/dependabot.yml)** - Organization-wide Dependabot configurat
   ion for:
   - npm (JavaScript/Node.js)
   - pip (Python)
@@ -773,7 +773,7 @@ The [profile/README.md](profile/README.md) file is displayed on our organization
 
 1. **Adopt Standards**: Review organization standards from this repository
 2. **Enable Workflows**: Copy desired workflow templates to `.github/workflows/` in your repo
-3. **Configure Dependabot**: Copy [dependabot.yml](dependabot.yml) to `.github/` in your repository
+3. **Configure Dependabot**: Copy [dependabot.yml](.github/dependabot.yml) to `.github/` in your repository
 4. **Apply Labels**: Use [LABELS.md](docs/LABELS.md) to standardize issue labels
 5. **Enable Branch Protection**: Follow [BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) guidelines
 
@@ -1018,7 +1018,7 @@ Need help? Have questions?
 - 📖 Check our [Support Documentation](docs/SUPPORT.md) for detailed guidance
 - 🐛 Report issues using our [issue templates](ISSUE_TEMPLATE/)
 - 📧 Contact repository maintainers through GitHub
-- 💬 For general discussions, check if [GitHub Discussions](https://github.com/orgs/ivi374forivi/discussions) are enabled
+- 💬 For general discussions, use GitHub Issues for questions and feature requests
 
 ---
 
