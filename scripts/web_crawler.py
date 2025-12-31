@@ -23,6 +23,13 @@ import concurrent.futures
 class OrganizationCrawler:
     """Crawls and analyzes organization repositories and documentation"""
 
+    # Compile regex pattern once for better performance
+    # Match both [text](url) and bare URLs using a single pass to avoid
+    # incorrect matching of bare URLs inside markdown syntax (e.g. "url)")
+    # Group 1: URL inside markdown link [text](URL) - excludes spaces to avoid malformed URLs
+    # Group 2: Bare URL - excludes closing paren and spaces to avoid trailing punctuation
+    LINK_PATTERN = re.compile(r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)')
+
     def __init__(self, github_token: str = None, org_name: str = None, max_workers: int = 10):
         self.github_token = github_token or os.environ.get('GITHUB_TOKEN')
         self.org_name = org_name or os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
@@ -78,12 +85,7 @@ class OrganizationCrawler:
 
     def _extract_links(self, content: str) -> List[str]:
         """Extract URLs from markdown content"""
-        # Match both [text](url) and bare URLs using a single pass to avoid
-        # incorrect matching of bare URLs inside markdown syntax (e.g. "url)")
-        # Group 1: URL inside markdown link [text](URL) - excludes spaces to avoid malformed URLs
-        # Group 2: Bare URL - excludes closing paren and spaces to avoid trailing punctuation
-        pattern = r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)'
-        matches = re.findall(pattern, content)
+        matches = self.LINK_PATTERN.findall(content)
 
         # Extract all non-empty URLs from both capture groups
         urls = {url for m in matches for url in m if url}
