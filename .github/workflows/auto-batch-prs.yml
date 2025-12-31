@@ -48,12 +48,33 @@ jobs:
             
             const includeManualPRs = '${{ github.event.inputs.include_manual_prs }}' === 'true';
             
-            const { data: prs } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              per_page: 100
-            });
+            // Fetch all open PRs with pagination
+            let prs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              prs = prs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${prs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${prs.length}`);
             
             // Define automated agents/bots
             const automatedAgents = [

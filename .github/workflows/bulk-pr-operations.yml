@@ -88,13 +88,33 @@ jobs:
             console.log(`   Dry Run: ${dryRun}`);
             console.log(`   Max PRs: ${maxPRs}`);
             
-            // Get all open PRs
-            const { data: allPRs } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              per_page: 100
-            });
+            // Get all open PRs with pagination
+            let allPRs = [];
+            let page = 1;
+            let hasMore = true;
+            
+            console.log('Fetching all open PRs with pagination...');
+            
+            while (hasMore) {
+              const { data: batch } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page: page
+              });
+              
+              allPRs = allPRs.concat(batch);
+              hasMore = batch.length === 100;
+              
+              console.log(`Fetched page ${page}: ${batch.length} PRs (total so far: ${allPRs.length})`);
+              
+              if (hasMore) {
+                page++;
+              }
+            }
+            
+            console.log(`Total open PRs fetched: ${allPRs.length}`);
             
             // Apply filter if specified
             let prs = allPRs;
