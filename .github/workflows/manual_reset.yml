@@ -27,15 +27,11 @@ jobs:
       - name: Make scripts executable
         run: chmod +x scripts/*.sh
 
-      - name: Acquire lock
-        run: ./scripts/manage_lock.sh acquire
+      # Removed manage_lock.sh usage to prevent deadlock and reliance on deprecated locking mechanism
+      # quota_manager.py handles locking internally using fcntl
 
       - name: Reset quotas
         run: python scripts/quota_manager.py reset_quotas
 
       - name: Commit state changes
         run: ./scripts/commit_changes.sh "chore: manually reset quotas"
-
-      - name: Release lock
-        if: always()
-        run: ./scripts/manage_lock.sh release

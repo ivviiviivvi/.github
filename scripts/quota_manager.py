@@ -7,26 +7,79 @@ from contextlib import contextmanager
 
 SUBSCRIPTIONS_FILE = ".github/subscriptions.json"
 TASK_QUEUE_FILE = ".github/task_queue.json"
+# Legacy lock directory for fallback
 LOCK_DIR = ".github/state.lock"
+# New lock file for fcntl
+LOCK_FILE = ".github/quota.lock"
+
+# Check if fcntl is available (Unix/Linux/macOS)
+try:
+    import fcntl
+    HAS_FCNTL = True
+except ImportError:
+    HAS_FCNTL = False
 
 @contextmanager
 def acquire_lock(timeout=60):
+    """
+    Acquires a lock to prevent concurrent modifications.
+    Uses fcntl (flock) on Unix-like systems for robust process-based locking.
+    Falls back to atomic directory creation on Windows or if fcntl is unavailable.
+    """
     start_time = time.time()
-    while True:
+
+    if HAS_FCNTL:
+        # FCNTL (Unix) Implementation
+        # Ensure lock file exists
+        if not os.path.exists(LOCK_FILE):
+             try:
+                 # Create empty file
+                 with open(LOCK_FILE, 'w') as f:
+                     pass
+             except OSError:
+                 pass # Might be created by another process concurrently
+
+        fd = None
         try:
-            os.mkdir(LOCK_DIR)
-            break
-        except FileExistsError:
-            if time.time() - start_time >= timeout:
-                raise TimeoutError("Could not acquire lock")
-            time.sleep(0.5)
-    try:
-        yield
-    finally:
+            fd = open(LOCK_FILE, 'r+')
+            while True:
+                try:
+                    # Try to acquire exclusive lock without blocking
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except (IOError, OSError):
+                    # Lock held by another process
+                    if time.time() - start_time >= timeout:
+                        raise TimeoutError(f"Could not acquire lock on {LOCK_FILE}")
+                    time.sleep(0.1)
+
+            yield
+
+        finally:
+            if fd:
+                # Release lock and close file
+                try:
+                    fcntl.flock(fd, fcntl.LOCK_UN)
+                except (IOError, OSError):
+                    pass
+                fd.close()
+    else:
+        # Fallback (Windows/Non-Unix) Implementation
+        while True:
+            try:
+                os.mkdir(LOCK_DIR)
+                break
+            except FileExistsError:
+                if time.time() - start_time >= timeout:
+                    raise TimeoutError(f"Could not acquire lock on {LOCK_DIR}")
+                time.sleep(0.5)
         try:
-            os.rmdir(LOCK_DIR)
-        except OSError:
-            pass
+            yield
+        finally:
+            try:
+                os.rmdir(LOCK_DIR)
+            except OSError:
+                pass
 
 def get_subscriptions():
     """Reads the subscriptions file and returns the subscriptions data."""
