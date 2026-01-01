@@ -1,0 +1,48 @@
+# Gitleaks Configuration
+# Documentation: https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks Configuration for ivviiviivvi/.github"
+
+# Extend default Gitleaks rules
+[extend]
+useDefault = true
+
+# Custom rules can be added here
+# [[rules]]
+# id = "custom-rule-id"
+# description = "Custom rule description"
+# regex = '''your-regex-pattern'''
+# tags = ["custom", "secret"]
+
+# Allowlist configuration
+# Use this to suppress false positives
+[allowlist]
+description = "Allowlisted files and patterns"
+
+# Allowlist specific paths
+paths = [
+  # Example: Ignore test fixtures
+  # '''.*test/fixtures/.*''',
+  # Example: Ignore documentation
+  # '''.*docs/examples/.*''',
+]
+
+# Allowlist specific regexes
+regexes = [
+  # Example: Ignore specific patterns in comments
+  # '''# nosecret.*''',
+]
+
+# Allowlist specific commits
+commits = [
+  # Example: Allowlist a specific commit that contains a false positive
+  # "abc123def456",
+]
+
+# Allowlist specific stop words
+stopwords = [
+  # Common words that might trigger false positives
+  # "example",
+  # "test",
+  # "dummy",
+]

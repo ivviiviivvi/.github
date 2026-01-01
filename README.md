@@ -785,6 +785,8 @@ See [Repository Bootstrap Guide](docs/workflows/REPOSITORY_BOOTSTRAP.md), [Video
   - Docker
   - Go modules
   - Composer (PHP)
+- **[.gitleaks.toml](.gitleaks.toml)** - Gitleaks secret scanning configuration with allowlist structure for managing false positives
+- **[.secrets.baseline](.secrets.baseline)** - detect-secrets baseline configuration with all default plugins and filters enabled
 
 ### Organization Profile
 
