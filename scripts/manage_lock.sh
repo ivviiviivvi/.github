@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
 
+# Deprecated: This script uses directory-based locking which is prone to stale locks.
+# New code should rely on quota_manager.py's internal fcntl-based locking.
+# This script is kept for backward compatibility if any external tools rely on it,
+# but it now warns about deprecation.
+
 LOCK_DIR=".github/state.lock"
 
 function acquire_lock {
+  echo "WARNING: scripts/manage_lock.sh is deprecated. Use quota_manager.py internal locking."
   # Try to create a lock directory. If it already exists, another process holds the lock.
   # We'll wait for a short period for it to be released.
   timeout=60 # seconds
