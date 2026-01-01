@@ -756,6 +756,8 @@ Advanced workflows for organization-wide automation:
 | [generate-pages-index.yml](.github/workflows/generate-pages-index.yml)                         | Generate gallery index from all org repos | Schedule, repository dispatch |
 | [badge-management.yml](.github/workflows/badge-management.yml)                                 | Generate and manage repository badges     | Push, PR, manual, workflow_call |
 | [bio-description-completions.yml](.github/workflows/bio-description-completions.yml)           | Audit and complete repo/org descriptions  | Weekly schedule, manual   |
+| [claude-code-review.yml](.github/workflows/claude-code-review.yml)                             | Automated Claude-powered PR code reviews  | PR opened, synchronized   |
+| [claude.yml](.github/workflows/claude.yml)                                                     | Claude AI assistance via @claude mentions | Issue/PR comments, reviews |
 
 See [Repository Bootstrap Guide](docs/workflows/REPOSITORY_BOOTSTRAP.md), [Video Walkthrough Guide](.github/WALKTHROUGH_GUIDE.md) and [Deployment Metadata Collection Guide](docs/workflows/DEPLOYMENT_METADATA_COLLECTION.md) for detailed documentation.
 
