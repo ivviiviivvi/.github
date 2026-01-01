@@ -387,25 +387,32 @@ graph TD
 
             if technologies:
                 parts.append("Supported languages and frameworks:\n\n")
-                parts.append(f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n")
 
-                # Group into columns
-                cols = 4
-                for i in range(0, len(technologies), cols):
-                    row_techs = technologies[i : i + cols]
+                # UX Improvement: Use list for small numbers, table for large to avoid empty cells
+                if len(technologies) <= 5:
+                    for tech in technologies:
+                        parts.append(f"- `{tech}`\n")
+                    parts.append("\n")
+                else:
+                    parts.append(f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n")
 
-                    # Pad with empty strings if needed
-                    current_len = len(row_techs)
-                    if current_len < cols:
-                        row_techs.extend([""] * (cols - current_len))
+                    # Group into columns
+                    cols = 4
+                    for i in range(0, len(technologies), cols):
+                        row_techs = technologies[i : i + cols]
 
-                    formatted_cells = [f"`{t}`" if t else "" for t in row_techs]
-                    parts.append("| " + " | ".join(formatted_cells) + " |\n")
+                        # Pad with empty strings if needed
+                        current_len = len(row_techs)
+                        if current_len < cols:
+                            row_techs.extend([""] * (cols - current_len))
 
-                    if i == 0:
-                        parts.append("| " + " | ".join(["---"] * cols) + " |\n")
+                        formatted_cells = [f"`{t}`" if t else "" for t in row_techs]
+                        parts.append("| " + " | ".join(formatted_cells) + " |\n")
 
-                parts.append("\n</details>\n")
+                        if i == 0:
+                            parts.append("| " + " | ".join(["---"] * cols) + " |\n")
+
+                    parts.append("\n</details>\n")
             else:
                  parts.append("No technologies detected.\n")
         else:
@@ -424,9 +431,11 @@ graph TD
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-                for workflow in sorted(workflows):
+                # UX Improvement: Use table with indices for better scanability and reference
+                parts.append("| # | Workflow | Action |\n|---|---|---|\n")
+                for i, workflow in enumerate(sorted(workflows), 1):
                     # Link to the workflow file with calculated relative path
-                    parts.append(f"- [`{workflow}`]({workflow_path}{workflow})\n")
+                    parts.append(f"| {i} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
                 parts.append("\n</details>\n")
             else:
                  parts.append("No active workflows detected.\n")
