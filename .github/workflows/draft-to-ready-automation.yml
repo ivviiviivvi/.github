@@ -257,7 +257,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. AI assistants (@copilot, @claude, @jules) have been notified and are available for review\n4. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
+              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. AI assistants and GitHub Apps have been notified (see comment below)\n4. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
             });
 
       - name: Add Auto-Merge Label
@@ -277,39 +277,67 @@ jobs:
             
             console.log('Added auto-merge and auto-converted labels');
 
-      - name: Trigger Auto-Assign Workflow
+      - name: Request Reviews and Notify AI Assistants
         if: steps.convert.outputs.converted == 'true'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
             const prNumber = ${{ steps.pr-details.outputs.number }};
             
-            console.log('🤖 Triggering auto-assign workflow for PR #' + prNumber);
+            console.log('🤖 Requesting reviews and notifying AI assistants for PR #' + prNumber);
             
-            // Manually request review from @copilot since ready_for_review event wasn't triggered
-            try {
-              await github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-                reviewers: ['copilot']
-              });
-              console.log('✅ Successfully requested review from @copilot');
-            } catch (error) {
-              console.log(`⚠️ Could not request @copilot review: ${error.message}`);
+            // List of potential GitHub App reviewers to request
+            const appReviewers = ['copilot'];
+            
+            // Request review from GitHub App reviewers
+            for (const reviewer of appReviewers) {
+              try {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  reviewers: [reviewer]
+                });
+                console.log(`✅ Successfully requested review from @${reviewer}`);
+                
+                // Also assign as assignee
+                await github.rest.issues.addAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  assignees: [reviewer]
+                });
+                console.log(`✅ Assigned @${reviewer} to PR`);
+              } catch (error) {
+                console.log(`⚠️ Could not request @${reviewer} review: ${error.message}`);
+              }
             }
             
-            // Also assign copilot as assignee
+            // Post a comment to notify mention-based AI assistants
+            // These assistants are triggered by mentions in comments
             try {
-              await github.rest.issues.addAssignees({
+              await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber,
-                assignees: ['copilot']
+                body: `🤖 **AI Assistants Available**
+            
+            This PR has been automatically converted from draft to ready for review.
+            
+            **Available AI Assistants:**
+            - @copilot - GitHub Copilot (requested as reviewer)
+            - @claude - Claude AI (mention to summon: \`@claude review\`)
+            - @jules - Jules AI (mention to summon: \`@jules help\`)
+            - @gemini-cli - Gemini AI (mention to summon: \`@gemini-cli /review\`)
+            
+            **Other Integrated Apps:**
+            All GitHub Apps and integrations with permissions to this repository can now interact with this PR.
+            
+            *Note: This is an automated notification. AI assistants that work via mentions will respond when explicitly called.*`
               });
-              console.log('✅ Assigned @copilot to PR');
+              console.log('✅ Posted AI assistant availability notification');
             } catch (error) {
-              console.log(`⚠️ Could not assign @copilot: ${error.message}`);
+              console.log(`⚠️ Could not post notification comment: ${error.message}`);
             }
 
       - name: Trigger PR Task Catcher

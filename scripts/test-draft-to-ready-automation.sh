@@ -61,23 +61,44 @@ echo "✅ Conversion comment found"
 
 # Check if comment mentions AI assistants
 echo ""
-echo "🤖 Checking if comment mentions AI assistants..."
-if echo "$CONVERSION_COMMENT" | grep -q "@copilot"; then
-  echo "✅ Comment mentions @copilot"
+echo "🤖 Checking conversion comment..."
+if echo "$CONVERSION_COMMENT" | grep -q "AI assistants and GitHub Apps have been notified"; then
+  echo "✅ Conversion comment mentions AI assistants and GitHub Apps"
 else
-  echo "⚠️  Comment doesn't mention @copilot"
+  echo "⚠️  Conversion comment doesn't mention AI assistants properly"
 fi
 
-if echo "$CONVERSION_COMMENT" | grep -q "@claude"; then
-  echo "✅ Comment mentions @claude"
+# Check for AI assistant notification comment
+echo ""
+echo "📢 Checking for AI assistant notification comment..."
+NOTIFICATION_COMMENT=$(gh pr view $PR_NUMBER --json comments --jq '.comments[] | select(.body | contains("AI Assistants Available")) | .body' || echo "")
+if [ -z "$NOTIFICATION_COMMENT" ]; then
+  echo "⚠️  AI assistant notification comment not found"
+  NOTIFICATION_FAIL=1
 else
-  echo "⚠️  Comment doesn't mention @claude"
-fi
-
-if echo "$CONVERSION_COMMENT" | grep -q "@jules"; then
-  echo "✅ Comment mentions @jules"
-else
-  echo "⚠️  Comment doesn't mention @jules"
+  echo "✅ AI assistant notification comment found"
+  NOTIFICATION_FAIL=0
+  
+  # Check if notification mentions all key assistants
+  if echo "$NOTIFICATION_COMMENT" | grep -q "@copilot"; then
+    echo "  ✅ Mentions @copilot"
+  fi
+  
+  if echo "$NOTIFICATION_COMMENT" | grep -q "@claude"; then
+    echo "  ✅ Mentions @claude"
+  fi
+  
+  if echo "$NOTIFICATION_COMMENT" | grep -q "@jules"; then
+    echo "  ✅ Mentions @jules"
+  fi
+  
+  if echo "$NOTIFICATION_COMMENT" | grep -q "@gemini-cli"; then
+    echo "  ✅ Mentions @gemini-cli"
+  fi
+  
+  if echo "$NOTIFICATION_COMMENT" | grep -q "GitHub Apps"; then
+    echo "  ✅ Mentions GitHub Apps"
+  fi
 fi
 
 # Check for auto-merge label
@@ -118,7 +139,7 @@ echo ""
 
 # Summary
 CRITICAL_FAIL=0
-if [ "$REVIEWER_FAIL" -eq 1 ] || [ "$ASSIGNEE_FAIL" -eq 1 ]; then
+if [ "$REVIEWER_FAIL" -eq 1 ] || [ "$ASSIGNEE_FAIL" -eq 1 ] || [ "$NOTIFICATION_FAIL" -eq 1 ]; then
   echo "⚠️  Some checks did not pass, but this may be expected"
   echo "   (e.g., @copilot may not exist as a user in this repo)"
 else
@@ -131,6 +152,7 @@ echo "  - PR converted: ✅"
 echo "  - @copilot reviewer: $([ "$REVIEWER_FAIL" -eq 0 ] && echo "✅" || echo "⚠️")"
 echo "  - @copilot assigned: $([ "$ASSIGNEE_FAIL" -eq 0 ] && echo "✅" || echo "⚠️")"
 echo "  - Conversion comment: ✅"
+echo "  - AI notification comment: $([ "$NOTIFICATION_FAIL" -eq 0 ] && echo "✅" || echo "⚠️")"
 echo "  - auto-merge label: $([ "$LABEL_FAIL" -eq 0 ] && echo "✅" || echo "⚠️")"
 echo ""
 

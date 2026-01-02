@@ -62,6 +62,7 @@ Modified `.github/workflows/draft-to-ready-automation.yml` to add three new step
    - Validates PR conversion
    - Checks @copilot assignment and review request
    - Verifies conversion comment presence
+   - Checks for AI assistant notification comment
    - Checks for proper labels
    - Returns success/failure status
 
@@ -81,7 +82,8 @@ Modified `.github/workflows/draft-to-ready-automation.yml` to add three new step
 ## Key Features
 
 ✅ **Maintains automation chain** - All downstream workflows execute as expected
-✅ **AI assistants available** - Can be summoned immediately after conversion
+✅ **All AI assistants available** - @copilot, @claude, @jules, @gemini-cli, and ALL GitHub Apps can be used immediately
+✅ **Comprehensive notification** - Posts dedicated comment listing all available assistants
 ✅ **Task tracking works** - PR tasks and blockers are scanned automatically  
 ✅ **Auto-merge enabled** - Qualifying PRs proceed to merge without manual intervention
 ✅ **No functionality reversal** - Original auto-merge preserved and enhanced

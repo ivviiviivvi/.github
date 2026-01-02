@@ -37,37 +37,53 @@ This is documented behavior, but it means automated workflows that convert draft
 
 The fix adds three new steps to the `draft-to-ready-automation.yml` workflow that execute after a PR is successfully converted from draft to ready:
 
-### 1. Trigger Auto-Assign Workflow
+### 1. Request Reviews and Notify AI Assistants
 
 ```yaml
-- name: Trigger Auto-Assign Workflow
+- name: Request Reviews and Notify AI Assistants
   if: steps.convert.outputs.converted == 'true'
   uses: actions/github-script@v7.0.1
   with:
     script: |
       const prNumber = ${{ steps.pr-details.outputs.number }};
       
-      // Manually request review from @copilot
-      await github.rest.pulls.requestReviewers({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        pull_number: prNumber,
-        reviewers: ['copilot']
-      });
+      // Request review from GitHub App reviewers (e.g., @copilot)
+      const appReviewers = ['copilot'];
+      for (const reviewer of appReviewers) {
+        await github.rest.pulls.requestReviewers({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pull_number: prNumber,
+          reviewers: [reviewer]
+        });
+        
+        await github.rest.issues.addAssignees({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: prNumber,
+          assignees: [reviewer]
+        });
+      }
       
-      // Also assign copilot as assignee
-      await github.rest.issues.addAssignees({
+      // Post a comment to notify mention-based AI assistants
+      await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
-        assignees: ['copilot']
+        body: `🤖 **AI Assistants Available**
+        
+        Available: @copilot, @claude, @jules, @gemini-cli
+        All GitHub Apps can now interact with this PR.`
       });
 ```
 
-This step replicates the behavior of `auto-assign.yml` by:
-- Requesting @copilot as a reviewer
-- Assigning @copilot to the PR
-- Including error handling for cases where these operations fail
+This step:
+- Requests GitHub App reviewers (like @copilot) programmatically
+- Assigns them to the PR
+- Posts a notification comment listing ALL available AI assistants
+- Makes mention-based assistants (@claude, @jules, @gemini-cli) aware that the PR is ready
+- Includes ALL GitHub Apps and integrations with repository permissions
+- Includes error handling for cases where operations fail
 
 ### 2. Trigger PR Task Catcher
 
@@ -125,10 +141,11 @@ This informs users that the assistants have been explicitly summoned and are rea
 ## Benefits
 
 1. **Maintains automation chain** - All downstream workflows now execute as expected
-2. **AI assistants available** - @copilot, @claude, @jules can now be used immediately after auto-conversion
-3. **Task tracking works** - PR tasks and blockers are scanned automatically
-4. **Auto-merge enabled** - Qualifying PRs proceed to merge without manual intervention
-5. **No functionality reversal** - The original auto-merge functionality is preserved and enhanced
+2. **All AI assistants available** - @copilot, @claude, @jules, @gemini-cli, and ALL GitHub Apps can now be used immediately after auto-conversion
+3. **Comprehensive notification** - Separate comment explicitly lists all available assistants and their usage
+4. **Task tracking works** - PR tasks and blockers are scanned automatically
+5. **Auto-merge enabled** - Qualifying PRs proceed to merge without manual intervention
+6. **No functionality reversal** - The original auto-merge functionality is preserved and enhanced
 
 ## Testing
 

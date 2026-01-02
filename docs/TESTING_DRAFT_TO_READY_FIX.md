@@ -19,6 +19,9 @@ This document outlines the testing plan for validating that AI assistants are pr
 - [ ] PR comment is posted indicating assistants have been notified
 - [ ] @claude can be summoned via comment (e.g., "@claude please review")
 - [ ] @jules can be summoned via comment (e.g., "@jules please update")
+- [ ] @gemini-cli can be summoned via comment (e.g., "@gemini-cli /review")
+- [ ] Notification comment is posted listing all available AI assistants
+- [ ] All GitHub Apps with permissions can interact with the PR
 
 **Verification:**
 ```bash
