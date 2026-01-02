@@ -1,4 +1,4 @@
-## 2025-12-18 - GitHub Actions Command Injection Vulnerability Fix
-**Vulnerability:** Found critical Command Injection vulnerabilities in AI workflow placeholders (`grok_workflow.yml`, `gemini_workflow.yml`, etc.). The workflows were directly interpolating user input (`${{ github.event.inputs.prompt }}`) into bash scripts inside the `run:` block.
-**Learning:** Never directly interpolate `${{ inputs... }}` into shell commands in GitHub Actions. If the input contains quotes or shell metacharacters, it can break out of the string context and execute arbitrary commands.
-**Prevention:** Always assign untrusted inputs to environment variables using the `env:` block, and then reference them using shell variable syntax (e.g., `$MY_VAR` or `"${MY_VAR}"`) within the script. This ensures the input is treated as data, not code.
+## 2024-02-14 - [Command Injection Mitigation in Workflows]
+**Vulnerability:** Found a Command Injection vulnerability in `.github/workflows/reusable-api-retry.yml` where `eval` was used to execute a dynamically constructed `curl` command. User input (like `API_ENDPOINT`) could potentially break out of the string and execute arbitrary commands.
+**Learning:** `eval` is extremely dangerous when handling user input in shell scripts. String concatenation for command construction is brittle and prone to injection if quotes are not handled perfectly (which is hard).
+**Prevention:** Use Bash arrays to build commands dynamically. Arrays handle argument separation safely. Execute the command using `"${array[@]}"`.
