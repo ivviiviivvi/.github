@@ -94,34 +94,35 @@ jobs:
             local attempt=$1
             echo "🔄 Attempt $attempt of $MAX_RETRIES..."
             
-            # Build curl command
-            curl_cmd="curl -s -w '\n%{http_code}' --max-time $TIMEOUT"
+            # Build curl command using array to prevent command injection
+            curl_cmd=(curl -s -w '\n%{http_code}' --max-time "$TIMEOUT")
             
             # Add method
-            curl_cmd="$curl_cmd -X $METHOD"
+            curl_cmd+=("-X" "$METHOD")
             
             # Add auth header if token provided
             if [ -n "$AUTH_TOKEN" ]; then
-              curl_cmd="$curl_cmd -H 'Authorization: Bearer $AUTH_TOKEN'"
+              curl_cmd+=("-H" "Authorization: Bearer $AUTH_TOKEN")
             fi
             
             # Add custom headers
             if [ "$HEADERS" != "{}" ]; then
-              echo "$HEADERS" | jq -r 'to_entries[] | "-H \"\(.key): \(.value)\""' | while read -r header; do
-                curl_cmd="$curl_cmd $header"
-              done
+              # Use process substitution to read lines safely into the array
+              while IFS= read -r header_line; do
+                curl_cmd+=("-H" "$header_line")
+              done < <(echo "$HEADERS" | jq -r 'to_entries[] | "\(.key): \(.value)"')
             fi
             
             # Add body if provided
             if [ -n "$BODY" ] && [ "$BODY" != "" ]; then
-              curl_cmd="$curl_cmd -H 'Content-Type: application/json' -d '$BODY'"
+              curl_cmd+=("-H" "Content-Type: application/json" "-d" "$BODY")
             fi
             
             # Add endpoint
-            curl_cmd="$curl_cmd '$API_ENDPOINT'"
+            curl_cmd+=("$API_ENDPOINT")
             
-            # Execute curl command
-            response=$(eval $curl_cmd)
+            # Execute curl command safely
+            response=$("${curl_cmd[@]}")
             
             # Extract status code (last line)
             status_code=$(echo "$response" | tail -n 1)
