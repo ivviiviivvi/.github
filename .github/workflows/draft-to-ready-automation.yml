@@ -257,7 +257,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
+              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. AI assistants (@copilot, @claude, @jules) have been notified and are available for review\n4. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
             });
 
       - name: Add Auto-Merge Label
@@ -276,6 +276,82 @@ jobs:
             });
             
             console.log('Added auto-merge and auto-converted labels');
+
+      - name: Trigger Auto-Assign Workflow
+        if: steps.convert.outputs.converted == 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            
+            console.log('🤖 Triggering auto-assign workflow for PR #' + prNumber);
+            
+            // Manually request review from @copilot since ready_for_review event wasn't triggered
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                reviewers: ['copilot']
+              });
+              console.log('✅ Successfully requested review from @copilot');
+            } catch (error) {
+              console.log(`⚠️ Could not request @copilot review: ${error.message}`);
+            }
+            
+            // Also assign copilot as assignee
+            try {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                assignees: ['copilot']
+              });
+              console.log('✅ Assigned @copilot to PR');
+            } catch (error) {
+              console.log(`⚠️ Could not assign @copilot: ${error.message}`);
+            }
+
+      - name: Trigger PR Task Catcher
+        if: steps.convert.outputs.converted == 'true'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            
+            console.log('📋 Triggering pr-task-catcher workflow for PR #' + prNumber);
+            
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'pr-task-catcher.yml',
+                ref: 'main',
+                inputs: {
+                  pr_number: prNumber.toString()
+                }
+              });
+              console.log('✅ Successfully triggered pr-task-catcher workflow');
+            } catch (error) {
+              console.log(`⚠️ Could not trigger pr-task-catcher: ${error.message}`);
+            }
+
+      - name: Enable Auto-Merge via GitHub CLI
+        if: steps.convert.outputs.converted == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ steps.pr-details.outputs.number }}
+          
+          echo "🤖 Attempting to enable auto-merge for PR #$PR_NUMBER"
+          
+          # Try to enable auto-merge (may fail if checks not complete yet)
+          if gh pr merge --auto --squash "https://github.com/${{ github.repository }}/pull/$PR_NUMBER" 2>/dev/null; then
+            echo "✅ Auto-merge enabled successfully"
+          else
+            echo "⏳ Auto-merge not ready yet (checks may not be complete)"
+            echo "The auto-merge workflow will handle this when ready"
+          fi
 
       - name: Wait for Checks (if needed)
         if: |
