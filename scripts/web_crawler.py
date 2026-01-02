@@ -117,11 +117,12 @@ class OrganizationCrawler:
         results['total_links'] = len(all_links)
 
         # Filter links efficiently
-        # Optimization: Filter BEFORE sorting to reduce O(N log N) to O(M log M) where M << N
-        links_to_check = sorted([
+        # Optimization: Filter WITHOUT sorting to avoid O(M log M).
+        # Processing order is irrelevant due to concurrency.
+        links_to_check = [
             link for link in all_links
             if link.startswith(('http:', 'https:'))
-        ])
+        ]
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers to be respectful but faster than serial

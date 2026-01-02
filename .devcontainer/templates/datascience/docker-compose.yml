@@ -1,0 +1,101 @@
+version: '3.9'
+
+networks:
+  workspace-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  jupyter-data:
+  mlflow-data:
+
+services:
+  workspace:
+    image: jupyter/datascience-notebook:latest
+    user: root
+    volumes:
+      - ..:/workspace:cached
+      - jupyter-data:/home/jovyan
+    command: start.sh jupyter lab --LabApp.token='' --LabApp.password=''
+    networks:
+      - workspace-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://devuser:devpass@postgres:5432/devdb
+      - REDIS_URL=redis://redis:6379
+      - JUPYTER_ENABLE_LAB=yes
+      - GRANT_SUDO=yes
+    ports:
+      - "8888:8888"
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    networks:
+      - workspace-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - workspace-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "6379:6379"
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    restart: unless-stopped
+    networks:
+      - workspace-network
+    volumes:
+      - mlflow-data:/mlflow
+    environment:
+      - BACKEND_STORE_URI=postgresql://devuser:devpass@postgres:5432/devdb
+      - ARTIFACT_ROOT=/mlflow/artifacts
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://devuser:devpass@postgres:5432/devdb
+      --default-artifact-root /mlflow/artifacts
+      --host 0.0.0.0
+      --port 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    networks:
+      - workspace-network
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres

@@ -431,11 +431,33 @@ graph TD
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-                # UX Improvement: Use table with indices for better scanability and reference
-                parts.append("| # | Workflow | Action |\n|---|---|---|\n")
+                # UX Improvement: Use table with indices for better scannability and reference
+                parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
+
                 for i, workflow in enumerate(sorted(workflows), 1):
+                    # Determine workflow type based on name for better scannability
+                    name = workflow.lower()
+                    w_type = '⚙️' # Default
+
+                    if name.startswith('safeguard') or 'policy' in name:
+                         w_type = '🛡️'
+                    elif any(k in name for k in ('security', 'scan', 'codeql', 'semgrep', 'secret')):
+                         w_type = '🔐'
+                    elif 'reusable' in name:
+                         w_type = '♻️'
+                    elif any(k in name for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-')):
+                         w_type = '🤖'
+                    elif any(k in name for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker')):
+                         w_type = '🚀'
+                    elif any(k in name for k in ('pr-', 'pull-request', 'merge')):
+                         w_type = '🔀'
+                    elif any(k in name for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly')):
+                         w_type = '⏱️'
+                    elif any(k in name for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report')):
+                         w_type = '💓'
+
                     # Link to the workflow file with calculated relative path
-                    parts.append(f"| {i} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
+                    parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
                 parts.append("\n</details>\n")
             else:
                  parts.append("No active workflows detected.\n")

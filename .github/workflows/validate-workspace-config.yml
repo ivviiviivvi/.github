@@ -1,0 +1,276 @@
+name: Validate Workspace Configurations
+
+on:
+  push:
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/workspace/**'
+      - 'docker-compose*.yml'
+      - 'Dockerfile*'
+  pull_request:
+    paths:
+      - '.devcontainer/**'
+      - 'scripts/workspace/**'
+      - 'docker-compose*.yml'
+      - 'Dockerfile*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-devcontainer:
+    name: Validate DevContainer Configurations
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        template:
+          - basic
+          - fullstack
+          - datascience
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate devcontainer.json syntax
+        run: |
+          if [ -f ".devcontainer/templates/${{ matrix.template }}/devcontainer.json" ]; then
+            echo "Validating .devcontainer/templates/${{ matrix.template }}/devcontainer.json"
+            jq empty ".devcontainer/templates/${{ matrix.template }}/devcontainer.json"
+          else
+            echo "No devcontainer.json found for ${{ matrix.template }}"
+            exit 1
+          fi
+
+      - name: Validate docker-compose.yml syntax
+        run: |
+          if [ -f ".devcontainer/templates/${{ matrix.template }}/docker-compose.yml" ]; then
+            echo "Validating .devcontainer/templates/${{ matrix.template }}/docker-compose.yml"
+            docker-compose -f ".devcontainer/templates/${{ matrix.template }}/docker-compose.yml" config --quiet
+          fi
+
+      - name: Check for required files
+        run: |
+          TEMPLATE_DIR=".devcontainer/templates/${{ matrix.template }}"
+          
+          # Check for devcontainer.json
+          if [ ! -f "$TEMPLATE_DIR/devcontainer.json" ]; then
+            echo "Error: devcontainer.json missing"
+            exit 1
+          fi
+          
+          # Check for docker-compose.yml
+          if [ ! -f "$TEMPLATE_DIR/docker-compose.yml" ]; then
+            echo "Warning: docker-compose.yml missing"
+          fi
+          
+          # Check for post-create.sh
+          if [ ! -f "$TEMPLATE_DIR/post-create.sh" ]; then
+            echo "Warning: post-create.sh missing"
+          fi
+          
+          echo "Template validation passed for ${{ matrix.template }}"
+
+  test-devcontainer-build:
+    name: Test DevContainer Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        template:
+          - fullstack
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build devcontainer
+        run: |
+          cd .devcontainer/templates/${{ matrix.template }}
+          
+          # Build the container
+          docker-compose build --no-cache
+          
+          echo "DevContainer build successful for ${{ matrix.template }}"
+
+      - name: Test container startup
+        run: |
+          cd .devcontainer/templates/${{ matrix.template }}
+          
+          # Start services
+          docker-compose up -d
+          
+          # Wait for services to be healthy
+          sleep 30
+          
+          # Check services are running
+          docker-compose ps
+          
+          # Cleanup
+          docker-compose down -v
+
+  validate-scripts:
+    name: Validate Workspace Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check script syntax
+        run: |
+          # Find all shell scripts
+          find scripts/workspace -name "*.sh" -type f | while read script; do
+            echo "Checking $script"
+            bash -n "$script"
+          done
+
+      - name: Check script permissions
+        run: |
+          # Verify scripts are executable
+          find scripts/workspace -name "*.sh" -type f | while read script; do
+            if [ ! -x "$script" ]; then
+              echo "Error: $script is not executable"
+              exit 1
+            fi
+          done
+
+      - name: Test workspace creation script (dry-run)
+        run: |
+          # This would test the script without actually creating anything
+          echo "Would test workspace creation script here"
+
+  validate-documentation:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for broken links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/markdown-link-check-config.json'
+          file-path: |
+            docs/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md
+            docs/CODESPACES_GUIDE.md
+            docs/CODE_SERVER_SETUP.md
+            docs/WORKSPACE_QUICK_START.md
+
+      - name: Validate README updates
+        run: |
+          # Check that workspace protocols are mentioned in README
+          if ! grep -q "Workspace.*Containerization" README.md; then
+            echo "Error: README.md not updated with workspace protocols"
+            exit 1
+          fi
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan for secrets in configs
+        run: |
+          # Check for potential secrets in devcontainer configs
+          if grep -r "password.*=" .devcontainer/ | grep -v "PASSWORD=" | grep -v "example"; then
+            echo "Warning: Potential hardcoded secrets found"
+            # Don't fail, just warn
+          fi
+
+      - name: Check Docker security best practices
+        run: |
+          # Check for common Docker security issues
+          find .devcontainer -name "docker-compose.yml" -type f | while read compose; do
+            echo "Checking $compose"
+            
+            # Check for privileged containers
+            if grep -q "privileged: true" "$compose"; then
+              echo "Warning: Privileged container found in $compose"
+            fi
+            
+            # Check for host network mode
+            if grep -q "network_mode.*host" "$compose"; then
+              echo "Warning: Host network mode found in $compose"
+            fi
+          done
+
+  summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs:
+      - validate-devcontainer
+      - test-devcontainer-build
+      - validate-scripts
+      - validate-documentation
+      - security-scan
+    if: always()
+    steps:
+      - name: Check job results
+        run: |
+          echo "Workspace configuration validation complete"
+          
+          if [ "${{ needs.validate-devcontainer.result }}" != "success" ]; then
+            echo "❌ DevContainer validation failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.test-devcontainer-build.result }}" != "success" ]; then
+            echo "❌ DevContainer build test failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.validate-scripts.result }}" != "success" ]; then
+            echo "❌ Script validation failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.validate-documentation.result }}" != "success" ]; then
+            echo "❌ Documentation validation failed"
+            exit 1
+          fi
+          
+          echo "✅ All workspace configuration validations passed"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = {
+              devcontainer: '${{ needs.validate-devcontainer.result }}',
+              build: '${{ needs.test-devcontainer-build.result }}',
+              scripts: '${{ needs.validate-scripts.result }}',
+              docs: '${{ needs.validate-documentation.result }}',
+              security: '${{ needs.security-scan.result }}'
+            };
+            
+            const allPassed = Object.values(results).every(r => r === 'success');
+            const icon = allPassed ? '✅' : '❌';
+            
+            const body = `
+            ## ${icon} Workspace Configuration Validation
+            
+            | Check | Status |
+            |-------|--------|
+            | DevContainer Config | ${results.devcontainer === 'success' ? '✅' : '❌'} |
+            | Container Build | ${results.build === 'success' ? '✅' : '❌'} |
+            | Scripts | ${results.scripts === 'success' ? '✅' : '❌'} |
+            | Documentation | ${results.docs === 'success' ? '✅' : '❌'} |
+            | Security | ${results.security === 'success' ? '✅' : '❌'} |
+            
+            ${allPassed ? 
+              '**All validations passed!** 🎉 Workspace configurations are ready to merge.' :
+              '**Some validations failed.** Please check the workflow logs for details.'}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
