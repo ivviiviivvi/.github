@@ -431,7 +431,7 @@ graph TD
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-                # UX Improvement: Use table with indices for better scanability and reference
+                # UX Improvement: Use table with indices for better scannability and reference
                 parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
 
                 for i, workflow in enumerate(sorted(workflows), 1):
