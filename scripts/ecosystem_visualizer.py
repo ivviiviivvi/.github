@@ -431,34 +431,39 @@ graph TD
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-                # UX Improvement: Use table with indices for better scannability and reference
-                parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
 
-                for i, workflow in enumerate(sorted(workflows), 1):
-                    # Determine workflow type based on name for better scannability
-                    name = workflow.lower()
-                    w_type = '⚙️' # Default
+                # Group workflows by category
+                categories = [
+                    ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
+                    ('🔐 Security', lambda n: any(k in n for k in ('security', 'scan', 'codeql', 'semgrep', 'secret'))),
+                    ('♻️ Reusable Workflows', lambda n: 'reusable' in n),
+                    ('🤖 AI Agents & Automation', lambda n: any(k in n for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-'))),
+                    ('🚀 CI/CD & Deployment', lambda n: any(k in n for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker'))),
+                    ('🔀 PR Management', lambda n: any(k in n for k in ('pr-', 'pull-request', 'merge'))),
+                    ('⏱️ Scheduled Tasks', lambda n: any(k in n for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly'))),
+                    ('💓 Health & Metrics', lambda n: any(k in n for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report'))),
+                    ('⚙️ Utility & Other', lambda n: True) # Fallback
+                ]
 
-                    if name.startswith('safeguard') or 'policy' in name:
-                         w_type = '🛡️'
-                    elif any(k in name for k in ('security', 'scan', 'codeql', 'semgrep', 'secret')):
-                         w_type = '🔐'
-                    elif 'reusable' in name:
-                         w_type = '♻️'
-                    elif any(k in name for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-')):
-                         w_type = '🤖'
-                    elif any(k in name for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker')):
-                         w_type = '🚀'
-                    elif any(k in name for k in ('pr-', 'pull-request', 'merge')):
-                         w_type = '🔀'
-                    elif any(k in name for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly')):
-                         w_type = '⏱️'
-                    elif any(k in name for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report')):
-                         w_type = '💓'
+                # Assign workflows to categories (first match wins)
+                grouped = {cat[0]: [] for cat in categories}
+                for w in sorted(workflows):
+                    name = w.lower()
+                    for label, matcher in categories:
+                        if matcher(name):
+                            grouped[label].append(w)
+                            break
 
-                    # Link to the workflow file with calculated relative path
-                    parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
-                parts.append("\n</details>\n")
+                # Render categories
+                for label, items in grouped.items():
+                    if items:
+                        parts.append(f"### {label}\n\n")
+                        parts.append("| Workflow | Action |\n|---|---|\n")
+                        for w in items:
+                             parts.append(f"| `{w}` | [View]({workflow_path}{w}) |\n")
+                        parts.append("\n")
+
+                parts.append("</details>\n")
             else:
                  parts.append("No active workflows detected.\n")
         else:
