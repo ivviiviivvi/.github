@@ -968,7 +968,12 @@ The organization now features **automated health monitoring** that brings the AI
 - **Dependabot**: Automatic dependency updates across multiple ecosystems
 - **CodeQL Analysis**: Continuous security scanning for vulnerabilities
 - **Branch Protection**: Enforced protection rules on production branches
-- **Secret Scanning**: Detection of hardcoded secrets (where enabled)
+- **Secret Scanning**: Multi-tool detection system with false positive management
+  - 🔍 **TruffleHog**: Entropy-based secret detection
+  - 🔍 **Gitleaks**: Fast, configurable scanner with `.gitleaks.toml`
+  - 🔍 **detect-secrets**: Baseline-aware scanning with `.secrets.baseline`
+  - 📹 **Video OCR Analysis**: Scans walkthrough videos for exposed credentials
+  - 📖 **[Secret Scanning Guide](docs/SECRET_SCANNING_GUIDE.md)**: Complete setup and troubleshooting documentation
 
 ### Quality Assurance
 
