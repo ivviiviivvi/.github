@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Dict, List
 import functools
 import concurrent.futures
+import ssl
 
 # Disable warnings globally
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -261,18 +262,47 @@ class OrganizationCrawler:
 
                 # 5. Make Request
                 # Use urllib3 to connect to safe_ip but verify the TLS certificate against
-                # the original hostname via assert_hostname. This only provides protection
-                # against MITM when the PoolManager is configured with proper CA certificates
-                # and certificate verification enabled. Ensure this behavior is covered by
-                # tests and review the urllib3 TLS/SSL documentation when changing this code.
+                # the original hostname via assert_hostname/server_hostname.
 
-                response = self.http.request(
+                # Determine scheme from parsed URL (http or https)
+                scheme = parsed.scheme
+                port = parsed.port
+                if not port:
+                    port = 443 if scheme == 'https' else 80
+
+                # Create a temporary connection pool for this specific request
+                # allowing us to verify hostname against the IP connection
+                if scheme == 'https':
+                    # Use system default SSL context to avoid extra dependencies
+                    ssl_context = ssl.create_default_context()
+                    pool = urllib3.HTTPSConnectionPool(
+                        host=safe_ip,
+                        port=port,
+                        cert_reqs='CERT_REQUIRED',
+                        ssl_context=ssl_context,
+                        assert_hostname=hostname,
+                        server_hostname=hostname
+                    )
+                else:
+                    pool = urllib3.HTTPConnectionPool(
+                        host=safe_ip,
+                        port=port
+                    )
+
+                # The safe_url contains the IP in the netloc, but we just need the path
+                # and query for the request method, as the pool handles the host connection.
+                # However, urllib3 request/urlopen expects a URL. If we pass a relative path,
+                # it works.
+                url_path = urllib.parse.urlunparse(('', '', parsed.path, parsed.params, parsed.query, parsed.fragment))
+                if not url_path.startswith('/'):
+                    url_path = '/' + url_path
+
+                response = pool.request(
                     'HEAD',
-                    safe_url,
+                    url_path,
                     timeout=timeout,
                     retries=False,
-                    headers=headers,
-                    assert_hostname=hostname
+                    headers=headers
                 )
 
                 # Handle Redirects
@@ -285,13 +315,12 @@ class OrganizationCrawler:
 
                 # Some servers don't support HEAD, try GET
                 if response.status >= 400:
-                    response = self.http.request(
+                    response = pool.request(
                         'GET',
-                        safe_url,
+                        url_path,
                         timeout=timeout,
                         retries=False,
-                        headers=headers,
-                        assert_hostname=hostname
+                        headers=headers
                     )
                     # If GET returns redirect
                     if 300 <= response.status < 400:

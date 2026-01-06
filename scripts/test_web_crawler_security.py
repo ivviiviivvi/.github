@@ -139,7 +139,8 @@ class TestWebCrawlerSecurity(unittest.TestCase):
             self.crawler.http.request.assert_not_called()
 
     @patch('socket.getaddrinfo')
-    def test_ssrf_protection_public_ip(self, mock_getaddrinfo):
+    @patch('urllib3.HTTPConnectionPool.request')
+    def test_ssrf_protection_public_ip(self, mock_request, mock_getaddrinfo):
         """Verify that public IPs are allowed."""
         url = "http://example.com"
 
@@ -149,11 +150,11 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         # Mock http.request to return 200
         mock_response = MagicMock()
         mock_response.status = 200
-        self.crawler.http.request.return_value = mock_response
+        mock_request.return_value = mock_response
 
         status = self.crawler._check_link(url)
         self.assertEqual(status, 200)
-        self.crawler.http.request.assert_called()
+        mock_request.assert_called()
 
 
 if __name__ == '__main__':
