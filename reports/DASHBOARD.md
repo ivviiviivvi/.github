@@ -186,6 +186,8 @@ Supported languages and frameworks:
 <details>
 <summary>View all 90 workflows</summary>
 
+> **Legend:** 🛡️ Safeguard | 🔐 Security | ♻️ Reusable | 🤖 AI Agent | 🚀 CI/CD | 🔀 PR Mgmt | ⏱️ Scheduled | 💓 Health | ⚙️ General
+
 | # | Type | Workflow | Action |
 |---|---|---|---|
 | 1 | 🚀 | `accessibility-testing.yml` | [View](../.github/workflows/accessibility-testing.yml) |

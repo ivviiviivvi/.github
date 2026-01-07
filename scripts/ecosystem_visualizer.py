@@ -431,6 +431,10 @@ graph TD
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
+
+                # UX Improvement: Add legend for workflow types
+                parts.append("> **Legend:** 🛡️ Safeguard | 🔐 Security | ♻️ Reusable | 🤖 AI Agent | 🚀 CI/CD | 🔀 PR Mgmt | ⏱️ Scheduled | 💓 Health | ⚙️ General\n\n")
+
                 # UX Improvement: Use table with indices for better scannability and reference
                 parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
 
