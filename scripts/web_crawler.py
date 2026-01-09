@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Dict, List
 import functools
 import concurrent.futures
+import ssl
 
 # Disable warnings globally
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -174,7 +175,15 @@ class OrganizationCrawler:
                 ip = ip.split('%')[0]
             try:
                 ip_obj = ipaddress.ip_address(ip)
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: Explicitly check for all unsafe categories
+                # While is_global handles most, explicit checks are safer for defense-in-depth
+                if (not ip_obj.is_global or
+                    ip_obj.is_multicast or
+                    ip_obj.is_private or
+                    ip_obj.is_loopback or
+                    ip_obj.is_link_local or
+                    ip_obj.is_reserved or
+                    ip_obj.is_unspecified):
                     return False
             except ValueError:
                 return False
@@ -200,8 +209,8 @@ class OrganizationCrawler:
                     ip = ip.split('%')[0]
 
                 ip_obj = ipaddress.ip_address(ip)
-                # Check if IP is globally reachable and not multicast
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: block any non-global or multicast IPs
+                if (not ip_obj.is_global) or ip_obj.is_multicast:
                     return False
 
             return True
@@ -261,18 +270,46 @@ class OrganizationCrawler:
 
                 # 5. Make Request
                 # Use urllib3 to connect to safe_ip but verify the TLS certificate against
-                # the original hostname via assert_hostname. This only provides protection
-                # against MITM when the PoolManager is configured with proper CA certificates
-                # and certificate verification enabled. Ensure this behavior is covered by
-                # tests and review the urllib3 TLS/SSL documentation when changing this code.
+                # the original hostname via assert_hostname/server_hostname.
 
-                response = self.http.request(
+                # Determine scheme from parsed URL (http or https)
+                scheme = parsed.scheme
+                port = parsed.port
+                if not port:
+                    port = 443 if scheme == 'https' else 80
+
+                # Create a temporary connection pool for this specific request
+                # allowing us to verify hostname against the IP connection
+                if scheme == 'https':
+                    # Use system default SSL context to avoid extra dependencies
+                    ssl_context = ssl.create_default_context()
+                    pool = urllib3.HTTPSConnectionPool(
+                        host=safe_ip,
+                        port=port,
+                        cert_reqs='CERT_REQUIRED',
+                        ssl_context=ssl_context,
+                        assert_hostname=hostname,
+                        server_hostname=hostname
+                    )
+                else:
+                    pool = urllib3.HTTPConnectionPool(
+                        host=safe_ip,
+                        port=port
+                    )
+
+                # The connection pool is configured with the resolved safe_ip as the host,
+                # so for the request we only need to provide the path and query components.
+                # urllib3.request accepts a relative path here, and the pool handles the
+                # actual TCP/SSL connection to the configured host and port.
+                path = parsed.path or '/'
+                url_path = urllib.parse.urlunparse(('', '', path, parsed.params, parsed.query, parsed.fragment))
+
+                response = pool.request(
                     'HEAD',
-                    safe_url,
+                    url_path,
                     timeout=timeout,
                     retries=False,
-                    headers=headers,
-                    assert_hostname=hostname
+                    headers=headers
                 )
 
                 # Handle Redirects
@@ -283,15 +320,20 @@ class OrganizationCrawler:
                     target = urllib.parse.urljoin(target, loc)
                     continue
 
+                # Optimization: Don't retry if the resource is definitely gone (404/410)
+                # This saves a full GET request for every broken link
+                if response.status in (404, 410):
+                    return response.status
+
                 # Some servers don't support HEAD, try GET
-                if response.status >= 400:
+                # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
+                if response.status >= 400 and response.status != 404:
                     response = self.http.request(
                         'GET',
-                        safe_url,
+                        url_path,
                         timeout=timeout,
                         retries=False,
-                        headers=headers,
-                        assert_hostname=hostname
+                        headers=headers
                     )
                     # If GET returns redirect
                     if 300 <= response.status < 400:

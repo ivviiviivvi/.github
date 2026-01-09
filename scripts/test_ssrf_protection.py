@@ -67,7 +67,7 @@ class TestSSRFProtection(unittest.TestCase):
             print("✅ SECURE: Mixed IP request was blocked.")
 
     @patch('socket.getaddrinfo')
-    @patch('urllib3.PoolManager.request')
+    @patch('urllib3.HTTPConnectionPool.request')
     def test_allows_public_ips(self, mock_request, mock_getaddrinfo):
         # Mock DNS resolution to return a public IP
         mock_getaddrinfo.return_value = [
