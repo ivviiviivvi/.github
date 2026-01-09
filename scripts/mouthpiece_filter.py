@@ -38,6 +38,16 @@ class MouthpieceFilter:
     optimizing for AI comprehension.
     """
 
+    # Compile regex patterns once for better performance
+    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _DOUBLE_QUOTES = re.compile(r'"([^"]+)"')
+    _SINGLE_QUOTES = re.compile(r"'([^']+)'")
+    _TECHNICAL_TERMS_DOT_UNDERSCORE = re.compile(r'\b\w+[._]\w+\b')
+    _CAMEL_CASE = re.compile(r'\b[a-z]+[A-Z]\w+\b')
+    _SENTENCE_SPLIT = re.compile(r'[.!?]+')
+    _QUESTIONS = re.compile(r'([^.!?]*\?)')
+    _STEPS = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b')
+    _PARAGRAPHS = re.compile(r'\n\s*\n')
     # Compile regex patterns once for performance
     # Capitalized words (potential proper nouns or important concepts)
     _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
@@ -102,7 +112,9 @@ class MouthpieceFilter:
 
     def _analyze_text(self, text: str) -> Dict[str, any]:
         """Analyze the text to understand intent and content."""
+        # Calculate concepts once to reuse in complexity assessment
         concepts = self._extract_concepts(text)
+
         analysis = {
             "intent": self._detect_intent(text),
             "concepts": concepts,
@@ -144,12 +156,12 @@ class MouthpieceFilter:
         concepts.extend(self._CAPITALIZED_WORDS.findall(text))
 
         # Quoted terms
-        concepts.extend(self._QUOTED_DOUBLE.findall(text))
-        concepts.extend(self._QUOTED_SINGLE.findall(text))
+        concepts.extend(self._DOUBLE_QUOTES.findall(text))
+        concepts.extend(self._SINGLE_QUOTES.findall(text))
 
         # Technical-looking terms (contains underscores, dots, or mixed case)
-        concepts.extend(self._TECH_TERMS_MIXED.findall(text))
-        concepts.extend(self._TECH_TERMS_CAMEL.findall(text))  # camelCase
+        concepts.extend(self._TECHNICAL_TERMS_DOT_UNDERSCORE.findall(text))
+        concepts.extend(self._CAMEL_CASE.findall(text))
 
         return list(set(concepts))  # Remove duplicates
 
@@ -187,13 +199,14 @@ class MouthpieceFilter:
         else:
             return "neutral"
 
-    def _assess_complexity(self, text: str, concepts: Optional[List[str]] = None) -> str:
+    def _assess_complexity(self, text: str, concepts: List[str] = None) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
-        sentences = self._SENTENCE_SPLITTER.split(text)
+        sentences = self._SENTENCE_SPLIT.split(text)
 
         avg_sentence_length = len(words) / max(len(sentences), 1)
 
+        # Use provided concepts or extract if not provided
         if concepts is None:
             concepts = self._extract_concepts(text)
 
@@ -268,7 +281,7 @@ class MouthpieceFilter:
         sections = []
 
         # Split by double newlines or paragraph indicators
-        paragraphs = self._PARAGRAPH_SPLITTER.split(text)
+        paragraphs = self._PARAGRAPHS.split(text)
 
         for i, para in enumerate(paragraphs):
             if para.strip():
@@ -359,7 +372,7 @@ class MouthpieceFilter:
     def _extract_main_objective(self, text: str, analysis: Dict) -> str:
         """Extract the main objective from the text."""
         # Get the first sentence or up to first period
-        sentences = self._SENTENCE_SPLITTER.split(text)
+        sentences = self._SENTENCE_SPLIT.split(text)
         main_sentence = sentences[0].strip() if sentences else text
 
         # Clean it up
