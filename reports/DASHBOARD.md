@@ -126,6 +126,8 @@ Supported languages and frameworks:
 
 **Legend:** 🛡️ Safeguard | 🔐 Security | ♻️ Reusable | 🤖 AI/Agent | 🚀 CI/CD | 🔀 PR | ⏱️ Scheduled | 💓 Health | ⚙️ Other
 
+> **Legend:** 🛡️ Safeguard | 🔐 Security | ♻️ Reusable | 🤖 AI Agent | 🚀 CI/CD | 🔀 PR Mgmt | ⏱️ Scheduled | 💓 Health | ⚙️ General
+
 | # | Type | Workflow | Action |
 |---|---|---|---|
 | 1 | ⚙️ | `workflow-0.yml` | [View](../.github/workflows/workflow-0.yml) |
