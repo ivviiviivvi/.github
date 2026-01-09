@@ -207,62 +207,60 @@ jobs:
           
           # Build PR body
           cat > /tmp/pr_body.md << 'EOF_BODY'
-# 🎯 Daily Consolidated PR - $TODAY
-
-This is the **single consolidated PR** for all automated work from Jules and bots today.
-
-## 📊 Summary
-
-- **Total PRs Consolidated:** ${{ needs.analyze-bot-prs.outputs.pr-count }}
-- **Successfully Merged:** ${{ steps.merge.outputs.merged }}
-- **Conflicts Auto-Resolved:** ${{ steps.merge.outputs.conflicts }}
-
-## 📋 Consolidated PRs
-
-${{ steps.merge.outputs.merge-details }}
-
-## ✅ Review Checklist
-
-Please review and approve/reject each item below:
-
-EOF_BODY
+          # Daily Consolidated PR
+          
+          This is the single consolidated PR for all automated work from Jules and bots today.
+          
+          ## Summary
+          
+          - Total PRs Consolidated: REPLACE_PR_COUNT
+          - Successfully Merged: REPLACE_MERGED
+          - Conflicts Auto-Resolved: REPLACE_CONFLICTS
+          
+          ## Consolidated PRs
+          
+          REPLACE_MERGE_DETAILS
+          
+          ## Review Checklist
+          
+          Please review and approve/reject each item below:
+          
+          EOF_BODY
           
           # Add checklist for each original PR
           echo '${{ needs.analyze-bot-prs.outputs.pr-list }}' | \
             jq -r '.[] | "- [ ] Review changes from PR #\(.number): \(.title)"' >> /tmp/pr_body.md
           
           cat >> /tmp/pr_body.md << 'EOF_FOOTER'
-
-## 🔄 CI/CD Status
-
-All checks will run on this consolidated PR. Please ensure:
-- [ ] All CI checks pass
-- [ ] No regressions introduced
-- [ ] All functionality preserved
-
-## 📝 Instructions
-
-1. Review each item in the checklist above
-2. Approve items you agree with, note any concerns
-3. Once all items reviewed and CI passes, merge this PR
-4. Original PRs will be automatically closed
-
----
-
-**Workflow Run:** [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-_Automated by [daily-pr-consolidator.yml](../.github/workflows/daily-pr-consolidator.yml)_
-_This PR consolidates all automated work to prevent PR sprawl and simplify reviews._
-EOF_FOOTER
           
-          # Replace variables in PR body
-          sed -i "s/\$TODAY/$TODAY/g" /tmp/pr_body.md
-          sed -i "s/\${{ needs.analyze-bot-prs.outputs.pr-count }}/${{ needs.analyze-bot-prs.outputs.pr-count }}/g" /tmp/pr_body.md
-          sed -i "s/\${{ steps.merge.outputs.merged }}/${{ steps.merge.outputs.merged }}/g" /tmp/pr_body.md
-          sed -i "s/\${{ steps.merge.outputs.conflicts }}/${{ steps.merge.outputs.conflicts }}/g" /tmp/pr_body.md
-          sed -i "s|\${{ github.run_id }}|${{ github.run_id }}|g" /tmp/pr_body.md
-          sed -i "s|\${{ github.server_url }}|${{ github.server_url }}|g" /tmp/pr_body.md
-          sed -i "s|\${{ github.repository }}|${{ github.repository }}|g" /tmp/pr_body.md
+          ## CI/CD Status
+          
+          All checks will run on this consolidated PR. Please ensure:
+          - [ ] All CI checks pass
+          - [ ] No regressions introduced
+          - [ ] All functionality preserved
+          
+          ## Instructions
+          
+          1. Review each item in the checklist above
+          2. Approve items you agree with, note any concerns
+          3. Once all items reviewed and CI passes, merge this PR
+          4. Original PRs will be automatically closed
+          
+          ---
+          
+          Automated by daily-pr-consolidator.yml
+          This PR consolidates all automated work to prevent PR sprawl and simplify reviews.
+          EOF_FOOTER
+          
+          # Replace placeholders in PR body
+          sed -i "s/REPLACE_PR_COUNT/${{ needs.analyze-bot-prs.outputs.pr-count }}/g" /tmp/pr_body.md
+          sed -i "s/REPLACE_MERGED/${{ steps.merge.outputs.merged }}/g" /tmp/pr_body.md
+          sed -i "s/REPLACE_CONFLICTS/${{ steps.merge.outputs.conflicts }}/g" /tmp/pr_body.md
+          
+          # Insert merge details
+          MERGE_DETAILS="${{ steps.merge.outputs.merge-details }}"
+          sed -i "/REPLACE_MERGE_DETAILS/c\\$MERGE_DETAILS" /tmp/pr_body.md
           
           # Create the PR
           PR_URL=$(gh pr create \
@@ -299,19 +297,18 @@ EOF_FOOTER
             
             echo "Closing PR #$PR_NUM..."
             
-            # Add comment
-            gh pr comment "$PR_NUM" --body "**🎯 Consolidated into Daily PR**
-
-This PR has been consolidated into the daily consolidated PR: #$CONSOLIDATED_PR
-
-All changes from this PR are included in the consolidated PR. This approach:
-- ✅ Prevents PR sprawl
-- ✅ Simplifies review process
-- ✅ Provides single point for daily approvals
-
-The consolidated PR will proceed through CI/CD and be ready for your review.
-
-_Automated by [daily-pr-consolidator.yml](../.github/workflows/daily-pr-consolidator.yml)_"
+            # Add comment - using file to avoid YAML escaping issues
+            cat > /tmp/pr_comment.md << 'EOF'
+          Consolidated into Daily PR
+          
+          This PR has been consolidated into the daily consolidated PR
+          
+          All changes from this PR are included in the consolidated PR. This approach prevents PR sprawl, simplifies review process, and provides single point for daily approvals.
+          
+          The consolidated PR will proceed through CI/CD and be ready for your review.
+          EOF
+            
+            gh pr comment "$PR_NUM" --body-file /tmp/pr_comment.md
             
             # Close the PR
             gh pr close "$PR_NUM"

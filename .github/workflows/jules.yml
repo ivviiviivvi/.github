@@ -118,4 +118,4 @@ jobs:
 
       - name: Commit state changes
         if: always()
-        run: ./scripts/commit_changes.sh "chore: update state for Jules task"
+        run: ./scripts/commit_changes.sh "chore - update state for Jules task"
