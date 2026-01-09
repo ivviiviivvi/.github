@@ -60,7 +60,34 @@ gh codespace create --repo ivviiviivvi/.github
 - 🔧 [Code-Server Setup](docs/CODE_SERVER_SETUP.md)
 - 🎯 [DevContainer Templates](.devcontainer/templates/)
 
-## 🚀 PR & Dependency Automation
+## 🤖 PR & Dependency Automation (ENHANCED!)
+
+**🎯 NEW: Jules Task Cascade Prevention & Daily PR Consolidation**
+
+Say goodbye to PR sprawl! Our enhanced automation now prevents cascading redundant tasks and consolidates ALL bot PRs into a SINGLE daily PR for streamlined review.
+
+### What's New
+- ✅ **Task Deduplication** - Prevents Jules and automated tasks from cascading
+- ✅ **Daily Consolidation** - All bot/Jules PRs merged into ONE PR per day
+- ✅ **Smart Scheduling** - Master orchestrator coordinates all daily operations
+- ✅ **Auto Cleanup** - Old task records automatically cleaned up
+- ✅ **Simple Review** - ONE checklist, ONE PR to approve daily
+
+**Quick Start:**
+```bash
+# View your consolidated PR (created daily at 1:30 AM UTC)
+gh pr list --label consolidated
+
+# Manually trigger consolidation if needed
+gh workflow run daily-pr-consolidator.yml
+
+# Check task deduplication status
+cat .github/task_state.json | jq '.'
+```
+
+📖 **Full docs:** [Jules Cascade Prevention](docs/JULES_CASCADE_PREVENTION.md) | [Quick Reference](docs/JULES_CASCADE_PREVENTION_QUICK_REF.md)
+
+### Classic PR Automation (Still Available)
 
 **Tired of managing 100+ PRs from Dependabot, Jules, and other automated tools?** We've got you covered!
 
