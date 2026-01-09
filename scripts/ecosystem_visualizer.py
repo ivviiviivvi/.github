@@ -190,11 +190,12 @@ graph TD
 
             emoji = {'CRITICAL': '🔴', 'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
 
-            parts.append(f"{emoji} **{category}** ({severity})\n")
+            # UX Improvement: Use blockquotes for better visual distinction
+            parts.append(f"> {emoji} **{category}** ({severity})\n")
             for item in grouped_items:
-                parts.append(f"  - {item.get('description')}\n")
+                parts.append(f"> - {item.get('description')}\n")
                 if 'recommendation' in item:
-                    parts.append(f"    - 💡 {item['recommendation']}\n")
+                    parts.append(f">   - 💡 *{item['recommendation']}*\n")
             parts.append("\n")
 
         return parts
@@ -440,6 +441,37 @@ graph TD
 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
 
+                # UX Improvement: Add legend for clearer interpretation of icons
+                parts.append("**Legend:** 🛡️ Safeguard | 🔐 Security | ♻️ Reusable | 🤖 AI/Agent | 🚀 CI/CD | 🔀 PR | ⏱️ Scheduled | 💓 Health | ⚙️ Other\n\n")
+
+                # UX Improvement: Use table with indices for better scannability and reference
+                parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
+
+                for i, workflow in enumerate(sorted(workflows), 1):
+                    # Determine workflow type based on name for better scannability
+                    name = workflow.lower()
+                    w_type = '⚙️' # Default
+
+                    if name.startswith('safeguard') or 'policy' in name:
+                         w_type = '🛡️'
+                    elif any(k in name for k in ('security', 'scan', 'codeql', 'semgrep', 'secret')):
+                         w_type = '🔐'
+                    elif 'reusable' in name:
+                         w_type = '♻️'
+                    elif any(k in name for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-')):
+                         w_type = '🤖'
+                    elif any(k in name for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker')):
+                         w_type = '🚀'
+                    elif any(k in name for k in ('pr-', 'pull-request', 'merge')):
+                         w_type = '🔀'
+                    elif any(k in name for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly')):
+                         w_type = '⏱️'
+                    elif any(k in name for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report')):
+                         w_type = '💓'
+
+                    # Link to the workflow file with calculated relative path
+                    parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
+                parts.append("\n</details>\n")
                 # Group workflows by category
                 categories = [
                     ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
