@@ -31,3 +31,6 @@ docs/_site/
 # Backup files
 *.backup
 *.bak
+
+# Generated state files
+.github/task_state.json
