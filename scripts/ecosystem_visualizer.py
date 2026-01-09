@@ -430,6 +430,10 @@ graph TD
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
+                # UX Improvement: Add legend for workflow types
+                parts.append("**Legend:**\n")
+                parts.append("🛡️ Safeguards | 🔐 Security | ♻️ Reusable | 🤖 AI Agents | 🚀 CI/CD | 🔀 PR Management | ⏱️ Scheduled | 💓 Health/Metrics | ⚙️ General\n\n")
+
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
 
                 # Group workflows by category
