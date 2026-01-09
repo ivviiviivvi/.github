@@ -85,12 +85,13 @@ class MouthpieceFilter:
 
     def _analyze_text(self, text: str) -> Dict[str, any]:
         """Analyze the text to understand intent and content."""
+        concepts = self._extract_concepts(text)
         analysis = {
             "intent": self._detect_intent(text),
-            "concepts": self._extract_concepts(text),
+            "concepts": concepts,
             "metaphors": self._extract_metaphors(text) if self.config["extract_metaphors"] else [],
             "tone": self._detect_tone(text),
-            "complexity": self._assess_complexity(text),
+            "complexity": self._assess_complexity(text, concepts),
             "key_verbs": self._extract_key_verbs(text),
             "questions": self._extract_questions(text),
         }
@@ -168,14 +169,17 @@ class MouthpieceFilter:
         else:
             return "neutral"
 
-    def _assess_complexity(self, text: str) -> str:
+    def _assess_complexity(self, text: str, concepts: Optional[List[str]] = None) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
         sentences = re.split(r'[.!?]+', text)
 
         avg_sentence_length = len(words) / max(len(sentences), 1)
 
-        if avg_sentence_length > 20 or len(self._extract_concepts(text)) > 5:
+        if concepts is None:
+            concepts = self._extract_concepts(text)
+
+        if avg_sentence_length > 20 or len(concepts) > 5:
             return "complex"
         elif avg_sentence_length > 10:
             return "moderate"
