@@ -320,6 +320,11 @@ class OrganizationCrawler:
                     target = urllib.parse.urljoin(target, loc)
                     continue
 
+                # Optimization: Don't retry if the resource is definitely gone (404/410)
+                # This saves a full GET request for every broken link
+                if response.status in (404, 410):
+                    return response.status
+
                 # Some servers don't support HEAD, try GET
                 # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
                 if response.status >= 400 and response.status != 404:
