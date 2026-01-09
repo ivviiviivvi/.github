@@ -244,12 +244,18 @@ jobs:
       - name: Generate video walkthrough
         env:
           DISPLAY: :99
+          # Map inputs to env vars to prevent command injection
+          INPUT_DURATION: ${{ github.event.inputs.duration || '60' }}
+          INPUT_VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
+          INPUT_FOCUS_AREAS: ${{ github.event.inputs.focus_areas || '' }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          APP_PORT: ${{ steps.detect.outputs.port }}
         run: |
-          DURATION="${{ github.event.inputs.duration || '60' }}"
-          VOICEOVER_STYLE="${{ github.event.inputs.voiceover_style || 'professional' }}"
-          FOCUS_AREAS="${{ github.event.inputs.focus_areas || '' }}"
-          APP_NAME="${{ github.event.repository.name }}"
-          APP_URL="http://localhost:${{ steps.detect.outputs.port }}"
+          DURATION="$INPUT_DURATION"
+          VOICEOVER_STYLE="$INPUT_VOICEOVER_STYLE"
+          FOCUS_AREAS="$INPUT_FOCUS_AREAS"
+          APP_NAME="$REPO_NAME"
+          APP_URL="http://localhost:${APP_PORT}"
           DATE=$(date +%Y%m%d)
 
           mkdir -p walkthroughs
@@ -361,8 +367,13 @@ jobs:
       - name: Create Pull Request with artifacts
         env:
           GH_TOKEN: ${{ github.token }}
+          # Map inputs to env vars to prevent command injection
+          INPUT_DURATION: ${{ github.event.inputs.duration || '60' }}
+          INPUT_VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
+          INPUT_FOCUS_AREAS: ${{ github.event.inputs.focus_areas || 'N/A' }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
-          APP_NAME="${{ github.event.repository.name }}"
+          APP_NAME="$REPO_NAME"
           DATE=$(date +%Y-%m-%d)
           BRANCH_NAME="walkthrough/update-${DATE}-${{ github.run_number }}"
 
@@ -389,9 +400,9 @@ jobs:
           git push origin ${BRANCH_NAME}
 
           # Create PR
-          DURATION="${{ github.event.inputs.duration || '60' }}"
-          VOICEOVER_STYLE="${{ github.event.inputs.voiceover_style || 'professional' }}"
-          FOCUS_AREAS="${{ github.event.inputs.focus_areas || 'N/A' }}"
+          DURATION="$INPUT_DURATION"
+          VOICEOVER_STYLE="$INPUT_VOICEOVER_STYLE"
+          FOCUS_AREAS="$INPUT_FOCUS_AREAS"
 
           gh pr create \
             --title "Add video walkthrough - ${DATE}" \
