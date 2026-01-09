@@ -165,13 +165,13 @@ validate_markdown_style() {
         if python3 -c "
 import re, sys
 try:
-    with open('$file', 'r', encoding='utf-8', errors='ignore') as f:
+    with open(sys.argv[1], 'r', encoding='utf-8', errors='ignore') as f:
         content = f.read()
         sys.exit(0 if re.search(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF]', content) else 1)
 except Exception as e:
     print(f'Error reading file: {e}', file=sys.stderr)
     sys.exit(1)
-" 2>/dev/null; then
+" "$file" 2>/dev/null; then
             error "Emoji found in $file (violates MARKDOWN_STYLE_GUIDE.md)"
             emoji_found=true
         fi

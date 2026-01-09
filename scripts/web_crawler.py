@@ -174,7 +174,15 @@ class OrganizationCrawler:
                 ip = ip.split('%')[0]
             try:
                 ip_obj = ipaddress.ip_address(ip)
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: Explicitly check for all unsafe categories
+                # While is_global handles most, explicit checks are safer for defense-in-depth
+                if (not ip_obj.is_global or
+                    ip_obj.is_multicast or
+                    ip_obj.is_private or
+                    ip_obj.is_loopback or
+                    ip_obj.is_link_local or
+                    ip_obj.is_reserved or
+                    ip_obj.is_unspecified):
                     return False
             except ValueError:
                 return False
@@ -200,8 +208,8 @@ class OrganizationCrawler:
                     ip = ip.split('%')[0]
 
                 ip_obj = ipaddress.ip_address(ip)
-                # Check if IP is globally reachable and not multicast
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: block any non-global or multicast IPs
+                if (not ip_obj.is_global) or ip_obj.is_multicast:
                     return False
 
             return True
@@ -284,7 +292,8 @@ class OrganizationCrawler:
                     continue
 
                 # Some servers don't support HEAD, try GET
-                if response.status >= 400:
+                # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
+                if response.status >= 400 and response.status != 404:
                     response = self.http.request(
                         'GET',
                         safe_url,
