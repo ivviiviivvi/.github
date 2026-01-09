@@ -284,7 +284,8 @@ class OrganizationCrawler:
                     continue
 
                 # Some servers don't support HEAD, try GET
-                if response.status >= 400:
+                # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
+                if response.status >= 400 and response.status != 404:
                     response = self.http.request(
                         'GET',
                         safe_url,
