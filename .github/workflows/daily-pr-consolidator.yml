@@ -42,11 +42,10 @@ jobs:
           
           # Filter for bot/automated PRs (Jules, github-actions, dependabot, etc.)
           jq '[.[] | select(
-            .author.login | 
-            contains("Jules") or 
-            contains("github-actions") or 
-            contains("dependabot") or
-            contains("bot")
+            (.author.login == "Jules" or 
+             .author.login == "github-actions[bot]" or 
+             .author.login == "dependabot[bot]" or
+             (.author.login | endswith("[bot]")))
           )] | map(select(
             # Exclude consolidation PRs themselves
             (.title | contains("Consolidate") | not) and
@@ -298,10 +297,10 @@ jobs:
             echo "Closing PR #$PR_NUM..."
             
             # Add comment - using file to avoid YAML escaping issues
-            cat > /tmp/pr_comment.md << 'EOF'
-          Consolidated into Daily PR
+            cat > /tmp/pr_comment.md << EOF
+          Consolidated into Daily PR #$CONSOLIDATED_PR
           
-          This PR has been consolidated into the daily consolidated PR
+          This PR has been consolidated into the daily consolidated PR: #$CONSOLIDATED_PR
           
           All changes from this PR are included in the consolidated PR. This approach prevents PR sprawl, simplifies review process, and provides single point for daily approvals.
           

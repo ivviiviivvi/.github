@@ -11,6 +11,11 @@ on:
         required: false
         type: boolean
         default: false
+      wait_time_minutes:
+        description: 'Minutes to wait for tasks to complete before consolidation'
+        required: false
+        type: number
+        default: 30
 
 concurrency:
   group: daily-master-orchestrator
@@ -91,36 +96,8 @@ jobs:
           TODAY=$(date -u +%Y-%m-%d)
           echo "🎯 Orchestrating daily tasks for $TODAY"
           
-          # Get tasks scheduled for today from orchestration_tasks.json
-          python3 << 'PYTHON_SCRIPT'
-          import json
-          from datetime import datetime, timedelta
-          from croniter import croniter
-          
-          now = datetime.now()
-          with open('.github/orchestration_tasks.json', 'r') as f:
-              config = json.load(f)
-          
-          daily_tasks = []
-          
-          for task in config.get('tasks', []):
-              if not task.get('enabled', False):
-                  continue
-              
-              schedule = task.get('schedule', '')
-              if croniter.is_valid(schedule):
-                  cron = croniter(schedule, now)
-                  # Check if task should run today
-                  prev_run = cron.get_prev(datetime)
-                  if (now - prev_run).total_seconds() <= 86400:  # 24 hours
-                      daily_tasks.append(task)
-          
-          print(f"Found {len(daily_tasks)} tasks scheduled for today")
-          print(json.dumps(daily_tasks, indent=2))
-          
-          with open('/tmp/daily_tasks.json', 'w') as f:
-              json.dump(daily_tasks, f)
-          PYTHON_SCRIPT
+          # Get tasks scheduled for today
+          python3 .github/scripts/get_daily_tasks.py
           
           TASK_COUNT=$(jq 'length' /tmp/daily_tasks.json)
           echo "tasks-executed=$TASK_COUNT" >> $GITHUB_OUTPUT
@@ -203,8 +180,10 @@ jobs:
     steps:
       - name: Wait for Task Completion
         run: |
-          echo "⏳ Waiting 30 minutes for tasks to complete and PRs to be created..."
-          sleep 1800
+          WAIT_MINUTES="${{ github.event.inputs.wait_time_minutes || 30 }}"
+          WAIT_SECONDS=$((WAIT_MINUTES * 60))
+          echo "⏳ Waiting $WAIT_MINUTES minutes for tasks to complete and PRs to be created..."
+          sleep $WAIT_SECONDS
       
       - name: Trigger PR Consolidation
         env:

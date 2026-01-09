@@ -20,8 +20,20 @@ class TaskDeduplicator:
     def _load_state(self):
         """Load existing task state"""
         if self.state_file.exists():
-            with open(self.state_file, 'r') as f:
-                return json.load(f)
+            try:
+                with open(self.state_file, 'r') as f:
+                    return json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Warning: Corrupted state file {self.state_file}: {e}", file=sys.stderr)
+                print("Creating new state file...", file=sys.stderr)
+                return {
+                    "processed_tasks": {},
+                    "active_prs": [],
+                    "last_cleanup": None
+                }
+            except Exception as e:
+                print(f"Error loading state file: {e}", file=sys.stderr)
+                raise
         return {
             "processed_tasks": {},
             "active_prs": [],
