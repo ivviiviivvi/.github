@@ -38,6 +38,27 @@ class MouthpieceFilter:
     optimizing for AI comprehension.
     """
 
+    # Pre-compiled patterns for performance
+    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
+    _QUOTED_SINGLE = re.compile(r"'([^']+)'")
+    _TECHNICAL_TERMS_MIXED = re.compile(r'\b\w+[._]\w+\b')
+    _TECHNICAL_TERMS_CAMEL = re.compile(r'\b[a-z]+[A-Z]\w+\b')
+
+    _METAPHOR_INDICATORS = [
+        "like", "as if", "seems", "feels like", "reminds me of",
+        "poetry", "blossomed", "flowers", "blooms", "seeds",
+        "river", "ocean", "mountain", "storm", "light", "shadow"
+    ]
+    _METAPHOR_PATTERN = re.compile(
+        r'|'.join(map(re.escape, _METAPHOR_INDICATORS)),
+        re.IGNORECASE
+    )
+
+    _SENTENCE_SPLIT = re.compile(r'[.!?]+')
+    _QUESTIONS_PATTERN = re.compile(r'([^.!?]*\?)')
+    _STEPS_PATTERN = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b', re.IGNORECASE)
+    _PARAGRAPH_SPLIT = re.compile(r'\n\s*\n')
     # Compile regex patterns once for better performance
     _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
     _DOUBLE_QUOTES = re.compile(r'"([^"]+)"')
@@ -156,6 +177,12 @@ class MouthpieceFilter:
         concepts.extend(self._CAPITALIZED_WORDS.findall(text))
 
         # Quoted terms
+        concepts.extend(self._QUOTED_DOUBLE.findall(text))
+        concepts.extend(self._QUOTED_SINGLE.findall(text))
+
+        # Technical-looking terms (contains underscores, dots, or mixed case)
+        concepts.extend(self._TECHNICAL_TERMS_MIXED.findall(text))
+        concepts.extend(self._TECHNICAL_TERMS_CAMEL.findall(text))
         concepts.extend(self._DOUBLE_QUOTES.findall(text))
         concepts.extend(self._SINGLE_QUOTES.findall(text))
 
@@ -167,18 +194,12 @@ class MouthpieceFilter:
 
     def _extract_metaphors(self, text: str) -> List[str]:
         """Extract metaphorical language that adds color and meaning."""
-        # Pattern words that often indicate metaphorical language
-        metaphor_indicators = [
-            "like", "as if", "seems", "feels like", "reminds me of",
-            "poetry", "blossomed", "flowers", "blooms", "seeds",
-            "river", "ocean", "mountain", "storm", "light", "shadow"
-        ]
-
         metaphors = []
+        sentences = self._SENTENCE_SPLIT.split(text)
         sentences = self._SENTENCE_SPLITTER.split(text)
 
         for sentence in sentences:
-            if any(indicator in sentence.lower() for indicator in metaphor_indicators):
+            if self._METAPHOR_PATTERN.search(sentence):
                 metaphors.append(sentence.strip())
 
         return metaphors
@@ -242,6 +263,7 @@ class MouthpieceFilter:
     def _extract_questions(self, text: str) -> List[str]:
         """Extract questions from the text."""
         # Find sentences ending with question marks
+        questions = self._QUESTIONS_PATTERN.findall(text)
         questions = self._QUESTIONS.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
@@ -274,6 +296,7 @@ class MouthpieceFilter:
     def _has_steps(self, text: str) -> bool:
         """Check if the text contains step-by-step information."""
         # Look for numbered lists or step indicators
+        return bool(self._STEPS_PATTERN.search(text))
         return bool(self._STEPS.search(text.lower()))
 
     def _identify_sections(self, text: str) -> List[str]:
@@ -281,6 +304,7 @@ class MouthpieceFilter:
         sections = []
 
         # Split by double newlines or paragraph indicators
+        paragraphs = self._PARAGRAPH_SPLIT.split(text)
         paragraphs = self._PARAGRAPHS.split(text)
 
         for i, para in enumerate(paragraphs):
