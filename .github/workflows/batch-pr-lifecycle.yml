@@ -353,7 +353,24 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         with:
           script: |
-            const mergeablePRs = JSON.parse(process.env.MERGEABLE_PRS);
+            const mergeablePRsRaw = process.env.MERGEABLE_PRS;
+            let mergeablePRs = [];
+            
+            if (!mergeablePRsRaw) {
+              console.log('MERGEABLE_PRS is empty or undefined; defaulting to an empty list of PRs.');
+            } else {
+              try {
+                const parsed = JSON.parse(mergeablePRsRaw);
+                if (Array.isArray(parsed)) {
+                  mergeablePRs = parsed;
+                } else {
+                  console.error('MERGEABLE_PRS did not contain a JSON array; defaulting to an empty list of PRs.');
+                }
+              } catch (error) {
+                console.error('Failed to parse MERGEABLE_PRS as JSON; defaulting to an empty list of PRs.', error);
+              }
+            }
+            
             const dryRun = process.env.DRY_RUN === 'true';
             
             console.log(`Merging ${mergeablePRs.length} mergeable PRs...`);
