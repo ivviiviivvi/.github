@@ -53,17 +53,49 @@ jobs:
           python-version: '3.x'
           cache: 'pip'
 
-      - name: Check quota
+      - name: Check quota and deduplication
         id: quota
         run: |
           usage=$(python scripts/quota_manager.py get_usage "Jules_Agent")
           quota=$(jq -r '.subscriptions[] | select(.name=="Jules_Agent") | .quota' .github/subscriptions.json)
           echo "usage=$usage" >> $GITHUB_OUTPUT
           echo "quota=$quota" >> $GITHUB_OUTPUT
+          
+          # Check for task deduplication
+          ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
+          TASK_TYPE="jules_request"
+          TASK_DATA="{\"issue\":\"$ISSUE_NUM\",\"event\":\"${{ github.event_name }}\",\"repo\":\"${{ github.repository }}\"}"
+          
+          DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "$TASK_TYPE" "$TASK_DATA" || echo '{"should_process":true,"reason":"deduplication check failed"}')
+          SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
+          REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
+          
+          echo "should_process=$SHOULD_PROCESS" >> $GITHUB_OUTPUT
+          echo "dedupe_reason=$REASON" >> $GITHUB_OUTPUT
+          
+          if [ "$SHOULD_PROCESS" = "false" ]; then
+            echo "⏭️  Skipping duplicate task: $REASON"
+          fi
+
+      - name: Skip Duplicate Notice
+        if: steps.quota.outputs.should_process == 'false'
+        run: |
+          ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
+          if [ -n "$ISSUE_NUM" ]; then
+            gh issue comment $ISSUE_NUM --body "⏭️  **Duplicate Request Detected**
+            
+            This Jules request was already processed recently: ${{ steps.quota.outputs.dedupe_reason }}
+            
+            To prevent redundant work and PR sprawl, duplicate requests are automatically skipped. If you need to re-run this task, please wait 24 hours or contact a maintainer.
+            
+            _Automated by [jules.yml](../.github/workflows/jules.yml) with task deduplication_" || echo "Could not post comment"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Claude Code
         id: claude
-        if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+        if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota && steps.quota.outputs.should_process == 'true' }}
         uses: anthropics/claude-code-action@0a2593483e318c6693adcb04af942367df7157f0 # ratchet:anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

@@ -64,13 +64,27 @@ jobs:
         run: |
           echo '${{ steps.orchestrator.outputs.due_tasks }}' | jq -c '.tasks[]' | while read -r task; do
             subscription_name=$(echo "$task" | jq -r '.subscription')
+            task_id=$(echo "$task" | jq -r '.id')
+            prompt=$(echo "$task" | jq -r '.prompt')
+            
+            # Check for task deduplication
+            TASK_DATA=$(echo "$task" | jq -c '{id, subscription, prompt}')
+            DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "orchestrated_task" "$TASK_DATA" || echo '{"should_process":true,"reason":"script error"}')
+            SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
+            REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
+            
+            if [ "$SHOULD_PROCESS" = "false" ]; then
+              echo "⏭️  Skipping duplicate task $task_id: $REASON"
+              continue
+            fi
+            
+            # Check quota
             usage=$(python scripts/quota_manager.py get_usage "$subscription_name")
             quota=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .quota' .github/subscriptions.json)
 
             if (( $(echo "$usage < $quota" | bc -l) )); then
-              echo "Dispatching task: $(echo "$task" | jq -r '.id')"
+              echo "Dispatching task: $task_id"
               workflow_file=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .relevant_workflows[0]' .github/subscriptions.json)
-              prompt=$(echo "$task" | jq -r '.prompt')
 
               if [ -n "$workflow_file" ] && [ "$workflow_file" != "null" ]; then
                 gh workflow run "$workflow_file" --ref ${{ github.ref }} -f "prompt=$prompt"
@@ -79,7 +93,7 @@ jobs:
                 echo "No relevant workflow found for subscription: $subscription_name"
               fi
             else
-              echo "Skipping task $(echo "$task" | jq -r '.id'): Quota limit reached for $subscription_name."
+              echo "Skipping task $task_id: Quota limit reached for $subscription_name."
             fi
           done
         env:
