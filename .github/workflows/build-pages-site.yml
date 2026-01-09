@@ -246,6 +246,8 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: write
 
     steps:
       - name: "Checkout repository"
