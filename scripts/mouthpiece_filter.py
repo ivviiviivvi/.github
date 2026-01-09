@@ -38,6 +38,28 @@ class MouthpieceFilter:
     optimizing for AI comprehension.
     """
 
+    # Pre-compiled patterns for performance
+    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
+    _QUOTED_SINGLE = re.compile(r"'([^']+)'")
+    _TECHNICAL_TERMS_MIXED = re.compile(r'\b\w+[._]\w+\b')
+    _TECHNICAL_TERMS_CAMEL = re.compile(r'\b[a-z]+[A-Z]\w+\b')
+
+    _METAPHOR_INDICATORS = [
+        "like", "as if", "seems", "feels like", "reminds me of",
+        "poetry", "blossomed", "flowers", "blooms", "seeds",
+        "river", "ocean", "mountain", "storm", "light", "shadow"
+    ]
+    _METAPHOR_PATTERN = re.compile(
+        r'|'.join(map(re.escape, _METAPHOR_INDICATORS)),
+        re.IGNORECASE
+    )
+
+    _SENTENCE_SPLIT = re.compile(r'[.!?]+')
+    _QUESTIONS_PATTERN = re.compile(r'([^.!?]*\?)')
+    _STEPS_PATTERN = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b', re.IGNORECASE)
+    _PARAGRAPH_SPLIT = re.compile(r'\n\s*\n')
+
     def __init__(self, config: Optional[Dict] = None):
         """Initialize the filter with optional configuration."""
         self.config = config or self._default_config()
@@ -122,32 +144,25 @@ class MouthpieceFilter:
         concepts = []
 
         # Capitalized words (potential proper nouns or important concepts)
-        concepts.extend(re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', text))
+        concepts.extend(self._CAPITALIZED_WORDS.findall(text))
 
         # Quoted terms
-        concepts.extend(re.findall(r'"([^"]+)"', text))
-        concepts.extend(re.findall(r"'([^']+)'", text))
+        concepts.extend(self._QUOTED_DOUBLE.findall(text))
+        concepts.extend(self._QUOTED_SINGLE.findall(text))
 
         # Technical-looking terms (contains underscores, dots, or mixed case)
-        concepts.extend(re.findall(r'\b\w+[._]\w+\b', text))
-        concepts.extend(re.findall(r'\b[a-z]+[A-Z]\w+\b', text))  # camelCase
+        concepts.extend(self._TECHNICAL_TERMS_MIXED.findall(text))
+        concepts.extend(self._TECHNICAL_TERMS_CAMEL.findall(text))
 
         return list(set(concepts))  # Remove duplicates
 
     def _extract_metaphors(self, text: str) -> List[str]:
         """Extract metaphorical language that adds color and meaning."""
-        # Pattern words that often indicate metaphorical language
-        metaphor_indicators = [
-            "like", "as if", "seems", "feels like", "reminds me of",
-            "poetry", "blossomed", "flowers", "blooms", "seeds",
-            "river", "ocean", "mountain", "storm", "light", "shadow"
-        ]
-
         metaphors = []
-        sentences = re.split(r'[.!?]+', text)
+        sentences = self._SENTENCE_SPLIT.split(text)
 
         for sentence in sentences:
-            if any(indicator in sentence.lower() for indicator in metaphor_indicators):
+            if self._METAPHOR_PATTERN.search(sentence):
                 metaphors.append(sentence.strip())
 
         return metaphors
@@ -171,7 +186,7 @@ class MouthpieceFilter:
     def _assess_complexity(self, text: str) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
-        sentences = re.split(r'[.!?]+', text)
+        sentences = self._SENTENCE_SPLIT.split(text)
 
         avg_sentence_length = len(words) / max(len(sentences), 1)
 
@@ -207,7 +222,7 @@ class MouthpieceFilter:
     def _extract_questions(self, text: str) -> List[str]:
         """Extract questions from the text."""
         # Find sentences ending with question marks
-        questions = re.findall(r'([^.!?]*\?)', text)
+        questions = self._QUESTIONS_PATTERN.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
     def _extract_structure(self, text: str, analysis: Dict) -> Dict[str, any]:
@@ -239,14 +254,14 @@ class MouthpieceFilter:
     def _has_steps(self, text: str) -> bool:
         """Check if the text contains step-by-step information."""
         # Look for numbered lists or step indicators
-        return bool(re.search(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b', text.lower()))
+        return bool(self._STEPS_PATTERN.search(text))
 
     def _identify_sections(self, text: str) -> List[str]:
         """Identify logical sections in the text."""
         sections = []
 
         # Split by double newlines or paragraph indicators
-        paragraphs = re.split(r'\n\s*\n', text)
+        paragraphs = self._PARAGRAPH_SPLIT.split(text)
 
         for i, para in enumerate(paragraphs):
             if para.strip():
@@ -337,7 +352,7 @@ class MouthpieceFilter:
     def _extract_main_objective(self, text: str, analysis: Dict) -> str:
         """Extract the main objective from the text."""
         # Get the first sentence or up to first period
-        sentences = re.split(r'[.!?]+', text)
+        sentences = self._SENTENCE_SPLIT.split(text)
         main_sentence = sentences[0].strip() if sentences else text
 
         # Clean it up
