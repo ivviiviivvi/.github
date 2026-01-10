@@ -1,0 +1,353 @@
+name: Daily PR Consolidator
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: daily-pr-consolidator
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  analyze-bot-prs:
+    name: Analyze Bot and Jules PRs
+    runs-on: ubuntu-latest
+    outputs:
+      pr-list: ${{ steps.analyze.outputs.pr-list }}
+      pr-count: ${{ steps.analyze.outputs.pr-count }}
+      should-consolidate: ${{ steps.analyze.outputs.should-consolidate }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      
+      - name: Analyze Open PRs
+        id: analyze
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Finding all bot and Jules PRs to consolidate..."
+          
+          # Get all open PRs from bots, Jules, and automated workflows
+          gh pr list \
+            --state open \
+            --json number,title,author,headRefName,isDraft,labels,createdAt,updatedAt \
+            --limit 100 > all_prs.json
+          
+          # Filter for bot/automated PRs (Jules, github-actions, dependabot, etc.)
+          jq '[.[] | select(
+            (.author.login == "Jules" or 
+             .author.login == "github-actions[bot]" or 
+             .author.login == "dependabot[bot]" or
+             (.author.login | endswith("[bot]")))
+          )] | map(select(
+            # Exclude consolidation PRs themselves
+            (.title | contains("Consolidate") | not) and
+            (.labels | map(.name) | contains(["consolidated"]) | not)
+          ))' all_prs.json > bot_prs.json
+          
+          PR_COUNT=$(jq 'length' bot_prs.json)
+          
+          echo "Found $PR_COUNT bot/automated PRs"
+          
+          if [ "$PR_COUNT" -eq 0 ]; then
+            echo "should-consolidate=false" >> $GITHUB_OUTPUT
+            echo "pr-count=0" >> $GITHUB_OUTPUT
+            echo "pr-list=[]" >> $GITHUB_OUTPUT
+            echo "✅ No PRs to consolidate"
+            exit 0
+          fi
+          
+          # If only 1 PR, no need to consolidate
+          if [ "$PR_COUNT" -eq 1 ]; then
+            echo "should-consolidate=false" >> $GITHUB_OUTPUT
+            echo "pr-count=1" >> $GITHUB_OUTPUT
+            echo "pr-list=$(cat bot_prs.json)" >> $GITHUB_OUTPUT
+            echo "ℹ️  Only 1 PR found, no consolidation needed"
+            exit 0
+          fi
+          
+          # Multiple PRs found, should consolidate
+          echo "should-consolidate=true" >> $GITHUB_OUTPUT
+          echo "pr-count=$PR_COUNT" >> $GITHUB_OUTPUT
+          
+          # Output PR list
+          echo "pr-list<<EOF" >> $GITHUB_OUTPUT
+          cat bot_prs.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo ""
+          echo "📋 PRs to consolidate:"
+          jq -r '.[] | "  - PR #\(.number): \(.title) by @\(.author.login)"' bot_prs.json
+
+  create-consolidated-pr:
+    name: Create Single Consolidated PR
+    runs-on: ubuntu-latest
+    needs: analyze-bot-prs
+    if: needs.analyze-bot-prs.outputs.should-consolidate == 'true'
+    outputs:
+      consolidated-pr: ${{ steps.create-pr.outputs.pr-number }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Create Consolidation Branch and Merge All PRs
+        id: merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME="daily-consolidated-$(date +%Y%m%d)"
+          
+          echo "📦 Creating consolidation branch: $BRANCH_NAME"
+          
+          # Ensure we're on main and up to date
+          git checkout main
+          git pull origin main
+          
+          # Create consolidation branch
+          git checkout -b "$BRANCH_NAME"
+          
+          # Parse PR list
+          echo '${{ needs.analyze-bot-prs.outputs.pr-list }}' > /tmp/prs_to_merge.json
+          
+          # Track results
+          echo "0" > /tmp/merged_count.txt
+          echo "0" > /tmp/conflict_count.txt
+          echo "" > /tmp/merge_details.md
+          
+          # Merge each PR
+          jq -c '.[]' /tmp/prs_to_merge.json | while IFS= read -r pr; do
+            PR_NUMBER=$(echo "$pr" | jq -r '.number')
+            PR_TITLE=$(echo "$pr" | jq -r '.title')
+            PR_BRANCH=$(echo "$pr" | jq -r '.headRefName')
+            PR_AUTHOR=$(echo "$pr" | jq -r '.author.login')
+            
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Merging PR #$PR_NUMBER: $PR_TITLE"
+            echo "Branch: $PR_BRANCH | Author: @$PR_AUTHOR"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            
+            # Fetch PR branch
+            if ! git fetch origin "$PR_BRANCH:$PR_BRANCH"; then
+              echo "⚠️  Could not fetch branch $PR_BRANCH, skipping"
+              continue
+            fi
+            
+            # Try merge
+            if git merge --no-ff --no-edit "$PR_BRANCH" -m "Merge PR #$PR_NUMBER: $PR_TITLE"; then
+              echo "✅ Clean merge"
+              MERGED_COUNT=$(cat /tmp/merged_count.txt)
+              echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
+              
+              echo "- ✅ PR #$PR_NUMBER: $PR_TITLE (by @$PR_AUTHOR)" >> /tmp/merge_details.md
+            else
+              echo "⚠️  Merge conflict, attempting auto-resolution..."
+              CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
+              echo "$((CONFLICT_COUNT + 1))" > /tmp/conflict_count.txt
+              
+              # Get conflicted files
+              CONFLICTED_FILES=$(git diff --name-only --diff-filter=U | tr '\n' ', ' | sed 's/,$//')
+              
+              # Abort and retry with theirs strategy
+              git merge --abort
+              
+              if git merge --no-ff --no-edit "$PR_BRANCH" -X theirs; then
+                echo "✅ Auto-resolved using theirs strategy"
+                MERGED_COUNT=$(cat /tmp/merged_count.txt)
+                echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
+                
+                echo "- ⚠️  PR #$PR_NUMBER: $PR_TITLE (by @$PR_AUTHOR) - conflicts in: $CONFLICTED_FILES" >> /tmp/merge_details.md
+              else
+                echo "❌ Could not auto-resolve, skipping"
+                git merge --abort
+                echo "- ❌ PR #$PR_NUMBER: $PR_TITLE (by @$PR_AUTHOR) - MANUAL REVIEW REQUIRED" >> /tmp/merge_details.md
+              fi
+            fi
+          done
+          
+          # Push consolidation branch
+          git push -u origin "$BRANCH_NAME"
+          
+          # Save outputs
+          MERGED_COUNT=$(cat /tmp/merged_count.txt)
+          CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
+          
+          echo "branch-name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "merged=$MERGED_COUNT" >> $GITHUB_OUTPUT
+          echo "conflicts=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+          
+          echo "merge-details<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/merge_details.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create Consolidated PR
+        id: create-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME="${{ steps.merge.outputs.branch-name }}"
+          TODAY=$(date +%Y-%m-%d)
+          
+          # Build PR body
+          cat > /tmp/pr_body.md << 'EOF_BODY'
+          # Daily Consolidated PR
+          
+          This is the single consolidated PR for all automated work from Jules and bots today.
+          
+          ## Summary
+          
+          - Total PRs Consolidated: REPLACE_PR_COUNT
+          - Successfully Merged: REPLACE_MERGED
+          - Conflicts Auto-Resolved: REPLACE_CONFLICTS
+          
+          ## Consolidated PRs
+          
+          REPLACE_MERGE_DETAILS
+          
+          ## Review Checklist
+          
+          Please review and approve/reject each item below:
+          
+          EOF_BODY
+          
+          # Add checklist for each original PR
+          echo '${{ needs.analyze-bot-prs.outputs.pr-list }}' | \
+            jq -r '.[] | "- [ ] Review changes from PR #\(.number): \(.title)"' >> /tmp/pr_body.md
+          
+          cat >> /tmp/pr_body.md << 'EOF_FOOTER'
+          
+          ## CI/CD Status
+          
+          All checks will run on this consolidated PR. Please ensure:
+          - [ ] All CI checks pass
+          - [ ] No regressions introduced
+          - [ ] All functionality preserved
+          
+          ## Instructions
+          
+          1. Review each item in the checklist above
+          2. Approve items you agree with, note any concerns
+          3. Once all items reviewed and CI passes, merge this PR
+          4. Original PRs will be automatically closed
+          
+          ---
+          
+          Automated by daily-pr-consolidator.yml
+          This PR consolidates all automated work to prevent PR sprawl and simplify reviews.
+          EOF_FOOTER
+          
+          # Replace placeholders in PR body
+          sed -i "s/REPLACE_PR_COUNT/${{ needs.analyze-bot-prs.outputs.pr-count }}/g" /tmp/pr_body.md
+          sed -i "s/REPLACE_MERGED/${{ steps.merge.outputs.merged }}/g" /tmp/pr_body.md
+          sed -i "s/REPLACE_CONFLICTS/${{ steps.merge.outputs.conflicts }}/g" /tmp/pr_body.md
+          
+          # Insert merge details
+          MERGE_DETAILS="${{ steps.merge.outputs.merge-details }}"
+          sed -i "/REPLACE_MERGE_DETAILS/c\\$MERGE_DETAILS" /tmp/pr_body.md
+          
+          # Create the PR
+          PR_URL=$(gh pr create \
+            --base main \
+            --head "$BRANCH_NAME" \
+            --title "🎯 Daily Consolidated Work - $TODAY" \
+            --body-file /tmp/pr_body.md \
+            --label "consolidated,automated,daily-work")
+          
+          PR_NUMBER=$(echo "$PR_URL" | grep -oP '\d+$')
+          
+          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr-url=$PR_URL" >> $GITHUB_OUTPUT
+          
+          echo "✅ Created consolidated PR #$PR_NUMBER"
+
+  close-original-prs:
+    name: Close Original PRs
+    runs-on: ubuntu-latest
+    needs: [analyze-bot-prs, create-consolidated-pr]
+    if: needs.create-consolidated-pr.outputs.consolidated-pr != ''
+    
+    steps:
+      - name: Close and Comment on Original PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CONSOLIDATED_PR="${{ needs.create-consolidated-pr.outputs.consolidated-pr }}"
+          
+          echo "🔒 Closing original PRs and adding consolidation notice..."
+          
+          echo '${{ needs.analyze-bot-prs.outputs.pr-list }}' | \
+            jq -r '.[].number' | while read -r PR_NUM; do
+            
+            echo "Closing PR #$PR_NUM..."
+            
+            # Add comment - using file to avoid YAML escaping issues
+            cat > /tmp/pr_comment.md << EOF
+          Consolidated into Daily PR #$CONSOLIDATED_PR
+          
+          This PR has been consolidated into the daily consolidated PR: #$CONSOLIDATED_PR
+          
+          All changes from this PR are included in the consolidated PR. This approach prevents PR sprawl, simplifies review process, and provides single point for daily approvals.
+          
+          The consolidated PR will proceed through CI/CD and be ready for your review.
+          EOF
+            
+            gh pr comment "$PR_NUM" --body-file /tmp/pr_comment.md
+            
+            # Close the PR
+            gh pr close "$PR_NUM"
+            
+            echo "✅ Closed PR #$PR_NUM"
+            sleep 1  # Rate limiting
+          done
+          
+          echo ""
+          echo "🎉 All original PRs closed and consolidated"
+
+  summary:
+    name: Consolidation Summary
+    runs-on: ubuntu-latest
+    needs: [analyze-bot-prs, create-consolidated-pr, close-original-prs]
+    if: always()
+    
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "# 🎯 Daily PR Consolidation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.analyze-bot-prs.outputs.should-consolidate }}" = "true" ]; then
+            echo "## 📊 Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Original PRs:** ${{ needs.analyze-bot-prs.outputs.pr-count }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Consolidated PR:** #${{ needs.create-consolidated-pr.outputs.consolidated-pr }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Status:** ✅ All PRs consolidated into single PR" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## ✅ Next Steps" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "1. Review consolidated PR #${{ needs.create-consolidated-pr.outputs.consolidated-pr }}" >> $GITHUB_STEP_SUMMARY
+            echo "2. Check all items in the approval checklist" >> $GITHUB_STEP_SUMMARY
+            echo "3. Ensure CI/CD checks pass" >> $GITHUB_STEP_SUMMARY
+            echo "4. Merge when ready" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️  **Status:** No consolidation needed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Found ${{ needs.analyze-bot-prs.outputs.pr-count }} bot/automated PRs (need 2+ to consolidate)" >> $GITHUB_STEP_SUMMARY
+          fi
