@@ -23,6 +23,43 @@ class EcosystemVisualizer:
     # Users can adjust this value if needed based on their diagram rendering environment.
     MAX_DIAGRAM_WORKFLOWS = 10
 
+    # Technology Icons Mapping
+    TECHNOLOGY_ICONS = {
+        'python': '🐍',
+        'javascript': '🟨',
+        'typescript': '🔷',
+        'docker': '🐳',
+        'json': '📦',
+        'yaml': '📝',
+        'markdown': '📄',
+        'html': '🌐',
+        'css': '🎨',
+        'bash': '🐚',
+        'shell': '🐚',
+        'go': '🐹',
+        'rust': '🦀',
+        'java': '☕',
+        'c++': '🔵',
+        'c#': '#️⃣',
+        'ruby': '💎',
+        'php': '🐘',
+        'swift': '🐦',
+        'kotlin': '🎯',
+    }
+
+    # Workflow Categories for Legend
+    WORKFLOW_CATEGORIES = {
+        '🛡️': 'Safeguards',
+        '🔐': 'Security',
+        '♻️': 'Reusable',
+        '🤖': 'AI Agents',
+        '🚀': 'CI/CD',
+        '🔀': 'PR Mgmt',
+        '⏱️': 'Scheduled',
+        '💓': 'Health',
+        '⚙️': 'General',
+    }
+
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
         self.report_data = None
@@ -393,7 +430,8 @@ graph TD
                 # UX Improvement: Use list for small numbers, table for large to avoid empty cells
                 if len(technologies) <= 5:
                     for tech in technologies:
-                        parts.append(f"- `{tech}`\n")
+                        icon = self.TECHNOLOGY_ICONS.get(tech.lower(), '🔹')
+                        parts.append(f"- {icon} `{tech}`\n")
                     parts.append("\n")
                 else:
                     parts.append(f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n")
@@ -408,7 +446,13 @@ graph TD
                         if current_len < cols:
                             row_techs.extend([""] * (cols - current_len))
 
-                        formatted_cells = [f"`{t}`" if t else "" for t in row_techs]
+                        formatted_cells = []
+                        for t in row_techs:
+                            if t:
+                                icon = self.TECHNOLOGY_ICONS.get(t.lower(), '🔹')
+                                formatted_cells.append(f"{icon} `{t}`")
+                            else:
+                                formatted_cells.append("")
                         parts.append("| " + " | ".join(formatted_cells) + " |\n")
 
                         if i == 0:
