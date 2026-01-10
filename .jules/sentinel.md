@@ -1,4 +1,4 @@
-## 2024-02-14 - [Command Injection Mitigation in Workflows]
-**Vulnerability:** Found a Command Injection vulnerability in `.github/workflows/reusable-api-retry.yml` where `eval` was used to execute a dynamically constructed `curl` command. User input (like `API_ENDPOINT`) could potentially break out of the string and execute arbitrary commands.
-**Learning:** `eval` is extremely dangerous when handling user input in shell scripts. String concatenation for command construction is brittle and prone to injection if quotes are not handled perfectly (which is hard).
-**Prevention:** Use Bash arrays to build commands dynamically. Arrays handle argument separation safely. Execute the command using `"${array[@]}"`.
+## 2025-02-18 - [Fix Code Injection in GitHub Actions]
+**Vulnerability:** Unmitigated Code Injection in `.github/workflows/bulk-pr-operations.yml`. The workflow interpolated user inputs directly into a JavaScript code block executed by `actions/github-script`. A malicious user with workflow dispatch permissions could inject arbitrary JavaScript code.
+**Learning:** GitHub Actions `github-script` action executes code in a Node.js context. Direct interpolation of inputs (e.g., `const val = '${{ inputs.val }}'`) is dangerous because the input is evaluated before the script runs, allowing code injection (e.g., input `'; system('rm -rf /'); //`).
+**Prevention:** Always use environment variables to pass inputs to `github-script`. Map inputs to `env:` in the workflow step, and access them via `process.env.VAR_NAME` within the script. This ensures data is treated as data, not code.
