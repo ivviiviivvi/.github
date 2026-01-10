@@ -319,8 +319,8 @@ jobs:
             # Insert at the very top
             echo -e "$BADGE\n\n$(cat README.md)" > README.md
           elif [ "$POSITION" = "after-title" ]; then
-            # Insert after the first heading
-            sed -i "0,/^#/s/^\(#.*\)/\1\n\n$BADGE/" README.md
+            # Insert after the first heading (using | as delimiter to avoid conflicts with URLs)
+            sed -i "0,/^#/s|^\(#.*\)|\1\n\n$BADGE|" README.md
           else
             # Default: insert at top
             echo -e "$BADGE\n\n$(cat README.md)" > README.md
