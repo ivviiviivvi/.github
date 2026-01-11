@@ -23,6 +23,19 @@ class EcosystemVisualizer:
     # Users can adjust this value if needed based on their diagram rendering environment.
     MAX_DIAGRAM_WORKFLOWS = 10
 
+    # UX Improvement: Centralized workflow categories with consistent emojis
+    WORKFLOW_CATEGORIES = {
+        '🛡️': 'Safeguards',
+        '🔐': 'Security',
+        '♻️': 'Reusable',
+        '🤖': 'AI Agents',
+        '🚀': 'CI/CD',
+        '🔀': 'PR Mgmt',
+        '⏱️': 'Scheduled',
+        '💓': 'Health',
+        '⚙️': 'General'
+    }
+
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
         self.report_data = None
@@ -429,22 +442,16 @@ graph TD
             workflows = em.get('workflows', [])
 
             if workflows:
-                # UX Improvement: Add legend for workflow types
-                parts.append("> **Legend:** 🛡️ Safeguard · 🔐 Security · ♻️ Reusable · 🤖 AI Agent · 🚀 CI/CD · 🔀 PR Mgmt · ⏱️ Scheduled · 💓 Health · ⚙️ General\n\n")
-
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
                 # UX Improvement: Add legend for workflow types
-                parts.append("**Legend:**\n")
-                parts.append("🛡️ Safeguards | 🔐 Security | ♻️ Reusable | 🤖 AI Agents | 🚀 CI/CD | 🔀 PR Management | ⏱️ Scheduled | 💓 Health/Metrics | ⚙️ General\n\n")
+                # Use a single, consistent legend derived from the class constant
+                legend_items = [f"{emoji} {name}" for emoji, name in self.WORKFLOW_CATEGORIES.items()]
+                legend_string = " · ".join(legend_items)
+                parts.append(f"> **Legend:** {legend_string}\n\n")
 
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-
-                # Add legend for workflow types
-                legend_items = [f"{emoji} {name}" for emoji, name in self.WORKFLOW_CATEGORIES.items()]
-                legend_string = " | ".join(legend_items)
-                parts.append(f"> **Legend:** {legend_string}\n\n")
 
                 # UX Improvement: Use table with indices for better scannability and reference
                 parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
