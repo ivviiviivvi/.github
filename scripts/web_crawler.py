@@ -46,13 +46,9 @@ class OrganizationCrawler:
         self.session.mount('https://', adapter)
         self.session.mount('http://', adapter)
 
-        # Use urllib3 directly for safe verified requests to IPs
-        # Increase num_pools to avoid thrashing when visiting many different hosts
-        self.http = urllib3.PoolManager(
-            num_pools=max(50, max_workers * 5),
-            maxsize=max_workers,
-            cert_reqs='CERT_REQUIRED'
-        )
+        # Create a single SSL context for reuse
+        # This avoids reloading the system trust store for every request
+        self.ssl_context = ssl.create_default_context()
 
         if self.github_token:
             self.session.headers.update({'Authorization': f'token {self.github_token}'})
@@ -281,13 +277,11 @@ class OrganizationCrawler:
                 # Create a temporary connection pool for this specific request
                 # allowing us to verify hostname against the IP connection
                 if scheme == 'https':
-                    # Use system default SSL context to avoid extra dependencies
-                    ssl_context = ssl.create_default_context()
                     pool = urllib3.HTTPSConnectionPool(
                         host=safe_ip,
                         port=port,
                         cert_reqs='CERT_REQUIRED',
-                        ssl_context=ssl_context,
+                        ssl_context=self.ssl_context,
                         assert_hostname=hostname,
                         server_hostname=hostname
                     )
@@ -328,7 +322,7 @@ class OrganizationCrawler:
                 # Some servers don't support HEAD, try GET
                 # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
                 if response.status >= 400 and response.status != 404:
-                    response = self.http.request(
+                    response = pool.request(
                         'GET',
                         url_path,
                         timeout=timeout,
