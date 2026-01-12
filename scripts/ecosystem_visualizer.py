@@ -511,7 +511,7 @@ graph TD
                     # Link to the workflow file with calculated relative path
                     parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
                 parts.append("\n")
-                
+
                 # Group workflows by category
                 categories = [
                     ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
