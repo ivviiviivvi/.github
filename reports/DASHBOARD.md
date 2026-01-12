@@ -123,15 +123,10 @@ Supported languages and frameworks:
 
 ## ⚙️  Active Workflows
 
-> **Legend:** 🛡️ Safeguard · 🔐 Security · ♻️ Reusable · 🤖 AI Agent · 🚀 CI/CD · 🔀 PR Mgmt · ⏱️ Scheduled · 💓 Health · ⚙️ General
-
-**Legend:**
-🛡️ Safeguards | 🔐 Security | ♻️ Reusable | 🤖 AI Agents | 🚀 CI/CD | 🔀 PR Management | ⏱️ Scheduled | 💓 Health/Metrics | ⚙️ General
+> **Legend:** 🛡️ Safeguards · 🔐 Security · ♻️ Reusable · 🤖 AI Agents · 🚀 CI/CD · 🔀 PR Management · ⏱️ Scheduled · 💓 Health · ⚙️ Utility & Other
 
 <details>
 <summary>View all 15 workflows</summary>
-
-> **Legend:** 🛡️ Safeguards | 🔐 Security | ♻️ Reusable | 🤖 AI Agents | 🚀 CI/CD | 🔀 PR Mgmt | ⏱️ Scheduled | 💓 Health | ⚙️ General
 
 | # | Type | Workflow | Action |
 |---|---|---|---|
@@ -151,7 +146,6 @@ Supported languages and frameworks:
 | 14 | ⚙️ | `workflow-8.yml` | [View](../.github/workflows/workflow-8.yml) |
 | 15 | ⚙️ | `workflow-9.yml` | [View](../.github/workflows/workflow-9.yml) |
 
-</details>
 ### ⚙️ Utility & Other
 
 | Workflow | Action |
