@@ -156,6 +156,54 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         self.assertEqual(status, 200)
         mock_request.assert_called()
 
+    @patch('urllib3.HTTPSConnectionPool')
+    def test_fallback_get_uses_safe_pool(self, MockHTTPSConnectionPool):
+        """
+        Verify that the fallback GET request uses the same IP-pinned pool
+        as the HEAD request to prevent SSRF bypass.
+        """
+        crawler = OrganizationCrawler(github_token="dummy", org_name="dummy")
+
+        # Mock external dependencies
+        crawler._resolve_hostname = MagicMock(return_value=["127.0.0.1"])
+        crawler._is_hostname_safe = MagicMock(return_value=True)
+
+        # Mock the global pool manager (should NOT be used for the request)
+        crawler.http = MagicMock()
+
+        # Mock the connection pool and its responses
+        mock_pool = MagicMock()
+        MockHTTPSConnectionPool.return_value = mock_pool
+
+        # First call (HEAD) returns 405 Method Not Allowed
+        mock_response_head = MagicMock()
+        mock_response_head.status = 405
+        mock_response_head.headers = {}
+
+        # Second call (GET) returns 200 OK
+        mock_response_get = MagicMock()
+        mock_response_get.status = 200
+        mock_response_get.headers = {}
+
+        # Configure side_effect to return different responses for sequential calls
+        mock_pool.request.side_effect = [mock_response_head, mock_response_get]
+
+        # Run _check_link
+        crawler._check_link("https://example.com/foo")
+
+        # Verify that crawler.http (global pool) was NOT used for the request
+        crawler.http.request.assert_not_called()
+
+        # Verify that mock_pool.request was called twice (HEAD then GET)
+        self.assertEqual(mock_pool.request.call_count, 2)
+
+        # Verify first call was HEAD
+        args1, _ = mock_pool.request.call_args_list[0]
+        self.assertEqual(args1[0], 'HEAD')
+
+        # Verify second call was GET
+        args2, _ = mock_pool.request.call_args_list[1]
+        self.assertEqual(args2[0], 'GET')
 
 if __name__ == '__main__':
     unittest.main()
