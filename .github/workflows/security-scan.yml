@@ -1,0 +1,210 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  security-events: write
+
+jobs:
+  secret-detection:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better secret detection
+      
+      - name: Run TruffleHog
+        id: trufflehog
+        continue-on-error: true
+        uses: trufflesecurity/trufflehog@v3.82.13
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+      
+      - name: Run Gitleaks
+        id: gitleaks
+        continue-on-error: true
+        uses: gitleaks/gitleaks-action@v2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install detect-secrets
+        run: |
+          pip install detect-secrets
+      
+      - name: Run detect-secrets scan
+        id: detect-secrets
+        continue-on-error: true
+        run: |
+          detect-secrets scan --all-files --force-use-all-plugins > .secrets.baseline
+          if [ -s .secrets.baseline ]; then
+            echo "Secrets detected!"
+            cat .secrets.baseline
+            echo "secrets_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "No secrets detected"
+            echo "secrets_found=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check for secrets
+        id: check
+        run: |
+          SECRETS_FOUND=false
+          
+          if [ "${{ steps.trufflehog.outcome }}" == "failure" ]; then
+            echo "❌ TruffleHog found secrets"
+            SECRETS_FOUND=true
+          fi
+          
+          if [ "${{ steps.gitleaks.outcome }}" == "failure" ]; then
+            echo "❌ Gitleaks found secrets"
+            SECRETS_FOUND=true
+          fi
+          
+          if [ "${{ steps.detect-secrets.outputs.secrets_found }}" == "true" ]; then
+            echo "❌ detect-secrets found secrets"
+            SECRETS_FOUND=true
+          fi
+          
+          if [ "$SECRETS_FOUND" == "true" ]; then
+            echo "secrets_detected=true" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "✅ No secrets detected"
+            echo "secrets_detected=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create issue if secrets found on main
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Security Alert: Secrets Detected in Main Branch';
+            const body = `## Security Alert
+            
+            Secrets or credentials have been detected in the main branch.
+            
+            **Commit:** ${{ github.sha }}
+            **Triggered by:** @${{ github.actor }}
+            **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ### Immediate Actions Required:
+            
+            1. ⚠️ **Rotate any exposed credentials immediately**
+            2. 🔍 Review the commit for sensitive data
+            3. 🔒 Remove secrets from the repository history
+            4. ✅ Update the code to use environment variables or secrets management
+            
+            ### Tools that detected issues:
+            - TruffleHog: ${{ steps.trufflehog.outcome }}
+            - Gitleaks: ${{ steps.gitleaks.outcome }}
+            - detect-secrets: ${{ steps.detect-secrets.outputs.secrets_found }}
+            
+            ### Next Steps:
+            
+            1. Investigate the commit: \`${{ github.sha }}\`
+            2. Use \`git filter-branch\` or BFG Repo-Cleaner to remove secrets from history
+            3. Rotate compromised credentials
+            4. Add secrets to environment variables or use GitHub Secrets
+            
+            **Priority:** 🔴 Critical - Handle immediately
+            
+            cc: @ivviiviivvi/security`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['security', 'priority: critical', 'automated']
+            });
+      
+      - name: Fail if secrets detected
+        if: steps.check.outputs.secrets_detected == 'true'
+        run: |
+          echo "::error::Secrets detected in the codebase!"
+          echo "::error::Please remove all secrets and use environment variables or GitHub Secrets instead."
+          exit 1
+      
+      - name: Upload detect-secrets baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: secrets-baseline
+          path: .secrets.baseline
+          retention-days: 30
+
+  dependency-security:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Run npm audit (if package.json exists)
+        if: hashFiles('package.json') != ''
+        continue-on-error: true
+        run: |
+          if [ -f package.json ]; then
+            echo "Running npm audit..."
+            npm audit --audit-level=moderate || true
+          fi
+      
+      - name: Run pip audit (if requirements.txt exists)
+        if: hashFiles('requirements.txt') != ''
+        continue-on-error: true
+        run: |
+          if [ -f requirements.txt ]; then
+            echo "Installing pip-audit..."
+            pip install pip-audit
+            echo "Running pip audit..."
+            pip-audit --requirement requirements.txt || true
+          fi
+      
+      - name: Security scan summary
+        if: always()
+        run: |
+          echo "### Security Scan Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All security scans completed. Review the logs above for any issues." >> $GITHUB_STEP_SUMMARY
+
+  scan-results:
+    name: Security Scan Results
+    runs-on: ubuntu-latest
+    needs: [secret-detection, dependency-security]
+    if: always()
+    
+    steps:
+      - name: Summary
+        run: |
+          echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Detection | ${{ needs.secret-detection.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Security | ${{ needs.dependency-security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.secret-detection.result }}" == "failure" ]; then
+            echo "❌ **Security issues detected!** Review the logs and take immediate action." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ **All security checks passed!**" >> $GITHUB_STEP_SUMMARY
+          fi
