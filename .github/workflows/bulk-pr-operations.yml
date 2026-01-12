@@ -66,15 +66,20 @@ jobs:
 
       - name: Execute Bulk Operation
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        env:
+          OPERATION: ${{ github.event.inputs.operation }}
+          FILTER_LABEL: ${{ github.event.inputs.filter_label }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          MAX_PRS: ${{ github.event.inputs.max_prs }}
         with:
           script: |
-            const operation = '${{ github.event.inputs.operation }}';
-            const filterLabel = '${{ github.event.inputs.filter_label }}' || null;
-            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const operation = process.env.OPERATION;
+            const filterLabel = process.env.FILTER_LABEL || null;
+            const dryRun = process.env.DRY_RUN === 'true';
             
             // Validate and sanitize max_prs input
             let maxPRs = 50; // default
-            const maxPRsInput = '${{ github.event.inputs.max_prs }}';
+            const maxPRsInput = process.env.MAX_PRS;
             if (maxPRsInput) {
               const parsed = parseInt(maxPRsInput, 10);
               if (isNaN(parsed) || parsed < 1 || parsed > 200) {
