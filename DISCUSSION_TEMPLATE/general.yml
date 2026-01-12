@@ -1,64 +1,91 @@
 title: "💬 Discussion: "
 labels:
   - discussion
-body: |
-  <!-- 
-  Start a general discussion about the project!
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <!-- 
+        Start a general discussion about the project!
+        
+        Use this category for:
+        - General topics that don't fit other categories
+        - Community discussions
+        - Project direction and philosophy
+        - Best practices and patterns
+        - Meta discussions about the project
+        
+        Not suitable for:
+        - Bug reports (use Issues instead)
+        - Specific support questions (use Q&A instead)
+        - Feature requests (use Ideas instead)
+        -->
   
-  Use this category for:
-  - General topics that don't fit other categories
-  - Community discussions
-  - Project direction and philosophy
-  - Best practices and patterns
-  - Meta discussions about the project
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+      description: What would you like to discuss?
+      placeholder: Describe the topic you want to discuss...
+    validations:
+      required: true
   
-  Not suitable for:
-  - Bug reports (use Issues instead)
-  - Specific support questions (use Q&A instead)
-  - Feature requests (use Ideas instead)
-  -->
+  - type: textarea
+    id: background
+    attributes:
+      label: Background / Context
+      description: Provide any necessary background information
+      placeholder: Share relevant context...
+    validations:
+      required: false
   
-  ## Topic
+  - type: textarea
+    id: discussion_points
+    attributes:
+      label: Discussion Points
+      description: What specific aspects would you like input on?
+      placeholder: |
+        - Point 1
+        - Point 2
+        - Point 3
+    validations:
+      required: false
   
-  <!-- What would you like to discuss? -->
+  - type: textarea
+    id: thoughts
+    attributes:
+      label: Your Thoughts
+      description: Share your perspective or initial thoughts on the topic
+      placeholder: Your initial thoughts...
+    validations:
+      required: false
   
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions for the Community
+      description: What would you like feedback on?
+      placeholder: |
+        1. Question 1
+        2. Question 2
+        3. Question 3
+    validations:
+      required: false
   
+  - type: textarea
+    id: resources
+    attributes:
+      label: Related Resources
+      description: Link to relevant discussions, issues, documentation, or external resources
+      placeholder: |
+        - Resource 1
+        - Resource 2
+    validations:
+      required: false
   
-  ## Background / Context
-  
-  <!-- Provide any necessary background information -->
-  
-  
-  
-  ## Discussion Points
-  
-  <!-- What specific aspects would you like input on? -->
-  
-  - 
-  - 
-  - 
-  
-  ## Your Thoughts
-  
-  <!-- Share your perspective or initial thoughts on the topic -->
-  
-  
-  
-  ## Questions for the Community
-  
-  <!-- What would you like feedback on? -->
-  
-  1. 
-  2. 
-  3. 
-  
-  ## Related Resources
-  
-  <!-- Optional: Link to relevant discussions, issues, documentation, or external resources -->
-  
-  - 
-  - 
-  
-  ---
-  
-  **Be Respectful:** Remember to follow our [Code of Conduct](../CODE_OF_CONDUCT.md) and be respectful of diverse opinions.
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        **Be Respectful:** Remember to follow our [Code of Conduct](../CODE_OF_CONDUCT.md) and be respectful of diverse opinions.

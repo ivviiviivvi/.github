@@ -164,13 +164,17 @@ Cargo.lock @ivviiviivvi/devops
 
 # Issue templates
 /ISSUE_TEMPLATE/ @ivviiviivvi/leadership
+.github/ISSUE_TEMPLATE/ @ivviiviivvi/leadership
 
 # Discussion templates
 /DISCUSSION_TEMPLATE/ @ivviiviivvi/leadership
+.github/DISCUSSION_TEMPLATE/ @ivviiviivvi/leadership
 
 # PR templates
 /PULL_REQUEST_TEMPLATE/ @ivviiviivvi/leadership
 /PULL_REQUEST_TEMPLATE.md @ivviiviivvi/leadership
+.github/PULL_REQUEST_TEMPLATE/ @ivviiviivvi/leadership
+.github/PULL_REQUEST_TEMPLATE.md @ivviiviivvi/leadership
 
 ##############################
 # Automation Scripts

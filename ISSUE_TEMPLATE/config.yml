@@ -2,19 +2,19 @@ blank_issues_enabled: false
 
 contact_links:
   - name: 🔒 Security Vulnerability (Private Disclosure)
-    url: https://github.com/YOUR_ORG/YOUR_REPO/blob/main/SECURITY.md
+    url: https://github.com/ivviiviivvi/.github/blob/main/SECURITY.md
     about: |
       For serious security vulnerabilities, please use our private disclosure process.
       Do NOT create a public issue for high or critical security concerns.
   
   - name: 💬 GitHub Discussions - Questions & Support
-    url: https://github.com/YOUR_ORG/YOUR_REPO/discussions
+    url: https://github.com/ivviiviivvi/.github/discussions
     about: |
       Ask questions, get help, or discuss ideas with the community.
       Use this for general questions that don't require a formal issue.
   
   - name: 📚 Documentation
-    url: https://github.com/YOUR_ORG/YOUR_REPO/wiki
+    url: https://github.com/ivviiviivvi/.github/wiki
     about: |
       Browse the project documentation, guides, and tutorials.
       Check here first before opening an issue.
