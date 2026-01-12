@@ -31,6 +31,7 @@ jobs:
         id: orchestrator
         run: |
           python3 << 'EOF'
+          python << 'EOF'
           import json
           import os
           from datetime import datetime
@@ -64,6 +65,7 @@ jobs:
               f.write('due_tasks<<EOF\n')
               f.write(f"{due_tasks_json}\n")
               f.write('EOF\n')
+              f.write(f"due_tasks={due_tasks_json}\n")
           EOF
 
       - name: Dispatch Due Tasks
