@@ -23,6 +23,30 @@ class EcosystemVisualizer:
     # Users can adjust this value if needed based on their diagram rendering environment.
     MAX_DIAGRAM_WORKFLOWS = 10
 
+    # Technology Icons Mapping
+    TECHNOLOGY_ICONS = {
+        'python': '🐍',
+        'javascript': '🟨',
+        'typescript': '🔷',
+        'docker': '🐳',
+        'json': '📦',
+        'yaml': '📝',
+        'markdown': '📄',
+        'html': '🌐',
+        'css': '🎨',
+        'bash': '🐚',
+        'shell': '🐚',
+        'go': '🐹',
+        'rust': '🦀',
+        'java': '☕',
+        'c++': '🔵',
+        'c#': '#️⃣',
+        'ruby': '💎',
+        'php': '🐘',
+        'swift': '🐦',
+        'kotlin': '🎯',
+    }
+
     # UX Improvement: Centralized workflow categories with consistent emojis
     WORKFLOW_CATEGORIES = {
         '🛡️': 'Safeguards',
@@ -30,10 +54,10 @@ class EcosystemVisualizer:
         '♻️': 'Reusable',
         '🤖': 'AI Agents',
         '🚀': 'CI/CD',
-        '🔀': 'PR Mgmt',
+        '🔀': 'PR Management',
         '⏱️': 'Scheduled',
         '💓': 'Health',
-        '⚙️': 'General'
+        '⚙️': 'Utility & Other'
     }
 
     def __init__(self, report_path: Path = None):
@@ -452,8 +476,6 @@ graph TD
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
 
-                parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-
                 # UX Improvement: Single source of truth for legend, using interpunct for cleaner look
                 legend_items = [f"{emoji} {name}" for emoji, name in self.WORKFLOW_CATEGORIES.items()]
                 legend_string = " · ".join(legend_items)
@@ -488,7 +510,8 @@ graph TD
 
                     # Link to the workflow file with calculated relative path
                     parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
-                parts.append("\n</details>\n")
+                parts.append("\n")
+                
                 # Group workflows by category
                 categories = [
                     ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
