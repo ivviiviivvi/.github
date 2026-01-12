@@ -103,6 +103,24 @@ Already exists, works with trusted agents including:
 - GitHub Actions
 - Copilot
 
+**Enhanced in this update:**
+- Now explicitly summons AI assistants (@copilot, @claude, @jules) when converting from draft to ready
+- Manually triggers `pr-task-catcher.yml` workflow to scan for tasks
+- Attempts to enable auto-merge via GitHub CLI
+- Updates PR comments to indicate assistants have been notified
+- **NEW: Supports both automated AND manual draft-to-ready conversions**
+
+**Why this was needed:**
+When the workflow programmatically converts a PR from draft to ready using `github.rest.pulls.update`, GitHub does not trigger the `ready_for_review` event. This meant workflows listening for that event (like `auto-assign.yml` and `auto-enable-merge.yml`) would not run automatically. 
+
+Additionally, when users manually converted PRs from draft to ready via the GitHub UI, the workflow didn't run at all because it wasn't listening for the `ready_for_review` event. This caused AI assistants and integrated GitHub Apps to not be triggered.
+
+**Solution:**
+The workflow now:
+1. Listens for the `ready_for_review` event (for manual conversions)
+2. Explicitly performs notification actions for both automated and manual conversions
+3. Ensures the full automation chain works correctly regardless of conversion method
+
 #### PR Batch Merge
 Manual and comment-triggered batch merging by label.
 

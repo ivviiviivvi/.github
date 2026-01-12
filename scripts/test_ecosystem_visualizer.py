@@ -170,5 +170,54 @@ class TestEcosystemVisualizer(unittest.TestCase):
         # Should show correct total count
         self.assertIn("View all 15 workflows", dashboard)
 
+    def test_workflow_categories_structure(self):
+        """Test that WORKFLOW_CATEGORIES has correct structure and keys"""
+        categories = EcosystemVisualizer.WORKFLOW_CATEGORIES
+        
+        # Should be a dictionary
+        self.assertIsInstance(categories, dict)
+        
+        # Should have expected emoji keys
+        expected_emojis = ['🛡️', '🔐', '♻️', '🤖', '🚀', '🔀', '⏱️', '💓', '⚙️']
+        self.assertEqual(set(categories.keys()), set(expected_emojis))
+        
+        # All values should be non-empty strings
+        for emoji, name in categories.items():
+            self.assertIsInstance(name, str)
+            self.assertTrue(len(name) > 0)
+
+    def test_workflow_categories_consistency_with_categorization(self):
+        """Test that WORKFLOW_CATEGORIES values match the actual category labels used in code"""
+        # The category labels used in the categorization logic should align with legend
+        # Create report with various workflow types
+        workflows = [
+            'safeguard-test.yml',
+            'security-scan.yml', 
+            'reusable-workflow.yml',
+            'copilot-agent.yml',
+            'ci-build.yml',
+            'pr-check.yml',
+            'scheduled-task.yml',
+            'health-check.yml',
+            'utility-workflow.yml'
+        ]
+        
+        self.report_data['ecosystem_map']['workflows'] = workflows
+        with open(self.report_path, "w") as f:
+            json.dump(self.report_data, f)
+        
+        visualizer = EcosystemVisualizer(self.report_path)
+        dashboard = visualizer.generate_dashboard_markdown(Path("reports/DASHBOARD.md"))
+        
+        # Check that the legend uses consistent naming
+        self.assertIn("PR Management", dashboard)
+        self.assertIn("⚙️ Utility & Other", dashboard)
+        
+        # Should NOT use abbreviated or inconsistent forms
+        self.assertNotIn("PR Mgmt", dashboard)
+        # The test should check the legend format, not the category headers
+        # Legend should be: "⚙️ Utility & Other" (emoji space name)
+        # Category header should be: "### ⚙️ Utility & Other"
+
 if __name__ == '__main__':
     unittest.main()
