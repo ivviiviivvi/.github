@@ -31,69 +31,70 @@ except ImportError:
 
 
 # Label definitions with colors and descriptions
+# These match the labels already created in ivviiviivvi/.github
 LABEL_DEFINITIONS = {
     # Priority Labels
     "priority: critical": {
-        "color": "b60205",  # Red
-        "description": "Critical priority - requires immediate attention"
+        "color": "d73a4a",  # Red
+        "description": "Critical priority"
     },
     "priority: high": {
-        "color": "d93f0b",  # Orange
-        "description": "High priority - should be addressed soon"
+        "color": "ff6b6b",  # Light red/pink
+        "description": "High priority"
     },
     "priority: medium": {
-        "color": "fbca04",  # Yellow
-        "description": "Medium priority - normal queue"
+        "color": "ffa500",  # Orange
+        "description": "Medium priority"
     },
     "priority: low": {
         "color": "0e8a16",  # Green
-        "description": "Low priority - nice to have"
+        "description": "Low priority"
     },
     
-    # Type Labels
-    "type: bug": {
+    # Type Labels (without prefix)
+    "bug": {
         "color": "d73a4a",  # Red
-        "description": "Something isn't working as expected"
+        "description": "Something isn't working"
     },
-    "type: enhancement": {
+    "enhancement": {
         "color": "a2eeef",  # Light blue
         "description": "New feature or request"
     },
-    "type: documentation": {
+    "documentation": {
         "color": "0075ca",  # Blue
         "description": "Improvements or additions to documentation"
     },
-    "type: security": {
-        "color": "b60205",  # Red
-        "description": "Security-related issue or improvement"
+    "security": {
+        "color": "d93f0b",  # Orange-red
+        "description": "Security related"
     },
-    "type: task": {
+    "task": {
         "color": "d4c5f9",  # Purple
         "description": "General task or work item"
     },
-    "type: question": {
+    "question": {
         "color": "d876e3",  # Pink
         "description": "Further information is requested"
     },
     
-    # Status Labels
-    "status: triage": {
-        "color": "ededed",  # Light gray
-        "description": "Needs initial assessment and prioritization"
-    },
-    "status: in-progress": {
-        "color": "1d76db",  # Blue
-        "description": "Currently being worked on"
-    },
-    "status: blocked": {
-        "color": "b60205",  # Red
-        "description": "Blocked by another issue or dependency"
-    },
-    "status: needs-review": {
+    # Status Labels (without prefix)
+    "triage": {
         "color": "fbca04",  # Yellow
+        "description": "Needs triage"
+    },
+    "in-progress": {
+        "color": "0052cc",  # Blue
+        "description": "Work in progress"
+    },
+    "blocked": {
+        "color": "b60205",  # Red
+        "description": "Blocked by dependency"
+    },
+    "needs-review": {
+        "color": "6f42c1",  # Purple
         "description": "Ready for review"
     },
-    "status: approved": {
+    "approved": {
         "color": "0e8a16",  # Green
         "description": "Approved and ready to merge"
     },
