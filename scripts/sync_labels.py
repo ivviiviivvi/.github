@@ -217,7 +217,7 @@ class LabelSyncManager:
                     existing_label = existing_labels[label_name]
                     needs_update = (
                         existing_label.color.lower() != label_config["color"].lower() or
-                        existing_label.description != label_config["description"]
+                        (existing_label.description or "").strip() != (label_config["description"] or "").strip()
                     )
                     
                     if needs_update:

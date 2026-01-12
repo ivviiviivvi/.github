@@ -36,6 +36,15 @@ for repo in $repos; do
     gh label create "blocked" --repo "$ORG/$repo" --color "b60205" --description "Blocked by dependency" --force 2>/dev/null
     gh label create "needs-review" --repo "$ORG/$repo" --color "6f42c1" --description "Ready for review" --force 2>/dev/null
     gh label create "approved" --repo "$ORG/$repo" --color "0e8a16" --description "Approved and ready to merge" --force 2>/dev/null
+    gh label create "wontfix" --repo "$ORG/$repo" --color "ffffff" --description "This will not be worked on" --force 2>/dev/null
+    gh label create "duplicate" --repo "$ORG/$repo" --color "cfd3d7" --description "This issue or pull request already exists" --force 2>/dev/null
+    gh label create "invalid" --repo "$ORG/$repo" --color "e4e669" --description "This doesn't seem right" --force 2>/dev/null
+    
+    # Category labels
+    gh label create "category: github-actions" --repo "$ORG/$repo" --color "2088ff" --description "Related to GitHub Actions workflows" --force 2>/dev/null
+    gh label create "category: configuration" --repo "$ORG/$repo" --color "e99695" --description "Configuration files or settings" --force 2>/dev/null
+    gh label create "category: dependencies" --repo "$ORG/$repo" --color "0366d6" --description "Dependency updates or issues" --force 2>/dev/null
+    gh label create "category: automated" --repo "$ORG/$repo" --color "bfd4f2" --description "Automated processes or bots" --force 2>/dev/null
     
     # Additional labels
     gh label create "good first issue" --repo "$ORG/$repo" --color "7057ff" --description "Good for newcomers" --force 2>/dev/null
