@@ -8,21 +8,21 @@ contact_links:
       Do NOT create a public issue for high or critical security concerns.
   
   - name: 💬 GitHub Discussions - Questions & Support
-    url: https://github.com/YOUR_ORG/YOUR_REPO/discussions
+    url: https://github.com/ivviiviivvi/.github/discussions
     about: |
       Ask questions, get help, or discuss ideas with the community.
       Use this for general questions that don't require a formal issue.
   
   - name: 📚 Documentation
-    url: https://github.com/YOUR_ORG/YOUR_REPO/wiki
+    url: https://github.com/ivviiviivvi/.github/wiki
     about: |
       Browse the project documentation, guides, and tutorials.
       Check here first before opening an issue.
   
   - name: 🐛 Bug Reports
-    url: /issues/new?template=bug_report.yml
+    url: https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml
     about: Report a bug or unexpected behavior
   
   - name: ✨ Feature Requests
-    url: /issues/new?template=feature_request.yml
+    url: https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml
     about: Suggest a new feature or enhancement
