@@ -90,7 +90,7 @@ jobs:
           # Check if remote branch exists
           if git ls-remote --exit-code --heads origin "$DAILY_BRANCH"; then
             echo "Branch $DAILY_BRANCH already exists."
-            git fetch origin "$DAILY_BRANCH":refs/remotes/origin/"$DAILY_BRANCH"
+            git fetch origin "$DAILY_BRANCH"
             git checkout "$DAILY_BRANCH"
           else
             echo "Creating branch $DAILY_BRANCH from main..."
