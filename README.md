@@ -97,6 +97,9 @@ Our comprehensive automation system handles ALL automated PRs:
 - ✅ **Bulk operations** - Emergency batch actions for large PR volumes from any source
 - ✅ **Auto-conversion** - Draft PRs from AI agents (Jules, Copilot, etc.) automatically become ready
 - ✅ **Smart assignment** - Copilot auto-assigned to all PRs
+- ✅ **AI Assistant Summoning** - @copilot, @claude, @jules automatically notified when PRs are ready
+
+**Recent Enhancement:** Fixed auto-merge workflow to properly summon AI assistants! When draft PRs are automatically converted to ready, the workflow now explicitly requests @copilot as a reviewer, triggers task scanning, and enables auto-merge. See [Draft-to-Ready Fix Documentation](docs/DRAFT_TO_READY_AUTOMATION_FIX.md) for details.
 
 **Quick Start:**
 ```bash
@@ -113,6 +116,7 @@ gh workflow run pr-batch-merge.yml -f batch_label="batch:jules"
 **Learn More:**
 - 📖 [Full Documentation](PR_AUTOMATION_GUIDE.md)
 - ⚡ [Quick Reference](PR_AUTOMATION_QUICK_REF.md)
+- 🔧 [Draft-to-Ready Fix](docs/DRAFT_TO_READY_AUTOMATION_FIX.md)
 - ⚙️ [Configuration](.github/dependabot.yml)
 
 ## Our Mission

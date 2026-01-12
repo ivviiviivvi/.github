@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Dict, List
 import functools
 import concurrent.futures
+import ssl
 
 # Disable warnings globally
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -34,54 +35,57 @@ class OrganizationCrawler:
     LINK_PATTERN = re.compile(r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)')
 
     def __init__(self, github_token: str = None, org_name: str = None, max_workers: int = 10):
-        self.github_token = github_token or os.environ.get('GITHUB_TOKEN')
-        self.org_name = org_name or os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
+        self.github_token = github_token or os.environ.get("GITHUB_TOKEN")
+        self.org_name = org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
         self.max_workers = max_workers
         self.session = requests.Session()
 
         # Optimize connection pool size to match workers
         # Default is 10, which bottlenecks if max_workers > 10
         adapter = HTTPAdapter(pool_connections=max_workers, pool_maxsize=max_workers)
-        self.session.mount('https://', adapter)
-        self.session.mount('http://', adapter)
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
 
+        # Create SSL context once and reuse it
+        self.ssl_context = ssl.create_default_context()
+
+        # Create a single SSL context for reuse
+        # This avoids reloading the system trust store for every request
+        self.ssl_context = ssl.create_default_context()
         # Use urllib3 directly for safe verified requests to IPs
         # Increase num_pools to avoid thrashing when visiting many different hosts
         self.http = urllib3.PoolManager(
             num_pools=max(50, max_workers * 5),
             maxsize=max_workers,
-            cert_reqs='CERT_REQUIRED'
+            cert_reqs="CERT_REQUIRED",
+            ssl_context=self.ssl_context,
         )
 
+        # Optimization: Reuse SSL context to avoid expensive re-initialization per request
+        self.ssl_context = ssl.create_default_context()
+
         if self.github_token:
-            self.session.headers.update({'Authorization': f'token {self.github_token}'})
+            self.session.headers.update({"Authorization": f"token {self.github_token}"})
 
         self.results = {
-            'timestamp': datetime.now(timezone.utc).isoformat(),
-            'organization': self.org_name,
-            'link_validation': {},
-            'repository_health': {},
-            'ecosystem_map': {},
-            'blind_spots': [],
-            'shatter_points': [],
-            'recommendations': []
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "organization": self.org_name,
+            "link_validation": {},
+            "repository_health": {},
+            "ecosystem_map": {},
+            "blind_spots": [],
+            "shatter_points": [],
+            "recommendations": [],
         }
-
-    # Pre-compile regex for performance
-    # Match both [text](url) and bare URLs using a single pass to avoid
-    # incorrect matching of bare URLs inside markdown syntax (e.g. "url)")
-    # Group 1: URL inside markdown link [text](URL) - excludes spaces to avoid malformed URLs
-    # Group 2: Bare URL - excludes closing paren and spaces to avoid trailing punctuation
-    LINK_PATTERN = re.compile(r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)')
 
     def crawl_markdown_files(self, directory: Path) -> Dict[str, List[str]]:
         """Extract all links from markdown files"""
         print(f"🔍 Crawling markdown files in {directory}")
         links_by_file = {}
 
-        for md_file in directory.rglob('*.md'):
+        for md_file in directory.rglob("*.md"):
             try:
-                content = md_file.read_text(encoding='utf-8')
+                content = md_file.read_text(encoding="utf-8")
                 links = self._extract_links(content)
                 if links:
                     links_by_file[str(md_file.relative_to(directory))] = links
@@ -103,26 +107,23 @@ class OrganizationCrawler:
         print("\n🌐 Validating links...")
 
         results = {
-            'total_links': 0,
-            'valid': 0,
-            'broken': 0,
-            'broken_links': [],
-            'warnings': []
+            "total_links": 0,
+            "valid": 0,
+            "broken": 0,
+            "broken_links": [],
+            "warnings": [],
         }
 
         all_links = set()
         for links in links_by_file.values():
             all_links.update(links)
 
-        results['total_links'] = len(all_links)
+        results["total_links"] = len(all_links)
 
         # Filter links efficiently
         # Optimization: Filter WITHOUT sorting to avoid O(M log M).
         # Processing order is irrelevant due to concurrency.
-        links_to_check = [
-            link for link in all_links
-            if link.startswith(('http:', 'https:'))
-        ]
+        links_to_check = [link for link in all_links if link.startswith(("http:", "https:"))]
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers to be respectful but faster than serial
@@ -134,18 +135,18 @@ class OrganizationCrawler:
                 try:
                     status = future.result()
                     if status == 200:
-                        results['valid'] += 1
+                        results["valid"] += 1
                         print(f"  ✓ {link}")
                     elif status == 999:  # Rate limited or blocked
-                        results['warnings'].append({'url': link, 'reason': 'Rate limited or blocked by server'})
+                        results["warnings"].append({"url": link, "reason": "Rate limited or blocked by server"})
                         print(f"  ⚠️  {link} (rate limited)")
                     else:
-                        results['broken'] += 1
-                        results['broken_links'].append({'url': link, 'status': status})
+                        results["broken"] += 1
+                        results["broken_links"].append({"url": link, "status": status})
                         print(f"  ✗ {link} (HTTP {status})")
                 except Exception as exc:
-                    results['broken'] += 1
-                    results['broken_links'].append({'url': link, 'status': f'Exception: {exc}'})
+                    results["broken"] += 1
+                    results["broken_links"].append({"url": link, "status": f"Exception: {exc}"})
                     print(f"  ✗ {link} (Exception: {exc})")
 
         return results
@@ -170,11 +171,21 @@ class OrganizationCrawler:
 
         for ip in ips:
             # Handle IPv6 scope ids if present
-            if '%' in ip:
-                ip = ip.split('%')[0]
+            if "%" in ip:
+                ip = ip.split("%")[0]
             try:
                 ip_obj = ipaddress.ip_address(ip)
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: Explicitly check for all unsafe categories
+                # While is_global handles most, explicit checks are safer for defense-in-depth
+                if (
+                    not ip_obj.is_global
+                    or ip_obj.is_multicast
+                    or ip_obj.is_private
+                    or ip_obj.is_loopback
+                    or ip_obj.is_link_local
+                    or ip_obj.is_reserved
+                    or ip_obj.is_unspecified
+                ):
                     return False
             except ValueError:
                 return False
@@ -196,12 +207,12 @@ class OrganizationCrawler:
 
             for ip in ips:
                 # Handle IPv6 scope ids if present (e.g., fe80::1%en0)
-                if '%' in ip:
-                    ip = ip.split('%')[0]
+                if "%" in ip:
+                    ip = ip.split("%")[0]
 
                 ip_obj = ipaddress.ip_address(ip)
-                # Check if IP is globally reachable and not multicast
-                if not ip_obj.is_global or ip_obj.is_multicast:
+                # Enhanced SSRF protection: block any non-global or multicast IPs
+                if (not ip_obj.is_global) or ip_obj.is_multicast:
                     return False
 
             return True
@@ -233,14 +244,14 @@ class OrganizationCrawler:
                 safe_ip = ips[0]
 
                 # Format IP for URL (IPv6 needs brackets)
-                if ':' in safe_ip:
+                if ":" in safe_ip:
                     safe_ip = f"[{safe_ip}]"
 
                 # Construct URL using IP address
                 # We need to reconstruct the URL replacing the hostname with the IP
                 # parsed.netloc includes user:pass@host:port, so we need to be careful
                 # For simplicity in this crawler context, we'll assume no auth and handle port
-                netloc_parts = parsed.netloc.split('@')[-1].split(':')
+                netloc_parts = parsed.netloc.split("@")[-1].split(":")
                 port_suffix = ""
                 if len(netloc_parts) > 1 and netloc_parts[-1].isdigit():
                     port_suffix = f":{netloc_parts[-1]}"
@@ -252,50 +263,74 @@ class OrganizationCrawler:
                 # Reconstruct URL components
                 new_url_parts = list(parsed)
                 new_url_parts[1] = new_netloc
-                safe_url = urllib.parse.urlunparse(new_url_parts)
+                # safe_url = urllib.parse.urlunparse(new_url_parts)
 
                 headers = {
-                    'User-Agent': 'Mozilla/5.0 GitHub Organization Health Crawler',
-                    'Host': hostname
+                    "User-Agent": "Mozilla/5.0 GitHub Organization Health Crawler",
+                    "Host": hostname,
                 }
 
                 # 5. Make Request
                 # Use urllib3 to connect to safe_ip but verify the TLS certificate against
-                # the original hostname via assert_hostname. This only provides protection
-                # against MITM when the PoolManager is configured with proper CA certificates
-                # and certificate verification enabled. Ensure this behavior is covered by
-                # tests and review the urllib3 TLS/SSL documentation when changing this code.
+                # the original hostname via assert_hostname/server_hostname.
 
-                response = self.http.request(
-                    'HEAD',
-                    safe_url,
-                    timeout=timeout,
-                    retries=False,
-                    headers=headers,
-                    assert_hostname=hostname
-                )
+                # Determine scheme from parsed URL (http or https)
+                scheme = parsed.scheme
+                port = parsed.port
+                if not port:
+                    port = 443 if scheme == "https" else 80
+
+                # Create a temporary connection pool for this specific request
+                # allowing us to verify hostname against the IP connection
+                if scheme == 'https':
+                    # Use system default SSL context to avoid extra dependencies
+                    # Optimization: Reuse pre-initialized SSL context
+                    pool = urllib3.HTTPSConnectionPool(
+                        host=safe_ip,
+                        port=port,
+                        cert_reqs='CERT_REQUIRED',
+                        ssl_context=self.ssl_context,
+                        assert_hostname=hostname,
+                        server_hostname=hostname,
+                    )
+                else:
+                    pool = urllib3.HTTPConnectionPool(host=safe_ip, port=port)
+
+                # The connection pool is configured with the resolved safe_ip as the host,
+                # so for the request we only need to provide the path and query components.
+                # urllib3.request accepts a relative path here, and the pool handles the
+                # actual TCP/SSL connection to the configured host and port.
+                path = parsed.path or "/"
+                url_path = urllib.parse.urlunparse(("", "", path, parsed.params, parsed.query, parsed.fragment))
+
+                response = pool.request("HEAD", url_path, timeout=timeout, retries=False, headers=headers)
 
                 # Handle Redirects
                 if 300 <= response.status < 400:
-                    loc = response.headers.get('Location')
+                    loc = response.headers.get("Location")
                     if not loc:
                         return response.status
                     target = urllib.parse.urljoin(target, loc)
                     continue
 
+                # Optimization: Don't retry if the resource is definitely gone (404/410)
+                # This saves a full GET request for every broken link
+                if response.status in (404, 410):
+                    return response.status
+
                 # Some servers don't support HEAD, try GET
-                if response.status >= 400:
-                    response = self.http.request(
+                # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
+                if response.status >= 400 and response.status != 404:
+                    response = pool.request(
                         'GET',
-                        safe_url,
+                        url_path,
                         timeout=timeout,
                         retries=False,
-                        headers=headers,
-                        assert_hostname=hostname
+                        headers=headers
                     )
                     # If GET returns redirect
                     if 300 <= response.status < 400:
-                        loc = response.headers.get('Location')
+                        loc = response.headers.get("Location")
                         if not loc:
                             return response.status
                         target = urllib.parse.urljoin(target, loc)
@@ -323,50 +358,50 @@ class OrganizationCrawler:
 
         if not self.github_token:
             print("  ⚠️  No GitHub token provided, skipping API calls")
-            return {'error': 'No GitHub token provided'}
+            return {"error": "No GitHub token provided"}
 
         health_metrics = {
-            'repositories': [],
-            'total_repos': 0,
-            'active_repos': 0,
-            'stale_repos': 0,
-            'security_alerts': []
+            "repositories": [],
+            "total_repos": 0,
+            "active_repos": 0,
+            "stale_repos": 0,
+            "security_alerts": [],
         }
 
         try:
             # Get organization repositories
-            api_url = f'https://api.github.com/orgs/{self.org_name}/repos'
-            response = self.session.get(api_url, params={'per_page': 100})
+            api_url = f"https://api.github.com/orgs/{self.org_name}/repos"
+            response = self.session.get(api_url, params={"per_page": 100})
 
             if response.status_code != 200:
-                return {'error': f'API request failed: {response.status_code}'}
+                return {"error": f"API request failed: {response.status_code}"}
 
             repos = response.json()
-            health_metrics['total_repos'] = len(repos)
+            health_metrics["total_repos"] = len(repos)
 
             for repo in repos:
                 repo_health = self._analyze_single_repo(repo)
-                health_metrics['repositories'].append(repo_health)
+                health_metrics["repositories"].append(repo_health)
 
-                if repo_health['is_active']:
-                    health_metrics['active_repos'] += 1
+                if repo_health["is_active"]:
+                    health_metrics["active_repos"] += 1
                 else:
-                    health_metrics['stale_repos'] += 1
+                    health_metrics["stale_repos"] += 1
 
         except Exception as e:
             print(f"  ✗ Error analyzing repositories: {e}")
-            health_metrics['error'] = str(e)
+            health_metrics["error"] = str(e)
 
         return health_metrics
 
     def _analyze_single_repo(self, repo: Dict) -> Dict:
         """Analyze health of a single repository"""
-        name = repo['name']
+        name = repo["name"]
         print(f"  📊 Analyzing {name}...")
 
         # Calculate days since last update
         try:
-            updated_at = datetime.fromisoformat(repo['updated_at'].replace('Z', '+00:00'))
+            updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
             if updated_at.tzinfo is None:
                 updated_at = updated_at.replace(tzinfo=timezone.utc)
 
@@ -377,16 +412,16 @@ class OrganizationCrawler:
             days_since_update = 999  # Assume stale if date parsing fails
 
         return {
-            'name': name,
-            'full_name': repo['full_name'],
-            'is_active': days_since_update < 90,
-            'days_since_update': days_since_update,
-            'stars': repo.get('stargazers_count', 0),
-            'open_issues': repo.get('open_issues_count', 0),
-            'language': repo.get('language', 'Unknown'),
-            'has_wiki': repo.get('has_wiki', False),
-            'has_pages': repo.get('has_pages', False),
-            'visibility': repo.get('visibility', 'public')
+            "name": name,
+            "full_name": repo["full_name"],
+            "is_active": days_since_update < 90,
+            "days_since_update": days_since_update,
+            "stars": repo.get("stargazers_count", 0),
+            "open_issues": repo.get("open_issues_count", 0),
+            "language": repo.get("language", "Unknown"),
+            "has_wiki": repo.get("has_wiki", False),
+            "has_pages": repo.get("has_pages", False),
+            "visibility": repo.get("visibility", "public"),
         }
 
     def map_ecosystem(self, base_dir: Path) -> Dict:
@@ -394,48 +429,48 @@ class OrganizationCrawler:
         print("\n🗺️  Mapping ecosystem...")
 
         ecosystem = {
-            'workflows': [],
-            'copilot_agents': [],
-            'copilot_instructions': [],
-            'copilot_prompts': [],
-            'copilot_chatmodes': [],
-            'technologies': set(),
-            'integrations': set()
+            "workflows": [],
+            "copilot_agents": [],
+            "copilot_instructions": [],
+            "copilot_prompts": [],
+            "copilot_chatmodes": [],
+            "technologies": set(),
+            "integrations": set(),
         }
 
         # Scan workflows
-        workflows_dir = base_dir / '.github' / 'workflows'
+        workflows_dir = base_dir / ".github" / "workflows"
         if workflows_dir.exists():
-            for workflow_file in workflows_dir.glob('*.yml'):
-                ecosystem['workflows'].append(workflow_file.name)
+            for workflow_file in workflows_dir.glob("*.yml"):
+                ecosystem["workflows"].append(workflow_file.name)
 
         # Scan Copilot customizations
-        agents_dir = base_dir / 'agents'
+        agents_dir = base_dir / "agents"
         if agents_dir.exists():
-            for agent_file in agents_dir.glob('*.md'):
-                ecosystem['copilot_agents'].append(agent_file.stem)
+            for agent_file in agents_dir.glob("*.md"):
+                ecosystem["copilot_agents"].append(agent_file.stem)
 
-        instructions_dir = base_dir / 'instructions'
+        instructions_dir = base_dir / "instructions"
         if instructions_dir.exists():
-            for instruction_file in instructions_dir.glob('*.md'):
-                ecosystem['copilot_instructions'].append(instruction_file.stem)
+            for instruction_file in instructions_dir.glob("*.md"):
+                ecosystem["copilot_instructions"].append(instruction_file.stem)
                 # Extract technology from filename
-                tech = instruction_file.stem.split('.')[0]
-                ecosystem['technologies'].add(tech)
+                tech = instruction_file.stem.split(".")[0]
+                ecosystem["technologies"].add(tech)
 
-        prompts_dir = base_dir / 'prompts'
+        prompts_dir = base_dir / "prompts"
         if prompts_dir.exists():
-            for prompt_file in prompts_dir.glob('*.md'):
-                ecosystem['copilot_prompts'].append(prompt_file.stem)
+            for prompt_file in prompts_dir.glob("*.md"):
+                ecosystem["copilot_prompts"].append(prompt_file.stem)
 
-        chatmodes_dir = base_dir / 'chatmodes'
+        chatmodes_dir = base_dir / "chatmodes"
         if chatmodes_dir.exists():
-            for chatmode_file in chatmodes_dir.glob('*.md'):
-                ecosystem['copilot_chatmodes'].append(chatmode_file.stem)
+            for chatmode_file in chatmodes_dir.glob("*.md"):
+                ecosystem["copilot_chatmodes"].append(chatmode_file.stem)
 
         # Convert sets to lists for JSON serialization
-        ecosystem['technologies'] = sorted(list(ecosystem['technologies']))
-        ecosystem['integrations'] = sorted(list(ecosystem['integrations']))
+        ecosystem["technologies"] = sorted(list(ecosystem["technologies"]))
+        ecosystem["integrations"] = sorted(list(ecosystem["integrations"]))
 
         return ecosystem
 
@@ -446,27 +481,31 @@ class OrganizationCrawler:
         blind_spots = []
 
         # Check for repositories without recent activity
-        if 'repositories' in health:
-            stale_repos = [r for r in health['repositories'] if not r['is_active']]
+        if "repositories" in health:
+            stale_repos = [r for r in health["repositories"] if not r["is_active"]]
             if stale_repos:
-                blind_spots.append({
-                    'category': 'Stale Repositories',
-                    'severity': 'medium',
-                    'description': f'Found {len(stale_repos)} repositories with no activity in 90+ days',
-                    'affected_items': [r['name'] for r in stale_repos[:5]]
-                })
+                blind_spots.append(
+                    {
+                        "category": "Stale Repositories",
+                        "severity": "medium",
+                        "description": f"Found {len(stale_repos)} repositories with no activity in 90+ days",
+                        "affected_items": [r["name"] for r in stale_repos[:5]],
+                    }
+                )
 
         # Check for missing documentation
         # This would need actual file checking in the implementation
 
         # Check for workflow coverage
-        if len(ecosystem.get('workflows', [])) < 5:
-            blind_spots.append({
-                'category': 'CI/CD Coverage',
-                'severity': 'low',
-                'description': 'Limited GitHub Actions workflows detected',
-                'recommendation': 'Consider adding more automation workflows'
-            })
+        if len(ecosystem.get("workflows", [])) < 5:
+            blind_spots.append(
+                {
+                    "category": "CI/CD Coverage",
+                    "severity": "low",
+                    "description": "Limited GitHub Actions workflows detected",
+                    "recommendation": "Consider adding more automation workflows",
+                }
+            )
 
         return blind_spots
 
@@ -477,17 +516,19 @@ class OrganizationCrawler:
         shatter_points = []
 
         # Check for critical workflows without backups
-        critical_workflows = ['ci.yml', 'security-scan.yml', 'deployment.yml']
-        existing_workflows = ecosystem.get('workflows', [])
+        critical_workflows = ["ci.yml", "security-scan.yml", "deployment.yml"]
+        existing_workflows = ecosystem.get("workflows", [])
 
         for critical in critical_workflows:
             if critical not in existing_workflows:
-                shatter_points.append({
-                    'category': 'Missing Critical Workflow',
-                    'severity': 'high',
-                    'description': f'Critical workflow {critical} not found',
-                    'recommendation': f'Implement {critical} to ensure automated {critical.split(".")[0]}'
-                })
+                shatter_points.append(
+                    {
+                        "category": "Missing Critical Workflow",
+                        "severity": "high",
+                        "description": f"Critical workflow {critical} not found",
+                        "recommendation": f'Implement {critical} to ensure automated {critical.split(".")[0]}',
+                    }
+                )
 
         return shatter_points
 
@@ -500,12 +541,12 @@ class OrganizationCrawler:
 
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        with open(report_path, 'w') as f:
+        with open(report_path, "w") as f:
             json.dump(self.results, f, indent=2, default=str)
 
         # Also generate a markdown summary
         md_report = self._generate_markdown_report()
-        md_path = output_dir / report_filename.replace('.json', '.md')
+        md_path = output_dir / report_filename.replace(".json", ".md")
         md_path.write_text(md_report)
 
         print(f"  ✓ Report saved to {report_path}")
@@ -523,23 +564,23 @@ Organization: {self.results['organization']}
 
 """
 
-        if 'link_validation' in self.results and self.results['link_validation']:
-            lv = self.results['link_validation']
+        if "link_validation" in self.results and self.results["link_validation"]:
+            lv = self.results["link_validation"]
             report += f"""- **Total Links**: {lv.get('total_links', 0)}
 - **Valid**: {lv.get('valid', 0)}
 - **Broken**: {lv.get('broken', 0)}
 - **Warnings**: {len(lv.get('warnings', []))}
 """
 
-            if lv.get('broken_links'):
+            if lv.get("broken_links"):
                 report += "\n### Broken Links\n\n"
-                for broken in lv['broken_links'][:10]:
+                for broken in lv["broken_links"][:10]:
                     report += f"- `{broken['url']}` (HTTP {broken['status']})\n"
 
         report += "\n## 🏥 Repository Health\n\n"
 
-        if 'repository_health' in self.results and self.results['repository_health']:
-            rh = self.results['repository_health']
+        if "repository_health" in self.results and self.results["repository_health"]:
+            rh = self.results["repository_health"]
             report += f"""- **Total Repositories**: {rh.get('total_repos', 0)}
 - **Active** (updated within 90 days): {rh.get('active_repos', 0)}
 - **Stale** (90+ days): {rh.get('stale_repos', 0)}
@@ -547,8 +588,8 @@ Organization: {self.results['organization']}
 
         report += "\n## 🗺️  Ecosystem Map\n\n"
 
-        if 'ecosystem_map' in self.results and self.results['ecosystem_map']:
-            em = self.results['ecosystem_map']
+        if "ecosystem_map" in self.results and self.results["ecosystem_map"]:
+            em = self.results["ecosystem_map"]
             report += f"""- **GitHub Actions Workflows**: {len(em.get('workflows', []))}
 - **Copilot Agents**: {len(em.get('copilot_agents', []))}
 - **Copilot Instructions**: {len(em.get('copilot_instructions', []))}
@@ -559,24 +600,24 @@ Organization: {self.results['organization']}
 
         report += "\n## 🔦 Blind Spots\n\n"
 
-        blind_spots = self.results.get('blind_spots', [])
+        blind_spots = self.results.get("blind_spots", [])
         if blind_spots:
             for spot in blind_spots:
                 report += f"### {spot.get('category')} ({spot.get('severity', 'unknown')})\n\n"
                 report += f"{spot.get('description')}\n\n"
-                if 'recommendation' in spot:
+                if "recommendation" in spot:
                     report += f"**Recommendation**: {spot['recommendation']}\n\n"
         else:
             report += "No significant blind spots detected.\n\n"
 
         report += "\n## 💥 Shatter Points\n\n"
 
-        shatter_points = self.results.get('shatter_points', [])
+        shatter_points = self.results.get("shatter_points", [])
         if shatter_points:
             for point in shatter_points:
                 report += f"### {point.get('category')} ({point.get('severity', 'unknown')})\n\n"
                 report += f"{point.get('description')}\n\n"
-                if 'recommendation' in point:
+                if "recommendation" in point:
                     report += f"**Recommendation**: {point['recommendation']}\n\n"
         else:
             report += "No critical shatter points detected.\n\n"
@@ -592,30 +633,30 @@ Organization: {self.results['organization']}
 
         # 1. Map ecosystem (AI-GH-06)
         ecosystem = self.map_ecosystem(base_dir)
-        self.results['ecosystem_map'] = ecosystem
+        self.results["ecosystem_map"] = ecosystem
 
         # 2. Analyze repository health (AI-GH-07)
         health = self.analyze_repository_health()
-        self.results['repository_health'] = health
+        self.results["repository_health"] = health
 
         # 3. Crawl and validate links (AI-GH-05 & AI-GH-07)
         if validate_external_links:
             links_by_file = self.crawl_markdown_files(base_dir)
             link_validation = self.validate_links(links_by_file)
-            self.results['link_validation'] = link_validation
+            self.results["link_validation"] = link_validation
         else:
             print("\n🌐 Skipping external link validation (use --validate-links to enable)")
 
         # 4. Identify blind spots (AI-GH-08-A)
         blind_spots = self.identify_blind_spots(ecosystem, health)
-        self.results['blind_spots'] = blind_spots
+        self.results["blind_spots"] = blind_spots
 
         # 5. Identify shatter points (AI-GH-08-B)
         shatter_points = self.identify_shatter_points(ecosystem)
-        self.results['shatter_points'] = shatter_points
+        self.results["shatter_points"] = shatter_points
 
         # 6. Generate report
-        report_path = self.generate_report(base_dir / 'reports')
+        report_path = self.generate_report(base_dir / "reports")
 
         print(f"\n✨ Analysis complete! Report saved to: {report_path}")
 
@@ -626,43 +667,63 @@ def main():
     """Main entry point"""
     import argparse
 
-    parser = argparse.ArgumentParser(description='GitHub Organization Health Crawler')
-    parser.add_argument('--base-dir', type=Path, default=Path.cwd(),
-                        help='Base directory to analyze (default: current directory)')
-    parser.add_argument('--validate-links', action='store_true',
-                        help='Validate external links (may be slow)')
-    parser.add_argument('--github-token', type=str,
-                        help='GitHub API token (or set GITHUB_TOKEN env var)')
-    parser.add_argument('--org-name', type=str,
-                        help='GitHub organization name (or set from GITHUB_REPOSITORY)')
-    parser.add_argument('--max-workers', type=int, default=10,
-                        help='Maximum number of threads for link validation (default: 10)')
+    parser = argparse.ArgumentParser(description="GitHub Organization Health Crawler")
+    parser.add_argument(
+        "--base-dir",
+        type=Path,
+        default=Path.cwd(),
+        help="Base directory to analyze (default: current directory)",
+    )
+    parser.add_argument(
+        "--validate-links",
+        action="store_true",
+        help="Validate external links (may be slow)",
+    )
+    parser.add_argument(
+        "--github-token",
+        type=str,
+        help="GitHub API token (or set GITHUB_TOKEN env var)",
+    )
+    parser.add_argument(
+        "--org-name",
+        type=str,
+        help="GitHub organization name (or set from GITHUB_REPOSITORY)",
+    )
+    parser.add_argument(
+        "--max-workers",
+        type=int,
+        default=10,
+        help="Maximum number of threads for link validation (default: 10)",
+    )
 
     args = parser.parse_args()
 
     crawler = OrganizationCrawler(
         github_token=args.github_token,
         org_name=args.org_name,
-        max_workers=args.max_workers
+        max_workers=args.max_workers,
     )
 
-    results = crawler.run_full_analysis(
-        base_dir=args.base_dir,
-        validate_external_links=args.validate_links
-    )
+    results = crawler.run_full_analysis(base_dir=args.base_dir, validate_external_links=args.validate_links)
 
     # Print summary
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 SUMMARY")
-    print("="*60)
+    print("=" * 60)
 
-    if 'ecosystem_map' in results:
-        em = results['ecosystem_map']
+    if "ecosystem_map" in results:
+        em = results["ecosystem_map"]
         print(f"Workflows: {len(em.get('workflows', []))}")
-        print(f"Copilot Customizations: {len(em.get('copilot_agents', [])) + len(em.get('copilot_instructions', [])) + len(em.get('copilot_prompts', [])) + len(em.get('copilot_chatmodes', []))}")
+    copilot_count = (
+        len(em.get("copilot_agents", []))
+        + len(em.get("copilot_instructions", []))
+        + len(em.get("copilot_prompts", []))
+        + len(em.get("copilot_chatmodes", []))
+        )
+    print(f"Copilot Customizations: {copilot_count}")
 
-    if 'repository_health' in results and 'total_repos' in results['repository_health']:
-        rh = results['repository_health']
+    if "repository_health" in results and "total_repos" in results["repository_health"]:
+        rh = results["repository_health"]
         print(f"Total Repositories: {rh.get('total_repos', 0)}")
         print(f"Active Repositories: {rh.get('active_repos', 0)}")
 
@@ -672,5 +733,5 @@ def main():
     print("\n✨ Organization is coming to life!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

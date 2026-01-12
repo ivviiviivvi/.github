@@ -23,7 +23,6 @@ jobs:
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
           python-version: '3.x'
-          cache: 'pip'
 
       - name: Install dependencies
         run: pip install croniter
@@ -31,7 +30,10 @@ jobs:
       - name: Run Orchestrator
         id: orchestrator
         run: |
+          python3 << 'EOF'
+          python << 'EOF'
           import json
+          import os
           from datetime import datetime
           from croniter import croniter
 
@@ -57,7 +59,14 @@ jobs:
           # Correctly format the JSON for the output
           due_tasks_json = json.dumps({"tasks": due_tasks})
           print(due_tasks_json)
-          echo "due_tasks=$due_tasks_json" >> $GITHUB_OUTPUT
+          
+          # Write to GITHUB_OUTPUT
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('due_tasks<<EOF\n')
+              f.write(f"{due_tasks_json}\n")
+              f.write('EOF\n')
+              f.write(f"due_tasks={due_tasks_json}\n")
+          EOF
 
       - name: Dispatch Due Tasks
         if: steps.orchestrator.outputs.due_tasks != '{"tasks":[]}'

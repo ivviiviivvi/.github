@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Setup Ruby"
-        uses: ruby/setup-ruby@ec7e310c65d9e8db3f9815b99a10a8e18f3b72dc # ratchet:ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@d5f787ce339eb0767271bc01d922e85644c2c8ab # ratchet:ruby/setup-ruby@v1.280.0
         with:
           ruby-version: "3.2"
           bundler-cache: true
@@ -246,15 +246,45 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: write
 
     steps:
+      - name: "Check if gh-pages branch exists"
+        id: check_branch
+        run: |
+          if git ls-remote --exit-code --heads ${{ github.server_url }}/${{ github.repository }} gh-pages >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✓ gh-pages branch exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ gh-pages branch does not exist, skipping cleanup"
+          fi
+
       - name: "Checkout repository"
+        if: steps.check_branch.outputs.exists == 'true'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: gh-pages
+
+      - name: "Check if gh-pages branch exists"
+        id: check_branch
+        run: |
+          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✓ gh-pages branch exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ gh-pages branch does not exist, skipping cleanup"
+          fi
+
+      - name: "Checkout gh-pages branch"
+        if: steps.check_branch.outputs.exists == 'true'
+        run: |
+          git checkout gh-pages
 
       - name: "Cleanup old builds"
+        if: steps.check_branch.outputs.exists == 'true'
         run: |
           echo "🧹 Cleaning up old builds (90-day retention)..."
 

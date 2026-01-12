@@ -23,6 +23,43 @@ class EcosystemVisualizer:
     # Users can adjust this value if needed based on their diagram rendering environment.
     MAX_DIAGRAM_WORKFLOWS = 10
 
+    # Technology Icons Mapping
+    TECHNOLOGY_ICONS = {
+        'python': '🐍',
+        'javascript': '🟨',
+        'typescript': '🔷',
+        'docker': '🐳',
+        'json': '📦',
+        'yaml': '📝',
+        'markdown': '📄',
+        'html': '🌐',
+        'css': '🎨',
+        'bash': '🐚',
+        'shell': '🐚',
+        'go': '🐹',
+        'rust': '🦀',
+        'java': '☕',
+        'c++': '🔵',
+        'c#': '#️⃣',
+        'ruby': '💎',
+        'php': '🐘',
+        'swift': '🐦',
+        'kotlin': '🎯',
+    }
+
+    # UX Improvement: Centralized workflow categories with consistent emojis
+    WORKFLOW_CATEGORIES = {
+        '🛡️': 'Safeguards',
+        '🔐': 'Security',
+        '♻️': 'Reusable',
+        '🤖': 'AI Agents',
+        '🚀': 'CI/CD',
+        '🔀': 'PR Management',
+        '⏱️': 'Scheduled',
+        '💓': 'Health',
+        '⚙️': 'Utility & Other'
+    }
+
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
         self.report_data = None
@@ -190,11 +227,12 @@ graph TD
 
             emoji = {'CRITICAL': '🔴', 'HIGH': '🔴', 'MEDIUM': '🟡', 'LOW': '🟢'}.get(severity, '⚪')
 
-            parts.append(f"{emoji} **{category}** ({severity})\n")
+            # UX Improvement: Use blockquotes for better visual distinction
+            parts.append(f"> {emoji} **{category}** ({severity})\n")
             for item in grouped_items:
-                parts.append(f"  - {item.get('description')}\n")
+                parts.append(f"> - {item.get('description')}\n")
                 if 'recommendation' in item:
-                    parts.append(f"    - 💡 {item['recommendation']}\n")
+                    parts.append(f">   - 💡 *{item['recommendation']}*\n")
             parts.append("\n")
 
         return parts
@@ -254,7 +292,7 @@ graph TD
 | 🛠️  Technologies Supported | {len(em.get('technologies', []))} |
 
 """)
-        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Repository health
         parts.append("## 🏥 Repository Health\n\n")
@@ -286,7 +324,7 @@ graph TD
             error = self.report_data.get('repository_health', {}).get('error', 'No data available')
             parts.append(f"⚠️ **Data Unavailable**: {error}\n\n")
 
-        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Link validation
         parts.append("## 🔗 Link Health\n\n")
@@ -344,7 +382,7 @@ graph TD
         else:
             parts.append("ℹ️ **No Data**: External link validation was skipped or found no links.\n\n")
 
-        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Alerts
         blind_spots = self.report_data.get('blind_spots', [])
@@ -363,7 +401,7 @@ graph TD
                 parts.append(f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n")
                 parts.extend(self._render_grouped_section(shatter_points))
 
-        parts.append("[Back to Top](#organization-ecosystem-dashboard)\n\n")
+        parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
 
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
@@ -377,7 +415,8 @@ graph TD
                 parts.append(f"All {len(workflows)} workflows are listed in the [Active Workflows](#-active-workflows) section.*\n\n")
         
         parts.append(self.generate_mermaid_diagram(output_path))
-        parts.append("\n[Back to Top](#organization-ecosystem-dashboard)\n")
+        parts.append("\n**Legend:** 🔵 Organization | 🟣 Workflow | 🟢 AI Agent | 🔘 Technology\n")
+        parts.append("\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Technology coverage
         parts.append(f"\n## 🛠️  Technology Coverage\n\n")
@@ -391,7 +430,8 @@ graph TD
                 # UX Improvement: Use list for small numbers, table for large to avoid empty cells
                 if len(technologies) <= 5:
                     for tech in technologies:
-                        parts.append(f"- `{tech}`\n")
+                        icon = self.TECHNOLOGY_ICONS.get(tech.lower(), '🔹')
+                        parts.append(f"- {icon} `{tech}`\n")
                     parts.append("\n")
                 else:
                     parts.append(f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n")
@@ -406,7 +446,13 @@ graph TD
                         if current_len < cols:
                             row_techs.extend([""] * (cols - current_len))
 
-                        formatted_cells = [f"`{t}`" if t else "" for t in row_techs]
+                        formatted_cells = []
+                        for t in row_techs:
+                            if t:
+                                icon = self.TECHNOLOGY_ICONS.get(t.lower(), '🔹')
+                                formatted_cells.append(f"{icon} `{t}`")
+                            else:
+                                formatted_cells.append("")
                         parts.append("| " + " | ".join(formatted_cells) + " |\n")
 
                         if i == 0:
@@ -418,7 +464,7 @@ graph TD
         else:
              parts.append("No technology data available.\n")
 
-        parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
+        parts.append(f"\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Top workflows
         parts.append(f"\n## ⚙️  Active Workflows\n\n")
@@ -429,8 +475,14 @@ graph TD
             if workflows:
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
-                
+
+                # UX Improvement: Single source of truth for legend, using interpunct for cleaner look
+                legend_items = [f"{emoji} {name}" for emoji, name in self.WORKFLOW_CATEGORIES.items()]
+                legend_string = " · ".join(legend_items)
+                parts.append(f"> **Legend:** {legend_string}\n\n")
+
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
+
                 # UX Improvement: Use table with indices for better scannability and reference
                 parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
 
@@ -458,13 +510,46 @@ graph TD
 
                     # Link to the workflow file with calculated relative path
                     parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
-                parts.append("\n</details>\n")
+                parts.append("\n")
+
+                # Group workflows by category
+                categories = [
+                    ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
+                    ('🔐 Security', lambda n: any(k in n for k in ('security', 'scan', 'codeql', 'semgrep', 'secret'))),
+                    ('♻️ Reusable Workflows', lambda n: 'reusable' in n),
+                    ('🤖 AI Agents & Automation', lambda n: any(k in n for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-'))),
+                    ('🚀 CI/CD & Deployment', lambda n: any(k in n for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker'))),
+                    ('🔀 PR Management', lambda n: any(k in n for k in ('pr-', 'pull-request', 'merge'))),
+                    ('⏱️ Scheduled Tasks', lambda n: any(k in n for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly'))),
+                    ('💓 Health & Metrics', lambda n: any(k in n for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report'))),
+                    ('⚙️ Utility & Other', lambda n: True) # Fallback
+                ]
+
+                # Assign workflows to categories (first match wins)
+                grouped = {cat[0]: [] for cat in categories}
+                for w in sorted(workflows):
+                    name = w.lower()
+                    for label, matcher in categories:
+                        if matcher(name):
+                            grouped[label].append(w)
+                            break
+
+                # Render categories
+                for label, items in grouped.items():
+                    if items:
+                        parts.append(f"### {label}\n\n")
+                        parts.append("| Workflow | Action |\n|---|---|\n")
+                        for w in items:
+                             parts.append(f"| `{w}` | [View]({workflow_path}{w}) |\n")
+                        parts.append("\n")
+
+                parts.append("</details>\n")
             else:
                  parts.append("No active workflows detected.\n")
         else:
              parts.append("No workflow data available.\n")
 
-        parts.append(f"\n[Back to Top](#organization-ecosystem-dashboard)\n")
+        parts.append(f"\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
 
         parts.append("\n---\n\n")
         parts.append("*Dashboard generated by Ecosystem Visualizer*\n")

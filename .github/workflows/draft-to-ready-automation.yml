@@ -2,7 +2,7 @@ name: Draft to Ready PR Automation
 
 on:
   pull_request:
-    types: [opened, synchronize, converted_to_draft]
+    types: [opened, synchronize, converted_to_draft, ready_for_review]
   check_suite:
     types: [completed]
   workflow_dispatch:
@@ -81,6 +81,12 @@ jobs:
             core.setOutput('author', pr.user.login);
             core.setOutput('title', pr.title);
             core.setOutput('head_sha', pr.head.sha);
+            
+            // Check if this is a manual ready_for_review event
+            const isReadyForReview = context.payload.action === 'ready_for_review';
+            core.setOutput('is_ready_for_review_event', isReadyForReview.toString());
+            
+            console.log(`Event: ${context.payload.action}, Manual conversion: ${isReadyForReview}`);
             
             return pr;
 
@@ -231,16 +237,21 @@ jobs:
             }
 
       - name: Post Conversion Comment
-        if: steps.convert.outputs.converted == 'true'
+        if: |
+          steps.convert.outputs.converted == 'true' ||
+          (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
             const prNumber = ${{ steps.pr-details.outputs.number }};
             const isTrustedAgent = '${{ steps.should-convert.outputs.is-trusted-agent }}' === 'true';
             const checksPassed = '${{ steps.check-status.outputs.checks-passed }}' === 'true';
+            const isManualConversion = '${{ steps.pr-details.outputs.is_ready_for_review_event }}' === 'true';
             
             let reason = '';
-            if (isTrustedAgent) {
+            if (isManualConversion) {
+              reason = '✅ Manually converted to ready for review';
+            } else if (isTrustedAgent) {
               reason = '✅ Trusted AI agent/bot PR';
             } else {
               reason = '✅ Marked for auto-ready';
@@ -253,15 +264,19 @@ jobs:
               statusInfo = '\n\n⏳ **Checks running** - PR will be ready for merge once checks pass';
             }
             
+            const conversionType = isManualConversion ? 'manually converted' : 'automatically converted';
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `🚀 Draft PR Auto-Converted to Ready\n\n${reason}\n\nThis PR has been automatically converted from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
+              body: `🚀 Draft PR ${isManualConversion ? 'Converted' : 'Auto-Converted'} to Ready\n\n${reason}\n\nThis PR has been ${conversionType} from draft to ready for review.${statusInfo}\n\nNext Steps:\n1. Review changes and ensure everything looks good\n2. Wait for CI checks to complete (if not already done)\n3. AI assistants and GitHub Apps have been notified (see comment below)\n4. The auto-merge workflow will handle merging when ready\n\nTo prevent auto-conversion:\n- Add the keep-draft label to PRs you want to keep as draft\n- Add the skip-auto-ready label\n\n_Automated by [draft-to-ready-automation.yml](../.github/workflows/draft-to-ready-automation.yml)_`
             });
 
       - name: Add Auto-Merge Label
-        if: steps.convert.outputs.converted == 'true'
+        if: |
+          steps.convert.outputs.converted == 'true' ||
+          (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
@@ -277,9 +292,120 @@ jobs:
             
             console.log('Added auto-merge and auto-converted labels');
 
+      - name: Request Reviews and Notify AI Assistants
+        if: |
+          steps.convert.outputs.converted == 'true' ||
+          (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            
+            console.log('🤖 Requesting reviews and notifying AI assistants for PR #' + prNumber);
+            
+            // List of potential GitHub App reviewers to request
+            const appReviewers = ['copilot'];
+            
+            // Request review from GitHub App reviewers
+            for (const reviewer of appReviewers) {
+              try {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  reviewers: [reviewer]
+                });
+                console.log(`✅ Successfully requested review from @${reviewer}`);
+                
+                // Also assign as assignee
+                await github.rest.issues.addAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  assignees: [reviewer]
+                });
+                console.log(`✅ Assigned @${reviewer} to PR`);
+              } catch (error) {
+                console.log(`⚠️ Could not request @${reviewer} review: ${error.message}`);
+              }
+            }
+            
+            // Post a comment to notify mention-based AI assistants
+            // These assistants are triggered by mentions in comments
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: `🤖 **AI Assistants Available**
+            
+            This PR has been automatically converted from draft to ready for review.
+            
+            **Available AI Assistants:**
+            - @copilot - GitHub Copilot (requested as reviewer)
+            - @claude - Claude AI (mention to summon: \`@claude review\`)
+            - @jules - Jules AI (mention to summon: \`@jules help\`)
+            - @gemini-cli - Gemini AI (mention to summon: \`@gemini-cli /review\`)
+            
+            **Other Integrated Apps:**
+            All GitHub Apps and integrations with permissions to this repository can now interact with this PR.
+            
+            *Note: This is an automated notification. AI assistants that work via mentions will respond when explicitly called.*`
+              });
+              console.log('✅ Posted AI assistant availability notification');
+            } catch (error) {
+              console.log(`⚠️ Could not post notification comment: ${error.message}`);
+            }
+
+      - name: Trigger PR Task Catcher
+        if: |
+          steps.convert.outputs.converted == 'true' ||
+          (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            const prNumber = ${{ steps.pr-details.outputs.number }};
+            
+            console.log('📋 Triggering pr-task-catcher workflow for PR #' + prNumber);
+            
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'pr-task-catcher.yml',
+                ref: 'main',
+                inputs: {
+                  pr_number: prNumber.toString()
+                }
+              });
+              console.log('✅ Successfully triggered pr-task-catcher workflow');
+            } catch (error) {
+              console.log(`⚠️ Could not trigger pr-task-catcher: ${error.message}`);
+            }
+
+      - name: Enable Auto-Merge via GitHub CLI
+        if: |
+          steps.convert.outputs.converted == 'true' ||
+          (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ steps.pr-details.outputs.number }}
+          
+          echo "🤖 Attempting to enable auto-merge for PR #$PR_NUMBER"
+          
+          # Try to enable auto-merge (may fail if checks not complete yet)
+          if gh pr merge --auto --squash "https://github.com/${{ github.repository }}/pull/$PR_NUMBER" 2>/dev/null; then
+            echo "✅ Auto-merge enabled successfully"
+          else
+            echo "⏳ Auto-merge not ready yet (checks may not be complete)"
+            echo "The auto-merge workflow will handle this when ready"
+          fi
+
       - name: Wait for Checks (if needed)
         if: |
-          steps.convert.outputs.converted == 'true' &&
+          (steps.convert.outputs.converted == 'true' ||
+           (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')) &&
           steps.check-status.outputs.checks-passed != 'true'
         run: |
           echo "⏳ PR converted to ready. Checks will run and auto-merge will proceed when they pass."

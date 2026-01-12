@@ -239,7 +239,7 @@ jobs:
 
       - name: "Extract metadata"
         id: meta
-        uses: docker/metadata-action@902be83e3f8ac51c98dcdb7c16e28e98b0f11f1f # ratchet:docker/metadata-action@v5
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # ratchet:docker/metadata-action@v5.5.1
         with:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}

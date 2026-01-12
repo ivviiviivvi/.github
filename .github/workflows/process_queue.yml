@@ -49,10 +49,18 @@ jobs:
                   issue_number=$(echo "$task" | jq -r '.issue_number')
                   pr_url=$(echo "$task" | jq -r '.pr_url')
                   if [ -n "$issue_number" ] && [ "$issue_number" != "null" ]; then
-                    inputs=" -f issue_number=$issue_number"
+                    if [[ "$issue_number" =~ ^[0-9]+$ ]]; then
+                      inputs=" -f issue_number=$issue_number"
+                    else
+                      echo "Invalid issue_number: $issue_number"
+                    fi
                   elif [ -n "$pr_url" ] && [ "$pr_url" != "null" ]; then
                     pr_number=$(basename "$pr_url")
-                    inputs=" -f pr_number=$pr_number"
+                    if [[ "$pr_number" =~ ^[0-9]+$ ]]; then
+                      inputs=" -f pr_number=$pr_number"
+                    else
+                      echo "Invalid pr_number: $pr_number"
+                    fi
                   fi
                 fi
                 gh workflow run "$workflow_file" --ref ${{ github.ref }}$inputs
