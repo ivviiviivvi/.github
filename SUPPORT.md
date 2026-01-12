@@ -67,14 +67,13 @@ Before asking for help, please:
 ### Tutorials and Examples
 
 - **[Examples Repository](examples/)** - Code examples and templates
-- **[Video Tutorials](https://youtube.com/@ivviiviivvi)** - Video walkthroughs
-- **[Blog Posts](https://blog.ivviiviivvi.com)** - Articles and tutorials
+- **[Video Tutorials](https://youtube.com/@ivviiviivvi)** - Video walkthroughs (coming soon)
 
 ### External Resources
 
-- **[Stack Overflow](https://stackoverflow.com/questions/tagged/ivviiviivvi)** - Community Q&A
-- **[Reddit Community](https://reddit.com/r/ivviiviivvi)** - Community discussions
-- **[Discord Server](https://discord.gg/ivviiviivvi)** - Real-time chat
+- **Community Q&A** - Stack Overflow support (coming soon)
+- **Community Discussions** - Reddit community (coming soon)  
+- **Real-time Chat** - Discord server (coming soon)
 
 ## FAQ
 
@@ -243,7 +242,6 @@ For enterprise support, training, or consulting:
 
 - **Email**: enterprise@ivviiviivvi.com
 - **Website**: https://ivviiviivvi.com/support
-- **Phone**: +1 (555) 123-4567
 
 ### Enterprise Support Includes
 
