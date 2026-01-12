@@ -49,6 +49,9 @@ class OrganizationCrawler:
         # Create SSL context once and reuse it
         self.ssl_context = ssl.create_default_context()
 
+        # Create a single SSL context for reuse
+        # This avoids reloading the system trust store for every request
+        self.ssl_context = ssl.create_default_context()
         # Use urllib3 directly for safe verified requests to IPs
         # Increase num_pools to avoid thrashing when visiting many different hosts
         self.http = urllib3.PoolManager(
@@ -318,7 +321,13 @@ class OrganizationCrawler:
                 # Some servers don't support HEAD, try GET
                 # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
                 if response.status >= 400 and response.status != 404:
-                    response = self.http.request("GET", url_path, timeout=timeout, retries=False, headers=headers)
+                    response = pool.request(
+                        'GET',
+                        url_path,
+                        timeout=timeout,
+                        retries=False,
+                        headers=headers
+                    )
                     # If GET returns redirect
                     if 300 <= response.status < 400:
                         loc = response.headers.get("Location")
