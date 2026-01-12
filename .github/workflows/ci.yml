@@ -50,7 +50,7 @@ jobs:
       
       - name: Run pre-commit hooks
         run: |
-          pre-commit run --all-files --show-diff-on-failure || true
+          pre-commit run --all-files --show-diff-on-failure
       
       - name: Lint summary
         if: always()
@@ -86,10 +86,9 @@ jobs:
           pip install pytest pytest-cov pytest-xdist || true
       
       - name: Run tests with coverage
-        continue-on-error: true
         run: |
           if command -v pytest &> /dev/null; then
-            pytest --cov=. --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=junit.xml -v || true
+            pytest --cov=. --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=junit.xml -v
           else
             echo "No tests configured"
           fi
@@ -124,25 +123,38 @@ jobs:
   build-and-test-node:
     name: Build and Test (Node.js)
     runs-on: ubuntu-latest
-    if: hashFiles('package.json') != ''
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      - name: Check for package.json
+        id: check-package
+        run: |
+          if [ -f "package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "No package.json found, skipping Node.js build"
+          fi
+      
       - name: Set up Node.js
+        if: steps.check-package.outputs.exists == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
       
       - name: Install dependencies
+        if: steps.check-package.outputs.exists == 'true'
         run: npm ci
       
       - name: Run tests
+        if: steps.check-package.outputs.exists == 'true'
         run: npm test -- --run || true
       
       - name: Build project
+        if: steps.check-package.outputs.exists == 'true'
         run: npm run build || true
 
   security:

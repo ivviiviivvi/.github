@@ -97,10 +97,10 @@ jobs:
           # Ascending order (oldest first)
           ascending: true
           
-          # Don't mark issues/PRs with assignees as stale
+          # Exempt issues/PRs with assignees from being marked stale
           exempt-all-assignees: true
           
-          # Close issues even if they have an assignee
+          # Close reason for stale issues
           close-issue-reason: 'not_planned'
       
       - name: Summary
