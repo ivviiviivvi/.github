@@ -1,0 +1,52 @@
+title: "📢 Announcement: "
+labels:
+  - announcement
+  - official
+body: |
+  <!-- 
+  ⚠️ This category is restricted to maintainers and official announcements only.
+  
+  Use this category for:
+  - Official project announcements
+  - Release notifications
+  - Important policy changes
+  - Security advisories
+  - Breaking changes
+  - Roadmap updates
+  -->
+  
+  ## Announcement
+  
+  <!-- Provide a clear and concise announcement -->
+  
+  
+  
+  ## Details
+  
+  <!-- Add detailed information about this announcement -->
+  
+  
+  
+  ## Action Required
+  
+  <!-- If users need to take action, describe it here. Otherwise, remove this section -->
+  
+  - [ ] Action item 1
+  - [ ] Action item 2
+  
+  ## Timeline
+  
+  <!-- If applicable, include dates and deadlines -->
+  
+  
+  
+  ## Resources
+  
+  <!-- Link to relevant documentation, PRs, issues, or external resources -->
+  
+  - 
+  - 
+  
+  ---
+  
+  **Note:** Questions about this announcement should be posted in the Q&A category.
