@@ -51,31 +51,31 @@ python scripts/sync_labels.py --list-labels
 
 | Label | Color | Description |
 |-------|-------|-------------|
-| `priority: critical` | ![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) `#b60205` | Critical priority - requires immediate attention |
-| `priority: high` | ![#d93f0b](https://via.placeholder.com/15/d93f0b/000000?text=+) `#d93f0b` | High priority - should be addressed soon |
-| `priority: medium` | ![#fbca04](https://via.placeholder.com/15/fbca04/000000?text=+) `#fbca04` | Medium priority - normal queue |
-| `priority: low` | ![#0e8a16](https://via.placeholder.com/15/0e8a16/000000?text=+) `#0e8a16` | Low priority - nice to have |
+| `priority: critical` | ![#d73a4a](https://via.placeholder.com/15/d73a4a/000000?text=+) `#d73a4a` | Critical priority |
+| `priority: high` | ![#ff6b6b](https://via.placeholder.com/15/ff6b6b/000000?text=+) `#ff6b6b` | High priority |
+| `priority: medium` | ![#ffa500](https://via.placeholder.com/15/ffa500/000000?text=+) `#ffa500` | Medium priority |
+| `priority: low` | ![#0e8a16](https://via.placeholder.com/15/0e8a16/000000?text=+) `#0e8a16` | Low priority |
 
 ### Type Labels
 
 | Label | Color | Description |
 |-------|-------|-------------|
-| `type: bug` | ![#d73a4a](https://via.placeholder.com/15/d73a4a/000000?text=+) `#d73a4a` | Something isn't working as expected |
-| `type: enhancement` | ![#a2eeef](https://via.placeholder.com/15/a2eeef/000000?text=+) `#a2eeef` | New feature or request |
-| `type: documentation` | ![#0075ca](https://via.placeholder.com/15/0075ca/000000?text=+) `#0075ca` | Improvements or additions to documentation |
-| `type: security` | ![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) `#b60205` | Security-related issue or improvement |
-| `type: task` | ![#d4c5f9](https://via.placeholder.com/15/d4c5f9/000000?text=+) `#d4c5f9` | General task or work item |
-| `type: question` | ![#d876e3](https://via.placeholder.com/15/d876e3/000000?text=+) `#d876e3` | Further information is requested |
+| `bug` | ![#d73a4a](https://via.placeholder.com/15/d73a4a/000000?text=+) `#d73a4a` | Something isn't working |
+| `enhancement` | ![#a2eeef](https://via.placeholder.com/15/a2eeef/000000?text=+) `#a2eeef` | New feature or request |
+| `documentation` | ![#0075ca](https://via.placeholder.com/15/0075ca/000000?text=+) `#0075ca` | Improvements or additions to documentation |
+| `security` | ![#d93f0b](https://via.placeholder.com/15/d93f0b/000000?text=+) `#d93f0b` | Security related |
+| `task` | ![#d4c5f9](https://via.placeholder.com/15/d4c5f9/000000?text=+) `#d4c5f9` | General task or work item |
+| `question` | ![#d876e3](https://via.placeholder.com/15/d876e3/000000?text=+) `#d876e3` | Further information is requested |
 
 ### Status Labels
 
 | Label | Color | Description |
 |-------|-------|-------------|
-| `status: triage` | ![#ededed](https://via.placeholder.com/15/ededed/000000?text=+) `#ededed` | Needs initial assessment and prioritization |
-| `status: in-progress` | ![#1d76db](https://via.placeholder.com/15/1d76db/000000?text=+) `#1d76db` | Currently being worked on |
-| `status: blocked` | ![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) `#b60205` | Blocked by another issue or dependency |
-| `status: needs-review` | ![#fbca04](https://via.placeholder.com/15/fbca04/000000?text=+) `#fbca04` | Ready for review |
-| `status: approved` | ![#0e8a16](https://via.placeholder.com/15/0e8a16/000000?text=+) `#0e8a16` | Approved and ready to merge |
+| `triage` | ![#fbca04](https://via.placeholder.com/15/fbca04/000000?text=+) `#fbca04` | Needs triage |
+| `in-progress` | ![#0052cc](https://via.placeholder.com/15/0052cc/000000?text=+) `#0052cc` | Work in progress |
+| `blocked` | ![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) `#b60205` | Blocked by dependency |
+| `needs-review` | ![#6f42c1](https://via.placeholder.com/15/6f42c1/000000?text=+) `#6f42c1` | Ready for review |
+| `approved` | ![#0e8a16](https://via.placeholder.com/15/0e8a16/000000?text=+) `#0e8a16` | Approved and ready to merge |
 
 ### Category Labels
 
