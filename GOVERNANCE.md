@@ -398,7 +398,7 @@ Our governance framework is supported by the following policies:
 
 #### Technical Policies
 
-- **[TEAM_STRUCTURE.md](TEAM_STRUCTURE.md)** - Team organization and CODEOWNERS
+- **[CODEOWNERS](CODEOWNERS)** - Team organization and code ownership
 - **Branch Protection Rules** - Enforced via GitHub settings
 - **CI/CD Standards** - Defined in workflow files
 - **Dependency Management** - Dependabot configuration

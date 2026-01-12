@@ -196,8 +196,8 @@ Cargo.lock @ivviiviivvi/devops
 # Organization documentation
 /profile/ @ivviiviivvi/leadership
 
-# Team structure and governance
-TEAM_STRUCTURE.md @ivviiviivvi/leadership
+# Governance documentation
+GOVERNANCE.md @ivviiviivvi/leadership
 
 # AI Implementation Protocol
 /for-ai-implementation.txt @ivviiviivvi/engineering
