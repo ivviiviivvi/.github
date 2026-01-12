@@ -170,5 +170,166 @@ class TestEcosystemVisualizer(unittest.TestCase):
         # Should show correct total count
         self.assertIn("View all 15 workflows", dashboard)
 
+    def test_classify_workflow_safeguards(self):
+        """Test that safeguard workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('safeguard-validation.yml')
+        self.assertEqual(emoji, '🛡️')
+        self.assertEqual(category, 'Safeguards & Policies')
+        
+        emoji, category = self.visualizer._classify_workflow('policy-enforcement.yml')
+        self.assertEqual(emoji, '🛡️')
+        self.assertEqual(category, 'Safeguards & Policies')
+
+    def test_classify_workflow_security(self):
+        """Test that security workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('security-scan.yml')
+        self.assertEqual(emoji, '🔐')
+        self.assertEqual(category, 'Security')
+        
+        emoji, category = self.visualizer._classify_workflow('codeql-analysis.yml')
+        self.assertEqual(emoji, '🔐')
+        self.assertEqual(category, 'Security')
+        
+        emoji, category = self.visualizer._classify_workflow('semgrep-check.yml')
+        self.assertEqual(emoji, '🔐')
+        self.assertEqual(category, 'Security')
+        
+        emoji, category = self.visualizer._classify_workflow('secret-scanning.yml')
+        self.assertEqual(emoji, '🔐')
+        self.assertEqual(category, 'Security')
+
+    def test_classify_workflow_reusable(self):
+        """Test that reusable workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('reusable-build.yml')
+        self.assertEqual(emoji, '♻️')
+        self.assertEqual(category, 'Reusable Workflows')
+
+    def test_classify_workflow_ai_agents(self):
+        """Test that AI agent workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('gemini-agent.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+        
+        emoji, category = self.visualizer._classify_workflow('claude-assistant.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+        
+        emoji, category = self.visualizer._classify_workflow('openai-integration.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+        
+        emoji, category = self.visualizer._classify_workflow('copilot-workflow.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+        
+        emoji, category = self.visualizer._classify_workflow('agent-automation.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+        
+        emoji, category = self.visualizer._classify_workflow('ai-enhanced-test.yml')
+        self.assertEqual(emoji, '🤖')
+        self.assertEqual(category, 'AI Agents & Automation')
+
+    def test_classify_workflow_ci_cd(self):
+        """Test that CI/CD workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('ci-pipeline.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+        
+        emoji, category = self.visualizer._classify_workflow('test-suite.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+        
+        emoji, category = self.visualizer._classify_workflow('build-project.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+        
+        emoji, category = self.visualizer._classify_workflow('deploy-production.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+        
+        emoji, category = self.visualizer._classify_workflow('release-package.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+        
+        emoji, category = self.visualizer._classify_workflow('docker-build.yml')
+        self.assertEqual(emoji, '🚀')
+        self.assertEqual(category, 'CI/CD & Deployment')
+
+    def test_classify_workflow_pr_management(self):
+        """Test that PR management workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('pr-validation.yml')
+        self.assertEqual(emoji, '🔀')
+        self.assertEqual(category, 'PR Management')
+        
+        emoji, category = self.visualizer._classify_workflow('pull-request-check.yml')
+        self.assertEqual(emoji, '🔀')
+        self.assertEqual(category, 'PR Management')
+        
+        emoji, category = self.visualizer._classify_workflow('merge-automation.yml')
+        self.assertEqual(emoji, '🔀')
+        self.assertEqual(category, 'PR Management')
+
+    def test_classify_workflow_scheduled(self):
+        """Test that scheduled workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('scheduled-cleanup.yml')
+        self.assertEqual(emoji, '⏱️')
+        self.assertEqual(category, 'Scheduled Tasks')
+        
+        emoji, category = self.visualizer._classify_workflow('daily-report.yml')
+        self.assertEqual(emoji, '⏱️')
+        self.assertEqual(category, 'Scheduled Tasks')
+        
+        emoji, category = self.visualizer._classify_workflow('weekly-maintenance.yml')
+        self.assertEqual(emoji, '⏱️')
+        self.assertEqual(category, 'Scheduled Tasks')
+
+    def test_classify_workflow_health_metrics(self):
+        """Test that health and metrics workflows are correctly classified"""
+        emoji, category = self.visualizer._classify_workflow('health-check.yml')
+        self.assertEqual(emoji, '💓')
+        self.assertEqual(category, 'Health & Metrics')
+        
+        emoji, category = self.visualizer._classify_workflow('monitoring-alerts.yml')
+        self.assertEqual(emoji, '💓')
+        self.assertEqual(category, 'Health & Metrics')
+        
+        emoji, category = self.visualizer._classify_workflow('metrics-dashboard.yml')
+        self.assertEqual(emoji, '💓')
+        self.assertEqual(category, 'Health & Metrics')
+        
+        emoji, category = self.visualizer._classify_workflow('report-generator.yml')
+        self.assertEqual(emoji, '💓')
+        self.assertEqual(category, 'Health & Metrics')
+
+    def test_classify_workflow_utility_default(self):
+        """Test that unmatched workflows default to Utility & Other"""
+        emoji, category = self.visualizer._classify_workflow('random-workflow.yml')
+        self.assertEqual(emoji, '⚙️')
+        self.assertEqual(category, 'Utility & Other')
+        
+        emoji, category = self.visualizer._classify_workflow('custom-automation.yml')
+        self.assertEqual(emoji, '⚙️')
+        self.assertEqual(category, 'Utility & Other')
+
+    def test_classify_workflow_case_insensitive(self):
+        """Test that workflow classification is case insensitive"""
+        emoji1, category1 = self.visualizer._classify_workflow('Security-Scan.yml')
+        emoji2, category2 = self.visualizer._classify_workflow('SECURITY-SCAN.yml')
+        emoji3, category3 = self.visualizer._classify_workflow('security-scan.yml')
+        
+        self.assertEqual(emoji1, emoji2)
+        self.assertEqual(emoji2, emoji3)
+        self.assertEqual(category1, category2)
+        self.assertEqual(category2, category3)
+        self.assertEqual(emoji1, '🔐')
+
+    def test_classify_workflow_first_match_wins(self):
+        """Test that first matching pattern wins for workflow classification"""
+        # A workflow with both 'security' and 'ci' should match security first
+        emoji, category = self.visualizer._classify_workflow('security-ci-pipeline.yml')
+        self.assertEqual(emoji, '🔐')
+        self.assertEqual(category, 'Security')
+
 if __name__ == '__main__':
     unittest.main()

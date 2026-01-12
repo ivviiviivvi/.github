@@ -8,7 +8,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple
 from datetime import datetime
 
 
@@ -17,7 +17,11 @@ class EcosystemVisualizer:
 
     _WORKFLOW_BASE_PATH = "../.github/workflows/"
     
-    # Configuration: Maximum workflows to display in Mermaid diagram
+    # Configuration: Maximum workflows to display in the Mermaid diagram.
+    # Large organizations can have many workflows, and rendering all of them
+    # in a single graph quickly becomes unreadable and hard to navigate.
+    # This limit only affects the visualization: the full set of workflows
+    # is still listed in the "Active Workflows" section of the report below.
     MAX_DIAGRAM_WORKFLOWS = 10
 
     # Workflow categories mapping
@@ -39,7 +43,7 @@ class EcosystemVisualizer:
         ('🛡️', re.compile(r'^safeguard|policy')),
         ('🔐', re.compile(r'security|scan|codeql|semgrep|secret')),
         ('♻️', re.compile(r'reusable')),
-        ('🤖', re.compile(r'gemini|claude|openai|perplexity|grok|jules|copilot|agent|ai-')),
+        ('🤖', re.compile(r'gemini|claude|openai|perplexity|grok|jules|copilot|agent|ai\-')),
         ('🚀', re.compile(r'ci|test|build|deploy|release|publish|docker')),
         ('🔀', re.compile(r'pr-|pull-request|merge')),
         ('⏱️', re.compile(r'schedule|cron|daily|weekly|monthly')),
@@ -463,16 +467,9 @@ graph TD
             workflows = em.get('workflows', [])
 
             if workflows:
-                # UX Improvement: Add legend for workflow types
-                parts.append("> **Legend:** 🛡️ Safeguard · 🔐 Security · ♻️ Reusable · 🤖 AI Agent · 🚀 CI/CD · 🔀 PR Mgmt · ⏱️ Scheduled · 💓 Health · ⚙️ General\n\n")
-
                 # Calculate the correct relative path for workflow links
                 workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 
-                # UX Improvement: Add legend for workflow types
-                parts.append("**Legend:**\n")
-                parts.append("🛡️ Safeguards | 🔐 Security | ♻️ Reusable | 🤖 AI Agents | 🚀 CI/CD | 🔀 PR Management | ⏱️ Scheduled | 💓 Health/Metrics | ⚙️ General\n\n")
-
                 parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
 
                 # Add legend for workflow types
@@ -503,17 +500,6 @@ graph TD
                     parts.append(f"| {i} | {emoji} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
 
                 parts.append("\n</details>\n")
-
-                # Render categories
-                for label, items in grouped.items():
-                    if items:
-                        parts.append(f"### {label}\n\n")
-                        parts.append("| Workflow | Action |\n|---|---|\n")
-                        for w in items:
-                             parts.append(f"| `{w}` | [View]({workflow_path}{w}) |\n")
-                        parts.append("\n")
-
-                parts.append("</details>\n")
             else:
                  parts.append("No active workflows detected.\n")
         else:
