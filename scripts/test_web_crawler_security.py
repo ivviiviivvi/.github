@@ -164,8 +164,8 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         """
         crawler = OrganizationCrawler(github_token="dummy", org_name="dummy")
 
-        # Mock external dependencies
-        crawler._resolve_hostname = MagicMock(return_value=["127.0.0.1"])
+        # Mock external dependencies - use public IP (example.com) for realistic scenario
+        crawler._resolve_hostname = MagicMock(return_value=["93.184.216.34"])
         crawler._is_hostname_safe = MagicMock(return_value=True)
 
         # Mock the global pool manager (should NOT be used for the request)
