@@ -6,8 +6,9 @@ Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring
 
 import json
 import os
+import re
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 
 
@@ -17,11 +18,33 @@ class EcosystemVisualizer:
     _WORKFLOW_BASE_PATH = "../.github/workflows/"
     
     # Configuration: Maximum workflows to display in Mermaid diagram
-    # Rationale: Mermaid diagrams become cluttered and less readable with too many nodes.
-    # All workflows are still listed in the "Active Workflows" section below the diagram.
-    # This limit ensures the diagram remains visually clear and interactive.
-    # Users can adjust this value if needed based on their diagram rendering environment.
     MAX_DIAGRAM_WORKFLOWS = 10
+
+    # Workflow categories mapping
+    WORKFLOW_CATEGORIES = {
+        '🛡️': 'Safeguards & Policies',
+        '🔐': 'Security',
+        '♻️': 'Reusable Workflows',
+        '🤖': 'AI Agents & Automation',
+        '🚀': 'CI/CD & Deployment',
+        '🔀': 'PR Management',
+        '⏱️': 'Scheduled Tasks',
+        '💓': 'Health & Metrics',
+        '⚙️': 'Utility & Other'
+    }
+
+    # Pre-compile regex patterns for performance
+    # Order matters: first match wins
+    WORKFLOW_PATTERNS = [
+        ('🛡️', re.compile(r'^safeguard|policy')),
+        ('🔐', re.compile(r'security|scan|codeql|semgrep|secret')),
+        ('♻️', re.compile(r'reusable')),
+        ('🤖', re.compile(r'gemini|claude|openai|perplexity|grok|jules|copilot|agent|ai-')),
+        ('🚀', re.compile(r'ci|test|build|deploy|release|publish|docker')),
+        ('🔀', re.compile(r'pr-|pull-request|merge')),
+        ('⏱️', re.compile(r'schedule|cron|daily|weekly|monthly')),
+        ('💓', re.compile(r'health|check|monitor|metrics|dashboard|report')),
+    ]
 
     def __init__(self, report_path: Path = None):
         self.report_path = report_path
@@ -199,6 +222,17 @@ graph TD
             parts.append("\n")
 
         return parts
+
+    def _classify_workflow(self, workflow_name: str) -> Tuple[str, str]:
+        """
+        Classify a workflow based on its name using pre-compiled regex patterns.
+        Returns tuple of (emoji, category_name).
+        """
+        name = workflow_name.lower()
+        for emoji, pattern in self.WORKFLOW_PATTERNS:
+            if pattern.search(name):
+                return emoji, self.WORKFLOW_CATEGORIES[emoji]
+        return '⚙️', self.WORKFLOW_CATEGORIES['⚙️']
 
     def generate_dashboard_markdown(self, output_path: Path = None) -> str:
         """Generate a comprehensive dashboard in Markdown"""
@@ -449,52 +483,26 @@ graph TD
                 # UX Improvement: Use table with indices for better scannability and reference
                 parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
 
-                for i, workflow in enumerate(sorted(workflows), 1):
-                    # Determine workflow type based on name for better scannability
-                    name = workflow.lower()
-                    w_type = '⚙️' # Default
-
-                    if name.startswith('safeguard') or 'policy' in name:
-                         w_type = '🛡️'
-                    elif any(k in name for k in ('security', 'scan', 'codeql', 'semgrep', 'secret')):
-                         w_type = '🔐'
-                    elif 'reusable' in name:
-                         w_type = '♻️'
-                    elif any(k in name for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-')):
-                         w_type = '🤖'
-                    elif any(k in name for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker')):
-                         w_type = '🚀'
-                    elif any(k in name for k in ('pr-', 'pull-request', 'merge')):
-                         w_type = '🔀'
-                    elif any(k in name for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly')):
-                         w_type = '⏱️'
-                    elif any(k in name for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report')):
-                         w_type = '💓'
-
-                    # Link to the workflow file with calculated relative path
-                    parts.append(f"| {i} | {w_type} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
-                parts.append("\n</details>\n")
-                # Group workflows by category
-                categories = [
-                    ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
-                    ('🔐 Security', lambda n: any(k in n for k in ('security', 'scan', 'codeql', 'semgrep', 'secret'))),
-                    ('♻️ Reusable Workflows', lambda n: 'reusable' in n),
-                    ('🤖 AI Agents & Automation', lambda n: any(k in n for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-'))),
-                    ('🚀 CI/CD & Deployment', lambda n: any(k in n for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker'))),
-                    ('🔀 PR Management', lambda n: any(k in n for k in ('pr-', 'pull-request', 'merge'))),
-                    ('⏱️ Scheduled Tasks', lambda n: any(k in n for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly'))),
-                    ('💓 Health & Metrics', lambda n: any(k in n for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report'))),
-                    ('⚙️ Utility & Other', lambda n: True) # Fallback
-                ]
+                # Optimized: Use pre-compiled regex for classification
+                sorted_workflows = sorted(workflows)
 
                 # Assign workflows to categories (first match wins)
-                grouped = {cat[0]: [] for cat in categories}
-                for w in sorted(workflows):
-                    name = w.lower()
-                    for label, matcher in categories:
-                        if matcher(name):
-                            grouped[label].append(w)
-                            break
+                # Grouping is now done efficiently
+                grouped = {}
+                for emoji in self.WORKFLOW_CATEGORIES.keys():
+                    grouped[f"{emoji} {self.WORKFLOW_CATEGORIES[emoji]}"] = []
+
+                for i, workflow in enumerate(sorted_workflows, 1):
+                    # Classify workflow using pre-compiled regex
+                    emoji, category_name = self._classify_workflow(workflow)
+
+                    # Store for grouped display later
+                    grouped[f"{emoji} {category_name}"].append(workflow)
+
+                    # Link to the workflow file with calculated relative path
+                    parts.append(f"| {i} | {emoji} | `{workflow}` | [View]({workflow_path}{workflow}) |\n")
+
+                parts.append("\n</details>\n")
 
                 # Render categories
                 for label, items in grouped.items():
