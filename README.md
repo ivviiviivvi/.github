@@ -1,5 +1,7 @@
 # ivviiviivvi Organization Policies
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
+
 This repository contains community health files and organization-wide policies for the ivviiviivvi GitHub organization.
 
 ## 📚 Documentation
