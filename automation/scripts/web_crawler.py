@@ -53,12 +53,10 @@ class OrganizationCrawler:
         self.session.mount("https://", adapter)
         self.session.mount("http://", adapter)
 
-        # Create SSL context once and reuse it
-        self.ssl_context = ssl.create_default_context()
-
         # Create a single SSL context for reuse
         # This avoids reloading the system trust store for every request
         self.ssl_context = ssl.create_default_context()
+
         # Use urllib3 directly for safe verified requests to IPs
         # Increase num_pools to avoid thrashing when visiting many different hosts
         self.http = urllib3.PoolManager(
@@ -67,9 +65,6 @@ class OrganizationCrawler:
             cert_reqs="CERT_REQUIRED",
             ssl_context=self.ssl_context,
         )
-
-        # Optimization: Reuse SSL context to avoid expensive re-initialization per request
-        self.ssl_context = ssl.create_default_context()
 
         if self.github_token:
             self.session.headers.update({"Authorization": f"token {self.github_token}"})
@@ -236,6 +231,33 @@ class OrganizationCrawler:
         except Exception:
             return False
 
+    @functools.lru_cache(maxsize=1024)
+    def _get_pinned_pool(self, scheme: str, safe_ip: str, port: int, hostname: str):
+        """Get a cached connection pool for a specific (IP, hostname) tuple
+
+        This enables TCP Keep-Alive and SSL Session reuse across multiple requests
+        to the same pinned IP, which significantly improves performance for
+        crawler workloads.
+        """
+        if scheme == 'https':
+            # Use system default SSL context to avoid extra dependencies
+            # Optimization: Reuse pre-initialized SSL context
+            return urllib3.HTTPSConnectionPool(
+                host=safe_ip,
+                port=port,
+                maxsize=self.max_workers,
+                cert_reqs='CERT_REQUIRED',
+                ssl_context=self.ssl_context,
+                assert_hostname=hostname,
+                server_hostname=hostname,
+            )
+        else:
+            return urllib3.HTTPConnectionPool(
+                host=safe_ip,
+                port=port,
+                maxsize=self.max_workers
+            )
+
     def _check_link(self, url: str, timeout: int = 10) -> int:
         """Check if a link is accessible with SSRF protection"""
         target = url
@@ -297,21 +319,9 @@ class OrganizationCrawler:
                 if not port:
                     port = 443 if scheme == "https" else 80
 
-                # Create a temporary connection pool for this specific request
-                # allowing us to verify hostname against the IP connection
-                if scheme == "https":
-                    # Use system default SSL context to avoid extra dependencies
-                    # Optimization: Reuse pre-initialized SSL context
-                    pool = urllib3.HTTPSConnectionPool(
-                        host=safe_ip,
-                        port=port,
-                        cert_reqs="CERT_REQUIRED",
-                        ssl_context=self.ssl_context,
-                        assert_hostname=hostname,
-                        server_hostname=hostname,
-                    )
-                else:
-                    pool = urllib3.HTTPConnectionPool(host=safe_ip, port=port)
+                # Get cached connection pool for this pinned IP
+                # Optimization: Reuses pool to enable Keep-Alive and SSL session reuse
+                pool = self._get_pinned_pool(scheme, safe_ip, port, hostname)
 
                 # The connection pool is configured with the resolved safe_ip as the host,
                 # so for the request we only need to provide the path and query components.
