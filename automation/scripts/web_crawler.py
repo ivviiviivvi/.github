@@ -342,6 +342,7 @@ class OrganizationCrawler:
                 # Some servers don't support HEAD, try GET
                 # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
                 if response.status >= 400 and response.status != 404:
+                    # Use the same IP-pinned pool for the GET request to maintain SSRF protection
                     response = pool.request(
                         "GET", url_path, timeout=timeout, retries=False, headers=headers
                     )
