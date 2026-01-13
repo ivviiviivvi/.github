@@ -484,13 +484,18 @@ graph TD
                 legend_string = " · ".join(legend_items)
                 parts.append(f"> **Legend:** {legend_string}\n\n")
 
-                parts.append(f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n")
-
-                # UX Improvement: Use table with indices for better scannability and reference
-                parts.append("| # | Type | Workflow | Action |\n|---|---|---|---|\n")
-
-                # Optimized: Use pre-compiled regex for classification
-                sorted_workflows = sorted(workflows)
+                # Group workflows by category
+                categories = [
+                    ('🛡️ Safeguards & Policies', lambda n: n.startswith('safeguard') or 'policy' in n),
+                    ('🔐 Security', lambda n: any(k in n for k in ('security', 'scan', 'codeql', 'semgrep', 'secret'))),
+                    ('♻️ Reusable Workflows', lambda n: 'reusable' in n),
+                    ('🤖 AI Agents & Automation', lambda n: any(k in n for k in ('gemini', 'claude', 'openai', 'perplexity', 'grok', 'jules', 'copilot', 'agent', 'ai-'))),
+                    ('🚀 CI/CD & Deployment', lambda n: any(k in n for k in ('ci', 'test', 'build', 'deploy', 'release', 'publish', 'docker'))),
+                    ('🔀 PR Management', lambda n: any(k in n for k in ('pr-', 'pull-request', 'merge'))),
+                    ('⏱️ Scheduled Tasks', lambda n: any(k in n for k in ('schedule', 'cron', 'daily', 'weekly', 'monthly'))),
+                    ('💓 Health & Metrics', lambda n: any(k in n for k in ('health', 'check', 'monitor', 'metrics', 'dashboard', 'report'))),
+                    ('⚙️ Utility & Other', lambda n: True) # Fallback
+                ]
 
                 # Assign workflows to categories (first match wins)
                 # Grouping is now done efficiently
@@ -498,9 +503,19 @@ graph TD
                 for emoji in self.WORKFLOW_CATEGORIES.keys():
                     grouped[f"{emoji} {self.WORKFLOW_CATEGORIES[emoji]}"] = []
 
-                for i, workflow in enumerate(sorted_workflows, 1):
-                    # Classify workflow using pre-compiled regex
-                    emoji, category_name = self._classify_workflow(workflow)
+                # Count active categories
+                active_categories = sum(1 for items in grouped.values() if items)
+
+                parts.append(f"<details>\n<summary>View all {len(workflows)} workflows across {active_categories} categories</summary>\n\n")
+
+                # Render categories
+                for label, items in grouped.items():
+                    if items:
+                        parts.append(f"### {label}\n\n")
+                        parts.append("| Workflow | Action |\n|---|---|\n")
+                        for w in items:
+                             parts.append(f"| `{w}` | [View]({workflow_path}{w}) |\n")
+                        parts.append("\n")
 
                     # Store for grouped display later
                     grouped[f"{emoji} {category_name}"].append(workflow)
