@@ -1,0 +1,134 @@
+# Gitleaks configuration for managing false positives
+# https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks Configuration for ivviiviivvi/.github"
+
+# Global allowlist for false positives
+[allowlist]
+  description = "Global allowlist for false positives"
+  
+  # Allowlist specific files that contain examples or patterns
+  paths = [
+    '''\.github/workflows/scan-for-secrets\.yml''',
+    '''\.github/workflows/safeguard-5-secret-scanning\.yml''',
+    '''docs/SECRETS_SETUP\.md''',
+    '''scripts/README\.md''',
+    '''agents/.*\.agent\.md''',
+    '''\.semgrep/rules\.yml''',
+    '''.pre-commit-config.*\.yaml''',
+  ]
+  
+  # Allowlist specific patterns that are examples or documentation
+  regexes = [
+    '''ghp_xxx''',  # Example token in documentation
+    '''AKIA\.\.\.''',  # Example AWS key placeholder
+    '''xox[baprs]-\d{10,12}-\d{10,12}-example''',  # Example Slack token
+    '''your[-_]?token[-_]?here''',  # Common placeholder
+    '''<your.*>''',  # Placeholder format
+    '''xxx+''',  # Placeholder
+    '''example\.com''',  # Example domains
+  ]
+  
+  # Allowlist commits (if needed in the future)
+  commits = []
+  
+  # Allowlist specific strings that are false positives
+  stopwords = [
+    "example",
+    "sample",
+    "placeholder",
+    "your-token-here",
+    "replace-with",
+    "dummy",
+  ]
+
+# Extend default rules if needed
+[[rules]]
+  description = "AWS Access Key"
+  id = "aws-access-key"
+  regex = '''AKIA[0-9A-Z]{16}'''
+  tags = ["key", "AWS"]
+  [[rules.allowlist]]
+    description = "Documentation examples"
+    regexes = ['''AKIA\.\.\.''']
+    paths = ['''docs/.*''', '''README\.md''', '''agents/.*''']
+
+[[rules]]
+  description = "GitHub Personal Access Token"
+  id = "github-pat"
+  regex = '''ghp_[a-zA-Z0-9]{36}'''
+  tags = ["key", "GitHub"]
+  [[rules.allowlist]]
+    description = "Documentation examples"
+    regexes = ['''ghp_xxx''', '''ghp_example''']
+    paths = ['''docs/.*''', '''README\.md''', '''scripts/.*''']
+
+[[rules]]
+  description = "Generic API Key"
+  id = "generic-api-key"
+  regex = '''(?i)(api[_-]?key|apikey)["\s:=]+['"']?([a-zA-Z0-9_\-]{20,})['"']?'''
+  tags = ["key", "API"]
+  [[rules.allowlist]]
+    description = "Workflow and documentation references"
+    paths = [
+      '''\.github/workflows/.*''',
+      '''docs/.*''',
+      '''agents/.*''',
+    ]
+
+[[rules]]
+  description = "Private Key"
+  id = "private-key"
+  regex = '''-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----'''
+  tags = ["key", "private"]
+  [[rules.allowlist]]
+    description = "Pattern definitions"
+    paths = ['''\.github/workflows/.*''', '''agents/.*''']
+# Gitleaks Configuration
+# Documentation: https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks Configuration for ivviiviivvi/.github"
+
+# Extend default Gitleaks rules
+[extend]
+useDefault = true
+
+# Custom rules can be added here
+# [[rules]]
+# id = "custom-rule-id"
+# description = "Custom rule description"
+# regex = '''your-regex-pattern'''
+# tags = ["custom", "secret"]
+
+# Allowlist configuration
+# Use this to suppress false positives
+[allowlist]
+description = "Allowlisted files and patterns"
+
+# Allowlist specific paths
+paths = [
+  # Example: Ignore test fixtures
+  # '''.*test/fixtures/.*''',
+  # Example: Ignore documentation
+  # '''.*docs/examples/.*''',
+]
+
+# Allowlist specific regexes
+regexes = [
+  # Example: Ignore specific patterns in comments
+  # '''# nosecret.*''',
+]
+
+# Allowlist specific commits
+commits = [
+  # Example: Allowlist a specific commit that contains a false positive
+  # "abc123def456",
+]
+
+# Allowlist specific stop words
+stopwords = [
+  # Common words that might trigger false positives
+  # "example",
+  # "test",
+  # "dummy",
+]

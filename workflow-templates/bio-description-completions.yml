@@ -1,0 +1,40 @@
+name: "Bio and Description Completions"
+
+on:
+  schedule:
+    # Run weekly on Monday at 9 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Scope of completion check"
+        required: false
+        type: choice
+        options:
+          - "all"
+          - "organization"
+          - "repositories"
+          - "current-repo"
+        default: "all"
+      auto_fix:
+        description: "Automatically create PRs to fix missing descriptions"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: "bio-completions-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  metadata: read
+
+jobs:
+  audit-completeness:
+    uses: ivviiviivvi/.github/.github/workflows/bio-description-completions.yml@main
+    with:
+      scope: ${{ inputs.scope || 'all' }}
+      auto_fix: ${{ inputs.auto_fix || false }}

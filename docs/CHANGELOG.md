@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- [e3a533e](https://github.com/ivviiviivvi/.github/commit/e3a533e3f06f38d6c1c3f6f3cd0dd2e22853a2e4) - Consolidated documentation into structured docs/ subdirectories and centralized config files
+- Consolidated documentation into structured docs/ subdirectories and centralized config files
 
 ### Deprecated
 

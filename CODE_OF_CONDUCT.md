@@ -59,8 +59,11 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-**conduct@ivviiviivvi.com**.
+reported to the community leaders responsible for enforcement through:
+
+- GitHub Issues (for public concerns)
+- Private Security Advisory (for sensitive matters)
+- Direct contact with maintainers
 
 All complaints will be reviewed and investigated promptly and fairly.
 
@@ -113,72 +116,6 @@ individual, or aggression toward or disparagement of classes of individuals.
 **Consequence**: A permanent ban from any sort of public interaction within the
 community.
 
-## Reporting
-
-### How to Report
-
-If you experience or witness unacceptable behavior, or have any other concerns,
-please report it by contacting us at:
-
-- **Email**: conduct@ivviiviivvi.com
-- **Subject Line**: "Code of Conduct Violation Report"
-
-### What to Include
-
-Please include the following information in your report:
-
-- Your contact information
-- Names (real, usernames, or pseudonyms) of any individuals involved
-- Description of the incident, including:
-  - When and where it occurred
-  - Your account of what happened
-  - Any supporting documentation (screenshots, logs, etc.)
-  - If you believe this incident is ongoing
-
-### Confidentiality
-
-All reports will be kept confidential. We will only share information about the
-incident with individuals who need to know in order to address it properly.
-
-### Response Timeline
-
-- **Initial Response**: Within 24 hours
-- **Investigation**: Within 7 days
-- **Resolution**: Within 14 days
-
-We will keep you informed throughout the process.
-
-## Appeal Process
-
-If you disagree with a decision made by the community leaders, you may appeal
-by contacting **appeals@ivviiviivvi.com** within 30 days of the decision. The
-appeal will be reviewed by a different set of community leaders.
-
-## Our Responsibilities
-
-Project maintainers are responsible for:
-
-- Clarifying standards of acceptable behavior
-- Taking appropriate and fair corrective action
-- Removing, editing, or rejecting contributions that violate this Code
-- Communicating reasons for moderation decisions when appropriate
-- Maintaining confidentiality regarding reporters of incidents
-
-## Community Values
-
-In addition to this Code of Conduct, we value:
-
-- **Inclusivity**: We welcome and support people of all backgrounds
-- **Respect**: We treat everyone with dignity and respect
-- **Collaboration**: We work together to achieve common goals
-- **Transparency**: We communicate openly and honestly
-- **Accountability**: We take responsibility for our actions
-
-## Questions
-
-If you have questions about this Code of Conduct, please contact us at
-conduct@ivviiviivvi.com.
-
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage],
@@ -197,7 +134,3 @@ For answers to common questions about this code of conduct, see the FAQ at
 [Mozilla CoC]: https://github.com/mozilla/diversity
 [FAQ]: https://www.contributor-covenant.org/faq
 [translations]: https://www.contributor-covenant.org/translations
-
----
-
-**Last Updated**: January 12, 2026

@@ -1,0 +1,497 @@
+name: "Repository Bootstrap"
+
+# This reusable workflow automates the setup of repository features
+# including issues, projects, discussions, wiki, labels, and workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repository:
+        description: "Target repository (org/repo or 'current' for this repo)"
+        required: true
+        type: string
+        default: "current"
+      enable_issues:
+        description: "Enable Issues"
+        required: false
+        type: boolean
+        default: true
+      enable_projects:
+        description: "Enable Projects"
+        required: false
+        type: boolean
+        default: true
+      enable_discussions:
+        description: "Enable Discussions"
+        required: false
+        type: boolean
+        default: false
+      enable_wiki:
+        description: "Enable Wiki"
+        required: false
+        type: boolean
+        default: false
+      create_labels:
+        description: "Create standard labels"
+        required: false
+        type: boolean
+        default: true
+      create_project_board:
+        description: "Create initial project board"
+        required: false
+        type: boolean
+        default: false
+      copy_workflow_templates:
+        description: "Copy workflow templates from .github repo"
+        required: false
+        type: boolean
+        default: false
+      configure_branch_protection:
+        description: "Configure branch protection rules"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      target_repository:
+        description: "Target repository (org/repo)"
+        required: true
+        type: string
+      enable_issues:
+        description: "Enable Issues"
+        required: false
+        type: boolean
+        default: true
+      enable_projects:
+        description: "Enable Projects"
+        required: false
+        type: boolean
+        default: true
+      enable_discussions:
+        description: "Enable Discussions"
+        required: false
+        type: boolean
+        default: false
+      enable_wiki:
+        description: "Enable Wiki"
+        required: false
+        type: boolean
+        default: false
+      create_labels:
+        description: "Create standard labels"
+        required: false
+        type: boolean
+        default: true
+      create_project_board:
+        description: "Create initial project board"
+        required: false
+        type: boolean
+        default: false
+      copy_workflow_templates:
+        description: "Copy workflow templates"
+        required: false
+        type: boolean
+        default: false
+      configure_branch_protection:
+        description: "Configure branch protection"
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      GH_PAT:
+        required: false
+        description: "GitHub PAT with repo and admin:org permissions"
+
+concurrency:
+  group: "repository-bootstrap-${{ inputs.target_repository }}"
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  administration: write
+
+jobs:
+  bootstrap-repository:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: "Checkout .github repository"
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        with:
+          repository: ivviiviivvi/.github
+          path: .github-repo
+          fetch-depth: 1
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: "Install GitHub CLI"
+        run: |
+          if ! command -v gh &> /dev/null; then
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh -y
+          fi
+          gh --version
+
+      - name: "Determine target repository"
+        id: target
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          INPUT_REPO="${{ inputs.target_repository }}"
+          
+          if [ "$INPUT_REPO" = "current" ]; then
+            TARGET_REPO="${{ github.repository }}"
+          else
+            TARGET_REPO="$INPUT_REPO"
+          fi
+          
+          echo "repository=$TARGET_REPO" >> $GITHUB_OUTPUT
+          echo "📦 Target repository: $TARGET_REPO"
+          
+          # Verify repository exists and we have access
+          if ! gh repo view "$TARGET_REPO" &> /dev/null; then
+            echo "❌ Error: Cannot access repository $TARGET_REPO"
+            exit 1
+          fi
+          
+          echo "✅ Repository access verified"
+
+      - name: "Enable repository features"
+        if: inputs.enable_issues || inputs.enable_projects || inputs.enable_discussions || inputs.enable_wiki
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "🔧 Configuring repository features for $TARGET_REPO..."
+          
+          FEATURES=""
+          
+          if [ "${{ inputs.enable_issues }}" = "true" ]; then
+            FEATURES="$FEATURES --enable-issues"
+            echo "  ✅ Enabling Issues"
+          fi
+          
+          if [ "${{ inputs.enable_projects }}" = "true" ]; then
+            FEATURES="$FEATURES --enable-projects"
+            echo "  ✅ Enabling Projects"
+          fi
+          
+          if [ "${{ inputs.enable_wiki }}" = "true" ]; then
+            FEATURES="$FEATURES --enable-wiki"
+            echo "  ✅ Enabling Wiki"
+          fi
+          
+          if [ -n "$FEATURES" ]; then
+            gh repo edit "$TARGET_REPO" $FEATURES || {
+              echo "⚠️ Warning: Could not update some repository features. This may require admin permissions."
+            }
+          fi
+          
+          # Enable Discussions (requires separate API call)
+          if [ "${{ inputs.enable_discussions }}" = "true" ]; then
+            echo "  ✅ Enabling Discussions"
+            gh api --method PUT "/repos/$TARGET_REPO" \
+              -f has_discussions=true || {
+              echo "⚠️ Warning: Could not enable Discussions. This may require admin permissions."
+            }
+          fi
+          
+          echo "✅ Repository features configured"
+
+      - name: "Create standard labels"
+        if: inputs.create_labels
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "🏷️ Creating standard labels in $TARGET_REPO..."
+          
+          # Read labels from docs/LABELS.md
+          LABELS_FILE=".github-repo/docs/LABELS.md"
+          
+          if [ ! -f "$LABELS_FILE" ]; then
+            echo "⚠️ Warning: Labels file not found at $LABELS_FILE"
+            exit 0
+          fi
+          
+          # Define labels array (name, color, description)
+          declare -a LABELS=(
+            "bug|d73a4a|Something isn't working correctly"
+            "enhancement|a2eeef|New feature or improvement request"
+            "documentation|0075ca|Documentation improvements or additions"
+            "question|d876e3|Further information is requested"
+            "refactoring|fbca04|Code refactoring without changing functionality"
+            "performance|f9d0c4|Performance improvements"
+            "security|d93f0b|Security-related issues or improvements"
+            "testing|1d76db|Testing-related changes or improvements"
+            "critical|b60205|Requires immediate attention"
+            "high priority|d93f0b|Should be addressed soon"
+            "medium priority|fbca04|Normal priority"
+            "low priority|0e8a16|Can be addressed later"
+            "in progress|ffff00|Currently being worked on"
+            "blocked|d93f0b|Blocked by another issue or dependency"
+            "on hold|fef2c0|Temporarily paused"
+            "needs review|bfdadc|Waiting for code review"
+            "needs testing|c5def5|Requires testing before completion"
+            "ready to merge|0e8a16|Approved and ready to be merged"
+            "good first issue|7057ff|Good for newcomers"
+            "help wanted|008672|Extra attention is needed"
+            "discussion|cc317c|Requires discussion or decision"
+            "duplicate|cfd3d7|This issue or pull request already exists"
+            "invalid|e4e669|This doesn't seem right"
+            "wontfix|ffffff|This will not be worked on"
+            "automated|0e8a16|Created or managed by automation"
+            "dependencies|0366d6|Dependencies updates"
+            "stale|eeeeee|No recent activity"
+            "github-actions|2088ff|Related to GitHub Actions"
+            "frontend|e99695|Frontend related"
+            "backend|c5def5|Backend related"
+            "infrastructure|d4c5f9|Infrastructure and DevOps"
+            "accessibility|fef2c0|Accessibility improvements"
+          )
+          
+          CREATED=0
+          SKIPPED=0
+          
+          for label_data in "${LABELS[@]}"; do
+            IFS='|' read -r NAME COLOR DESCRIPTION <<< "$label_data"
+            
+            # Check if label already exists
+            if gh label list --repo "$TARGET_REPO" | grep -q "^$NAME"; then
+              echo "  ⏭️  Label '$NAME' already exists, skipping"
+              ((SKIPPED++))
+            else
+              # Create the label
+              if gh label create "$NAME" \
+                --repo "$TARGET_REPO" \
+                --color "$COLOR" \
+                --description "$DESCRIPTION" 2>/dev/null; then
+                echo "  ✅ Created label: $NAME"
+                ((CREATED++))
+              else
+                echo "  ⚠️  Failed to create label: $NAME"
+              fi
+            fi
+          done
+          
+          echo ""
+          echo "📊 Label creation summary:"
+          echo "   Created: $CREATED"
+          echo "   Skipped: $SKIPPED"
+          echo "✅ Standard labels configured"
+
+      - name: "Create initial project board"
+        if: inputs.create_project_board
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "📋 Creating initial project board for $TARGET_REPO..."
+          
+          # Check if a project already exists
+          EXISTING_PROJECTS=$(gh project list --owner "$(echo $TARGET_REPO | cut -d'/' -f1)" --format json | jq length)
+          
+          if [ "$EXISTING_PROJECTS" -gt 0 ]; then
+            echo "⚠️ Projects already exist. Skipping creation."
+            exit 0
+          fi
+          
+          # Create a new project (Projects V2)
+          PROJECT_NAME="Development Board"
+          
+          gh project create \
+            --owner "$(echo $TARGET_REPO | cut -d'/' -f1)" \
+            --title "$PROJECT_NAME" || {
+            echo "⚠️ Warning: Could not create project. This may require different permissions or PAT."
+            exit 0
+          }
+          
+          echo "✅ Created project board: $PROJECT_NAME"
+
+      - name: "Copy workflow templates"
+        if: inputs.copy_workflow_templates
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "📄 Copying workflow templates to $TARGET_REPO..."
+          
+          # Clone target repository
+          TEMP_DIR=$(mktemp -d)
+          cd "$TEMP_DIR"
+          
+          gh repo clone "$TARGET_REPO" target-repo || {
+            echo "❌ Error: Could not clone target repository"
+            exit 1
+          }
+          
+          cd target-repo
+          
+          # Create .github/workflows directory if it doesn't exist
+          mkdir -p .github/workflows
+          
+          # Copy essential workflow templates
+          TEMPLATES=(
+            "ci.yml:Basic CI pipeline"
+            "security-scan.yml:Security scanning"
+            "dependency-updates.yml:Dependency updates"
+            "stale-management.yml:Stale issue management"
+          )
+          
+          COPIED=0
+          for template_info in "${TEMPLATES[@]}"; do
+            IFS=':' read -r TEMPLATE DESC <<< "$template_info"
+            SOURCE="${GITHUB_WORKSPACE}/.github-repo/workflow-templates/$TEMPLATE"
+            DEST=".github/workflows/$TEMPLATE"
+            
+            if [ -f "$SOURCE" ]; then
+              if [ ! -f "$DEST" ]; then
+                cp "$SOURCE" "$DEST"
+                echo "  ✅ Copied: $TEMPLATE ($DESC)"
+                ((COPIED++))
+              else
+                echo "  ⏭️  Skipped: $TEMPLATE (already exists)"
+              fi
+            else
+              echo "  ⚠️  Template not found: $TEMPLATE"
+            fi
+          done
+          
+          if [ $COPIED -gt 0 ]; then
+            # Configure git
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            
+            # Create branch and commit
+            BRANCH_NAME="bootstrap/workflow-templates-$(date +%s)"
+            git checkout -b "$BRANCH_NAME"
+            git add .github/workflows/
+            git commit -m "chore: add workflow templates from .github repository
+
+- Added $COPIED workflow template(s)
+- Templates copied: ${TEMPLATES[@]%%:*}
+- Automated by repository-bootstrap workflow"
+            
+            # Push and create PR
+            git push origin "$BRANCH_NAME"
+            
+            gh pr create \
+              --repo "$TARGET_REPO" \
+              --base main \
+              --head "$BRANCH_NAME" \
+              --title "chore: Add workflow templates" \
+              --body "This PR adds standard workflow templates from the organization's \`.github\` repository.
+
+## Templates Added
+
+$(for template_info in "${TEMPLATES[@]}"; do
+  IFS=':' read -r TEMPLATE DESC <<< "$template_info"
+  echo "- **$TEMPLATE**: $DESC"
+done)
+
+## Next Steps
+
+1. Review the workflows and customize as needed
+2. Add any required secrets to the repository settings
+3. Update workflow triggers based on your needs
+
+---
+*Automated by repository-bootstrap workflow*" || {
+              echo "⚠️ Warning: Could not create PR. Changes pushed to branch $BRANCH_NAME"
+            }
+            
+            echo "✅ Workflow templates copied and PR created"
+          else
+            echo "ℹ️ No new workflow templates to copy"
+          fi
+          
+          cd "$GITHUB_WORKSPACE"
+          rm -rf "$TEMP_DIR"
+
+      - name: "Configure branch protection"
+        if: inputs.configure_branch_protection
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "🔒 Configuring branch protection for $TARGET_REPO..."
+          
+          # Get default branch
+          DEFAULT_BRANCH=$(gh repo view "$TARGET_REPO" --json defaultBranchRef --jq .defaultBranchRef.name)
+          echo "  Default branch: $DEFAULT_BRANCH"
+          
+          # Apply branch protection rules
+          gh api --method PUT "/repos/$TARGET_REPO/branches/$DEFAULT_BRANCH/protection" \
+            -f required_status_checks='{"strict":true,"contexts":[]}' \
+            -f enforce_admins=false \
+            -f required_pull_request_reviews='{"required_approving_review_count":1,"dismiss_stale_reviews":true}' \
+            -f restrictions=null \
+            -f required_linear_history=false \
+            -f allow_force_pushes=false \
+            -f allow_deletions=false \
+            -f required_conversation_resolution=true || {
+            echo "⚠️ Warning: Could not configure branch protection. This requires admin permissions and a PAT."
+            exit 0
+          }
+          
+          echo "✅ Branch protection rules configured for $DEFAULT_BRANCH"
+
+      - name: "Generate bootstrap summary"
+        env:
+          TARGET_REPO: ${{ steps.target.outputs.repository }}
+        run: |
+          echo "📊 Repository Bootstrap Summary"
+          echo "================================"
+          echo ""
+          echo "Repository: $TARGET_REPO"
+          echo ""
+          echo "Features Configured:"
+          
+          if [ "${{ inputs.enable_issues }}" = "true" ]; then
+            echo "  ✅ Issues enabled"
+          fi
+          
+          if [ "${{ inputs.enable_projects }}" = "true" ]; then
+            echo "  ✅ Projects enabled"
+          fi
+          
+          if [ "${{ inputs.enable_discussions }}" = "true" ]; then
+            echo "  ✅ Discussions enabled"
+          fi
+          
+          if [ "${{ inputs.enable_wiki }}" = "true" ]; then
+            echo "  ✅ Wiki enabled"
+          fi
+          
+          if [ "${{ inputs.create_labels }}" = "true" ]; then
+            echo "  ✅ Standard labels created"
+          fi
+          
+          if [ "${{ inputs.create_project_board }}" = "true" ]; then
+            echo "  ✅ Project board created"
+          fi
+          
+          if [ "${{ inputs.copy_workflow_templates }}" = "true" ]; then
+            echo "  ✅ Workflow templates copied"
+          fi
+          
+          if [ "${{ inputs.configure_branch_protection }}" = "true" ]; then
+            echo "  ✅ Branch protection configured"
+          fi
+          
+          echo ""
+          echo "🎉 Bootstrap complete!"
+          echo ""
+          echo "Next steps:"
+          echo "1. Review the repository settings and features"
+          echo "2. Customize workflows and templates as needed"
+          echo "3. Add team members and configure permissions"
+          echo "4. Start using the repository!"

@@ -1,0 +1,64 @@
+labels: [question]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 General Q&A
+        
+        Ask questions, get answers, and share knowledge with the community!
+        
+        **Before posting:**
+        - Search existing discussions to see if your question has been answered
+        - Check the [documentation](https://github.com/ivi374forivi/.github)
+        - Review our [Best Practices Guide](../../docs/guides/BEST_PRACTICES.md)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: Describe your question clearly and provide context...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any additional information that might help others answer your question
+      placeholder: |
+        - What have you already tried?
+        - What resources have you checked?
+        - Any relevant links or documentation?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Topic Area
+      description: Which area does your question relate to?
+      options:
+        - Workflows & CI/CD
+        - Security & Compliance
+        - Community Health
+        - Documentation
+        - GitHub Actions
+        - Templates & Configuration
+        - Best Practices
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched existing discussions for similar questions
+          required: true
+        - label: I have checked the documentation
+          required: true
+        - label: I have provided sufficient context for my question
+          required: true

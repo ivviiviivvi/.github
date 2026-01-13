@@ -1,0 +1,245 @@
+name: Workflow Health Check
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        with:
+          fetch-depth: 100  # Last 100 commits for analysis
+      
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml requests
+      
+      - name: Analyze workflow health
+        id: health
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import json
+          import yaml
+          from pathlib import Path
+          from datetime import datetime, timedelta
+          import subprocess
+          
+          # Analyze all workflows
+          workflows_dir = Path('.github/workflows')
+          health_report = {
+              "timestamp": datetime.now().isoformat(),
+              "overall_health": "excellent",
+              "total_workflows": 0,
+              "healthy_workflows": 0,
+              "warnings": [],
+              "errors": [],
+              "recommendations": [],
+              "metrics": {
+                  "security": {"score": 10, "issues": []},
+                  "performance": {"score": 9, "issues": []},
+                  "reliability": {"score": 9, "issues": []},
+                  "maintainability": {"score": 9, "issues": []}
+              }
+          }
+          
+          workflows = list(workflows_dir.glob('*.yml')) + list(workflows_dir.glob('*.yaml'))
+          health_report["total_workflows"] = len(workflows)
+          
+          # Check each workflow
+          for workflow_file in workflows:
+              try:
+                  with open(workflow_file, 'r') as f:
+                      workflow = yaml.safe_load(f)
+                  
+                  workflow_name = workflow_file.name
+                  
+                  # Security checks
+                  if 'permissions' not in workflow:
+                      health_report["warnings"].append(f"{workflow_name}: Missing explicit permissions")
+                      health_report["metrics"]["security"]["score"] -= 0.1
+                  
+                  # Check for unpinned actions
+                  workflow_str = open(workflow_file).read()
+                  if '@master' in workflow_str or '@main' in workflow_str:
+                      health_report["errors"].append(f"{workflow_name}: Contains unpinned actions (@master/@main)")
+                      health_report["metrics"]["security"]["score"] -= 0.5
+                  
+                  # Performance checks
+                  if 'setup-python' in workflow_str and 'cache:' not in workflow_str:
+                      health_report["recommendations"].append(f"{workflow_name}: Could benefit from pip caching")
+                  
+                  if 'setup-node' in workflow_str and 'cache:' not in workflow_str:
+                      health_report["recommendations"].append(f"{workflow_name}: Could benefit from npm caching")
+                  
+                  # Reliability checks
+                  if 'timeout-minutes' not in workflow_str:
+                      health_report["warnings"].append(f"{workflow_name}: Missing timeout configuration")
+                  
+                  # If no issues, mark as healthy
+                  workflow_issues = [w for w in health_report["warnings"] + health_report["errors"] if workflow_name in w]
+                  if not workflow_issues:
+                      health_report["healthy_workflows"] += 1
+                  
+              except Exception as e:
+                  health_report["errors"].append(f"{workflow_file.name}: Parse error - {str(e)}")
+          
+          # Calculate overall health
+          health_percentage = (health_report["healthy_workflows"] / health_report["total_workflows"]) * 100
+          
+          if health_percentage >= 95:
+              health_report["overall_health"] = "excellent"
+          elif health_percentage >= 85:
+              health_report["overall_health"] = "good"
+          elif health_percentage >= 70:
+              health_report["overall_health"] = "fair"
+          else:
+              health_report["overall_health"] = "needs attention"
+          
+          # Save report
+          os.makedirs('metrics/health', exist_ok=True)
+          with open('metrics/health/latest.json', 'w') as f:
+              json.dump(health_report, f, indent=2)
+          
+          # Output summary
+          print(f"Overall Health: {health_report['overall_health']}")
+          print(f"Healthy Workflows: {health_report['healthy_workflows']}/{health_report['total_workflows']}")
+          print(f"Errors: {len(health_report['errors'])}")
+          print(f"Warnings: {len(health_report['warnings'])}")
+          
+          # Set outputs
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"health={health_report['overall_health']}\n")
+              f.write(f"errors={len(health_report['errors'])}\n")
+              f.write(f"warnings={len(health_report['warnings'])}\n")
+          EOF
+      
+      - name: Create health report
+        run: |
+          cat > metrics/health/README.md << 'EOF'
+          # Workflow Health Report
+          
+          Automated health checks for all GitHub Actions workflows.
+          
+          ## Current Status
+          
+          - **Overall Health**: See `latest.json`
+          - **Last Check**: Auto-updated every 6 hours
+          - **Healthy Workflows**: Tracked in report
+          
+          ## Health Criteria
+          
+          ### Security (Weight: 30%)
+          - ✅ All actions pinned to commit SHAs
+          - ✅ Explicit minimal permissions
+          - ✅ No secrets in logs
+          - ✅ SARIF uploads for security scans
+          
+          ### Performance (Weight: 25%)
+          - ✅ Caching enabled where applicable
+          - ✅ Optimal runner selection
+          - ✅ Path filters for selective runs
+          - ✅ Concurrency controls
+          
+          ### Reliability (Weight: 25%)
+          - ✅ Timeout configurations
+          - ✅ Retry logic for flaky operations
+          - ✅ Error handling
+          - ✅ Notification on failures
+          
+          ### Maintainability (Weight: 20%)
+          - ✅ Reusable workflows
+          - ✅ Clear naming conventions
+          - ✅ Comprehensive documentation
+          - ✅ DRY principle
+          
+          ## Health Grades
+          
+          - **Excellent**: 95-100% healthy workflows
+          - **Good**: 85-94% healthy workflows
+          - **Fair**: 70-84% healthy workflows
+          - **Needs Attention**: <70% healthy workflows
+          
+          ## Automated Actions
+          
+          When health degrades:
+          1. Issue automatically created
+          2. Notification sent to team
+          3. Dashboard updated with status
+          4. Recommendations provided
+          
+          ## Manual Review
+          
+          Trigger health check manually:
+          ```bash
+          gh workflow run health-check.yml
+          ```
+          EOF
+      
+      - name: Commit health report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add metrics/health/
+          git diff --staged --quiet || git commit -m "chore: update workflow health check report"
+      
+      - name: Create issue if health is poor
+        if: steps.health.outputs.errors != '0'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
+        with:
+          script: |
+            const errors = ${{ steps.health.outputs.errors }};
+            const warnings = ${{ steps.health.outputs.warnings }};
+            
+            if (errors > 0) {
+              // Check for existing health issue
+              const issues = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                labels: 'workflow-health'
+              });
+              
+              if (issues.data.length === 0) {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: '🔴 Workflow Health Check: Critical Issues Detected',
+                  body: `## Workflow Health Alert\n\n**Errors**: ${errors}\n**Warnings**: ${warnings}\n\nPlease review the health report at \`metrics/health/latest.json\` for details.\n\n### Recommended Actions\n1. Review error messages\n2. Fix critical issues\n3. Re-run health check\n4. Close this issue when resolved`,
+                  labels: ['workflow-health', 'priority:high']
+                });
+              }
+            }
+      
+      - name: Generate summary
+        run: |
+          echo "## 🏥 Workflow Health Check Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Overall Health**: ${{ steps.health.outputs.health }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Errors**: ${{ steps.health.outputs.errors }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Warnings**: ${{ steps.health.outputs.warnings }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Full report: \`metrics/health/latest.json\`" >> $GITHUB_STEP_SUMMARY

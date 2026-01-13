@@ -1,0 +1,7 @@
+{
+  "name": "Badge Management Workflow",
+  "description": "Automatically generate and maintain comprehensive repository badges in README",
+  "iconName": "badge",
+  "categories": ["Automation", "Documentation"],
+  "filePatterns": ["package.json$", "requirements.txt$", "Cargo.toml$", "README.md$"]
+}

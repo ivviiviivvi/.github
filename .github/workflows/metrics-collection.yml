@@ -1,0 +1,225 @@
+name: Workflow Metrics Collection
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: metrics-collection
+  cancel-in-progress: false
+
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests python-dateutil
+      
+      - name: Collect workflow metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          import requests
+          from datetime import datetime, timedelta
+          from collections import defaultdict
+          
+          # GitHub API setup
+          token = os.environ['GITHUB_TOKEN']
+          repo = os.environ['GITHUB_REPOSITORY']
+          headers = {
+              'Authorization': f'token {token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+          
+          print("📊 Collecting workflow metrics...")
+          print(f"Repository: {repo}")
+          
+          # Get all workflows
+          workflows_url = f'https://api.github.com/repos/{repo}/actions/workflows'
+          workflows_response = requests.get(workflows_url, headers=headers)
+          workflows = workflows_response.json().get('workflows', [])
+          
+          print(f"Found {len(workflows)} workflows")
+          
+          metrics = []
+          total_runs = 0
+          total_successful = 0
+          total_duration = 0
+          workflows_with_data = 0
+          
+          for workflow in workflows:
+              workflow_id = workflow['id']
+              workflow_name = workflow['name']
+              workflow_path = workflow['path']
+              
+              # Get recent runs for this workflow
+              runs_url = f'https://api.github.com/repos/{repo}/actions/workflows/{workflow_id}/runs'
+              runs_response = requests.get(runs_url, headers=headers, params={'per_page': 20})
+              runs_data = runs_response.json()
+              runs = runs_data.get('workflow_runs', [])
+              
+              if not runs:
+                  continue
+              
+              workflows_with_data += 1
+              
+              # Calculate metrics
+              successful = sum(1 for r in runs if r['conclusion'] == 'success')
+              failed = sum(1 for r in runs if r['conclusion'] == 'failure')
+              total = len(runs)
+              
+              total_runs += total
+              total_successful += successful
+              
+              # Calculate average duration (in minutes)
+              durations = []
+              for run in runs:
+                  if run['conclusion'] == 'success':
+                      created = datetime.fromisoformat(run['created_at'].replace('Z', '+00:00'))
+                      updated = datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))
+                      duration = (updated - created).total_seconds() / 60
+                      durations.append(duration)
+              
+              avg_duration = sum(durations) / len(durations) if durations else 0
+              total_duration += avg_duration
+              
+              # Get cache hit data (if available from logs)
+              cache_hits = 0
+              cache_total = 0
+              for run in runs[:5]:  # Check last 5 runs
+                  jobs_url = run['jobs_url']
+                  jobs_response = requests.get(jobs_url, headers=headers)
+                  jobs = jobs_response.json().get('jobs', [])
+                  for job in jobs:
+                      for step in job.get('steps', []):
+                          step_name = step.get('name', '').lower()
+                          if 'cache' in step_name:
+                              cache_total += 1
+                              if step.get('conclusion') == 'success':
+                                  cache_hits += 1
+              
+              cache_hit_rate = (cache_hits / cache_total * 100) if cache_total > 0 else None
+              
+              metrics.append({
+                  'name': workflow_name,
+                  'path': workflow_path,
+                  'total_runs': total,
+                  'successful_runs': successful,
+                  'failed_runs': failed,
+                  'success_rate': round(successful / total * 100, 1) if total > 0 else 0,
+                  'avg_duration_min': round(avg_duration, 1),
+                  'cache_hit_rate': round(cache_hit_rate, 1) if cache_hit_rate is not None else None
+              })
+          
+          # Sort by total runs (most active first)
+          metrics.sort(key=lambda x: x['total_runs'], reverse=True)
+          
+          # Calculate aggregate metrics
+          overall_success_rate = (total_successful / total_runs * 100) if total_runs > 0 else 0
+          avg_workflow_duration = (total_duration / workflows_with_data) if workflows_with_data > 0 else 0
+          
+          # Create output structure
+          output = {
+              'collected_at': datetime.utcnow().isoformat() + 'Z',
+              'repository': repo,
+              'summary': {
+                  'total_workflows': len(workflows),
+                  'workflows_with_runs': workflows_with_data,
+                  'total_runs_analyzed': total_runs,
+                  'overall_success_rate': round(overall_success_rate, 1),
+                  'avg_workflow_duration_min': round(avg_workflow_duration, 1)
+              },
+              'workflows': metrics
+          }
+          
+          # Create metrics directory if it doesn't exist
+          os.makedirs('metrics', exist_ok=True)
+          
+          # Write metrics
+          with open('metrics/workflow-metrics.json', 'w') as f:
+              json.dump(output, f, indent=2)
+          
+          print(f"\n✅ Metrics collected successfully!")
+          print(f"   Workflows analyzed: {workflows_with_data}")
+          print(f"   Total runs: {total_runs}")
+          print(f"   Overall success rate: {overall_success_rate:.1f}%")
+          print(f"   Avg duration: {avg_workflow_duration:.1f} min")
+          
+          # Generate summary report
+          print("\n📈 Top 10 Most Active Workflows:")
+          for i, metric in enumerate(metrics[:10], 1):
+              print(f"   {i}. {metric['name']}: {metric['total_runs']} runs, {metric['success_rate']}% success, {metric['avg_duration_min']} min avg")
+          EOF
+      
+      - name: Generate metrics summary
+        run: |
+          cat << 'EOF' > metrics/metrics-summary.md
+          # Workflow Metrics Summary
+          
+          **Last Updated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          ## Overview
+          
+          This file is automatically updated every 6 hours with the latest workflow metrics.
+          
+          $(python3 << 'PYTHON'
+          import json
+          with open('metrics/workflow-metrics.json', 'r') as f:
+              data = json.load(f)
+          
+          summary = data['summary']
+          print(f"- **Total Workflows**: {summary['total_workflows']}")
+          print(f"- **Active Workflows**: {summary['workflows_with_runs']}")
+          print(f"- **Runs Analyzed**: {summary['total_runs_analyzed']}")
+          print(f"- **Success Rate**: {summary['overall_success_rate']}%")
+          print(f"- **Avg Duration**: {summary['avg_workflow_duration_min']} minutes")
+          print()
+          print("## Top 10 Most Active Workflows")
+          print()
+          print("| Rank | Workflow | Runs | Success Rate | Avg Duration |")
+          print("|------|----------|------|--------------|--------------|")
+          for i, wf in enumerate(data['workflows'][:10], 1):
+              print(f"| {i} | {wf['name']} | {wf['total_runs']} | {wf['success_rate']}% | {wf['avg_duration_min']} min |")
+          PYTHON
+          )
+          
+          ## Metrics Files
+          
+          - `workflow-metrics.json` - Complete metrics data (updated automatically)
+          - `baseline-metrics.json` - Baseline for comparison
+          
+          EOF
+      
+      - name: Commit metrics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add metrics/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update workflow metrics [skip ci]"
+            git push
+            echo "✅ Metrics committed and pushed"
+          fi

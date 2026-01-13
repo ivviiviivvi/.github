@@ -18,6 +18,10 @@ on:
     types:
       - 'created'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
 defaults:
   run:
     shell: 'bash'
@@ -27,6 +31,7 @@ jobs:
     if: |-
      ${{ fromJSON(vars.DEBUG || vars.ACTIONS_STEP_DEBUG || false) }}
     runs-on: 'ubuntu-latest'
+    timeout-minutes: 5
     permissions:
       contents: 'read'
     steps:

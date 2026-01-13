@@ -1,0 +1,108 @@
+labels: [announcement]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📢 Announcements
+        
+        Official announcements from the maintainers team.
+        
+        **Note:** Only maintainers can create announcements using this template.
+
+  - type: input
+    id: title
+    attributes:
+      label: Announcement Title
+      description: A clear, concise title for the announcement
+      placeholder: e.g., New Feature - Automated Deployment Gallery
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Announcement Type
+      description: What type of announcement is this?
+      options:
+        - New Feature
+        - Release
+        - Breaking Change
+        - Deprecation
+        - Policy Change
+        - Event
+        - Maintenance
+        - General Update
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A brief overview of the announcement
+      placeholder: Provide a concise summary that captures the key message...
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Full details of the announcement
+      placeholder: Provide comprehensive information about this announcement...
+    validations:
+      required: true
+
+  - type: textarea
+    id: action-required
+    attributes:
+      label: Action Required (if any)
+      description: Do users need to take any action?
+      placeholder: |
+        - Steps users need to take
+        - Migration instructions
+        - Configuration changes
+        - Deadlines
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: Who or what is affected by this announcement?
+      placeholder: Describe the scope and impact of this announcement...
+    validations:
+      required: false
+
+  - type: input
+    id: effective-date
+    attributes:
+      label: Effective Date (if applicable)
+      description: When does this change/feature take effect?
+      placeholder: YYYY-MM-DD
+    validations:
+      required: false
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Additional Resources
+      description: Links to documentation, guides, or related resources
+      placeholder: |
+        - Documentation: [link]
+        - Migration Guide: [link]
+        - Related Discussion: [link]
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: visibility
+    attributes:
+      label: Visibility
+      options:
+        - label: Pin this announcement to the top of discussions
+          required: false
+        - label: This is a critical announcement
+          required: false

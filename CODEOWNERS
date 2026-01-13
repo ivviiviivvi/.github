@@ -2,209 +2,60 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 #
 # These owners will be automatically requested for review when someone opens a pull request
-# that modifies code that they own. 
-#
-# IMPORTANT: Order matters! More specific patterns should appear AFTER general patterns.
-# The last matching pattern takes precedence.
-#
-# Teams must have explicit write access to the repository to be valid code owners.
-# See TEAM_STRUCTURE.md for team definitions and permissions.
+# that modifies code that they own. Order is important; the last matching pattern takes precedence.
 
 ##############################
 # Default Owners
 ##############################
 
 # Default owners for everything in the repo
-# Leadership team has oversight but should not be used for routine code review
 * @ivviiviivvi/leadership
 
 ##############################
-# Source Code
+# Engineering
 ##############################
 
-# General source code - Engineering team
+# Engineering owns code
 /src/ @ivviiviivvi/engineering
-
-# Python files - Backend team
-*.py @ivviiviivvi/backend
-
-# JavaScript and TypeScript - Frontend team
-*.js @ivviiviivvi/frontend
-*.jsx @ivviiviivvi/frontend
-*.ts @ivviiviivvi/frontend
-*.tsx @ivviiviivvi/frontend
-*.vue @ivviiviivvi/frontend
-*.svelte @ivviiviivvi/frontend
-
-# Frontend-specific directories
-/src/components/ @ivviiviivvi/frontend
-/src/pages/ @ivviiviivvi/frontend
-/src/views/ @ivviiviivvi/frontend
-/public/ @ivviiviivvi/frontend
-/static/ @ivviiviivvi/frontend
-
-# Backend-specific directories
-/src/api/ @ivviiviivvi/backend
-/src/services/ @ivviiviivvi/backend
-/src/models/ @ivviiviivvi/backend
-/src/database/ @ivviiviivvi/backend
+*.py @ivviiviivvi/engineering
+*.js @ivviiviivvi/engineering
+*.ts @ivviiviivvi/engineering
+*.tsx @ivviiviivvi/engineering
+*.jsx @ivviiviivvi/engineering
+*.java @ivviiviivvi/engineering
+*.go @ivviiviivvi/engineering
+*.rs @ivviiviivvi/engineering
 
 ##############################
-# Infrastructure & DevOps
+# DevOps and Infrastructure
 ##############################
 
-# GitHub Actions workflows
+# DevOps owns infrastructure
 /.github/workflows/ @ivviiviivvi/devops
-
-# Infrastructure as code
 /infrastructure/ @ivviiviivvi/devops
-/terraform/ @ivviiviivvi/devops
-/kubernetes/ @ivviiviivvi/devops
-/k8s/ @ivviiviivvi/devops
-
-# Docker
-Dockerfile* @ivviiviivvi/devops
-docker-compose*.yml @ivviiviivvi/devops
-docker-compose*.yaml @ivviiviivvi/devops
-/docker/ @ivviiviivvi/devops
-
-# CI/CD and deployment
-/.github/workflows/deploy*.yml @ivviiviivvi/devops
-/.github/workflows/ci*.yml @ivviiviivvi/devops
-/.circleci/ @ivviiviivvi/devops
-/.gitlab-ci.yml @ivviiviivvi/devops
-/scripts/deploy/ @ivviiviivvi/devops
-
-# Configuration files
 *.yml @ivviiviivvi/devops
 *.yaml @ivviiviivvi/devops
-*.toml @ivviiviivvi/devops
-.env.example @ivviiviivvi/devops
-
-# Dependency management
-package.json @ivviiviivvi/devops
-package-lock.json @ivviiviivvi/devops
-requirements.txt @ivviiviivvi/devops
-Pipfile @ivviiviivvi/devops
-Pipfile.lock @ivviiviivvi/devops
-go.mod @ivviiviivvi/devops
-go.sum @ivviiviivvi/devops
-Gemfile @ivviiviivvi/devops
-Gemfile.lock @ivviiviivvi/devops
-Cargo.toml @ivviiviivvi/devops
-Cargo.lock @ivviiviivvi/devops
+Dockerfile @ivviiviivvi/devops
+docker-compose.yml @ivviiviivvi/devops
+.dockerignore @ivviiviivvi/devops
 
 ##############################
 # Security
 ##############################
 
-# Security policy and advisories
+# Security team for security files
 /SECURITY.md @ivviiviivvi/security
-
-# Security-related workflows
-/.github/workflows/security*.yml @ivviiviivvi/security
+/.github/SECURITY.md @ivviiviivvi/security
+/.github/CLAUDE_SECURITY.md @ivviiviivvi/security
 /.github/workflows/codeql*.yml @ivviiviivvi/security
-
-# Authentication and authorization
-**/auth/ @ivviiviivvi/security
-**/authentication/ @ivviiviivvi/security
-**/authorization/ @ivviiviivvi/security
-/src/security/ @ivviiviivvi/security
-
-# Security configurations
-/security/ @ivviiviivvi/security
-
-##############################
-# Documentation
-##############################
-
-# All markdown files - Engineering team
-*.md @ivviiviivvi/engineering
-
-# Documentation directory
-/docs/ @ivviiviivvi/engineering
-
-# API documentation
-/docs/api/ @ivviiviivvi/backend
-
-##############################
-# GitHub-specific Files
-##############################
-
-# GitHub-specific configuration files (Leadership oversight)
-/.github/ @ivviiviivvi/leadership
-
-# Community health files
-/CODE_OF_CONDUCT.md @ivviiviivvi/leadership
-/CONTRIBUTING.md @ivviiviivvi/leadership
-/LICENSE @ivviiviivvi/leadership
-
-##############################
-# GitHub Copilot Customizations
-##############################
-
-# GitHub Copilot agents
-/agents/ @ivviiviivvi/engineering
-
-# GitHub Copilot chat modes
-/chatmodes/ @ivviiviivvi/engineering
-
-# GitHub Copilot collections
-/collections/ @ivviiviivvi/engineering
-
-# GitHub Copilot instructions
-/instructions/ @ivviiviivvi/engineering
-
-# GitHub Copilot prompts
-/prompts/ @ivviiviivvi/engineering
-
-##############################
-# Templates
-##############################
-
-# Issue templates
-/ISSUE_TEMPLATE/ @ivviiviivvi/leadership
-
-# Discussion templates
-/DISCUSSION_TEMPLATE/ @ivviiviivvi/leadership
-
-# PR templates
-/PULL_REQUEST_TEMPLATE/ @ivviiviivvi/leadership
-/PULL_REQUEST_TEMPLATE.md @ivviiviivvi/leadership
-
-##############################
-# Automation Scripts
-##############################
-
-# General scripts
-/scripts/ @ivviiviivvi/devops
-
-# Python automation scripts
-/scripts/*.py @ivviiviivvi/backend @ivviiviivvi/devops
-
-# Shell scripts
-/scripts/*.sh @ivviiviivvi/devops
+/.github/workflows/security-*.yml @ivviiviivvi/security
+/.github/workflows/scan-*.yml @ivviiviivvi/security
 
 ##############################
 # Organization Documentation
 ##############################
 
-# Organization documentation
-/profile/ @ivviiviivvi/leadership
-
-# Team structure and governance
-TEAM_STRUCTURE.md @ivviiviivvi/leadership
-
-# AI Implementation Protocol
-/for-ai-implementation.txt @ivviiviivvi/engineering
-AI_IMPLEMENTATION_GUIDE.md @ivviiviivvi/engineering
-
-##############################
-# Context and Observability
-##############################
-
-# Context handoff system
-/context-handoff/ @ivviiviivvi/engineering
-
-# Observability and monitoring
-/observability/ @ivviiviivvi/devops
+# Documentation
+*.md @ivviiviivvi/leadership @ivviiviivvi/engineering
+/docs/ @ivviiviivvi/engineering
+/README.md @ivviiviivvi/leadership

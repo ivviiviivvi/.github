@@ -2,22 +2,32 @@ name: Health Check - Live Apps Monitoring
 
 on:
   schedule:
-    # Run every 5 minutes
-    - cron: '*/5 * * * *'
+    # Run every 30 minutes (reduced from 5 minutes to save costs)
+    # Was: 288 runs/day, Now: 48 runs/day = 83% cost reduction
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 env:
   LOG_DIR: ./health-check-logs
   TIMESTAMP: ${{ github.event.head_commit.timestamp || github.event.repository.pushed_at }}
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   health-check:
     runs-on: ubuntu-latest
     name: Monitor Application Health
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 1
 
@@ -70,12 +80,12 @@ jobs:
 
             if [ ${#failed_apps[@]} -gt 0 ]; then
               echo "Failed Applications: ${failed_apps[*]}" | tee -a ${{ env.LOG_DIR }}/health-check.log
-              echo "::set-output name=failed_apps::${failed_apps[*]}"
-              echo "::set-output name=has_failures::true"
+              echo "failed_apps=${failed_apps[*]}" >> $GITHUB_OUTPUT
+              echo "has_failures=true" >> $GITHUB_OUTPUT
               exit 1
             else
               echo "All applications are healthy!" | tee -a ${{ env.LOG_DIR }}/health-check.log
-              echo "::set-output name=has_failures::false"
+              echo "has_failures=false" >> $GITHUB_OUTPUT
             fi
           }
 
@@ -146,7 +156,7 @@ jobs:
           done
 
           echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC') - Recovery Status: $recovery_count/3 applications recovered" | tee -a ${{ env.LOG_DIR }}/health-check.log
-          echo "::set-output name=recovered_count::$recovery_count"
+          echo "recovered_count=$recovery_count" >> $GITHUB_OUTPUT
 
       - name: Generate Health Report
         if: always()
@@ -167,7 +177,7 @@ jobs:
 
       - name: Upload Health Check Logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
         with:
           name: health-check-logs-${{ github.run_number }}
           path: ${{ env.LOG_DIR }}/
@@ -176,7 +186,7 @@ jobs:
 
       - name: Alert on Failures - Create Issue
         if: failure() && steps.endpoint_check.outputs.has_failures == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
             const failedApps = "${{ steps.endpoint_check.outputs.failed_apps }}".split(' ').filter(x => x);
@@ -225,7 +235,7 @@ jobs:
 
       - name: Slack Notification (Optional)
         if: failure() && steps.endpoint_check.outputs.has_failures == 'true'
-        uses: 8398a7/action-slack@v3
+        uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486 # ratchet:8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           text: '🚨 Application Health Check Failed!\n${{ steps.endpoint_check.outputs.failed_apps }}'

@@ -1,0 +1,170 @@
+labels: [help-wanted]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🆘 Help Wanted
+        
+        Request help from the community or offer your expertise!
+        
+        **Use this for:**
+        - Getting help with implementation challenges
+        - Finding collaborators for projects
+        - Offering expertise in specific areas
+        - Seeking code reviews or feedback
+        - Building connections with other contributors
+
+  - type: dropdown
+    id: request-type
+    attributes:
+      label: Request Type
+      description: What kind of help are you looking for or offering?
+      options:
+        - Seeking Help - Implementation Issue
+        - Seeking Help - Design/Architecture
+        - Seeking Help - Code Review
+        - Seeking Help - Testing/Debugging
+        - Seeking Help - Documentation
+        - Offering Help - Available to assist
+        - Looking for Collaborators
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe what you need help with or what you're offering
+      placeholder: |
+        Be specific about:
+        - What you're working on
+        - What kind of help you need
+        - What you've already tried (if seeking help)
+        - Your area of expertise (if offering help)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of Focus
+      description: What area does this relate to?
+      multiple: true
+      options:
+        - GitHub Actions/Workflows
+        - CI/CD Pipeline
+        - Security & Scanning
+        - Documentation
+        - Templates & Configuration
+        - Python Development
+        - JavaScript/Node.js
+        - DevOps/Infrastructure
+        - Testing
+        - Code Review
+        - Community Management
+        - Other
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      description: How urgent is this?
+      options:
+        - Critical - Blocking work
+        - High - Needed soon
+        - Medium - Would like help within a week
+        - Low - No rush
+        - Flexible - Whenever someone is available
+    validations:
+      required: true
+
+  - type: dropdown
+    id: time-commitment
+    attributes:
+      label: Estimated Time Commitment
+      description: How much time might this require?
+      options:
+        - Quick (< 30 minutes)
+        - Short (30 minutes - 2 hours)
+        - Medium (2-8 hours)
+        - Long (> 8 hours)
+        - Ongoing collaboration
+        - Uncertain
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context & Background
+      description: Provide relevant context
+      placeholder: |
+        - Links to relevant code, issues, or PRs
+        - Error messages or logs
+        - What you're trying to achieve
+        - Constraints or requirements
+    validations:
+      required: false
+
+  - type: textarea
+    id: attempted-solutions
+    attributes:
+      label: What Have You Tried? (if seeking help)
+      description: What solutions have you already attempted?
+      placeholder: |
+        List what you've tried so far:
+        - Approaches attempted
+        - Resources consulted
+        - Why they didn't work
+    validations:
+      required: false
+
+  - type: textarea
+    id: expertise
+    attributes:
+      label: Your Expertise (if offering help)
+      description: What are your areas of expertise?
+      placeholder: |
+        - Technical skills
+        - Relevant experience
+        - Areas you're comfortable helping with
+        - Availability
+    validations:
+      required: false
+
+  - type: textarea
+    id: skills-needed
+    attributes:
+      label: Skills/Knowledge Needed
+      description: What skills or knowledge would be helpful?
+      placeholder: |
+        - Required skills or experience
+        - Helpful but not required skills
+        - Domain knowledge needed
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Details
+      options:
+        - label: This could be a good first issue for new contributors
+          required: false
+        - label: Mentorship/guidance is available
+          required: false
+        - label: This relates to an active project or initiative
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched existing discussions for similar requests
+          required: true
+        - label: I have provided sufficient context
+          required: true
+        - label: I am respectful of others' time and expertise
+          required: true

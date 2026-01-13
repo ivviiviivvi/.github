@@ -1,0 +1,454 @@
+name: "Bio and Description Completions"
+
+on:
+  schedule:
+    # Run weekly on Monday at 9 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "Scope of completion check"
+        required: false
+        type: choice
+        options:
+          - "all"
+          - "organization"
+          - "repositories"
+          - "current-repo"
+        default: "all"
+      auto_fix:
+        description: "Automatically create PRs to fix missing descriptions"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      scope:
+        description: "Scope of completion check"
+        required: false
+        type: string
+        default: "all"
+      auto_fix:
+        description: "Automatically create PRs to fix missing descriptions"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: "bio-completions-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  metadata: read
+
+jobs:
+  audit-completeness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      - name: "Load completions configuration"
+        id: load-config
+        run: |
+          CONFIG_FILE=".github/completions-config.yml"
+          
+          # Set defaults
+          ENABLED="true"
+          MIN_DESCRIPTION_LENGTH="20"
+          CHECK_TOPICS="true"
+          CHECK_WEBSITE="true"
+          CREATE_ISSUES="false"
+          
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "📝 Loading completions configuration from $CONFIG_FILE"
+            
+            if command -v yq &> /dev/null; then
+              ENABLED=$(yq eval '.enabled // true' "$CONFIG_FILE")
+              MIN_DESCRIPTION_LENGTH=$(yq eval '.min_description_length // 20' "$CONFIG_FILE")
+              CHECK_TOPICS=$(yq eval '.check_topics // true' "$CONFIG_FILE")
+              CHECK_WEBSITE=$(yq eval '.check_website // true' "$CONFIG_FILE")
+              CREATE_ISSUES=$(yq eval '.create_issues // false' "$CONFIG_FILE")
+            fi
+          else
+            echo "ℹ️ No completions configuration file found, using defaults"
+          fi
+          
+          echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
+          echo "min_description_length=$MIN_DESCRIPTION_LENGTH" >> $GITHUB_OUTPUT
+          echo "check_topics=$CHECK_TOPICS" >> $GITHUB_OUTPUT
+          echo "check_website=$CHECK_WEBSITE" >> $GITHUB_OUTPUT
+          echo "create_issues=$CREATE_ISSUES" >> $GITHUB_OUTPUT
+          
+          echo "Completions configuration loaded:"
+          echo "  Enabled: $ENABLED"
+          echo "  Min Description Length: $MIN_DESCRIPTION_LENGTH"
+          echo "  Check Topics: $CHECK_TOPICS"
+          echo "  Check Website: $CHECK_WEBSITE"
+          echo "  Create Issues: $CREATE_ISSUES"
+
+      - name: "Check organization profile"
+        if: inputs.scope == 'all' || inputs.scope == 'organization'
+        id: check-org
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Checking organization profile completeness..."
+          
+          ORG_NAME="${{ github.repository_owner }}"
+          
+          # Fetch organization details
+          ORG_DATA=$(gh api "orgs/$ORG_NAME" 2>/dev/null || echo '{}')
+          
+          ORG_DESCRIPTION=$(echo "$ORG_DATA" | jq -r '.description // ""')
+          ORG_BLOG=$(echo "$ORG_DATA" | jq -r '.blog // ""')
+          ORG_EMAIL=$(echo "$ORG_DATA" | jq -r '.email // ""')
+          ORG_LOCATION=$(echo "$ORG_DATA" | jq -r '.location // ""')
+          ORG_TWITTER=$(echo "$ORG_DATA" | jq -r '.twitter_username // ""')
+          
+          # Check completeness
+          ISSUES=""
+          
+          if [ -z "$ORG_DESCRIPTION" ] || [ ${#ORG_DESCRIPTION} -lt ${{ steps.load-config.outputs.min_description_length }} ]; then
+            ISSUES="${ISSUES}- ❌ Organization description is missing or too short (< ${{ steps.load-config.outputs.min_description_length }} chars)\n"
+          else
+            echo "✓ Organization description: OK"
+          fi
+          
+          if [ -z "$ORG_BLOG" ]; then
+            ISSUES="${ISSUES}- ⚠️ Organization website URL is not set\n"
+          else
+            echo "✓ Organization website: $ORG_BLOG"
+          fi
+          
+          if [ -z "$ORG_EMAIL" ]; then
+            ISSUES="${ISSUES}- ⚠️ Organization email is not set\n"
+          else
+            echo "✓ Organization email: OK"
+          fi
+          
+          if [ -z "$ORG_LOCATION" ]; then
+            ISSUES="${ISSUES}- ⚠️ Organization location is not set\n"
+          else
+            echo "✓ Organization location: $ORG_LOCATION"
+          fi
+          
+          # Check for profile README
+          PROFILE_README_EXISTS="false"
+          if [ -f "profile/README.md" ]; then
+            PROFILE_README_EXISTS="true"
+            echo "✓ Organization profile README exists"
+          else
+            ISSUES="${ISSUES}- ⚠️ Organization profile README (profile/README.md) is missing\n"
+          fi
+          
+          echo "org_issues<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$ISSUES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          if [ -z "$ISSUES" ]; then
+            echo "org_complete=true" >> $GITHUB_OUTPUT
+          else
+            echo "org_complete=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "Audit current repository"
+        if: inputs.scope == 'all' || inputs.scope == 'current-repo'
+        id: check-current-repo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MIN_LENGTH: ${{ steps.load-config.outputs.min_description_length }}
+        run: |
+          echo "🔍 Auditing current repository..."
+          
+          REPO_NAME="${{ github.repository }}"
+          
+          # Fetch repository details
+          REPO_DATA=$(gh api "repos/$REPO_NAME")
+          
+          DESCRIPTION=$(echo "$REPO_DATA" | jq -r '.description // ""')
+          HOMEPAGE=$(echo "$REPO_DATA" | jq -r '.homepage // ""')
+          TOPICS=$(echo "$REPO_DATA" | jq -r '.topics[]' 2>/dev/null | wc -l)
+          HAS_LICENSE=$(echo "$REPO_DATA" | jq -r '.license.key // ""')
+          
+          ISSUES=""
+          SUGGESTIONS=""
+          
+          # Check description
+          if [ -z "$DESCRIPTION" ]; then
+            ISSUES="${ISSUES}- ❌ Repository description is missing\n"
+            SUGGESTIONS="${SUGGESTIONS}- Add a clear, concise description (recommended: 50-160 characters)\n"
+          elif [ ${#DESCRIPTION} -lt $MIN_LENGTH ]; then
+            ISSUES="${ISSUES}- ⚠️ Repository description is too short (${#DESCRIPTION} chars, minimum: $MIN_LENGTH)\n"
+            SUGGESTIONS="${SUGGESTIONS}- Expand description to be more informative\n"
+          else
+            echo "✓ Repository description: OK (${#DESCRIPTION} chars)"
+          fi
+          
+          # Check homepage/website
+          if [ "${{ steps.load-config.outputs.check_website }}" = "true" ] && [ -z "$HOMEPAGE" ]; then
+            ISSUES="${ISSUES}- ⚠️ Repository website URL is not set\n"
+            SUGGESTIONS="${SUGGESTIONS}- Add a website URL if applicable (documentation, demo, etc.)\n"
+          else
+            echo "✓ Repository website: ${HOMEPAGE:-Not set}"
+          fi
+          
+          # Check topics
+          if [ "${{ steps.load-config.outputs.check_topics }}" = "true" ] && [ "$TOPICS" -lt 3 ]; then
+            ISSUES="${ISSUES}- ⚠️ Repository has fewer than 3 topics ($TOPICS found, recommended: 3-5)\n"
+            SUGGESTIONS="${SUGGESTIONS}- Add relevant topics/tags for better discoverability\n"
+          else
+            echo "✓ Repository topics: $TOPICS"
+          fi
+          
+          # Check license
+          if [ -z "$HAS_LICENSE" ]; then
+            ISSUES="${ISSUES}- ⚠️ Repository license is not set\n"
+            SUGGESTIONS="${SUGGESTIONS}- Add a LICENSE file to clarify usage terms\n"
+          else
+            echo "✓ Repository license: $HAS_LICENSE"
+          fi
+          
+          # Check README
+          if [ ! -f "README.md" ]; then
+            ISSUES="${ISSUES}- ❌ README.md is missing\n"
+            SUGGESTIONS="${SUGGESTIONS}- Create a comprehensive README.md\n"
+          else
+            README_SIZE=$(wc -c < README.md)
+            if [ $README_SIZE -lt 500 ]; then
+              ISSUES="${ISSUES}- ⚠️ README.md is very short ($README_SIZE bytes)\n"
+              SUGGESTIONS="${SUGGESTIONS}- Expand README with more details, examples, and documentation\n"
+            else
+              echo "✓ README.md: OK ($README_SIZE bytes)"
+            fi
+          fi
+          
+          echo "repo_issues<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$ISSUES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "repo_suggestions<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$SUGGESTIONS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          if [ -z "$ISSUES" ]; then
+            echo "repo_complete=true" >> $GITHUB_OUTPUT
+          else
+            echo "repo_complete=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "Audit all organization repositories"
+        if: inputs.scope == 'all' || inputs.scope == 'repositories'
+        id: check-all-repos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MIN_LENGTH: ${{ steps.load-config.outputs.min_description_length }}
+        run: |
+          echo "🔍 Auditing all organization repositories..."
+          
+          ORG_NAME="${{ github.repository_owner }}"
+          
+          # Fetch all repositories
+          REPOS=$(gh api "orgs/$ORG_NAME/repos?per_page=100" --paginate)
+          
+          # Use temporary files to avoid subshell variable scope issues
+          INCOMPLETE_REPOS_FILE=$(mktemp)
+          COMPLETE_COUNT=0
+          INCOMPLETE_COUNT=0
+          
+          while read -r repo; do
+            REPO_NAME=$(echo "$repo" | jq -r '.name')
+            DESCRIPTION=$(echo "$repo" | jq -r '.description // ""')
+            TOPICS_COUNT=$(echo "$repo" | jq -r '.topics | length')
+            HOMEPAGE=$(echo "$repo" | jq -r '.homepage // ""')
+            
+            IS_INCOMPLETE=false
+            ISSUES_LIST=""
+            
+            # Check description
+            if [ -z "$DESCRIPTION" ] || [ ${#DESCRIPTION} -lt $MIN_LENGTH ]; then
+              IS_INCOMPLETE=true
+              ISSUES_LIST="${ISSUES_LIST}no-description;"
+            fi
+            
+            # Check topics
+            if [ "${{ steps.load-config.outputs.check_topics }}" = "true" ] && [ "$TOPICS_COUNT" -lt 3 ]; then
+              IS_INCOMPLETE=true
+              ISSUES_LIST="${ISSUES_LIST}few-topics;"
+            fi
+            
+            # Check website
+            if [ "${{ steps.load-config.outputs.check_website }}" = "true" ] && [ -z "$HOMEPAGE" ]; then
+              IS_INCOMPLETE=true
+              ISSUES_LIST="${ISSUES_LIST}no-website;"
+            fi
+            
+            if [ "$IS_INCOMPLETE" = true ]; then
+              echo "- ⚠️ $REPO_NAME: ${ISSUES_LIST%;}"
+              echo "$REPO_NAME|$ISSUES_LIST" >> "$INCOMPLETE_REPOS_FILE"
+              INCOMPLETE_COUNT=$((INCOMPLETE_COUNT + 1))
+            else
+              COMPLETE_COUNT=$((COMPLETE_COUNT + 1))
+            fi
+          done < <(echo "$REPOS" | jq -c '.[]')
+          
+          # Read incomplete repos from file
+          INCOMPLETE_REPOS=$(cat "$INCOMPLETE_REPOS_FILE" | tr '\n' '\\n')
+          rm -f "$INCOMPLETE_REPOS_FILE"
+          
+          TOTAL_COUNT=$((COMPLETE_COUNT + INCOMPLETE_COUNT))
+          COMPLETION_RATE=$(awk "BEGIN {printf \"%.1f\", ($COMPLETE_COUNT / $TOTAL_COUNT) * 100}")
+          
+          echo "all_repos_incomplete<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$INCOMPLETE_REPOS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "complete_count=$COMPLETE_COUNT" >> $GITHUB_OUTPUT
+          echo "incomplete_count=$INCOMPLETE_COUNT" >> $GITHUB_OUTPUT
+          echo "total_count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+          echo "completion_rate=$COMPLETION_RATE" >> $GITHUB_OUTPUT
+          
+          echo "📊 Summary:"
+          echo "  Total repositories: $TOTAL_COUNT"
+          echo "  Complete: $COMPLETE_COUNT"
+          echo "  Incomplete: $INCOMPLETE_COUNT"
+          echo "  Completion rate: $COMPLETION_RATE%"
+
+      - name: "Generate suggested descriptions"
+        if: steps.check-current-repo.outputs.repo_complete == 'false' && inputs.auto_fix == true
+        id: generate-suggestions
+        run: |
+          echo "💡 Generating suggested descriptions based on repository content..."
+          
+          REPO_NAME="${{ github.repository }}"
+          
+          # Analyze repository content to suggest description
+          SUGGESTION=""
+          
+          # Check for specific frameworks/tools
+          if [ -f "package.json" ]; then
+            PKG_DESC=$(jq -r '.description // ""' package.json)
+            if [ -n "$PKG_DESC" ]; then
+              SUGGESTION="$PKG_DESC"
+            fi
+          fi
+          
+          if [ -f "pyproject.toml" ]; then
+            PY_DESC=$(grep -E "^description\s*=" pyproject.toml | cut -d'"' -f2)
+            if [ -n "$PY_DESC" ]; then
+              SUGGESTION="$PY_DESC"
+            fi
+          fi
+          
+          if [ -f "Cargo.toml" ]; then
+            CARGO_DESC=$(grep -E "^description\s*=" Cargo.toml | cut -d'"' -f2)
+            if [ -n "$CARGO_DESC" ]; then
+              SUGGESTION="$CARGO_DESC"
+            fi
+          fi
+          
+          # If no description found in package files, analyze README
+          if [ -z "$SUGGESTION" ] && [ -f "README.md" ]; then
+            # Extract first paragraph after title
+            SUGGESTION=$(sed -n '/^#/,/^$/p' README.md | grep -v "^#" | head -1 | xargs)
+          fi
+          
+          if [ -z "$SUGGESTION" ]; then
+            SUGGESTION="A project in the ${{ github.repository_owner }} organization"
+          fi
+          
+          echo "suggested_description=$SUGGESTION" >> $GITHUB_OUTPUT
+          echo "Suggested description: $SUGGESTION"
+
+      - name: "Create issue for missing descriptions"
+        if: |
+          steps.load-config.outputs.create_issues == 'true' && 
+          (steps.check-current-repo.outputs.repo_complete == 'false' || 
+           steps.check-org.outputs.org_complete == 'false')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "📝 Creating issue for incomplete descriptions..."
+          
+          ISSUE_BODY="## 📋 Completeness Audit Report\n\n"
+          ISSUE_BODY="${ISSUE_BODY}This is an automated report identifying missing or incomplete descriptions and metadata.\n\n"
+          
+          if [ "${{ steps.check-org.outputs.org_complete }}" = "false" ]; then
+            ISSUE_BODY="${ISSUE_BODY}### Organization Profile Issues\n\n"
+            ISSUE_BODY="${ISSUE_BODY}${{ steps.check-org.outputs.org_issues }}\n\n"
+          fi
+          
+          if [ "${{ steps.check-current-repo.outputs.repo_complete }}" = "false" ]; then
+            ISSUE_BODY="${ISSUE_BODY}### Repository Issues\n\n"
+            ISSUE_BODY="${ISSUE_BODY}${{ steps.check-current-repo.outputs.repo_issues }}\n\n"
+            ISSUE_BODY="${ISSUE_BODY}### Suggested Actions\n\n"
+            ISSUE_BODY="${ISSUE_BODY}${{ steps.check-current-repo.outputs.repo_suggestions }}\n\n"
+          fi
+          
+          ISSUE_BODY="${ISSUE_BODY}---\n"
+          ISSUE_BODY="${ISSUE_BODY}*Generated by [bio-description-completions workflow](.github/workflows/bio-description-completions.yml)*"
+          
+          gh issue create \
+            --title "📋 Complete repository descriptions and metadata" \
+            --body "$ISSUE_BODY" \
+            --label "documentation,enhancement,automated" \
+            || echo "Issue may already exist or could not be created"
+
+      - name: "Generate completion report"
+        run: |
+          echo "## 📊 Bio and Description Completions Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Organization section
+          if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "organization" ]; then
+            echo "### Organization Profile" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ steps.check-org.outputs.org_complete }}" = "true" ]; then
+              echo "✅ **Complete** - All organization profile fields are filled" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ **Incomplete** - Some fields need attention:" >> $GITHUB_STEP_SUMMARY
+              echo "${{ steps.check-org.outputs.org_issues }}" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Current repository section
+          if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "current-repo" ]; then
+            echo "### Current Repository" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ steps.check-current-repo.outputs.repo_complete }}" = "true" ]; then
+              echo "✅ **Complete** - Repository metadata is comprehensive" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ **Incomplete** - Issues found:" >> $GITHUB_STEP_SUMMARY
+              echo "${{ steps.check-current-repo.outputs.repo_issues }}" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "**Suggested Actions:**" >> $GITHUB_STEP_SUMMARY
+              echo "${{ steps.check-current-repo.outputs.repo_suggestions }}" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # All repositories section
+          if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "repositories" ]; then
+            echo "### Organization Repositories" >> $GITHUB_STEP_SUMMARY
+            echo "- **Total Repositories**: ${{ steps.check-all-repos.outputs.total_count }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Complete**: ${{ steps.check-all-repos.outputs.complete_count }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Incomplete**: ${{ steps.check-all-repos.outputs.incomplete_count }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Completion Rate**: ${{ steps.check-all-repos.outputs.completion_rate }}%" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Audit completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> $GITHUB_STEP_SUMMARY

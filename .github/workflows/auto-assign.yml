@@ -6,6 +6,10 @@ on:
   issues:
     types: [opened]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   issues: write
@@ -15,10 +19,11 @@ jobs:
   auto-assign-pr:
     name: Auto Assign PR
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: github.event_name == 'pull_request'
     steps:
       - name: Auto-assign PR to author
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
             // Assign PR to the author
@@ -29,30 +34,65 @@ jobs:
               assignees: [context.payload.pull_request.user.login]
             })
 
-      - name: Request review from CODEOWNERS
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+      - name: Request review from @copilot
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
-            // You can customize this to request reviews from specific people/teams
-            // based on the files changed or other criteria
+            // Request review from @copilot with retries
+            const maxRetries = 3;
+            let success = false;
+            
+            for (let i = 0; i < maxRetries; i++) {
+              try {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                  reviewers: ['copilot']
+                });
+                console.log('✅ Successfully requested review from @copilot');
+                success = true;
+                break;
+              } catch (error) {
+                console.log(`⚠️ Attempt ${i + 1}/${maxRetries} failed: ${error.message}`);
+                if (i < maxRetries - 1) {
+                  await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+              }
+            }
+            
+            if (!success) {
+              console.log('⚠️ Could not request review from @copilot after all retries');
+              console.log('Note: CODEOWNERS will still be requested by GitHub automatically');
+            }
 
-            // Example: Request review from a specific team
-            // github.rest.pulls.requestReviewers({
-            //   owner: context.repo.owner,
-            //   repo: context.repo.repo,
-            //   pull_number: context.issue.number,
-            //   team_reviewers: ['core-team']
-            // })
-
-            console.log('CODEOWNERS will be automatically requested for review')
+      - name: Assign copilot as fallback
+        if: always()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        with:
+          script: |
+            // Try to assign copilot as assignee as well
+            try {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                assignees: ['copilot']
+              });
+              console.log('✅ Assigned @copilot to PR');
+            } catch (error) {
+              console.error(`❌ Failed to assign @copilot: ${error.message}`);
+              console.error('This is a non-critical error and will not block the workflow');
+            }
 
   auto-assign-issue:
     name: Auto Assign Issue
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: github.event_name == 'issues'
     steps:
       - name: Auto-assign issue to maintainers
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
         with:
           script: |
             // Uncomment and customize to auto-assign issues to specific users

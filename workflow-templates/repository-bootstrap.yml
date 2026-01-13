@@ -1,0 +1,64 @@
+name: "Repository Bootstrap"
+
+# Use this workflow to bootstrap your repository with standard organization features
+# This workflow calls the reusable bootstrap workflow from the .github repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable_issues:
+        description: "Enable Issues"
+        required: false
+        type: boolean
+        default: true
+      enable_projects:
+        description: "Enable Projects"
+        required: false
+        type: boolean
+        default: true
+      enable_discussions:
+        description: "Enable Discussions"
+        required: false
+        type: boolean
+        default: false
+      enable_wiki:
+        description: "Enable Wiki"
+        required: false
+        type: boolean
+        default: false
+      create_labels:
+        description: "Create standard labels"
+        required: false
+        type: boolean
+        default: true
+      create_project_board:
+        description: "Create initial project board"
+        required: false
+        type: boolean
+        default: false
+      copy_workflow_templates:
+        description: "Copy workflow templates from .github repo"
+        required: false
+        type: boolean
+        default: true
+      configure_branch_protection:
+        description: "Configure branch protection rules"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  bootstrap:
+    uses: ivviiviivvi/.github/.github/workflows/repository-bootstrap.yml@main
+    with:
+      target_repository: ${{ github.repository }}
+      enable_issues: ${{ inputs.enable_issues }}
+      enable_projects: ${{ inputs.enable_projects }}
+      enable_discussions: ${{ inputs.enable_discussions }}
+      enable_wiki: ${{ inputs.enable_wiki }}
+      create_labels: ${{ inputs.create_labels }}
+      create_project_board: ${{ inputs.create_project_board }}
+      copy_workflow_templates: ${{ inputs.copy_workflow_templates }}
+      configure_branch_protection: ${{ inputs.configure_branch_protection }}
+    secrets:
+      GH_PAT: ${{ secrets.GITHUB_TOKEN }}

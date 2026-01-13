@@ -18,6 +18,10 @@ on:
         description: 'The PR number to process'
         required: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
 jobs:
   jules:
     if: |
@@ -27,6 +31,7 @@ jobs:
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@jules') || contains(github.event.issue.title, '@jules'))) ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
       pull-requests: write
@@ -35,17 +40,18 @@ jobs:
       actions: read # Required for Claude to read CI results on PRs
     steps:
       - name: Setup GitHub Copilot Actions Environment
-        uses: github/copilot-actions-setup@v1
+        uses: github/copilot-actions-setup@v1 # ratchet:exclude
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 1
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
           python-version: '3.x'
+          cache: 'pip'
 
       - name: Check quota
         id: quota
@@ -58,7 +64,7 @@ jobs:
       - name: Run Claude Code
         id: claude
         if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@0a2593483e318c6693adcb04af942367df7157f0 # ratchet:anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |

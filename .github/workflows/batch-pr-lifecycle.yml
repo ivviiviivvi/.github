@@ -1,0 +1,542 @@
+name: Batch PR Lifecycle Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - 'draft-to-ready-all'
+          - 'merge-ready-prs'
+          - 'full-pipeline'
+          - 'cleanup-merged'
+        default: 'full-pipeline'
+      author_filter:
+        description: 'Filter by author (e.g., Jules, github-actions[bot]) - leave empty for all'
+        required: false
+        type: string
+      label_filter:
+        description: 'Filter by label (e.g., auto-merge, batch:api-update) - leave empty for all'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run - only show what would be done'
+        required: false
+        type: boolean
+        default: false
+  schedule:
+    # Run daily at 2 AM UTC to process accumulated PRs
+    - cron: '0 2 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  analyze-prs:
+    name: Analyze PR Landscape
+    runs-on: ubuntu-latest
+    outputs:
+      draft-prs: ${{ steps.analyze.outputs.draft-prs }}
+      ready-prs: ${{ steps.analyze.outputs.ready-prs }}
+      mergeable-prs: ${{ steps.analyze.outputs.mergeable-prs }}
+      total-count: ${{ steps.analyze.outputs.total-count }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Analyze All PRs
+        id: analyze
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        env:
+          AUTHOR_FILTER: ${{ github.event.inputs.author_filter }}
+          LABEL_FILTER: ${{ github.event.inputs.label_filter }}
+        with:
+          script: |
+            const authorFilter = process.env.AUTHOR_FILTER;
+            const labelFilter = process.env.LABEL_FILTER;
+            
+            console.log('🔍 Analyzing PR landscape...');
+            console.log(`Filters: author=${authorFilter || 'all'}, label=${labelFilter || 'all'}`);
+            
+            // Get all open PRs
+            const { data: allPRs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+            
+            console.log(`Found ${allPRs.length} total open PRs`);
+            
+            // Apply filters
+            let prs = allPRs;
+            
+            if (authorFilter) {
+              prs = prs.filter(pr => pr.user.login.includes(authorFilter));
+              console.log(`After author filter: ${prs.length} PRs`);
+            }
+            
+            if (labelFilter) {
+              prs = prs.filter(pr => 
+                pr.labels.some(label => label.name.includes(labelFilter))
+              );
+              console.log(`After label filter: ${prs.length} PRs`);
+            }
+            
+            // Categorize PRs
+            const draftPRs = [];
+            const readyPRs = [];
+            const mergeablePRs = [];
+            
+            for (const pr of prs) {
+              const prInfo = {
+                number: pr.number,
+                title: pr.title,
+                author: pr.user.login,
+                draft: pr.draft,
+                labels: pr.labels.map(l => l.name),
+                created: pr.created_at,
+                updated: pr.updated_at
+              };
+              
+              if (pr.draft) {
+                // Check if should be auto-converted
+                const trustedAgents = ['Jules', 'dependabot[bot]', 'github-actions[bot]'];
+                const isTrustedAgent = trustedAgents.some(agent => pr.user.login.includes(agent));
+                const hasAutoReady = pr.labels.some(l => l.name === 'auto-ready' || l.name === 'ready-when-green');
+                const hasSkip = pr.labels.some(l => l.name === 'keep-draft' || l.name === 'skip-auto-ready');
+                
+                if (!hasSkip && (isTrustedAgent || hasAutoReady)) {
+                  prInfo.eligible = true;
+                  prInfo.reason = isTrustedAgent ? 'Trusted agent' : 'Auto-ready label';
+                  draftPRs.push(prInfo);
+                }
+              } else {
+                readyPRs.push(prInfo);
+                
+                // Check if mergeable
+                const hasAutoMerge = pr.labels.some(l => 
+                  l.name === 'auto-merge' || 
+                  l.name === 'automerge' ||
+                  l.name === 'auto-created'
+                );
+                
+                const hasSkipMerge = pr.labels.some(l => 
+                  l.name === 'skip-auto-merge' ||
+                  l.name === 'needs-review' ||
+                  l.name === 'has-blockers'
+                );
+                
+                if (hasAutoMerge && !hasSkipMerge) {
+                  // Get detailed status
+                  try {
+                    const { data: detailedPR } = await github.rest.pulls.get({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: pr.number
+                    });
+                    
+                    if (detailedPR.mergeable_state === 'clean' || detailedPR.mergeable_state === 'unstable') {
+                      prInfo.mergeable = true;
+                      prInfo.mergeable_state = detailedPR.mergeable_state;
+                      mergeablePRs.push(prInfo);
+                    }
+                  } catch (error) {
+                    console.log(`Could not get detailed status for PR #${pr.number}: ${error.message}`);
+                  }
+                }
+              }
+            }
+            
+            console.log('\n📊 Analysis Results:');
+            console.log(`- Draft PRs (eligible for conversion): ${draftPRs.length}`);
+            console.log(`- Ready PRs: ${readyPRs.length}`);
+            console.log(`- Mergeable PRs: ${mergeablePRs.length}`);
+            
+            core.setOutput('draft-prs', JSON.stringify(draftPRs));
+            core.setOutput('ready-prs', JSON.stringify(readyPRs));
+            core.setOutput('mergeable-prs', JSON.stringify(mergeablePRs));
+            core.setOutput('total-count', prs.length);
+            
+            return {
+              total: prs.length,
+              draft: draftPRs.length,
+              ready: readyPRs.length,
+              mergeable: mergeablePRs.length,
+              draftPRs,
+              readyPRs,
+              mergeablePRs
+            };
+
+      - name: Create Analysis Report
+        env:
+          INPUT_AUTHOR_FILTER: ${{ github.event.inputs.author_filter }}
+          INPUT_LABEL_FILTER: ${{ github.event.inputs.label_filter }}
+          DRAFT_PRS: ${{ steps.analyze.outputs.draft-prs }}
+          READY_PRS: ${{ steps.analyze.outputs.ready-prs }}
+          MERGEABLE_PRS: ${{ steps.analyze.outputs.mergeable-prs }}
+          TOTAL_COUNT: ${{ steps.analyze.outputs.total-count }}
+        run: |
+          TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M UTC')
+          AUTHOR_FILTER="${INPUT_AUTHOR_FILTER:-all}"
+          LABEL_FILTER="${INPUT_LABEL_FILTER:-all}"
+          DRAFT_COUNT=$(echo "$DRAFT_PRS" | jq length)
+          READY_COUNT=$(echo "$READY_PRS" | jq length)
+          MERGEABLE_COUNT=$(echo "$MERGEABLE_PRS" | jq length)
+          
+          {
+            echo "# PR Batch Lifecycle Analysis Report"
+            echo ""
+            echo "Generated: $TIMESTAMP"
+            echo "Filters:"
+            echo "- Author: $AUTHOR_FILTER"
+            echo "- Label: $LABEL_FILTER"
+            echo ""
+            echo "## Summary"
+            echo ""
+            echo "- Total Open PRs: $TOTAL_COUNT"
+            echo "- Draft PRs (eligible): $DRAFT_COUNT"
+            echo "- Ready PRs: $READY_COUNT"
+            echo "- Mergeable PRs: $MERGEABLE_COUNT"
+            echo ""
+            echo "## Draft PRs Ready for Conversion"
+            echo ""
+            echo "$DRAFT_PRS" | jq -r '.[] | "- [#\(.number)](\(.number)) \(.title) by @\(.author) - \(.reason)"'
+            echo ""
+            echo "## Ready PRs"
+            echo ""
+            echo "$READY_PRS" | jq -r '.[] | "- [#\(.number)](\(.number)) \(.title) by @\(.author)"'
+            echo ""
+            echo "## Mergeable PRs"
+            echo ""
+            echo "$MERGEABLE_PRS" | jq -r '.[] | "- [#\(.number)](\(.number)) \(.title) by @\(.author) - \(.mergeable_state)"'
+            echo ""
+            echo "---"
+            echo "_Generated by [batch-pr-lifecycle.yml](../.github/workflows/batch-pr-lifecycle.yml)_"
+          } > pr_analysis_report.md
+          
+          cat pr_analysis_report.md
+          
+          echo "report<<EOF" >> $GITHUB_ENV
+          cat pr_analysis_report.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Upload Analysis Report
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
+        with:
+          name: pr-analysis-report
+          path: pr_analysis_report.md
+
+  convert-drafts:
+    name: Convert Draft PRs to Ready
+    runs-on: ubuntu-latest
+    needs: analyze-prs
+    if: |
+      (github.event.inputs.action == 'draft-to-ready-all' || 
+       github.event.inputs.action == 'full-pipeline' ||
+       github.event_name == 'schedule') &&
+      fromJSON(needs.analyze-prs.outputs.draft-prs)[0] != null
+    
+    steps:
+      - name: Convert All Eligible Draft PRs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        env:
+          DRAFT_PRS: ${{ needs.analyze-prs.outputs.draft-prs }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        with:
+          script: |
+            const rawDraftPRs = process.env.DRAFT_PRS;
+            
+            if (!rawDraftPRs) {
+              console.log('No draft PRs data found in DRAFT_PRS. Nothing to convert.');
+              return { converted: [], failed: [] };
+            }
+            
+            let draftPRs;
+            try {
+              draftPRs = JSON.parse(rawDraftPRs);
+            } catch (error) {
+              console.error('Failed to parse DRAFT_PRS as JSON:', error.message);
+              console.error('DRAFT_PRS content:', rawDraftPRs);
+              throw new Error('Invalid JSON in DRAFT_PRS environment variable');
+            }
+            
+            const dryRun = process.env.DRY_RUN === 'true';
+            
+            console.log(`Converting ${draftPRs.length} draft PRs to ready...`);
+            console.log(`Dry run: ${dryRun}`);
+            
+            const results = {
+              converted: [],
+              failed: []
+            };
+            
+            for (const pr of draftPRs) {
+              console.log(`\nProcessing PR #${pr.number}: ${pr.title}`);
+              
+              if (dryRun) {
+                console.log(`[DRY RUN] Would convert PR #${pr.number}`);
+                results.converted.push(pr.number);
+                continue;
+              }
+              
+              try {
+                // Convert draft to ready
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  draft: false
+                });
+                
+                console.log(`✅ Converted PR #${pr.number}`);
+                
+                // Add labels
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  labels: ['auto-merge', 'auto-converted', 'batch-processed']
+                });
+                
+                // Add comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: `🚀 Batch Converted: Draft → Ready\n\nThis PR was automatically converted from draft to ready as part of the batch lifecycle management.\n\nReason: ${pr.reason}\nBatch Run: ${{ github.run_id }}\n\nThe PR will now proceed through automated checks and merging.\n\n_Automated by [batch-pr-lifecycle.yml](../.github/workflows/batch-pr-lifecycle.yml)_`
+                });
+                
+                results.converted.push(pr.number);
+              } catch (error) {
+                console.error(`❌ Failed to convert PR #${pr.number}: ${error.message}`);
+                results.failed.push({ number: pr.number, error: error.message });
+              }
+            }
+            
+            console.log(`\n✅ Converted: ${results.converted.length}`);
+            console.log(`❌ Failed: ${results.failed.length}`);
+            
+            return results;
+
+  merge-ready-prs:
+    name: Merge Ready PRs
+    runs-on: ubuntu-latest
+    needs: [analyze-prs, convert-drafts]
+    if: |
+      always() &&
+      (github.event.inputs.action == 'merge-ready-prs' || 
+       github.event.inputs.action == 'full-pipeline' ||
+       github.event_name == 'schedule') &&
+      fromJSON(needs.analyze-prs.outputs.mergeable-prs)[0] != null
+    
+    steps:
+      - name: Wait for Checks
+        run: |
+          echo "⏳ Waiting 2 minutes for checks to start on newly converted PRs..."
+          sleep 120
+
+      - name: Merge All Mergeable PRs
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        env:
+          MERGEABLE_PRS: ${{ needs.analyze-prs.outputs.mergeable-prs }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        with:
+          script: |
+            const mergeablePRsRaw = process.env.MERGEABLE_PRS;
+            let mergeablePRs = [];
+            
+            if (!mergeablePRsRaw) {
+              console.log('MERGEABLE_PRS is empty or undefined; defaulting to an empty list of PRs.');
+            } else {
+              try {
+                const parsed = JSON.parse(mergeablePRsRaw);
+                if (Array.isArray(parsed)) {
+                  mergeablePRs = parsed;
+                } else {
+                  console.error('MERGEABLE_PRS did not contain a JSON array; defaulting to an empty list of PRs.');
+                }
+              } catch (error) {
+                console.error('Failed to parse MERGEABLE_PRS as JSON; defaulting to an empty list of PRs.', error);
+              }
+            }
+            
+            const dryRun = process.env.DRY_RUN === 'true';
+            
+            console.log(`Merging ${mergeablePRs.length} mergeable PRs...`);
+            console.log(`Dry run: ${dryRun}`);
+            
+            const results = {
+              merged: [],
+              failed: [],
+              skipped: []
+            };
+            
+            for (const pr of mergeablePRs) {
+              console.log(`\nProcessing PR #${pr.number}: ${pr.title}`);
+              
+              if (dryRun) {
+                console.log(`[DRY RUN] Would merge PR #${pr.number}`);
+                results.merged.push(pr.number);
+                continue;
+              }
+              
+              try {
+                // Get latest PR status
+                const { data: currentPR } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number
+                });
+                
+                // Check if still mergeable
+                if (!currentPR.mergeable) {
+                  console.log(`⏭️ PR #${pr.number} is no longer mergeable`);
+                  results.skipped.push({ number: pr.number, reason: 'Not mergeable' });
+                  continue;
+                }
+                
+                // Check status checks
+                const { data: status } = await github.rest.repos.getCombinedStatusForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: currentPR.head.sha
+                });
+                
+                if (status.state !== 'success') {
+                  console.log(`⏭️ PR #${pr.number} checks not passing: ${status.state}`);
+                  results.skipped.push({ number: pr.number, reason: `Checks ${status.state}` });
+                  continue;
+                }
+                
+                // Merge the PR
+                const { data: merge } = await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  merge_method: 'squash',
+                  commit_title: currentPR.title,
+                  commit_message: `Batch merged PR #${pr.number}\n\n${currentPR.body || ''}\n\nBatch run: ${{ github.run_id }}`
+                });
+                
+                console.log(`✅ Merged PR #${pr.number} - SHA: ${merge.sha}`);
+                
+                results.merged.push(pr.number);
+                
+                // Delete branch if not protected
+                const protectedBranches = ['main', 'master', 'develop'];
+                const headBranch = currentPR.head.ref;
+                
+                if (!protectedBranches.includes(headBranch)) {
+                  try {
+                    await github.rest.git.deleteRef({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      ref: `heads/${headBranch}`
+                    });
+                    console.log(`🗑️ Deleted branch: ${headBranch}`);
+                  } catch (error) {
+                    console.log(`Could not delete branch ${headBranch}: ${error.message}`);
+                  }
+                }
+              } catch (error) {
+                console.error(`❌ Failed to merge PR #${pr.number}: ${error.message}`);
+                results.failed.push({ number: pr.number, error: error.message });
+              }
+            }
+            
+            console.log(`\n✅ Merged: ${results.merged.length}`);
+            console.log(`⏭️ Skipped: ${results.skipped.length}`);
+            console.log(`❌ Failed: ${results.failed.length}`);
+            
+            return results;
+
+  create-summary-issue:
+    name: Create Summary Issue
+    runs-on: ubuntu-latest
+    needs: [analyze-prs, convert-drafts, merge-ready-prs]
+    if: always() && github.event_name != 'schedule'
+    
+    steps:
+      - name: Create Summary Issue
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7.0.1
+        env:
+          INPUT_ACTION: ${{ github.event.inputs.action }}
+          INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
+          INPUT_AUTHOR_FILTER: ${{ github.event.inputs.author_filter }}
+          INPUT_LABEL_FILTER: ${{ github.event.inputs.label_filter }}
+          TOTAL_COUNT: ${{ needs.analyze-prs.outputs.total-count }}
+          DRAFT_PRS: ${{ needs.analyze-prs.outputs.draft-prs }}
+          READY_PRS: ${{ needs.analyze-prs.outputs.ready-prs }}
+          MERGEABLE_PRS: ${{ needs.analyze-prs.outputs.mergeable-prs }}
+        with:
+          script: |
+            const action = process.env.INPUT_ACTION;
+            const dryRun = process.env.INPUT_DRY_RUN === 'true';
+            const timestamp = new Date().toISOString();
+            const authorFilter = process.env.INPUT_AUTHOR_FILTER || 'all';
+            const labelFilter = process.env.INPUT_LABEL_FILTER || 'all';
+            
+            const totalCount = process.env.TOTAL_COUNT;
+            const draftCount = JSON.parse(process.env.DRAFT_PRS || '[]').length;
+            const readyCount = JSON.parse(process.env.READY_PRS || '[]').length;
+            const mergeableCount = JSON.parse(process.env.MERGEABLE_PRS || '[]').length;
+
+            const body = `# Batch PR Lifecycle Management Summary\n\nAction: ${action}\nDry Run: ${dryRun ? 'Yes ✅' : 'No'}\nTimestamp: ${timestamp}\nWorkflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n## Filters Applied\n\n- Author: ${authorFilter}\n- Label: ${labelFilter}\n\n## Analysis Results\n\n- Total PRs Analyzed: ${totalCount}\n- Draft PRs (eligible): ${draftCount}\n- Ready PRs: ${readyCount}\n- Mergeable PRs: ${mergeableCount}\n\n## Actions Taken\n\nSee the workflow run for detailed logs and results.\n\n---\n_Automated by [batch-pr-lifecycle.yml](../.github/workflows/batch-pr-lifecycle.yml)_`;
+
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Batch PR Lifecycle Summary - ${new Date().toISOString().split('T')[0]}`,
+              body: body,
+              labels: ['automation', 'batch-processing', 'pr-management']
+            });
+            
+            console.log(`Created summary issue #${issue.number}`);
+            
+            return issue.number;
+
+  summary:
+    name: Workflow Summary
+    runs-on: ubuntu-latest
+    needs: [analyze-prs, convert-drafts, merge-ready-prs]
+    if: always()
+    
+    steps:
+      - name: Generate Summary
+        env:
+          INPUT_ACTION: ${{ github.event.inputs.action }}
+          INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
+          TOTAL_COUNT: ${{ needs.analyze-prs.outputs.total-count }}
+          DRAFT_PRS: ${{ needs.analyze-prs.outputs.draft-prs }}
+          READY_PRS: ${{ needs.analyze-prs.outputs.ready-prs }}
+          MERGEABLE_PRS: ${{ needs.analyze-prs.outputs.mergeable-prs }}
+        run: |
+          DRAFT_COUNT=$(echo "$DRAFT_PRS" | jq length)
+          READY_COUNT=$(echo "$READY_PRS" | jq length)
+          MERGEABLE_COUNT=$(echo "$MERGEABLE_PRS" | jq length)
+
+          echo "# 🔄 Batch PR Lifecycle Management" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Action:** ${INPUT_ACTION:-scheduled}" >> $GITHUB_STEP_SUMMARY
+          echo "**Dry Run:** ${INPUT_DRY_RUN:-false}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- Total PRs: $TOTAL_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- Draft (eligible): $DRAFT_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- Ready: $READY_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- Mergeable: $MERGEABLE_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Results" >> $GITHUB_STEP_SUMMARY
+          echo "See job logs for detailed conversion and merge results" >> $GITHUB_STEP_SUMMARY

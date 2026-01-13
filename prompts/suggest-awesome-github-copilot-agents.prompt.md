@@ -54,19 +54,99 @@ Display analysis results in structured table comparing awesome-copilot custom ag
 3. Build comprehensive inventory of existing agents
 4. Use this inventory to avoid suggesting duplicates
 
+## Quality Metrics Analysis
+
+When analyzing custom agents from awesome-copilot, gather and display these quality indicators:
+
+1. **Popularity Metrics**:
+   - GitHub stars on the awesome-copilot repository
+   - Number of forks and watchers
+   - Community discussion activity
+   - Integration adoption rates
+   - Partner endorsements
+
+2. **Quality Signals**:
+   - Last updated date (freshness indicator)
+   - Maintenance frequency (commit history)
+   - Documentation completeness (setup guides, examples, troubleshooting)
+   - Number of contributors
+   - Issue resolution rate
+   - MCP server compatibility
+   - Enterprise readiness indicators
+
+3. **Adoption Indicators**:
+   - Mentioned in GitHub courses/documentation
+   - Featured in GitHub blog posts or partner announcements
+   - Trending status (recent star growth >30% in 30 days)
+   - External references and case studies
+   - Community endorsements and success stories
+   - Official partner status
+
+4. **Integration Value**:
+   - Integration complexity (low/medium/high)
+   - Prerequisites and dependencies
+   - Setup time estimate
+   - Maintenance effort
+   - ROI potential
+
+5. **Relevance Scoring**:
+   - Tool stack match (0-100%)
+   - Integration need alignment
+   - Gap analysis score (how much value it adds)
+   - Team workflow fit (based on chat history and project needs)
+   - Complementary vs. duplicate capability
+
+6. **Category Analysis**:
+   - Group by integration type (Incident, Security, Infrastructure, etc.)
+   - Identify coverage gaps by category
+   - Show distribution of existing vs. recommended agents
+   - Highlight missing critical integrations
+
 ## Requirements
 
-- Use `githubRepo` tool to get content from awesome-copilot repository agents folder
+- Use `githubRepo` tool to get content and metadata from awesome-copilot repository agents folder
+- Gather popularity and quality metrics from GitHub API (with fallback to cached/estimated values if API unavailable)
 - Scan local file system for existing agents in `.github/agents/` directory
 - Read YAML front matter from local agent files to extract descriptions
 - Compare against existing agents in this repository to avoid duplicates
+- **PRIORITIZE** agents with highest quality indicators, MCP integration, and relevance scores
+- **CATEGORIZE** by integration type for better organization
 - Focus on gaps in current agent library coverage
-- Validate that suggested agents align with repository's purpose and standards
-- Provide clear rationale for each suggestion
+- Validate that suggested agents align with repository's tool stack and needs
+- Provide clear, data-driven rationale for each suggestion with metrics
 - Include links to both awesome-copilot agents and similar local agents
-- Don't provide any additional information or context beyond the table and the analysis
+- Group recommendations by priority (High/Medium/Optional) AND integration category
+- Use visual hierarchy with emojis, badges, and formatting for scannability
+- Provide executive summary with key statistics
+- Include integration category breakdown showing coverage gaps
+- Highlight missing critical integrations (especially monitoring, security, CI/CD)
+- Show setup complexity and prerequisites for each agent
+- Don't provide any additional information or context beyond the structured output
 
-## Icons Reference
+## Icons & Status Reference
 
-- ✅ Already installed in repo
-- ❌ Not installed in repo
+### Status Indicators
+- ✅ **Covered**: Already installed or well-covered by existing agents
+- ❌ **Missing**: Not available in repository, recommended for installation
+- ⚠️ **Similar**: Partial coverage, enhancement opportunity
+- 🔄 **Update**: Newer version available
+- 🔧 **Needs Config**: Installed but requires configuration
+
+### Priority Levels
+- 🔥🔥🔥 **Critical**: Must-have integration, immediate installation recommended
+- 🔥🔥 **High**: Strong recommendation, high value-add
+- ⚡⚡ **Medium**: Quality improvement opportunity
+- 💡 **Optional**: Nice-to-have, consider based on specific tool usage
+- ⛔ **Not Recommended**: Tool not in use or significant overlap
+
+### Integration Category Icons
+- 🚨 **Incident Management & Monitoring**
+- 🔒 **Security & Compliance**
+- 🏗️ **Infrastructure & Cloud**
+- 🧪 **Feature Management & Experimentation**
+- 🔧 **Development & Automation**
+- 🗄️ **Data Management**
+- 📋 **Productivity & Workflow**
+- 🔌 **API & Integration**
+- 📊 **Analytics & Observability**
+- 🎯 **Quality & Testing**

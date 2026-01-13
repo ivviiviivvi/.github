@@ -15,9 +15,14 @@ on:
           - 'true'
           - 'false'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   reconcile-deployments:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
       deployments: read
@@ -27,15 +32,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: Install dependencies
         run: |
@@ -347,7 +351,7 @@ jobs:
 
       - name: Create alert issue on critical problems
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
         with:
           script: |
             const report = `${{ steps.reconcile.outputs.report }}`;
@@ -365,7 +369,7 @@ jobs:
 
       - name: Annotate workflow with summary
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
         with:
           script: |
             const discrepancies = parseInt(`${{ steps.reconcile.outputs.discrepancies_found }}`);
@@ -385,7 +389,7 @@ jobs:
 
       - name: Upload reconciliation report as artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
         with:
           name: reconciliation-report
           path: reconciliation-report.txt
@@ -393,7 +397,7 @@ jobs:
 
       - name: Post status check
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
         with:
           script: |
             const fs = require('fs');

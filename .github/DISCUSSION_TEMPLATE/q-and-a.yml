@@ -1,0 +1,101 @@
+labels: [question]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ❓ Q&A Discussion
+        
+        Ask questions about the project, workflows, or best practices.
+        
+        **Before asking:**
+        - Search existing discussions and issues
+        - Check the documentation
+        - Review the FAQ section
+
+  - type: input
+    id: question-title
+    attributes:
+      label: Question Title
+      description: A clear, concise question as the title
+      placeholder: e.g., "How do I configure automated deployments?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: Ask your question in detail
+      placeholder: |
+        Provide context and details about what you're trying to accomplish,
+        what you've tried, and where you're stuck...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Question Category
+      description: What is your question about?
+      options:
+        - Workflows & Automation
+        - Security & Compliance
+        - Templates & Configuration
+        - GitHub Actions
+        - Best Practices
+        - Documentation
+        - Integration
+        - Troubleshooting
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Provide any relevant context
+      placeholder: |
+        - What are you trying to achieve?
+        - What have you already tried?
+        - Any error messages?
+        - Relevant configuration or code snippets
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment (if relevant)
+      description: Details about your environment
+      placeholder: |
+        - Repository type: Public/Private/Organization
+        - GitHub plan: Free/Team/Enterprise
+        - Relevant tools or services
+    validations:
+      required: false
+
+  - type: textarea
+    id: research
+    attributes:
+      label: What have you tried?
+      description: Have you searched or tried anything already?
+      placeholder: |
+        - Documentation reviewed
+        - Similar issues or discussions found
+        - Solutions attempted
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched for similar questions
+          required: true
+        - label: I have checked the documentation
+          required: true
+        - label: I have provided enough context for others to help
+          required: true

@@ -6,19 +6,31 @@ name: Commit Tracking
     branches:
       - main
       - develop
+    paths:
+      - '**.py'
+      - '**.js'
+      - '**.ts'
+      - '**.go'
+      - '**.rs'
+      - 'src/**'
   pull_request:
     types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   track-commits:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     permissions:
       contents: read
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 

@@ -1,0 +1,165 @@
+labels: [best-practices, documentation]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📚 Best Practices Discussion
+        
+        Discuss, share, and improve best practices for GitHub, development workflows, and community management.
+        
+        **Perfect for:**
+        - Proposing new best practices
+        - Discussing existing practices
+        - Sharing lessons learned
+        - Seeking guidance on implementation
+        - Collaborative improvement of standards
+
+  - type: input
+    id: topic
+    attributes:
+      label: Best Practice Topic
+      description: What best practice are you discussing?
+      placeholder: e.g., "Security scanning in CI/CD pipelines"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: discussion-type
+    attributes:
+      label: Discussion Type
+      description: What kind of discussion is this?
+      options:
+        - Proposing a new best practice
+        - Improving existing best practice
+        - Seeking guidance on implementation
+        - Sharing experience/lessons learned
+        - Question about best practices
+        - General discussion
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context & Background
+      description: Provide context for this discussion
+      placeholder: |
+        - What is the current situation?
+        - Why is this best practice important?
+        - What problem does it address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal or Question
+      description: What are you proposing or asking about?
+      placeholder: |
+        Describe your proposal, question, or point of discussion...
+        
+        If proposing a practice, include:
+        - What should be done
+        - Why it should be done this way
+        - How to implement it
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which area does this relate to?
+      multiple: true
+      options:
+        - Security & Compliance
+        - CI/CD & Workflows
+        - Code Quality
+        - Documentation
+        - Testing
+        - Code Review
+        - Community Management
+        - Repository Structure
+        - Dependency Management
+        - Release Management
+        - Performance
+        - Accessibility
+        - Other
+
+  - type: dropdown
+    id: maturity
+    attributes:
+      label: Maturity Level
+      description: How established is this practice?
+      options:
+        - Experimental - New idea, needs validation
+        - Emerging - Being adopted, needs refinement
+        - Established - Widely used, proven effective
+        - Standard - Industry standard or requirement
+    validations:
+      required: false
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits & Impact
+      description: What are the expected benefits?
+      placeholder: |
+        - Improved security?
+        - Better performance?
+        - Enhanced developer experience?
+        - Cost savings?
+        - Risk reduction?
+    validations:
+      required: false
+
+  - type: textarea
+    id: considerations
+    attributes:
+      label: Trade-offs & Considerations
+      description: Are there any trade-offs, challenges, or considerations?
+      placeholder: |
+        - Implementation complexity
+        - Resource requirements
+        - Potential downsides
+        - Prerequisites
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples & Resources
+      description: Share examples, resources, or references
+      placeholder: |
+        - Code examples
+        - Links to implementations
+        - Documentation references
+        - Research or articles
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Interest
+      options:
+        - label: I can help document this best practice
+          required: false
+        - label: I can provide implementation examples
+          required: false
+        - label: I have experience implementing this
+          required: false
+
+  - type: checkboxes
+    id: alignment
+    attributes:
+      label: Alignment Check
+      options:
+        - label: This aligns with the project's security goals
+          required: false
+        - label: This aligns with the project's quality standards
+          required: false
+        - label: This has been validated in practice
+          required: false

@@ -1,0 +1,203 @@
+name: 🌱 Community Health Check
+description: Request a community health evaluation for a repository
+title: "[Community Health]: "
+labels: ["community", "health-check", "documentation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🌱 Community Health Check
+        
+        Request an evaluation of repository community health files and practices.
+        
+        This ensures repositories have proper:
+        - Community health files (CODE_OF_CONDUCT, CONTRIBUTING, etc.)
+        - Issue and PR templates
+        - Discussion categories and management
+        - Contributor guidelines and support
+        - Welcoming and inclusive environment
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: Which repository should be evaluated?
+      placeholder: "organization/repository-name"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: check-type
+    attributes:
+      label: Check Type
+      description: What type of check is needed?
+      options:
+        - Full Health Check - Comprehensive evaluation
+        - Quick Check - Basic file presence validation
+        - Focused Check - Specific areas only
+        - Follow-up Check - Re-evaluation after improvements
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: components
+    attributes:
+      label: Components to Check
+      description: Select components to evaluate
+      options:
+        - label: README.md - Project description and setup
+        - label: CODE_OF_CONDUCT.md - Community standards
+        - label: CONTRIBUTING.md - Contribution guidelines
+        - label: LICENSE - License information
+        - label: SECURITY.md - Security policy
+        - label: SUPPORT.md - Support resources
+        - label: GOVERNANCE.md - Governance model
+        - label: CODEOWNERS - Code ownership
+        - label: Issue Templates - Issue creation templates
+        - label: PR Templates - Pull request templates
+        - label: Discussion Templates - Discussion categories
+        - label: Workflow Templates - Reusable workflows
+        - label: Community Standards - GitHub community standards check
+
+  - type: textarea
+    id: current-status
+    attributes:
+      label: Current Status
+      description: What is the current state of community health files?
+      placeholder: |
+        - What files already exist?
+        - What is working well?
+        - What needs improvement?
+        - Any recent changes or initiatives?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: repository-type
+    attributes:
+      label: Repository Type
+      description: What type of repository is this?
+      options:
+        - Public Open Source
+        - Private Organization
+        - Internal Tool
+        - Documentation
+        - Template Repository
+        - .github Repository
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: project-stage
+    attributes:
+      label: Project Stage
+      description: What stage is the project in?
+      options:
+        - New/Starting - Just getting started
+        - Active Development - Under active development
+        - Stable/Maintained - Established and maintained
+        - Mature - Well-established with community
+        - Maintenance Mode - Bug fixes only
+        - Archived - No longer active
+    validations:
+      required: true
+
+  - type: textarea
+    id: community-size
+    attributes:
+      label: Community Context
+      description: Tell us about the community
+      placeholder: |
+        - Number of contributors
+        - Number of users
+        - Community activity level
+        - Target audience
+        - Contribution frequency
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: goals
+    attributes:
+      label: Goals
+      description: What are your goals for this check?
+      options:
+        - label: Increase external contributions
+        - label: Improve contributor experience
+        - label: Meet organizational standards
+        - label: Prepare for public release
+        - label: Improve documentation
+        - label: Enhance inclusivity
+        - label: Support community growth
+
+  - type: textarea
+    id: specific-concerns
+    attributes:
+      label: Specific Concerns
+      description: Any specific concerns or known issues?
+      placeholder: |
+        - Low contributor engagement?
+        - Unclear contribution process?
+        - Incomplete documentation?
+        - Accessibility concerns?
+        - Inclusivity issues?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this check?
+      options:
+        - Critical - Needed immediately
+        - High - Needed within a week
+        - Medium - Needed within a month
+        - Low - No specific timeline
+    validations:
+      required: true
+
+  - type: textarea
+    id: desired-outcome
+    attributes:
+      label: Desired Outcome
+      description: What would success look like?
+      placeholder: |
+        Describe your desired outcome:
+        - Specific improvements wanted
+        - Community health score target
+        - Contribution goals
+        - Timeline expectations
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: support
+    attributes:
+      label: Support Needed
+      options:
+        - label: I need help creating missing files
+          required: false
+        - label: I need help updating existing files
+          required: false
+        - label: I need templates and examples
+          required: false
+        - label: I need guidance on best practices
+          required: false
+        - label: I can implement changes myself
+          required: false
+
+  - type: checkboxes
+    id: acknowledgment
+    attributes:
+      label: Acknowledgment
+      options:
+        - label: I have maintainer permissions for this repository
+          required: true
+        - label: I am committed to implementing recommendations
+          required: true
+        - label: I have reviewed existing community standards
+          required: true

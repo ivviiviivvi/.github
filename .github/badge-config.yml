@@ -1,0 +1,48 @@
+# Badge Management Configuration
+# Controls automatic badge generation and placement in README.md
+
+# Enable or disable badge management workflow
+enabled: true
+
+# Badge style (see https://shields.io for options)
+# Options: flat, flat-square, plastic, for-the-badge, social
+badge_style: flat-square
+
+# Position for badge insertion in README
+# Options: top (after first heading), beginning (before everything)
+position: top
+
+# Automatically detect repository characteristics
+auto_detect: true
+
+# Custom badges (optional)
+# Add custom badges that should always be included
+custom_badges:
+  # Example: Add a custom badge
+  # - label: "Custom"
+  #   message: "Badge"
+  #   color: "blue"
+  #   logo: "github"
+  #   url: "https://example.com"
+
+# Badge categories to include
+include:
+  ci_status: true
+  license: true
+  language: true
+  stats: true  # stars, issues, PRs, commits
+  docker: true
+  contributors: true
+  version: false  # disabled by default, enable if you have releases
+  coverage: false  # disabled by default, enable if you have coverage reports
+
+# Repository-specific settings
+repository:
+  # Exclude specific badges
+  exclude:
+    # - "version"
+    # - "coverage"
+  
+  # Override badge URLs (optional)
+  override_urls:
+    # ci: "https://github.com/owner/repo/actions/workflows/custom.yml"

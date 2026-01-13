@@ -10,6 +10,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.batch_label || github.run_id }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -19,6 +23,7 @@ jobs:
   batch-merge:
     name: Batch Merge PRs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name == 'workflow_dispatch' ||
       (github.event.issue.pull_request &&
@@ -26,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 

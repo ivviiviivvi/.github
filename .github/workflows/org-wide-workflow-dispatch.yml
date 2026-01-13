@@ -1,0 +1,375 @@
+name: 'Organization-Wide Workflow Dispatch'
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_file:
+        description: 'Workflow file name to trigger (e.g., ci.yml)'
+        required: true
+        type: string
+      workflow_inputs:
+        description: 'JSON object of workflow inputs (optional)'
+        required: false
+        type: string
+        default: '{}'
+      target_repos:
+        description: 'Target repositories (comma-separated, or "all" for all repos)'
+        required: false
+        type: string
+        default: 'all'
+      exclude_repos:
+        description: 'Repositories to exclude (comma-separated)'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'Dry run mode (list repos without triggering workflows)'
+        required: false
+        type: boolean
+        default: false
+      include_archived:
+        description: 'Include archived repositories'
+        required: false
+        type: boolean
+        default: false
+      include_private:
+        description: 'Include private repositories'
+        required: false
+        type: boolean
+        default: true
+      max_repos:
+        description: 'Maximum number of repositories to process (0 = unlimited)'
+        required: false
+        type: number
+        default: 0
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  discover-repositories:
+    name: 'Discover Target Repositories'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      repositories: ${{ steps.filter-repos.outputs.repositories }}
+      total_count: ${{ steps.filter-repos.outputs.total_count }}
+    
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: 'Set up Python'
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
+        with:
+          python-version: '3.11'
+
+      - name: 'Discover and filter repositories'
+        id: filter-repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_NAME: ${{ github.repository_owner }}
+          TARGET_REPOS: ${{ github.event.inputs.target_repos }}
+          EXCLUDE_REPOS: ${{ github.event.inputs.exclude_repos }}
+          INCLUDE_ARCHIVED: ${{ github.event.inputs.include_archived }}
+          INCLUDE_PRIVATE: ${{ github.event.inputs.include_private }}
+          WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
+          MAX_REPOS: ${{ github.event.inputs.max_repos }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+          from typing import List, Dict
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          org = os.getenv('ORG_NAME')
+          target_repos = os.getenv('TARGET_REPOS', 'all')
+          exclude_repos = set(r.strip() for r in os.getenv('EXCLUDE_REPOS', '').split(',') if r.strip())
+          include_archived = os.getenv('INCLUDE_ARCHIVED', 'false').lower() == 'true'
+          include_private = os.getenv('INCLUDE_PRIVATE', 'true').lower() == 'true'
+          workflow_file = os.getenv('WORKFLOW_FILE')
+          max_repos = int(os.getenv('MAX_REPOS', '0'))
+
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          print(f"🔍 Discovering repositories in organization: {org}")
+          print(f"📋 Target repos filter: {target_repos}")
+          print(f"🚫 Exclude repos: {exclude_repos if exclude_repos else 'None'}")
+          print(f"📦 Include archived: {include_archived}")
+          print(f"🔒 Include private: {include_private}")
+          print(f"📄 Workflow file: {workflow_file}")
+
+          # Fetch all organization repositories
+          all_repos = []
+          page = 1
+          per_page = 100
+
+          while True:
+              url = f'https://api.github.com/orgs/{org}/repos'
+              params = {'per_page': per_page, 'page': page, 'sort': 'updated'}
+              
+              response = requests.get(url, headers=headers, params=params, timeout=30)
+              
+              if response.status_code != 200:
+                  print(f"❌ Error fetching repositories: {response.status_code}")
+                  print(response.text)
+                  break
+              
+              repos = response.json()
+              if not repos:
+                  break
+              
+              all_repos.extend(repos)
+              page += 1
+              
+              # GitHub's pagination typically returns empty array when done
+              if len(repos) < per_page:
+                  break
+
+          print(f"📊 Found {len(all_repos)} total repositories")
+
+          # Filter repositories
+          filtered_repos = []
+          
+          for repo in all_repos:
+              repo_name = repo['name']
+              full_name = repo['full_name']
+              
+              # Skip if archived and not including archived
+              if repo['archived'] and not include_archived:
+                  print(f"⏭️  Skipping archived: {full_name}")
+                  continue
+              
+              # Skip if private and not including private
+              if repo['private'] and not include_private:
+                  print(f"⏭️  Skipping private: {full_name}")
+                  continue
+              
+              # Skip if in exclude list
+              if repo_name in exclude_repos or full_name in exclude_repos:
+                  print(f"⏭️  Skipping excluded: {full_name}")
+                  continue
+              
+              # Check if target repos is specific list
+              if target_repos != 'all':
+                  target_list = [r.strip() for r in target_repos.split(',') if r.strip()]
+                  if repo_name not in target_list and full_name not in target_list:
+                      continue
+              
+              # Check if workflow exists in repository
+              workflow_url = f"https://api.github.com/repos/{full_name}/contents/.github/workflows/{workflow_file}"
+              workflow_check = requests.get(workflow_url, headers=headers, timeout=10)
+              
+              if workflow_check.status_code == 200:
+                  print(f"✅ Target repository: {full_name} (has {workflow_file})")
+                  filtered_repos.append({
+                      'full_name': full_name,
+                      'name': repo_name,
+                      'default_branch': repo['default_branch'],
+                      'private': repo['private'],
+                      'archived': repo['archived']
+                  })
+              else:
+                  print(f"⏭️  Skipping {full_name}: workflow {workflow_file} not found")
+              
+              # Apply max repos limit
+              if max_repos > 0 and len(filtered_repos) >= max_repos:
+                  print(f"🛑 Reached maximum repository limit: {max_repos}")
+                  break
+
+          print(f"\n📋 Summary:")
+          print(f"   Total repositories: {len(all_repos)}")
+          print(f"   Filtered repositories: {len(filtered_repos)}")
+          
+          # Output for GitHub Actions
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"repositories={json.dumps(filtered_repos)}\n")
+              f.write(f"total_count={len(filtered_repos)}\n")
+          PYTHON_SCRIPT
+
+      - name: 'Generate discovery summary'
+        run: |
+          echo "## 🔍 Repository Discovery Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow File:** \`${{ github.event.inputs.workflow_file }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Filter:** \`${{ github.event.inputs.target_repos }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Repositories Found:** ${{ steps.filter-repos.outputs.total_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            echo "🧪 **DRY RUN MODE** - No workflows will be triggered" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  dispatch-workflows:
+    name: 'Dispatch Workflows'
+    needs: discover-repositories
+    if: github.event.inputs.dry_run != 'true' && needs.discover-repositories.outputs.total_count > 0
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: 'Dispatch workflows to repositories'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORIES: ${{ needs.discover-repositories.outputs.repositories }}
+          WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
+          WORKFLOW_INPUTS: ${{ github.event.inputs.workflow_inputs }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+          import time
+          from typing import Dict, List
+
+          github_token = os.getenv('GITHUB_TOKEN')
+          repositories = json.loads(os.getenv('REPOSITORIES'))
+          workflow_file = os.getenv('WORKFLOW_FILE')
+          workflow_inputs_str = os.getenv('WORKFLOW_INPUTS', '{}')
+          
+          # Parse workflow inputs
+          try:
+              workflow_inputs = json.loads(workflow_inputs_str)
+          except json.JSONDecodeError:
+              print(f"⚠️  Invalid JSON for workflow inputs, using empty object")
+              workflow_inputs = {}
+
+          headers = {
+              'Authorization': f'token {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+
+          print(f"🚀 Dispatching workflow '{workflow_file}' to {len(repositories)} repositories")
+          print(f"📥 Workflow inputs: {json.dumps(workflow_inputs, indent=2)}")
+          print("")
+
+          success_count = 0
+          failed_repos = []
+
+          for i, repo in enumerate(repositories, 1):
+              full_name = repo['full_name']
+              default_branch = repo['default_branch']
+              
+              print(f"[{i}/{len(repositories)}] 🎯 Dispatching to {full_name}...")
+              
+              # Dispatch workflow
+              dispatch_url = f"https://api.github.com/repos/{full_name}/actions/workflows/{workflow_file}/dispatches"
+              
+              payload = {
+                  'ref': default_branch,
+                  'inputs': workflow_inputs
+              }
+              
+              try:
+                  response = requests.post(
+                      dispatch_url,
+                      headers=headers,
+                      json=payload,
+                      timeout=15
+                  )
+                  
+                  if response.status_code == 204:
+                      print(f"   ✅ Successfully dispatched to {full_name}")
+                      success_count += 1
+                  else:
+                      print(f"   ❌ Failed to dispatch to {full_name}: {response.status_code}")
+                      print(f"      Response: {response.text}")
+                      failed_repos.append({
+                          'repo': full_name,
+                          'status': response.status_code,
+                          'error': response.text[:200]
+                      })
+                  
+                  # Rate limiting: wait between dispatches
+                  time.sleep(0.5)
+                  
+              except Exception as e:
+                  print(f"   ❌ Error dispatching to {full_name}: {e}")
+                  failed_repos.append({
+                      'repo': full_name,
+                      'status': 'exception',
+                      'error': str(e)
+                  })
+
+          print(f"\n📊 Dispatch Summary:")
+          print(f"   ✅ Successful: {success_count}/{len(repositories)}")
+          print(f"   ❌ Failed: {len(failed_repos)}/{len(repositories)}")
+          
+          if failed_repos:
+              print(f"\n❌ Failed repositories:")
+              for failure in failed_repos:
+                  print(f"   - {failure['repo']}: {failure['status']} - {failure['error'][:100]}")
+          
+          # Save results
+          results = {
+              'total': len(repositories),
+              'successful': success_count,
+              'failed': len(failed_repos),
+              'failed_repos': failed_repos
+          }
+          
+          with open('dispatch_results.json', 'w') as f:
+              json.dump(results, f, indent=2)
+          PYTHON_SCRIPT
+
+      - name: 'Upload dispatch results'
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
+        with:
+          name: dispatch-results-${{ github.run_number }}
+          path: dispatch_results.json
+          retention-days: 30
+
+      - name: 'Generate dispatch summary'
+        run: |
+          echo "## 🚀 Workflow Dispatch Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "dispatch_results.json" ]; then
+            TOTAL=$(jq -r '.total' dispatch_results.json)
+            SUCCESS=$(jq -r '.successful' dispatch_results.json)
+            FAILED=$(jq -r '.failed' dispatch_results.json)
+            
+            echo "**Total Repositories:** ${TOTAL}" >> $GITHUB_STEP_SUMMARY
+            echo "**✅ Successful:** ${SUCCESS}" >> $GITHUB_STEP_SUMMARY
+            echo "**❌ Failed:** ${FAILED}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${FAILED}" -gt "0" ]; then
+              echo "### ❌ Failed Dispatches" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              jq -r '.failed_repos[] | "- **\(.repo)**: \(.status) - \(.error)"' dispatch_results.json >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+  dry-run-summary:
+    name: 'Dry Run Summary'
+    needs: discover-repositories
+    if: github.event.inputs.dry_run == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 'Display dry run results'
+        env:
+          REPOSITORIES: ${{ needs.discover-repositories.outputs.repositories }}
+          TOTAL_COUNT: ${{ needs.discover-repositories.outputs.total_count }}
+        run: |
+          echo "🧪 DRY RUN MODE - No workflows triggered"
+          echo ""
+          echo "Target repositories (${TOTAL_COUNT}):"
+          echo "${REPOSITORIES}" | jq -r '.[] | "  - \(.full_name) (branch: \(.default_branch))"'
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧪 Dry Run Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**No workflows were triggered.** The following ${TOTAL_COUNT} repositories would be targeted:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "${REPOSITORIES}" | jq -r '.[] | "- **\(.full_name)** (branch: \(.default_branch))"' >> $GITHUB_STEP_SUMMARY

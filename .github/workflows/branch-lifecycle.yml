@@ -2,9 +2,13 @@ name: Branch Lifecycle Management
 
 on:
   schedule:
-    # Run every 6 hours
-    - cron: '0 */6 * * *'
+    # Run every 12 hours (reduced from 6 hours for cost savings)
+    - cron: '0 */12 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -20,10 +24,11 @@ jobs:
   manage-stale-prs:
     name: Manage Stale PRs and Branches
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
 
       - name: Get All Open PRs
         id: prs
@@ -282,7 +287,7 @@ See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-ma
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 

@@ -42,6 +42,10 @@ on:
       - 'pom.xml'
       - 'build.gradle'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   generate-walkthrough:
     runs-on: ubuntu-latest
@@ -53,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -144,13 +148,13 @@ jobs:
 
       - name: Set up Node.js
         if: contains(fromJSON('["react", "vue", "angular", "nextjs", "nodejs"]'), steps.detect.outputs.app_type)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -240,12 +244,18 @@ jobs:
       - name: Generate video walkthrough
         env:
           DISPLAY: :99
+          # Map inputs to env vars to prevent command injection
+          INPUT_DURATION: ${{ github.event.inputs.duration || '60' }}
+          INPUT_VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
+          INPUT_FOCUS_AREAS: ${{ github.event.inputs.focus_areas || '' }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          APP_PORT: ${{ steps.detect.outputs.port }}
         run: |
-          DURATION="${{ github.event.inputs.duration || '60' }}"
-          VOICEOVER_STYLE="${{ github.event.inputs.voiceover_style || 'professional' }}"
-          FOCUS_AREAS="${{ github.event.inputs.focus_areas || '' }}"
-          APP_NAME="${{ github.event.repository.name }}"
-          APP_URL="http://localhost:${{ steps.detect.outputs.port }}"
+          DURATION="$INPUT_DURATION"
+          VOICEOVER_STYLE="$INPUT_VOICEOVER_STYLE"
+          FOCUS_AREAS="$INPUT_FOCUS_AREAS"
+          APP_NAME="$REPO_NAME"
+          APP_URL="http://localhost:${APP_PORT}"
           DATE=$(date +%Y%m%d)
 
           mkdir -p walkthroughs
@@ -346,7 +356,7 @@ jobs:
           pkill -f "uvicorn" || true
 
       - name: Upload video artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
         with:
           name: walkthrough-${{ github.event.repository.name }}-${{ github.run_number }}
           path: |
@@ -357,8 +367,13 @@ jobs:
       - name: Create Pull Request with artifacts
         env:
           GH_TOKEN: ${{ github.token }}
+          # Map inputs to env vars to prevent command injection
+          INPUT_DURATION: ${{ github.event.inputs.duration || '60' }}
+          INPUT_VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
+          INPUT_FOCUS_AREAS: ${{ github.event.inputs.focus_areas || 'N/A' }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
-          APP_NAME="${{ github.event.repository.name }}"
+          APP_NAME="$REPO_NAME"
           DATE=$(date +%Y-%m-%d)
           BRANCH_NAME="walkthrough/update-${DATE}-${{ github.run_number }}"
 
@@ -385,9 +400,9 @@ jobs:
           git push origin ${BRANCH_NAME}
 
           # Create PR
-          DURATION="${{ github.event.inputs.duration || '60' }}"
-          VOICEOVER_STYLE="${{ github.event.inputs.voiceover_style || 'professional' }}"
-          FOCUS_AREAS="${{ github.event.inputs.focus_areas || 'N/A' }}"
+          DURATION="$INPUT_DURATION"
+          VOICEOVER_STYLE="$INPUT_VOICEOVER_STYLE"
+          FOCUS_AREAS="$INPUT_FOCUS_AREAS"
 
           gh pr create \
             --title "Add video walkthrough - ${DATE}" \

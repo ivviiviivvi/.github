@@ -3,6 +3,18 @@ description: AI rules derived by SpecStory from the project AI interaction histo
 globs: *
 ---
 
+## GitHub Copilot Enhancement Resources
+
+**New to GitHub Copilot customizations?** This organization provides comprehensive enhancements:
+
+- 📘 [**Quick Start Guide**](../docs/COPILOT_QUICK_START.md) - Get up and running in 15 minutes
+- 🔧 [**Custom Instructions Setup**](../docs/CUSTOM_INSTRUCTIONS_SETUP.md) - Configure coding standards (100+ available)
+- 🔌 [**MCP Server Setup**](../docs/MCP_SERVER_SETUP.md) - Extend Copilot with Model Context Protocol (11 languages)
+- 💻 [**Development Environment Setup**](../docs/DEVELOPMENT_ENVIRONMENT_SETUP.md) - Optimize your dev environment
+- 📚 [**Complete Index**](../docs/COPILOT_ENHANCEMENTS_INDEX.md) - Browse all resources
+
+---
+
 The following instructions are only to be applied when performing a code review.
 
 ## README updates

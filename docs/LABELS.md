@@ -1,6 +1,26 @@
 # Organization Labels Standard
 
-This document defines the standard set of labels to be used across all repositories in the organization.
+This document defines the standard set of labels to be used across all repositories in the organization. These labels are defined in `.github/labels.yml` and can be synchronized across repositories using the label-sync workflow.
+
+## Priority Labels
+
+These labels indicate the urgency or importance:
+
+- **priority: critical** 🚨
+  - Color: `#d73a4a`
+  - Description: Critical priority - immediate attention required
+
+- **priority: high** ⬆️
+  - Color: `#ff6b6b`
+  - Description: High priority - should be addressed soon
+
+- **priority: medium** ➡️
+  - Color: `#ffa500`
+  - Description: Medium priority - normal queue
+
+- **priority: low** ⬇️
+  - Color: `#0e8a16`
+  - Description: Low priority - can be scheduled later
 
 ## Type Labels
 
@@ -8,159 +28,139 @@ These labels categorize the type of issue or PR:
 
 - **bug** 🐛
   - Color: `#d73a4a`
-  - Description: Something isn't working correctly
+  - Description: Something isn't working
 
 - **enhancement** ✨
   - Color: `#a2eeef`
-  - Description: New feature or improvement request
+  - Description: New feature or request
 
 - **documentation** 📚
   - Color: `#0075ca`
-  - Description: Documentation improvements or additions
+  - Description: Improvements or additions to documentation
+
+- **security** 🔒
+  - Color: `#d93f0b`
+  - Description: Security vulnerability or security-related issue
+
+- **task** 📋
+  - Color: `#7057ff`
+  - Description: General task or work item
 
 - **question** ❓
   - Color: `#d876e3`
   - Description: Further information is requested
 
-- **refactoring** 🔨
-  - Color: `#fbca04`
-  - Description: Code refactoring without changing functionality
+- **breaking-change** 💥
+  - Color: `#d93f0b`
+  - Description: Breaking change that requires migration
 
 - **performance** ⚡
   - Color: `#f9d0c4`
   - Description: Performance improvements
 
-- **security** 🔒
-  - Color: `#d93f0b`
-  - Description: Security-related issues or improvements
+- **refactoring** 🔨
+  - Color: `#fbca04`
+  - Description: Code refactoring without functional changes
 
 - **testing** ✅
-  - Color: `#1d76db`
-  - Description: Testing-related changes or improvements
+  - Color: `#c5def5`
+  - Description: Related to testing
 
-## Priority Labels
-
-These labels indicate the urgency or importance:
-
-- **critical** 🚨
-  - Color: `#b60205`
-  - Description: Requires immediate attention
-
-- **high priority** ⬆️
-  - Color: `#d93f0b`
-  - Description: Should be addressed soon
-
-- **medium priority** ➡️
-  - Color: `#fbca04`
-  - Description: Normal priority
-
-- **low priority** ⬇️
-  - Color: `#0e8a16`
-  - Description: Can be addressed later
+- **accessibility** ♿
+  - Color: `#f9c513`
+  - Description: Accessibility improvements
 
 ## Status Labels
 
 These labels track the current state:
 
-- **in progress** 🔄
-  - Color: `#ffff00`
-  - Description: Currently being worked on
+- **triage** 🏷️
+  - Color: `#fbca04`
+  - Description: Needs triage and initial assessment
+
+- **in-progress** 🔄
+  - Color: `#0052cc`
+  - Description: Work is currently in progress
 
 - **blocked** 🚧
-  - Color: `#d93f0b`
-  - Description: Blocked by another issue or dependency
+  - Color: `#b60205`
+  - Description: Blocked by another issue or external dependency
 
-- **on hold** ⏸️
-  - Color: `#fef2c0`
-  - Description: Temporarily paused
-
-- **needs review** 👀
-  - Color: `#bfdadc`
+- **needs-review** 👀
+  - Color: `#6f42c1`
   - Description: Waiting for code review
 
-- **needs testing** 🧪
-  - Color: `#c5def5`
-  - Description: Requires testing before completion
-
-- **ready to merge** ✔️
+- **approved** ✔️
   - Color: `#0e8a16`
-  - Description: Approved and ready to be merged
-
-## Community Labels
-
-These labels help community engagement:
-
-- **good first issue** 👶
-  - Color: `#7057ff`
-  - Description: Good for newcomers
-
-- **help wanted** 🙋
-  - Color: `#008672`
-  - Description: Extra attention is needed
-
-- **discussion** 💬
-  - Color: `#cc317c`
-  - Description: Requires discussion before implementation
+  - Description: Approved and ready to merge
 
 - **duplicate** ➕
   - Color: `#cfd3d7`
-  - Description: This issue or PR already exists
-
-- **invalid** ❌
-  - Color: `#e4e669`
-  - Description: This doesn't seem right
+  - Description: This issue or pull request already exists
 
 - **wontfix** 🚫
   - Color: `#ffffff`
   - Description: This will not be worked on
 
-## Automated Labels
-
-These labels are typically applied by automation:
-
-- **automated** 🤖
-  - Color: `#fbca04`
-  - Description: Created or updated by automation
-
-- **dependencies** 📦
-  - Color: `#0366d6`
-  - Description: Pull requests that update a dependency file
+- **invalid** ❌
+  - Color: `#e4e669`
+  - Description: This doesn't seem right
 
 - **stale** 💤
   - Color: `#eeeeee`
-  - Description: No recent activity
+  - Description: Stale issue or PR - no recent activity
+
+## Category Labels
+
+These labels help categorize the area of work:
 
 - **github-actions** ⚙️
   - Color: `#000000`
   - Description: Related to GitHub Actions workflows
 
-## Platform/Technology Labels
+- **configuration** 🔧
+  - Color: `#bfdadc`
+  - Description: Configuration changes
 
-Use these to indicate specific platforms or technologies:
+- **dependencies** 📦
+  - Color: `#0366d6`
+  - Description: Pull requests that update a dependency file
 
-- **frontend** 🎨
-  - Color: `#bfe5bf`
-  - Description: Frontend-related changes
+- **automated** 🤖
+  - Color: `#ededed`
+  - Description: Automated changes (e.g., Dependabot, bots)
 
-- **backend** 💾
-  - Color: `#c2e0c6`
-  - Description: Backend-related changes
+## Community Labels
 
-- **infrastructure** 🏗️
-  - Color: `#fad8c7`
-  - Description: Infrastructure and DevOps changes
+These labels help community engagement:
 
-- **database** 🗄️
-  - Color: `#d4c5f9`
-  - Description: Database-related changes
+- **good-first-issue** 👶
+  - Color: `#7057ff`
+  - Description: Good for newcomers
 
-- **api** 🔌
-  - Color: `#f9c513`
+- **help-wanted** 🙋
+  - Color: `#008672`
+  - Description: Extra attention is needed - looking for contributors
+
+## Area Labels
+
+These labels indicate specific functional areas:
+
+- **area: ci-cd** 🔁
+  - Color: `#1d76db`
+  - Description: Continuous Integration / Continuous Deployment
+
+- **area: api** 🔌
+  - Color: `#5319e7`
   - Description: API-related changes
 
-- **ui/ux** 🖼️
-  - Color: `#eb6420`
-  - Description: User interface or experience changes
+- **area: ui** 🎨
+  - Color: `#c2e0c6`
+  - Description: User interface changes
+
+- **area: infrastructure** 🏗️
+  - Color: `#0e8a16`
+  - Description: Infrastructure and deployment
 
 ## Sync Labels to All Repositories
 

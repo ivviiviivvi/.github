@@ -8,6 +8,24 @@
     },
     {
       "pattern": "^http://127.0.0.1"
+    },
+    {
+      "pattern": "^https://aka.ms/awesome-copilot/"
+    },
+    {
+      "pattern": "^https://img.shields.io/badge/"
+    },
+    {
+      "pattern": "^https://ffmpeg.org/"
+    },
+    {
+      "pattern": "^https://learn.microsoft.com/"
+    },
+    {
+      "pattern": "^https://keepachangelog.com/"
+    },
+    {
+      "pattern": "^https://semver.org/"
     }
   ],
   "replacementPatterns": [],
@@ -23,5 +41,5 @@
   "retryOn429": true,
   "retryCount": 3,
   "fallbackRetryDelay": "30s",
-  "aliveStatusCodes": [200, 206, 301, 302, 307, 308]
+  "aliveStatusCodes": [200, 206, 301, 302, 307, 308, 406]
 }

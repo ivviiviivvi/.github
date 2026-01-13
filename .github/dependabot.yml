@@ -9,33 +9,59 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
+      time: "03:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "organization-team"
     labels:
       - "dependencies"
       - "automated"
-      - "category: github-actions"
+      - "auto-merge"
     commit-message:
-      prefix: "chore(deps)"
-    reviewers:
-      - "ivviiviivvi/devops"
-
+      prefix: "chore"
+      include: "scope"
+    groups:
+      npm-production:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
+      npm-development:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      npm-types:
+        patterns:
+          - "@types/*"
+  
   # Enable version updates for pip (Python)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
+      time: "03:00"
+    open-pull-requests-limit: 2
     reviewers:
       - "ivviiviivvi/backend"
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
       prefix: "chore(deps)"
       include: "scope"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   
   # Enable version updates for npm (JavaScript/TypeScript)
   - package-ecosystem: "npm"
@@ -43,24 +69,18 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "ivviiviivvi/frontend"
+      time: "03:00"
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
-    # Group minor and patch updates together
+      prefix: "ci"
     groups:
-      npm-dependencies:
+      github-actions:
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"
   
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -68,14 +88,18 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
+      time: "03:00"
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "automated"
-      - "category: configuration"
+      - "auto-merge"
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "build"
+    groups:
+      docker-images:
+        patterns:
+          - "*"
   
   # Enable version updates for Go modules
   - package-ecosystem: "gomod"
@@ -83,13 +107,21 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
+      time: "03:00"
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "chore"
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   
   # Enable version updates for Composer (PHP)
   - package-ecosystem: "composer"
@@ -97,27 +129,18 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
+      time: "03:00"
+    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "automated"
+      - "auto-merge"
     commit-message:
-      prefix: "chore(deps)"
-  
-  # Enable version updates for Terraform
-  - package-ecosystem: "terraform"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "automated"
-      - "category: configuration"
-    commit-message:
-      prefix: "chore(deps)"
-    reviewers:
-      - "ivviiviivvi/devops"
+      prefix: "chore"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"

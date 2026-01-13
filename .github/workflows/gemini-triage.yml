@@ -30,7 +30,7 @@ jobs:
       pull-requests: 'read'
     steps:
       - name: Setup GitHub Copilot Actions Environment
-        uses: github/copilot-actions-setup@v1
+        uses: github/copilot-actions-setup@v1 # ratchet:exclude
 
       - name: 'Get repository labels'
         id: 'get_labels'

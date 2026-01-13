@@ -1,0 +1,110 @@
+name: 📝 Documentation
+description: Report documentation issues or suggest improvements
+title: "[Docs] "
+labels: ["documentation"]
+assignees:
+  - 
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve our documentation! Report issues or suggest improvements.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the documentation issue or improvement
+      placeholder: What needs to be documented or improved?
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation is this about?
+      options:
+        - README
+        - API Documentation
+        - User Guide
+        - Developer Guide
+        - Code Comments
+        - Tutorial/Example
+        - Contributing Guidelines
+        - Other
+    validations:
+      required: true
+  
+  - type: textarea
+    id: affected-docs
+    attributes:
+      label: Affected Documentation
+      description: Which documentation files or sections are affected?
+      placeholder: |
+        - docs/api/README.md
+        - Section: "Getting Started"
+        - File: src/components/Button.tsx (code comments)
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What kind of documentation issue is this?
+      options:
+        - Missing Documentation
+        - Incorrect Information
+        - Outdated Information
+        - Unclear Explanation
+        - Typo/Grammar
+        - Broken Link
+        - Missing Example
+        - Improvement Suggestion
+    validations:
+      required: true
+  
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current Content (Optional)
+      description: If applicable, paste the current documentation content
+      placeholder: Current documentation text
+    validations:
+      required: false
+  
+  - type: textarea
+    id: suggested-content
+    attributes:
+      label: Suggested Content (Optional)
+      description: If you have a specific suggestion, provide it here
+      placeholder: Your suggested documentation text
+    validations:
+      required: false
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any additional information that would help improve the documentation
+    validations:
+      required: false
+  
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to help fix this documentation?
+      options:
+        - label: I am willing to submit a PR to fix this documentation issue
+          required: false
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

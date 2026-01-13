@@ -6,18 +6,28 @@ on:
   pull_request:
     types: [opened, reopened, labeled]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   project-management:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Parse Issue
-        uses: github/issue-parser@v3
+        uses: github/issue-parser@87d5fddc632816aeb4b84c40e20fd37e09a80b28 # ratchet:github/issue-parser@v3
         id: issue-parser
         with:
           template-path: .github/ISSUE_TEMPLATE/bug_report.md # Optional: Adjust based on actual templates
 
       - name: Add to Project
-        uses: actions/add-to-project@v0
+        uses: actions/add-to-project@v0 # ratchet:exclude
         with:
           # Requires a PAT or App token with project write permissions
           project-url: https://github.com/orgs/${{ github.repository_owner }}/projects/1

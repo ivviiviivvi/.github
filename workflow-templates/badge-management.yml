@@ -1,0 +1,44 @@
+name: "Badge Management"
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "package.json"
+      - "requirements.txt"
+      - "Cargo.toml"
+      - "pom.xml"
+      - "build.gradle"
+      - "composer.json"
+      - "README.md"
+      - ".github/workflows/**"
+      - ".github/badge-config.yml"
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: "Force badge update even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: "badge-management-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+  actions: read
+
+jobs:
+  generate-badges:
+    uses: ivviiviivvi/.github/.github/workflows/badge-management.yml@main
+    with:
+      force_update: ${{ inputs.force_update || false }}

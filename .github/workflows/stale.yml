@@ -1,8 +1,9 @@
-name: Close Stale Issues and PRs
+name: Stale Issues and PRs
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Daily at midnight UTC
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -11,106 +12,79 @@ permissions:
 
 jobs:
   stale:
-    name: Mark and Close Stale Items
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 10
+
     steps:
-      - name: Stale issue and PR management
-        uses: actions/stale@v9
+      - name: Mark stale issues and PRs
+        uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e # v9.0.0
         with:
+          # General configuration
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
           # Days before marking as stale
           days-before-stale: 60
-          
-          # Days before closing after marked stale
           days-before-close: 14
           
-          # Labels to exempt from stale marking
-          exempt-issue-labels: 'security,priority: critical,priority: high,pinned,wontfix'
-          exempt-pr-labels: 'security,priority: critical,priority: high,pinned,in-progress'
-          
-          # Labels to add when marked stale
-          stale-issue-label: 'stale'
-          stale-pr-label: 'stale'
-          
-          # Messages
+          # Stale issue configuration
           stale-issue-message: |
-            👋 This issue has been automatically marked as stale because it has not had recent activity in the last 60 days.
+            This issue has been automatically marked as stale because it has not had recent activity.
+            It will be closed in 14 days if no further activity occurs.
             
-            **It will be closed in 14 days if no further activity occurs.**
-            
-            If this issue is still relevant:
+            If this issue is still relevant, please:
             - Add a comment to keep it open
-            - Add the `pinned` label to prevent it from being marked stale
-            - Reference it in a pull request
+            - Add new information or context
+            - Remove the 'stale' label
             
-            If this was resolved or is no longer needed:
-            - No action needed, it will close automatically
-            
-            Thank you for your contributions! 🙏
-          
-          stale-pr-message: |
-            👋 This pull request has been automatically marked as stale because it has not had recent activity in the last 60 days.
-            
-            **It will be closed in 14 days if no further activity occurs.**
-            
-            If this PR is still being worked on:
-            - Push new commits or add a comment
-            - Request a review
-            - Add the `pinned` label to prevent it from being marked stale
-            
-            If this PR is no longer needed:
-            - No action needed, it will close automatically
-            
-            Thank you for your contributions! 🙏
+            Thank you for your contributions!
           
           close-issue-message: |
-            🔒 This issue was automatically closed because it has been stale for 14 days with no activity.
+            This issue has been automatically closed due to inactivity.
             
-            If you believe this issue should be reopened:
-            - Comment on this issue with an update
-            - Open a new issue referencing this one
-            - Contact the maintainers
+            If you believe this issue is still relevant, please feel free to reopen it
+            or create a new issue with updated information.
+          
+          stale-issue-label: 'stale'
+          
+          # Stale PR configuration
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+            It will be closed in 14 days if no further activity occurs.
             
-            Thank you! 🙏
+            If this PR is still relevant, please:
+            - Rebase with the latest main branch
+            - Address review comments
+            - Add a comment explaining the current status
+            - Remove the 'stale' label
+            
+            Thank you for your contributions!
           
           close-pr-message: |
-            🔒 This pull request was automatically closed because it has been stale for 14 days with no activity.
+            This pull request has been automatically closed due to inactivity.
             
-            If you'd like to continue this work:
-            - Reopen this PR with an update
-            - Open a new PR referencing this one
-            - Contact the maintainers
-            
-            Thank you for your contribution! 🙏
+            If you'd like to continue working on this, please feel free to reopen it
+            or create a new pull request with updated changes.
+          
+          stale-pr-label: 'stale'
+          
+          # Labels to exempt from going stale
+          exempt-issue-labels: 'security,priority: critical,priority: high,pinned,in-progress'
+          exempt-pr-labels: 'security,priority: critical,priority: high,pinned,in-progress,blocked'
+          
+          # Draft PRs
+          exempt-draft-pr: true
+          
+          # Milestones
+          exempt-all-milestones: false
           
           # Operations per run (to avoid rate limiting)
           operations-per-run: 100
           
-          # Remove stale label when activity occurs
+          # Remove stale label when updated
           remove-stale-when-updated: true
-          
-          # Enable debug output
-          debug-only: false
           
           # Ascending order (oldest first)
           ascending: true
           
-          # Don't mark issues/PRs with assignees as stale
-          exempt-all-assignees: true
-          
-          # Close issues even if they have an assignee
-          close-issue-reason: 'not_planned'
-      
-      - name: Summary
-        if: always()
-        run: |
-          echo "### 🧹 Stale Issue Management" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Stale management workflow completed." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Policy:**" >> $GITHUB_STEP_SUMMARY
-          echo "- Issues/PRs marked stale after 60 days of inactivity" >> $GITHUB_STEP_SUMMARY
-          echo "- Closed 14 days after being marked stale" >> $GITHUB_STEP_SUMMARY
-          echo "- Exemptions: security, priority: critical, priority: high, pinned" >> $GITHUB_STEP_SUMMARY
+          # Enable debug output
+          debug-only: false

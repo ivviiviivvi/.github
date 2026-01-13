@@ -1,0 +1,109 @@
+labels: [enhancement, idea]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Ideas & Feature Proposals
+        
+        Share your ideas for new features, improvements, or enhancements!
+        
+        **Note:** For detailed feature requests, consider opening a [Feature Request Issue](../../ISSUE_TEMPLATE/feature_request_form.yml) instead.
+
+  - type: input
+    id: title
+    attributes:
+      label: Idea Title
+      description: A short, descriptive title for your idea
+      placeholder: e.g., "Add automated workflow for dependency updates"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Opportunity
+      description: What problem does this solve or what opportunity does it create?
+      placeholder: Describe the current situation and why this idea would be valuable...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How would you implement or approach this idea?
+      placeholder: Describe your proposed solution, approach, or implementation...
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Expected Benefits
+      description: What benefits would this provide?
+      placeholder: |
+        - Who would benefit from this?
+        - What improvements would it bring?
+        - How does it align with project goals?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Approaches
+      description: Have you considered any alternative solutions?
+      placeholder: Describe any alternative approaches you've thought about...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Proposed Priority
+      description: How important do you think this is?
+      options:
+        - High - Critical for project success
+        - Medium - Important but not urgent
+        - Low - Nice to have
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: What area would this impact?
+      multiple: true
+      options:
+        - Workflows & Automation
+        - Security & Compliance
+        - Documentation
+        - Templates
+        - Community Tools
+        - Developer Experience
+        - Infrastructure
+        - Other
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Interest
+      options:
+        - label: I am willing to help implement this idea
+          required: false
+        - label: I can provide domain expertise or guidance
+          required: false
+        - label: I can help test this feature
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched for similar ideas in existing discussions
+          required: true
+        - label: This idea aligns with the project's goals and values
+          required: true

@@ -61,6 +61,13 @@ python scripts/web_crawler.py --github-token ghp_xxx --org-name myorg
 - 🎯 Generates comprehensive dashboards
 - 🏆 Calculates health scores and badges
 - 📈 Visualizes trends and metrics
+- ⚙️  Configurable workflow display limit for optimal diagram readability
+
+**Configuration**:
+- `MAX_DIAGRAM_WORKFLOWS`: Controls how many workflows appear in the Mermaid diagram (default: 10)
+  - All workflows are still listed in the "Active Workflows" section
+  - Can be adjusted by modifying the class constant if needed for larger displays
+  - Users are notified when workflows exceed the display limit
 
 **Usage**:
 

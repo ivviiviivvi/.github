@@ -1,0 +1,371 @@
+name: "Badge Management"
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "package.json"
+      - "requirements.txt"
+      - "Cargo.toml"
+      - "pom.xml"
+      - "build.gradle"
+      - "composer.json"
+      - "README.md"
+      - ".github/workflows/**"
+      - ".github/badge-config.yml"
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: "Force badge update even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      force_update:
+        description: "Force badge update even if no changes detected"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: "badge-management-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+  actions: read
+
+jobs:
+  generate-badges:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Load badge configuration"
+        id: load-config
+        run: |
+          CONFIG_FILE=".github/badge-config.yml"
+          
+          # Set defaults
+          ENABLED="true"
+          BADGE_STYLE="flat-square"
+          POSITION="top"
+          AUTO_DETECT="true"
+          
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "📝 Loading badge configuration from $CONFIG_FILE"
+            
+            # Check if yq is available
+            if command -v yq &> /dev/null; then
+              ENABLED=$(yq eval '.enabled // true' "$CONFIG_FILE")
+              BADGE_STYLE=$(yq eval '.badge_style // "flat-square"' "$CONFIG_FILE")
+              POSITION=$(yq eval '.position // "top"' "$CONFIG_FILE")
+              AUTO_DETECT=$(yq eval '.auto_detect // true' "$CONFIG_FILE")
+            fi
+          else
+            echo "ℹ️ No badge configuration file found, using defaults"
+          fi
+          
+          echo "enabled=$ENABLED" >> $GITHUB_OUTPUT
+          echo "badge_style=$BADGE_STYLE" >> $GITHUB_OUTPUT
+          echo "position=$POSITION" >> $GITHUB_OUTPUT
+          echo "auto_detect=$AUTO_DETECT" >> $GITHUB_OUTPUT
+          
+          echo "Badge configuration loaded:"
+          echo "  Enabled: $ENABLED"
+          echo "  Style: $BADGE_STYLE"
+          echo "  Position: $POSITION"
+          echo "  Auto-detect: $AUTO_DETECT"
+
+      - name: "Detect repository characteristics"
+        id: detect-repo
+        run: |
+          echo "🔍 Detecting repository type and characteristics..."
+          
+          # Initialize variables
+          REPO_TYPE=""
+          LANGUAGES=""
+          HAS_WORKFLOWS="false"
+          HAS_TESTS="false"
+          HAS_DOCKER="false"
+          HAS_LICENSE="false"
+          PACKAGE_MANAGER=""
+          
+          # Detect languages and frameworks
+          if [ -f "package.json" ]; then
+            LANGUAGES="${LANGUAGES}javascript,"
+            PACKAGE_MANAGER="npm"
+            echo "✓ Detected: Node.js/JavaScript"
+          fi
+          
+          if [ -f "requirements.txt" ] || [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then
+            LANGUAGES="${LANGUAGES}python,"
+            PACKAGE_MANAGER="pip"
+            echo "✓ Detected: Python"
+          fi
+          
+          if [ -f "Cargo.toml" ]; then
+            LANGUAGES="${LANGUAGES}rust,"
+            PACKAGE_MANAGER="cargo"
+            echo "✓ Detected: Rust"
+          fi
+          
+          if [ -f "go.mod" ]; then
+            LANGUAGES="${LANGUAGES}go,"
+            PACKAGE_MANAGER="go"
+            echo "✓ Detected: Go"
+          fi
+          
+          if [ -f "pom.xml" ] || [ -f "build.gradle" ]; then
+            LANGUAGES="${LANGUAGES}java,"
+            PACKAGE_MANAGER="maven/gradle"
+            echo "✓ Detected: Java"
+          fi
+          
+          if [ -f "composer.json" ]; then
+            LANGUAGES="${LANGUAGES}php,"
+            PACKAGE_MANAGER="composer"
+            echo "✓ Detected: PHP"
+          fi
+          
+          if [ -f "Gemfile" ]; then
+            LANGUAGES="${LANGUAGES}ruby,"
+            PACKAGE_MANAGER="bundler"
+            echo "✓ Detected: Ruby"
+          fi
+          
+          if ls *.csproj 1> /dev/null 2>&1 || ls *.sln 1> /dev/null 2>&1; then
+            LANGUAGES="${LANGUAGES}csharp,"
+            PACKAGE_MANAGER="nuget"
+            echo "✓ Detected: C#/.NET"
+          fi
+          
+          # Check for workflows
+          if [ -d ".github/workflows" ] && [ "$(ls -A .github/workflows/*.yml 2>/dev/null | wc -l)" -gt 0 ]; then
+            HAS_WORKFLOWS="true"
+            echo "✓ GitHub Actions workflows detected"
+          fi
+          
+          # Check for tests
+          if [ -d "test" ] || [ -d "tests" ] || [ -d "__tests__" ] || [ -d "spec" ]; then
+            HAS_TESTS="true"
+            echo "✓ Test directory detected"
+          fi
+          
+          # Check for Docker
+          if [ -f "Dockerfile" ] || [ -f "docker-compose.yml" ]; then
+            HAS_DOCKER="true"
+            echo "✓ Docker configuration detected"
+          fi
+          
+          # Check for license
+          if [ -f "LICENSE" ] || [ -f "LICENSE.md" ] || [ -f "LICENSE.txt" ]; then
+            HAS_LICENSE="true"
+            LICENSE_TYPE=$(head -1 LICENSE* 2>/dev/null | grep -o -E "(MIT|Apache|GPL|BSD|ISC)" || echo "Custom")
+            echo "✓ License detected: $LICENSE_TYPE"
+          fi
+          
+          # Output results
+          echo "languages=${LANGUAGES%,}" >> $GITHUB_OUTPUT
+          echo "has_workflows=$HAS_WORKFLOWS" >> $GITHUB_OUTPUT
+          echo "has_tests=$HAS_TESTS" >> $GITHUB_OUTPUT
+          echo "has_docker=$HAS_DOCKER" >> $GITHUB_OUTPUT
+          echo "has_license=$HAS_LICENSE" >> $GITHUB_OUTPUT
+          echo "license_type=${LICENSE_TYPE:-Unknown}" >> $GITHUB_OUTPUT
+          echo "package_manager=$PACKAGE_MANAGER" >> $GITHUB_OUTPUT
+
+      - name: "Generate badge collection"
+        id: generate-badges
+        env:
+          BADGE_STYLE: ${{ steps.load-config.outputs.badge_style }}
+          LANGUAGES: ${{ steps.detect-repo.outputs.languages }}
+          HAS_WORKFLOWS: ${{ steps.detect-repo.outputs.has_workflows }}
+          HAS_TESTS: ${{ steps.detect-repo.outputs.has_tests }}
+          HAS_DOCKER: ${{ steps.detect-repo.outputs.has_docker }}
+          HAS_LICENSE: ${{ steps.detect-repo.outputs.has_license }}
+          LICENSE_TYPE: ${{ steps.detect-repo.outputs.license_type }}
+          REPO_NAME: ${{ github.repository }}
+          REPO_OWNER: ${{ github.repository_owner }}
+        run: |
+          echo "🎨 Generating badges..."
+          
+          BADGES=""
+          
+          # GitHub Actions workflow status badge
+          if [ "$HAS_WORKFLOWS" = "true" ]; then
+            BADGES="${BADGES}[![CI](https://img.shields.io/github/actions/workflow/status/${REPO_NAME}/ci.yml?style=${BADGE_STYLE}&label=CI)](https://github.com/${REPO_NAME}/actions/workflows/ci.yml) "
+          fi
+          
+          # License badge
+          if [ "$HAS_LICENSE" = "true" ]; then
+            BADGES="${BADGES}[![License](https://img.shields.io/github/license/${REPO_NAME}?style=${BADGE_STYLE})](LICENSE) "
+          fi
+          
+          # Language badges
+          IFS=',' read -ra LANG_ARRAY <<< "$LANGUAGES"
+          for lang in "${LANG_ARRAY[@]}"; do
+            case "$lang" in
+              javascript)
+                BADGES="${BADGES}[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=${BADGE_STYLE}&logo=javascript&logoColor=black)](#) "
+                ;;
+              python)
+                BADGES="${BADGES}[![Python](https://img.shields.io/badge/Python-3776AB?style=${BADGE_STYLE}&logo=python&logoColor=white)](#) "
+                ;;
+              rust)
+                BADGES="${BADGES}[![Rust](https://img.shields.io/badge/Rust-000000?style=${BADGE_STYLE}&logo=rust&logoColor=white)](#) "
+                ;;
+              go)
+                BADGES="${BADGES}[![Go](https://img.shields.io/badge/Go-00ADD8?style=${BADGE_STYLE}&logo=go&logoColor=white)](#) "
+                ;;
+              java)
+                BADGES="${BADGES}[![Java](https://img.shields.io/badge/Java-ED8B00?style=${BADGE_STYLE}&logo=openjdk&logoColor=white)](#) "
+                ;;
+              php)
+                BADGES="${BADGES}[![PHP](https://img.shields.io/badge/PHP-777BB4?style=${BADGE_STYLE}&logo=php&logoColor=white)](#) "
+                ;;
+              ruby)
+                BADGES="${BADGES}[![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=${BADGE_STYLE}&logo=ruby&logoColor=white)](#) "
+                ;;
+              csharp)
+                BADGES="${BADGES}[![C#](https://img.shields.io/badge/C%23-239120?style=${BADGE_STYLE}&logo=c-sharp&logoColor=white)](#) "
+                ;;
+            esac
+          done
+          
+          # GitHub stats badges
+          BADGES="${BADGES}[![Stars](https://img.shields.io/github/stars/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/stargazers) "
+          BADGES="${BADGES}[![Issues](https://img.shields.io/github/issues/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/issues) "
+          BADGES="${BADGES}[![Pull Requests](https://img.shields.io/github/issues-pr/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/pulls) "
+          BADGES="${BADGES}[![Last Commit](https://img.shields.io/github/last-commit/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/commits) "
+          
+          # Docker badge
+          if [ "$HAS_DOCKER" = "true" ]; then
+            BADGES="${BADGES}[![Docker](https://img.shields.io/badge/Docker-2496ED?style=${BADGE_STYLE}&logo=docker&logoColor=white)](#) "
+          fi
+          
+          # Contributors badge
+          BADGES="${BADGES}[![Contributors](https://img.shields.io/github/contributors/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/graphs/contributors) "
+          
+          echo "Generated badges: $BADGES"
+          
+          # Save to output (handle multiline)
+          echo "badges<<EOF" >> $GITHUB_OUTPUT
+          echo "$BADGES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: "Update README with badges"
+        if: steps.load-config.outputs.enabled == 'true'
+        env:
+          BADGES: ${{ steps.generate-badges.outputs.badges }}
+          POSITION: ${{ steps.load-config.outputs.position }}
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "⚠️ README.md not found, skipping badge insertion"
+            exit 0
+          fi
+          
+          echo "📝 Updating README.md with badges..."
+          
+          # Check if badges section already exists
+          if grep -q "<!-- BADGES:START -->" README.md; then
+            echo "Updating existing badges section"
+            # Replace content between markers
+            sed -i '/<!-- BADGES:START -->/,/<!-- BADGES:END -->/c\<!-- BADGES:START -->\n'"$BADGES"'\n<!-- BADGES:END -->' README.md
+          else
+            echo "Adding new badges section"
+            # Add badges at the top after title
+            if [ "$POSITION" = "top" ]; then
+              # Insert after the first heading
+              sed -i '0,/^#/a\\\n<!-- BADGES:START -->\n'"$BADGES"'\n<!-- BADGES:END -->\n' README.md
+            else
+              # Insert at the beginning of file
+              echo -e "<!-- BADGES:START -->\n$BADGES\n<!-- BADGES:END -->\n\n$(cat README.md)" > README.md
+            fi
+          fi
+          
+          echo "✅ README.md updated successfully"
+
+      - name: "Check for changes"
+        id: check-changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✓ Changes detected"
+          fi
+
+      - name: "Commit and push changes"
+        if: steps.check-changes.outputs.has_changes == 'true' && github.event_name != 'pull_request'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "feat: update repository badges
+
+          - Added/updated comprehensive badge collection
+          - Badges include CI status, language, stats, and more
+          - Automatically generated by badge-management workflow"
+          git push
+
+      - name: "Create pull request with badge updates"
+        if: steps.check-changes.outputs.has_changes == 'true' && github.event_name == 'pull_request'
+        uses: peter-evans/create-pull-request@8867c4aba1b742c39f8d0ba387c70f678c12193f # ratchet:peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat: update repository badges"
+          title: "feat: Update repository badges"
+          body: |
+            ## Badge Updates
+            
+            This PR updates the repository badges with comprehensive information:
+            
+            ### Generated Badges
+            ${{ steps.generate-badges.outputs.badges }}
+            
+            ### Detected Features
+            - **Languages**: ${{ steps.detect-repo.outputs.languages }}
+            - **Has Workflows**: ${{ steps.detect-repo.outputs.has_workflows }}
+            - **Has Tests**: ${{ steps.detect-repo.outputs.has_tests }}
+            - **Has Docker**: ${{ steps.detect-repo.outputs.has_docker }}
+            - **License**: ${{ steps.detect-repo.outputs.license_type }}
+            
+            ### Next Steps
+            - ✅ Review the badge placement and styling
+            - ✅ Verify all badges are working correctly
+            - ✅ Merge this PR to update the README
+            
+            ---
+            *Automatically generated by [badge-management workflow](.github/workflows/badge-management.yml)*
+          branch: "badges/auto-update-${{ github.run_number }}"
+          delete-branch: true
+
+      - name: "Summary"
+        run: |
+          echo "## 🎉 Badge Management Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Badges" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.generate-badges.outputs.badges }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Repository Characteristics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Languages**: ${{ steps.detect-repo.outputs.languages }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Has Workflows**: ${{ steps.detect-repo.outputs.has_workflows }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Has Tests**: ${{ steps.detect-repo.outputs.has_tests }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Has Docker**: ${{ steps.detect-repo.outputs.has_docker }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **License**: ${{ steps.detect-repo.outputs.license_type }}" >> $GITHUB_STEP_SUMMARY

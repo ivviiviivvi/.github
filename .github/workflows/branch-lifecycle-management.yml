@@ -8,6 +8,10 @@ on:
     - cron: '0 0 * * MON'  # Weekly cleanup on Monday
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write
@@ -18,6 +22,7 @@ jobs:
     name: Validate Branch Naming Convention
     if: github.event_name == 'create' && github.ref_type == 'branch'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Check branch name
         run: |
@@ -57,8 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       - name: Create ARCHIVE_NOTICE.md
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
@@ -104,7 +108,7 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
           
@@ -171,7 +175,7 @@ EOF
 
       - name: Create cleanup issue
         if: steps.find-stale.outputs.found == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
         env:
           BRANCHES_FILE: ${{ steps.find-stale.outputs.branches_file }}
         with:
@@ -233,7 +237,7 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
           
@@ -255,7 +259,7 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
           
@@ -292,7 +296,7 @@ EOF
           cat lifecycle-report.md
           
       - name: Upload report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
         with:
           name: lifecycle-report
           path: lifecycle-report.md
