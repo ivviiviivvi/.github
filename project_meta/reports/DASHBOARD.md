@@ -2,7 +2,8 @@
 
 ![Health](https://img.shields.io/badge/health-100%25_excellent-brightgreen)
 
-**Last Updated**: December 25, 2025 at 02:37 AM **Organization**: TestOrg
+**Last Updated**: December 25, 2025 at 02:37 AM
+**Organization**: TestOrg
 
 ---
 
@@ -20,14 +21,14 @@
 
 ## 📊 Quick Stats
 
-| Category                    | Count |
-| --------------------------- | ----- |
-| ⚡ GitHub Actions Workflows | 15    |
-| 🤖 Copilot Agents           | 0     |
-| 📝 Copilot Instructions     | 0     |
-| 💬 Copilot Prompts          | 0     |
-| 🎭 Copilot Chat Modes       | 0     |
-| 🛠️ Technologies Supported   | 1     |
+| Category | Count |
+|----------|-------|
+| ⚡ GitHub Actions Workflows | 15 |
+| 🤖 Copilot Agents | 0 |
+| 📝 Copilot Instructions | 0 |
+| 💬 Copilot Prompts | 0 |
+| 🎭 Copilot Chat Modes | 0 |
+| 🛠️  Technologies Supported | 1 |
 
 [⬆️ Back to Top](#organization-ecosystem-dashboard)
 
@@ -43,16 +44,16 @@
 
 [⬆️ Back to Top](#organization-ecosystem-dashboard)
 
-## ⚠️ Alerts
+## ⚠️  Alerts
 
 ✅ No alerts found! The ecosystem is healthy.
 
 [⬆️ Back to Top](#organization-ecosystem-dashboard)
 
-## 🗺️ Ecosystem Map
 
-ℹ️ _The diagram below displays the first 10 workflows for readability. All 15
-workflows are listed in the [Active Workflows](#-active-workflows) section._
+## 🗺️  Ecosystem Map
+
+ℹ️  *The diagram below displays the first 10 workflows for readability. All 15 workflows are listed in the [Active Workflows](#-active-workflows) section.*
 
 ```mermaid
 graph TD
@@ -111,59 +112,39 @@ graph TD
 
 [⬆️ Back to Top](#organization-ecosystem-dashboard)
 
-## 🛠️ Technology Coverage
+## 🛠️  Technology Coverage
 
 Supported languages and frameworks:
 
 - 🐍 `python`
 
+
 [⬆️ Back to Top](#organization-ecosystem-dashboard)
 
-## ⚙️ Active Workflows
+## ⚙️  Active Workflows
 
-> **Legend:** 🛡️ Safeguards · 🔐 Security · ♻️ Reusable · 🤖 AI Agents · 🚀 CI/CD ·
-> 🔀 PR Management · ⏱️ Scheduled · 💓 Health · ⚙️ Utility & Other
+> **Legend:** 🛡️ Safeguards · 🔐 Security · ♻️ Reusable · 🤖 AI Agents · 🚀 CI/CD · 🔀 PR Management · ⏱️ Scheduled · 💓 Health · ⚙️ Utility & Other
 
 <details>
 <summary>View all 15 workflows</summary>
 
-| #   | Type | Workflow          | Action                                       |
-| --- | ---- | ----------------- | -------------------------------------------- |
-| 1   | ⚙️   | `workflow-0.yml`  | [View](../.github/workflows/workflow-0.yml)  |
-| 2   | ⚙️   | `workflow-1.yml`  | [View](../.github/workflows/workflow-1.yml)  |
-| 3   | ⚙️   | `workflow-10.yml` | [View](../.github/workflows/workflow-10.yml) |
-| 4   | ⚙️   | `workflow-11.yml` | [View](../.github/workflows/workflow-11.yml) |
-| 5   | ⚙️   | `workflow-12.yml` | [View](../.github/workflows/workflow-12.yml) |
-| 6   | ⚙️   | `workflow-13.yml` | [View](../.github/workflows/workflow-13.yml) |
-| 7   | ⚙️   | `workflow-14.yml` | [View](../.github/workflows/workflow-14.yml) |
-| 8   | ⚙️   | `workflow-2.yml`  | [View](../.github/workflows/workflow-2.yml)  |
-| 9   | ⚙️   | `workflow-3.yml`  | [View](../.github/workflows/workflow-3.yml)  |
-| 10  | ⚙️   | `workflow-4.yml`  | [View](../.github/workflows/workflow-4.yml)  |
-| 11  | ⚙️   | `workflow-5.yml`  | [View](../.github/workflows/workflow-5.yml)  |
-| 12  | ⚙️   | `workflow-6.yml`  | [View](../.github/workflows/workflow-6.yml)  |
-| 13  | ⚙️   | `workflow-7.yml`  | [View](../.github/workflows/workflow-7.yml)  |
-| 14  | ⚙️   | `workflow-8.yml`  | [View](../.github/workflows/workflow-8.yml)  |
-| 15  | ⚙️   | `workflow-9.yml`  | [View](../.github/workflows/workflow-9.yml)  |
-
-### ⚙️ Utility & Other
-
-| Workflow          | Action                                       |
-| ----------------- | -------------------------------------------- |
-| `workflow-0.yml`  | [View](../.github/workflows/workflow-0.yml)  |
-| `workflow-1.yml`  | [View](../.github/workflows/workflow-1.yml)  |
-| `workflow-10.yml` | [View](../.github/workflows/workflow-10.yml) |
-| `workflow-11.yml` | [View](../.github/workflows/workflow-11.yml) |
-| `workflow-12.yml` | [View](../.github/workflows/workflow-12.yml) |
-| `workflow-13.yml` | [View](../.github/workflows/workflow-13.yml) |
-| `workflow-14.yml` | [View](../.github/workflows/workflow-14.yml) |
-| `workflow-2.yml`  | [View](../.github/workflows/workflow-2.yml)  |
-| `workflow-3.yml`  | [View](../.github/workflows/workflow-3.yml)  |
-| `workflow-4.yml`  | [View](../.github/workflows/workflow-4.yml)  |
-| `workflow-5.yml`  | [View](../.github/workflows/workflow-5.yml)  |
-| `workflow-6.yml`  | [View](../.github/workflows/workflow-6.yml)  |
-| `workflow-7.yml`  | [View](../.github/workflows/workflow-7.yml)  |
-| `workflow-8.yml`  | [View](../.github/workflows/workflow-8.yml)  |
-| `workflow-9.yml`  | [View](../.github/workflows/workflow-9.yml)  |
+| # | Type | Workflow | Action |
+|---|---|---|---|
+| 1 | ⚙️ | `workflow-0.yml` | [View](../.github/workflows/workflow-0.yml) |
+| 2 | ⚙️ | `workflow-1.yml` | [View](../.github/workflows/workflow-1.yml) |
+| 3 | ⚙️ | `workflow-10.yml` | [View](../.github/workflows/workflow-10.yml) |
+| 4 | ⚙️ | `workflow-11.yml` | [View](../.github/workflows/workflow-11.yml) |
+| 5 | ⚙️ | `workflow-12.yml` | [View](../.github/workflows/workflow-12.yml) |
+| 6 | ⚙️ | `workflow-13.yml` | [View](../.github/workflows/workflow-13.yml) |
+| 7 | ⚙️ | `workflow-14.yml` | [View](../.github/workflows/workflow-14.yml) |
+| 8 | ⚙️ | `workflow-2.yml` | [View](../.github/workflows/workflow-2.yml) |
+| 9 | ⚙️ | `workflow-3.yml` | [View](../.github/workflows/workflow-3.yml) |
+| 10 | ⚙️ | `workflow-4.yml` | [View](../.github/workflows/workflow-4.yml) |
+| 11 | ⚙️ | `workflow-5.yml` | [View](../.github/workflows/workflow-5.yml) |
+| 12 | ⚙️ | `workflow-6.yml` | [View](../.github/workflows/workflow-6.yml) |
+| 13 | ⚙️ | `workflow-7.yml` | [View](../.github/workflows/workflow-7.yml) |
+| 14 | ⚙️ | `workflow-8.yml` | [View](../.github/workflows/workflow-8.yml) |
+| 15 | ⚙️ | `workflow-9.yml` | [View](../.github/workflows/workflow-9.yml) |
 
 </details>
 
@@ -171,4 +152,4 @@ Supported languages and frameworks:
 
 ---
 
-_Dashboard generated by Ecosystem Visualizer_
+*Dashboard generated by Ecosystem Visualizer*
