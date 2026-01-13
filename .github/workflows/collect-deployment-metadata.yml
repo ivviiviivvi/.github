@@ -35,7 +35,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     if: |
-      github.event_name == 'workflow_dispatch' || 
+      github.event_name == 'workflow_dispatch' ||
       github.event_name == 'workflow_call' ||
       github.event.workflow_run.conclusion == 'success'
 
@@ -71,7 +71,7 @@ jobs:
             echo "::error::No run_id provided for manual ingestion"
             exit 1
           fi
-          
+
           echo "Resolved run_id: $(cat $GITHUB_OUTPUT | grep run_id)"
           echo "Resolved repository: $(cat $GITHUB_OUTPUT | grep repository)"
 
@@ -168,7 +168,7 @@ PY
         if: always()
         run: |
           echo "## Deployment Metadata Collection" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ steps.download-artifact.outcome }}" = "failure" ]; then
             echo "⚠️ Artifact download failed - see warnings above" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ steps.validate.outcome }}" = "success" ]; then

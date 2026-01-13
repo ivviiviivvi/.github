@@ -3,11 +3,11 @@ name: Release Management
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - v*.*.*
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., v1.0.0)'
+        description: Version to release (e.g., v1.0.0)
         required: true
         type: string
 
@@ -99,7 +99,7 @@ jobs:
       - name: Commit updated CHANGELOG
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # ratchet:stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'docs: update CHANGELOG for ${{ github.event.inputs.version || github.ref_name }}'
+          commit_message: "docs: update CHANGELOG for ${{ github.event.inputs.version || github.ref_name }}"
           file_pattern: CHANGELOG.md
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com

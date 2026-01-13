@@ -1,23 +1,27 @@
 ---
-description: 'Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos'
-applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/application*.properties'
----
+
+## description: 'Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos' applyTo: '**/\*.java,**/pom.xml,**/build.gradle,**/application\*.properties'
 
 # Convert Spring JPA project to Spring Data Cosmos
 
-This generalized guide applies to any JPA to Spring Data Cosmos DB conversion project.
+This generalized guide applies to any JPA to Spring Data Cosmos DB conversion
+project.
 
 ## High-level plan
 
 1. Swap build dependencies (remove JPA, add Cosmos + Identity).
-2. Add `cosmos` profile and properties.
-3. Add Cosmos config with proper Azure identity authentication.
-4. Transform entities (ids → `String`, add `@Container` and `@PartitionKey`, remove JPA mappings, adjust relationships).
-5. Convert repositories (`JpaRepository` → `CosmosRepository`).
-6. **Create service layer** for relationship management and template compatibility.
-7. **CRITICAL**: Update ALL test files to work with String IDs and Cosmos repositories.
-8. Seed data via `CommandLineRunner`.
-9. **CRITICAL**: Test runtime functionality and fix template compatibility issues.
+1. Add `cosmos` profile and properties.
+1. Add Cosmos config with proper Azure identity authentication.
+1. Transform entities (ids → `String`, add `@Container` and `@PartitionKey`,
+   remove JPA mappings, adjust relationships).
+1. Convert repositories (`JpaRepository` → `CosmosRepository`).
+1. **Create service layer** for relationship management and template
+   compatibility.
+1. **CRITICAL**: Update ALL test files to work with String IDs and Cosmos
+   repositories.
+1. Seed data via `CommandLineRunner`.
+1. **CRITICAL**: Test runtime functionality and fix template compatibility
+   issues.
 
 ## Step-by-step
 
@@ -25,8 +29,10 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 
 - **Maven** (`pom.xml`):
   - Remove dependency `spring-boot-starter-data-jpa`
-  - Remove database-specific dependencies (H2, MySQL, PostgreSQL) unless needed elsewhere
-  - Add `com.azure:azure-spring-data-cosmos:5.17.0` (or latest compatible version)
+  - Remove database-specific dependencies (H2, MySQL, PostgreSQL) unless needed
+    elsewhere
+  - Add `com.azure:azure-spring-data-cosmos:5.17.0` (or latest compatible
+    version)
   - Add `com.azure:azure-identity:1.15.4` (required for DefaultAzureCredential)
 - **Gradle**: Apply same dependency changes for Gradle syntax
 - Remove testcontainers and JPA-specific test dependencies
@@ -48,6 +54,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 ### Step 3 — Configuration class with Azure Identity
 
 - Create `src/main/java/<rootpkg>/config/CosmosConfiguration.java`:
+
   ```java
   @Configuration
   @EnableCosmosRepositories(basePackages = "<rootpkg>")
@@ -76,33 +83,53 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   }
 
   ```
-- **IMPORTANT**: Use `DefaultAzureCredentialBuilder().build()` instead of key-based authentication for production security
+
+- **IMPORTANT**: Use `DefaultAzureCredentialBuilder().build()` instead of
+  key-based authentication for production security
 
 ### Step 4 — Entity transformation
 
-- Target all classes with JPA annotations (`@Entity`, `@MappedSuperclass`, `@Embeddable`)
+- Target all classes with JPA annotations (`@Entity`, `@MappedSuperclass`,
+  `@Embeddable`)
+
 - **Base entity changes**:
+
   - Change `id` field type from `Integer` to `String`
   - Add `@Id` and `@GeneratedValue` annotations
   - Add `@PartitionKey` field (typically `String partitionKey`)
   - Remove all `jakarta.persistence` imports
+
 - **CRITICAL - Cosmos DB Serialization Requirements**:
-  - **Remove ALL `@JsonIgnore` annotations** from fields that need to be persisted to Cosmos DB
-  - **Authentication entities (User, Authority) MUST be fully serializable** - no `@JsonIgnore` on password, authorities, or other persisted fields
-  - **Use `@JsonProperty` instead of `@JsonIgnore`** when you need to control JSON field names but still persist the data
-  - **Common authentication serialization errors**: `Cannot pass null or empty values to constructor` usually means `@JsonIgnore` is blocking required field serialization
+
+  - **Remove ALL `@JsonIgnore` annotations** from fields that need to be
+    persisted to Cosmos DB
+  - **Authentication entities (User, Authority) MUST be fully serializable** -
+    no `@JsonIgnore` on password, authorities, or other persisted fields
+  - **Use `@JsonProperty` instead of `@JsonIgnore`** when you need to control
+    JSON field names but still persist the data
+  - **Common authentication serialization errors**:
+    `Cannot pass null or empty values to constructor` usually means
+    `@JsonIgnore` is blocking required field serialization
+
 - **Entity-specific changes**:
+
   - Replace `@Entity` with `@Container(containerName = "<plural-entity-name>")`
   - Remove `@Table`, `@Column`, `@JoinColumn`, etc.
   - Remove relationship annotations (`@OneToMany`, `@ManyToOne`, `@ManyToMany`)
   - For relationships:
     - Embed collections for one-to-many (e.g., `List<Pet> pets` in Owner)
     - Use reference IDs for many-to-one (e.g., `String ownerId` in Pet)
-    - **For complex relationships**: Store IDs but add transient properties for templates
+    - **For complex relationships**: Store IDs but add transient properties for
+      templates
   - Add constructor to set partition key: `setPartitionKey("entityType")`
+
 - **CRITICAL - Authentication Entity Pattern**:
-  - **For User entities with Spring Security**: Store authorities as `Set<String>` instead of `Set<Authority>` objects
+
+  - **For User entities with Spring Security**: Store authorities as
+    `Set<String>` instead of `Set<Authority>` objects
+
   - **Example User entity transformation**:
+
     ```java
     @Container(containerName = "users")
     public class User {
@@ -131,18 +158,31 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
     }
 
     ```
+
 - **CRITICAL - Template Compatibility for Relationship Changes**:
+
   - **When converting relationships to ID references, preserve template access**
   - **Example**: If entity had `List<Specialty> specialties` → convert to:
     - Storage: `List<String> specialtyIds` (persisted to Cosmos)
-    - Template: `@JsonIgnore private List<Specialty> specialties = new ArrayList<>()` (transient)
+    - Template:
+      `@JsonIgnore private List<Specialty> specialties = new ArrayList<>()`
+      (transient)
     - Add getters/setters for both properties
-  - **Update entity method logic**: `getNrOfSpecialties()` should use the transient list
+  - **Update entity method logic**: `getNrOfSpecialties()` should use the
+    transient list
+
 - **CRITICAL - Template Compatibility for Thymeleaf/JSP Applications**:
-  - **Identify template property access**: Search for `${entity.relationshipProperty}` in `.html` files
+
+  - **Identify template property access**: Search for
+    `${entity.relationshipProperty}` in `.html` files
+
   - **For each relationship property accessed in templates**:
+
     - **Storage**: Keep ID-based storage (e.g., `List<String> specialtyIds`)
-    - **Template Access**: Add transient property with `@JsonIgnore` (e.g., `private List<Specialty> specialties = new ArrayList<>()`)
+
+    - **Template Access**: Add transient property with `@JsonIgnore` (e.g.,
+      `private List<Specialty> specialties = new ArrayList<>()`)
+
     - **Example**:
 
       ```java
@@ -164,17 +204,26 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 
       ```
 
-    - **Update count methods**: `getNrOfSpecialties()` should use transient list, not ID list
+    - **Update count methods**: `getNrOfSpecialties()` should use transient
+      list, not ID list
+
 - **CRITICAL - Method Signature Conflicts**:
-  - **When converting ID types from Integer to String, check for method signature conflicts**
-  - **Common conflict**: `getPet(String name)` vs `getPet(String id)` - both have same signature
+
+  - **When converting ID types from Integer to String, check for method
+    signature conflicts**
+  - **Common conflict**: `getPet(String name)` vs `getPet(String id)` - both
+    have same signature
   - **Solution**: Rename methods to be specific:
     - `getPet(String id)` for ID-based lookup
     - `getPetByName(String name)` for name-based lookup
-    - `getPetByName(String name, boolean ignoreNew)` for conditional name-based lookup
+    - `getPetByName(String name, boolean ignoreNew)` for conditional name-based
+      lookup
   - **Update ALL callers** of renamed methods in controllers and tests
+
 - **Method updates for entities**:
-  - Update `addVisit(Integer petId, Visit visit)` to `addVisit(String petId, Visit visit)`
+
+  - Update `addVisit(Integer petId, Visit visit)` to
+    `addVisit(String petId, Visit visit)`
   - Ensure all ID comparison logic uses `.equals()` instead of `==`
 
 ### Step 5 — Repository conversion
@@ -184,16 +233,23 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   - To: `extends CosmosRepository<Entity, String>`
 - **Query method updates**:
   - Remove pagination parameters from custom queries
-  - Change `Page<Entity> findByX(String param, Pageable pageable)` to `List<Entity> findByX(String param)`
+  - Change `Page<Entity> findByX(String param, Pageable pageable)` to
+    `List<Entity> findByX(String param)`
   - Update `@Query` annotations to use Cosmos SQL syntax
   - **Replace custom method names**: `findPetTypes()` → `findAllOrderByName()`
-  - **Update ALL references** to changed method names in controllers and formatters
+  - **Update ALL references** to changed method names in controllers and
+    formatters
 
 ### Step 6 — **Create service layer** for relationship management and template compatibility
 
-- **CRITICAL**: Create service classes to bridge Cosmos document storage with existing template expectations
-- **Purpose**: Handle relationship population and maintain template compatibility
+- **CRITICAL**: Create service classes to bridge Cosmos document storage with
+  existing template expectations
+
+- **Purpose**: Handle relationship population and maintain template
+  compatibility
+
 - **Service pattern for each entity with relationships**:
+
   ```java
   @Service
   public class EntityService {
@@ -242,6 +298,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 ### Step 6.5 — **Spring Security Integration** (CRITICAL for Authentication)
 
 - **UserDetailsService Integration Pattern**:
+
   ```java
   @Service
   @Transactional
@@ -277,16 +334,21 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   }
 
   ```
+
 - **Key Authentication Requirements**:
-  - User entity must be fully serializable (no `@JsonIgnore` on password/authorities)
+
+  - User entity must be fully serializable (no `@JsonIgnore` on
+    password/authorities)
   - Store authorities as `Set<String>` for Cosmos DB compatibility
-  - Convert between string authorities and `GrantedAuthority` objects in UserDetailsService
+  - Convert between string authorities and `GrantedAuthority` objects in
+    UserDetailsService
   - Add comprehensive debugging logs to trace authentication flow
   - Handle activated/deactivated user states appropriately
 
 #### **Template Relationship Population Pattern**
 
-Each service method that returns entities for template rendering MUST populate transient properties:
+Each service method that returns entities for template rendering MUST populate
+transient properties:
 
 ```java
 private void populateRelationships(Entity entity) {
@@ -308,8 +370,12 @@ private void populateRelationships(Entity entity) {
 #### **Critical Service Usage in Controllers**
 
 - **Replace ALL direct repository calls** with service calls in controllers
-- **Never return entities from repositories directly** to templates without relationship population
+
+- **Never return entities from repositories directly** to templates without
+  relationship population
+
 - **Update controllers** to use service layer instead of repositories directly
+
 - **Controller pattern change**:
 
   ```java
@@ -329,6 +395,7 @@ private void populateRelationships(Entity entity) {
 ### Step 7 — Data seeding
 
 - Create `@Component` implementing `CommandLineRunner`:
+
   ```java
   @Component
   public class DataSeeder implements CommandLineRunner {
@@ -344,14 +411,19 @@ private void populateRelationships(Entity entity) {
   }
 
   ```
+
 - **CRITICAL - BigDecimal Reflection Issues with JDK 17+**:
-  - **If using BigDecimal fields**, you may encounter reflection errors during seeding
-  - **Error pattern**: `Unable to make field private final java.math.BigInteger java.math.BigDecimal.intVal accessible`
+
+  - **If using BigDecimal fields**, you may encounter reflection errors during
+    seeding
+  - **Error pattern**:
+    `Unable to make field private final java.math.BigInteger java.math.BigDecimal.intVal accessible`
   - **Solutions**:
     1. Use `Double` or `String` instead of `BigDecimal` for monetary values
-    2. Add JVM argument: `--add-opens java.base/java.math=ALL-UNNAMED`
-    3. Wrap BigDecimal operations in try-catch and handle gracefully
-  - **The application will start successfully even if seeding fails** - check logs for seeding errors
+    1. Add JVM argument: `--add-opens java.base/java.math=ALL-UNNAMED`
+    1. Wrap BigDecimal operations in try-catch and handle gracefully
+  - **The application will start successfully even if seeding fails** - check
+    logs for seeding errors
 
 ### Step 8 — Test file conversion (CRITICAL SECTION)
 
@@ -371,7 +443,8 @@ private void populateRelationships(Entity entity) {
 - Search for: `setId\(\d+\)` → Replace with: `setId("test-id-X")`
 - Search for: `findById\(\d+\)` → Replace with: `findById("test-id-X")`
 - Search for: `\.findPetTypes\(\)` → Replace with: `.findAllOrderByName()`
-- Search for: `\.findByLastNameStartingWith\(.*,.*Pageable` → Remove pagination parameter
+- Search for: `\.findByLastNameStartingWith\(.*,.*Pageable` → Remove pagination
+  parameter
 
 #### C. Update test annotations and imports
 
@@ -414,15 +487,19 @@ private void populateRelationships(Entity entity) {
 - Update `EntityUtils.java` or similar:
   - Remove JPA-specific exception imports (`ObjectRetrievalFailureException`)
   - Change method signatures from `int id` to `String id`
-  - Update ID comparison logic: `entity.getId() == entityId` → `entity.getId().equals(entityId)`
+  - Update ID comparison logic: `entity.getId() == entityId` →
+    `entity.getId().equals(entityId)`
   - Replace JPA exceptions with standard exceptions (`IllegalArgumentException`)
 
 #### H. Update assertions for String IDs
 
 - Change ID assertions:
-  - `assertThat(entity.getId()).isNotZero()` → `assertThat(entity.getId()).isNotEmpty()`
-  - `assertThat(entity.getId()).isEqualTo(1)` → `assertThat(entity.getId()).isEqualTo("test-id-1")`
-  - JSON path assertions: `jsonPath("$.id").value(1)` → `jsonPath("$.id").value("test-id-1")`
+  - `assertThat(entity.getId()).isNotZero()` →
+    `assertThat(entity.getId()).isNotEmpty()`
+  - `assertThat(entity.getId()).isEqualTo(1)` →
+    `assertThat(entity.getId()).isEqualTo("test-id-1")`
+  - JSON path assertions: `jsonPath("$.id").value(1)` →
+    `jsonPath("$.id").value("test-id-1")`
 
 ### Step 8 — Test file conversion (CRITICAL SECTION)
 
@@ -441,7 +518,8 @@ private void populateRelationships(Entity entity) {
 - Search for: `setId\(\d+\)` → Replace with: `setId("test-id-X")`
 - Search for: `findById\(\d+\)` → Replace with: `findById("test-id-X")`
 - Search for: `\.findPetTypes\(\)` → Replace with: `.findAllOrderByName()`
-- Search for: `\.findByLastNameStartingWith\(.*,.*Pageable` → Remove pagination parameter
+- Search for: `\.findByLastNameStartingWith\(.*,.*Pageable` → Remove pagination
+  parameter
 
 #### C. Update test annotations and imports
 
@@ -484,15 +562,19 @@ private void populateRelationships(Entity entity) {
 - Update `EntityUtils.java` or similar:
   - Remove JPA-specific exception imports (`ObjectRetrievalFailureException`)
   - Change method signatures from `int id` to `String id`
-  - Update ID comparison logic: `entity.getId() == entityId` → `entity.getId().equals(entityId)`
+  - Update ID comparison logic: `entity.getId() == entityId` →
+    `entity.getId().equals(entityId)`
   - Replace JPA exceptions with standard exceptions (`IllegalArgumentException`)
 
 #### H. Update assertions for String IDs
 
 - Change ID assertions:
-  - `assertThat(entity.getId()).isNotZero()` → `assertThat(entity.getId()).isNotEmpty()`
-  - `assertThat(entity.getId()).isEqualTo(1)` → `assertThat(entity.getId()).isEqualTo("test-id-1")`
-  - JSON path assertions: `jsonPath("$.id").value(1)` → `jsonPath("$.id").value("test-id-1")`
+  - `assertThat(entity.getId()).isNotZero()` →
+    `assertThat(entity.getId()).isNotEmpty()`
+  - `assertThat(entity.getId()).isEqualTo(1)` →
+    `assertThat(entity.getId()).isEqualTo("test-id-1")`
+  - JSON path assertions: `jsonPath("$.id").value(1)` →
+    `jsonPath("$.id").value("test-id-1")`
 
 ### Step 9 — **Runtime Testing and Template Compatibility**
 
@@ -501,13 +583,15 @@ private void populateRelationships(Entity entity) {
 - **Start the application**: `mvn spring-boot:run`
 - **Navigate through all pages** in the web interface to identify runtime errors
 - **Common runtime issues after conversion**:
-  - Templates trying to access properties that no longer exist (e.g., `vet.specialties`)
+  - Templates trying to access properties that no longer exist (e.g.,
+    `vet.specialties`)
   - Service layer not populating transient relationship properties
   - Controllers not using service layer for relationship loading
 
 #### **Template compatibility fixes**:
 
-- **If templates access relationship properties** (e.g., `entity.relatedObjects`):
+- **If templates access relationship properties** (e.g.,
+  `entity.relatedObjects`):
   - Ensure transient properties exist on entities with proper getters/setters
   - Verify service layer populates these transient properties
   - Update `getNrOfXXX()` methods to use transient lists instead of ID lists
@@ -517,7 +601,8 @@ private void populateRelationships(Entity entity) {
 
 #### **Service layer verification**:
 
-- **Ensure all controllers use service layer** instead of direct repository access
+- **Ensure all controllers use service layer** instead of direct repository
+  access
 - **Verify service methods populate relationships** before returning entities
 - **Test all CRUD operations** through the web interface
 
@@ -528,11 +613,11 @@ private void populateRelationships(Entity entity) {
 After successful compilation and application startup:
 
 1. **Navigate to EVERY page** in the application systematically
-2. **Test each template that displays entity data**:
+1. **Test each template that displays entity data**:
    - List pages (e.g., `/vets`, `/owners`)
    - Detail pages (e.g., `/owners/{id}`, `/vets/{id}`)
    - Forms and edit pages
-3. **Look for specific template errors**:
+1. **Look for specific template errors**:
    - `Property or field 'relationshipName' cannot be found on object of type 'EntityName'`
    - `EL1008E` Spring Expression Language errors
    - Empty or missing data where relationships should appear
@@ -549,18 +634,22 @@ When encountering template errors:
 
 #### **Common Template Error Patterns**
 
-- `Property or field 'specialties' cannot be found` → Add `@JsonIgnore private List<Specialty> specialties` to Vet entity
-- `Property or field 'pets' cannot be found` → Add `@JsonIgnore private List<Pet> pets` to Owner entity
-- Empty relationship data displayed → Service not populating transient properties
+- `Property or field 'specialties' cannot be found` → Add
+  `@JsonIgnore private List<Specialty> specialties` to Vet entity
+- `Property or field 'pets' cannot be found` → Add
+  `@JsonIgnore private List<Pet> pets` to Owner entity
+- Empty relationship data displayed → Service not populating transient
+  properties
 
 ### Step 10 — **Systematic Error Resolution Process**
 
 #### When compilation fails:
 
 1. **Run `mvn compile` first** - fix main source issues before tests
-2. **Run `mvn test-compile`** - systematically fix each test compilation error
-3. **Focus on most frequent error patterns**:
-   - `int cannot be converted to String` → Change test constants and entity setters
+1. **Run `mvn test-compile`** - systematically fix each test compilation error
+1. **Focus on most frequent error patterns**:
+   - `int cannot be converted to String` → Change test constants and entity
+     setters
    - `method X cannot be applied to given types` → Remove pagination parameters
    - `cannot find symbol: method Y()` → Update to new repository method names
    - Method signature conflicts → Rename conflicting methods
@@ -570,38 +659,51 @@ When encountering template errors:
 #### When compilation fails:
 
 1. **Run `mvn compile` first** - fix main source issues before tests
-2. **Run `mvn test-compile`** - systematically fix each test compilation error
-3. **Focus on most frequent error patterns**:
-   - `int cannot be converted to String` → Change test constants and entity setters
+1. **Run `mvn test-compile`** - systematically fix each test compilation error
+1. **Focus on most frequent error patterns**:
+   - `int cannot be converted to String` → Change test constants and entity
+     setters
    - `method X cannot be applied to given types` → Remove pagination parameters
    - `cannot find symbol: method Y()` → Update to new repository method names
    - Method signature conflicts → Rename conflicting methods
+
 #### When runtime fails:
 
 1. **Check application logs** for specific error messages
-2. **Look for template/SpEL errors**:
-   - `Property or field 'xxx' cannot be found` → Add transient property to entity
+1. **Look for template/SpEL errors**:
+   - `Property or field 'xxx' cannot be found` → Add transient property to
+     entity
    - Missing relationship data → Service layer not populating relationships
-3. **Verify service layer usage** in controllers
-4. **Test navigation through all application pages**
+1. **Verify service layer usage** in controllers
+1. **Test navigation through all application pages**
 
 #### Common error patterns and solutions:
 
-- **`method findByLastNameStartingWith cannot be applied`** → Remove `Pageable` parameter
-- **`cannot find symbol: method findPetTypes()`** → Change to `findAllOrderByName()`
-- **`incompatible types: int cannot be converted to String`** → Update test ID constants
-- **`method getPet(String) is already defined`** → Rename one method (e.g., `getPetByName`)
-- **`cannot find symbol: method isNotZero()`** → Change to `isNotEmpty()` for String IDs
-- **`Property or field 'specialties' cannot be found`** → Add transient property and populate in service
-- **`ClassCastException: reactor.core.publisher.BlockingIterable cannot be cast to java.util.List`** → Fix repository `findAllWithEagerRelationships()` method to use StreamSupport
-- **`Unable to make field...BigDecimal.intVal accessible`** → Replace BigDecimal with Double throughout application
-- **Health check database failure** → Remove 'db' from health check readiness configuration
+- **`method findByLastNameStartingWith cannot be applied`** → Remove `Pageable`
+  parameter
+- **`cannot find symbol: method findPetTypes()`** → Change to
+  `findAllOrderByName()`
+- **`incompatible types: int cannot be converted to String`** → Update test ID
+  constants
+- **`method getPet(String) is already defined`** → Rename one method (e.g.,
+  `getPetByName`)
+- **`cannot find symbol: method isNotZero()`** → Change to `isNotEmpty()` for
+  String IDs
+- **`Property or field 'specialties' cannot be found`** → Add transient property
+  and populate in service
+- **`ClassCastException: reactor.core.publisher.BlockingIterable cannot be cast to java.util.List`**
+  → Fix repository `findAllWithEagerRelationships()` method to use StreamSupport
+- **`Unable to make field...BigDecimal.intVal accessible`** → Replace BigDecimal
+  with Double throughout application
+- **Health check database failure** → Remove 'db' from health check readiness
+  configuration
 
 #### **Template-Specific Runtime Errors**
 
 - **`Property or field 'XXX' cannot be found on object of type 'YYY'`**:
 
-  - Root cause: Template accessing relationship property that was converted to ID storage
+  - Root cause: Template accessing relationship property that was converted to
+    ID storage
   - Solution: Add transient property to entity + populate in service layer
   - Prevention: Always check template usage before converting relationships
 
@@ -612,8 +714,11 @@ When encountering template errors:
   - Prevention: Test all template navigation after service layer implementation
 
 - **Empty/null relationship data in templates**:
-  - Root cause: Controller bypassing service layer or service not populating relationships
-  - Solution: Ensure all controller methods use service layer for entity retrieval
+
+  - Root cause: Controller bypassing service layer or service not populating
+    relationships
+  - Solution: Ensure all controller methods use service layer for entity
+    retrieval
   - Prevention: Never return repository results directly to templates
 
 ### Step 11 — Validation checklist
@@ -624,13 +729,20 @@ After conversion, verify:
 - [ ] **All test files compile**: `mvn test-compile` succeeds
 - [ ] **No compilation errors**: Address every single compilation error
 - [ ] **Application starts successfully**: `mvn spring-boot:run` without errors
-- [ ] **All web pages load**: Navigate through all application pages without runtime errors
-- [ ] **Service layer populates relationships**: Transient properties are correctly set
-- [ ] **All template pages render without errors**: Navigate through entire application
-- [ ] **Relationship data displays correctly**: Lists, counts, and related objects show properly
-- [ ] **No SpEL template errors in logs**: Check application logs during navigation
-- [ ] **Transient properties are @JsonIgnore annotated**: Prevents JSON serialization issues
-- [ ] **Service layer used consistently**: No direct repository access in controllers for template rendering
+- [ ] **All web pages load**: Navigate through all application pages without
+      runtime errors
+- [ ] **Service layer populates relationships**: Transient properties are
+      correctly set
+- [ ] **All template pages render without errors**: Navigate through entire
+      application
+- [ ] **Relationship data displays correctly**: Lists, counts, and related
+      objects show properly
+- [ ] **No SpEL template errors in logs**: Check application logs during
+      navigation
+- [ ] **Transient properties are @JsonIgnore annotated**: Prevents JSON
+      serialization issues
+- [ ] **Service layer used consistently**: No direct repository access in
+      controllers for template rendering
 - [ ] No remaining `jakarta.persistence` imports
 - [ ] All entity IDs are `String` type consistently
 - [ ] All repository interfaces extend `CosmosRepository<Entity, String>`
@@ -639,76 +751,110 @@ After conversion, verify:
 - [ ] Test files use String IDs consistently
 - [ ] Repository mocks updated for Cosmos methods
 - [ ] **No method signature conflicts** in entity classes
-- [ ] **All renamed methods updated** in callers (controllers, tests, formatters)
+- [ ] **All renamed methods updated** in callers (controllers, tests,
+      formatters)
 
 ### Common pitfalls to avoid
 
-1. **Not checking compilation frequently** - Run `mvn test-compile` after each major change
-2. **Method signature conflicts** - Method overloading issues when converting ID types
-3. **Forgetting to update method callers** - When renaming methods, update ALL callers
-4. **Missing repository method renames** - Custom repository methods must be updated everywhere called
-5. **Using key-based authentication** - Use `DefaultAzureCredential` instead
-6. **Mixing Integer and String IDs** - Be consistent with String IDs everywhere, especially in tests
-7. **Not updating controller pagination logic** - Remove pagination from controllers when repositories change
-8. **Leaving JPA-specific test annotations** - Replace with Cosmos-compatible alternatives
-9. **Incomplete test file updates** - Search entire test directory, not just obvious files
-10. **Skipping runtime testing** - Always test the running application, not just compilation
-11. **Missing service layer** - Don't access repositories directly from controllers
-12. **Forgetting transient properties** - Templates may need access to relationship data
-13. **Not testing template navigation** - Compilation success doesn't mean templates work
-14. **Missing transient properties for templates** - Templates need object access, not just IDs
-15. **Service layer bypassing** - Controllers must use services, never direct repository access
-16. **Incomplete relationship population** - Service methods must populate ALL transient properties used by templates
-17. **Forgetting @JsonIgnore on transient properties** - Prevents serialization issues
-18. **@JsonIgnore on persisted fields** - **CRITICAL**: Never use `@JsonIgnore` on fields that need to be stored in Cosmos DB
-19. **Authentication serialization errors** - User/Authority entities must be fully serializable without `@JsonIgnore` blocking required fields
-20. **BigDecimal reflection issues** - Use alternative data types or JVM arguments for JDK 17+ compatibility
-21. **Repository reactive type casting** - Don't cast `findAll()` directly to `List`, use `StreamSupport.stream().collect(Collectors.toList())`
-22. **Health check database references** - Remove database dependencies from Spring Boot health checks after JPA removal
-23. **Collection type mismatches** - Update service methods to handle String vs object collections consistently
+1. **Not checking compilation frequently** - Run `mvn test-compile` after each
+   major change
+1. **Method signature conflicts** - Method overloading issues when converting ID
+   types
+1. **Forgetting to update method callers** - When renaming methods, update ALL
+   callers
+1. **Missing repository method renames** - Custom repository methods must be
+   updated everywhere called
+1. **Using key-based authentication** - Use `DefaultAzureCredential` instead
+1. **Mixing Integer and String IDs** - Be consistent with String IDs everywhere,
+   especially in tests
+1. **Not updating controller pagination logic** - Remove pagination from
+   controllers when repositories change
+1. **Leaving JPA-specific test annotations** - Replace with Cosmos-compatible
+   alternatives
+1. **Incomplete test file updates** - Search entire test directory, not just
+   obvious files
+1. **Skipping runtime testing** - Always test the running application, not just
+   compilation
+1. **Missing service layer** - Don't access repositories directly from
+   controllers
+1. **Forgetting transient properties** - Templates may need access to
+   relationship data
+1. **Not testing template navigation** - Compilation success doesn't mean
+   templates work
+1. **Missing transient properties for templates** - Templates need object
+   access, not just IDs
+1. **Service layer bypassing** - Controllers must use services, never direct
+   repository access
+1. **Incomplete relationship population** - Service methods must populate ALL
+   transient properties used by templates
+1. **Forgetting @JsonIgnore on transient properties** - Prevents serialization
+   issues
+1. **@JsonIgnore on persisted fields** - **CRITICAL**: Never use `@JsonIgnore`
+   on fields that need to be stored in Cosmos DB
+1. **Authentication serialization errors** - User/Authority entities must be
+   fully serializable without `@JsonIgnore` blocking required fields
+1. **BigDecimal reflection issues** - Use alternative data types or JVM
+   arguments for JDK 17+ compatibility
+1. **Repository reactive type casting** - Don't cast `findAll()` directly to
+   `List`, use `StreamSupport.stream().collect(Collectors.toList())`
+1. **Health check database references** - Remove database dependencies from
+   Spring Boot health checks after JPA removal
+1. **Collection type mismatches** - Update service methods to handle String vs
+   object collections consistently
 
 ### Debugging compilation issues systematically
 
 If compilation fails after conversion:
 
-1. **Start with main compilation**: `mvn compile` - fix entity and controller issues first
-2. **Then test compilation**: `mvn test-compile` - fix each error systematically
-3. **Check for remaining `jakarta.persistence` imports** throughout codebase
-4. **Verify all test constants use String IDs** - search for `int.*TEST.*ID`
-5. **Ensure repository method signatures match** new Cosmos interface
-6. **Check for mixed Integer/String ID usage** in entity relationships and tests
-7. **Validate all mocking uses correct method names** (`findAllOrderByName()` not `findPetTypes()`)
-8. **Look for method signature conflicts** - resolve by renaming conflicting methods
-9. **Verify assertion methods work with String IDs** (`isNotEmpty()` not `isNotZero()`)
+1. **Start with main compilation**: `mvn compile` - fix entity and controller
+   issues first
+1. **Then test compilation**: `mvn test-compile` - fix each error systematically
+1. **Check for remaining `jakarta.persistence` imports** throughout codebase
+1. **Verify all test constants use String IDs** - search for `int.*TEST.*ID`
+1. **Ensure repository method signatures match** new Cosmos interface
+1. **Check for mixed Integer/String ID usage** in entity relationships and tests
+1. **Validate all mocking uses correct method names** (`findAllOrderByName()`
+   not `findPetTypes()`)
+1. **Look for method signature conflicts** - resolve by renaming conflicting
+   methods
+1. **Verify assertion methods work with String IDs** (`isNotEmpty()` not
+   `isNotZero()`)
 
 ### Debugging runtime issues systematically
 
 If runtime fails after successful compilation:
 
 1. **Check application startup logs** for initialization errors
-2. **Navigate through all pages** to identify template/controller issues
-3. **Look for SpEL template errors** in logs:
+1. **Navigate through all pages** to identify template/controller issues
+1. **Look for SpEL template errors** in logs:
    - `Property or field 'xxx' cannot be found` → Missing transient property
    - `EL1008E` → Service layer not populating relationships
-4. **Verify service layer is being used** instead of direct repository access
-5. **Check that transient properties are populated** in service methods
-6. **Test all CRUD operations** through the web interface
-7. **Verify data seeding worked correctly** and relationships are maintained
-8. **Authentication-specific debugging**:
-   - `Cannot pass null or empty values to constructor` → Check for `@JsonIgnore` on required fields
-   - `BadCredentialsException` → Verify User entity serialization and password field accessibility
-   - Check logs for "DomainUserDetailsService" debugging output to trace authentication flow
+1. **Verify service layer is being used** instead of direct repository access
+1. **Check that transient properties are populated** in service methods
+1. **Test all CRUD operations** through the web interface
+1. **Verify data seeding worked correctly** and relationships are maintained
+1. **Authentication-specific debugging**:
+   - `Cannot pass null or empty values to constructor` → Check for `@JsonIgnore`
+     on required fields
+   - `BadCredentialsException` → Verify User entity serialization and password
+     field accessibility
+   - Check logs for "DomainUserDetailsService" debugging output to trace
+     authentication flow
 
 ### **Pro Tips for Success**
 
 - **Compile early and often** - Don't let errors accumulate
 - **Use global search and replace** - Find all occurrences of patterns to update
-- **Be systematic** - Fix one type of error across all files before moving to next
+- **Be systematic** - Fix one type of error across all files before moving to
+  next
 - **Test method renames carefully** - Ensure all callers are updated
 - **Use meaningful String IDs** - "owner-1", "pet-1" instead of random strings
-- **Check controller classes** - They often call repository methods that change signatures
-- **Always test runtime** - Compilation success doesn't guarantee functional templates
-- **Service layer is critical** - Bridge between document storage and template expectations
+- **Check controller classes** - They often call repository methods that change
+  signatures
+- **Always test runtime** - Compilation success doesn't guarantee functional
+  templates
+- **Service layer is critical** - Bridge between document storage and template
+  expectations
 
 ### **Authentication Troubleshooting Guide** (CRITICAL)
 
@@ -716,20 +862,27 @@ If runtime fails after successful compilation:
 
 1. **`Cannot pass null or empty values to constructor`**:
 
-   - **Root Cause**: `@JsonIgnore` preventing required field serialization to Cosmos DB
-   - **Solution**: Remove `@JsonIgnore` from all persisted fields (password, authorities, etc.)
+   - **Root Cause**: `@JsonIgnore` preventing required field serialization to
+     Cosmos DB
+   - **Solution**: Remove `@JsonIgnore` from all persisted fields (password,
+     authorities, etc.)
    - **Verification**: Check User entity has no `@JsonIgnore` on stored fields
 
-2. **`BadCredentialsException` during login**:
+1. **`BadCredentialsException` during login**:
 
    - **Root Cause**: Password field not accessible during authentication
-   - **Solution**: Ensure password field is serializable and accessible in UserDetailsService
+   - **Solution**: Ensure password field is serializable and accessible in
+     UserDetailsService
    - **Verification**: Add debug logs in `loadUserByUsername` method
 
-3. **Authorities not loading correctly**:
+1. **Authorities not loading correctly**:
 
-   - **Root Cause**: Authority objects stored as complex entities instead of strings
-   - **Solution**: Store authorities as `Set<String>` and convert to `GrantedAuthority` in UserDetailsService
+   - **Root Cause**: Authority objects stored as complex entities instead of
+     strings
+
+   - **Solution**: Store authorities as `Set<String>` and convert to
+     `GrantedAuthority` in UserDetailsService
+
    - **Pattern**:
 
      ```java
@@ -746,9 +899,11 @@ If runtime fails after successful compilation:
 
      ```
 
-4. **User entity not found during authentication**:
+1. **User entity not found during authentication**:
+
    - **Root Cause**: Repository query methods not working with String IDs
-   - **Solution**: Update repository `findOneByLogin` method to work with Cosmos DB
+   - **Solution**: Update repository `findOneByLogin` method to work with Cosmos
+     DB
    - **Verification**: Test repository methods independently
 
 #### **Authentication Debugging Checklist**:
@@ -766,9 +921,11 @@ If runtime fails after successful compilation:
 
 #### **Issue 1: Repository Reactive Type Casting Errors**
 
-**Error**: `ClassCastException: reactor.core.publisher.BlockingIterable cannot be cast to java.util.List`
+**Error**:
+`ClassCastException: reactor.core.publisher.BlockingIterable cannot be cast to java.util.List`
 
-**Root Cause**: Cosmos repositories return reactive types (`Iterable`) but legacy JPA code expects `List`
+**Root Cause**: Cosmos repositories return reactive types (`Iterable`) but
+legacy JPA code expects `List`
 
 **Solution**: Convert reactive types properly in repository methods:
 
@@ -793,9 +950,11 @@ default List<Entity> customFindMethod() {
 
 #### **Issue 2: BigDecimal Reflection Issues in Java 17+**
 
-**Error**: `Unable to make field private final java.math.BigInteger java.math.BigDecimal.intVal accessible`
+**Error**:
+`Unable to make field private final java.math.BigInteger java.math.BigDecimal.intVal accessible`
 
-**Root Cause**: Java 17+ module system restricts reflection access to BigDecimal internal fields during serialization
+**Root Cause**: Java 17+ module system restricts reflection access to BigDecimal
+internal fields during serialization
 
 **Solutions**:
 
@@ -810,7 +969,7 @@ default List<Entity> customFindMethod() {
 
    ```
 
-2. **Use String for high precision requirements**:
+1. **Use String for high precision requirements**:
 
    ```java
    // Store as String, convert as needed
@@ -822,16 +981,19 @@ default List<Entity> customFindMethod() {
 
    ```
 
-3. **Add JVM argument** (if BigDecimal must be kept):
+1. **Add JVM argument** (if BigDecimal must be kept):
+
    ```
    --add-opens java.base/java.math=ALL-UNNAMED
    ```
 
 #### **Issue 3: Health Check Database Dependencies**
 
-**Error**: Application fails health checks looking for removed database components
+**Error**: Application fails health checks looking for removed database
+components
 
-**Root Cause**: Spring Boot health checks still reference JPA/database dependencies after removal
+**Root Cause**: Spring Boot health checks still reference JPA/database
+dependencies after removal
 
 **Solution**: Update health check configuration:
 
@@ -840,7 +1002,7 @@ default List<Entity> customFindMethod() {
 management:
   health:
     readiness:
-      include: 'ping,diskSpace' # Remove 'db' if present
+      include: "ping,diskSpace" # Remove 'db' if present
 ```
 
 **Files to Check**:
@@ -851,13 +1013,15 @@ management:
 
 #### **Issue 4: Collection Type Mismatches in Services**
 
-**Error**: Type mismatch errors when converting entity relationships to String-based storage
+**Error**: Type mismatch errors when converting entity relationships to
+String-based storage
 
-**Root Cause**: Service methods expecting different collection types after entity conversion
+**Root Cause**: Service methods expecting different collection types after
+entity conversion
 
 **Solution**: Update service methods to handle new entity structure:
 
-```java
+````java
 // Before: Entity relationships
 public Set<RelatedEntity> getRelatedEntities() {
     return entity.getRelatedEntities(); // Direct entity references
@@ -925,7 +1089,7 @@ public Set<RelatedEntity> getRelatedEntities() {
    // Replace BigDecimal fields with alternatives:
    private Double amount; // Or String for high precision
 
-   ```
+````
 
 3. **Health Check Configuration**:
    ```yaml
@@ -933,7 +1097,7 @@ public Set<RelatedEntity> getRelatedEntities() {
    management:
      health:
        readiness:
-         include: 'ping,diskSpace'
+         include: "ping,diskSpace"
    ```
 
 ### **Authentication Conversion Patterns**
@@ -946,4 +1110,5 @@ public Set<RelatedEntity> getRelatedEntities() {
 
 - **Add transient properties** with `@JsonIgnore` for UI access to related data
 - **Use service layer** to populate transient relationships before rendering
-- **Never return repository results directly** to templates without relationship population
+- **Never return repository results directly** to templates without relationship
+  population

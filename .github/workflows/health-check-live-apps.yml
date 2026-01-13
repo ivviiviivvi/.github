@@ -4,7 +4,7 @@ on:
   schedule:
     # Run every 30 minutes (reduced from 5 minutes to save costs)
     # Was: 288 runs/day, Now: 48 runs/day = 83% cost reduction
-    - cron: '*/30 * * * *'
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 env:
@@ -241,7 +241,7 @@ jobs:
           text: '🚨 Application Health Check Failed!\n${{ steps.endpoint_check.outputs.failed_apps }}'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           fields: repo,message,commit,author
-          if-empty: 'warning'
+          if-empty: "warning"
         continue-on-error: true
 
       - name: Summary

@@ -1,9 +1,9 @@
 import json
 import os
-import time
 import sys
-from datetime import datetime
+import time
 from contextlib import contextmanager
+from datetime import datetime
 
 SUBSCRIPTIONS_FILE = ".github/subscriptions.json"
 TASK_QUEUE_FILE = ".github/task_queue.json"
@@ -15,9 +15,11 @@ LOCK_FILE = ".github/quota.lock"
 # Check if fcntl is available (Unix/Linux/macOS)
 try:
     import fcntl
+
     HAS_FCNTL = True
 except ImportError:
     HAS_FCNTL = False
+
 
 @contextmanager
 def acquire_lock(timeout=60):
@@ -32,16 +34,16 @@ def acquire_lock(timeout=60):
         # FCNTL (Unix) Implementation
         # Ensure lock file exists
         if not os.path.exists(LOCK_FILE):
-             try:
-                 # Create empty file
-                 with open(LOCK_FILE, 'w') as f:
-                     pass
-             except OSError:
-                 pass # Might be created by another process concurrently
+            try:
+                # Create empty file
+                with open(LOCK_FILE, "w") as f:
+                    pass
+            except OSError:
+                pass  # Might be created by another process concurrently
 
         fd = None
         try:
-            fd = open(LOCK_FILE, 'r+')
+            fd = open(LOCK_FILE, "r+")
             while True:
                 try:
                     # Try to acquire exclusive lock without blocking
@@ -81,6 +83,7 @@ def acquire_lock(timeout=60):
             except OSError:
                 pass
 
+
 def get_subscriptions():
     """Reads the subscriptions file and returns the subscriptions data."""
     try:
@@ -89,6 +92,7 @@ def get_subscriptions():
     except (FileNotFoundError, json.JSONDecodeError):
         return {"subscriptions": []}
 
+
 def get_usage(subscription_name):
     """Gets the current usage for a specific subscription."""
     data = get_subscriptions()
@@ -96,6 +100,7 @@ def get_usage(subscription_name):
         if sub["name"] == subscription_name:
             return sub.get("usage", 0)
     return 0
+
 
 def increment_usage(subscription_name, amount=1):
     """Increments the usage for a specific subscription."""
@@ -113,6 +118,7 @@ def increment_usage(subscription_name, amount=1):
 
         with open(SUBSCRIPTIONS_FILE, "w") as f:
             json.dump(data, f, indent=2)
+
 
 def reset_quotas():
     """Resets the usage for subscriptions based on their reset cadence."""
@@ -142,6 +148,7 @@ def reset_quotas():
         with open(SUBSCRIPTIONS_FILE, "w") as f:
             json.dump(data, f, indent=2)
 
+
 def add_task_to_queue(task):
     """Adds a task to the task queue."""
     with acquire_lock():
@@ -154,6 +161,7 @@ def add_task_to_queue(task):
         with open(TASK_QUEUE_FILE, "w") as f:
             json.dump(queue, f, indent=2)
 
+
 def get_tasks_from_queue():
     """Retrieves all tasks from the task queue."""
     try:
@@ -161,6 +169,7 @@ def get_tasks_from_queue():
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
+
 
 def remove_task_from_queue(task):
     """Removes a specific task from the task queue."""
@@ -175,6 +184,7 @@ def remove_task_from_queue(task):
 
         with open(TASK_QUEUE_FILE, "w") as f:
             json.dump(new_queue, f, indent=2)
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

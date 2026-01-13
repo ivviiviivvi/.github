@@ -2,7 +2,10 @@
 
 ## Overview
 
-The `suggest-awesome-*` family of prompts has been enhanced with comprehensive quality metrics, improved visual hierarchy, and intelligent categorization to help teams discover the best GitHub Copilot assets from the [awesome-copilot repository](https://github.com/github/awesome-copilot).
+The `suggest-awesome-*` family of prompts has been enhanced with comprehensive
+quality metrics, improved visual hierarchy, and intelligent categorization to
+help teams discover the best GitHub Copilot assets from the
+[awesome-copilot repository](https://github.com/github/awesome-copilot).
 
 ## What's New
 
@@ -20,6 +23,7 @@ Every suggestion now starts with a high-level overview:
 ```
 
 This gives you instant visibility into:
+
 - Total coverage
 - What you already have
 - How many recommendations to review
@@ -30,24 +34,28 @@ This gives you instant visibility into:
 Suggestions are now grouped by priority with clear visual indicators:
 
 #### 🔥🔥🔥 Critical (Must-Have)
-- >70% new content
+
+- > 70% new content
 - Fills critical capability gaps
 - Highest quality indicators
 - Immediate value proposition
 
 #### 🔥🔥 High Priority
+
 - 50-70% new content
 - Strong recommendations
 - High value-add
 - Should install soon
 
 #### ⚡⚡ Medium Priority
+
 - 35-50% new content
 - Quality improvements
 - Enhancement opportunities
 
 #### 💡 Optional
-- <25% new content
+
+- \<25% new content
 - Nice-to-have features
 - Consider based on specific needs
 
@@ -55,20 +63,21 @@ Suggestions are now grouped by priority with clear visual indicators:
 
 Each suggestion includes comprehensive quality metrics:
 
-| Indicator | Meaning | Example |
-|-----------|---------|---------|
-| ⭐ Stars | GitHub stars (popularity) | ⭐ 450 stars |
-| 📈 Trending | Recent growth >20-30% | 📈 +35% in 30 days |
-| 🔥 Popular | Top 15-25% adoption | 🔥 Top 20% |
-| 💬 Discussions | Active community | 💬 125 discussions |
-| ✅ Maintained | Recently updated | ✅ Updated 2 weeks ago |
-| 📚 Well-documented | Comprehensive guides | 📚 Setup guides + examples |
-| 🎓 Course Featured | In GitHub courses | 🎓 Featured in Security course |
-| 👥 Team Recommended | Official endorsement | 👥 GitHub team endorsed |
+| Indicator           | Meaning                   | Example                        |
+| ------------------- | ------------------------- | ------------------------------ |
+| ⭐ Stars            | GitHub stars (popularity) | ⭐ 450 stars                   |
+| 📈 Trending         | Recent growth >20-30%     | 📈 +35% in 30 days             |
+| 🔥 Popular          | Top 15-25% adoption       | 🔥 Top 20%                     |
+| 💬 Discussions      | Active community          | 💬 125 discussions             |
+| ✅ Maintained       | Recently updated          | ✅ Updated 2 weeks ago         |
+| 📚 Well-documented  | Comprehensive guides      | 📚 Setup guides + examples     |
+| 🎓 Course Featured  | In GitHub courses         | 🎓 Featured in Security course |
+| 👥 Team Recommended | Official endorsement      | 👥 GitHub team endorsed        |
 
 ### 🗂️ Intelligent Categorization
 
 #### For Instructions (Technology-Based)
+
 ```
 🎯 Languages
 - ✅ C#: 3 variants (English, Japanese, Korean)
@@ -82,6 +91,7 @@ Each suggestion includes comprehensive quality metrics:
 ```
 
 #### For Chat Modes (Role-Based)
+
 ```
 🏗️ Architecture & Design
 - ✅ Azure Architect: Principal level
@@ -95,6 +105,7 @@ Each suggestion includes comprehensive quality metrics:
 ```
 
 #### For Agents (Integration-Based)
+
 ```
 🚨 Incident Management & Monitoring
 - ✅ PagerDuty: Incident response
@@ -108,6 +119,7 @@ Each suggestion includes comprehensive quality metrics:
 ```
 
 #### For Collections (Theme-Based)
+
 ```
 🔒 Security & Quality
 - 🔥🔥🔥 Security & Compliance: 14 new assets (recommended)
@@ -122,12 +134,14 @@ Each suggestion includes comprehensive quality metrics:
 ### 💰 Value Analysis
 
 #### ROI Indicators
+
 - Setup time estimates
 - Expected benefits (% improvements)
 - Coverage gap analysis
 - Technology stack alignment scores
 
 #### Example from Collections:
+
 ```
 Installation Impact:
 - 📁 Will add to prompts/: 6 security-focused prompts
@@ -144,11 +158,13 @@ Installation Impact:
 **Focus**: Task-specific prompts for code generation and problem-solving
 
 **Special Features**:
+
 - Priority-based grouping (High/Medium/Optional)
 - Workflow type categorization
 - Quick-scan table format
 
 **Best For**:
+
 - Teams looking for specific workflow prompts
 - Filling gaps in code generation capabilities
 - Finding popular community solutions
@@ -158,12 +174,14 @@ Installation Impact:
 **Focus**: Coding standards and best practices per language/framework
 
 **Special Features**:
+
 - Technology stack categorization
 - Language coverage analysis
 - Framework-specific recommendations
 - Multi-language variants detection
 
 **Best For**:
+
 - Establishing coding standards
 - Onboarding new languages/frameworks
 - Ensuring consistent code quality
@@ -173,12 +191,14 @@ Installation Impact:
 **Focus**: Specialized AI personas for different roles
 
 **Special Features**:
+
 - Role/persona categorization
 - Expertise area mapping
 - Coverage gap highlighting
 - Critical role identification
 
 **Best For**:
+
 - Building specialized development teams
 - Filling expertise gaps
 - Role-based assistance
@@ -188,6 +208,7 @@ Installation Impact:
 **Focus**: MCP-enabled custom agents for tool integrations
 
 **Special Features**:
+
 - Integration type categorization
 - Tool stack alignment
 - Setup complexity indicators
@@ -195,6 +216,7 @@ Installation Impact:
 - Partner/enterprise status
 
 **Best For**:
+
 - Integrating external tools
 - Automation opportunities
 - Partner platform connections
@@ -204,6 +226,7 @@ Installation Impact:
 **Focus**: Curated bundles of related assets
 
 **Special Features**:
+
 - Detailed asset breakdown by type
 - New vs. existing calculation
 - Theme-based organization
@@ -212,6 +235,7 @@ Installation Impact:
 - Priority decision matrix
 
 **Best For**:
+
 - Bulk capability additions
 - Themed improvements (e.g., "Security", "Testing")
 - Comprehensive coverage
@@ -222,43 +246,49 @@ Installation Impact:
 ### Example 1: Finding High-Priority Security Assets
 
 Use `suggest-awesome-github-copilot-collections` and look for:
+
 1. Executive summary showing security gaps
-2. 🔥🔥🔥 Critical priority collections
-3. 🔒 Security & Quality category
-4. High new asset percentage (>70%)
+1. 🔥🔥🔥 Critical priority collections
+1. 🔒 Security & Quality category
+1. High new asset percentage (>70%)
 
 ### Example 2: Adding Language Support
 
 Use `suggest-awesome-github-copilot-instructions` and review:
+
 1. Technology category breakdown
-2. 🎯 Languages section for gaps
-3. Quality indicators (stars, maintenance)
-4. Coverage comparison with existing
+1. 🎯 Languages section for gaps
+1. Quality indicators (stars, maintenance)
+1. Coverage comparison with existing
 
 ### Example 3: Building Specialized Team
 
 Use `suggest-awesome-github-copilot-chatmodes` and focus on:
+
 1. Role category breakdown
-2. Missing critical roles (❌ indicators)
-3. Priority recommendations for key personas
-4. Expertise alignment with project needs
+1. Missing critical roles (❌ indicators)
+1. Priority recommendations for key personas
+1. Expertise alignment with project needs
 
 ### Example 4: Integrating External Tools
 
 Use `suggest-awesome-github-copilot-agents` and examine:
+
 1. Integration category breakdown
-2. Tool stack currently in use
-3. Setup complexity and prerequisites
-4. MCP compatibility and enterprise readiness
+1. Tool stack currently in use
+1. Setup complexity and prerequisites
+1. MCP compatibility and enterprise readiness
 
 ## Quality Metrics Explained
 
 ### Popularity Metrics
+
 - **Stars**: Direct indicator of community adoption
 - **Forks**: Shows active usage and customization
 - **Watchers**: Indicates ongoing interest
 
 ### Quality Signals
+
 - **Last Updated**: Freshness (30-60 days = excellent)
 - **Maintenance Frequency**: Regular commits indicate health
 - **Documentation**: Examples and guides = production-ready
@@ -266,12 +296,14 @@ Use `suggest-awesome-github-copilot-agents` and examine:
 - **Issue Resolution**: Fast resolution = responsive maintenance
 
 ### Adoption Indicators
+
 - **Course Featured**: Official GitHub endorsement
 - **Blog Posts**: Community recognition
 - **Trending**: Recent momentum and growth
 - **Team Recommended**: Verified quality
 
 ### Relevance Scoring
+
 - **Stack Match**: Alignment with your technologies
 - **Gap Analysis**: How much new value is added
 - **Team Need**: Based on chat history and patterns
@@ -280,13 +312,15 @@ Use `suggest-awesome-github-copilot-agents` and examine:
 ## Priority Decision Framework
 
 ### When to Install Immediately (🔥🔥🔥)
+
 - Fills critical capability gap (no alternative exists)
-- >70% new assets in collections
+- > 70% new assets in collections
 - High quality indicators (>400 stars, trending)
 - Immediate, measurable value proposition
 - Team explicitly requested or discussed
 
 ### When to Install Soon (🔥🔥 / ⚡⚡)
+
 - 50-70% new assets in collections
 - Enhances existing capabilities significantly
 - Good quality indicators (>300 stars)
@@ -294,6 +328,7 @@ Use `suggest-awesome-github-copilot-agents` and examine:
 - Moderate setup effort with good ROI
 
 ### When to Consider Later (⚡ / 💡)
+
 - 25-50% new assets in collections
 - Incremental improvements
 - Moderate quality indicators
@@ -301,7 +336,8 @@ Use `suggest-awesome-github-copilot-agents` and examine:
 - Lower priority on roadmap
 
 ### When to Skip (⛔)
-- <25% new assets in collections
+
+- \<25% new assets in collections
 - Significant overlap with existing
 - Low relevance to tech stack
 - Outdated or poorly maintained
@@ -310,7 +346,9 @@ Use `suggest-awesome-github-copilot-agents` and examine:
 ## Integration with Workflow
 
 ### Step 1: Discovery Phase
+
 Run the appropriate suggest-awesome prompt based on your needs:
+
 - General capabilities → `collections`
 - Specific language → `instructions`
 - Role/persona needed → `chatmodes`
@@ -318,53 +356,64 @@ Run the appropriate suggest-awesome prompt based on your needs:
 - Specific workflow → `prompts`
 
 ### Step 2: Analysis Phase
+
 Review the output focusing on:
+
 1. **Executive Summary**: Get the big picture
-2. **Priority Sections**: Start with 🔥🔥🔥 Critical
-3. **Quality Indicators**: Verify community support
-4. **Category Breakdown**: Identify systematic gaps
-5. **Value Propositions**: Understand ROI
+1. **Priority Sections**: Start with 🔥🔥🔥 Critical
+1. **Quality Indicators**: Verify community support
+1. **Category Breakdown**: Identify systematic gaps
+1. **Value Propositions**: Understand ROI
 
 ### Step 3: Selection Phase
+
 Use the decision framework to filter:
+
 - Must-haves (critical gaps + high quality)
 - Should-haves (good value + moderate effort)
 - Nice-to-haves (incremental + low priority)
 - Skip (overlap + low relevance)
 
 ### Step 4: Installation Phase
+
 Follow the prompt guidance to:
+
 1. Confirm selections with team
-2. Install assets to appropriate directories
-3. Configure as needed
-4. Test and validate
-5. Document in team guidelines
+1. Install assets to appropriate directories
+1. Configure as needed
+1. Test and validate
+1. Document in team guidelines
 
 ## Tips for Best Results
 
 ### 1. Run Regularly
+
 - Quarterly reviews for new additions
 - After major tech stack changes
 - When adopting new tools/frameworks
 - Following team feedback or pain points
 
 ### 2. Use Category Breakdowns
+
 - Identify systematic gaps
 - Plan phased rollouts by category
 - Balance coverage across types
 
 ### 3. Consider Quality Over Quantity
+
 - Prioritize highly-rated assets
 - Check maintenance status
 - Look for team endorsements
 - Verify documentation quality
 
 ### 4. Think Holistically
+
 - Collections for comprehensive coverage
 - Individual assets for targeted needs
 - Complementary assets work better together
 
 ### 5. Track Adoption
+
 - Monitor which assets get used
 - Gather team feedback
 - Iterate and refine
@@ -373,24 +422,28 @@ Follow the prompt guidance to:
 ## Troubleshooting
 
 ### "Too Many Recommendations"
+
 - Focus on 🔥🔥🔥 Critical priority first
 - Review executive summary percentages
 - Use category breakdown to prioritize areas
 - Consider collections for bulk additions
 
 ### "Not Enough New Assets"
+
 - Your coverage may already be excellent!
 - Look for ⚡ Medium priority enhancements
 - Check for newer versions (🔄 indicators)
 - Focus on specific gaps identified in categories
 
 ### "Unsure About Quality"
+
 - Check ⭐ stars (>300 = well-adopted)
 - Look for 📈 trending (growing interest)
 - Verify ✅ maintained status
 - Prefer 🎓 course-featured assets
 
 ### "Wrong Technology Stack"
+
 - Prompts analyze your repository automatically
 - If mismatched, check chat history context
 - Consider providing explicit technology info
@@ -399,6 +452,7 @@ Follow the prompt guidance to:
 ## Future Enhancements
 
 Planned improvements include:
+
 - [ ] Automated A/B comparison of similar assets
 - [ ] Historical trending data over 6-12 months
 - [ ] Team usage statistics integration
@@ -420,7 +474,8 @@ Planned improvements include:
 
 ## Feedback
 
-Have suggestions for improving these suggest-awesome prompts? 
+Have suggestions for improving these suggest-awesome prompts?
+
 - Open an issue with the `enhancement` label
 - Contribute improvements via pull request
 - Share your success stories in discussions
@@ -428,5 +483,6 @@ Have suggestions for improving these suggest-awesome prompts?
 
 ---
 
-**Last Updated**: 2025-12-28  
-**Version**: 2.0 (Quality Metrics & Visual Hierarchy Enhancement)
+**Last Updated**: 2025-12-28\
+**Version**: 2.0 (Quality Metrics & Visual
+Hierarchy Enhancement)

@@ -1,16 +1,22 @@
 # Testing Plan: Draft-to-Ready Automation Fix
 
 ## Overview
-This document outlines the testing plan for validating that AI assistants are properly summoned after the `draft-to-ready-automation.yml` workflow auto-converts a draft PR to ready.
+
+This document outlines the testing plan for validating that AI assistants are
+properly summoned after the `draft-to-ready-automation.yml` workflow
+auto-converts a draft PR to ready.
 
 ## Test Scenarios
 
 ### Scenario 1: Trusted Agent PR (Jules)
+
 **Setup:**
+
 1. Create a draft PR from Jules agent
-2. Ensure PR has changes and passes basic validation
+1. Ensure PR has changes and passes basic validation
 
 **Expected Behavior:**
+
 - [ ] PR is automatically converted from draft to ready
 - [ ] @copilot is requested as a reviewer
 - [ ] @copilot is assigned to the PR
@@ -24,6 +30,7 @@ This document outlines the testing plan for validating that AI assistants are pr
 - [ ] All GitHub Apps with permissions can interact with the PR
 
 **Verification:**
+
 ```bash
 # Check PR reviewers
 gh pr view <PR_NUMBER> --json reviewRequests
@@ -39,47 +46,63 @@ gh run list --workflow=pr-task-catcher.yml --json databaseId,status,conclusion
 ```
 
 ### Scenario 2: PR with auto-ready Label
+
 **Setup:**
+
 1. Create a draft PR manually
-2. Add `auto-ready` label to the PR
+1. Add `auto-ready` label to the PR
 
 **Expected Behavior:**
+
 - [ ] Same as Scenario 1
 
 **Verification:**
+
 - Same as Scenario 1
 
 ### Scenario 3: Dependabot PR
+
 **Setup:**
+
 1. Wait for or trigger a Dependabot PR
-2. Ensure it's created as a draft (if configured that way)
+1. Ensure it's created as a draft (if configured that way)
 
 **Expected Behavior:**
+
 - [ ] Same as Scenario 1
 
 ### Scenario 4: Manual PR Conversion (Baseline)
+
 **Setup:**
+
 1. Create a draft PR manually
-2. Manually mark it as ready using GitHub UI
+1. Manually mark it as ready using GitHub UI
 
 **Expected Behavior:**
+
 - [ ] @copilot is requested as a reviewer (via `auto-assign.yml`)
 - [ ] PR task catcher runs (via trigger on `ready_for_review`)
 - [ ] This should work as before (baseline comparison)
 
 **Verification:**
-- Same as Scenario 1, but verify workflows run via event triggers, not workflow_dispatch
+
+- Same as Scenario 1, but verify workflows run via event triggers, not
+  workflow_dispatch
 
 ### Scenario 5: PR with skip-auto-ready Label
+
 **Setup:**
+
 1. Create a draft PR with `skip-auto-ready` label
 
 **Expected Behavior:**
+
 - [ ] PR remains as draft
 - [ ] No automation is triggered
 - [ ] PR comment is not posted
 
 **Verification:**
+
 ```bash
 # Check PR is still draft
 gh pr view <PR_NUMBER> --json isDraft
@@ -162,7 +185,8 @@ After the workflow runs:
 - [ ] Check GitHub Actions logs for `draft-to-ready-automation.yml`
 - [ ] Verify "Trigger Auto-Assign Workflow" step succeeded
 - [ ] Verify "Trigger PR Task Catcher" step succeeded
-- [ ] Verify "Enable Auto-Merge via GitHub CLI" step ran (may fail if checks incomplete)
+- [ ] Verify "Enable Auto-Merge via GitHub CLI" step ran (may fail if checks
+      incomplete)
 - [ ] Check that PR has conversion comment
 - [ ] Check that PR has `auto-merge` and `auto-converted` labels
 - [ ] Try summoning @claude with a comment: "@claude please review this PR"
@@ -172,6 +196,7 @@ After the workflow runs:
 ## Performance Considerations
 
 The new steps add approximately 10-15 seconds to the workflow execution time:
+
 - Requesting reviewers: ~2-3 seconds
 - Assigning assignee: ~2-3 seconds
 - Triggering workflow_dispatch: ~3-5 seconds
@@ -184,20 +209,22 @@ This is acceptable overhead for the improved functionality.
 If the fix causes issues:
 
 1. Revert the changes to `draft-to-ready-automation.yml`
-2. Remove the new steps (Trigger Auto-Assign, Trigger PR Task Catcher, Enable Auto-Merge)
-3. Restore the original PR comment text
-4. The workflow will still convert drafts, but assistants won't be summoned automatically
+1. Remove the new steps (Trigger Auto-Assign, Trigger PR Task Catcher, Enable
+   Auto-Merge)
+1. Restore the original PR comment text
+1. The workflow will still convert drafts, but assistants won't be summoned
+   automatically
 
 ## Success Criteria
 
 The fix is considered successful if:
 
 1. ✅ PRs are converted from draft to ready as before
-2. ✅ @copilot is requested as a reviewer for all auto-converted PRs
-3. ✅ PR task catcher workflow runs for all auto-converted PRs
-4. ✅ @claude, @jules, and other assistants can be summoned on auto-converted PRs
-5. ✅ No regressions in existing functionality
-6. ✅ No errors in workflow logs
+1. ✅ @copilot is requested as a reviewer for all auto-converted PRs
+1. ✅ PR task catcher workflow runs for all auto-converted PRs
+1. ✅ @claude, @jules, and other assistants can be summoned on auto-converted PRs
+1. ✅ No regressions in existing functionality
+1. ✅ No errors in workflow logs
 
 ## Notes
 

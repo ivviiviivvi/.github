@@ -1,3 +1,4 @@
+---
 # Prometheus Configuration Example
 #
 # Save as prometheus.yml and use with:
@@ -7,8 +8,8 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'production'
-    replica: '1'
+    cluster: production
+    replica: "1"
 
 # Alertmanager configuration
 alerting:
@@ -19,41 +20,41 @@ alerting:
 
 # Load rules once and periodically evaluate them
 rule_files:
-  - 'alerts/*.yml'
+  - alerts/*.yml
 
 # Scrape configurations
 scrape_configs:
   # Prometheus itself
-  - job_name: 'prometheus'
+  - job_name: prometheus
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: [localhost:9090]
 
-  # Node exporter (system metrics)
-  - job_name: 'node'
+    # Node exporter (system metrics)
+  - job_name: node
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: [localhost:9100]
 
-  # Application metrics
-  - job_name: 'application'
+    # Application metrics
+  - job_name: application
     static_configs:
-      - targets: ['localhost:3000']
-    metrics_path: '/metrics'
+      - targets: [localhost:3000]
+    metrics_path: /metrics
     scrape_interval: 30s
 
-  # Docker containers
-  - job_name: 'docker'
+    # Docker containers
+  - job_name: docker
     static_configs:
-      - targets: ['localhost:9323']
+      - targets: [localhost:9323]
 
-  # PostgreSQL
-  - job_name: 'postgres'
+    # PostgreSQL
+  - job_name: postgres
     static_configs:
-      - targets: ['localhost:9187']
+      - targets: [localhost:9187]
 
-  # Redis
-  - job_name: 'redis'
+    # Redis
+  - job_name: redis
     static_configs:
-      - targets: ['localhost:9121']
+      - targets: [localhost:9121]
 
 # Example alert rules (save as alerts/app.yml)
 ---
@@ -67,8 +68,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value }} errors/sec"
+          summary: High error rate detected
+          description: Error rate is {{ $value }} errors/sec
 
       - alert: HighLatency
         expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
@@ -76,8 +77,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High latency detected"
-          description: "95th percentile latency is {{ $value }}s"
+          summary: High latency detected
+          description: 95th percentile latency is {{ $value }}s
 
       - alert: ServiceDown
         expr: up{job="application"} == 0
@@ -85,5 +86,5 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Service is down"
+          summary: Service is down
           description: "{{ $labels.instance }} is down"

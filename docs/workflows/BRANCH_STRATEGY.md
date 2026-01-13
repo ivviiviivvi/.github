@@ -1,6 +1,7 @@
 # Branch Strategy
 
-Comprehensive branching strategy for collaborative development, versioning, and archival.
+Comprehensive branching strategy for collaborative development, versioning, and
+archival.
 
 ## Table of Contents
 
@@ -21,10 +22,10 @@ Comprehensive branching strategy for collaborative development, versioning, and 
 This organization uses a structured branching strategy that supports:
 
 1. **Continuous Development**: Active feature development
-2. **Version Management**: Clear version progression
-3. **Long-term Support**: Maintenance of older versions
-4. **Historical Preservation**: Archival of past work
-5. **Collaborative Workflows**: Multiple teams working simultaneously
+1. **Version Management**: Clear version progression
+1. **Long-term Support**: Maintenance of older versions
+1. **Historical Preservation**: Archival of past work
+1. **Collaborative Workflows**: Multiple teams working simultaneously
 
 ---
 
@@ -35,6 +36,7 @@ This organization uses a structured branching strategy that supports:
 **Purpose**: Production-ready, stable code
 
 **Characteristics**:
+
 - Permanent branch
 - Protected: highest security level
 - Only accepts merges from release and hotfix branches
@@ -43,6 +45,7 @@ This organization uses a structured branching strategy that supports:
 - Automatically deploys to production environment
 
 **Protection Rules**:
+
 ```yaml
 - Require pull request reviews (2+ approvals)
 - Require status checks to pass
@@ -54,6 +57,7 @@ This organization uses a structured branching strategy that supports:
 ```
 
 **Merge Sources**:
+
 - `release/*` branches (normal releases)
 - `production/hotfix/*` branches (critical fixes)
 
@@ -64,6 +68,7 @@ This organization uses a structured branching strategy that supports:
 **Purpose**: Integration branch for ongoing development
 
 **Characteristics**:
+
 - Permanent branch
 - Contains latest development changes
 - Feature branches merge here first
@@ -72,6 +77,7 @@ This organization uses a structured branching strategy that supports:
 - Always ahead of main (except immediately after release)
 
 **Protection Rules**:
+
 ```yaml
 - Require pull request reviews (1+ approval)
 - Require status checks to pass
@@ -80,6 +86,7 @@ This organization uses a structured branching strategy that supports:
 ```
 
 **Merge Sources**:
+
 - `develop/feature/*` branches
 - `develop/bugfix/*` branches
 - `develop/enhancement/*` branches
@@ -103,12 +110,14 @@ experimental/feature/ai-assistant/nlp-engine
 **Purpose**: Develop new features
 
 **Lifecycle**:
+
 1. Created from `develop`
-2. Development work happens here
-3. Merged back to `develop` via PR
-4. Deleted after successful merge
+1. Development work happens here
+1. Merged back to `develop` via PR
+1. Deleted after successful merge
 
 **Best Practices**:
+
 - Keep short-lived (max 2 weeks)
 - Sync with develop regularly
 - One feature per branch
@@ -128,10 +137,11 @@ maintenance/bugfix/v2.x/memory-leak-fix
 **Purpose**: Fix non-critical bugs
 
 **Lifecycle**:
+
 1. Created from `develop` (or maintenance branch)
-2. Fix implemented and tested
-3. Merged back to source branch via PR
-4. Deleted after successful merge
+1. Fix implemented and tested
+1. Merged back to source branch via PR
+1. Deleted after successful merge
 
 ---
 
@@ -162,6 +172,7 @@ experimental/feature/quantum-computing-algorithm
 **Purpose**: Proof-of-concept and research
 
 **Characteristics**:
+
 - High risk, experimental work
 - May never merge to develop
 - Can be archived if unsuccessful
@@ -182,15 +193,17 @@ release/v1.5.3
 **Purpose**: Prepare and stabilize code for production release
 
 **Lifecycle**:
+
 1. Created from `develop` when ready for release
-2. Only bug fixes and version bumps allowed
-3. No new features
-4. Testing and QA happens here
-5. Merged to both `main` and `develop`
-6. Tagged on main with version number
-7. Deleted after successful release
+1. Only bug fixes and version bumps allowed
+1. No new features
+1. Testing and QA happens here
+1. Merged to both `main` and `develop`
+1. Tagged on main with version number
+1. Deleted after successful release
 
 **Activities on Release Branch**:
+
 ```bash
 # Version bumping
 npm version 1.2.0
@@ -205,6 +218,7 @@ git commit -m "fix(release): resolve last-minute bug"
 ```
 
 **Merge Process**:
+
 ```bash
 # 1. Merge to main
 git checkout main
@@ -229,7 +243,8 @@ git push origin --delete release/v1.2.0
 
 ## Maintenance Branches
 
-**Naming Convention**: `maintenance/v<MAJOR>-maintenance` or `maintenance/v<MAJOR>.x/<purpose>`
+**Naming Convention**: `maintenance/v<MAJOR>-maintenance` or
+`maintenance/v<MAJOR>.x/<purpose>`
 
 ```bash
 maintenance/v1-maintenance
@@ -241,11 +256,13 @@ maintenance/v2.x/bug-fixes
 **Purpose**: Long-term support for previous major versions
 
 **When to Create**:
+
 - When releasing a new major version (v2.0.0, v3.0.0)
 - When customers require extended support for older versions
 - For LTS (Long Term Support) versions
 
 **Characteristics**:
+
 - Long-lived branches (can exist for years)
 - Only accept critical bug fixes and security patches
 - No new features ever
@@ -253,6 +270,7 @@ maintenance/v2.x/bug-fixes
 - Regular patch releases (v1.2.3, v1.2.4, etc.)
 
 **Example Workflow**:
+
 ```bash
 # When releasing v2.0.0, create maintenance branch for v1.x
 git checkout v1.9.5  # Last v1 release tag
@@ -273,6 +291,7 @@ git push origin maintenance/v1-maintenance --tags
 ```
 
 **Maintenance Schedule Examples**:
+
 ```
 v1.x: Maintained until 2025-12-31
 v2.x: Maintained until 2026-12-31
@@ -296,13 +315,15 @@ archive/deprecated/jquery-frontend
 **Purpose**: Historical preservation without cluttering active development
 
 **When to Archive**:
+
 1. Old features completely replaced
-2. Experimental branches that didn't pan out
-3. Legacy code no longer maintained
-4. Completed project phases
-5. Deprecated implementations
+1. Experimental branches that didn't pan out
+1. Legacy code no longer maintained
+1. Completed project phases
+1. Deprecated implementations
 
 **Archive Process**:
+
 ```bash
 # Option 1: Rename existing branch
 git branch -m old-feature-branch archive/v1/old-feature-implementation
@@ -334,11 +355,12 @@ git push -u origin archive/experimental/failed-blockchain-integration
 ```
 
 **Archive Guidelines**:
+
 1. Always document why it was archived
-2. Never delete - keep for reference
-3. Include date and author information
-4. Reference replacement solution if applicable
-5. Update team documentation with archive notice
+1. Never delete - keep for reference
+1. Include date and author information
+1. Reference replacement solution if applicable
+1. Update team documentation with archive notice
 
 ---
 
@@ -456,28 +478,29 @@ feature/C                  └───●────────────�
 ### Do's ✅
 
 1. **Keep Branches Short-Lived**: Feature branches should live days, not months
-2. **Sync Regularly**: Merge develop into feature branches frequently
-3. **Descriptive Names**: `develop/feature/user-auth/oauth-google` not `feature/update`
-4. **One Purpose Per Branch**: Single feature, fix, or enhancement
-5. **Delete After Merge**: Clean up merged branches promptly
-6. **Protect Core Branches**: Use branch protection rules
-7. **Tag All Releases**: Every production release gets a tag
-8. **Document Archives**: Explain why and when branches were archived
-9. **Maintain Old Versions**: Create maintenance branches for major versions
-10. **Follow Naming Conventions**: Use consistent, hierarchical naming
+1. **Sync Regularly**: Merge develop into feature branches frequently
+1. **Descriptive Names**: `develop/feature/user-auth/oauth-google` not
+   `feature/update`
+1. **One Purpose Per Branch**: Single feature, fix, or enhancement
+1. **Delete After Merge**: Clean up merged branches promptly
+1. **Protect Core Branches**: Use branch protection rules
+1. **Tag All Releases**: Every production release gets a tag
+1. **Document Archives**: Explain why and when branches were archived
+1. **Maintain Old Versions**: Create maintenance branches for major versions
+1. **Follow Naming Conventions**: Use consistent, hierarchical naming
 
 ### Don'ts ❌
 
 1. **Don't Commit Directly to Main**: Always use PR workflow
-2. **Don't Keep Stale Branches**: Delete after merge
-3. **Don't Mix Features**: One branch per feature
-4. **Don't Use Generic Names**: Avoid `fix`, `update`, `test`
-5. **Don't Force Push to Shared Branches**: Preserve history
-6. **Don't Delete Without Archiving**: Archive before deleting important work
-7. **Don't Reuse Branch Names**: Create new branches for new work
-8. **Don't Skip Code Review**: All merges require review
-9. **Don't Add Features to Release Branches**: Only bug fixes
-10. **Don't Break Naming Conventions**: Consistency is key
+1. **Don't Keep Stale Branches**: Delete after merge
+1. **Don't Mix Features**: One branch per feature
+1. **Don't Use Generic Names**: Avoid `fix`, `update`, `test`
+1. **Don't Force Push to Shared Branches**: Preserve history
+1. **Don't Delete Without Archiving**: Archive before deleting important work
+1. **Don't Reuse Branch Names**: Create new branches for new work
+1. **Don't Skip Code Review**: All merges require review
+1. **Don't Add Features to Release Branches**: Only bug fixes
+1. **Don't Break Naming Conventions**: Consistency is key
 
 ---
 
@@ -490,14 +513,14 @@ feature/C                  └───●────────────�
 on:
   push:
     branches:
-      - main                    # Deploy to production
-      - develop                 # Deploy to staging
-      - 'maintenance/v*'        # Deploy to maintenance environments
+      - main # Deploy to production
+      - develop # Deploy to staging
+      - "maintenance/v*" # Deploy to maintenance environments
 
   pull_request:
     branches:
-      - develop                 # Preview deployments
-      - 'maintenance/v*'        # Maintenance preview
+      - develop # Preview deployments
+      - "maintenance/v*" # Maintenance preview
 ```
 
 ### Automated Versioning
@@ -507,7 +530,7 @@ on:
 on:
   push:
     tags:
-      - 'v*.*.*'               # Semantic version tags
+      - "v*.*.*" # Semantic version tags
 
 jobs:
   release:
@@ -522,11 +545,13 @@ jobs:
 
 ## Related Documentation
 
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Overall version control standards
+- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Overall version
+  control standards
 - [GIT_WORKFLOW.md](GIT_WORKFLOW.md) - Detailed Git workflow
 - [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) - Version numbering rules
 - [RELEASE_PROCESS.md](RELEASE_PROCESS.md) - Creating and managing releases
-- [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) - Protection rule configuration
+- [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) - Protection rule
+  configuration
 
 ---
 

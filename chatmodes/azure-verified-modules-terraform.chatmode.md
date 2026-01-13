@@ -1,30 +1,36 @@
 ---
-description: 'Create, update, or review Azure IaC in Terraform using Azure Verified Modules (AVM).'
-tools: ['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'azure_get_deployment_best_practices', 'azure_get_schema_for_Bicep']
----
+
+## description: 'Create, update, or review Azure IaC in Terraform using Azure Verified Modules (AVM).' tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'azure_get_deployment_best_practices', 'azure_get_schema_for_Bicep'\]
 
 # Azure AVM Terraform mode
 
-Use Azure Verified Modules for Terraform to enforce Azure best practices via pre-built modules.
+Use Azure Verified Modules for Terraform to enforce Azure best practices via
+pre-built modules.
 
 ## Discover modules
 
 - Terraform Registry: search "avm" + resource, filter by Partner tag.
-- AVM Index: `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/`
+- AVM Index:
+  `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/`
 
 ## Usage
 
-- **Examples**: Copy example, replace `source = "../../"` with `source = "Azure/avm-res-{service}-{resource}/azurerm"`, add `version`, set `enable_telemetry`.
+- **Examples**: Copy example, replace `source = "../../"` with
+  `source = "Azure/avm-res-{service}-{resource}/azurerm"`, add `version`, set
+  `enable_telemetry`.
 - **Custom**: Copy Provision Instructions, set inputs, pin `version`.
 
 ## Versioning
 
-- Endpoint: `https://registry.terraform.io/v1/modules/Azure/{module}/azurerm/versions`
+- Endpoint:
+  `https://registry.terraform.io/v1/modules/Azure/{module}/azurerm/versions`
 
 ## Sources
 
-- Registry: `https://registry.terraform.io/modules/Azure/{module}/azurerm/latest`
-- GitHub: `https://github.com/Azure/terraform-azurerm-avm-res-{service}-{resource}`
+- Registry:
+  `https://registry.terraform.io/modules/Azure/{module}/azurerm/latest`
+- GitHub:
+  `https://github.com/Azure/terraform-azurerm-avm-res-{service}-{resource}`
 
 ## Naming conventions
 
@@ -46,7 +52,10 @@ Use Azure Verified Modules for Terraform to enforce Azure best practices via pre
 
 ## Custom Instructions for GitHub Copilot Agents
 
-**IMPORTANT**: When GitHub Copilot Agent or GitHub Copilot Coding Agent is working on this repository, the following local unit tests MUST be executed to comply with PR checks. Failure to run these tests will cause PR validation failures:
+**IMPORTANT**: When GitHub Copilot Agent or GitHub Copilot Coding Agent is
+working on this repository, the following local unit tests MUST be executed to
+comply with PR checks. Failure to run these tests will cause PR validation
+failures:
 
 ```bash
 ./avm pre-commit
@@ -54,5 +63,7 @@ Use Azure Verified Modules for Terraform to enforce Azure best practices via pre
 ./avm pr-check
 ```
 
-These commands must be run before any pull request is created or updated to ensure compliance with the Azure Verified Modules standards and prevent CI/CD pipeline failures.
-More details on the AVM process can be found in the [Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/).
+These commands must be run before any pull request is created or updated to
+ensure compliance with the Azure Verified Modules standards and prevent CI/CD
+pipeline failures. More details on the AVM process can be found in the
+[Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/).

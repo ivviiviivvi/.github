@@ -6,7 +6,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
 # Global allowlist for false positives
 [allowlist]
   description = "Global allowlist for false positives"
-  
+
   # Allowlist specific files that contain examples or patterns
   paths = [
     '''\.github/workflows/scan-for-secrets\.yml''',
@@ -17,7 +17,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
     '''\.semgrep/rules\.yml''',
     '''.pre-commit-config.*\.yaml''',
   ]
-  
+
   # Allowlist specific patterns that are examples or documentation
   regexes = [
     '''ghp_xxx''',  # Example token in documentation
@@ -28,10 +28,10 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
     '''xxx+''',  # Placeholder
     '''example\.com''',  # Example domains
   ]
-  
+
   # Allowlist commits (if needed in the future)
   commits = []
-  
+
   # Allowlist specific strings that are false positives
   stopwords = [
     "example",

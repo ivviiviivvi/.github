@@ -15,7 +15,10 @@
 
 ## Overview
 
-GitHub Best Practices Sessions are structured meetings designed to educate teams, review implementations, share knowledge, and continuously improve development practices across the organization. These sessions foster a culture of learning, quality, and collaboration.
+GitHub Best Practices Sessions are structured meetings designed to educate
+teams, review implementations, share knowledge, and continuously improve
+development practices across the organization. These sessions foster a culture
+of learning, quality, and collaboration.
 
 ### Goals
 
@@ -29,7 +32,10 @@ GitHub Best Practices Sessions are structured meetings designed to educate teams
 
 ## What are Best Practices Sessions?
 
-Best Practices Sessions are regular, structured meetings that focus on specific aspects of GitHub usage, development workflows, security practices, or community management. They can range from short 30-minute knowledge shares to comprehensive multi-hour workshops.
+Best Practices Sessions are regular, structured meetings that focus on specific
+aspects of GitHub usage, development workflows, security practices, or community
+management. They can range from short 30-minute knowledge shares to
+comprehensive multi-hour workshops.
 
 ### Benefits
 
@@ -49,11 +55,13 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Share specific knowledge or features with the team.
 
 **Format**:
+
 - Presentation or demo (20-30 min)
 - Q&A and discussion (10-20 min)
 - Action items (5-10 min)
 
 **Topics**:
+
 - GitHub Actions tips and tricks
 - Security scanning best practices
 - Effective code review techniques
@@ -69,12 +77,14 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Comprehensive review of repository best practices implementation.
 
 **Format**:
+
 - Current state review (20 min)
 - Deep dive into specific areas (30-40 min)
 - Recommendations and planning (20-30 min)
 - Action items and assignments (10 min)
 
 **Review Areas**:
+
 - Security & compliance
 - Code quality
 - Documentation
@@ -91,6 +101,7 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Comprehensive review and optimization of CI/CD workflows.
 
 **Format**:
+
 - Current workflow analysis (30-60 min)
 - Bottleneck identification (30 min)
 - Optimization brainstorming (60 min)
@@ -98,6 +109,7 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 - Documentation and follow-up (30 min)
 
 **Focus Areas**:
+
 - Build time reduction
 - Cost optimization
 - Security hardening
@@ -113,12 +125,14 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Review and enhance security practices.
 
 **Format**:
+
 - Security posture review (20 min)
 - Vulnerability assessment (20-30 min)
 - Best practices review (20-30 min)
 - Action planning (10-20 min)
 
 **Topics**:
+
 - Secret management
 - Dependency vulnerabilities
 - Code scanning configurations
@@ -135,12 +149,14 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Train new team members or introduce new practices.
 
 **Format**:
+
 - Introduction and overview (15-20 min)
 - Hands-on walkthrough (60-90 min)
 - Practice exercises (30-45 min)
 - Q&A and resources (15 min)
 
 **Topics**:
+
 - Repository structure and navigation
 - Contribution workflow
 - Issue and PR templates
@@ -157,12 +173,14 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 **Purpose**: Reflect on practices and identify improvements.
 
 **Format**:
+
 - What went well (15 min)
 - What could be improved (15 min)
 - Action items (20 min)
 - Follow-up planning (10 min)
 
 **Focus**:
+
 - Recent incidents or challenges
 - Process effectiveness
 - Tool satisfaction
@@ -177,6 +195,7 @@ Best Practices Sessions are regular, structured meetings that focus on specific 
 ### 1. Define Objectives
 
 Clear, measurable objectives for the session:
+
 - What should participants learn?
 - What decisions need to be made?
 - What outcomes do you expect?
@@ -184,6 +203,7 @@ Clear, measurable objectives for the session:
 ### 2. Choose the Right Format
 
 Select the session type that best fits your objectives:
+
 - **Knowledge Share**: Quick education on specific topics
 - **Workshop**: Hands-on, collaborative problem-solving
 - **Review**: Comprehensive evaluation and feedback
@@ -192,18 +212,21 @@ Select the session type that best fits your objectives:
 ### 3. Prepare Content
 
 **For Knowledge Shares**:
+
 - Presentation slides
 - Demo repository or examples
 - Code samples
 - Reference documentation
 
 **For Reviews**:
+
 - Pre-review checklist
 - Current metrics and data
 - Comparison with best practices
 - Prioritized findings
 
 **For Workshops**:
+
 - Hands-on exercises
 - Sample problems
 - Starter templates
@@ -212,6 +235,7 @@ Select the session type that best fits your objectives:
 ### 4. Select Participants
 
 **Consider**:
+
 - Who needs this knowledge?
 - Who can contribute expertise?
 - Who will implement actions?
@@ -220,12 +244,14 @@ Select the session type that best fits your objectives:
 ### 5. Schedule and Communicate
 
 **Logistics**:
+
 - Choose a time that works for key participants
 - Send calendar invites with agenda
 - Share pre-reading materials
 - Set up necessary tools/access
 
 **Pre-Session Communication**:
+
 - Session objectives
 - Agenda and timeline
 - Pre-work or preparation needed
@@ -248,16 +274,19 @@ Select the session type that best fits your objectives:
 **Location/Link**: [Meeting link]
 
 ## Objectives
+
 - [ ] Learn about [specific feature/practice]
 - [ ] Understand when and how to use it
 - [ ] See practical examples
 - [ ] Discuss application to our projects
 
 ## Pre-Reading
+
 - [Link to documentation]
 - [Link to example repository]
 
 ## Agenda
+
 1. Introduction (5 min)
 2. Topic Overview (15 min)
 3. Live Demo (20 min)
@@ -265,6 +294,7 @@ Select the session type that best fits your objectives:
 5. Action Items (5 min)
 
 ## Please prepare
+
 - Review pre-reading materials
 - Think about current challenges in this area
 - Prepare questions
@@ -273,29 +303,34 @@ Select the session type that best fits your objectives:
 #### Session Outline
 
 **Introduction (5 minutes)**
+
 - Welcome and session objectives
 - Brief participant introductions if needed
 - Set context and expectations
 
 **Topic Overview (15 minutes)**
+
 - What is this practice/feature?
 - Why is it important?
 - When should you use it?
 - Key concepts and terminology
 
 **Live Demo (20 minutes)**
+
 - Real-world example
 - Step-by-step walkthrough
 - Common pitfalls to avoid
 - Tips and tricks
 
 **Q&A and Discussion (15 minutes)**
+
 - Address questions
 - Discuss applications
 - Share experiences
 - Identify challenges
 
 **Action Items (5 minutes)**
+
 - Summarize key takeaways
 - Assign follow-up tasks
 - Share resources
@@ -310,23 +345,28 @@ Select the session type that best fits your objectives:
 **Attendees**: [Names]
 
 ## Key Takeaways
+
 - [Takeaway 1]
 - [Takeaway 2]
 - [Takeaway 3]
 
 ## Action Items
+
 - [ ] [Action 1] - Owner: [Name] - Due: [Date]
 - [ ] [Action 2] - Owner: [Name] - Due: [Date]
 
 ## Resources Shared
+
 - [Link 1]
 - [Link 2]
 
 ## Questions for Follow-up
+
 - [Question 1]
 - [Question 2]
 
 ## Next Session
+
 **Topic**: [Topic]
 **Date**: [Date]
 ```
@@ -345,6 +385,7 @@ Select the session type that best fits your objectives:
 **Reviewer**: [Name]
 
 ## Automated Checks
+
 - [ ] Run GitHub Community Standards check
 - [ ] Review CodeQL analysis results
 - [ ] Check Dependabot alerts
@@ -355,6 +396,7 @@ Select the session type that best fits your objectives:
 ## Manual Review Areas
 
 ### Documentation
+
 - [ ] README.md - Complete and up-to-date?
 - [ ] CONTRIBUTING.md - Clear guidelines?
 - [ ] CODE_OF_CONDUCT.md - Present?
@@ -364,6 +406,7 @@ Select the session type that best fits your objectives:
 - [ ] Code comments - Adequate?
 
 ### Community Health
+
 - [ ] Issue templates - Comprehensive?
 - [ ] PR templates - Effective?
 - [ ] Discussion categories - Set up?
@@ -371,6 +414,7 @@ Select the session type that best fits your objectives:
 - [ ] Welcoming environment - Inclusive language?
 
 ### Security & Compliance
+
 - [ ] Secret scanning - Enabled and configured?
 - [ ] Code scanning - CodeQL running?
 - [ ] Dependency updates - Automated?
@@ -379,6 +423,7 @@ Select the session type that best fits your objectives:
 - [ ] Branch protection - Properly configured?
 
 ### Code Quality
+
 - [ ] Linting - Automated?
 - [ ] Testing - Adequate coverage?
 - [ ] Code review - Required?
@@ -386,6 +431,7 @@ Select the session type that best fits your objectives:
 - [ ] Static analysis - Running?
 
 ### CI/CD & Automation
+
 - [ ] Build workflows - Optimized?
 - [ ] Test workflows - Comprehensive?
 - [ ] Deployment - Automated?
@@ -394,12 +440,14 @@ Select the session type that best fits your objectives:
 - [ ] Caching - Implemented?
 
 ### Repository Structure
+
 - [ ] File organization - Logical?
 - [ ] Naming conventions - Consistent?
 - [ ] .gitignore - Appropriate?
 - [ ] .gitattributes - If needed?
 
 ## Metrics to Gather
+
 - Stars/Forks (if public)
 - Open issues/PRs
 - Issue/PR close time
@@ -423,30 +471,35 @@ Select the session type that best fits your objectives:
 ## Agenda
 
 ### 1. Current State Overview (20 min)
+
 - Repository purpose and scope
 - Current metrics and statistics
 - Recent activity and changes
 - Known issues or concerns
 
 ### 2. Security & Compliance (20 min)
+
 - Security alerts review
 - Vulnerability status
 - Access control review
 - Compliance requirements
 
 ### 3. Code Quality & Documentation (20 min)
+
 - Code quality metrics
 - Documentation completeness
 - Testing coverage
 - Technical debt
 
 ### 4. Community & Automation (20 min)
+
 - Community health score
 - Template effectiveness
 - Workflow performance
 - Contributor experience
 
 ### 5. Recommendations & Action Plan (10 min)
+
 - Prioritized improvements
 - Action item assignments
 - Timeline and milestones
@@ -468,83 +521,106 @@ Select the session type that best fits your objectives:
 Overall Health Score: [X/100]
 
 **Strengths**:
+
 - [Strength 1]
 - [Strength 2]
 
 **Areas for Improvement**:
+
 - [Area 1]
 - [Area 2]
 
 ## Detailed Findings
 
 ### Security & Compliance (Score: X/100)
+
 **Status**: 🟢 Good / 🟡 Fair / 🔴 Needs Attention
 
 **Findings**:
+
 - ✅ [Positive finding]
 - ⚠️ [Warning/recommendation]
 - ❌ [Critical issue]
 
 **Recommendations**:
+
 1. [Recommendation 1]
 2. [Recommendation 2]
 
 ### Code Quality (Score: X/100)
+
 **Status**: 🟢 Good / 🟡 Fair / 🔴 Needs Attention
 
 **Findings**:
+
 - [Findings]
 
 **Recommendations**:
+
 - [Recommendations]
 
 ### Documentation (Score: X/100)
+
 **Status**: 🟢 Good / 🟡 Fair / 🔴 Needs Attention
 
 **Findings**:
+
 - [Findings]
 
 **Recommendations**:
+
 - [Recommendations]
 
 ### Community Health (Score: X/100)
+
 **Status**: 🟢 Good / 🟡 Fair / 🔴 Needs Attention
 
 **Findings**:
+
 - [Findings]
 
 **Recommendations**:
+
 - [Recommendations]
 
 ### CI/CD & Automation (Score: X/100)
+
 **Status**: 🟢 Good / 🟡 Fair / 🔴 Needs Attention
 
 **Findings**:
+
 - [Findings]
 
 **Recommendations**:
+
 - [Recommendations]
 
 ## Action Plan
 
 ### Critical (Do immediately)
+
 - [ ] [Action] - Owner: [Name] - Due: [Date]
 
 ### High Priority (Within 1 week)
+
 - [ ] [Action] - Owner: [Name] - Due: [Date]
 
 ### Medium Priority (Within 1 month)
+
 - [ ] [Action] - Owner: [Name] - Due: [Date]
 
 ### Low Priority (Nice to have)
+
 - [ ] [Action] - Owner: [Name] - Due: [Date]
 
 ## Resources
+
 - [Link to best practices guide]
 - [Link to templates]
 - [Link to documentation]
 
 ## Follow-up
+
 **Next Review Date**: [Date]
 **Check-in Schedule**: [Frequency]
 ```
@@ -564,6 +640,7 @@ Overall Health Score: [X/100]
 **Participants**: [Names/Teams]
 
 ## Pre-Workshop Preparation
+
 - [ ] Gather workflow metrics (run times, costs, success rates)
 - [ ] Identify pain points and bottlenecks
 - [ ] Review recent workflow failures
@@ -574,17 +651,21 @@ Overall Health Score: [X/100]
 ### Part 1: Current State Analysis (45 min)
 
 **Objectives**:
+
 - Understand current workflow landscape
 - Identify inefficiencies
 - Prioritize optimization opportunities
 
 **Activities**:
+
 1. Workflow inventory (15 min)
+
    - List all workflows
    - Document purpose of each
    - Identify dependencies
 
 2. Metrics review (15 min)
+
    - Average run times
    - Failure rates
    - Resource usage/costs
@@ -601,22 +682,27 @@ Overall Health Score: [X/100]
 ### Part 2: Optimization Opportunities (60 min)
 
 **Objectives**:
+
 - Learn optimization techniques
 - Apply to current workflows
 - Estimate impact
 
 **Topics**:
+
 1. Caching strategies (15 min)
+
    - Dependency caching
    - Build artifact caching
    - When and how to cache
 
 2. Parallelization (15 min)
+
    - Job-level parallelization
    - Matrix strategies
    - Conditional execution
 
 3. Resource optimization (15 min)
+
    - Runner selection
    - Timeout configurations
    - Cost optimization
@@ -631,17 +717,21 @@ Overall Health Score: [X/100]
 ### Part 3: Implementation Planning (60 min)
 
 **Objectives**:
+
 - Create concrete improvement plan
 - Assign ownership
 - Set timelines
 
 **Activities**:
+
 1. Prioritization (20 min)
+
    - High-impact, low-effort wins
    - Strategic improvements
    - Long-term investments
 
 2. Implementation planning (30 min)
+
    - Detailed action items
    - Dependencies and prerequisites
    - Risk assessment
@@ -653,6 +743,7 @@ Overall Health Score: [X/100]
    - Schedule follow-ups
 
 ### Wrap-up (15 min)
+
 - Summary of decisions
 - Action item review
 - Next steps
@@ -668,21 +759,22 @@ Overall Health Score: [X/100]
 
 ### Workflow Inventory
 
-| Workflow | Purpose | Trigger | Avg Duration | Success Rate | Annual Cost* |
-|----------|---------|---------|--------------|--------------|--------------|
-| [Name] | [Purpose] | [push/pr/etc] | [Xm Ys] | [%] | $[X] |
-| | | | | | |
+| Workflow | Purpose   | Trigger       | Avg Duration | Success Rate | Annual Cost\* |
+| -------- | --------- | ------------- | ------------ | ------------ | ------------- |
+| [Name]   | [Purpose] | [push/pr/etc] | [Xm Ys]      | [%]          | $[X]          |
+|          |           |               |              |              |               |
 
-*Estimated based on runner minutes
+\*Estimated based on runner minutes
 
 ### Pain Points (Vote with 👍)
 
-| Pain Point | Impact | Frequency | Votes |
-|------------|--------|-----------|-------|
-| [Description] | High/Med/Low | Daily/Weekly/Monthly | X |
-| | | | |
+| Pain Point    | Impact       | Frequency            | Votes |
+| ------------- | ------------ | -------------------- | ----- |
+| [Description] | High/Med/Low | Daily/Weekly/Monthly | X     |
+|               |              |                      |       |
 
 ### Top 5 Priorities
+
 1. [Priority 1] - Reason: [Why]
 2. [Priority 2] - Reason: [Why]
 3. [Priority 3] - Reason: [Why]
@@ -692,41 +784,48 @@ Overall Health Score: [X/100]
 ## Part 2: Optimization Ideas
 
 ### Quick Wins (< 1 day effort)
+
 - [ ] [Idea] - Expected impact: [Description]
 - [ ] [Idea] - Expected impact: [Description]
 
 ### Strategic Improvements (1-5 days effort)
+
 - [ ] [Idea] - Expected impact: [Description]
 - [ ] [Idea] - Expected impact: [Description]
 
 ### Long-term Investments (> 5 days effort)
+
 - [ ] [Idea] - Expected impact: [Description]
 - [ ] [Idea] - Expected impact: [Description]
 
 ## Part 3: Action Plan
 
 ### Sprint 1 (This Week)
+
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 
 ### Sprint 2 (Next Week)
+
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 
 ### Sprint 3 (Following Week)
+
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 - [ ] [Action] - Owner: [Name] - Est: [Xh] - Due: [Date]
 
 ### Success Metrics
 
-| Metric | Current | Target | Measurement |
-|--------|---------|--------|-------------|
-| Avg build time | [Xm] | [Xm] | Weekly |
-| Success rate | [%] | [%] | Weekly |
-| Monthly cost | $[X] | $[X] | Monthly |
-| Developer satisfaction | [/10] | [/10] | Survey |
+| Metric                 | Current | Target | Measurement |
+| ---------------------- | ------- | ------ | ----------- |
+| Avg build time         | [Xm]    | [Xm]   | Weekly      |
+| Success rate           | [%]     | [%]    | Weekly      |
+| Monthly cost           | $[X]    | $[X]   | Monthly     |
+| Developer satisfaction | [/10]   | [/10]  | Survey      |
 
 ### Follow-up
+
 - Check-in date: [Date]
 - Review date: [Date]
 - Celebration: [When targets are hit!]
@@ -739,6 +838,7 @@ Overall Health Score: [X/100]
 ### Before the Session
 
 **1-2 Weeks Before**:
+
 - [ ] Define objectives and outcomes
 - [ ] Choose session format
 - [ ] Select participants
@@ -746,6 +846,7 @@ Overall Health Score: [X/100]
 - [ ] Send calendar invites with agenda
 
 **1 Week Before**:
+
 - [ ] Prepare content/slides
 - [ ] Create any necessary materials
 - [ ] Send pre-reading materials
@@ -753,6 +854,7 @@ Overall Health Score: [X/100]
 - [ ] Test technology
 
 **1 Day Before**:
+
 - [ ] Send reminder with agenda
 - [ ] Confirm technology works
 - [ ] Review materials
@@ -762,6 +864,7 @@ Overall Health Score: [X/100]
 ### During the Session
 
 **Start Strong**:
+
 - Begin on time
 - Welcome participants warmly
 - Review objectives and agenda
@@ -769,6 +872,7 @@ Overall Health Score: [X/100]
 - Create psychological safety
 
 **Keep Energy High**:
+
 - Use varied formats (presentation, discussion, hands-on)
 - Check for understanding regularly
 - Encourage participation
@@ -776,6 +880,7 @@ Overall Health Score: [X/100]
 - Monitor time
 
 **Facilitate Effectively**:
+
 - Ask open-ended questions
 - Draw out quiet participants
 - Manage dominant voices
@@ -784,6 +889,7 @@ Overall Health Score: [X/100]
 - Acknowledge contributions
 
 **Handle Challenges**:
+
 - Technical difficulties: Have backup plans
 - Off-topic discussions: "Park" for later
 - Disagreements: Facilitate respectful discussion
@@ -791,6 +897,7 @@ Overall Health Score: [X/100]
 - Time running short: Prioritize ruthlessly
 
 **End Well**:
+
 - Summarize key takeaways
 - Review action items
 - Clarify next steps
@@ -801,6 +908,7 @@ Overall Health Score: [X/100]
 ### After the Session
 
 **Within 24 Hours**:
+
 - [ ] Send summary and notes
 - [ ] Share action items with owners
 - [ ] Upload materials to shared location
@@ -808,12 +916,14 @@ Overall Health Score: [X/100]
 - [ ] Follow up on questions
 
 **Within 1 Week**:
+
 - [ ] Check in on action items
 - [ ] Address any follow-up questions
 - [ ] Gather and review feedback
 - [ ] Adjust future sessions based on feedback
 
 **Ongoing**:
+
 - [ ] Track action item completion
 - [ ] Measure impact
 - [ ] Share results
@@ -832,6 +942,7 @@ Overall Health Score: [X/100]
 **Review Date**: [Date]
 
 ### Critical Priority
+
 - [ ] **[Action Item]**
   - Owner: @[username]
   - Due Date: [Date]
@@ -840,18 +951,21 @@ Overall Health Score: [X/100]
   - Blocker: [If any]
 
 ### High Priority
+
 - [ ] **[Action Item]**
   - Owner: @[username]
   - Due Date: [Date]
   - Status: 🔴 Not Started / 🟡 In Progress / 🟢 Complete
 
 ### Medium Priority
+
 - [ ] **[Action Item]**
   - Owner: @[username]
   - Due Date: [Date]
   - Status: 🔴 Not Started / 🟡 In Progress / 🟢 Complete
 
 ### Low Priority / Nice to Have
+
 - [ ] **[Action Item]**
   - Owner: @[username]
   - Due Date: [Date]
@@ -861,18 +975,21 @@ Overall Health Score: [X/100]
 ### Tracking and Accountability
 
 **Weekly Check-ins**:
+
 - Review action item status
 - Address blockers
 - Adjust timelines if needed
 - Celebrate completions
 
 **Tools**:
+
 - GitHub Issues for tracking
 - GitHub Projects for visualization
 - Discussion threads for updates
 - Automated reminders
 
 **Reporting**:
+
 - Weekly status updates
 - Monthly completion metrics
 - Impact measurements
@@ -883,6 +1000,7 @@ Overall Health Score: [X/100]
 ## Resources
 
 ### Internal Resources
+
 - [Best Practices Guide](./BEST_PRACTICES.md)
 - [Workflow Optimization Guide](../../WORKFLOW_OPTIMIZATION_INDEX.md)
 - [Security Best Practices](../../WORKFLOW_SECURITY_AUDIT.md)
@@ -890,17 +1008,20 @@ Overall Health Score: [X/100]
 - [Community Standards](../CODE_OF_CONDUCT.md)
 
 ### GitHub Documentation
+
 - [GitHub Actions Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [Community Standards](https://docs.github.com/en/communities)
 - [Repository Best Practices](https://docs.github.com/en/repositories)
 - [Security Best Practices](https://docs.github.com/en/code-security)
 
 ### External Resources
+
 - [GitHub Skills](https://skills.github.com/)
 - [GitHub Blog](https://github.blog/)
 - [GitHub Changelog](https://github.blog/changelog/)
 
 ### Templates
+
 - [Issue Templates](../../ISSUE_TEMPLATE/)
 - [PR Templates](../../PULL_REQUEST_TEMPLATE/)
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
@@ -911,6 +1032,7 @@ Overall Health Score: [X/100]
 ## Measuring Success
 
 ### Session Metrics
+
 - **Attendance**: Participation rate
 - **Engagement**: Questions asked, contributions made
 - **Satisfaction**: Post-session survey scores
@@ -918,6 +1040,7 @@ Overall Health Score: [X/100]
 - **Impact**: Measurable improvements resulting from actions
 
 ### Long-term Metrics
+
 - **Knowledge Retention**: Follow-up assessments
 - **Practice Adoption**: Usage of taught practices
 - **Quality Improvements**: Metrics showing improvement
@@ -927,6 +1050,7 @@ Overall Health Score: [X/100]
 ### Feedback Collection
 
 **Post-Session Survey** (1-2 minutes):
+
 ```markdown
 ## Session Feedback
 
@@ -941,6 +1065,7 @@ Overall Health Score: [X/100]
 ```
 
 **Follow-up Survey** (After 1 month):
+
 ```markdown
 ## Session Impact Survey
 
@@ -959,28 +1084,22 @@ Overall Health Score: [X/100]
 ## Tips for Success
 
 ### Do's
-✅ **Set clear objectives** for every session
-✅ **Prepare thoroughly** but stay flexible
-✅ **Encourage participation** from all attendees
-✅ **Use practical examples** from real projects
-✅ **Follow up** on action items consistently
-✅ **Measure impact** and share results
-✅ **Iterate** based on feedback
-✅ **Celebrate wins** and progress
-✅ **Make it safe** to ask questions and make mistakes
-✅ **Keep it relevant** to participants' work
+
+✅ **Set clear objectives** for every session ✅ **Prepare thoroughly** but stay
+flexible ✅ **Encourage participation** from all attendees ✅ **Use practical
+examples** from real projects ✅ **Follow up** on action items consistently ✅
+**Measure impact** and share results ✅ **Iterate** based on feedback ✅
+**Celebrate wins** and progress ✅ **Make it safe** to ask questions and make
+mistakes ✅ **Keep it relevant** to participants' work
 
 ### Don'ts
-❌ **Don't lecture** for extended periods
-❌ **Don't skip breaks** in longer sessions
-❌ **Don't ignore questions** or dismiss concerns
-❌ **Don't overcomplicate** - keep it practical
-❌ **Don't skip follow-up** - accountability matters
-❌ **Don't make it mandatory** without value demonstration
-❌ **Don't present without interaction**
-❌ **Don't ignore feedback**
-❌ **Don't compare teams** negatively
-❌ **Don't forget to document** learnings and decisions
+
+❌ **Don't lecture** for extended periods ❌ **Don't skip breaks** in longer
+sessions ❌ **Don't ignore questions** or dismiss concerns ❌ **Don't
+overcomplicate** - keep it practical ❌ **Don't skip follow-up** - accountability
+matters ❌ **Don't make it mandatory** without value demonstration ❌ **Don't
+present without interaction** ❌ **Don't ignore feedback** ❌ **Don't compare
+teams** negatively ❌ **Don't forget to document** learnings and decisions
 
 ---
 
@@ -989,32 +1108,36 @@ Overall Health Score: [X/100]
 Ready to run your first session? Here's a simple starter path:
 
 ### Week 1: Plan
+
 1. Choose a topic from current pain points
-2. Select "Knowledge Share" format (easiest start)
-3. Define 2-3 clear learning objectives
-4. Schedule 60-minute session
-5. Invite 5-10 relevant people
+1. Select "Knowledge Share" format (easiest start)
+1. Define 2-3 clear learning objectives
+1. Schedule 60-minute session
+1. Invite 5-10 relevant people
 
 ### Week 2: Prepare
+
 1. Create simple presentation (10-15 slides max)
-2. Prepare live demo in test repository
-3. Create handout with key points and resources
-4. Test demo thoroughly
-5. Send pre-reading materials
+1. Prepare live demo in test repository
+1. Create handout with key points and resources
+1. Test demo thoroughly
+1. Send pre-reading materials
 
 ### Week 3: Execute
+
 1. Run the session following the template
-2. Keep it interactive and practical
-3. Capture questions and action items
-4. Thank participants
-5. Gather immediate feedback
+1. Keep it interactive and practical
+1. Capture questions and action items
+1. Thank participants
+1. Gather immediate feedback
 
 ### Week 4: Follow-up
+
 1. Send summary within 24 hours
-2. Check in on action items
-3. Answer follow-up questions
-4. Measure impact
-5. Plan next session based on feedback
+1. Check in on action items
+1. Answer follow-up questions
+1. Measure impact
+1. Plan next session based on feedback
 
 ---
 
@@ -1022,8 +1145,12 @@ Ready to run your first session? Here's a simple starter path:
 
 Need help planning or running a session?
 
-- 💬 **Start a [Discussion](https://github.com/ivi374forivi/.github/discussions)** in the Best Practices category
-- 🎫 **Open an [Issue](https://github.com/ivi374forivi/.github/issues/new/choose)** using the "Best Practices Review" template
+- 💬 **Start a
+  [Discussion](https://github.com/ivi374forivi/.github/discussions)** in the
+  Best Practices category
+- 🎫 **Open an
+  [Issue](https://github.com/ivi374forivi/.github/issues/new/choose)** using the
+  "Best Practices Review" template
 - 📖 **Review** the [Best Practices Guide](./BEST_PRACTICES.md)
 - 🤝 **Connect** with session facilitators in your organization
 
@@ -1043,6 +1170,5 @@ See our [Contributing Guidelines](../CONTRIBUTING.md) for more information.
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2024-12-25
-**Maintained by**: ivi374forivi Community
+**Document Version**: 1.0 **Last Updated**: 2024-12-25 **Maintained by**:
+ivi374forivi Community

@@ -1,7 +1,7 @@
 # AI Rapid Development - Quick Reference
 
-> **For solo developers working with multiple AI assistants**
-> Fast-track your PR workflow with intelligent automation
+> **For solo developers working with multiple AI assistants** Fast-track your PR
+> workflow with intelligent automation
 
 ---
 
@@ -46,19 +46,19 @@ gh pr create --label "batch:api-v2" --title "test: API tests"
 
 **Burst Mode (Default):**
 
-| Label | Effect | Use When | % of PRs |
-|-------|--------|----------|----------|
-| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅ | **90% of PRs** - all features | **Default** |
-| `needs-review` | 🛑 Blocks auto-merge, needs approval | Complex/breaking/security | 10% |
-| `batch:<name>` | 🔗 Groups related PRs for batch merge | Tightly coupled features | As needed |
-| `keep-alive` | ♾️ Prevents stale closure | Rare - work needs >24h | Rare |
-| `hold` | ⏸️ Temporarily blocks merge | Need to pause | As needed |
-| `do-not-extract-tasks` | 🚫 Skip task extraction on close | Obsolete/test PRs | As needed |
+| Label                      | Effect                                | Use When                      | % of PRs    |
+| -------------------------- | ------------------------------------- | ----------------------------- | ----------- |
+| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅      | **90% of PRs** - all features | **Default** |
+| `needs-review`             | 🛑 Blocks auto-merge, needs approval  | Complex/breaking/security     | 10%         |
+| `batch:<name>`             | 🔗 Groups related PRs for batch merge | Tightly coupled features      | As needed   |
+| `keep-alive`               | ♾️ Prevents stale closure             | Rare - work needs >24h        | Rare        |
+| `hold`                     | ⏸️ Temporarily blocks merge           | Need to pause                 | As needed   |
+| `do-not-extract-tasks`     | 🚫 Skip task extraction on close      | Obsolete/test PRs             | As needed   |
 
 **Normal Mode (Lower velocity):**
 
-| Label | Effect |
-|-------|--------|
+| Label                           | Effect                    |
+| ------------------------------- | ------------------------- |
 | `automerge:after-review-period` | ⏰ Waits 24h before merge |
 
 ---
@@ -101,10 +101,10 @@ gh pr create --label "batch:api-v2" --title "test: API tests"
 
 ## 💬 Comment Commands
 
-| Command | Action | Where |
-|---------|--------|-------|
+| Command                   | Action              | Where           |
+| ------------------------- | ------------------- | --------------- |
 | `/merge-batch api-update` | Trigger batch merge | Any PR in batch |
-| `/automerge` | Enable auto-merge | Any open PR |
+| `/automerge`              | Enable auto-merge   | Any open PR     |
 
 ---
 
@@ -141,29 +141,32 @@ gh pr create \
 ```
 
 **Reviewer leaves blocker:**
+
 ```markdown
 🚨 BLOCKER: Must fix SQL injection on line 42
 ```
 
 **Result:**
+
 - `has-blockers` label added
 - Merge blocked until addressed
 - Task summary updated
 
 ### Task Catcher Labels
 
-| Label | Auto? | Purpose |
-|-------|-------|---------|
-| `has-blockers` | ✅ | Unresolved blocker items |
-| `has-pending-tasks` | ✅ | Unchecked tasks exist |
-| `create-issues-for-tasks` | ❌ | Create issues on merge |
-| `ignore-task-checks` | ❌ | Bypass blocking (emergency) |
+| Label                     | Auto? | Purpose                     |
+| ------------------------- | ----- | --------------------------- |
+| `has-blockers`            | ✅    | Unresolved blocker items    |
+| `has-pending-tasks`       | ✅    | Unchecked tasks exist       |
+| `create-issues-for-tasks` | ❌    | Create issues on merge      |
+| `ignore-task-checks`      | ❌    | Bypass blocking (emergency) |
 
 ---
 
 ## 📊 Daily Dashboard (15 min/day)
 
 ### Morning
+
 ```bash
 # What auto-merged overnight?
 gh pr list --state merged --search "merged:>=yesterday"
@@ -179,6 +182,7 @@ gh pr list | wc -l
 ```
 
 ### Evening
+
 ```bash
 # Today's velocity
 gh pr list --state merged --search "merged:>=today"
@@ -191,12 +195,12 @@ gh pr list --label "stale:final-warning"
 
 ## 🎯 Target Metrics
 
-| Metric | Target | Check With |
-|--------|--------|------------|
-| Open PRs | <10 | `gh pr list \| wc -l` |
-| PR merge time | <2h | Auto-merged PRs |
-| Stale PRs | <5 | `gh pr list --label stale` |
-| Auto-merge rate | >70% | Weekly report |
+| Metric          | Target | Check With                 |
+| --------------- | ------ | -------------------------- |
+| Open PRs        | \<10   | `gh pr list \| wc -l`      |
+| PR merge time   | \<2h   | Auto-merged PRs            |
+| Stale PRs       | \<5    | `gh pr list --label stale` |
+| Auto-merge rate | >70%   | Weekly report              |
 
 ---
 
@@ -296,12 +300,13 @@ gh pr edit 150 --add-label "automerge:when-ci-passes"
 ### Enable Auto-Merge in Repo Settings
 
 1. Settings → General → Pull Requests
-2. ✅ Allow auto-merge
-3. ✅ Automatically delete head branches
+1. ✅ Allow auto-merge
+1. ✅ Automatically delete head branches
 
 ### Update Branch Protection (Optional)
 
 Settings → Branches → Add rule for `develop`:
+
 - ✅ Require status checks: `CodeQL`, `Semgrep`, `Tests`
 - ✅ Require branches up to date
 - ⬜ Require pull request reviews (optional for solo dev)
@@ -393,6 +398,7 @@ gh workflow run task-extraction.yml -f pr_number=123
 ## 🎓 Philosophy
 
 > **For solo dev + AI:**
+>
 > - CI is your code reviewer
 > - PRs are a means to ship, not a process to follow
 > - Speed > bureaucracy (but quality via automation)
@@ -401,5 +407,4 @@ gh workflow run task-extraction.yml -f pr_number=123
 
 ---
 
-**Last Updated:** 2025-11-18
-**Version:** 1.0.0
+**Last Updated:** 2025-11-18 **Version:** 1.0.0

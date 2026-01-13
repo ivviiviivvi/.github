@@ -1,16 +1,18 @@
 ---
-description: 'This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.'
-mode: 'agent'
----
+
+## description: 'This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.' mode: 'agent'
 
 # Product Manager Assistant: Feature Identification and Specification
 
-This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.
+This workflow guides you through a systematic approach to identify missing
+features, prioritize them, and create detailed specifications for
+implementation.
 
 ## 1. Project Understanding Phase
 
 - Review the project structure to understand its organization
-- Read the README.md and other documentation files to understand the project's core functionality
+- Read the README.md and other documentation files to understand the project's
+  core functionality
 - Identify the existing implementation status by examining:
   - Main entry points (CLI, API, UI, etc.)
   - Core modules and their functionality
@@ -18,6 +20,7 @@ This workflow guides you through a systematic approach to identify missing featu
   - Any placeholder implementations
 
 **Guiding Questions:**
+
 - What is the primary purpose of this project?
 - What user problems does it solve?
 - What patterns exist in the current implementation?
@@ -32,6 +35,7 @@ This workflow guides you through a systematic approach to identify missing featu
 - Focus on core functionality first (not nice-to-have features)
 
 **Output Creation:**
+
 - Create a list of potential missing features (5-7 items)
 - For each feature, note:
   - Current implementation status
@@ -43,15 +47,18 @@ This workflow guides you through a systematic approach to identify missing featu
 - Apply a score to each identified gap:
 
 **Scoring Matrix (1-5 scale):**
+
 - User Impact: How many users benefit?
 - Strategic Alignment: Fits core mission?
 - Implementation Feasibility: Technical complexity?
 - Resource Requirements: Development effort needed?
 - Risk Level: Potential negative impacts?
 
-**Priority = (User Impact × Strategic Alignment) / (Implementation Effort × Risk Level)**
+**Priority = (User Impact × Strategic Alignment) / (Implementation Effort × Risk
+Level)**
 
 **Output Creation:**
+
 - Present the top 3 highest-priority missing features based on the scoring
 - For each, provide:
   - Feature name
@@ -68,21 +75,26 @@ This workflow guides you through a systematic approach to identify missing featu
   - Keep the specification implementation-friendly
 
 **For Each Feature Specification:**
+
 1. **Overview & Scope**
+
    - What problem does it solve?
    - What's included and what's explicitly excluded?
 
-2. **Technical Requirements**
+1. **Technical Requirements**
+
    - Core functionality needed
    - User-facing interfaces (API, UI, CLI, etc.)
    - Integration points with existing code
 
-3. **Implementation Plan**
+1. **Implementation Plan**
+
    - Key modules/files to create or modify
    - Simple code examples showing the approach
    - Clear data structures and interfaces
 
-4. **Acceptance Criteria**
+1. **Acceptance Criteria**
+
    - How will we know when it's done?
    - What specific functionality must work?
    - What tests should pass?
@@ -97,53 +109,65 @@ This workflow guides you through a systematic approach to identify missing featu
 
 **Issue Template Structure:**
 
-# [Feature Name]
+# \[Feature Name\]
 
 ## Overview
-[Brief description of the feature and its purpose]
+
+\[Brief description of the feature and its purpose\]
 
 ## Scope
-[What's included and what's explicitly excluded]
+
+\[What's included and what's explicitly excluded\]
 
 ## Technical Requirements
-[Specific technical needs and constraints]
+
+\[Specific technical needs and constraints\]
 
 ## Implementation Plan
-[Step-by-step approach with simple code examples]
+
+\[Step-by-step approach with simple code examples\]
 
 ## Acceptance Criteria
-[Clear list of requirements to consider the feature complete]
+
+\[Clear list of requirements to consider the feature complete\]
 
 ## Priority
-[Justification for prioritization]
+
+\[Justification for prioritization\]
 
 ## Dependencies
-- **Blocks:** [List of issues blocked by this one]
-- **Blocked by:** [List of issues this one depends on]
+
+- **Blocks:** \[List of issues blocked by this one\]
+- **Blocked by:** \[List of issues this one depends on\]
 
 ## Implementation Size
-- **Estimated effort:** [Small/Medium/Large]
-- **Sub-issues:** [Links to sub-issues if this is a parent issue]
 
+- **Estimated effort:** \[Small/Medium/Large\]
+- **Sub-issues:** \[Links to sub-issues if this is a parent issue\]
 
 ## 5.5 Work Distribution Optimization
 
 - **Independence Analysis**
+
   - Review each specification to identify truly independent components
   - Refactor specifications to maximize independent work streams
   - Create clear boundaries between interdependent components
 
 - **Dependency Mapping**
-  - For features with unavoidable dependencies, establish clear issue hierarchies
+
+  - For features with unavoidable dependencies, establish clear issue
+    hierarchies
   - Create parent issues for the overall feature with sub-issues for components
   - Explicitly document "blocked by" and "blocks" relationships
 
 - **Workload Balancing**
+
   - Break down large specifications into smaller, manageable sub-issues
   - Ensure each sub-issue represents 1-3 days of development work
   - Include sub-issue specific acceptance criteria
 
 **Implementation Guidelines:**
+
 - Use GitHub issue linking syntax to create explicit relationships
 - Add labels to indicate dependency status (e.g., "blocked", "prerequisite")
 - Include estimated complexity/effort for each issue to aid sprint planning
@@ -156,10 +180,13 @@ This workflow guides you through a systematic approach to identify missing featu
 - Note any potential challenges or considerations
 
 Remember throughout this process:
+
 - Favor simplicity over complexity
 - Start with minimal viable implementations that work
 - Focus on developer experience
 - Build a foundation that can be extended later
 - Consider the open-source community and contribution model
 
-This workflow embodiment of our approach should help maintain consistency in how features are specified and prioritized, ensuring that software projects evolve in a thoughtful, user-centered way.
+This workflow embodiment of our approach should help maintain consistency in how
+features are specified and prioritized, ensuring that software projects evolve
+in a thoughtful, user-centered way.

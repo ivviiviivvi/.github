@@ -1,9 +1,6 @@
 ---
-description: 'Automate filling in a form using Playwright MCP'
-mode: agent
-tools: ['playwright']
-model: 'Claude Sonnet 4'
----
+
+## description: 'Automate filling in a form using Playwright MCP' mode: agent tools: \['playwright'\] model: 'Claude Sonnet 4'
 
 # Automating Filling in a Form with Playwright MCP
 
@@ -17,14 +14,14 @@ Navigate to https://forms.microsoft.com/url-of-my-form
 
 1. Show: playwright live
 
-2. Date: 15 July
+1. Date: 15 July
 
-3. Time: 1:00 AM
+1. Time: 1:00 AM
 
-4. Topic: Playwright Live - Latest updates on Playwright MCP + Live Demo
+1. Topic: Playwright Live - Latest updates on Playwright MCP + Live Demo
 
-5. Upload image: /Users/myuserName/Downloads/my-image.png
+1. Upload image: /Users/myuserName/Downloads/my-image.png
 
-DO NOT SUBMIT THE FORM. 
+DO NOT SUBMIT THE FORM.
 
 Ask for a review of the form before submitting it.

@@ -2,7 +2,9 @@
 
 > **Comprehensive classification system for all organizational issues**
 
-This document defines the exhaustive taxonomy for issues across the Ivviiviivvi organization. Use this as a reference when creating, labeling, and organizing issues.
+This document defines the exhaustive taxonomy for issues across the Ivviiviivvi
+organization. Use this as a reference when creating, labeling, and organizing
+issues.
 
 ## Table of Contents
 
@@ -18,12 +20,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 1. Development Issues
 
 #### 1.1 Feature Development
+
 - **New Features**: Net-new functionality additions
 - **Feature Enhancements**: Improvements to existing features
 - **Feature Deprecation**: Phasing out old features
 - **Feature Requests**: User-submitted feature proposals
 
 #### 1.2 Bug Management
+
 - **Critical Bugs**: System-breaking issues requiring immediate attention
 - **High Priority Bugs**: Significant issues affecting core functionality
 - **Medium Priority Bugs**: Issues affecting non-critical features
@@ -31,6 +35,7 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 - **Regression Bugs**: Previously working features that broke
 
 #### 1.3 Technical Debt
+
 - **Code Refactoring**: Improving code quality without changing behavior
 - **Architecture Improvements**: Structural enhancements
 - **Performance Optimization**: Speed and efficiency improvements
@@ -40,6 +45,7 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 2. Documentation Issues
 
 #### 2.1 Documentation Types
+
 - **API Documentation**: Endpoint and interface documentation
 - **User Documentation**: End-user guides and tutorials
 - **Developer Documentation**: Contributing guides and technical docs
@@ -47,6 +53,7 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 - **Process Documentation**: Workflow and procedure guides
 
 #### 2.2 Documentation Tasks
+
 - **Documentation Gaps**: Missing documentation identification
 - **Documentation Updates**: Keeping docs current with code
 - **Documentation Errors**: Fixing inaccuracies
@@ -55,12 +62,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 3. Infrastructure & DevOps
 
 #### 3.1 CI/CD Issues
+
 - **Workflow Optimization**: Improving GitHub Actions performance
 - **Build Issues**: Compilation and build failures
 - **Deployment Issues**: Release and deployment problems
 - **Testing Infrastructure**: Test suite improvements
 
 #### 3.2 Infrastructure Management
+
 - **Server Configuration**: Infrastructure setup and changes
 - **Monitoring & Observability**: Metrics and logging improvements
 - **Security Infrastructure**: Security tooling and hardening
@@ -69,12 +78,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 4. Security & Compliance
 
 #### 4.1 Security Issues
+
 - **Vulnerabilities**: Security flaws requiring patches
 - **Security Enhancements**: Proactive security improvements
 - **Dependency Vulnerabilities**: Third-party security issues
 - **Security Audits**: Systematic security reviews
 
 #### 4.2 Compliance Issues
+
 - **License Compliance**: License audit and management
 - **Data Privacy**: GDPR, CCPA, and privacy compliance
 - **Accessibility**: WCAG and accessibility compliance
@@ -83,12 +94,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 5. Community & Operations
 
 #### 5.1 Community Management
+
 - **Community Health**: Repository health metrics
 - **Contributor Experience**: Onboarding and contribution UX
 - **Communication**: Announcements and updates
 - **Community Events**: Meetups, sprints, discussions
 
 #### 5.2 Operational Issues
+
 - **Repository Administration**: Settings and configuration
 - **Team Management**: Access control and permissions
 - **Process Improvements**: Workflow and procedure enhancements
@@ -97,12 +110,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### 6. Research & Planning
 
 #### 6.1 Research Issues
+
 - **Technology Research**: Evaluating new tools and frameworks
 - **Competitive Analysis**: Studying similar solutions
 - **User Research**: Understanding user needs and pain points
 - **Performance Research**: Benchmarking and analysis
 
 #### 6.2 Planning Issues
+
 - **Epic Planning**: Large initiative planning
 - **Sprint Planning**: Iteration planning
 - **Roadmap Planning**: Long-term strategy
@@ -113,24 +128,25 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### By Nature
 
 1. **Task**: Actionable work items with clear completion criteria
-2. **Bug**: Defects in existing functionality
-3. **Enhancement**: Improvements to existing features
-4. **Feature**: New functionality additions
-5. **Question**: Requests for information or clarification
-6. **Discussion**: Topics requiring team input and consensus
-7. **Epic**: Large initiatives spanning multiple issues
-8. **Spike**: Time-boxed research or investigation
+1. **Bug**: Defects in existing functionality
+1. **Enhancement**: Improvements to existing features
+1. **Feature**: New functionality additions
+1. **Question**: Requests for information or clarification
+1. **Discussion**: Topics requiring team input and consensus
+1. **Epic**: Large initiatives spanning multiple issues
+1. **Spike**: Time-boxed research or investigation
 
 ### By Scope
 
 1. **Single Repository**: Issues affecting one repository
-2. **Multi-Repository**: Issues spanning multiple repositories
-3. **Organization-Wide**: Issues affecting the entire organization
-4. **External**: Issues requiring external coordination
+1. **Multi-Repository**: Issues spanning multiple repositories
+1. **Organization-Wide**: Issues affecting the entire organization
+1. **External**: Issues requiring external coordination
 
 ## Priority Levels
 
 ### P0 - Critical
+
 - System down or unusable
 - Security vulnerabilities actively exploited
 - Data loss or corruption
@@ -138,6 +154,7 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 - **SLA**: Immediate response, resolution within 4 hours
 
 ### P1 - High
+
 - Major functionality broken
 - Significant user impact
 - Security vulnerabilities discovered
@@ -145,18 +162,21 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 - **SLA**: Response within 4 hours, resolution within 24 hours
 
 ### P2 - Medium
+
 - Moderate functionality issues
 - Some user impact
 - Important but not urgent improvements
 - **SLA**: Response within 1 business day, resolution within 1 week
 
 ### P3 - Low
+
 - Minor issues with workarounds
 - Nice-to-have enhancements
 - Documentation improvements
 - **SLA**: Response within 3 business days, resolution as capacity allows
 
 ### P4 - Backlog
+
 - Future considerations
 - Ideas and proposals
 - Low-impact improvements
@@ -167,14 +187,14 @@ This document defines the exhaustive taxonomy for issues across the Ivviiviivvi 
 ### Status Labels
 
 1. **Triage**: New issues awaiting initial review
-2. **Backlog**: Accepted issues not yet scheduled
-3. **Todo**: Scheduled for upcoming work
-4. **In Progress**: Actively being worked on
-5. **In Review**: Under code review or testing
-6. **Blocked**: Waiting on external dependency
-7. **Done**: Completed and closed
-8. **Won't Fix**: Decided not to address
-9. **Duplicate**: Already addressed in another issue
+1. **Backlog**: Accepted issues not yet scheduled
+1. **Todo**: Scheduled for upcoming work
+1. **In Progress**: Actively being worked on
+1. **In Review**: Under code review or testing
+1. **Blocked**: Waiting on external dependency
+1. **Done**: Completed and closed
+1. **Won't Fix**: Decided not to address
+1. **Duplicate**: Already addressed in another issue
 
 ### Status Transitions
 
@@ -191,6 +211,7 @@ Triage → Backlog → Todo → In Progress → In Review → Done
 ### Meta Issues
 
 Issues about the issue tracking system itself:
+
 - Issue template improvements
 - Label taxonomy updates
 - Workflow process changes
@@ -199,6 +220,7 @@ Issues about the issue tracking system itself:
 ### Tracking Issues
 
 Large initiatives broken down into multiple sub-issues:
+
 - Epic tracking with child issue links
 - Milestone tracking across repositories
 - Project board coordination
@@ -207,6 +229,7 @@ Large initiatives broken down into multiple sub-issues:
 ### Automated Issues
 
 Issues created by automation:
+
 - Dependabot security alerts
 - Stale issue notifications
 - Health check failures
@@ -215,6 +238,7 @@ Issues created by automation:
 ### External Integration Issues
 
 Issues from external systems:
+
 - Sentry error reports
 - Customer support tickets
 - Security scan results
@@ -225,6 +249,7 @@ Issues from external systems:
 ### Quality Attributes
 
 Issues can have multiple quality attribute labels:
+
 - **Performance**: Speed and efficiency concerns
 - **Scalability**: Growth and capacity concerns
 - **Reliability**: Stability and availability concerns
@@ -236,6 +261,7 @@ Issues can have multiple quality attribute labels:
 ### Affected Components
 
 Tag issues with affected system components:
+
 - Frontend/UI
 - Backend/API
 - Database
@@ -247,6 +273,7 @@ Tag issues with affected system components:
 ### Stakeholder Types
 
 Identify who is affected:
+
 - End Users
 - Contributors
 - Maintainers
@@ -258,17 +285,19 @@ Identify who is affected:
 ### Required Information
 
 Every issue should include:
+
 1. **Clear Title**: Descriptive and searchable
-2. **Description**: What, why, and context
-3. **Acceptance Criteria**: Definition of done
-4. **Labels**: Proper classification
-5. **Assignee**: Responsible party (if known)
-6. **Milestone**: Target release (if applicable)
-7. **Project**: Board tracking (if applicable)
+1. **Description**: What, why, and context
+1. **Acceptance Criteria**: Definition of done
+1. **Labels**: Proper classification
+1. **Assignee**: Responsible party (if known)
+1. **Milestone**: Target release (if applicable)
+1. **Project**: Board tracking (if applicable)
 
 ### Optional Information
 
 Additional helpful details:
+
 - Screenshots/recordings
 - Error logs and stack traces
 - Reproduction steps
@@ -279,11 +308,11 @@ Additional helpful details:
 ### Best Practices
 
 1. **One Issue, One Topic**: Keep issues focused
-2. **Search First**: Avoid duplicates
-3. **Use Templates**: Leverage issue templates
-4. **Link Relationships**: Connect related issues
-5. **Update Status**: Keep issues current
-6. **Close When Done**: Don't leave stale issues open
+1. **Search First**: Avoid duplicates
+1. **Use Templates**: Leverage issue templates
+1. **Link Relationships**: Connect related issues
+1. **Update Status**: Keep issues current
+1. **Close When Done**: Don't leave stale issues open
 
 ## Issue Labels Reference
 
@@ -302,6 +331,7 @@ See [LABELS.md](LABELS.md) for the complete label taxonomy and usage guidelines.
 ### Project Integration
 
 Issues automatically sync with:
+
 - GitHub Projects (v2)
 - Milestones and releases
 - Pull requests
@@ -313,6 +343,7 @@ Issues automatically sync with:
 ### Key Metrics
 
 Track these issue metrics:
+
 - Time to triage
 - Time to resolution
 - Issue backlog size
@@ -336,5 +367,6 @@ Track these issue metrics:
 
 ---
 
-**Last Updated**: 2025-12-28  
-**Maintained By**: @ivviiviivvi organization maintainers
+**Last Updated**: 2025-12-28\
+**Maintained By**: @ivviiviivvi organization
+maintainers

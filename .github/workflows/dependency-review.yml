@@ -1,19 +1,19 @@
-name: 'Dependency Review'
+name: "Dependency Review"
 
 on:
   pull_request:
-    branches: [ "main", "master", "develop" ]
+    branches: ["main", "master", "develop"]
     paths:
-      - '**/package*.json'
-      - '**/yarn.lock'
-      - '**/pnpm-lock.yaml'
-      - '**/requirements*.txt'
-      - '**/Pipfile*'
-      - '**/go.mod'
-      - '**/go.sum'
-      - '**/Gemfile*'
-      - '**/composer.json'
-      - '**/composer.lock'
+      - "**/package*.json"
+      - "**/yarn.lock"
+      - "**/pnpm-lock.yaml"
+      - "**/requirements*.txt"
+      - "**/Pipfile*"
+      - "**/go.mod"
+      - "**/go.sum"
+      - "**/Gemfile*"
+      - "**/composer.json"
+      - "**/composer.lock"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

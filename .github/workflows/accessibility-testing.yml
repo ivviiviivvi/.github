@@ -3,19 +3,19 @@ name: Accessibility Testing
 on:
   pull_request:
     paths:
-      - 'src/**/*.html'
-      - 'src/**/*.jsx'
-      - 'src/**/*.tsx'
-      - 'src/**/*.vue'
-      - 'public/**'
+      - "src/**/*.html"
+      - "src/**/*.jsx"
+      - "src/**/*.tsx"
+      - "src/**/*.vue"
+      - "public/**"
   push:
     branches: [main, master]
     paths:
-      - 'src/**/*.html'
-      - 'src/**/*.jsx'
-      - 'src/**/*.tsx'
-      - 'src/**/*.vue'
-      - 'public/**'
+      - "src/**/*.html"
+      - "src/**/*.jsx"
+      - "src/**/*.tsx"
+      - "src/**/*.vue"
+      - "public/**"
   workflow_dispatch:
 
 concurrency:
@@ -39,8 +39,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -141,8 +141,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -208,8 +208,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -222,7 +222,7 @@ jobs:
         with:
           urls: |
             http://localhost:3000
-          configPath: './.github/lighthouse-config.json'
+          configPath: "./.github/lighthouse-config.json"
           uploadArtifacts: true
           temporaryPublicStorage: true
 

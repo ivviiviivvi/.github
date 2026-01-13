@@ -30,11 +30,11 @@ include:
   ci_status: true
   license: true
   language: true
-  stats: true  # stars, issues, PRs, commits
+  stats: true # stars, issues, PRs, commits
   docker: true
   contributors: true
-  version: false  # disabled by default, enable if you have releases
-  coverage: false  # disabled by default, enable if you have coverage reports
+  version: false # disabled by default, enable if you have releases
+  coverage: false # disabled by default, enable if you have coverage reports
 
 # Repository-specific settings
 repository:
@@ -42,7 +42,7 @@ repository:
   exclude:
     # - "version"
     # - "coverage"
-  
+
   # Override badge URLs (optional)
   override_urls:
     # ci: "https://github.com/owner/repo/actions/workflows/custom.yml"

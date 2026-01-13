@@ -1,11 +1,14 @@
 # GitHub Actions Workflow Standards
 
 ## Overview
-This document defines the standards for all GitHub Actions workflows in this organization to ensure security, performance, reliability, and maintainability.
+
+This document defines the standards for all GitHub Actions workflows in this
+organization to ensure security, performance, reliability, and maintainability.
 
 ## Action Version Standards
 
 ### Core Actions (Pinned to SHA)
+
 Use these standardized versions across all workflows:
 
 ```yaml
@@ -47,55 +50,62 @@ docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
 ## Required Workflow Elements
 
 ### 1. Permissions (Security)
+
 **ALWAYS** specify minimal permissions at the workflow or job level:
 
 ```yaml
 permissions:
-  contents: read        # Default - read repo contents
-  pull-requests: write  # Only if needed
-  issues: write         # Only if needed
+  contents: read # Default - read repo contents
+  pull-requests: write # Only if needed
+  issues: write # Only if needed
 ```
 
 ### 2. Concurrency (Performance & Cost)
+
 **ALWAYS** add concurrency controls to prevent redundant runs:
 
 ```yaml
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # For PRs and feature branches
+  cancel-in-progress: true # For PRs and feature branches
   # cancel-in-progress: false # For main/production deployments
 ```
 
 ### 3. Timeouts (Reliability)
+
 **ALWAYS** set timeouts to prevent hanging jobs:
 
 ```yaml
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # Adjust based on job needs
+    timeout-minutes: 30 # Adjust based on job needs
 ```
 
 ### 4. Caching (Performance)
+
 **ALWAYS** cache dependencies to speed up workflows:
 
 #### Node.js
+
 ```yaml
 - uses: actions/setup-node@v4
   with:
-    node-version: '20'
-    cache: 'npm'  # Automatic caching
+    node-version: "20"
+    cache: "npm" # Automatic caching
 ```
 
 #### Python
+
 ```yaml
 - uses: actions/setup-python@v5
   with:
-    python-version: '3.12'
-    cache: 'pip'  # Automatic caching
+    python-version: "3.12"
+    cache: "pip" # Automatic caching
 ```
 
 #### Manual Caching
+
 ```yaml
 - uses: actions/cache@v4
   with:
@@ -106,67 +116,74 @@ jobs:
 ```
 
 ### 5. Path Filters (Cost Reduction)
+
 Use path filters to avoid unnecessary runs:
 
 ```yaml
 on:
   push:
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'package*.json'
+      - "src/**"
+      - "tests/**"
+      - "package*.json"
   pull_request:
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'package*.json'
+      - "src/**"
+      - "tests/**"
+      - "package*.json"
 ```
 
 ## Best Practices
 
 ### Security
+
 1. ✅ Pin all actions to commit SHAs (not tags)
-2. ✅ Use minimal permissions
-3. ✅ Never commit secrets to code
-4. ✅ Use environment protection rules for production
-5. ✅ Review third-party actions before use
-6. ✅ Use OIDC for cloud deployments
+1. ✅ Use minimal permissions
+1. ✅ Never commit secrets to code
+1. ✅ Use environment protection rules for production
+1. ✅ Review third-party actions before use
+1. ✅ Use OIDC for cloud deployments
 
 ### Performance
+
 1. ✅ Enable caching for dependencies
-2. ✅ Use job parallelization where possible
-3. ✅ Implement path filters to reduce runs
-4. ✅ Use conditional execution for expensive steps
-5. ✅ Optimize Docker layer caching
-6. ✅ Use build matrices efficiently
+1. ✅ Use job parallelization where possible
+1. ✅ Implement path filters to reduce runs
+1. ✅ Use conditional execution for expensive steps
+1. ✅ Optimize Docker layer caching
+1. ✅ Use build matrices efficiently
 
 ### Cost Optimization
+
 1. ✅ Use `ubuntu-latest` for most jobs (cheapest)
-2. ✅ Implement concurrency controls
-3. ✅ Set appropriate timeouts
-4. ✅ Use path filters to skip unnecessary runs
-5. ✅ Schedule non-urgent jobs during off-peak hours
-6. ✅ Clean up artifacts regularly (set retention-days)
+1. ✅ Implement concurrency controls
+1. ✅ Set appropriate timeouts
+1. ✅ Use path filters to skip unnecessary runs
+1. ✅ Schedule non-urgent jobs during off-peak hours
+1. ✅ Clean up artifacts regularly (set retention-days)
 
 ### Reliability
+
 1. ✅ Set timeouts on all jobs and steps
-2. ✅ Use `continue-on-error` appropriately
-3. ✅ Implement retry logic for flaky operations
-4. ✅ Add proper error handling
-5. ✅ Use status checks for critical workflows
-6. ✅ Implement notifications for failures
+1. ✅ Use `continue-on-error` appropriately
+1. ✅ Implement retry logic for flaky operations
+1. ✅ Add proper error handling
+1. ✅ Use status checks for critical workflows
+1. ✅ Implement notifications for failures
 
 ### Maintainability
+
 1. ✅ Use descriptive job and step names
-2. ✅ Document complex workflows
-3. ✅ Extract reusable workflows for common patterns
-4. ✅ Keep workflows DRY
-5. ✅ Use consistent naming conventions
-6. ✅ Regular dependency updates
+1. ✅ Document complex workflows
+1. ✅ Extract reusable workflows for common patterns
+1. ✅ Keep workflows DRY
+1. ✅ Use consistent naming conventions
+1. ✅ Regular dependency updates
 
 ## Workflow Templates
 
 ### Standard CI Workflow
+
 ```yaml
 name: CI
 
@@ -174,15 +191,15 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'package*.json'
+      - "src/**"
+      - "tests/**"
+      - "package*.json"
   pull_request:
     branches: [main, develop]
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'package*.json'
+      - "src/**"
+      - "tests/**"
+      - "package*.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -201,8 +218,8 @@ jobs:
 
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -212,6 +229,7 @@ jobs:
 ```
 
 ### Reusable Workflow
+
 ```yaml
 name: Reusable Build
 
@@ -221,7 +239,7 @@ on:
       node-version:
         required: false
         type: string
-        default: '20'
+        default: "20"
 
 permissions:
   contents: read
@@ -237,7 +255,7 @@ jobs:
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: ${{ inputs.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       - run: npm ci
       - run: npm run build
@@ -246,6 +264,7 @@ jobs:
 ## Common Anti-Patterns to Avoid
 
 ### ❌ Don't Do This
+
 ```yaml
 # No permissions specified
 # No concurrency control
@@ -267,12 +286,13 @@ jobs:
 ```
 
 ### ✅ Do This Instead
+
 ```yaml
 on:
   push:
     branches: [main]
     paths:
-      - 'src/**'
+      - "src/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -291,22 +311,24 @@ jobs:
 
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
-      - run: npm ci  # Faster and more reliable than npm install
+      - run: npm ci # Faster and more reliable than npm install
       - run: npm test
 ```
 
 ## Deprecated Features
 
 ### ❌ Avoid These
+
 - `::set-output` - Use `$GITHUB_OUTPUT` instead
 - `::save-state` - Use `$GITHUB_STATE` instead
 - `::set-env` - Use `$GITHUB_ENV` instead
 - Old action versions (v1, v2, v3)
 
 ### ✅ Use These
+
 ```bash
 # Deprecated
 echo "::set-output name=foo::bar"
@@ -318,6 +340,7 @@ echo "foo=bar" >> $GITHUB_OUTPUT
 ## Monitoring and Maintenance
 
 ### Regular Tasks
+
 - [ ] Review workflow execution times monthly
 - [ ] Update action versions quarterly
 - [ ] Audit permissions quarterly
@@ -326,6 +349,7 @@ echo "foo=bar" >> $GITHUB_OUTPUT
 - [ ] Update this document with new standards
 
 ## References
+
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)

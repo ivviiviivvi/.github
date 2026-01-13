@@ -1,15 +1,16 @@
 ---
-description: 'C# アプリケーション構築指針 by @tsubakimoto'
-applyTo: '**/*.cs'
----
+
+## description: 'C# アプリケーション構築指針 by @tsubakimoto' applyTo: '\*\*/\*.cs'
 
 # C# アプリケーション開発
 
 ## C# の指針
+
 - 常に最新の C# を使用します。現在は C# 13 の機能です。
 - 各関数に対して明確で簡潔なコメントを書きます。
 
 ## 全般ガイドライン
+
 - コード変更のレビューでは、確信度の高い提案のみを行います。
 - なぜその設計判断をしたのかという理由を含むコメントなど、保守性の高い実践に沿ってコードを書きます。
 - エッジケースに対応し、明確な例外処理を書きます。
@@ -106,7 +107,9 @@ applyTo: '**/*.cs'
 
 ## デプロイと DevOps
 
-- .NET の組み込みコンテナーサポート（`dotnet publish --os linux --arch x64 -p:PublishProfile=DefaultContainer`）を用いた API のコンテナー化を案内します。
+- .NET
+  の組み込みコンテナーサポート（`dotnet publish --os linux --arch x64 -p:PublishProfile=DefaultContainer`）を用いた
+  API のコンテナー化を案内します。
 - 手動で Dockerfile を作成する方法と、.NET のコンテナー公開機能の違いを説明します。
 - .NET アプリケーション向け CI/CD パイプラインを説明します。
 - Azure App Service、Azure Container Apps、その他のホスティングオプションへのデプロイを示します。

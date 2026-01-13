@@ -1,6 +1,7 @@
 # Visual Comparison: Before & After Enhancements
 
-This document demonstrates the improvements made to the suggest-awesome prompts with side-by-side comparisons.
+This document demonstrates the improvements made to the suggest-awesome prompts
+with side-by-side comparisons.
 
 ## Example 1: Output Format Transformation
 
@@ -15,6 +16,7 @@ This document demonstrates the improvements made to the suggest-awesome prompts 
 ```
 
 **Issues**:
+
 - No prioritization
 - No quality indicators
 - Flat list without categorization
@@ -55,6 +57,7 @@ This document demonstrates the improvements made to the suggest-awesome prompts 
 ```
 
 **Improvements**:
+
 - ✅ Executive summary shows big picture
 - ✅ Priority-based grouping (🔥🔥🔥, 🔥🔥, 💡)
 - ✅ Quality indicators with badges
@@ -75,6 +78,7 @@ This document demonstrates the improvements made to the suggest-awesome prompts 
 ```
 
 **Issues**:
+
 - No technology grouping
 - Difficult to scan
 - No coverage analysis
@@ -121,6 +125,7 @@ This document demonstrates the improvements made to the suggest-awesome prompts 
 ```
 
 **Improvements**:
+
 - ✅ Technology icons for quick identification
 - ✅ Grouped by category (Languages, Cloud, Frontend)
 - ✅ Coverage status per category (✅ ❌ ⚠️)
@@ -140,6 +145,7 @@ This document demonstrates the improvements made to the suggest-awesome prompts 
 ```
 
 **Issues**:
+
 - No breakdown of what's inside
 - No new vs. existing percentage
 - No setup time or ROI
@@ -201,6 +207,7 @@ Installation Impact:
 ```
 
 **Improvements**:
+
 - ✅ Complete asset-by-type breakdown
 - ✅ Quality metrics with growth indicators
 - ✅ Coverage analysis (existing vs. missing)
@@ -261,6 +268,7 @@ Installation Impact:
 ```
 
 **Improvements**:
+
 - ✅ Integration-type categorization
 - ✅ Tool stack coverage analysis
 - ✅ Explicit status of all related tools
@@ -270,6 +278,7 @@ Installation Impact:
 ## Key Visual Enhancements Summary
 
 ### 1. **Color-Coded Priority System**
+
 - 🔥🔥🔥 = Must install now (red)
 - 🔥🔥 = Should install soon (orange)
 - ⚡⚡ = Nice to have (yellow)
@@ -277,6 +286,7 @@ Installation Impact:
 - ⛔ = Skip (gray)
 
 ### 2. **Status Indicators**
+
 - ✅ = Covered/Installed
 - ❌ = Missing/Needed
 - ⚠️ = Partial/Enhancement opportunity
@@ -284,6 +294,7 @@ Installation Impact:
 - 🔧 = Needs configuration
 
 ### 3. **Quality Badges**
+
 - ⭐ = Stars/popularity
 - 📈 = Trending
 - 🔥 = Popular
@@ -294,6 +305,7 @@ Installation Impact:
 - 👥 = Team-recommended
 
 ### 4. **Category Icons**
+
 - 🎯 = Languages
 - ☁️ = Cloud
 - 🏗️ = Architecture
@@ -304,6 +316,7 @@ Installation Impact:
 - 🗄️ = Backend/Data
 
 ### 5. **Metric Visualization**
+
 - Percentages for quick scanning
 - Counts with context (e.g., "14 new (78%)")
 - Time estimates (⏱️ Setup Time: ~2 hours)
@@ -312,25 +325,29 @@ Installation Impact:
 ## Decision-Making Improvements
 
 ### Before: Guesswork
+
 "Which should I install? They all look similar."
 
 ### After: Data-Driven
+
 1. Check executive summary (overall coverage)
-2. Start with 🔥🔥🔥 Critical (biggest gaps)
-3. Review quality indicators (community validation)
-4. Check category breakdown (systematic coverage)
-5. Evaluate ROI (setup time, quality improvements, % benefits)
-6. Make informed decision
+1. Start with 🔥🔥🔥 Critical (biggest gaps)
+1. Review quality indicators (community validation)
+1. Check category breakdown (systematic coverage)
+1. Evaluate ROI (setup time, quality improvements, % benefits)
+1. Make informed decision
 
 ## Scanning Efficiency
 
 ### Before
+
 - Linear reading required
 - Hard to prioritize
 - Time-consuming comparison
 - Unclear value
 
 ### After
+
 - Executive summary = 10 seconds to understand
 - Priority groups = Start at the top
 - Visual badges = Instant quality assessment
@@ -339,4 +356,6 @@ Installation Impact:
 
 ---
 
-**Conclusion**: The enhancements transform flat, hard-to-scan tables into rich, hierarchical, data-driven recommendations that enable fast, confident decision-making about which GitHub Copilot assets to adopt.
+**Conclusion**: The enhancements transform flat, hard-to-scan tables into rich,
+hierarchical, data-driven recommendations that enable fast, confident
+decision-making about which GitHub Copilot assets to adopt.

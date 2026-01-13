@@ -19,13 +19,14 @@
 
 ## What is GitHub Pages?
 
-**GitHub Pages** is a static site hosting service that automatically publishes a website from this repository. For the Ivviiviivvi organization, it serves as:
+**GitHub Pages** is a static site hosting service that automatically publishes a
+website from this repository. For the Ivviiviivvi organization, it serves as:
 
-📹 **Walkthrough Gallery** - Video gallery of all application walkthroughs
-🚀 **Live Demo Directory** - Centralized listing of all live demos
-📊 **Repository Statistics** - Organization-wide metrics and insights
-🔍 **Searchable Index** - Find walkthroughs across all repositories
-🎨 **Professional Showcase** - Beautiful, responsive design with dark mode
+📹 **Walkthrough Gallery** - Video gallery of all application walkthroughs 🚀
+**Live Demo Directory** - Centralized listing of all live demos 📊 **Repository
+Statistics** - Organization-wide metrics and insights 🔍 **Searchable Index** -
+Find walkthroughs across all repositories 🎨 **Professional Showcase** -
+Beautiful, responsive design with dark mode
 
 ---
 
@@ -55,7 +56,8 @@
 
 The system automatically collects:
 
-- **Walkthrough Videos** - From `/walkthroughs`, `/docs/walkthroughs`, `/.github/walkthroughs`
+- **Walkthrough Videos** - From `/walkthroughs`, `/docs/walkthroughs`,
+  `/.github/walkthroughs`
 - **Live Demo URLs** - From README badges and AgentSphere deployments
 - **Repository Metadata** - Names, descriptions, languages, stars
 - **Video Metadata** - Titles, descriptions, tags, upload dates
@@ -80,13 +82,12 @@ https://ivviiviivvi.github.io/.github/
 
 ### Gallery Features
 
-✅ **Responsive Design** - Works on desktop, tablet, and mobile
-✅ **Dark Mode** - Automatic theme switching
-✅ **Video Playback** - Embedded HTML5 video players
-✅ **Lazy Loading** - Fast page load with progressive video loading
-✅ **Search** - Real-time client-side search
-✅ **Metadata Display** - Repository name, description, date, tags
-✅ **Live Demo Links** - Direct links to AgentSphere demos
+✅ **Responsive Design** - Works on desktop, tablet, and mobile ✅ **Dark Mode** -
+Automatic theme switching ✅ **Video Playback** - Embedded HTML5 video players ✅
+**Lazy Loading** - Fast page load with progressive video loading ✅ **Search** -
+Real-time client-side search ✅ **Metadata Display** - Repository name,
+description, date, tags ✅ **Live Demo Links** - Direct links to AgentSphere
+demos
 
 ---
 
@@ -97,18 +98,21 @@ https://ivviiviivvi.github.io/.github/
 The gallery includes powerful search capabilities:
 
 **Search Fields:**
+
 - Repository name
 - Video title
 - Description text
 - Tags and categories
 
 **How to Search:**
+
 1. Type in the search bar at the top of the gallery
-2. Results update in real-time as you type
-3. Search is case-insensitive
-4. Minimum 2 characters required
+1. Results update in real-time as you type
+1. Search is case-insensitive
+1. Minimum 2 characters required
 
 **Example Searches:**
+
 ```
 "node" - Find all Node.js projects
 "authentication" - Find auth-related walkthroughs
@@ -149,7 +153,7 @@ Embed a specific walkthrough video:
 
 ```html
 <video controls width="640" height="360">
-  <source src="VIDEO_DOWNLOAD_URL" type="video/mp4">
+  <source src="VIDEO_DOWNLOAD_URL" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
 ```
@@ -159,7 +163,9 @@ Embed a specific walkthrough video:
 For responsive embedding that adapts to screen size:
 
 ```html
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<div
+  style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"
+>
   <iframe
     src="https://ivviiviivvi.github.io/.github/"
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
@@ -190,22 +196,23 @@ TTL: 3600
 **Step 2: Configure GitHub Pages**
 
 1. Go to repository Settings → Pages
-2. Enter custom domain: `walkthroughs.ivviiviivvi.dev`
-3. Enable "Enforce HTTPS"
-4. Save settings
+1. Enter custom domain: `walkthroughs.ivviiviivvi.dev`
+1. Enable "Enforce HTTPS"
+1. Save settings
 
 **Step 3: Update Jekyll Configuration**
 
 Update `_config.yml`:
 
 ```yaml
-url: 'https://walkthroughs.ivviiviivvi.dev'
-baseurl: ''
+url: "https://walkthroughs.ivviiviivvi.dev"
+baseurl: ""
 ```
 
 **Step 4: Commit and Deploy**
 
-Changes will take effect on next deployment (within 6 hours or trigger manually).
+Changes will take effect on next deployment (within 6 hours or trigger
+manually).
 
 ---
 
@@ -218,8 +225,8 @@ Enable analytics in `_config.yml`:
 ```yaml
 analytics:
   enabled: true
-  provider: 'google'
-  tracking_id: 'G-XXXXXXXXXX'
+  provider: "google"
+  tracking_id: "G-XXXXXXXXXX"
 ```
 
 ### Privacy-Friendly Analytics
@@ -235,8 +242,8 @@ Configuration example:
 ```yaml
 analytics:
   enabled: true
-  provider: 'plausible'
-  domain: 'walkthroughs.ivviiviivvi.dev'
+  provider: "plausible"
+  domain: "walkthroughs.ivviiviivvi.dev"
 ```
 
 ---
@@ -249,12 +256,12 @@ Customize colors in `_config.yml`:
 
 ```yaml
 theme_customization:
-  primary_color: '#2ea44f'
-  secondary_color: '#0969da'
-  background_color: '#ffffff'
-  text_color: '#24292f'
-  header_gradient_start: '#2ea44f'
-  header_gradient_end: '#0969da'
+  primary_color: "#2ea44f"
+  secondary_color: "#0969da"
+  background_color: "#ffffff"
+  text_color: "#24292f"
+  header_gradient_start: "#2ea44f"
+  header_gradient_end: "#0969da"
 ```
 
 ### Dark Mode Colors
@@ -266,9 +273,9 @@ theme_customization:
   dark_mode:
     enabled: true
     auto_detect: true
-    background_color: '#0d1117'
-    text_color: '#c9d1d9'
-    primary_color: '#58a6ff'
+    background_color: "#0d1117"
+    text_color: "#c9d1d9"
+    primary_color: "#58a6ff"
 ```
 
 ### Logo and Branding
@@ -277,9 +284,9 @@ Add organization logo:
 
 ```yaml
 organization:
-  name: 'Ivviiviivvi'
-  logo_url: '/assets/images/logo.png'
-  tagline: 'Building innovative solutions'
+  name: "Ivviiviivvi"
+  logo_url: "/assets/images/logo.png"
+  tagline: "Building innovative solutions"
 ```
 
 ### Custom CSS
@@ -301,7 +308,7 @@ Include in `_config.yml`:
 
 ```yaml
 custom_css:
-  - '/assets/css/custom.css'
+  - "/assets/css/custom.css"
 ```
 
 ---
@@ -310,15 +317,19 @@ custom_css:
 
 ### Q: How often is the gallery updated?
 
-**A:** The gallery updates automatically every 6 hours via scheduled workflow. You can also trigger manual updates.
+**A:** The gallery updates automatically every 6 hours via scheduled workflow.
+You can also trigger manual updates.
 
 ### Q: Can I add walkthroughs manually?
 
-**A:** Yes, add video files to `/walkthroughs`, `/docs/walkthroughs`, or `/.github/walkthroughs` in your repository. The next scheduled run will pick them up.
+**A:** Yes, add video files to `/walkthroughs`, `/docs/walkthroughs`, or
+`/.github/walkthroughs` in your repository. The next scheduled run will pick
+them up.
 
 ### Q: What video formats are supported?
 
-**A:** MP4, WebM, and MOV formats are supported. MP4 is recommended for best compatibility.
+**A:** MP4, WebM, and MOV formats are supported. MP4 is recommended for best
+compatibility.
 
 ### Q: How do I add metadata to walkthroughs?
 
@@ -334,20 +345,22 @@ custom_css:
 
 ### Q: Can I exclude certain repositories from the gallery?
 
-**A:** Yes, add `.nojekyll` file to the repository or configure exclusions in `_config.yml`.
+**A:** Yes, add `.nojekyll` file to the repository or configure exclusions in
+`_config.yml`.
 
 ### Q: How do I change the site title?
 
 **A:** Edit `_config.yml`:
 
 ```yaml
-title: 'Your Custom Title'
-description: 'Your custom description'
+title: "Your Custom Title"
+description: "Your custom description"
 ```
 
 ### Q: Can I customize the layout?
 
-**A:** Yes, edit `docs/_layouts/default.html` to modify the page structure and styling.
+**A:** Yes, edit `docs/_layouts/default.html` to modify the page structure and
+styling.
 
 ---
 
@@ -358,51 +371,56 @@ description: 'Your custom description'
 **Problem**: GitHub Pages build fails
 
 **Solutions**:
+
 1. Check Actions tab for build errors
-2. Verify `_config.yml` syntax is valid YAML
-3. Ensure Jekyll version compatibility
-4. Check for missing dependencies in Gemfile
+1. Verify `_config.yml` syntax is valid YAML
+1. Ensure Jekyll version compatibility
+1. Check for missing dependencies in Gemfile
 
 ### Videos Not Appearing
 
 **Problem**: Videos uploaded but not showing in gallery
 
 **Solutions**:
+
 1. Check file location (must be in `/walkthroughs` or similar)
-2. Verify file format is MP4, WebM, or MOV
-3. Wait for next scheduled index generation (up to 6 hours)
-4. Trigger manual index generation workflow
+1. Verify file format is MP4, WebM, or MOV
+1. Wait for next scheduled index generation (up to 6 hours)
+1. Trigger manual index generation workflow
 
 ### Search Not Working
 
 **Problem**: Search bar not filtering results
 
 **Solutions**:
+
 1. Clear browser cache
-2. Check JavaScript console for errors
-3. Verify walkthrough data file exists at `docs/_data/walkthroughs.yml`
-4. Ensure data format is valid YAML
+1. Check JavaScript console for errors
+1. Verify walkthrough data file exists at `docs/_data/walkthroughs.yml`
+1. Ensure data format is valid YAML
 
 ### Dark Mode Not Toggling
 
 **Problem**: Theme toggle button doesn't work
 
 **Solutions**:
+
 1. Check browser localStorage permissions
-2. Clear browser cache and localStorage
-3. Try different browser
-4. Verify JavaScript is enabled
+1. Clear browser cache and localStorage
+1. Try different browser
+1. Verify JavaScript is enabled
 
 ### Custom Domain Not Working
 
 **Problem**: Custom domain shows 404 error
 
 **Solutions**:
+
 1. Verify DNS CNAME record is correct
-2. Wait for DNS propagation (up to 24 hours)
-3. Check GitHub Pages settings
-4. Ensure HTTPS is enforced
-5. Verify `_config.yml` URL is correct
+1. Wait for DNS propagation (up to 24 hours)
+1. Check GitHub Pages settings
+1. Ensure HTTPS is enforced
+1. Verify `_config.yml` URL is correct
 
 ---
 
@@ -453,5 +471,4 @@ Need help? Contact:
 
 ---
 
-**Last Updated**: 2025-12-21
-**Version**: 1.0.0
+**Last Updated**: 2025-12-21 **Version**: 1.0.0

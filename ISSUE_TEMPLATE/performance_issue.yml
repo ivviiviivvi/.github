@@ -1,7 +1,7 @@
 name: ⚡ Performance Issue
 description: Report a performance problem or optimization opportunity
 title: "[PERFORMANCE]: "
-labels: ["performance", "needs-triage"]
+labels: [performance, needs-triage]
 body:
   - type: markdown
     attributes:

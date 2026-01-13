@@ -12,45 +12,71 @@ Usage:
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 class ContextValidator:
     """Validate context payloads against schema and token requirements"""
 
     # Token count targets
-    TARGETS = {
-        'minimal': 500,
-        'standard': 1200,
-        'full': 2000
-    }
+    TARGETS = {"minimal": 500, "standard": 1200, "full": 2000}
 
     # Required fields by compression level
     REQUIRED_FIELDS = {
-        'minimal': {
-            'summary': ['phase', 'progress'],
-            'active': None,
-            'failed': None,
-            'next': None
+        "minimal": {
+            "summary": ["phase", "progress"],
+            "active": None,
+            "failed": None,
+            "next": None,
         },
-        'standard': {
-            'version': None,
-            'handoff_id': None,
-            'summary': ['project', 'current_phase', 'progress', 'tasks_complete', 'tasks_total'],
-            'execution_state': ['active_tasks', 'blocked_tasks', 'failed_tasks', 'next_eligible'],
-            'critical_context': ['errors', 'user_decisions', 'warnings'],
-            'dag_snapshot': ['phases_completed', 'current_phase_progress', 'critical_path']
+        "standard": {
+            "version": None,
+            "handoff_id": None,
+            "summary": [
+                "project",
+                "current_phase",
+                "progress",
+                "tasks_complete",
+                "tasks_total",
+            ],
+            "execution_state": [
+                "active_tasks",
+                "blocked_tasks",
+                "failed_tasks",
+                "next_eligible",
+            ],
+            "critical_context": ["errors", "user_decisions", "warnings"],
+            "dag_snapshot": [
+                "phases_completed",
+                "current_phase_progress",
+                "critical_path",
+            ],
         },
-        'full': {
-            'version': None,
-            'handoff_id': None,
-            'summary': ['project', 'current_phase', 'progress', 'tasks_complete', 'tasks_total'],
-            'execution_state': ['active_tasks', 'blocked_tasks', 'failed_tasks', 'next_eligible'],
-            'critical_context': ['errors', 'user_decisions', 'warnings'],
-            'dag_snapshot': ['phases_completed', 'current_phase_progress', 'critical_path'],
-            'file_state': ['artifacts', 'required', 'disk_mb'],
-            'environment': ['os', 'python', 'packages']
-        }
+        "full": {
+            "version": None,
+            "handoff_id": None,
+            "summary": [
+                "project",
+                "current_phase",
+                "progress",
+                "tasks_complete",
+                "tasks_total",
+            ],
+            "execution_state": [
+                "active_tasks",
+                "blocked_tasks",
+                "failed_tasks",
+                "next_eligible",
+            ],
+            "critical_context": ["errors", "user_decisions", "warnings"],
+            "dag_snapshot": [
+                "phases_completed",
+                "current_phase_progress",
+                "critical_path",
+            ],
+            "file_state": ["artifacts", "required", "disk_mb"],
+            "environment": ["os", "python", "packages"],
+        },
     }
 
     def __init__(self, context_file: str):
@@ -77,7 +103,7 @@ class ContextValidator:
         if not self.context_file.exists():
             raise FileNotFoundError(f"Context file not found: {self.context_file}")
 
-        with open(self.context_file, 'r', encoding='utf-8') as f:
+        with open(self.context_file, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def detect_level(self) -> str:
@@ -86,11 +112,11 @@ class ContextValidator:
         Returns:
             Detected compression level ('minimal', 'standard', or 'full')
         """
-        if 'version' in self.context:
-            if 'file_state' in self.context:
-                return 'full'
-            return 'standard'
-        return 'minimal'
+        if "version" in self.context:
+            if "file_state" in self.context:
+                return "full"
+            return "standard"
+        return "minimal"
 
     def validate_schema(self, level: str) -> bool:
         """Validate context against schema requirements
@@ -152,7 +178,7 @@ class ContextValidator:
         Returns:
             Estimated token count (4 chars ≈ 1 token)
         """
-        return len(json.dumps(self.context, separators=(',', ':'))) // 4
+        return len(json.dumps(self.context, separators=(",", ":"))) // 4
 
     def validate_data_types(self) -> bool:
         """Validate data types of fields
@@ -164,22 +190,19 @@ class ContextValidator:
 
         # Check lists
         list_fields = {
-            'minimal': ['active', 'failed', 'next'],
-            'standard': [
-                'execution_state.active_tasks',
-                'execution_state.blocked_tasks',
-                'execution_state.failed_tasks',
-                'execution_state.next_eligible',
-                'critical_context.errors',
-                'critical_context.user_decisions',
-                'critical_context.warnings',
-                'dag_snapshot.phases_completed',
-                'dag_snapshot.critical_path'
+            "minimal": ["active", "failed", "next"],
+            "standard": [
+                "execution_state.active_tasks",
+                "execution_state.blocked_tasks",
+                "execution_state.failed_tasks",
+                "execution_state.next_eligible",
+                "critical_context.errors",
+                "critical_context.user_decisions",
+                "critical_context.warnings",
+                "dag_snapshot.phases_completed",
+                "dag_snapshot.critical_path",
             ],
-            'full': [
-                'file_state.artifacts',
-                'file_state.required'
-            ]
+            "full": ["file_state.artifacts", "file_state.required"],
         }
 
         level = self.detect_level()
@@ -200,7 +223,7 @@ class ContextValidator:
         Returns:
             Value at field path or None if not found
         """
-        parts = field_path.split('.')
+        parts = field_path.split(".")
         value = self.context
         for part in parts:
             if isinstance(value, dict) and part in value:
@@ -265,7 +288,9 @@ class ContextValidator:
 
         if is_valid and not errors and not warnings:
             print("\n✓ All validations passed")
-            print(f"✓ Token efficiency: {(1 - token_count/8500)*100:.1f}% reduction from naive")
+            print(
+                f"✓ Token efficiency: {(1 - token_count/8500)*100:.1f}% reduction from naive"
+            )
 
         print("=" * 80)
 
@@ -280,16 +305,12 @@ def main():
         description="Validate context payload against schema and token requirements"
     )
     parser.add_argument(
-        'context_file',
-        nargs='?',
-        default='context_payload.json',
-        help='Path to context payload JSON file (default: context_payload.json)'
+        "context_file",
+        nargs="?",
+        default="context_payload.json",
+        help="Path to context payload JSON file (default: context_payload.json)",
     )
-    parser.add_argument(
-        '--json',
-        action='store_true',
-        help='Output results as JSON'
-    )
+    parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
     args = parser.parse_args()
 
@@ -300,11 +321,11 @@ def main():
             # JSON output
             is_valid, errors, warnings = validator.validate_all()
             result = {
-                'valid': is_valid,
-                'level': validator.detect_level(),
-                'token_count': validator.get_token_count(),
-                'errors': errors,
-                'warnings': warnings
+                "valid": is_valid,
+                "level": validator.detect_level(),
+                "token_count": validator.get_token_count(),
+                "errors": errors,
+                "warnings": warnings,
             }
             print(json.dumps(result, indent=2))
         else:
@@ -322,9 +343,10 @@ def main():
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         import traceback
+
         traceback.print_exc()
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -1,6 +1,7 @@
 # AI Code Intelligence & Context-Aware Tools
 
-Comprehensive guide to AI-powered code intelligence, context-aware analysis, and modern development tools.
+Comprehensive guide to AI-powered code intelligence, context-aware analysis, and
+modern development tools.
 
 ## Table of Contents
 
@@ -20,6 +21,7 @@ Comprehensive guide to AI-powered code intelligence, context-aware analysis, and
 ### What is Context-Aware Analysis?
 
 Context-aware analysis goes beyond simple pattern matching by understanding:
+
 - **Code semantics**: What the code actually does, not just syntax
 - **Dependencies**: How different parts of code interact
 - **Data flow**: How data moves through the application
@@ -44,6 +46,7 @@ Context-aware analysis goes beyond simple pattern matching by understanding:
 **Purpose**: AI pair programmer
 
 **Features**:
+
 - Context-aware code completions
 - Whole function suggestions
 - Test generation
@@ -51,6 +54,7 @@ Context-aware analysis goes beyond simple pattern matching by understanding:
 - Multi-language support
 
 **Integration**:
+
 ```yaml
 # Already integrated via .github/workflows/claude.yml
 # GitHub Copilot available in:
@@ -61,6 +65,7 @@ Context-aware analysis goes beyond simple pattern matching by understanding:
 ```
 
 **Best Practices**:
+
 ```javascript
 // Copilot works best with clear context
 
@@ -89,12 +94,14 @@ function parseISODate(dateString) {
 **Purpose**: AI code completion
 
 **Features**:
+
 - Team-specific AI models
 - Privacy-focused (can run locally)
 - Learns from your codebase
 - Multi-language support
 
 **Setup**:
+
 ```bash
 # VS Code extension
 ext install TabNine.tabnine-vscode
@@ -111,12 +118,14 @@ ext install TabNine.tabnine-vscode
 **Purpose**: Free AI code acceleration
 
 **Features**:
+
 - Fast code completions
 - Natural language to code
 - Refactoring suggestions
 - 70+ languages
 
 **Installation**:
+
 ```bash
 # VS Code
 ext install Codeium.codeium
@@ -130,12 +139,14 @@ ext install Codeium.codeium
 **Purpose**: ML-powered coding companion
 
 **Features**:
+
 - Real-time code suggestions
 - Security scanning
 - Reference tracking
 - AWS optimized
 
 **Setup**:
+
 ```yaml
 # AWS Toolkit for VS Code
 # Includes CodeWhisperer
@@ -151,6 +162,7 @@ ext install Codeium.codeium
 **Purpose**: AI coding assistant with codebase context
 
 **Features**:
+
 - **Codebase-aware**: Understands entire repository
 - Chat with your code
 - Explain complex code
@@ -158,6 +170,7 @@ ext install Codeium.codeium
 - Fix bugs
 
 **Setup**:
+
 ```bash
 # VS Code extension
 ext install sourcegraph.cody-ai
@@ -170,6 +183,7 @@ ext install sourcegraph.cody-ai
 ```
 
 **Usage Examples**:
+
 ```
 Ask Cody:
 - "Explain how authentication works in this codebase"
@@ -183,12 +197,14 @@ Ask Cody:
 **Purpose**: AI-first code editor
 
 **Features**:
+
 - Fork of VS Code
 - Deep codebase understanding
 - Natural language editing
 - Multi-file edits
 
 **Key Features**:
+
 - **Cmd+K**: Edit code with natural language
 - **Cmd+L**: Chat about codebase
 - **Context-aware**: Reads relevant files automatically
@@ -200,6 +216,7 @@ Ask Cody:
 ### Copilot Chat
 
 **Usage in PR Reviews**:
+
 ```
 @github-copilot review this PR for:
 - Security vulnerabilities
@@ -209,6 +226,7 @@ Ask Cody:
 ```
 
 **Code Explanations**:
+
 ```
 @github-copilot explain this function
 @github-copilot what does this regex do
@@ -216,6 +234,7 @@ Ask Cody:
 ```
 
 **Test Generation**:
+
 ```
 @github-copilot generate unit tests for this function
 @github-copilot create integration tests
@@ -246,6 +265,7 @@ gh? create a PR for current branch
 **Purpose**: Universal code search
 
 **Features**:
+
 - Search across all repositories
 - Structural search (AST-based)
 - Batch changes
@@ -253,6 +273,7 @@ gh? create a PR for current branch
 - Code intelligence (go-to-definition across repos)
 
 **Setup**:
+
 ```yaml
 # Sourcegraph Cloud (Free for public repos)
 https://sourcegraph.com
@@ -265,6 +286,7 @@ docker run -d \
 ```
 
 **Search Examples**:
+
 ```
 # Find SQL injection vulnerabilities
 lang:javascript execute($1 + $2)
@@ -281,12 +303,14 @@ patternType:regexp [A-Za-z0-9]{32}
 **Purpose**: Code visualization and architecture
 
 **Features**:
+
 - Automatic architecture diagrams
 - Code maps
 - PR impact visualization
 - Onboarding tours
 
 **Integration**:
+
 ```yaml
 # .github/workflows/codesee.yml
 name: CodeSee
@@ -306,6 +330,7 @@ jobs:
 **Purpose**: Source code search engine
 
 **Features**:
+
 - Fast code search
 - Cross-reference
 - History search
@@ -318,12 +343,14 @@ jobs:
 ### 1. Claude Code (Already Integrated!)
 
 **Features**:
+
 - Context-aware PR reviews
 - Security analysis
 - Best practices checking
 - Test coverage suggestions
 
 **Usage**:
+
 ```yaml
 # Already configured in .github/workflows/claude-code-review.yml
 
@@ -338,12 +365,14 @@ jobs:
 **Purpose**: AI code reviewer
 
 **Features**:
+
 - Line-by-line review
 - Security scanning
 - Performance suggestions
 - Automatic fixes
 
 **Setup**:
+
 ```yaml
 # Install GitHub App
 # https://github.com/apps/coderabbitai
@@ -363,6 +392,7 @@ reviews:
 **Purpose**: AI-powered SAST
 
 **Features**:
+
 - ML-based vulnerability detection
 - Fix suggestions
 - Low false positives
@@ -377,12 +407,14 @@ reviews:
 **Purpose**: Large-scale code changes
 
 **Features**:
+
 - Multi-repo refactoring
 - Preview changes
 - Track adoption
 - Automated PRs
 
 **Example Batch Change**:
+
 ```yaml
 # batch-change.yml
 name: Update to new API
@@ -411,11 +443,13 @@ changesetTemplate:
 **Purpose**: Structural code search and replace
 
 **Features**:
+
 - Language-aware replacement
 - Pattern matching
 - Safe refactoring
 
 **Examples**:
+
 ```bash
 # Rename function across codebase
 comby 'oldFunction(:[args])' 'newFunction(:[args])' .js
@@ -429,11 +463,13 @@ comby 'fetch(:[url])' 'fetch(:[url], { headers: authHeaders })' .ts
 **Purpose**: Automated code fixes
 
 **Features**:
+
 - Pattern-based fixes
 - Custom rules
 - Safe transformations
 
 **Example Rule**:
+
 ```yaml
 # .semgrep/autofix.yml
 rules:
@@ -454,12 +490,14 @@ rules:
 **Purpose**: Automated code review
 
 **Features**:
+
 - Performance analysis
 - Security scanning
 - Code metrics
 - Auto-fix
 
 **Configuration**:
+
 ```toml
 # .deepsource.toml
 version = 1
@@ -484,6 +522,7 @@ enabled = true
 **Purpose**: Code quality platform
 
 **Features**:
+
 - Maintainability scores
 - Test coverage
 - Duplication detection
@@ -494,6 +533,7 @@ enabled = true
 **Purpose**: Continuous code quality
 
 **Features**:
+
 - Quality gates
 - Security hotspots
 - Code smells
@@ -508,12 +548,14 @@ enabled = true
 **Purpose**: AI documentation
 
 **Features**:
+
 - Auto-generate docstrings
 - API documentation
 - Code explanations
 - Documentation maintenance
 
 **Setup**:
+
 ```bash
 # VS Code extension
 ext install mintlify.document
@@ -526,6 +568,7 @@ ext install mintlify.document
 **Purpose**: Documentation automation
 
 **Features**:
+
 - Generate README
 - API docs
 - Code comments
@@ -536,6 +579,7 @@ ext install mintlify.document
 **Purpose**: GPT-powered documentation
 
 **Features**:
+
 - Generate docstrings
 - Explain complex code
 - Update outdated docs
@@ -612,14 +656,16 @@ Structured data vocabulary for the web, making content machine-readable.
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [{
-    "@type": "Question",
-    "name": "How do I install?",
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": "Run npm install package-name"
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I install?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run npm install package-name"
+      }
     }
-  }]
+  ]
 }
 ```
 
@@ -627,21 +673,21 @@ Structured data vocabulary for the web, making content machine-readable.
 
 ```html
 <!-- In your documentation site -->
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareSourceCode",
-    "name": "{{ site.title }}",
-    "description": "{{ site.description }}",
-    "codeRepository": "{{ site.github.repository_url }}",
-    "license": "{{ site.github.license }}",
-    "programmingLanguage": ["JavaScript", "Python"]
-  }
-  </script>
-</head>
+  <head>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "{{ site.title }}",
+        "description": "{{ site.description }}",
+        "codeRepository": "{{ site.github.repository_url }}",
+        "license": "{{ site.github.license }}",
+        "programmingLanguage": ["JavaScript", "Python"]
+      }
+    </script>
+  </head>
 </html>
 ```
 
@@ -652,18 +698,18 @@ Structured data vocabulary for the web, making content machine-readable.
 ### Context-Aware Development
 
 1. **Write Clear Comments**: AI tools use comments for context
-2. **Use Descriptive Names**: Better suggestions from AI
-3. **Maintain Consistency**: Helps AI learn patterns
-4. **Keep Tests Updated**: AI uses tests to understand intent
-5. **Document Assumptions**: Helps AI understand constraints
+1. **Use Descriptive Names**: Better suggestions from AI
+1. **Maintain Consistency**: Helps AI learn patterns
+1. **Keep Tests Updated**: AI uses tests to understand intent
+1. **Document Assumptions**: Helps AI understand constraints
 
 ### AI Tool Usage
 
 1. **Review AI Suggestions**: Don't blindly accept
-2. **Understand Generated Code**: Learn what AI produces
-3. **Test Thoroughly**: AI can introduce bugs
-4. **Security Check**: Verify AI-generated security code
-5. **Privacy Aware**: Don't share sensitive code with cloud AI
+1. **Understand Generated Code**: Learn what AI produces
+1. **Test Thoroughly**: AI can introduce bugs
+1. **Security Check**: Verify AI-generated security code
+1. **Privacy Aware**: Don't share sensitive code with cloud AI
 
 ### Data Privacy
 
@@ -684,16 +730,16 @@ Structured data vocabulary for the web, making content machine-readable.
 
 ## Tool Comparison Matrix
 
-| Tool | Type | Privacy | Cost | Best For |
-|------|------|---------|------|----------|
-| **GitHub Copilot** | Completion | Cloud | Paid | General coding |
-| **Tabnine** | Completion | Local option | Freemium | Team learning |
-| **Codeium** | Completion | Cloud | Free | Free alternative |
-| **Cody** | Chat + Completion | Cloud | Freemium | Codebase questions |
-| **Cursor** | Editor | Cloud | Paid | AI-first editing |
-| **Semgrep** | Analysis | Local | Free | Security scanning |
-| **Sourcegraph** | Search | Self-host | Freemium | Code search |
-| **CodeSee** | Visualization | Cloud | Freemium | Architecture |
+| Tool               | Type              | Privacy      | Cost     | Best For           |
+| ------------------ | ----------------- | ------------ | -------- | ------------------ |
+| **GitHub Copilot** | Completion        | Cloud        | Paid     | General coding     |
+| **Tabnine**        | Completion        | Local option | Freemium | Team learning      |
+| **Codeium**        | Completion        | Cloud        | Free     | Free alternative   |
+| **Cody**           | Chat + Completion | Cloud        | Freemium | Codebase questions |
+| **Cursor**         | Editor            | Cloud        | Paid     | AI-first editing   |
+| **Semgrep**        | Analysis          | Local        | Free     | Security scanning  |
+| **Sourcegraph**    | Search            | Self-host    | Freemium | Code search        |
+| **CodeSee**        | Visualization     | Cloud        | Freemium | Architecture       |
 
 ---
 

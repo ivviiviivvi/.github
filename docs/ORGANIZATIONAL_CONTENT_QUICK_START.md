@@ -2,7 +2,8 @@
 
 > **Get started in 15 minutes**
 
-This quick start gets you up and running with issues, discussions, projects, and wikis fast.
+This quick start gets you up and running with issues, discussions, projects, and
+wikis fast.
 
 ## 🎯 Choose Your Path
 
@@ -29,6 +30,7 @@ gh repo view $REPO --web
 ```
 
 **What you get**:
+
 - ✅ 20+ pre-created issues
 - ✅ Discussion categories and starters
 - ✅ Project templates ready to use
@@ -53,6 +55,7 @@ gh issue list --repo your-org/your-repo
 ```
 
 **What you get**:
+
 - ✅ Issue taxonomy applied
 - ✅ 20+ tracking issues created
 - ✅ Labels configured
@@ -78,6 +81,7 @@ gh discussion create \
 ```
 
 **What you get**:
+
 - ✅ Discussion categories configured
 - ✅ Welcome discussion started
 - ✅ Engagement framework ready
@@ -99,6 +103,7 @@ gh repo edit your-org/your-repo --enable-projects
 ```
 
 **What you get**:
+
 - ✅ Project board created
 - ✅ Custom fields configured
 - ✅ Views set up
@@ -125,6 +130,7 @@ git add . && git commit -m "Initialize wiki" && git push
 ```
 
 **What you get**:
+
 - ✅ Wiki structure ready
 - ✅ Home page created
 - ✅ Navigation sidebar
@@ -135,18 +141,21 @@ git add . && git commit -m "Initialize wiki" && git push
 ### Immediate (Today)
 
 1. **Review Created Content**:
+
    - Browse created issues
    - Check discussion categories
    - Explore project boards
    - Read wiki pages
 
-2. **Customize Key Items**:
+1. **Customize Key Items**:
+
    - Update issue descriptions
    - Pin important discussions
    - Adjust project fields
    - Edit wiki home page
 
-3. **Share with Team**:
+1. **Share with Team**:
+
    - Send announcement
    - Share links
    - Brief explanation
@@ -154,17 +163,20 @@ git add . && git commit -m "Initialize wiki" && git push
 ### This Week
 
 1. **Read Documentation**:
+
    - [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - 20 min
    - [Issue Taxonomy](ISSUE_TAXONOMY.md) - 25 min
    - Skim other guides as needed
 
-2. **Engage Your Team**:
+1. **Engage Your Team**:
+
    - Create first real issues
    - Start discussions
    - Add items to projects
    - Contribute to wiki
 
-3. **Set Up Processes**:
+1. **Set Up Processes**:
+
    - Issue triage schedule
    - Discussion moderation
    - Project grooming
@@ -173,17 +185,20 @@ git add . && git commit -m "Initialize wiki" && git push
 ### This Month
 
 1. **Full Customization**:
+
    - Tailor all templates
    - Add domain-specific content
    - Set up automation
    - Define workflows
 
-2. **Training**:
+1. **Training**:
+
    - Team training sessions
    - Document best practices
    - Create examples
 
-3. **Measure & Iterate**:
+1. **Measure & Iterate**:
+
    - Track metrics
    - Collect feedback
    - Make improvements
@@ -191,25 +206,31 @@ git add . && git commit -m "Initialize wiki" && git push
 ## 🔗 Essential Links
 
 ### Documentation
+
 - 🗂️ [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - Start here
 - 📝 [Issue Taxonomy](ISSUE_TAXONOMY.md) - Issue types and guidelines
 - 💬 [Discussion Guide](DISCUSSION_GUIDE.md) - Discussion framework
 - 📊 [Projects Guide](PROJECTS_GUIDE.md) - Project templates
 - 📚 [Wiki Guide](WIKI_GUIDE.md) - Wiki structure
-- 🚀 [Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) - Full deployment
+- 🚀 [Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) - Full
+  deployment
 
 ### Templates
+
 - `.github/ISSUE_TEMPLATE/` - Issue templates
 - `.github/discussion-starters/` - Discussion starters
 - `.github/project-templates/` - Project configurations
 - `.github/wiki-templates/` - Wiki page templates
 
 ### Automation
-- `.github/workflows/create-organizational-content.yml` - Content creation workflow
+
+- `.github/workflows/create-organizational-content.yml` - Content creation
+  workflow
 
 ## 💡 Quick Tips
 
 ### Issues
+
 ```bash
 # Create from template
 gh issue create --template bug_report.yml
@@ -223,6 +244,7 @@ gh issue list --json number --jq '.[].number' | \
 ```
 
 ### Discussions
+
 ```bash
 # Create discussion
 gh discussion create --category "Q&A" --title "How do I...?"
@@ -235,6 +257,7 @@ gh discussion mark-answer 123 --answer 456
 ```
 
 ### Projects
+
 ```bash
 # View projects (limited CLI support)
 gh project list
@@ -243,6 +266,7 @@ gh project list
 ```
 
 ### Wiki
+
 ```bash
 # Clone wiki
 git clone https://github.com/org/repo.wiki.git
@@ -258,47 +282,57 @@ git add . && git commit -m "Update" && git push
 ## 🆘 Getting Help
 
 ### Quick Answers
+
 - 📖 Check [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md)
 - 🔍 Search documentation
 - 💬 Browse discussions
 
 ### Ask for Help
+
 - 💬 [Create Discussion](https://github.com/your-org/your-repo/discussions/new)
 - 🐛 [Report Issue](https://github.com/your-org/your-repo/issues/new)
 - 📧 Contact maintainers
 
 ### Common Questions
 
-**Q: Do I need all features?**  
-A: No! Start with what you need. Issues are most common, discussions for community, projects for tracking, wikis for docs.
+**Q: Do I need all features?**\
+A: No! Start with what you need. Issues are most
+common, discussions for community, projects for tracking, wikis for docs.
 
-**Q: Can I customize everything?**  
-A: Yes! All templates and configurations are fully customizable.
+**Q: Can I customize everything?**\
+A: Yes! All templates and configurations are
+fully customizable.
 
-**Q: What if my team doesn't adopt it?**  
-A: Start small, show value, provide training, lead by example.
+**Q: What if my team doesn't adopt it?**\
+A: Start small, show value, provide
+training, lead by example.
 
-**Q: How do I maintain this?**  
-A: Set regular review schedules, assign owners, automate where possible.
+**Q: How do I maintain this?**\
+A: Set regular review schedules, assign owners,
+automate where possible.
 
-**Q: Can I roll this back?**  
-A: Yes! You can disable features, delete content, or archive as needed. Nothing is permanent.
+**Q: Can I roll this back?**\
+A: Yes! You can disable features, delete content,
+or archive as needed. Nothing is permanent.
 
 ## ✅ Success Checklist
 
 ### Day 1
+
 - [ ] Features enabled
 - [ ] Content deployed (if using automation)
 - [ ] Quick review completed
 - [ ] Team notified
 
 ### Week 1
+
 - [ ] Templates customized
 - [ ] First real content created
 - [ ] Team starting to use
 - [ ] Initial feedback collected
 
 ### Month 1
+
 - [ ] Active usage established
 - [ ] Processes documented
 - [ ] Metrics being tracked
@@ -307,6 +341,7 @@ A: Yes! You can disable features, delete content, or archive as needed. Nothing 
 ## 🎉 You're Ready!
 
 You now have:
+
 - ✅ Framework deployed
 - ✅ Templates ready
 - ✅ Documentation available
@@ -316,4 +351,5 @@ You now have:
 
 ---
 
-**Questions?** See [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) or ask in [Discussions](https://github.com/your-org/your-repo/discussions)
+**Questions?** See [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) or ask in
+[Discussions](https://github.com/your-org/your-repo/discussions)

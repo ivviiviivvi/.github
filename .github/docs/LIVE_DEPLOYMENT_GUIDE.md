@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide covers the automated deployment system that takes your applications from GitHub repositories to live, running instances accessible via GitHub Pages, Docker containers, or GitHub Codespaces.
+This guide covers the automated deployment system that takes your applications
+from GitHub repositories to live, running instances accessible via GitHub Pages,
+Docker containers, or GitHub Codespaces.
 
 ## How Live Deployment Works
 
@@ -11,36 +13,38 @@ This guide covers the automated deployment system that takes your applications f
 When you push code to your repository, the deployment workflow automatically:
 
 1. **Analyzes repository structure** (package.json, Dockerfile, etc.)
-2. **Detects application type** (React, Flask, Express, etc.)
-3. **Selects deployment strategy** (Pages, Docker, Codespaces, or None)
-4. **Executes deployment** with appropriate tools and configuration
-5. **Updates registry** with deployment status and URLs
-6. **Creates PR** with deployment details
+1. **Detects application type** (React, Flask, Express, etc.)
+1. **Selects deployment strategy** (Pages, Docker, Codespaces, or None)
+1. **Executes deployment** with appropriate tools and configuration
+1. **Updates registry** with deployment status and URLs
+1. **Creates PR** with deployment details
 
 ### Deployment Strategies
 
 Four strategies are available, automatically selected based on your application:
 
-| Strategy | Description | Best For | Output |
-|----------|-------------|----------|--------|
-| **Pages Direct** | Static site deployed to GitHub Pages | React, Vue, Angular, Static HTML | Live URL |
-| **Docker** | Containerized deployment | Express, Flask, Django APIs | Docker image |
-| **Codespaces** | Full dev environment | Microservices, complex apps | Codespaces button |
-| **None** | No live deployment | CLI tools, libraries | Documentation only |
+| Strategy         | Description                          | Best For                         | Output             |
+| ---------------- | ------------------------------------ | -------------------------------- | ------------------ |
+| **Pages Direct** | Static site deployed to GitHub Pages | React, Vue, Angular, Static HTML | Live URL           |
+| **Docker**       | Containerized deployment             | Express, Flask, Django APIs      | Docker image       |
+| **Codespaces**   | Full dev environment                 | Microservices, complex apps      | Codespaces button  |
+| **None**         | No live deployment                   | CLI tools, libraries             | Documentation only |
 
 ## Supported Deployment Strategies
 
 ### Strategy A: Pages Direct (Static Apps)
 
 **Automatic Detection:**
+
 - Presence of `package.json` with React, Vue, or Angular
 - `index.html` without backend frameworks
 - Next.js applications with static export
 
 **Setup Requirements:**
+
 1. Buildable to static files
-2. Build outputs to `/build`, `/dist`, or `/out`
-3. No server-side requirements
+1. Build outputs to `/build`, `/dist`, or `/out`
+1. No server-side requirements
 
 **Configuration Example:**
 
@@ -55,6 +59,7 @@ build:
 ```
 
 **Build Process:**
+
 ```bash
 # Automatic steps:
 1. npm ci
@@ -64,6 +69,7 @@ build:
 ```
 
 **Example Apps:**
+
 - React single-page applications
 - Vue.js projects
 - Angular applications
@@ -89,14 +95,16 @@ environment_variables:
 ### Strategy B: Docker (Backend Apps)
 
 **Automatic Detection:**
+
 - Presence of `Dockerfile`
 - Backend frameworks (Express, Flask, Django, FastAPI)
 - Node.js with server dependencies
 
 **Setup Requirements:**
+
 1. Valid `Dockerfile` in repository root
-2. Application exposes a port
-3. Health check endpoint (recommended)
+1. Application exposes a port
+1. Health check endpoint (recommended)
 
 **Dockerfile Example (Node.js):**
 
@@ -135,14 +143,15 @@ CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
 **Docker Hub Setup:**
 
 1. Create account at https://hub.docker.com
-2. Generate access token
-3. Add to GitHub Secrets:
+1. Generate access token
+1. Add to GitHub Secrets:
    - `DOCKER_USERNAME`: Your Docker Hub username
    - `DOCKER_TOKEN`: Your access token
 
 **Using GitHub Container Registry (Alternative):**
 
 No setup required! Uses GitHub token automatically:
+
 - Images pushed to: `ghcr.io/[username]/[repo]`
 - Accessible with: `docker pull ghcr.io/[username]/[repo]`
 
@@ -188,14 +197,16 @@ health_check:
 ### Strategy C: Codespaces (Complex Apps)
 
 **Automatic Detection:**
+
 - Presence of `docker-compose.yml`
 - Multiple services/microservices
 - Existing `.devcontainer/devcontainer.json`
 
 **Setup Requirements:**
+
 1. GitHub account with Codespaces access
-2. Repository with complex architecture
-3. Optional: Custom devcontainer configuration
+1. Repository with complex architecture
+1. Optional: Custom devcontainer configuration
 
 **devcontainer.json Setup:**
 
@@ -234,7 +245,7 @@ The workflow auto-generates this file if it doesn't exist:
 # .github/app-deployment-config.yml
 deployment_strategy: codespaces
 codespaces:
-  machine_size: large  # default, large, xlarge
+  machine_size: large # default, large, xlarge
   features:
     - node
     - python
@@ -253,11 +264,12 @@ codespaces:
 **Using Codespaces:**
 
 1. Click "Open in GitHub Codespaces" badge in README
-2. Wait for environment to build (2-5 minutes first time)
-3. Start developing immediately
-4. All ports auto-forwarded to web browser
+1. Wait for environment to build (2-5 minutes first time)
+1. Start developing immediately
+1. All ports auto-forwarded to web browser
 
 **Example Use Cases:**
+
 - Microservices with multiple containers
 - Full-stack apps with database
 - Applications requiring specific dev tools
@@ -266,12 +278,14 @@ codespaces:
 ### Strategy D: None (CLI/Libraries)
 
 **Automatic Detection:**
+
 - `"bin"` field in package.json
 - `entry_points` in setup.py
 - No web server dependencies
 - No Dockerfile or static build output
 
 **What Happens:**
+
 - No live deployment created
 - Video walkthrough remains primary showcase
 - Documentation and source code highlighted
@@ -286,6 +300,7 @@ app_type: cli
 ```
 
 **Example Apps:**
+
 - Command-line utilities
 - npm packages
 - Python libraries
@@ -297,11 +312,13 @@ app_type: cli
 ### Pages Direct Requirements
 
 ✅ **Required:**
+
 - Buildable to static HTML/CSS/JS
 - No server-side runtime dependencies
 - Build command in package.json
 
 ❌ **Not Supported:**
+
 - Server-side rendering (SSR)
 - Database connections
 - File system writes
@@ -310,33 +327,39 @@ app_type: cli
 ### Docker Requirements
 
 ✅ **Required:**
+
 - Valid Dockerfile
 - Application binds to 0.0.0.0 (not localhost)
 - Exposed port documented
 
 📝 **Recommended:**
+
 - Health check endpoint
 - Graceful shutdown handling
 - Environment variable configuration
 - Multi-stage builds for efficiency
 
 ❌ **Limitations:**
+
 - Max image size: 10GB
 - Must be publicly accessible or use GitHub Container Registry
 
 ### Codespaces Requirements
 
 ✅ **Required:**
+
 - GitHub account with Codespaces access
-- Repository <10GB
+- Repository \<10GB
 - Valid devcontainer.json or auto-generated
 
 💰 **Costs:**
+
 - Free tier: 120 core-hours/month
 - Paid plans: Usage-based billing
 - Billing details: https://github.com/pricing
 
 ❌ **Limitations:**
+
 - Not suitable for simple static sites
 - Requires GitHub authentication
 - Environment builds take time (2-5 min)
@@ -453,12 +476,14 @@ tests/
 **Solutions:**
 
 1. **Check devcontainer.json syntax:**
+
 ```bash
 # Validate JSON
 cat .devcontainer/devcontainer.json | jq .
 ```
 
 2. **Reduce features:**
+
 ```json
 {
   "image": "mcr.microsoft.com/devcontainers/universal:latest",
@@ -470,6 +495,7 @@ cat .devcontainer/devcontainer.json | jq .
 ```
 
 3. **Use simpler base image:**
+
 ```json
 {
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu"
@@ -520,10 +546,10 @@ COPY --from=builder /app/build /usr/share/nginx/html
 ```yaml
 # Use smaller machine size when possible
 codespaces:
-  machine_size: default  # Not large
+  machine_size: default # Not large
 
-# Minimize post-create commands
-  post_create_command: "npm ci"  # Use ci instead of install
+  # Minimize post-create commands
+  post_create_command: "npm ci" # Use ci instead of install
 ```
 
 ## Performance Tips per Strategy
@@ -531,6 +557,7 @@ codespaces:
 ### Pages Direct Performance
 
 1. **Optimize Bundle Size:**
+
 ```bash
 # Analyze bundle
 npm run build -- --profile
@@ -538,12 +565,14 @@ npx webpack-bundle-analyzer
 ```
 
 2. **Code Splitting:**
+
 ```javascript
 // React lazy loading
-const Component = React.lazy(() => import('./Component'));
+const Component = React.lazy(() => import("./Component"));
 ```
 
 3. **Image Optimization:**
+
 ```bash
 # Use WebP format
 # Lazy load images
@@ -553,6 +582,7 @@ const Component = React.lazy(() => import('./Component'));
 ### Docker Performance
 
 1. **Reduce Image Size:**
+
 ```dockerfile
 # Use alpine images
 FROM node:20-alpine
@@ -565,6 +595,7 @@ RUN npm prune --production
 ```
 
 2. **Layer Caching:**
+
 ```dockerfile
 # Order matters! Change less → change more
 COPY package*.json ./
@@ -573,6 +604,7 @@ COPY . .
 ```
 
 3. **Health Checks:**
+
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:3000/health || exit 1
@@ -581,12 +613,14 @@ HEALTHCHECK --interval=30s --timeout=3s \
 ### Codespaces Performance
 
 1. **Prebuilds:**
+
 ```yaml
 # .github/workflows/codespaces-prebuild.yml
 # Enable prebuilds for faster startup
 ```
 
 2. **Optimize Post-Create:**
+
 ```json
 {
   "postCreateCommand": "npm ci --prefer-offline"
@@ -596,16 +630,19 @@ HEALTHCHECK --interval=30s --timeout=3s \
 ## Cost Considerations
 
 ### Pages Direct
+
 - **Cost:** FREE
 - **Bandwidth:** 100GB/month
 - **Build minutes:** 2000 minutes/month (free tier)
 
 ### Docker (GitHub Container Registry)
+
 - **Storage:** 500MB free, then $0.25/GB/month
 - **Bandwidth:** Unlimited for public packages
 - **Build minutes:** Uses GitHub Actions minutes
 
 ### Codespaces
+
 - **Free tier:** 120 core-hours/month
 - **Paid:**
   - 2-core: $0.18/hour
@@ -618,18 +655,21 @@ HEALTHCHECK --interval=30s --timeout=3s \
 ### All Strategies
 
 1. **Never commit secrets:**
+
 ```bash
 # Use GitHub Secrets
 ${{ secrets.API_KEY }}
 ```
 
 2. **Validate inputs:**
+
 ```javascript
 // Sanitize user input
 const sanitized = DOMPurify.sanitize(userInput);
 ```
 
 3. **Use HTTPS:**
+
 ```yaml
 security:
   https_enabled: true
@@ -638,16 +678,19 @@ security:
 ### Docker-Specific
 
 1. **Scan images:**
+
 ```bash
 docker scan myapp:latest
 ```
 
 2. **Use official base images:**
+
 ```dockerfile
 FROM node:20-alpine  # Official Node image
 ```
 
 3. **Run as non-root:**
+
 ```dockerfile
 USER node
 ```
@@ -655,6 +698,7 @@ USER node
 ### Codespaces-Specific
 
 1. **Limit scope:**
+
 ```json
 {
   "customizations": {
@@ -680,5 +724,6 @@ USER node
 ## Getting Help
 
 - **Issues:** [Report a problem](https://github.com/ivviiviivvi/.github/issues)
-- **Discussions:** [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
+- **Discussions:**
+  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
 - **Documentation:** [Main README](../README.md)

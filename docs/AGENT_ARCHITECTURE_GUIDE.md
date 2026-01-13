@@ -1,6 +1,7 @@
 # 🤖 Agent Architecture Guide
 
-> **Comprehensive guide to building, testing, and deploying agents following organizational patterns**
+> **Comprehensive guide to building, testing, and deploying agents following
+> organizational patterns**
 
 ## Table of Contents
 
@@ -24,14 +25,21 @@
 
 ## Overview
 
-Agents are specialized AI assistants that integrate with GitHub Copilot to provide domain-specific expertise and automation capabilities. This guide documents the architectural patterns discovered across the organization and provides a comprehensive framework for building production-ready agents.
+Agents are specialized AI assistants that integrate with GitHub Copilot to
+provide domain-specific expertise and automation capabilities. This guide
+documents the architectural patterns discovered across the organization and
+provides a comprehensive framework for building production-ready agents.
 
 **Key Principles:**
+
 - **Single Responsibility**: Each agent focuses on a specific domain or task
-- **MCP Integration**: Leverage Model Context Protocol servers for enhanced capabilities
-- **Declarative Configuration**: Use YAML frontmatter for agent metadata and configuration
+- **MCP Integration**: Leverage Model Context Protocol servers for enhanced
+  capabilities
+- **Declarative Configuration**: Use YAML frontmatter for agent metadata and
+  configuration
 - **Testability**: Design agents with clear inputs/outputs for automated testing
-- **Documentation First**: Comprehensive documentation enables discoverability and adoption
+- **Documentation First**: Comprehensive documentation enables discoverability
+  and adoption
 
 ---
 
@@ -39,9 +47,11 @@ Agents are specialized AI assistants that integrate with GitHub Copilot to provi
 
 ### BaseAgent Pattern
 
-The BaseAgent pattern provides a foundational structure for agents with common functionality.
+The BaseAgent pattern provides a foundational structure for agents with common
+functionality.
 
 **Characteristics:**
+
 - Centralized configuration management
 - Standardized error handling
 - Built-in logging and telemetry
@@ -56,32 +66,32 @@ import logging
 class BaseAgent:
     """
     Base class for all agents providing common functionality.
-    
+
     Attributes:
         name: Agent identifier
         description: Human-readable agent purpose
         config: Agent configuration dictionary
         logger: Logging instance
     """
-    
+
     def __init__(self, name: str, description: str, config: Optional[Dict[str, Any]] = None):
         self.name = name
         self.description = description
         self.config = config or {}
         self.logger = logging.getLogger(f"agent.{name}")
         self._initialize()
-    
+
     def _initialize(self) -> None:
         """Initialize agent-specific resources."""
         self.logger.info(f"Initializing agent: {self.name}")
-    
+
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute agent logic with provided context.
-        
+
         Args:
             context: Execution context dictionary
-            
+
         Returns:
             Result dictionary with status and data
         """
@@ -92,7 +102,7 @@ class BaseAgent:
         except Exception as e:
             self.logger.error(f"Execution failed: {str(e)}")
             return {"status": "error", "error": str(e)}
-    
+
     def _execute_impl(self, context: Dict[str, Any]) -> Any:
         """Override this method in subclasses."""
         raise NotImplementedError("Subclass must implement _execute_impl")
@@ -103,18 +113,18 @@ class BaseAgent:
 ```python
 class TerraformAgent(BaseAgent):
     """Terraform infrastructure specialist agent."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__(
             name="terraform",
             description="Terraform infrastructure specialist",
             config=config
         )
-    
+
     def _execute_impl(self, context: Dict[str, Any]) -> Any:
         action = context.get("action", "plan")
         workspace = self.config.get("workspace")
-        
+
         if action == "plan":
             return self._run_plan(workspace)
         elif action == "apply":
@@ -127,9 +137,11 @@ class TerraformAgent(BaseAgent):
 
 ### Skills System Pattern
 
-The Skills System pattern organizes agent capabilities into discrete, reusable skills.
+The Skills System pattern organizes agent capabilities into discrete, reusable
+skills.
 
 **Characteristics:**
+
 - Modular skill registration
 - Dynamic skill discovery
 - Skill composition and chaining
@@ -139,11 +151,11 @@ The Skills System pattern organizes agent capabilities into discrete, reusable s
 
 ```yaml
 ---
-name: 'code-review'
-description: 'Automated code review with security and quality checks'
-license: 'MIT'
-version: '1.0.0'
-author: 'Organization Team'
+name: "code-review"
+description: "Automated code review with security and quality checks"
+license: "MIT"
+version: "1.0.0"
+author: "Organization Team"
 tools:
   - read
   - search
@@ -154,16 +166,16 @@ mcp-servers:
   - github
   - codeql
 dependencies:
-  - python: '>=3.11'
+  - python: ">=3.11"
 parameters:
   pr_number:
-    type: 'integer'
+    type: "integer"
     required: true
-    description: 'Pull request number to review'
+    description: "Pull request number to review"
   focus_areas:
-    type: 'array'
+    type: "array"
     required: false
-    default: ['security', 'performance', 'maintainability']
+    default: ["security", "performance", "maintainability"]
 ---
 ```
 
@@ -184,25 +196,25 @@ class SkillMetadata:
 
 class Skill:
     """Base class for agent skills."""
-    
+
     def __init__(self, metadata: SkillMetadata):
         self.metadata = metadata
         self.name = metadata.name
-    
+
     async def execute(self, **kwargs) -> Dict[str, Any]:
         """Execute the skill with provided parameters."""
         raise NotImplementedError
 
 class SkillRegistry:
     """Registry for managing available skills."""
-    
+
     def __init__(self):
         self._skills: Dict[str, Skill] = {}
-    
+
     def register(self, skill: Skill) -> None:
         """Register a new skill."""
         self._skills[skill.name] = skill
-    
+
     def get_skill(self, name: str) -> Optional[Skill]:
         """Retrieve a skill by name."""
         return self._skills.get(name)
@@ -215,6 +227,7 @@ class SkillRegistry:
 The Agent Orchestration pattern enables coordination between multiple agents.
 
 **Characteristics:**
+
 - Council-based decision making
 - Swarm coordination for parallel execution
 - Task delegation and routing
@@ -234,16 +247,16 @@ class VoteDecision(Enum):
 
 class CouncilMember:
     """Represents an agent in the council."""
-    
+
     def __init__(self, agent: 'BaseAgent', weight: float = 1.0):
         self.agent = agent
         self.weight = weight
-    
+
     def vote(self, proposal: Dict[str, Any]) -> VoteDecision:
         """Cast a vote on a proposal."""
         result = self.agent.execute({"action": "review", "proposal": proposal})
         return VoteDecision(result.get("decision", "abstain"))
-    
+
     def provide_feedback(self, proposal: Dict[str, Any]) -> str:
         """Provide detailed feedback on proposal."""
         result = self.agent.execute({"action": "feedback", "proposal": proposal})
@@ -251,16 +264,16 @@ class CouncilMember:
 
 class AgentCouncil:
     """Orchestrates decision-making across multiple agents."""
-    
+
     def __init__(self, members: List[CouncilMember], quorum: float = 0.5):
         self.members = members
         self.quorum = quorum
-    
+
     def deliberate(self, proposal: Dict[str, Any]) -> Dict[str, Any]:
         """Conduct deliberation on a proposal."""
         votes = {}
         feedback = []
-        
+
         # Collect votes from all members
         for member in self.members:
             vote = member.vote(proposal)
@@ -268,7 +281,7 @@ class AgentCouncil:
                 "decision": vote,
                 "weight": member.weight
             }
-        
+
         # Calculate weighted results
         approval_weight = sum(
             v["weight"] for v in votes.values()
@@ -276,7 +289,7 @@ class AgentCouncil:
         )
         total_weight = sum(v["weight"] for v in votes.values())
         approval_ratio = approval_weight / total_weight if total_weight > 0 else 0
-        
+
         return {
             "decision": "approved" if approval_ratio >= self.quorum else "rejected",
             "approval_ratio": approval_ratio,
@@ -289,7 +302,8 @@ class AgentCouncil:
 
 ### TypeScript Agents Pattern
 
-TypeScript agents provide type-safe agent implementations for Node.js ecosystems.
+TypeScript agents provide type-safe agent implementations for Node.js
+ecosystems.
 
 ```typescript
 interface AgentConfig {
@@ -357,6 +371,7 @@ docs/
 ```
 
 **Agent File Naming Convention:**
+
 - Format: `{agent-name}.agent.md`
 - Use lowercase with hyphens
 - Must end with `.agent.md` extension
@@ -395,10 +410,12 @@ dependencies:
 ```
 
 **Required Fields:**
+
 - `name`: Human-readable agent name
 - `description`: Clear description (single quotes required)
 
 **Optional Fields:**
+
 - `version`: Semantic version number
 - `tools`: List of Copilot tools
 - `mcp-servers`: MCP server configurations
@@ -411,6 +428,7 @@ dependencies:
 ### Creation
 
 **Step 1: Define Agent Purpose**
+
 - What problem does this agent solve?
 - Who are the primary users?
 - What are the success criteria?
@@ -429,16 +447,20 @@ touch agents/my-agent.agent.md
 You are a specialized agent for [domain].
 
 ## Responsibilities
+
 1. Primary responsibility
 2. Secondary responsibility
 
 ## Workflow
+
 When user requests [action]:
+
 1. Validate inputs
 2. Execute core logic
 3. Return results
 
 ## Usage Examples
+
 - "Example request 1"
 - "Example request 2"
 ```
@@ -446,6 +468,7 @@ When user requests [action]:
 ### Testing
 
 **Manual Testing:**
+
 ```bash
 # Test through GitHub Copilot Chat
 # @my-agent "test request"
@@ -459,12 +482,12 @@ import pytest
 class AgentTestHarness:
     def __init__(self, agent):
         self.agent = agent
-    
+
     def test_execute_success(self, context):
         result = self.agent.execute(context)
         assert result["status"] == "success"
         assert "data" in result
-    
+
     def test_execute_error(self, context):
         result = self.agent.execute(context)
         assert result["status"] == "error"
@@ -473,14 +496,15 @@ class AgentTestHarness:
 ### Deployment
 
 **Step 1: Validate Agent**
+
 ```bash
 pre-commit run --files agents/my-agent.agent.md
 ```
 
-**Step 2: Update Documentation**
-Update `docs/README.agents.md`
+**Step 2: Update Documentation** Update `docs/README.agents.md`
 
 **Step 3: Commit and Push**
+
 ```bash
 git add agents/my-agent.agent.md docs/README.agents.md
 git commit -m "feat: add My Agent for domain-specific tasks"
@@ -490,10 +514,11 @@ git push origin main
 ### Maintenance
 
 **Regular Updates:**
+
 1. Version bumps
-2. Dependency updates
-3. Documentation updates
-4. Expand test coverage
+1. Dependency updates
+1. Documentation updates
+1. Expand test coverage
 
 **Monitoring:**
 
@@ -503,12 +528,12 @@ class AgentMetrics:
         self.agent_name = agent_name
         self.execution_count = 0
         self.error_count = 0
-    
+
     def record_execution(self, success: bool):
         self.execution_count += 1
         if not success:
             self.error_count += 1
-    
+
     def get_success_rate(self) -> float:
         if self.execution_count == 0:
             return 0.0
@@ -527,24 +552,24 @@ Agents integrate with GitHub Copilot through:
 
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)](install-link)
 
-**Via Direct Download:**
-Download `.agent.md` files to your repository's `agents/` directory.
+**Via Direct Download:** Download `.agent.md` files to your repository's
+`agents/` directory.
 
 ### Activation
 
 1. **Chat Interface**: `@agent-name "request"`
-2. **Inline Comments**: `// @agent-name: suggestion`
-3. **Workspace Integration**: Automatic based on file patterns
+1. **Inline Comments**: `// @agent-name: suggestion`
+1. **Workspace Integration**: Automatic based on file patterns
 
 ### Tool Access
 
 ```yaml
 tools:
-  - read         # Read file contents
-  - edit         # Edit files
-  - search       # Search codebase
-  - shell        # Execute shell commands
-  - github/*     # All GitHub operations
+  - read # Read file contents
+  - edit # Edit files
+  - search # Search codebase
+  - shell # Execute shell commands
+  - github/* # All GitHub operations
 ```
 
 ---
@@ -560,10 +585,10 @@ Model Context Protocol (MCP) servers extend agent capabilities.
 ```yaml
 mcp-servers:
   terraform:
-    type: 'local'
-    command: 'docker'
-    args: ['run', '-i', '--rm', 'hashicorp/terraform-mcp-server:latest']
-    tools: ['*']
+    type: "local"
+    command: "docker"
+    args: ["run", "-i", "--rm", "hashicorp/terraform-mcp-server:latest"]
+    tools: ["*"]
 ```
 
 **HTTP Servers:**
@@ -571,11 +596,11 @@ mcp-servers:
 ```yaml
 mcp-servers:
   dynatrace:
-    type: 'http'
-    url: 'https://api.dynatrace.com/mcp'
+    type: "http"
+    url: "https://api.dynatrace.com/mcp"
     headers:
-      Authorization: 'Bearer $TOKEN'
-    tools: ['*']
+      Authorization: "Bearer $TOKEN"
+    tools: ["*"]
 ```
 
 ### Configuration
@@ -589,17 +614,17 @@ from typing import List, Dict, Any
 
 class MCPClient:
     """Client for interacting with MCP servers."""
-    
+
     def __init__(self, server_config: Dict[str, Any]):
         self.config = server_config
         self.tools = {}  # Populated by discover_tools() after initialization
-    
+
     async def discover_tools(self) -> List[str]:
         """Discover available tools from MCP server."""
         if self.config["type"] == "http":
             return await self._discover_http_tools()
         return await self._discover_local_tools()
-    
+
     async def call_tool(self, tool_name: str, params: Dict) -> Any:
         """Call a tool on the MCP server."""
         return await self._execute_tool_call(tool_name, params)
@@ -636,7 +661,7 @@ class InputValidator:
         # Remove path traversal attempts
         path = re.sub(r'\.\./', '', path)
         return path.strip()
-    
+
     @staticmethod
     def sanitize_user_input(user_input: str) -> str:
         # Remove potentially dangerous characters
@@ -656,7 +681,7 @@ class RetryStrategy:
     def __init__(self, max_retries: int = 3, base_delay: float = 1.0):
         self.max_retries = max_retries
         self.base_delay = base_delay
-    
+
     def execute_with_retry(self, func: Callable, *args: Any, **kwargs: Any) -> Any:
         for attempt in range(self.max_retries):
             try:
@@ -684,7 +709,7 @@ class TestAgentUnit:
         client = Mock()
         client.call_tool.return_value = {"result": "success"}
         return client
-    
+
     def test_execute_success(self, mock_mcp_client):
         agent = TerraformAgent()
         agent.mcp_client = mock_mcp_client
@@ -702,36 +727,45 @@ class TestAgentUnit:
 > Brief one-line description
 
 ## Overview
+
 Comprehensive overview of agent purpose
 
 ## Prerequisites
+
 - Required MCP servers
 - Required permissions
 - Required environment variables
 
 ## Installation
+
 Step-by-step instructions
 
 ## Usage
 
 ### Basic Usage
+
 \`\`\`
 @agent-name "basic request"
 \`\`\`
 
 ### Advanced Usage
+
 Complex scenarios
 
 ## Examples
+
 Real-world usage examples
 
 ## Troubleshooting
+
 Common issues and solutions
 
 ## Contributing
+
 How to contribute
 
 ## License
+
 License information
 ```
 
@@ -746,11 +780,13 @@ License information
 **Purpose**: Automate repository creation and configuration
 
 **Key Features**:
+
 - Creates repositories with standard templates
 - Configures branch protection
 - Sets up CI/CD workflows
 
 **Usage**:
+
 ```
 @repository-setup "Create a new Python repository"
 ```
@@ -762,11 +798,13 @@ License information
 **Purpose**: Terraform infrastructure specialist
 
 **Key Features**:
+
 - Queries Terraform registries
 - Generates compliant configurations
 - Manages workspaces
 
 **Usage**:
+
 ```
 @terraform "Create an AWS VPC module"
 ```
@@ -778,11 +816,13 @@ License information
 **Purpose**: Observability and security analysis
 
 **Key Features**:
+
 - Incident root cause analysis
 - Deployment impact analysis
 - Performance regression detection
 
 **Usage**:
+
 ```
 @dynatrace-expert "Analyze deployment impact"
 ```
@@ -794,11 +834,13 @@ License information
 **Purpose**: Automated incident response
 
 **Key Features**:
+
 - Retrieves incident details
 - Identifies recent code changes
 - Suggests remediation PRs
 
 **Usage**:
+
 ```
 @pagerduty-incident-responder "Respond to incident INC-12345"
 ```
@@ -915,49 +957,54 @@ License information
 **Symptom**: Copilot doesn't recognize agent mention
 
 **Solutions**:
+
 1. Verify agent file is in `agents/` directory
-2. Check file naming follows `.agent.md` convention
-3. Ensure frontmatter is valid YAML
-4. Restart VS Code
+1. Check file naming follows `.agent.md` convention
+1. Ensure frontmatter is valid YAML
+1. Restart VS Code
 
 #### Issue 2: MCP Server Connection Failed
 
 **Symptom**: Agent can't connect to MCP server
 
 **Solutions**:
+
 1. Verify MCP server is running
-2. Check environment variables
-3. Validate configuration
-4. Review server logs
+1. Check environment variables
+1. Validate configuration
+1. Review server logs
 
 #### Issue 3: Tool Access Denied
 
 **Symptom**: Agent can't access tools
 
 **Solutions**:
+
 1. Verify tools listed in frontmatter
-2. Check user permissions
-3. Ensure MCP server exposes tools
+1. Check user permissions
+1. Ensure MCP server exposes tools
 
 #### Issue 4: Slow Agent Response
 
 **Symptom**: Agent takes too long
 
 **Solutions**:
+
 1. Optimize MCP server calls
-2. Add caching layer
-3. Use async execution
-4. Profile agent execution
+1. Add caching layer
+1. Use async execution
+1. Profile agent execution
 
 #### Issue 5: Inconsistent Results
 
 **Symptom**: Different results for same input
 
 **Solutions**:
+
 1. Review for determinism
-2. Fix random behavior
-3. Add input validation
-4. Log intermediate steps
+1. Fix random behavior
+1. Add input validation
+1. Log intermediate steps
 
 ### Debugging Tools
 
@@ -982,11 +1029,13 @@ def setup_agent_logging(agent_name: str, level: int = logging.DEBUG):
 ### Getting Help
 
 **Internal Resources:**
+
 - [Agent Examples](../agents/)
 - [MCP Server Documentation](https://modelcontextprotocol.io/)
 - [GitHub Copilot Documentation](https://docs.github.com/copilot)
 
 **Community Support:**
+
 - GitHub Discussions
 - Internal Slack: `#agents-dev`
 - Office hours: Thursdays 2PM UTC
@@ -1025,6 +1074,7 @@ def setup_agent_logging(agent_name: str, level: int = logging.DEBUG):
 
 ---
 
-**Maintained by**: ivi374forivi Organization  
-**Last Updated**: 2024-11-24  
+**Maintained by**: ivi374forivi Organization\
+**Last Updated**:
+2024-11-24\
 **License**: MIT

@@ -2,7 +2,9 @@
 
 > **Optimized for Solo Developer + Multiple AI Assistants**
 >
-> Problem: Traditional PR workflows create bottlenecks when one developer works with multiple AI agents, generating working software in <24 hours but drowning in branch/PR management.
+> Problem: Traditional PR workflows create bottlenecks when one developer works
+> with multiple AI agents, generating working software in \<24 hours but
+> drowning in branch/PR management.
 >
 > Solution: Streamlined trunk-based development with intelligent automation.
 
@@ -11,6 +13,7 @@
 ## The Problem
 
 **Traditional workflow:**
+
 ```
 AI 1 creates feature A → Branch A → PR A → Review → Merge
 AI 2 creates feature B → Branch B → PR B → Review → Merge
@@ -28,17 +31,18 @@ Result: 10+ open PRs, lost tasks, merge bottleneck
 ### Core Principles
 
 1. **CI is the Gatekeeper** - If tests pass, ship it
-2. **Short-lived Branches** - Max 48 hours from creation to merge
-3. **Auto-merge by Default** - Manual review only for critical changes
-4. **Task-first, PR-second** - Track work in issues/tasks, not PR backlogs
-5. **Batch Related Work** - Merge dependent PRs together
-6. **Ruthless Cleanup** - Auto-close stale branches
+1. **Short-lived Branches** - Max 48 hours from creation to merge
+1. **Auto-merge by Default** - Manual review only for critical changes
+1. **Task-first, PR-second** - Track work in issues/tasks, not PR backlogs
+1. **Batch Related Work** - Merge dependent PRs together
+1. **Ruthless Cleanup** - Auto-close stale branches
 
 ---
 
 ## Feature Scope: 1 Feature = 1 PR
 
 **Golden Rule:**
+
 - ✅ **1 feature per branch** → **1 PR per feature**
 - Clean git history
 - Easy to review
@@ -46,6 +50,7 @@ Result: 10+ open PRs, lost tasks, merge bottleneck
 - Clear changelog
 
 **Bad:**
+
 ```bash
 # DON'T: Multiple features in one PR
 git checkout -b feature/dashboard-and-api-and-auth
@@ -53,6 +58,7 @@ git checkout -b feature/dashboard-and-api-and-auth
 ```
 
 **Good:**
+
 ```bash
 # DO: Separate PRs for each feature
 git checkout -b feature/user-dashboard    # PR #1
@@ -62,6 +68,7 @@ git checkout -b feature/oauth-login      # PR #3
 ```
 
 **Exception - Use batch merge for tightly coupled features:**
+
 ```bash
 # If features MUST go together:
 gh pr create --label "batch:api-v2" --title "feat: API v2 endpoint"
@@ -76,11 +83,13 @@ gh pr create --label "batch:api-v2" --title "test: API v2 integration tests"
 
 ### 🚀 Burst Mode (Default for Rapid Development)
 
-**When:** You're in active development with AI assistants creating features in rapid succession (hours, not days)
+**When:** You're in active development with AI assistants creating features in
+rapid succession (hours, not days)
 
 **Philosophy:** Ship fast, fix forward. If CI passes, it's good enough.
 
 **Timeline:**
+
 - **0-2h:** Feature development
 - **Immediate:** Auto-merge when CI passes
 - **12h:** Stale warning (if no merge/activity)
@@ -109,13 +118,15 @@ gh pr create --title "feat: add user dashboard" \
 ```
 
 **Lifecycle:**
+
 - Created → CI runs (5-10 min) → ✅ Pass → Auto-merge → Branch deleted
 - **Total time: 15 minutes - 2 hours**
 - You review AFTER merge (async) for learning, not blocking
 
 #### Type 2: Complex Features (10% of PRs in burst mode)
 
-**Use for:** Breaking changes, security, architecture changes, multi-service updates
+**Use for:** Breaking changes, security, architecture changes, multi-service
+updates
 
 ```bash
 # AI creates feature branch
@@ -135,6 +146,7 @@ gh pr merge --squash
 ```
 
 **Lifecycle:**
+
 - Created → CI runs → Manual review (2-4h) → Approve → Merge
 - **Total time: 4-8 hours same day**
 - Still fast, but with your explicit approval
@@ -146,12 +158,14 @@ gh pr merge --squash
 **When:** Not actively developing, maintenance mode, or want extra caution
 
 **Timeline:**
+
 - **24h:** Review window before auto-merge
 - **48h:** Stale warning
 - **72h:** Final warning
 - **96h:** Auto-close + task extraction
 
 **Use labels:**
+
 ```bash
 gh pr create --label "automerge:after-review-period"  # Wait 24h
 gh pr create --label "needs-review"                    # Manual approval
@@ -167,32 +181,35 @@ gh pr create --label "needs-review"                    # Manual approval
 
 **For Burst Mode (Recommended):**
 
-| Label | Behavior | Use When | % of PRs |
-|-------|----------|----------|----------|
-| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅ | 90% of PRs - all features unless complex | **90%** |
-| `needs-review` | 🛑 Blocks auto-merge, requires approval | Complex/breaking/security changes | **10%** |
-| `batch:<name>` | 🔗 Groups related PRs, merges together | Tightly coupled features | As needed |
+| Label                      | Behavior                                | Use When                                 | % of PRs  |
+| -------------------------- | --------------------------------------- | ---------------------------------------- | --------- |
+| `automerge:when-ci-passes` | ⚡ Merges immediately when CI ✅        | 90% of PRs - all features unless complex | **90%**   |
+| `needs-review`             | 🛑 Blocks auto-merge, requires approval | Complex/breaking/security changes        | **10%**   |
+| `batch:<name>`             | 🔗 Groups related PRs, merges together  | Tightly coupled features                 | As needed |
 
 **For Normal Mode (Lower velocity):**
 
-| Label | Behavior | Use When |
-|-------|----------|----------|
+| Label                           | Behavior                    | Use When               |
+| ------------------------------- | --------------------------- | ---------------------- |
 | `automerge:after-review-period` | ⏰ Waits 24h before merging | Want extra review time |
-| `needs-review` | 🛑 Requires manual approval | Critical changes |
+| `needs-review`                  | 🛑 Requires manual approval | Critical changes       |
 
 ### How to Apply
 
 **When creating PR:**
+
 ```bash
 gh pr create --label "automerge:when-ci-passes"
 ```
 
 **To existing PR:**
+
 ```bash
 gh pr edit 123 --add-label "automerge:when-ci-passes"
 ```
 
 **In PR description:**
+
 ```markdown
 /automerge when-ci-passes
 ```
@@ -205,13 +222,14 @@ gh pr edit 123 --add-label "automerge:when-ci-passes"
 
 **🚀 Burst Mode Timeline (Default - for rapid development):**
 
-| Age | Status | Action |
-|-----|--------|--------|
-| 0-12h | Active | No action - rapid development in progress |
-| 12-24h | Warning | Bot comments: "⚠️ PR is 12h old, merge or update soon" |
-| 24h+ | Stale | Auto-closes PR, deletes branch, extracts tasks to issue |
+| Age    | Status  | Action                                                  |
+| ------ | ------- | ------------------------------------------------------- |
+| 0-12h  | Active  | No action - rapid development in progress               |
+| 12-24h | Warning | Bot comments: "⚠️ PR is 12h old, merge or update soon"  |
+| 24h+   | Stale   | Auto-closes PR, deletes branch, extracts tasks to issue |
 
 **Why so aggressive?**
+
 - Burst development = features ship in hours
 - If PR isn't merged in 12h during active development, something's wrong
 - Forces fast feedback loop: ship it or close it
@@ -219,14 +237,15 @@ gh pr edit 123 --add-label "automerge:when-ci-passes"
 
 **🐢 Normal Mode Timeline (for lower-velocity periods):**
 
-| Age | Status | Action |
-|-----|--------|--------|
-| 0-48h | Active | No action |
-| 48-72h | Warning | Bot comments: "Branch is 2 days old, merge or close soon" |
-| 72h+ | Final Warning | Bot comments: "Will auto-close in 24h unless updated" |
-| 96h+ | Closed | Auto-closes PR, deletes branch, extracts tasks to issue |
+| Age    | Status        | Action                                                    |
+| ------ | ------------- | --------------------------------------------------------- |
+| 0-48h  | Active        | No action                                                 |
+| 48-72h | Warning       | Bot comments: "Branch is 2 days old, merge or close soon" |
+| 72h+   | Final Warning | Bot comments: "Will auto-close in 24h unless updated"     |
+| 96h+   | Closed        | Auto-closes PR, deletes branch, extracts tasks to issue   |
 
 **Configure mode:**
+
 ```bash
 # Enable burst mode (default)
 # PRs auto-close after 24h
@@ -238,6 +257,7 @@ gh pr edit 123 --add-label "automerge:when-ci-passes"
 ```
 
 **Override stale automation:**
+
 ```bash
 # For work that genuinely needs >24h (rare in burst mode)
 gh pr edit 123 --add-label "keep-alive"
@@ -256,14 +276,15 @@ When PRs are abandoned, the work/tasks inside are lost.
 **Before closing a stale PR, automation:**
 
 1. Scans PR description and comments for task lists
-2. Extracts incomplete tasks
-3. Creates a new issue: "Extracted tasks from PR #123"
-4. Links back to original PR
-5. Closes PR, deletes branch
+1. Extracts incomplete tasks
+1. Creates a new issue: "Extracted tasks from PR #123"
+1. Links back to original PR
+1. Closes PR, deletes branch
 
 **Example:**
 
 PR #123 is stale with:
+
 ```markdown
 - [x] Implement feature A
 - [ ] Add tests for feature A
@@ -271,6 +292,7 @@ PR #123 is stale with:
 ```
 
 Automation creates Issue #124:
+
 ```markdown
 # Extracted Tasks from PR #123
 
@@ -289,9 +311,10 @@ See original work: #123
 ### Problem: Tasks/Suggestions in Comments Get Lost
 
 **Common scenario:**
+
 - Reviewer leaves comment: "Must fix the SQL injection vulnerability here"
 - Or: "TODO: Add error handling"
-- Or: "- [ ] Add unit tests for this function"
+- Or: "- \[ \] Add unit tests for this function"
 - PR gets merged without addressing the comment
 - Security issue or tech debt gets lost forever
 
@@ -300,19 +323,24 @@ See original work: #123
 The **PR Task Catcher** workflow continuously scans all PR comments for:
 
 1. **Unchecked task items**: `- [ ] task`
-2. **Blocker keywords**: "FIXME", "TODO", "Must fix", "Required", "Blocker", "Action item"
-3. **Suggestions**: "suggest", "should", "could", "consider", "recommend"
-4. **Unresolved review threads**
+1. **Blocker keywords**: "FIXME", "TODO", "Must fix", "Required", "Blocker",
+   "Action item"
+1. **Suggestions**: "suggest", "should", "could", "consider", "recommend"
+1. **Unresolved review threads**
 
 **Automatic actions:**
+
 - Posts/updates a **Task Catcher Summary** comment showing all found items
 - Adds labels: `has-blockers`, `has-pending-tasks`
-- **Blocks merge** if blocker items are found (unless `ignore-task-checks` label is added)
-- Creates issues for unresolved tasks when PR is merged (if `create-issues-for-tasks` label is present)
+- **Blocks merge** if blocker items are found (unless `ignore-task-checks` label
+  is added)
+- Creates issues for unresolved tasks when PR is merged (if
+  `create-issues-for-tasks` label is present)
 
 ### How It Works
 
 **Triggers:**
+
 - When PR is opened
 - When comments are added/edited
 - When reviews are submitted
@@ -327,21 +355,23 @@ The **PR Task Catcher** workflow continuously scans all PR comments for:
 
 ## 📋 Task Overview
 
-| Category | Count |
-|----------|-------|
-| PR Body Unchecked Tasks | 2 |
-| PR Body Checked Tasks | 3 ✅ |
-| Comment Tasks | 1 |
-| Blocker Items | 2 🚨 |
-| Suggestions | 3 💡 |
-| Unresolved Review Threads | 1 |
+| Category                  | Count |
+| ------------------------- | ----- |
+| PR Body Unchecked Tasks   | 2     |
+| PR Body Checked Tasks     | 3 ✅  |
+| Comment Tasks             | 1     |
+| Blocker Items             | 2 🚨  |
+| Suggestions               | 3 💡  |
+| Unresolved Review Threads | 1     |
 
 ## 💬 Comment Tasks & Blockers
 
 ### 🚨 @reviewer1 - BLOCKER at auth.ts:42
+
 Must fix the SQL injection vulnerability here
 
 ### 💡 @reviewer2 - Suggestion
+
 Consider adding retry logic for API calls
 
 ## 🎯 Next Steps
@@ -351,6 +381,7 @@ Consider adding retry logic for API calls
 - 💬 Resolve review discussion threads
 
 **Options:**
+
 - ✅ Check off tasks as you complete them
 - 📋 Create issues for tasks to handle later: Add `create-issues-for-tasks` label
 - 🚫 Ignore tasks for merge: Add `ignore-task-checks` label
@@ -392,6 +423,7 @@ Closes #123" \
 ```
 
 **Result:**
+
 - Task Catcher finds 1 blocker, 1 suggestion, 2 tasks
 - Adds `has-blockers` label
 - Posts summary comment
@@ -400,24 +432,25 @@ Closes #123" \
 **Resolving blockers:**
 
 1. Fix the SQL injection
-2. Update the comment or check off the task
-3. Task Catcher re-scans (on next comment/push)
-4. `has-blockers` label removed automatically
-5. Merge proceeds
+1. Update the comment or check off the task
+1. Task Catcher re-scans (on next comment/push)
+1. `has-blockers` label removed automatically
+1. Merge proceeds
 
 ### Labels
 
-| Label | Purpose | Auto-Added? |
-|-------|---------|-------------|
-| `has-blockers` | PR has unresolved blocker items | ✅ Yes |
-| `has-pending-tasks` | PR has unchecked tasks | ✅ Yes |
-| `ignore-task-checks` | Skip task blocking (not recommended) | ❌ Manual |
-| `create-issues-for-tasks` | Create issues for incomplete tasks on merge | ❌ Manual |
-| `task-from-pr` | Issue was created from PR task | ✅ Yes (on issues) |
+| Label                     | Purpose                                     | Auto-Added?        |
+| ------------------------- | ------------------------------------------- | ------------------ |
+| `has-blockers`            | PR has unresolved blocker items             | ✅ Yes             |
+| `has-pending-tasks`       | PR has unchecked tasks                      | ✅ Yes             |
+| `ignore-task-checks`      | Skip task blocking (not recommended)        | ❌ Manual          |
+| `create-issues-for-tasks` | Create issues for incomplete tasks on merge | ❌ Manual          |
+| `task-from-pr`            | Issue was created from PR task              | ✅ Yes (on issues) |
 
 ### Benefits
 
 **For solo dev + AI:**
+
 - No reviewer feedback gets lost
 - AI can leave tasks for you to review
 - You can leave tasks for AI to implement
@@ -447,23 +480,26 @@ Closes #123
 ### Disabling Task Catcher
 
 **To bypass blocking:**
+
 ```bash
 # If you really need to merge with blockers (emergency)
 gh pr edit 123 --add-label "ignore-task-checks"
 ```
 
-**To disable for a PR:**
-The task catcher only blocks merge if blocker keywords are found. Regular unchecked tasks are informational only.
+**To disable for a PR:** The task catcher only blocks merge if blocker keywords
+are found. Regular unchecked tasks are informational only.
 
 ### Best Practices
 
 **✅ DO:**
+
 - Use blocker keywords sparingly (only for actual blockers)
 - Check off tasks as you complete them
 - Use `create-issues-for-tasks` label for follow-up work
 - Resolve review threads to clear them from summary
 
 **❌ DON'T:**
+
 - Mark everything as "BLOCKER" (dilutes meaning)
 - Ignore task summaries (defeats the purpose)
 - Use `ignore-task-checks` routinely (defeats the purpose)
@@ -485,6 +521,7 @@ Merging #100 creates conflicts in #101 and #102
 ### Solution: Batch Merge Labels
 
 **Mark PRs as related:**
+
 ```bash
 gh pr edit 100 --add-label "batch:api-update"
 gh pr edit 101 --add-label "batch:api-update"
@@ -492,12 +529,14 @@ gh pr edit 102 --add-label "batch:api-update"
 ```
 
 **Automation:**
+
 1. Waits for ALL PRs with `batch:api-update` to pass CI
-2. Rebases them in dependency order
-3. Merges all together
-4. Deletes all branches
+1. Rebases them in dependency order
+1. Merges all together
+1. Deletes all branches
 
 **Or manually trigger:**
+
 ```bash
 # Comment on any PR in the batch
 /merge-batch api-update
@@ -508,6 +547,7 @@ gh pr edit 102 --add-label "batch:api-update"
 ## Daily Workflow for Solo Dev + AI
 
 ### Morning (15 min)
+
 ```bash
 # Check what AI agents accomplished overnight
 gh pr list --label "automerge:when-ci-passes"
@@ -523,6 +563,7 @@ gh issue list --label "priority:high"
 ```
 
 ### During Day (Continuous)
+
 ```bash
 # AI 1 works on task A → auto-merges when done
 # AI 2 works on task B → auto-merges when done
@@ -533,6 +574,7 @@ gh issue list --label "priority:high"
 ```
 
 ### Evening (15 min)
+
 ```bash
 # Review what shipped today
 gh pr list --state merged --search "merged:>=2024-01-15"
@@ -545,6 +587,7 @@ gh issue create --title "Task for AI: implement X"
 ```
 
 ### Weekly (30 min)
+
 ```bash
 # Batch close stale PRs
 gh pr list --label "stale" --json number --jq '.[].number' | xargs -I {} gh pr close {}
@@ -578,6 +621,7 @@ return <OldDashboard />;
 ```
 
 **Benefits:**
+
 - Merge early, merge often
 - Reduce PR backlog
 - Enable features when ready
@@ -590,17 +634,18 @@ return <OldDashboard />;
 ### Target Sizes for Fast Merge
 
 | Size | Lines Changed | Merge Time | Auto-Merge? |
-|------|---------------|------------|-------------|
-| XS | <10 | <5 min | ✅ Yes |
-| S | 10-99 | <15 min | ✅ Yes |
-| M | 100-499 | <1 hour | ⚠️ Maybe |
-| L | 500-999 | <4 hours | ❌ No |
-| XL | 1000+ | Manual | ❌ No |
+| ---- | ------------- | ---------- | ----------- |
+| XS   | \<10          | \<5 min    | ✅ Yes      |
+| S    | 10-99         | \<15 min   | ✅ Yes      |
+| M    | 100-499       | \<1 hour   | ⚠️ Maybe    |
+| L    | 500-999       | \<4 hours  | ❌ No       |
+| XL   | 1000+         | Manual     | ❌ No       |
 
 **If PR is L or XL:**
+
 1. Break into smaller PRs
-2. Use feature flags
-3. Use draft PR for incremental work
+1. Use feature flags
+1. Use draft PR for incremental work
 
 ---
 
@@ -672,6 +717,7 @@ Add to your AI prompts:
 
 ```markdown
 When creating PRs:
+
 - For bug fixes, docs, small features: Add label "automerge:when-ci-passes"
 - For standard features: Add label "automerge:after-24h"
 - For complex changes: Add label "needs-review"
@@ -689,14 +735,14 @@ See "Daily Workflow" section above.
 
 ### Measure Success
 
-| Metric | Target | How to Measure |
-|--------|--------|----------------|
-| **PR Merge Time** | <2 hours for small PRs | `gh pr list --state merged` |
-| **Open PR Count** | <10 at any time | `gh pr list | wc -l` |
-| **Stale PR Count** | <5 | `gh pr list --label stale | wc -l` |
-| **Auto-merge Rate** | >70% of PRs | Weekly metrics workflow |
-| **CI Pass Rate** | >90% | GitHub Actions insights |
-| **Time to Ship** | <24h from idea to production | Track issue → merge time |
+| Metric              | Target                        | How to Measure              |
+| ------------------- | ----------------------------- | --------------------------- |
+| **PR Merge Time**   | \<2 hours for small PRs       | `gh pr list --state merged` |
+| **Open PR Count**   | \<10 at any time              | \`gh pr list                |
+| **Stale PR Count**  | \<5                           | \`gh pr list --label stale  |
+| **Auto-merge Rate** | >70% of PRs                   | Weekly metrics workflow     |
+| **CI Pass Rate**    | >90%                          | GitHub Actions insights     |
+| **Time to Ship**    | \<24h from idea to production | Track issue → merge time    |
 
 ### Weekly Review
 
@@ -714,22 +760,16 @@ gh pr list --state merged --search "merged:>=2024-01-08" --label "automerge:when
 
 ### What Auto-Merge Will NOT Do
 
-❌ Merge if ANY CI check fails
-❌ Merge PRs labeled `needs-review` without approval
-❌ Merge PRs targeting `main` (only `develop`)
-❌ Merge PRs with unresolved review comments
-❌ Merge PRs with merge conflicts
-❌ Bypass security scans (CodeQL, Semgrep)
+❌ Merge if ANY CI check fails ❌ Merge PRs labeled `needs-review` without
+approval ❌ Merge PRs targeting `main` (only `develop`) ❌ Merge PRs with
+unresolved review comments ❌ Merge PRs with merge conflicts ❌ Bypass security
+scans (CodeQL, Semgrep)
 
 ### Required CI Checks (Must Pass for Auto-Merge)
 
-✅ All tests pass
-✅ Code coverage >80% (if configured)
-✅ CodeQL security scan passes
-✅ Semgrep security scan passes
-✅ Link checker passes (for docs)
-✅ Conventional commit format
-✅ PR description >50 characters
+✅ All tests pass ✅ Code coverage >80% (if configured) ✅ CodeQL security scan
+passes ✅ Semgrep security scan passes ✅ Link checker passes (for docs) ✅
+Conventional commit format ✅ PR description >50 characters
 
 ---
 
@@ -738,6 +778,7 @@ gh pr list --state merged --search "merged:>=2024-01-08" --label "automerge:when
 ### Issue: Too many auto-merges, not enough review
 
 **Solution:**
+
 ```bash
 # Change default to 24h delay
 # In PR template, change default label to:
@@ -747,6 +788,7 @@ automerge:after-24h
 ### Issue: AI creating merge conflicts
 
 **Solution:**
+
 ```bash
 # Use batch merge for related work
 # AI should coordinate:
@@ -757,6 +799,7 @@ gh pr edit 101 --add-label "batch:feature-x"
 ### Issue: Important changes merged too fast
 
 **Solution:**
+
 ```bash
 # For critical files, require review
 # Add to .github/CODEOWNERS:
@@ -767,6 +810,7 @@ gh pr edit 101 --add-label "batch:feature-x"
 ### Issue: Want to disable auto-merge temporarily
 
 **Solution:**
+
 ```bash
 # Add label to PRs:
 gh pr edit <number> --add-label "hold"
@@ -781,7 +825,7 @@ gh pr edit <number> --add-label "hold"
 ### ✅ DO
 
 - Use auto-merge for >70% of your PRs (bug fixes, docs, small features)
-- Keep PRs small (<500 lines changed)
+- Keep PRs small (\<500 lines changed)
 - Link PRs to issues (track work in issues, not PR backlogs)
 - Review auto-merged PRs async (for learning, not blocking)
 - Use feature flags for incomplete work
@@ -803,20 +847,26 @@ gh pr edit <number> --add-label "hold"
 ## Summary
 
 **Old Way:**
+
 - AI creates PR → you manually review → you manually merge → repeat
 - Result: 20+ open PRs, lost tasks, slow shipping
 
 **New Way:**
+
 - AI creates PR with `automerge` label → CI passes → auto-merges
 - You review complex PRs async, auto-merge handles 70%+ of work
-- Result: <10 open PRs, no lost tasks, ship in hours not days
+- Result: \<10 open PRs, no lost tasks, ship in hours not days
 
 **Key Insight:**
-> As a solo developer with AI assistants, the traditional PR review process is **pure overhead**. Your CI pipeline is your code reviewer. Trust it, automate it, ship faster.
+
+> As a solo developer with AI assistants, the traditional PR review process is
+> **pure overhead**. Your CI pipeline is your code reviewer. Trust it, automate
+> it, ship faster.
 
 ---
 
 **See Also:**
+
 - `.github/workflows/auto-merge.yml` - Auto-merge implementation
 - `.github/workflows/branch-lifecycle.yml` - Branch cleanup automation
 - `.github/workflows/pr-batch-merge.yml` - Batch merge workflow

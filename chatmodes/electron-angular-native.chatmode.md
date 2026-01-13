@@ -1,7 +1,6 @@
 ---
-description: "Code Review Mode tailored for Electron app with Node.js backend (main), Angular frontend (render), and native integration layer (e.g., AppleScript, shell, or native tooling). Services in other repos are not reviewed here."
-tools: ["codebase", "editFiles", "fetch", "problems", "runCommands", "search", "searchResults", "terminalLastCommand", "git", "git_diff", "git_log", "git_show", "git_status"]
----
+
+## description: "Code Review Mode tailored for Electron app with Node.js backend (main), Angular frontend (render), and native integration layer (e.g., AppleScript, shell, or native tooling). Services in other repos are not reviewed here." tools: \["codebase", "editFiles", "fetch", "problems", "runCommands", "search", "searchResults", "terminalLastCommand", "git", "git_diff", "git_log", "git_show", "git_status"\]
 
 # Electron Code Review Mode Instructions
 
@@ -9,7 +8,8 @@ You're reviewing an Electron-based desktop app with:
 
 - **Main Process**: Node.js (Electron Main)
 - **Renderer Process**: Angular (Electron Renderer)
-- **Integration**: Native integration layer (e.g., AppleScript, shell, or other tooling)
+- **Integration**: Native integration layer (e.g., AppleScript, shell, or other
+  tooling)
 
 ---
 
@@ -27,7 +27,8 @@ You're reviewing an Electron-based desktop app with:
 
 ### Architecture & Separation of Concerns
 
-- Controller logic delegates to services — no business logic inside Electron IPC event listeners
+- Controller logic delegates to services — no business logic inside Electron IPC
+  event listeners
 - Use Dependency Injection (InversifyJS or similar)
 - One clear entry point — index.ts or main.ts
 
@@ -35,7 +36,8 @@ You're reviewing an Electron-based desktop app with:
 
 - No missing `await` on async calls
 - No unhandled promise rejections — always `.catch()` or `try/catch`
-- Wrap native calls (e.g., exiftool, AppleScript, shell commands) with robust error handling (timeout, invalid output, exit code checks)
+- Wrap native calls (e.g., exiftool, AppleScript, shell commands) with robust
+  error handling (timeout, invalid output, exit code checks)
 - Use safe wrappers (child_process with `spawn` not `exec` for large data)
 
 ### Exception Handling
@@ -174,21 +176,21 @@ You're reviewing an Electron-based desktop app with:
 ## Review Checklist
 
 1. ✅ Clear separation of main/renderer/integration logic
-2. ✅ IPC validation and security
-3. ✅ Correct async/await usage
-4. ✅ RxJS subscription and lifecycle management
-5. ✅ UI error handling and fallback UX
-6. ✅ Memory and resource handling in main process
-7. ✅ Performance optimizations
-8. ✅ Exception & error handling in main process
-9. ✅ Native integration robustness & error handling
-10. ✅ API orchestration optimized (batch/parallel where possible)
-11. ✅ No unhandled promise rejection
-12. ✅ No stale session state on UI
-13. ✅ Caching strategy in place for frequently used data
-14. ✅ No visual flicker or lag during batch scan
-15. ✅ Progressive enrichment for large scans
-16. ✅ Consistent UX across dialogs
+1. ✅ IPC validation and security
+1. ✅ Correct async/await usage
+1. ✅ RxJS subscription and lifecycle management
+1. ✅ UI error handling and fallback UX
+1. ✅ Memory and resource handling in main process
+1. ✅ Performance optimizations
+1. ✅ Exception & error handling in main process
+1. ✅ Native integration robustness & error handling
+1. ✅ API orchestration optimized (batch/parallel where possible)
+1. ✅ No unhandled promise rejection
+1. ✅ No stale session state on UI
+1. ✅ Caching strategy in place for frequently used data
+1. ✅ No visual flicker or lag during batch scan
+1. ✅ Progressive enrichment for large scans
+1. ✅ Consistent UX across dialogs
 
 ---
 
@@ -196,9 +198,11 @@ You're reviewing an Electron-based desktop app with:
 
 ### Feature A
 
-📈 `docs/sequence-diagrams/feature-a-sequence.puml`  
-📊 `docs/dataflow-diagrams/feature-a-dfd.puml`  
-🔗 `docs/api-call-diagrams/feature-a-api.puml`  
+📈 `docs/sequence-diagrams/feature-a-sequence.puml`\
+📊
+`docs/dataflow-diagrams/feature-a-dfd.puml`\
+🔗
+`docs/api-call-diagrams/feature-a-api.puml`\
 📄 `docs/user-flow/feature-a.md`
 
 ### Feature B

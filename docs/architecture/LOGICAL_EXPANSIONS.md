@@ -1,6 +1,7 @@
 # Logical Expansions Roadmap
 
-Strategic next steps and logical expansions to enhance this gold standard repository.
+Strategic next steps and logical expansions to enhance this gold standard
+repository.
 
 ## Table of Contents
 
@@ -16,24 +17,25 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 
 ### What We Have ✅
 
-| Category | Coverage | Status |
-|----------|----------|--------|
-| **Security** | 95% | ⭐⭐⭐⭐⭐ Excellent |
-| **Code Quality** | 90% | ⭐⭐⭐⭐⭐ Excellent |
-| **Automation** | 95% | ⭐⭐⭐⭐⭐ Excellent |
-| **Documentation** | 90% | ⭐⭐⭐⭐⭐ Excellent |
-| **Release Management** | 100% | ⭐⭐⭐⭐⭐ Excellent |
-| **AI Integration** | 80% | ⭐⭐⭐⭐ Very Good |
-| **Testing** | 70% | ⭐⭐⭐ Good |
-| **Observability** | 30% | ⭐⭐ Basic |
-| **Developer Experience** | 75% | ⭐⭐⭐⭐ Very Good |
-| **API Documentation** | 40% | ⭐⭐ Basic |
-| **Infrastructure** | 50% | ⭐⭐⭐ Good |
-| **Compliance** | 60% | ⭐⭐⭐ Good |
+| Category                 | Coverage | Status               |
+| ------------------------ | -------- | -------------------- |
+| **Security**             | 95%      | ⭐⭐⭐⭐⭐ Excellent |
+| **Code Quality**         | 90%      | ⭐⭐⭐⭐⭐ Excellent |
+| **Automation**           | 95%      | ⭐⭐⭐⭐⭐ Excellent |
+| **Documentation**        | 90%      | ⭐⭐⭐⭐⭐ Excellent |
+| **Release Management**   | 100%     | ⭐⭐⭐⭐⭐ Excellent |
+| **AI Integration**       | 80%      | ⭐⭐⭐⭐ Very Good   |
+| **Testing**              | 70%      | ⭐⭐⭐ Good          |
+| **Observability**        | 30%      | ⭐⭐ Basic           |
+| **Developer Experience** | 75%      | ⭐⭐⭐⭐ Very Good   |
+| **API Documentation**    | 40%      | ⭐⭐ Basic           |
+| **Infrastructure**       | 50%      | ⭐⭐⭐ Good          |
+| **Compliance**           | 60%      | ⭐⭐⭐ Good          |
 
 ### Gaps & Opportunities
 
 #### Testing Gap
+
 - ❌ Mutation testing
 - ❌ Contract testing (API contracts)
 - ❌ Visual regression testing
@@ -42,6 +44,7 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 - ❌ Load testing automation
 
 #### Observability Gap
+
 - ❌ OpenTelemetry integration
 - ❌ Distributed tracing
 - ❌ Metrics collection
@@ -49,12 +52,14 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 - ❌ APM integration
 
 #### Developer Experience Gap
+
 - ❌ DevContainers configuration
 - ❌ GitHub Codespaces setup
 - ❌ Local environment standardization
 - ❌ IDE workspace settings
 
 #### API & Documentation Gap
+
 - ❌ OpenAPI/Swagger generation
 - ❌ GraphQL schema validation
 - ❌ API versioning automation
@@ -64,25 +69,39 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 
 ## Critical Review & Risk Controls
 
-**Why this matters**: The roadmap is ambitious and tooling-heavy. Without guardrails, it can erode existing stability—the very functionality we need to preserve while expanding capability.
+**Why this matters**: The roadmap is ambitious and tooling-heavy. Without
+guardrails, it can erode existing stability—the very functionality we need to
+preserve while expanding capability.
 
-- **Tooling sprawl risk**: Prefer one tool per concern (e.g., pick **Percy _or_ Chromatic**, **Datadog _or_ Prometheus/Grafana**) and document the rationale to avoid duplicated effort and inconsistent outputs.
-- **Pipeline performance risk**: Mutation, visual, and accessibility suites can balloon CI time. Introduce a **tiered test strategy** (smoke on PRs, full suites on schedules) with published SLAs for runtime budgets.
-- **Change-management guardrails**: Gate adoption with **feature flags** and **progressive rollout** plans (shadow mode, mirrored traffic, then production) so behavior stays stable while capabilities grow.
-- **Observability consistency**: Standardize telemetry naming (service, environment, version) and require **baseline dashboards + alerts** _before_ enabling new exporters to avoid noisy, low-signal alerting.
-- **Compliance & data handling**: For logging/observability additions, run a **PII data audit** and keep a redaction policy enforced in code linters or centralized middleware.
-- **Ownership clarity**: Assign an **owner per capability** (Testing, Observability, DX, API Docs) with a published escalation path so regressions have clear accountability.
+- **Tooling sprawl risk**: Prefer one tool per concern (e.g., pick **Percy _or_
+  Chromatic**, **Datadog _or_ Prometheus/Grafana**) and document the rationale
+  to avoid duplicated effort and inconsistent outputs.
+- **Pipeline performance risk**: Mutation, visual, and accessibility suites can
+  balloon CI time. Introduce a **tiered test strategy** (smoke on PRs, full
+  suites on schedules) with published SLAs for runtime budgets.
+- **Change-management guardrails**: Gate adoption with **feature flags** and
+  **progressive rollout** plans (shadow mode, mirrored traffic, then production)
+  so behavior stays stable while capabilities grow.
+- **Observability consistency**: Standardize telemetry naming (service,
+  environment, version) and require **baseline dashboards + alerts** _before_
+  enabling new exporters to avoid noisy, low-signal alerting.
+- **Compliance & data handling**: For logging/observability additions, run a
+  **PII data audit** and keep a redaction policy enforced in code linters or
+  centralized middleware.
+- **Ownership clarity**: Assign an **owner per capability** (Testing,
+  Observability, DX, API Docs) with a published escalation path so regressions
+  have clear accountability.
 
 **Execution checkpoints (apply to every new capability)**
 
-| Control | Description | Owner | Exit Criteria |
-|---------|-------------|-------|---------------|
-| Baseline verification | Capture golden paths, error budgets, and latency budgets before rollout. | Capability owner | Baseline metrics stored in runbooks and dashboards. |
-| Rollback readiness | Define rollback/feature-flag plan and verify it in staging. | Capability owner | Documented rollback steps; flag default-off until guardrails pass. |
-| Data handling | Validate PII handling/redaction in logs and traces. | Security/Privacy | Passing lint/redaction checks; audit log captured. |
-| Alert hygiene | Add/validate high-signal alerts with runbook links. | Observability | Alerts linked to runbooks; noise budget ≤ agreed SLA. |
-| Dependency validation | Confirm new tooling versions are pinned and scoped. | Capability owner | Lockfiles updated; supply-chain checks green. |
-| Functional parity | Run smoke/perf baselines before & after rollout to verify no regression. | Capability owner | Baseline deltas within agreed error budget; rollback plan exercised if breached. |
+| Control               | Description                                                              | Owner            | Exit Criteria                                                                    |
+| --------------------- | ------------------------------------------------------------------------ | ---------------- | -------------------------------------------------------------------------------- |
+| Baseline verification | Capture golden paths, error budgets, and latency budgets before rollout. | Capability owner | Baseline metrics stored in runbooks and dashboards.                              |
+| Rollback readiness    | Define rollback/feature-flag plan and verify it in staging.              | Capability owner | Documented rollback steps; flag default-off until guardrails pass.               |
+| Data handling         | Validate PII handling/redaction in logs and traces.                      | Security/Privacy | Passing lint/redaction checks; audit log captured.                               |
+| Alert hygiene         | Add/validate high-signal alerts with runbook links.                      | Observability    | Alerts linked to runbooks; noise budget ≤ agreed SLA.                            |
+| Dependency validation | Confirm new tooling versions are pinned and scoped.                      | Capability owner | Lockfiles updated; supply-chain checks green.                                    |
+| Functional parity     | Run smoke/perf baselines before & after rollout to verify no regression. | Capability owner | Baseline deltas within agreed error budget; rollback plan exercised if breached. |
 
 ---
 
@@ -97,18 +116,20 @@ Strategic next steps and logical expansions to enhance this gold standard reposi
 **Purpose**: Test the tests - ensure tests actually catch bugs
 
 **Tools**:
+
 - **Stryker** (JavaScript/TypeScript)
 - **mutmut** (Python)
 - **PITest** (Java)
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/mutation-testing.yml
 name: Mutation Testing
 
 on:
   schedule:
-    - cron: '0 2 * * 0'  # Weekly
+    - cron: "0 2 * * 0" # Weekly
   workflow_dispatch:
 
 jobs:
@@ -130,6 +151,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - Validates test quality
 - Identifies weak tests
 - Improves test coverage quality
@@ -140,11 +162,13 @@ jobs:
 **Purpose**: Ensure API contracts between services are maintained
 
 **Tools**:
+
 - **Pact** (Consumer-driven contracts)
 - **Spring Cloud Contract**
 - **Postman Contract Testing**
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/contract-testing.yml
 name: Contract Testing
@@ -152,8 +176,8 @@ name: Contract Testing
 on:
   pull_request:
     paths:
-      - 'src/api/**'
-      - 'contracts/**'
+      - "src/api/**"
+      - "contracts/**"
 
 jobs:
   contract-test:
@@ -172,6 +196,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - Prevents breaking API changes
 - Enables independent service deployment
 - Documents API contracts
@@ -182,12 +207,14 @@ jobs:
 **Purpose**: Catch unintended UI changes
 
 **Tools**:
+
 - **Percy** (Visual testing)
 - **Chromatic** (Storybook visual testing)
 - **BackstopJS** (Open source)
 - **Playwright** (with screenshots)
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/visual-regression.yml
 name: Visual Regression
@@ -195,8 +222,8 @@ name: Visual Regression
 on:
   pull_request:
     paths:
-      - 'src/components/**'
-      - 'src/pages/**'
+      - "src/components/**"
+      - "src/pages/**"
 
 jobs:
   visual-test:
@@ -207,12 +234,13 @@ jobs:
       - name: Percy Visual Tests
         uses: percy/snapshot-action@v0.1.3
         with:
-          build-directory: 'build'
+          build-directory: "build"
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 ```
 
 **Benefits**:
+
 - Prevents CSS regression
 - Catches visual bugs
 - Validates across browsers
@@ -223,11 +251,13 @@ jobs:
 **Purpose**: Ensure WCAG compliance and accessibility
 
 **Tools**:
+
 - **axe-core** (Accessibility engine)
 - **Pa11y** (Automated testing)
 - **Lighthouse** (Already have, expand)
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/accessibility.yml
 name: Accessibility Testing
@@ -253,6 +283,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - WCAG 2.1 compliance
 - Better user experience
 - Legal compliance
@@ -269,23 +300,29 @@ jobs:
 **Purpose**: Unified observability (traces, metrics, logs)
 
 **Implementation**:
+
 ```javascript
 // src/instrumentation.js
-const { NodeSDK } = require('@opentelemetry/sdk-node');
-const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');
+const { NodeSDK } = require("@opentelemetry/sdk-node");
+const {
+  getNodeAutoInstrumentations,
+} = require("@opentelemetry/auto-instrumentations-node");
+const {
+  OTLPTraceExporter,
+} = require("@opentelemetry/exporter-trace-otlp-http");
 
 const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter({
-    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
   }),
-  instrumentations: [getNodeAutoInstrumentations()]
+  instrumentations: [getNodeAutoInstrumentations()],
 });
 
 sdk.start();
 ```
 
 **Configuration**:
+
 ```yaml
 # .github/workflows/deploy.yml (add to deployment)
 - name: Configure OpenTelemetry
@@ -295,6 +332,7 @@ sdk.start();
 ```
 
 **Benefits**:
+
 - Distributed tracing
 - Performance monitoring
 - Root cause analysis
@@ -305,14 +343,16 @@ sdk.start();
 **Purpose**: Track application and business metrics
 
 **Tools**:
+
 - **Prometheus** (Metrics collection)
 - **Grafana** (Visualization)
 - **DataDog** (SaaS option)
 
 **Implementation**:
+
 ```yaml
 # docker-compose.monitoring.yml
-version: '3.9'
+version: "3.9"
 
 services:
   prometheus:
@@ -323,7 +363,7 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - "--config.file=/etc/prometheus/prometheus.yml"
 
   grafana:
     image: grafana/grafana:latest
@@ -340,6 +380,7 @@ volumes:
 ```
 
 **Benefits**:
+
 - Real-time monitoring
 - Custom dashboards
 - Alerting
@@ -350,32 +391,35 @@ volumes:
 **Purpose**: Centralized logging and analysis
 
 **Tools**:
+
 - **ELK Stack** (Elasticsearch, Logstash, Kibana)
 - **Loki** (Prometheus for logs)
 - **Datadog Logs**
 - **Better Stack** (formerly Logtail)
 
 **Implementation**:
+
 ```javascript
 // src/logger.js
-const winston = require('winston');
-const { LogtailTransport } = require('@logtail/winston');
+const winston = require("winston");
+const { LogtailTransport } = require("@logtail/winston");
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
   transports: [
     new winston.transports.Console(),
     new LogtailTransport({
-      sourceToken: process.env.LOGTAIL_SOURCE_TOKEN
-    })
-  ]
+      sourceToken: process.env.LOGTAIL_SOURCE_TOKEN,
+    }),
+  ],
 });
 
 module.exports = logger;
 ```
 
 **Benefits**:
+
 - Search across all logs
 - Error tracking
 - Audit trails
@@ -392,6 +436,7 @@ module.exports = logger;
 **Purpose**: Consistent development environment
 
 **Implementation**:
+
 ```json
 // .devcontainer/devcontainer.json
 {
@@ -433,6 +478,7 @@ module.exports = logger;
 ```
 
 **Benefits**:
+
 - Instant development setup
 - Consistent environments
 - Works with Codespaces
@@ -443,6 +489,7 @@ module.exports = logger;
 **Purpose**: Cloud-based development environment
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/codespaces-prebuilds.yml
 name: Codespaces Prebuild
@@ -464,6 +511,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - Start coding in seconds
 - No local setup needed
 - Powerful cloud resources
@@ -474,6 +522,7 @@ jobs:
 **Purpose**: Standardized IDE configuration
 
 **Implementation**:
+
 ```json
 // .vscode/settings.json
 {
@@ -510,6 +559,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - Consistent formatting
 - Automatic linting
 - Better collaboration
@@ -526,25 +576,27 @@ jobs:
 **Purpose**: Auto-generate API documentation
 
 **Tools**:
+
 - **Swagger/OpenAPI**
 - **tsoa** (TypeScript)
 - **FastAPI** (Python - auto-generates)
 - **springdoc** (Java)
 
 **Implementation**:
+
 ```typescript
 // src/api/users.controller.ts
-import { Controller, Get, Post, Route, Tags } from 'tsoa';
+import { Controller, Get, Post, Route, Tags } from "tsoa";
 
-@Route('api/users')
-@Tags('Users')
+@Route("api/users")
+@Tags("Users")
 export class UsersController extends Controller {
   /**
    * Retrieves all users
    * @summary Get all users
    * @returns {User[]} List of users
    */
-  @Get('/')
+  @Get("/")
   public async getUsers(): Promise<User[]> {
     return userService.getAll();
   }
@@ -554,7 +606,7 @@ export class UsersController extends Controller {
    * @param requestBody User data
    * @returns {User} Created user
    */
-  @Post('/')
+  @Post("/")
   public async createUser(@Body() requestBody: CreateUserDto): Promise<User> {
     return userService.create(requestBody);
   }
@@ -562,6 +614,7 @@ export class UsersController extends Controller {
 ```
 
 **Workflow**:
+
 ```yaml
 # .github/workflows/api-docs.yml
 name: API Documentation
@@ -570,7 +623,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/api/**'
+      - "src/api/**"
 
 jobs:
   generate-docs:
@@ -589,6 +642,7 @@ jobs:
 ```
 
 **Benefits**:
+
 - Always up-to-date docs
 - Interactive API explorer
 - Client SDK generation
@@ -599,10 +653,12 @@ jobs:
 **Purpose**: Validate GraphQL schema changes
 
 **Tools**:
+
 - **GraphQL Inspector**
 - **Apollo Schema Check**
 
 **Implementation**:
+
 ```yaml
 # .github/workflows/graphql-check.yml
 name: GraphQL Schema Check
@@ -610,8 +666,8 @@ name: GraphQL Schema Check
 on:
   pull_request:
     paths:
-      - 'schema/**'
-      - 'src/graphql/**'
+      - "schema/**"
+      - "src/graphql/**"
 
 jobs:
   schema-check:
@@ -622,10 +678,11 @@ jobs:
       - name: GraphQL Inspector
         uses: kamilkisiela/graphql-inspector@master
         with:
-          schema: 'main:schema.graphql'
+          schema: "main:schema.graphql"
 ```
 
 **Benefits**:
+
 - Prevent breaking changes
 - Schema evolution tracking
 - Deprecation management
@@ -641,14 +698,14 @@ jobs:
 
 #### Terraform/Pulumi Workflows
 
-```yaml
+````yaml
 # .github/workflows/terraform.yml
 name: Terraform
 
 on:
   pull_request:
     paths:
-      - 'infrastructure/**'
+      - "infrastructure/**"
 
 jobs:
   terraform:
@@ -675,9 +732,10 @@ jobs:
               repo: context.repo.repo,
               body: '## Terraform Plan\n```\n' + process.env.PLAN + '\n```'
             })
-```
+````
 
 **Tools**:
+
 - **Terraform** (HashiCorp)
 - **Pulumi** (Infrastructure as software)
 - **Terragrunt** (Terraform wrapper)
@@ -688,11 +746,13 @@ jobs:
 **Impact**: Medium | **Effort**: High | **Priority**: 🟢 Medium
 
 **Tools**:
+
 - **Chaos Mesh** (Kubernetes)
 - **Gremlin** (SaaS)
 - **Chaos Monkey** (Netflix OSS)
 
 **Purpose**:
+
 - Test resilience
 - Identify weaknesses
 - Improve reliability
@@ -703,12 +763,14 @@ jobs:
 **Impact**: Medium | **Effort**: Medium | **Priority**: 🟢 Medium
 
 **Tools**:
+
 - **LaunchDarkly**
 - **Unleash** (Open source)
 - **Flagsmith**
 - **Split.io**
 
 **Benefits**:
+
 - Gradual rollouts
 - A/B testing
 - Kill switches
@@ -723,6 +785,7 @@ jobs:
 #### A. Runtime Application Self-Protection (RASP)
 
 **Tools**:
+
 - **Sqreen** (DataDog)
 - **Contrast Security**
 - **Immunio**
@@ -730,12 +793,14 @@ jobs:
 #### B. Security Chaos Engineering
 
 **Tools**:
+
 - **ChaoSlingr** (Security chaos)
 - **Attack simulation**
 
 #### C. Threat Modeling Automation
 
 **Tools**:
+
 - **OWASP Threat Dragon**
 - **Microsoft Threat Modeling Tool**
 - **IriusRisk**
@@ -765,6 +830,7 @@ jobs:
 #### B. GDPR/Privacy Checks
 
 **Tools**:
+
 - **OneTrust**
 - **TrustArc**
 - Custom privacy scanners
@@ -772,6 +838,7 @@ jobs:
 #### C. SOC 2 / ISO 27001 Compliance
 
 **Documentation**:
+
 - Automated evidence collection
 - Compliance dashboards
 - Audit trail generation
@@ -812,6 +879,7 @@ jobs:
 #### B. Canary Releases
 
 **Tools**:
+
 - **Flagger** (Kubernetes)
 - **Argo Rollouts**
 - **Spinnaker**
@@ -819,6 +887,7 @@ jobs:
 #### C. Progressive Delivery
 
 **Combines**:
+
 - Feature flags
 - Canary releases
 - A/B testing
@@ -829,34 +898,46 @@ jobs:
 ## Implementation Roadmap
 
 ### Functionality Preservation Gates (apply to every phase)
-- [ ] **Baseline captured**: Golden path smoke tests + before/after metrics recorded.
-- [ ] **Rollout strategy defined**: Feature flag or canary path with rollback steps documented.
-- [ ] **PII/secret handling confirmed**: Logging/telemetry redaction rules enforced and linted.
-- [ ] **Owner & runbook**: Named DRI with an escalation and rollback playbook linked.
-- [ ] **Alert hygiene**: At least one high-signal alert plus dashboard for the new capability, reviewed for noise.
-- [ ] **Dependency check**: New tools validated against existing SLAs (CI runtime, hosting costs, retention policies).
+
+- [ ] **Baseline captured**: Golden path smoke tests + before/after metrics
+      recorded.
+- [ ] **Rollout strategy defined**: Feature flag or canary path with rollback
+      steps documented.
+- [ ] **PII/secret handling confirmed**: Logging/telemetry redaction rules
+      enforced and linted.
+- [ ] **Owner & runbook**: Named DRI with an escalation and rollback playbook
+      linked.
+- [ ] **Alert hygiene**: At least one high-signal alert plus dashboard for the
+      new capability, reviewed for noise.
+- [ ] **Dependency check**: New tools validated against existing SLAs (CI
+      runtime, hosting costs, retention policies).
 
 ### Phase 1: Testing Excellence (Weeks 1-4)
+
 - [ ] Week 1: Mutation testing setup
 - [ ] Week 2: Contract testing implementation
 - [ ] Week 3: Visual regression testing
 - [ ] Week 4: Accessibility testing
 
 ### Phase 2: Observability (Weeks 5-8)
+
 - [ ] Week 5: OpenTelemetry integration
 - [ ] Week 6: Metrics collection (Prometheus/Grafana)
 - [ ] Week 7: Log aggregation
 - [ ] Week 8: Dashboards and alerts
 
 ### Phase 3: Developer Experience (Weeks 9-10)
+
 - [ ] Week 9: DevContainers + Codespaces
 - [ ] Week 10: VS Code workspace + local environment
 
 ### Phase 4: API Documentation (Weeks 11-12)
+
 - [ ] Week 11: OpenAPI/Swagger generation
 - [ ] Week 12: GraphQL schema validation
 
 ### Phase 5: Advanced Features (Weeks 13-16)
+
 - [ ] Week 13: Infrastructure as Code
 - [ ] Week 14: Feature flags
 - [ ] Week 15: Chaos engineering
@@ -867,22 +948,27 @@ jobs:
 ## Quick Wins (Implement First)
 
 ### 1. DevContainers (1 day)
+
 - Immediate developer productivity
 - Low effort, high impact
 
 ### 2. VS Code Settings (2 hours)
+
 - Standardize team workflow
 - Minimal effort
 
 ### 3. OpenAPI Generation (1-2 days)
+
 - Auto-document APIs
 - High value
 
 ### 4. Accessibility Testing (1 day)
+
 - Add Pa11y to CI
 - Important for compliance
 
 ### 5. Basic Observability (2-3 days)
+
 - Add structured logging
 - Basic metrics collection
 
@@ -891,6 +977,7 @@ jobs:
 ## Cost Considerations
 
 ### Free/Open Source
+
 - Mutation testing (Stryker, mutmut)
 - Contract testing (Pact)
 - DevContainers
@@ -899,11 +986,13 @@ jobs:
 - OpenTelemetry
 
 ### Freemium
+
 - Percy (visual testing)
 - Codecov
 - Better Stack (logging)
 
 ### Paid (Worth It)
+
 - Datadog (full observability)
 - LaunchDarkly (feature flags)
 - Chromatic (visual testing)
@@ -915,11 +1004,11 @@ jobs:
 Track these to measure expansion impact:
 
 - **Testing**: Mutation score >80%
-- **Observability**: Mean time to detect (MTTD) <5 min
-- **Developer Experience**: Onboarding time <1 hour
+- **Observability**: Mean time to detect (MTTD) \<5 min
+- **Developer Experience**: Onboarding time \<1 hour
 - **API Documentation**: 100% coverage
 - **Deployment**: Deployment frequency (daily+)
-- **Reliability**: Error rate <0.1%
+- **Reliability**: Error rate \<0.1%
 
 ---
 

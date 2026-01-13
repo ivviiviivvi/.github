@@ -1,6 +1,7 @@
 # Advanced Security Configuration
 
-Comprehensive guide for implementing advanced security measures in your repository.
+Comprehensive guide for implementing advanced security measures in your
+repository.
 
 ## Table of Contents
 
@@ -19,8 +20,8 @@ Comprehensive guide for implementing advanced security measures in your reposito
 ### Enable GitHub Secret Scanning
 
 1. Navigate to repository **Settings** → **Security & analysis**
-2. Enable **Secret scanning**
-3. Enable **Push protection**
+1. Enable **Secret scanning**
+1. Enable **Push protection**
 
 ### Configure Secret Detection
 
@@ -33,6 +34,7 @@ detect-secrets scan > .secrets.baseline
 ### Prevent Secrets in Code
 
 **.gitignore** additions:
+
 ```
 # Environment variables
 .env
@@ -57,11 +59,13 @@ id_ed25519
 ### Use Environment Variables
 
 **Bad**:
+
 ```javascript
-const apiKey = 'sk_live_abc123...'; // Don't do this!
+const apiKey = "sk_live_abc123..."; // Don't do this!
 ```
 
 **Good**:
+
 ```javascript
 const apiKey = process.env.API_KEY;
 ```
@@ -83,6 +87,7 @@ const apiKey = process.env.API_KEY;
 ### Dependency Scanning
 
 Enabled workflows:
+
 - **Dependabot**: `dependabot.yml`
 - **Renovate**: `renovate.json`
 - **Dependency Review**: `.github/workflows/dependency-review.yml`
@@ -104,13 +109,14 @@ cargo audit
 ### Update Strategy
 
 1. **Critical vulnerabilities**: Immediate update
-2. **High severity**: Within 7 days
-3. **Medium severity**: Within 30 days
-4. **Low severity**: Next release cycle
+1. **High severity**: Within 7 days
+1. **Medium severity**: Within 30 days
+1. **Low severity**: Next release cycle
 
 ### Lock Files
 
 **Always commit lock files**:
+
 - `package-lock.json` (npm)
 - `yarn.lock` (Yarn)
 - `pnpm-lock.yaml` (pnpm)
@@ -160,16 +166,16 @@ queries:
   - uses: security-and-quality
 
 paths-ignore:
-  - 'node_modules'
-  - 'dist'
-  - 'build'
-  - 'vendor'
-  - '**/*.test.js'
-  - '**/*.spec.ts'
+  - "node_modules"
+  - "dist"
+  - "build"
+  - "vendor"
+  - "**/*.test.js"
+  - "**/*.spec.ts"
 
 paths:
-  - 'src'
-  - 'lib'
+  - "src"
+  - "lib"
 
 query-filters:
   - exclude:
@@ -222,11 +228,11 @@ select str, "Potential hardcoded credential"
 - name: Scan Docker Image
   uses: aquasecurity/trivy-action@master
   with:
-    image-ref: 'myimage:latest'
-    format: 'sarif'
-    output: 'trivy-results.sarif'
-    severity: 'CRITICAL,HIGH'
-    exit-code: '1'
+    image-ref: "myimage:latest"
+    format: "sarif"
+    output: "trivy-results.sarif"
+    severity: "CRITICAL,HIGH"
+    exit-code: "1"
 ```
 
 **Snyk Container Scan**:
@@ -295,22 +301,22 @@ USER nonroot:nonroot
 See `BRANCH_PROTECTION.md` for detailed rules.
 
 **Essential protections**:
+
 ```yaml
 # Via GitHub API
 {
-  "required_status_checks": {
-    "strict": true,
-    "contexts": ["ci/tests", "security/scan"]
-  },
+  "required_status_checks":
+    { "strict": true, "contexts": ["ci/tests", "security/scan"] },
   "enforce_admins": true,
-  "required_pull_request_reviews": {
-    "dismissal_restrictions": {},
-    "dismiss_stale_reviews": true,
-    "require_code_owner_reviews": true,
-    "required_approving_review_count": 2
-  },
+  "required_pull_request_reviews":
+    {
+      "dismissal_restrictions": {},
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": true,
+      "required_approving_review_count": 2,
+    },
   "restrictions": null,
-  "required_signatures": true
+  "required_signatures": true,
 }
 ```
 
@@ -327,6 +333,7 @@ SECURITY.md @security-team
 ### SSH Key Management
 
 **Best Practices**:
+
 ```bash
 # Generate Ed25519 key (recommended)
 ssh-keygen -t ed25519 -C "your_email@example.com"
@@ -369,6 +376,7 @@ git commit -S -m "feat: add feature"
 ### GitHub Audit Log
 
 **Access audit log**:
+
 ```bash
 # Using GitHub CLI
 gh api /orgs/ORG/audit-log
@@ -399,6 +407,7 @@ gh api /orgs/ORG/audit-log \
 ### Third-Party Monitoring
 
 Integrate with:
+
 - **Datadog**: Security monitoring
 - **Splunk**: Log aggregation
 - **Elasticsearch**: Search and analytics
@@ -419,7 +428,7 @@ on:
     branches: [main, develop]
   pull_request:
   schedule:
-    - cron: '0 0 * * 0' # Weekly
+    - cron: "0 0 * * 0" # Weekly
 
 jobs:
   security:
@@ -523,6 +532,7 @@ jobs:
 ## Security Checklist
 
 ### Repository Setup
+
 - [ ] Enable secret scanning
 - [ ] Enable push protection
 - [ ] Configure Dependabot
@@ -533,6 +543,7 @@ jobs:
 - [ ] Enable 2FA for all users
 
 ### CI/CD Pipeline
+
 - [ ] Scan for secrets
 - [ ] Audit dependencies
 - [ ] Run SAST tools
@@ -541,6 +552,7 @@ jobs:
 - [ ] Verify signatures
 
 ### Access Control
+
 - [ ] Review permissions quarterly
 - [ ] Remove inactive users
 - [ ] Audit CODEOWNERS
@@ -548,6 +560,7 @@ jobs:
 - [ ] Monitor audit logs
 
 ### Incident Response
+
 - [ ] Document response plan
 - [ ] Designate security contacts
 - [ ] Set up alerting
@@ -558,16 +571,16 @@ jobs:
 
 ## Security Tools Comparison
 
-| Tool | Purpose | Cost | Best For |
-|------|---------|------|----------|
-| **CodeQL** | SAST | Free (OSS) | Code analysis |
-| **Dependabot** | Dependencies | Free | Dependency updates |
-| **Snyk** | Multi-purpose | Paid | Comprehensive scanning |
-| **Trivy** | Container | Free | Container scanning |
-| **Semgrep** | SAST | Free tier | Custom rules |
-| **FOSSA** | License | Paid | License compliance |
-| **SonarQube** | Code quality | Paid | Quality + security |
-| **Checkmarx** | SAST | Paid | Enterprise |
+| Tool           | Purpose       | Cost       | Best For               |
+| -------------- | ------------- | ---------- | ---------------------- |
+| **CodeQL**     | SAST          | Free (OSS) | Code analysis          |
+| **Dependabot** | Dependencies  | Free       | Dependency updates     |
+| **Snyk**       | Multi-purpose | Paid       | Comprehensive scanning |
+| **Trivy**      | Container     | Free       | Container scanning     |
+| **Semgrep**    | SAST          | Free tier  | Custom rules           |
+| **FOSSA**      | License       | Paid       | License compliance     |
+| **SonarQube**  | Code quality  | Paid       | Quality + security     |
+| **Checkmarx**  | SAST          | Paid       | Enterprise             |
 
 ---
 

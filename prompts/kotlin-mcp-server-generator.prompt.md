@@ -1,23 +1,23 @@
 ---
-mode: agent
-description: 'Generate a complete Kotlin MCP server project with proper structure, dependencies, and implementation using the official io.modelcontextprotocol:kotlin-sdk library.'
----
+
+## mode: agent description: 'Generate a complete Kotlin MCP server project with proper structure, dependencies, and implementation using the official io.modelcontextprotocol:kotlin-sdk library.'
 
 # Kotlin MCP Server Project Generator
 
-Generate a complete, production-ready Model Context Protocol (MCP) server project in Kotlin.
+Generate a complete, production-ready Model Context Protocol (MCP) server
+project in Kotlin.
 
 ## Project Requirements
 
 You will create a Kotlin MCP server with:
 
 1. **Project Structure**: Gradle-based Kotlin project layout
-2. **Dependencies**: Official MCP SDK, Ktor, and kotlinx libraries
-3. **Server Setup**: Configured MCP server with transports
-4. **Tools**: At least 2-3 useful tools with typed inputs/outputs
-5. **Error Handling**: Proper exception handling and validation
-6. **Documentation**: README with setup and usage instructions
-7. **Testing**: Basic test structure with coroutines
+1. **Dependencies**: Official MCP SDK, Ktor, and kotlinx libraries
+1. **Server Setup**: Configured MCP server with transports
+1. **Tools**: At least 2-3 useful tools with typed inputs/outputs
+1. **Error Handling**: Proper exception handling and validation
+1. **Documentation**: README with setup and usage instructions
+1. **Testing**: Basic test structure with coroutines
 
 ## Template Structure
 
@@ -62,21 +62,21 @@ repositories {
 
 dependencies {
     implementation("io.modelcontextprotocol:kotlin-sdk:0.7.2")
-    
+
     // Ktor for transports
     implementation("io.ktor:ktor-server-netty:3.0.0")
     implementation("io.ktor:ktor-client-cio:3.0.0")
-    
+
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-    
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    
+
     // Logging
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
     implementation("ch.qos.logback:logback-classic:1.5.12")
-    
+
     // Testing
     testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
@@ -114,13 +114,13 @@ private val logger = KotlinLogging.logger {}
 
 fun main() = runBlocking {
     logger.info { "Starting MCP server..." }
-    
+
     val config = loadConfig()
     val server = createServer(config)
-    
+
     // Use stdio transport
     val transport = StdioServerTransport()
-    
+
     logger.info { "Server '${config.name}' v${config.version} ready" }
     server.connect(transport)
 }
@@ -156,10 +156,10 @@ fun createServer(config: Config): Server {
     ) {
         config.description
     }
-    
+
     // Register all tools
     server.registerTools()
-    
+
     return server
 }
 ```
@@ -226,10 +226,10 @@ fun Server.registerTool1() {
         val param1 = request.params.arguments["param1"] as? String
             ?: throw IllegalArgumentException("param1 is required")
         val param2 = (request.params.arguments["param2"] as? Number)?.toInt() ?: 0
-        
+
         // Perform tool logic
         val result = performTool1Logic(param1, param2)
-        
+
         CallToolResult(
             content = listOf(
                 TextContent(text = result)
@@ -269,7 +269,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 class ServerTest {
-    
+
     @Test
     fun `test server creation`() = runTest {
         val config = Config(
@@ -277,18 +277,18 @@ class ServerTest {
             version = "1.0.0",
             description = "Test server"
         )
-        
+
         val server = createServer(config)
-        
+
         assertEquals("test-server", server.serverInfo.name)
         assertEquals("1.0.0", server.serverInfo.version)
     }
-    
+
     @Test
     fun `test tool1 execution`() = runTest {
         val config = Config()
         val server = createServer(config)
-        
+
         // Test tool execution
         // Note: You'll need to implement proper testing utilities
         // for calling tools in the server
@@ -346,13 +346,16 @@ Configure via environment variables:
 ## Available Tools
 
 ### tool1
+
 {{TOOL1_DESCRIPTION}}
 
 **Input:**
+
 - `param1` (string, required): First parameter
 - `param2` (integer, optional): Second parameter
 
 **Output:**
+
 - Text result of the operation
 
 ## Development
@@ -390,15 +393,15 @@ MIT
 When generating a Kotlin MCP server:
 
 1. **Gradle Setup**: Create proper `build.gradle.kts` with all dependencies
-2. **Package Structure**: Follow Kotlin package conventions
-3. **Type Safety**: Use data classes and kotlinx.serialization
-4. **Coroutines**: All operations should be suspending functions
-5. **Error Handling**: Use Kotlin exceptions and validation
-6. **JSON Schemas**: Use `buildJsonObject` for tool schemas
-7. **Testing**: Include coroutine test utilities
-8. **Logging**: Use kotlin-logging for structured logging
-9. **Configuration**: Use data classes and environment variables
-10. **Documentation**: KDoc comments for public APIs
+1. **Package Structure**: Follow Kotlin package conventions
+1. **Type Safety**: Use data classes and kotlinx.serialization
+1. **Coroutines**: All operations should be suspending functions
+1. **Error Handling**: Use Kotlin exceptions and validation
+1. **JSON Schemas**: Use `buildJsonObject` for tool schemas
+1. **Testing**: Include coroutine test utilities
+1. **Logging**: Use kotlin-logging for structured logging
+1. **Configuration**: Use data classes and environment variables
+1. **Documentation**: KDoc comments for public APIs
 
 ## Best Practices
 
@@ -416,12 +419,14 @@ When generating a Kotlin MCP server:
 ## Transport Options
 
 ### Stdio Transport
+
 ```kotlin
 val transport = StdioServerTransport()
 server.connect(transport)
 ```
 
 ### SSE Transport (Ktor)
+
 ```kotlin
 embeddedServer(Netty, port = 8080) {
     mcp {
@@ -439,7 +444,7 @@ kotlin {
     jvm()
     js(IR) { nodejs() }
     wasmJs()
-    
+
     sourceSets {
         commonMain.dependencies {
             implementation("io.modelcontextprotocol:kotlin-sdk:0.7.2")

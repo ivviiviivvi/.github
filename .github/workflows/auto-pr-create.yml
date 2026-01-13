@@ -3,10 +3,10 @@ name: Auto Create Pull Request
 on:
   push:
     branches:
-      - 'feature/**'
-      - 'bugfix/**'
-      - 'hotfix/**'
-      - 'release/**'
+      - feature/**
+      - bugfix/**
+      - hotfix/**
+      - release/**
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -2,14 +2,6 @@
   "name": "Dependency Updates",
   "description": "Automated dependency update workflow with PR creation",
   "iconName": "package",
-  "categories": [
-    "Automation",
-    "Dependencies"
-  ],
-  "filePatterns": [
-    "package.json$",
-    "requirements.txt$",
-    "go.mod$",
-    "Gemfile$"
-  ]
+  "categories": ["Automation", "Dependencies"],
+  "filePatterns": ["package.json$", "requirements.txt$", "go.mod$", "Gemfile$"]
 }

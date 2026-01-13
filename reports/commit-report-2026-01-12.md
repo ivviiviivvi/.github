@@ -5,13 +5,17 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 33 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
      28 2026-01-09
       5 2026-01-11
@@ -19,6 +23,7 @@
 ```
 
 ### Recent Commits
+
 ```
 27ecd4c - Copilot, 12 hours ago : fix: use python heredoc in orchestrator workflow (#206)
 9c4a3fb - Copilot, 13 hours ago : Remove pip cache from reconcile-deployments workflow (#201)

@@ -1,20 +1,21 @@
 # CLAUDE.md - AI Assistant Guide for .github Repository
 
-> **Comprehensive guide for AI assistants working with the ivviiviivvi organization's .github repository**
+> **Comprehensive guide for AI assistants working with the ivviiviivvi
+> organization's .github repository**
 
 ## Table of Contents
 
 1. [Repository Overview](#repository-overview)
-2. [Codebase Structure](#codebase-structure)
-3. [Development Workflows](#development-workflows)
-4. [Commit Conventions](#commit-conventions)
-5. [Pull Request Process](#pull-request-process)
-6. [GitHub Copilot Customizations](#github-copilot-customizations)
-7. [Automation & CI/CD](#automation--cicd)
-8. [Security & Compliance](#security--compliance)
-9. [Key Conventions](#key-conventions)
-10. [AI Assistant Guidelines](#ai-assistant-guidelines)
-11. [Common Tasks](#common-tasks)
+1. [Codebase Structure](#codebase-structure)
+1. [Development Workflows](#development-workflows)
+1. [Commit Conventions](#commit-conventions)
+1. [Pull Request Process](#pull-request-process)
+1. [GitHub Copilot Customizations](#github-copilot-customizations)
+1. [Automation & CI/CD](#automation--cicd)
+1. [Security & Compliance](#security--compliance)
+1. [Key Conventions](#key-conventions)
+1. [AI Assistant Guidelines](#ai-assistant-guidelines)
+1. [Common Tasks](#common-tasks)
 
 ---
 
@@ -22,24 +23,32 @@
 
 ### Purpose
 
-This is the **organization-level .github repository** for ivviiviivvi. It serves as the central hub for:
+This is the **organization-level .github repository** for ivviiviivvi. It serves
+as the central hub for:
 
-- **Default community health files** that apply to all repositories in the organization
+- **Default community health files** that apply to all repositories in the
+  organization
 - **Standardized templates** for issues and pull requests
 - **Reusable workflow templates** for CI/CD and automation
 - **Organization-wide configuration** and documentation standards
-- **GitHub Copilot customizations** (300+ agents, instructions, prompts, chatmodes, collections)
+- **GitHub Copilot customizations** (300+ agents, instructions, prompts,
+  chatmodes, collections)
 - **Living Document System** - AI-driven governance and management protocols
 
-When a repository in the organization doesn't have its own community health file, GitHub automatically uses the defaults from this repository.
+When a repository in the organization doesn't have its own community health
+file, GitHub automatically uses the defaults from this repository.
 
 ### Key Principles
 
 - **Openness**: Transparent development and documentation
-- **Automation-First**: 59 active workflows plus 14 reusable templates covering all aspects of development
-- **Security-by-Default**: Multi-layered security scanning (CodeQL, Semgrep, dependency review)
-- **AI-Driven**: Deep integration with AI tools (Claude, GitHub Copilot, OpenAI, Gemini, Grok)
-- **Community-Focused**: Welcoming to contributors with clear guidelines and templates
+- **Automation-First**: 59 active workflows plus 14 reusable templates covering
+  all aspects of development
+- **Security-by-Default**: Multi-layered security scanning (CodeQL, Semgrep,
+  dependency review)
+- **AI-Driven**: Deep integration with AI tools (Claude, GitHub Copilot, OpenAI,
+  Gemini, Grok)
+- **Community-Focused**: Welcoming to contributors with clear guidelines and
+  templates
 - **Quality-Enforced**: Automated quality checks on all PRs
 
 ---
@@ -235,34 +244,35 @@ main (production)
    - All checks must pass
    - Signed commits required
 
-2. **`develop`** - Integration branch
+1. **`develop`** - Integration branch
 
    - High protection level
    - Auto-deploys to staging
    - Merges from feature branches
 
-3. **`feature/*`** - New features or enhancements
+1. **`feature/*`** - New features or enhancements
 
    - Naming: `feature/short-description` or `feature/TICKET-123-description`
    - Base: `develop`
    - Merge to: `develop`
    - Delete after merging
 
-4. **`release/*`** - Prepare for production
+1. **`release/*`** - Prepare for production
 
    - Naming: `release/v1.2.0`
    - Base: `develop`
    - Merge to: Both `main` and `develop`
    - Only version bumps, final testing, bug fixes
 
-5. **`hotfix/*`** - Urgent production fixes
+1. **`hotfix/*`** - Urgent production fixes
 
    - Naming: `hotfix/critical-fix-description`
    - Base: `main`
    - Merge to: Both `main` and `develop`
    - Highest priority
 
-6. **`bugfix/*`** - Non-critical bug fixes
+1. **`bugfix/*`** - Non-critical bug fixes
+
    - Naming: `bugfix/fix-login-error`
    - Base: `develop`
    - Merge to: `develop`
@@ -347,7 +357,8 @@ Weekly reports are auto-generated every Monday and stored in `reports/`.
 
 ### PR Quality Checks
 
-All PRs must pass automated quality checks defined in `.github/workflows/pr-quality-checks.yml`:
+All PRs must pass automated quality checks defined in
+`.github/workflows/pr-quality-checks.yml`:
 
 #### 1. Conventional Commit Title
 
@@ -394,7 +405,7 @@ PRs are automatically labeled based on:
 
 **By Size**:
 
-- `size/XS` - <10 lines
+- `size/XS` - \<10 lines
 - `size/S` - 10-99 lines
 - `size/M` - 100-499 lines
 - `size/L` - 500-999 lines
@@ -424,7 +435,8 @@ Use specialized templates via `?template=<name>.md`:
 
 ## GitHub Copilot Customizations
 
-This repository includes **300+ GitHub Copilot customizations** from [github/awesome-copilot](https://github.com/github/awesome-copilot).
+This repository includes **300+ GitHub Copilot customizations** from
+[github/awesome-copilot](https://github.com/github/awesome-copilot).
 
 ### 1. Agents (14 files)
 
@@ -448,9 +460,11 @@ mcp-servers:
 
 **Key Agents**:
 
-- **Terraform Agent** (`terraform.agent.md`) - IaC automation with Terraform MCP server integration
+- **Terraform Agent** (`terraform.agent.md`) - IaC automation with Terraform MCP
+  server integration
 - **C# Expert** (`CSharpExpert.agent.md`) - .NET development specialist
-- **Dynatrace Expert** (`dynatrace-expert.agent.md`) - Observability and monitoring
+- **Dynatrace Expert** (`dynatrace-expert.agent.md`) - Observability and
+  monitoring
 - **PagerDuty Incident Responder** - Incident management automation
 - **LaunchDarkly Flag Cleanup** - Feature flag lifecycle management
 
@@ -472,9 +486,12 @@ applyTo: "**/*.ts, **/*.html"
 
 **Key Instructions**:
 
-- **Angular** (`angular.instructions.md`) - Angular 19+ with Signals, standalone components, OnPush strategy
-- **Terraform** (`terraform-azure.instructions.md`) - 2-space indentation, alphabetical vars, HCP backend
-- **Python FastAPI** (`python-fastapi.instructions.md`) - Type hints, async/await, best practices
+- **Angular** (`angular.instructions.md`) - Angular 19+ with Signals, standalone
+  components, OnPush strategy
+- **Terraform** (`terraform-azure.instructions.md`) - 2-space indentation,
+  alphabetical vars, HCP backend
+- **Python FastAPI** (`python-fastapi.instructions.md`) - Type hints,
+  async/await, best practices
 - **Bicep** (`bicep-code-best-practices.md`) - Azure IaC standards
 - **React** - Modern hooks, TypeScript, component patterns
 
@@ -539,14 +556,16 @@ model: "claude-sonnet-4.5" # Strongly encouraged
 **Key Chat Modes**:
 
 - **Architecture**:
-  - `azure-principal-architect.md` - WAF-based architecture with MCP docs integration
+  - `azure-principal-architect.md` - WAF-based architecture with MCP docs
+    integration
   - `solution-architect.md` - System design expert
 - **Development**:
   - `expert-rust-software-engineer.md` - Rust expertise
   - `expert-react-software-engineer.md` - React/TypeScript expertise
   - `expert-dotnet-software-engineer.md` - .NET/C# expertise
 - **Specialized**:
-  - `Ultimate-Transparent-Thinking-Beast-Mode.md` - Extended reasoning with full transparency
+  - `Ultimate-Transparent-Thinking-Beast-Mode.md` - Extended reasoning with full
+    transparency
   - `power-bi-dax-expert.md` - BI development
   - `postgresql-dba.md`, `ms-sql-dba.md` - Database specialists
 - **Maintenance**:
@@ -555,7 +574,8 @@ model: "claude-sonnet-4.5" # Strongly encouraged
 
 **Documentation**: `docs/README.chatmodes.md` (81KB)
 
-**File Naming Convention**: `lowercase-with-hyphens.chatmode.md` or `PascalCase.md`
+**File Naming Convention**: `lowercase-with-hyphens.chatmode.md` or
+`PascalCase.md`
 
 ### 5. Collections (27 collections, 55 files)
 
@@ -564,7 +584,8 @@ model: "claude-sonnet-4.5" # Strongly encouraged
 **Key Collections**:
 
 - **Cloud**:
-  - `azure-cloud-development.yml` - IaC (Bicep/Terraform), Functions, Logic Apps, Architecture
+  - `azure-cloud-development.yml` - IaC (Bicep/Terraform), Functions, Logic
+    Apps, Architecture
 - **MCP Development**:
   - `typescript-mcp-development.yml`, `python-mcp-development.yml`
   - Language-specific: Go, Rust, C#, Java, Kotlin, Swift, Ruby, PHP, Clojure
@@ -623,7 +644,9 @@ Applied during code reviews, checks for:
 
 **Location**: `chaos-zone/` directory
 
-**Purpose**: Temporary holding area for unorganized, unstructured, or work-in-progress content. Think of it as the repository's "inbox" for quickly uploading content without worrying about structure.
+**Purpose**: Temporary holding area for unorganized, unstructured, or
+work-in-progress content. Think of it as the repository's "inbox" for quickly
+uploading content without worrying about structure.
 
 **Structure**:
 
@@ -654,7 +677,9 @@ chaos-zone/
 - ❌ Don't upload sensitive information (API keys, passwords, etc.)
 - ❌ Don't store large binary files (use Git LFS or external storage)
 
-**Maintenance**: The chaos zone should be reviewed monthly to move relevant content to appropriate directories, archive outdated material, and extract useful insights into proper documentation.
+**Maintenance**: The chaos zone should be reviewed monthly to move relevant
+content to appropriate directories, archive outdated material, and extract
+useful insights into proper documentation.
 
 ---
 
@@ -671,7 +696,7 @@ chaos-zone/
    - **Output**: SARIF to GitHub Security tab
    - **Queries**: Security and quality
 
-2. **Semgrep** (`semgrep.yml`)
+1. **Semgrep** (`semgrep.yml`)
 
    - **Jobs**: 4 parallel jobs
      - Security audit (OWASP Top 10, CWE Top 25)
@@ -681,26 +706,27 @@ chaos-zone/
    - **Custom Rules**: `.semgrep/rules.yml` (1511 lines)
    - **Output**: SARIF, inline PR comments
 
-3. **Dependency Review** (`dependency-review.yml`)
+1. **Dependency Review** (`dependency-review.yml`)
 
    - **Triggers**: Pull requests
    - **Checks**: Vulnerabilities, license compliance
    - **Blocks**: GPL-3.0, AGPL-3.0
    - **Allows**: MIT, Apache-2.0, BSD
 
-4. **SBOM Generation** (`sbom-generation.yml`)
+1. **SBOM Generation** (`sbom-generation.yml`)
 
    - **Formats**: SPDX, CycloneDX
    - **Purpose**: Supply chain transparency
 
-5. **Dependency Updates** (`dependabot.yml`)
+1. **Dependency Updates** (`dependabot.yml`)
 
    - **Ecosystems**: npm, pip, GitHub Actions, Docker, Go, Composer
    - **Schedule**: Weekly Monday 3 AM UTC
    - **Limits**: 5 PRs max per ecosystem
    - **Auto-labeling**: `dependencies` tag
 
-6. **Renovate** (`renovate.json`)
+1. **Renovate** (`renovate.json`)
+
    - **Features**: Dependency dashboard, smart grouping
    - **Schedule**: Before 4 AM Monday
    - **Limits**: 10 concurrent PRs, 5/hour
@@ -713,38 +739,38 @@ chaos-zone/
    - Path-based labels: `frontend`, `backend`, `docs`, `ci/cd`, `security`
    - Size labels: `size/XS`, `size/S`, `size/M`, `size/L`, `size/XL`
 
-2. **Auto-Assign** (`auto-assign.yml`)
+1. **Auto-Assign** (`auto-assign.yml`)
 
    - Assigns PR to author
    - Requests reviews from CODEOWNERS
    - Team-based reviewers
 
-3. **PR Quality Checks** (`pr-quality-checks.yml`)
+1. **PR Quality Checks** (`pr-quality-checks.yml`)
 
    - Conventional commit title
    - Description length >50 characters
    - Linked issues check
    - Checklist completion
 
-4. **Link Checker** (`link-checker.yml`)
+1. **Link Checker** (`link-checker.yml`)
 
    - Weekly validation of markdown links
    - Runs on PRs modifying documentation
 
-5. **Community Health** (`community-health.yml`)
+1. **Community Health** (`community-health.yml`)
 
    - Stale issue management
    - 60 days inactive → 7 days warning → close
    - Labels: `stale`, `no-issue-activity`
 
-6. **Welcome Bot** (`welcome.yml`)
+1. **Welcome Bot** (`welcome.yml`)
 
    - Greets first-time contributors
    - Links to CONTRIBUTING.md, CODE_OF_CONDUCT.md
 
-7. **Code Coverage** - Tracks test coverage metrics
+1. **Code Coverage** - Tracks test coverage metrics
 
-8. **Accessibility Testing** - WCAG 2.1 compliance validation
+1. **Accessibility Testing** - WCAG 2.1 compliance validation
 
 #### AI & Code Intelligence (9 workflows)
 
@@ -754,42 +780,43 @@ chaos-zone/
    - Analyzes: security, performance, best practices
    - Posts review comments
 
-2. **OpenAI Workflow** (`openai_workflow.yml`)
+1. **OpenAI Workflow** (`openai_workflow.yml`)
 
    - OpenAI API integration for code analysis
    - Configurable for various AI tasks
 
-3. **Gemini Workflow** (`gemini_workflow.yml`)
+1. **Gemini Workflow** (`gemini_workflow.yml`)
 
    - Google Gemini integration
    - Multi-modal AI capabilities
 
-4. **Grok Workflow** (`grok_workflow.yml`)
+1. **Grok Workflow** (`grok_workflow.yml`)
 
    - xAI Grok integration
    - Real-time AI assistance
 
-5. **Perplexity Workflow** (`perplexity_workflow.yml`)
+1. **Perplexity Workflow** (`perplexity_workflow.yml`)
 
    - Perplexity AI integration
    - Research and code understanding
 
-6. **Jules** (`jules.yml`)
+1. **Jules** (`jules.yml`)
 
    - AI-powered development assistant
    - Automated task execution
 
-7. **Orchestrator** (`orchestrator.yml`)
+1. **Orchestrator** (`orchestrator.yml`)
 
    - Coordinates multi-AI workflows
    - Task distribution and management
 
-8. **Process Queue** (`process_queue.yml`)
+1. **Process Queue** (`process_queue.yml`)
 
    - Async task processing
    - Quota management integration
 
-9. **CI Advanced** (`ci-advanced.yml`)
+1. **CI Advanced** (`ci-advanced.yml`)
+
    - Advanced continuous integration
    - AI-enhanced build and test automation
 
@@ -801,22 +828,22 @@ chaos-zone/
    - Generates statistics by author
    - Tracks activity patterns
 
-2. **Weekly Commit Report** (`weekly-commit-report.yml`)
+1. **Weekly Commit Report** (`weekly-commit-report.yml`)
 
    - Auto-generated every Monday
    - 7-day activity summary
    - Stored in `reports/commit-report-YYYY-MM-DD.md`
 
-3. **Repository Metrics** (`repo-metrics.yml`)
+1. **Repository Metrics** (`repo-metrics.yml`)
 
    - Monthly analytics
    - Issue/PR timing
    - Contributor stats
    - Language breakdown
 
-4. **Performance Benchmarking** - Performance regression detection
+1. **Performance Benchmarking** - Performance regression detection
 
-5. **Mutation Testing** - Test effectiveness validation
+1. **Mutation Testing** - Test effectiveness validation
 
 #### Release Management (3 workflows)
 
@@ -827,12 +854,13 @@ chaos-zone/
    - Version bumping
    - GitHub release creation
 
-2. **Version Bump** (`version-bump.yml`)
+1. **Version Bump** (`version-bump.yml`)
 
    - Supports: major.minor.patch
    - Ecosystems: npm, Python, Rust
 
-3. **Release** (`release.yml`)
+1. **Release** (`release.yml`)
+
    - Changelog generation
    - Asset uploads
    - Release notes
@@ -844,17 +872,18 @@ chaos-zone/
    - Coordinates multi-AI workflows
    - Manages task distribution across AI providers
 
-2. **Process Queue** (`process_queue.yml`)
+1. **Process Queue** (`process_queue.yml`)
 
    - Async task processing with quota management
    - Handles background job execution
 
-3. **Reset Quotas** (`reset_quotas.yml`)
+1. **Reset Quotas** (`reset_quotas.yml`)
 
    - Automated quota reset on schedule
    - Manages API rate limits
 
-4. **Manual Reset** (`manual_reset.yml`)
+1. **Manual Reset** (`manual_reset.yml`)
+
    - Manual quota reset trigger
    - Emergency quota management
 
@@ -870,20 +899,21 @@ chaos-zone/
    - Semgrep with custom rules (1511 lines)
    - Scheduled and event-driven
 
-2. **Dependency Security**:
+1. **Dependency Security**:
 
    - Dependency review on PRs
    - Dependabot weekly updates
    - Renovate advanced management
    - License compliance enforcement
 
-3. **Secrets Detection**:
+1. **Secrets Detection**:
 
    - Semgrep secrets scanning
    - GitHub secret scanning (where enabled)
    - Pre-commit hooks
 
-4. **Supply Chain**:
+1. **Supply Chain**:
+
    - SBOM generation (SPDX, CycloneDX)
    - Supply chain analysis via Semgrep
    - Dependency provenance
@@ -899,10 +929,11 @@ chaos-zone/
 ### Security Best Practices
 
 1. **Never commit secrets** - Use GitHub Secrets or environment variables
-2. **Review dependency updates** - Don't auto-merge security updates without review
-3. **Respond to security alerts** - Within 24-48 hours
-4. **Keep dependencies updated** - Weekly reviews via Dependabot/Renovate
-5. **Enable branch protection** - On all production and integration branches
+1. **Review dependency updates** - Don't auto-merge security updates without
+   review
+1. **Respond to security alerts** - Within 24-48 hours
+1. **Keep dependencies updated** - Weekly reviews via Dependabot/Renovate
+1. **Enable branch protection** - On all production and integration branches
 
 ---
 
@@ -956,13 +987,14 @@ chaos-zone/
    - Contributing section
    - License
 
-2. **Code Comments**:
+1. **Code Comments**:
 
    - Use docstrings/JSDoc for functions
    - Explain WHY, not WHAT
    - Keep comments up-to-date
 
-3. **Markdown**:
+1. **Markdown**:
+
    - Use ATX-style headers (`#` not `===`)
    - Fenced code blocks with language
    - Reference-style links for readability
@@ -975,39 +1007,42 @@ chaos-zone/
 
 #### DO:
 
-1. **Use Conventional Commits** - ALWAYS format commits as `type(scope): description`
+1. **Use Conventional Commits** - ALWAYS format commits as
+   `type(scope): description`
 
-2. **Leverage Existing Workflows** - Don't recreate automation that already exists
+1. **Leverage Existing Workflows** - Don't recreate automation that already
+   exists
 
-3. **Follow Established Patterns**:
+1. **Follow Established Patterns**:
 
    - Use appropriate Copilot agents for specialized tasks
    - Apply instructions based on file types
    - Reference existing prompts for common tasks
 
-4. **Respect Security Constraints**:
+1. **Respect Security Constraints**:
 
    - Never hardcode secrets
    - Don't bypass security checks
    - Always run security scans
 
-5. **Update Documentation**:
+1. **Update Documentation**:
 
    - When adding features, update relevant docs
    - Add new Copilot customizations to README files
    - Keep CHANGELOG.md current
 
-6. **Use Auto-Labeling**:
+1. **Use Auto-Labeling**:
 
    - Understand that PRs will be auto-labeled
    - Don't manually add labels that auto-labeler handles
 
-7. **Reference Issues**:
+1. **Reference Issues**:
 
    - Link PRs to issues with `Closes #123`, `Fixes #456`
    - Provide context in PR descriptions
 
-8. **Test Thoroughly**:
+1. **Test Thoroughly**:
+
    - Run all checks locally before pushing
    - Verify CI passes before requesting review
 
@@ -1019,24 +1054,25 @@ chaos-zone/
    - Don't push without running tests
    - Don't merge with failing CI
 
-2. **Don't Create Duplicate Automation**:
+1. **Don't Create Duplicate Automation**:
 
    - Check existing workflows first
    - Reuse workflow templates where possible
 
-3. **Don't Ignore Security Alerts**:
+1. **Don't Ignore Security Alerts**:
 
    - Always address CodeQL findings
    - Review Semgrep warnings
    - Update vulnerable dependencies
 
-4. **Don't Commit Generated Files** (unless necessary):
+1. **Don't Commit Generated Files** (unless necessary):
 
    - Build artifacts
    - Lock files (if not needed)
    - IDE-specific files
 
-5. **Don't Use Non-Standard Formats**:
+1. **Don't Use Non-Standard Formats**:
+
    - Follow conventional commits strictly
    - Use established branch naming
    - Match existing code style
@@ -1049,38 +1085,39 @@ chaos-zone/
    - Check existing implementations
    - Identify applicable Copilot customizations
 
-2. **Plan the Changes**:
+1. **Plan the Changes**:
 
    - Use TodoWrite tool to track tasks
    - Break down complex changes
    - Identify potential issues
 
-3. **Implement**:
+1. **Implement**:
 
    - Follow established conventions
    - Use appropriate tools and agents
    - Write clean, documented code
 
-4. **Test**:
+1. **Test**:
 
    - Run local tests
    - Verify security scans pass
    - Check documentation builds
 
-5. **Commit**:
+1. **Commit**:
 
    - Use conventional commit format
    - Write descriptive messages
    - Reference related issues
 
-6. **Create PR**:
+1. **Create PR**:
 
    - Use appropriate template
    - Write clear description
    - Link to issues
    - Complete checklist
 
-7. **Respond to Feedback**:
+1. **Respond to Feedback**:
+
    - Address review comments
    - Update based on CI failures
    - Keep PR up-to-date with base branch
@@ -1327,7 +1364,8 @@ git push
 
 #### Using an Agent:
 
-Agents are configured in individual repositories that need them. See `docs/README.agents.md` for setup instructions.
+Agents are configured in individual repositories that need them. See
+`docs/README.agents.md` for setup instructions.
 
 ---
 
@@ -1398,26 +1436,30 @@ gh repo view --json name,description,stargazerCount,forkCount
 
 ## Summary
 
-This `.github` repository represents a **comprehensive reference implementation** for organization-level GitHub management with:
+This `.github` repository represents a **comprehensive reference
+implementation** for organization-level GitHub management with:
 
 - **300+ AI customizations** for GitHub Copilot
-- **59 automated workflows** plus 14 reusable templates covering security, quality, metrics, and releases
-- **Multi-layered security** scanning with CodeQL, Semgrep, and dependency review
+- **59 automated workflows** plus 14 reusable templates covering security,
+  quality, metrics, and releases
+- **Multi-layered security** scanning with CodeQL, Semgrep, and dependency
+  review
 - **Comprehensive documentation** (300KB+ of Copilot docs alone)
 - **Strict quality enforcement** via automated PR checks
 - **Conventional commits** strictly enforced
 - **Community-focused** with templates and welcoming automation
-- **AI-first development** with Claude, GitHub Copilot, and multiple AI providers
+- **AI-first development** with Claude, GitHub Copilot, and multiple AI
+  providers
 
 ### Key Takeaways for AI Assistants
 
 1. **Always use conventional commits** - This is strictly enforced
-2. **Leverage existing automation** - Don't recreate what exists
-3. **Follow security best practices** - Multiple layers of scanning
-4. **Use Copilot customizations** - 300+ agents, instructions, prompts, modes
-5. **Document everything** - Update docs with every change
-6. **Test thoroughly** - All CI checks must pass
-7. **Respect conventions** - File naming, code organization, branching
+1. **Leverage existing automation** - Don't recreate what exists
+1. **Follow security best practices** - Multiple layers of scanning
+1. **Use Copilot customizations** - 300+ agents, instructions, prompts, modes
+1. **Document everything** - Update docs with every change
+1. **Test thoroughly** - All CI checks must pass
+1. **Respect conventions** - File naming, code organization, branching
 
 ### Getting Help
 
@@ -1429,6 +1471,5 @@ This `.github` repository represents a **comprehensive reference implementation*
 
 ---
 
-**Last Updated**: 2025-11-18
-**Maintained by**: ivviiviivvi organization
+**Last Updated**: 2025-11-18 **Maintained by**: ivviiviivvi organization
 **License**: MIT

@@ -3,13 +3,13 @@ description: Create a task or work item
 title: "[Task] "
 labels: ["task"]
 assignees:
-  - 
+  -
 body:
   - type: markdown
     attributes:
       value: |
         Use this template to create a task or work item for the project.
-  
+
   - type: textarea
     id: description
     attributes:
@@ -18,7 +18,7 @@ body:
       placeholder: Describe what needs to be done and why
     validations:
       required: true
-  
+
   - type: textarea
     id: acceptance-criteria
     attributes:
@@ -30,7 +30,7 @@ body:
         - [ ] Criterion 3
     validations:
       required: true
-  
+
   - type: dropdown
     id: priority
     attributes:
@@ -43,7 +43,7 @@ body:
         - Critical
     validations:
       required: false
-  
+
   - type: textarea
     id: dependencies
     attributes:
@@ -55,7 +55,7 @@ body:
         - Requires approval from...
     validations:
       required: false
-  
+
   - type: input
     id: due-date
     attributes:
@@ -64,7 +64,7 @@ body:
       placeholder: YYYY-MM-DD
     validations:
       required: false
-  
+
   - type: dropdown
     id: complexity
     attributes:
@@ -77,7 +77,7 @@ body:
         - Unknown
     validations:
       required: false
-  
+
   - type: textarea
     id: additional-context
     attributes:
@@ -85,7 +85,7 @@ body:
       description: Add any other relevant information about this task
     validations:
       required: false
-  
+
   - type: checkboxes
     id: terms
     attributes:

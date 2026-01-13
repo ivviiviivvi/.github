@@ -5,9 +5,9 @@ body:
     attributes:
       value: |
         ## 📚 Best Practices Discussion
-        
+
         Discuss, share, and improve best practices for GitHub, development workflows, and community management.
-        
+
         **Perfect for:**
         - Proposing new best practices
         - Discussing existing practices
@@ -58,7 +58,7 @@ body:
       description: What are you proposing or asking about?
       placeholder: |
         Describe your proposal, question, or point of discussion...
-        
+
         If proposing a practice, include:
         - What should be done
         - Why it should be done this way

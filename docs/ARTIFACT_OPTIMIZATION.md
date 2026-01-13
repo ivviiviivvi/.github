@@ -1,10 +1,12 @@
 # Artifact Optimization Guide
 
-This document explains the artifact optimization strategies implemented across workflows.
+This document explains the artifact optimization strategies implemented across
+workflows.
 
 ## Problem Statement
 
 GitHub Actions artifacts consume storage and have associated costs:
+
 - **Storage limit**: 500MB for free tier, 50GB for teams
 - **Cost**: $0.25 per GB/month for additional storage
 - **Default retention**: 90 days (excessive for most use cases)
@@ -15,24 +17,26 @@ GitHub Actions artifacts consume storage and have associated costs:
 
 Different artifact types need different retention periods:
 
-| Artifact Type | Retention | Rationale |
-|---------------|-----------|-----------|
-| **Test Results** | 7 days | Quick debugging, not needed long-term |
-| **Coverage Reports** | 14 days | Trend analysis, comparison |
-| **Build Artifacts** | 30 days | Deployment rollback capability |
-| **Security Scans** | 30 days | Compliance, audit trails |
-| **Metrics/Logs** | 7 days | Recent debugging only |
-| **Documentation** | 90 days | Long-term reference |
-| **Release Assets** | 365 days | Permanent record |
+| Artifact Type        | Retention | Rationale                             |
+| -------------------- | --------- | ------------------------------------- |
+| **Test Results**     | 7 days    | Quick debugging, not needed long-term |
+| **Coverage Reports** | 14 days   | Trend analysis, comparison            |
+| **Build Artifacts**  | 30 days   | Deployment rollback capability        |
+| **Security Scans**   | 30 days   | Compliance, audit trails              |
+| **Metrics/Logs**     | 7 days    | Recent debugging only                 |
+| **Documentation**    | 90 days   | Long-term reference                   |
+| **Release Assets**   | 365 days  | Permanent record                      |
 
 ### 2. Size Optimization
 
 **Compression**:
+
 - Use `tar.gz` or `zip` for multi-file artifacts
 - Exclude unnecessary files (node_modules, .git, etc.)
 - Use `.gitignore` patterns
 
 **Selective Upload**:
+
 - Only upload on failure (when needed for debugging)
 - Skip artifacts for scheduled/automated runs
 - Use conditional artifact upload
@@ -48,10 +52,12 @@ name: test-results-${{ github.run_number }}-${{ github.sha }}
 ### 4. Cleanup Strategy
 
 **Auto-cleanup**:
+
 - Old artifacts auto-delete after retention period
 - No manual intervention needed
 
 **Manual cleanup** (if needed):
+
 ```bash
 # List artifacts
 gh api repos/{owner}/{repo}/actions/artifacts
@@ -66,7 +72,7 @@ gh api -X DELETE repos/{owner}/{repo}/actions/artifacts/{artifact_id}
 
 ```yaml
 - name: Upload test results
-  if: failure()  # Only on failure
+  if: failure() # Only on failure
   uses: actions/upload-artifact@v4
   with:
     name: test-results-${{ github.run_number }}
@@ -85,7 +91,7 @@ gh api -X DELETE repos/{owner}/{repo}/actions/artifacts/{artifact_id}
     name: build-${{ github.sha }}
     path: dist/
     retention-days: 30
-    compression-level: 9  # Maximum compression
+    compression-level: 9 # Maximum compression
 ```
 
 ### Security Scans (30 days)
@@ -116,6 +122,7 @@ gh api -X DELETE repos/{owner}/{repo}/actions/artifacts/{artifact_id}
 ## Storage Savings Calculation
 
 **Before Optimization**:
+
 - Average artifact size: 50MB
 - Number of workflows with artifacts: 24
 - Runs per day: 20
@@ -124,6 +131,7 @@ gh api -X DELETE repos/{owner}/{repo}/actions/artifacts/{artifact_id}
 - Cost: 2,160 GB × $0.25 = **$540/month**
 
 **After Optimization**:
+
 - Average retention: 14 days (optimized)
 - Conditional uploads reduce volume by 50%
 - Storage: 50MB × 24 × 20 × 14 × 0.5 = **168 GB**
@@ -146,31 +154,35 @@ gh api /repos/{owner}/{repo}/actions/artifacts --paginate
 ## Best Practices
 
 1. ✅ **Always set explicit retention-days** - Don't rely on default 90 days
-2. ✅ **Use conditional upload** - `if: failure()` for debug artifacts
-3. ✅ **Compress large artifacts** - Use `compression-level: 9`
-4. ✅ **Use descriptive names** - Include run number or SHA
-5. ✅ **Clean up regularly** - Delete old artifacts if needed
-6. ✅ **Monitor storage** - Track usage trends
-7. ✅ **Document retention** - Explain why each retention period was chosen
+1. ✅ **Use conditional upload** - `if: failure()` for debug artifacts
+1. ✅ **Compress large artifacts** - Use `compression-level: 9`
+1. ✅ **Use descriptive names** - Include run number or SHA
+1. ✅ **Clean up regularly** - Delete old artifacts if needed
+1. ✅ **Monitor storage** - Track usage trends
+1. ✅ **Document retention** - Explain why each retention period was chosen
 
 ## Workflow-Specific Recommendations
 
 ### High-Frequency Workflows (run > 10x/day)
+
 - Minimize artifact uploads
 - Use 7-day retention max
 - Upload only on failure
 
 ### Security Workflows
+
 - Keep SARIF files for compliance
 - 30-day retention recommended
 - Always upload to GitHub Security tab
 
 ### Deployment Workflows
+
 - Keep build artifacts for rollback
 - 30-day retention recommended
 - Consider external storage for releases
 
 ### Metrics/Monitoring Workflows
+
 - 7-day retention sufficient
 - Auto-commit results to repo instead
 - Artifacts only for debugging

@@ -184,16 +184,16 @@ fi
 # Step 5: Add devcontainer configuration
 if [ "$DRY_RUN" = false ]; then
   echo -e "${BLUE}🐳 Adding DevContainer configuration...${NC}"
-  
+
   TEMPLATE_DIR=".devcontainer/templates/$TEMPLATE"
   if [ ! -d "$TEMPLATE_DIR" ]; then
     echo -e "${RED}Error: Template not found: $TEMPLATE${NC}"
     exit 1
   fi
-  
+
   mkdir -p "$TARGET_DIR/.devcontainer"
   cp -r "$TEMPLATE_DIR"/* "$TARGET_DIR/.devcontainer/"
-  
+
   echo -e "${GREEN}✅ DevContainer configuration added${NC}"
 else
   echo -e "${BLUE}🐳 Would add DevContainer configuration from template: $TEMPLATE${NC}"
@@ -213,7 +213,7 @@ fi
 # Step 7: Update configurations
 if [ "$DRY_RUN" = false ]; then
   echo -e "${BLUE}⚙️  Updating configurations...${NC}"
-  
+
   # Update database URLs to use service names
   if [ -f "$TARGET_DIR/.env" ]; then
     sed -i 's/localhost:5432/postgres:5432/g' "$TARGET_DIR/.env"
@@ -229,7 +229,7 @@ fi
 # Step 8: Create migration guide
 if [ "$DRY_RUN" = false ]; then
   echo -e "${BLUE}📝 Creating migration guide...${NC}"
-  
+
   cat > "$TARGET_DIR/MIGRATION_GUIDE.md" <<EOF
 # Migration Guide
 
@@ -309,7 +309,7 @@ else
   echo "  2. Review MIGRATION_GUIDE.md"
   echo "  3. code ."
   echo "  4. Reopen in Container"
-  
+
   if [ "$BACKUP" = true ]; then
     echo ""
     echo "Backup available at: $BACKUP_NAME"

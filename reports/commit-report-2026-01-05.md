@@ -5,13 +5,17 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 36 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
      13 2025-12-29
      12 2025-12-31
@@ -22,6 +26,7 @@
 ```
 
 ### Recent Commits
+
 ```
 041c9f0 - Copilot, 2 days ago : Fix secret scanning workflow Python setup failure and add false positive management
 84f3737 - google-labs-jules[bot], 3 days ago : 🛡️ Sentinel: Fix command injection in reusable-api-retry workflow (#162)

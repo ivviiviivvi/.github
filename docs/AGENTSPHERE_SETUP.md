@@ -19,13 +19,16 @@
 
 ## What is AgentSphere?
 
-**AgentSphere** is a cloud-based sandbox environment that automatically deploys and hosts live demos of your applications. When you push code to your repository, AgentSphere:
+**AgentSphere** is a cloud-based sandbox environment that automatically deploys
+and hosts live demos of your applications. When you push code to your
+repository, AgentSphere:
 
-1. 🔍 Detects your application type (Node.js, Python, Vue, React, Java, Go, Ruby, .NET)
-2. 🚀 Deploys your app to a secure sandbox environment
-3. 🔗 Generates a unique demo URL
-4. 📝 Updates your README with a "Live Demo" badge
-5. 🔄 Keeps the demo synchronized with your latest code
+1. 🔍 Detects your application type (Node.js, Python, Vue, React, Java, Go, Ruby,
+   .NET)
+1. 🚀 Deploys your app to a secure sandbox environment
+1. 🔗 Generates a unique demo URL
+1. 📝 Updates your README with a "Live Demo" badge
+1. 🔄 Keeps the demo synchronized with your latest code
 
 ---
 
@@ -77,16 +80,16 @@
 
 ### Supported Application Types
 
-| Type | Detection | Startup Commands |
-|------|-----------|------------------|
-| **Node.js** | `package.json` | `npm start`, `npm run dev`, `npm run serve` |
-| **Python** | `requirements.txt`, `Pipfile` | `python app.py`, `flask run`, `uvicorn app:app` |
-| **Vue.js** | `vue.config.js` | `npm run serve`, `npm run dev` |
-| **React** | `src/App.jsx`, `src/App.tsx` | `npm start`, `npm run dev` |
-| **Java** | `pom.xml`, `build.gradle` | `java -jar`, `gradle bootRun` |
-| **Go** | `go.mod`, `main.go` | `go run main.go`, `./main` |
-| **Ruby** | `Gemfile` | `bundle exec rails server`, `puma` |
-| **.NET** | `*.csproj`, `*.sln` | `dotnet run` |
+| Type        | Detection                     | Startup Commands                                |
+| ----------- | ----------------------------- | ----------------------------------------------- |
+| **Node.js** | `package.json`                | `npm start`, `npm run dev`, `npm run serve`     |
+| **Python**  | `requirements.txt`, `Pipfile` | `python app.py`, `flask run`, `uvicorn app:app` |
+| **Vue.js**  | `vue.config.js`               | `npm run serve`, `npm run dev`                  |
+| **React**   | `src/App.jsx`, `src/App.tsx`  | `npm start`, `npm run dev`                      |
+| **Java**    | `pom.xml`, `build.gradle`     | `java -jar`, `gradle bootRun`                   |
+| **Go**      | `go.mod`, `main.go`           | `go run main.go`, `./main`                      |
+| **Ruby**    | `Gemfile`                     | `bundle exec rails server`, `puma`              |
+| **.NET**    | `*.csproj`, `*.sln`           | `dotnet run`                                    |
 
 ### Detection Logic
 
@@ -149,22 +152,22 @@ Create `.agentsphere.yml` in your repository root to override defaults:
 # .agentsphere.yml
 enabled: true
 
-startup_command: 'npm run custom-start'
-build_command: 'npm run custom-build'
+startup_command: "npm run custom-start"
+build_command: "npm run custom-build"
 port: 3000
 
 environment:
-  NODE_ENV: 'production'
-  API_URL: 'https://api.example.com'
-  CUSTOM_VAR: 'custom-value'
+  NODE_ENV: "production"
+  API_URL: "https://api.example.com"
+  CUSTOM_VAR: "custom-value"
 
 badge:
-  style: 'flat-square'
-  color: 'blue'
-  position: 'top'
+  style: "flat-square"
+  color: "blue"
+  position: "top"
 
 access:
-  visibility: 'private'
+  visibility: "private"
   require_auth: true
 ```
 
@@ -176,13 +179,13 @@ If auto-detection fails, specify a custom command:
 # Via GitHub Actions manual dispatch
 workflow_dispatch:
   inputs:
-    custom_command: 'python -m uvicorn main:app --host 0.0.0.0 --port 8000'
+    custom_command: "python -m uvicorn main:app --host 0.0.0.0 --port 8000"
 ```
 
 Or in `.agentsphere.yml`:
 
 ```yaml
-startup_command: 'bundle exec rails server -b 0.0.0.0'
+startup_command: "bundle exec rails server -b 0.0.0.0"
 ```
 
 ---
@@ -197,7 +200,8 @@ By default, demos are publicly accessible:
 Demo URL: https://demo-owner-repo.agentsphere.dev
 ```
 
-Share this URL with team members, stakeholders, clients, job recruiters, and open source contributors.
+Share this URL with team members, stakeholders, clients, job recruiters, and
+open source contributors.
 
 ### Private Demos
 
@@ -205,7 +209,7 @@ For private demos, configure access control:
 
 ```yaml
 access:
-  visibility: 'private'
+  visibility: "private"
   require_auth: true
 ```
 
@@ -218,29 +222,32 @@ access:
 **Problem**: Demo URL returns 502 or 503 error
 
 **Solutions**:
+
 1. Check workflow logs for deployment errors
-2. Verify startup command is correct
-3. Ensure all dependencies are installed
-4. Check port configuration matches application
+1. Verify startup command is correct
+1. Ensure all dependencies are installed
+1. Check port configuration matches application
 
 ### Wrong Application Type Detected
 
 **Problem**: Workflow detects wrong tech stack
 
 **Solutions**:
+
 1. Create `.agentsphere.yml` with explicit `app_type`
-2. Use manual workflow dispatch with custom command
-3. Add detection files (e.g., `package.json` for Node.js)
+1. Use manual workflow dispatch with custom command
+1. Add detection files (e.g., `package.json` for Node.js)
 
 ### Badge Not Appearing
 
 **Problem**: Pull request created but badge not in README
 
 **Solutions**:
+
 1. Check PR files for badge markdown
-2. Merge the PR to apply changes
-3. Verify README.md exists in repository
-4. Check badge position configuration
+1. Merge the PR to apply changes
+1. Verify README.md exists in repository
+1. Check badge position configuration
 
 ---
 
@@ -261,8 +268,8 @@ build_command: 'npm install --production'
 ```yaml
 # Use production mode
 environment:
-  NODE_ENV: 'production'
-  RAILS_ENV: 'production'
+  NODE_ENV: "production"
+  RAILS_ENV: "production"
 ```
 
 ---
@@ -310,5 +317,4 @@ Need help? Contact:
 
 ---
 
-**Last Updated**: 2025-12-21
-**Version**: 1.0.0
+**Last Updated**: 2025-12-21 **Version**: 1.0.0

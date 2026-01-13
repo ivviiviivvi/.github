@@ -1,13 +1,14 @@
 ---
-applyTo: ["*"]
-description: "Comprehensive best practices for adopting new Java 17 features since the release of Java 11."
----
+
+## applyTo: \["\*"\] description: "Comprehensive best practices for adopting new Java 17 features since the release of Java 11."
 
 # Java 11 to Java 17 Upgrade Guide
 
 ## Project Context
 
-This guide provides comprehensive GitHub Copilot instructions for upgrading Java projects from JDK 11 to JDK 17, covering major language features, API changes, and migration patterns based on 47 JEPs integrated between these versions.
+This guide provides comprehensive GitHub Copilot instructions for upgrading Java
+projects from JDK 11 to JDK 17, covering major language features, API changes,
+and migration patterns based on 47 JEPs integrated between these versions.
 
 ## Language Features and API Changes
 
@@ -690,7 +691,8 @@ java -XX:SharedArchiveFile=myapp.jsa -cp myapp.jar com.example.Main
    - Update CI/CD pipelines
    - Verify dependency compatibility
 
-2. **Address removals and deprecations**
+1. **Address removals and deprecations**
+
    - Remove Nashorn JavaScript engine usage
    - Replace deprecated Applet APIs
    - Update Security Manager usage
@@ -703,7 +705,8 @@ java -XX:SharedArchiveFile=myapp.jsa -cp myapp.jar com.example.Main
    - Add validation in compact constructors
    - Test serialization compatibility
 
-2. **Add Pattern Matching**
+1. **Add Pattern Matching**
+
    - Convert instanceof chains
    - Implement type-safe casting patterns
 
@@ -715,7 +718,8 @@ java -XX:SharedArchiveFile=myapp.jsa -cp myapp.jar com.example.Main
    - Use new arrow syntax
    - Implement complex yield logic
 
-2. **Text Blocks**
+1. **Text Blocks**
+
    - Replace concatenated multi-line strings
    - Update SQL and HTML generation
    - Use formatting methods
@@ -728,7 +732,8 @@ java -XX:SharedArchiveFile=myapp.jsa -cp myapp.jar com.example.Main
    - Implement sealed class patterns
    - Combine with pattern matching
 
-2. **Testing and validation**
+1. **Testing and validation**
+
    - Comprehensive test coverage
    - Performance benchmarking
    - Compatibility verification
@@ -764,30 +769,33 @@ java -XX:SharedArchiveFile=myapp.jsa -cp myapp.jar com.example.Main
    - API data transfer objects
    - Configuration objects
 
-2. **Apply Pattern Matching Strategically**
+1. **Apply Pattern Matching Strategically**
 
    - Replace instanceof chains
    - Use with sealed classes
    - Combine with switch expressions
 
-3. **Adopt Text Blocks for Multi-line Content**
+1. **Adopt Text Blocks for Multi-line Content**
 
    - SQL queries
    - JSON templates
    - HTML content
    - Configuration files
 
-4. **Design with Sealed Classes**
+1. **Design with Sealed Classes**
 
    - Domain modeling
    - State machines
    - Algebraic data types
    - API evolution control
 
-5. **Leverage Enhanced Random Generators**
+1. **Leverage Enhanced Random Generators**
+
    - Parallel processing scenarios
    - High-quality random numbers
    - Statistical applications
    - Gaming and simulation
 
-This comprehensive guide enables GitHub Copilot to provide contextually appropriate suggestions when upgrading Java 11 projects to Java 17, focusing on language enhancements, API improvements, and modern Java development practices.
+This comprehensive guide enables GitHub Copilot to provide contextually
+appropriate suggestions when upgrading Java 11 projects to Java 17, focusing on
+language enhancements, API improvements, and modern Java development practices.

@@ -1,11 +1,12 @@
 ---
-description: 'Guidelines for TypeScript Development targeting TypeScript 5.x and ES2022 output'
-applyTo: '**/*.ts'
----
+
+## description: 'Guidelines for TypeScript Development targeting TypeScript 5.x and ES2022 output' applyTo: '\*\*/\*.ts'
 
 # TypeScript Development
 
-> These instructions assume projects are built with TypeScript 5.x (or newer) compiling to an ES2022 JavaScript baseline. Adjust guidance if your runtime requires older language targets or down-level transpilation.
+> These instructions assume projects are built with TypeScript 5.x (or newer)
+> compiling to an ES2022 JavaScript baseline. Adjust guidance if your runtime
+> requires older language targets or down-level transpilation.
 
 ## Core Intent
 
@@ -17,26 +18,31 @@ applyTo: '**/*.ts'
 ## General Guardrails
 
 - Target TypeScript 5.x / ES2022 and prefer native features over polyfills.
-- Use pure ES modules; never emit `require`, `module.exports`, or CommonJS helpers.
+- Use pure ES modules; never emit `require`, `module.exports`, or CommonJS
+  helpers.
 - Rely on the project's build, lint, and test scripts unless asked otherwise.
 - Note design trade-offs when intent is not obvious.
 
 ## Project Organization
 
 - Follow the repository's folder and responsibility layout for new code.
-- Use kebab-case filenames (e.g., `user-session.ts`, `data-service.ts`) unless told otherwise.
-- Keep tests, types, and helpers near their implementation when it aids discovery.
+- Use kebab-case filenames (e.g., `user-session.ts`, `data-service.ts`) unless
+  told otherwise.
+- Keep tests, types, and helpers near their implementation when it aids
+  discovery.
 - Reuse or extend shared utilities before adding new ones.
 
 ## Naming & Style
 
-- Use PascalCase for classes, interfaces, enums, and type aliases; camelCase for everything else.
+- Use PascalCase for classes, interfaces, enums, and type aliases; camelCase for
+  everything else.
 - Skip interface prefixes like `I`; rely on descriptive names.
 - Name things for their behavior or domain meaning, not implementation.
 
 ## Formatting & Style
 
-- Run the repository's lint/format scripts (e.g., `npm run lint`) before submitting.
+- Run the repository's lint/format scripts (e.g., `npm run lint`) before
+  submitting.
 - Match the project's indentation, quote style, and trailing comma rules.
 - Keep functions focused; extract helpers when logic branches grow.
 - Favor immutable data and pure functions when practical.
@@ -46,7 +52,8 @@ applyTo: '**/*.ts'
 - Avoid `any` (implicit or explicit); prefer `unknown` plus narrowing.
 - Use discriminated unions for realtime events and state machines.
 - Centralize shared contracts instead of duplicating shapes.
-- Express intent with TypeScript utility types (e.g., `Readonly`, `Partial`, `Record`).
+- Express intent with TypeScript utility types (e.g., `Readonly`, `Partial`,
+  `Record`).
 
 ## Async, Events & Error Handling
 
@@ -58,10 +65,14 @@ applyTo: '**/*.ts'
 
 ## Architecture & Patterns
 
-- Follow the repository's dependency injection or composition pattern; keep modules single-purpose.
-- Observe existing initialization and disposal sequences when wiring into lifecycles.
-- Keep transport, domain, and presentation layers decoupled with clear interfaces.
-- Supply lifecycle hooks (e.g., `initialize`, `dispose`) and targeted tests when adding services.
+- Follow the repository's dependency injection or composition pattern; keep
+  modules single-purpose.
+- Observe existing initialization and disposal sequences when wiring into
+  lifecycles.
+- Keep transport, domain, and presentation layers decoupled with clear
+  interfaces.
+- Supply lifecycle hooks (e.g., `initialize`, `dispose`) and targeted tests when
+  adding services.
 
 ## External Integrations
 
@@ -74,17 +85,21 @@ applyTo: '**/*.ts'
 
 - Validate and sanitize external input with schema validators or type guards.
 - Avoid dynamic code execution and untrusted template rendering.
-- Encode untrusted content before rendering HTML; use framework escaping or trusted types.
+- Encode untrusted content before rendering HTML; use framework escaping or
+  trusted types.
 - Use parameterized queries or prepared statements to block injection.
-- Keep secrets in secure storage, rotate them regularly, and request least-privilege scopes.
+- Keep secrets in secure storage, rotate them regularly, and request
+  least-privilege scopes.
 - Favor immutable flows and defensive copies for sensitive data.
 - Use vetted crypto libraries only.
 - Patch dependencies promptly and monitor advisories.
 
 ## Configuration & Secrets
 
-- Reach configuration through shared helpers and validate with schemas or dedicated validators.
-- Handle secrets via the project's secure storage; guard `undefined` and error states.
+- Reach configuration through shared helpers and validate with schemas or
+  dedicated validators.
+- Handle secrets via the project's secure storage; guard `undefined` and error
+  states.
 - Document new configuration keys and update related tests.
 
 ## UI & UX Components
@@ -96,7 +111,8 @@ applyTo: '**/*.ts'
 ## Testing Expectations
 
 - Add or update unit tests with the project's framework and naming style.
-- Expand integration or end-to-end suites when behavior crosses modules or platform APIs.
+- Expand integration or end-to-end suites when behavior crosses modules or
+  platform APIs.
 - Run targeted test scripts for quick feedback before submitting.
 - Avoid brittle timing assertions; prefer fake timers or injected clocks.
 

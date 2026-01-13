@@ -1,6 +1,7 @@
 # Contributing to this Project
 
-Thank you for your interest in contributing! This guide will help you get started.
+Thank you for your interest in contributing! This guide will help you get
+started.
 
 ## Table of Contents
 
@@ -17,15 +18,18 @@ Thank you for your interest in contributing! This guide will help you get starte
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior through the appropriate channels.
+This project and everyone participating in it is governed by our
+[Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to
+uphold this code. Please report unacceptable behavior through the appropriate
+channels.
 
 ## Getting Started
 
 1. **Fork the repository** to your GitHub account
-2. **Clone your fork** locally
-3. **Create a branch** for your changes
-4. **Make your changes** following our guidelines
-5. **Push to your fork** and submit a pull request
+1. **Clone your fork** locally
+1. **Create a branch** for your changes
+1. **Make your changes** following our guidelines
+1. **Push to your fork** and submit a pull request
 
 ## Development Setup
 
@@ -77,7 +81,9 @@ pre-commit run ruff --all-files
 
 ### Reporting Bugs
 
-Use our [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml) and include:
+Use our [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml) and
+include:
+
 - Clear description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -85,14 +91,18 @@ Use our [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml) and include
 
 ### Suggesting Features
 
-Use our [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.yml) and include:
+Use our [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.yml)
+and include:
+
 - Problem statement
 - Proposed solution
 - Alternatives considered
 
 ### Improving Documentation
 
-Documentation improvements are always welcome! Use our [Documentation template](.github/ISSUE_TEMPLATE/documentation.yml) for doc issues.
+Documentation improvements are always welcome! Use our
+[Documentation template](.github/ISSUE_TEMPLATE/documentation.yml) for doc
+issues.
 
 ## Code Style Guidelines
 
@@ -174,12 +184,12 @@ BREAKING CHANGE: API now requires authentication token
 ## Pull Request Process
 
 1. **Update Documentation**: Update README, docs, or comments as needed
-2. **Add Tests**: Include tests for new functionality
-3. **Run Linters**: Ensure all linting checks pass
-4. **Run Tests**: Ensure all tests pass
-5. **Update Changelog**: Add entry to CHANGELOG.md (if applicable)
-6. **Fill PR Template**: Complete all sections of the PR template
-7. **Request Review**: Request review from appropriate team members
+1. **Add Tests**: Include tests for new functionality
+1. **Run Linters**: Ensure all linting checks pass
+1. **Run Tests**: Ensure all tests pass
+1. **Update Changelog**: Add entry to CHANGELOG.md (if applicable)
+1. **Fill PR Template**: Complete all sections of the PR template
+1. **Request Review**: Request review from appropriate team members
 
 ### PR Checklist
 
@@ -198,8 +208,8 @@ BREAKING CHANGE: API now requires authentication token
 ### Before Creating an Issue
 
 1. Search existing issues to avoid duplicates
-2. Check if the issue is already fixed in the latest version
-3. Gather relevant information (logs, screenshots, etc.)
+1. Check if the issue is already fixed in the latest version
+1. Gather relevant information (logs, screenshots, etc.)
 
 ### Creating a Quality Issue
 
@@ -259,13 +269,15 @@ def test1():
 
 ## Getting Help
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask questions
+- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask
+  questions
 - 📚 [Documentation](README.md) - Read the docs
 - 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues) - Report bugs
 
 ## Recognition
 
 Contributors will be:
+
 - Added to CONTRIBUTORS.md
 - Mentioned in release notes
 - Acknowledged in commit messages

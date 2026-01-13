@@ -1,18 +1,18 @@
 ---
-mode: 'agent'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search']
-description: 'Get best practices for MSTest unit testing, including data-driven tests'
----
+
+## mode: 'agent' tools: \['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search'\] description: 'Get best practices for MSTest unit testing, including data-driven tests'
 
 # MSTest Best Practices
 
-Your goal is to help me write effective unit tests with MSTest, covering both standard and data-driven testing approaches.
+Your goal is to help me write effective unit tests with MSTest, covering both
+standard and data-driven testing approaches.
 
 ## Project Setup
 
 - Use a separate test project with naming convention `[ProjectName].Tests`
 - Reference MSTest package
-- Create test classes that match the classes being tested (e.g., `CalculatorTests` for `Calculator`)
+- Create test classes that match the classes being tested (e.g.,
+  `CalculatorTests` for `Calculator`)
 - Use .NET SDK test commands: `dotnet test` for running tests
 
 ## Test Structure
@@ -23,7 +23,8 @@ Your goal is to help me write effective unit tests with MSTest, covering both st
 - Name tests using the pattern `MethodName_Scenario_ExpectedBehavior`
 - Use `[TestInitialize]` and `[TestCleanup]` for per-test setup and teardown
 - Use `[ClassInitialize]` and `[ClassCleanup]` for per-class setup and teardown
-- Use `[AssemblyInitialize]` and `[AssemblyCleanup]` for assembly-level setup and teardown
+- Use `[AssemblyInitialize]` and `[AssemblyCleanup]` for assembly-level setup
+  and teardown
 
 ## Standard Tests
 
@@ -50,7 +51,8 @@ Your goal is to help me write effective unit tests with MSTest, covering both st
 - Use `CollectionAssert` for collection comparisons
 - Use `StringAssert` for string-specific assertions
 - Use `Assert.Throws<T>` to test exceptions
-- Ensure assertions are simple in nature and have a message provided for clarity on failure
+- Ensure assertions are simple in nature and have a message provided for clarity
+  on failure
 
 ## Mocking and Isolation
 

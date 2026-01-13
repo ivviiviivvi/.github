@@ -1,8 +1,10 @@
 # GitHub Projects Guide
 
-> **Comprehensive guide for using GitHub Projects (v2) in the Ivviiviivvi organization**
+> **Comprehensive guide for using GitHub Projects (v2) in the Ivviiviivvi
+> organization**
 
-This guide provides an exhaustive framework for leveraging GitHub Projects to manage work, track progress, and coordinate activities across the organization.
+This guide provides an exhaustive framework for leveraging GitHub Projects to
+manage work, track progress, and coordinate activities across the organization.
 
 ## Table of Contents
 
@@ -18,6 +20,7 @@ This guide provides an exhaustive framework for leveraging GitHub Projects to ma
 ## Overview
 
 GitHub Projects (v2) provides flexible, powerful project management with:
+
 - **Multiple views** (table, board, roadmap, calendar)
 - **Custom fields** for tracking any data
 - **Automated workflows** via built-in automation
@@ -26,22 +29,24 @@ GitHub Projects (v2) provides flexible, powerful project management with:
 
 ### Projects vs Issues vs Discussions
 
-| Feature | Issues | Projects | Discussions |
-|---------|--------|----------|-------------|
-| **Purpose** | Track individual work items | Organize and track multiple items | Community conversation |
-| **Scope** | Single task or bug | Initiative or milestone | Open-ended topics |
-| **Structure** | Linear, actionable | Flexible, multi-view | Threaded, collaborative |
-| **Best For** | Specific deliverables | Project management | Ideation and support |
+| Feature       | Issues                      | Projects                          | Discussions             |
+| ------------- | --------------------------- | --------------------------------- | ----------------------- |
+| **Purpose**   | Track individual work items | Organize and track multiple items | Community conversation  |
+| **Scope**     | Single task or bug          | Initiative or milestone           | Open-ended topics       |
+| **Structure** | Linear, actionable          | Flexible, multi-view              | Threaded, collaborative |
+| **Best For**  | Specific deliverables       | Project management                | Ideation and support    |
 
 ## Project Templates
 
 ### 1. 🚀 Product Roadmap
 
-**Purpose**: Track features and releases across quarters  
-**Views**: Roadmap, By Quarter, By Status  
-**Duration**: 6-12 months  
+**Purpose**: Track features and releases across quarters\
+**Views**: Roadmap, By
+Quarter, By Status\
+**Duration**: 6-12 months
 
 **Custom Fields:**
+
 - **Quarter** (Single select): Q1 2025, Q2 2025, Q3 2025, Q4 2025
 - **Theme** (Single select): Performance, Security, UX, Infrastructure
 - **Status** (Status): Planned, In Progress, In Review, Shipped
@@ -51,33 +56,40 @@ GitHub Projects (v2) provides flexible, powerful project management with:
 - **Owner** (Person)
 
 **Workflows:**
+
 - Auto-set Quarter based on target date
 - Move to "In Progress" when issue assigned
 - Move to "Shipped" when PR merged
 - Notify on quarter completion
 
 **Board Layout:**
+
 ```
 Backlog → Planned → In Progress → In Review → Shipped
 ```
 
 ### 2. 🐛 Bug Triage & Resolution
 
-**Purpose**: Track and prioritize bug fixes  
-**Views**: By Priority, By Component, By Age  
-**Duration**: Ongoing  
+**Purpose**: Track and prioritize bug fixes\
+**Views**: By Priority, By
+Component, By Age\
+**Duration**: Ongoing
 
 **Custom Fields:**
+
 - **Priority** (Single select): P0-Critical, P1-High, P2-Medium, P3-Low
 - **Severity** (Single select): Blocker, Major, Minor, Trivial
-- **Component** (Multiple select): Frontend, Backend, API, Database, Infrastructure
+- **Component** (Multiple select): Frontend, Backend, API, Database,
+  Infrastructure
 - **Affected Version** (Text)
 - **Reproducibility** (Single select): Always, Sometimes, Once, Unable
-- **Root Cause** (Single select): Code Bug, Configuration, Data, Environment, Unknown
+- **Root Cause** (Single select): Code Bug, Configuration, Data, Environment,
+  Unknown
 - **Time to Fix** (Number) - in hours
 - **Reporter Type** (Single select): User, Internal, Automated
 
 **Workflows:**
+
 - Auto-label by priority
 - Auto-assign to component owners
 - Escalate P0/P1 after 24h without update
@@ -85,17 +97,20 @@ Backlog → Planned → In Progress → In Review → Shipped
 - Track time to resolution
 
 **Board Layout:**
+
 ```
 New → Triaged → Investigating → Fixing → Testing → Resolved
 ```
 
 ### 3. 📋 Sprint Planning
 
-**Purpose**: Manage 2-week development sprints  
-**Views**: Current Sprint, By Assignee, Velocity Chart  
-**Duration**: 2 weeks  
+**Purpose**: Manage 2-week development sprints\
+**Views**: Current Sprint, By
+Assignee, Velocity Chart\
+**Duration**: 2 weeks
 
 **Custom Fields:**
+
 - **Sprint** (Iteration): Sprint 1, Sprint 2, etc.
 - **Story Points** (Number)
 - **Type** (Single select): Feature, Bug, Chore, Spike
@@ -106,78 +121,93 @@ New → Triaged → Investigating → Fixing → Testing → Resolved
 - **Actual Points** (Number): Actuals vs estimates
 
 **Workflows:**
+
 - Auto-calculate sprint velocity
 - Alert on sprint capacity exceeded
 - Move to next sprint if incomplete
 - Generate sprint report on completion
 
 **Board Layout:**
+
 ```
 Backlog → Sprint Planning → Current Sprint → Completed
 ```
 
 ### 4. 🏗️ Infrastructure & DevOps
 
-**Purpose**: Track infrastructure work and incidents  
-**Views**: By Environment, By Service, Incident Board  
-**Duration**: Ongoing  
+**Purpose**: Track infrastructure work and incidents\
+**Views**: By Environment,
+By Service, Incident Board\
+**Duration**: Ongoing
 
 **Custom Fields:**
+
 - **Environment** (Multiple select): Dev, Staging, Production
 - **Service** (Single select): API, Database, Frontend, CDN, Auth, etc.
 - **Type** (Single select): Incident, Maintenance, Improvement, Investigation
 - **Severity** (Single select): SEV1, SEV2, SEV3, SEV4
-- **Status** (Status): Detected, Investigating, Mitigating, Resolved, Post-Mortem
+- **Status** (Status): Detected, Investigating, Mitigating, Resolved,
+  Post-Mortem
 - **Impact** (Text): Number of users affected
 - **MTTR** (Number): Mean time to resolution
 - **RCA Complete** (Checkbox)
 
 **Workflows:**
+
 - Auto-create on monitoring alerts
 - Escalate SEV1/2 to on-call
 - Require post-mortem for SEV1/2
 - Track SLA compliance
 
 **Board Layout:**
+
 ```
 Detected → Investigating → Mitigating → Resolved → Post-Mortem
 ```
 
 ### 5. 🎓 Onboarding & Training
 
-**Purpose**: Track new contributor onboarding  
-**Views**: By Phase, By Mentee, By Skill  
-**Duration**: Per cohort  
+**Purpose**: Track new contributor onboarding\
+**Views**: By Phase, By Mentee,
+By Skill\
+**Duration**: Per cohort
 
 **Custom Fields:**
+
 - **Phase** (Single select): Week 1, Week 2, Week 3, Week 4, Ongoing
 - **Mentee** (Person)
 - **Mentor** (Person)
-- **Skill Area** (Single select): Frontend, Backend, DevOps, Design, Documentation
+- **Skill Area** (Single select): Frontend, Backend, DevOps, Design,
+  Documentation
 - **Task Type** (Single select): Reading, Hands-on, Shadowing, Independent
 - **Completion** (Number): Percentage complete
 - **Status** (Status): Not Started, In Progress, Blocked, Complete
 - **Feedback Given** (Checkbox)
 
 **Workflows:**
+
 - Assign mentor on start
 - Progress through phases automatically
 - Send reminders for stalled tasks
 - Request feedback on completion
 
 **Board Layout:**
+
 ```
 Pre-Arrival → Week 1 → Week 2 → Week 3 → Week 4 → Alumni
 ```
 
 ### 6. 📚 Documentation Improvement
 
-**Purpose**: Track documentation gaps and improvements  
-**Views**: By Doc Type, By Priority, By Audience  
-**Duration**: Ongoing  
+**Purpose**: Track documentation gaps and improvements\
+**Views**: By Doc Type,
+By Priority, By Audience\
+**Duration**: Ongoing
 
 **Custom Fields:**
-- **Doc Type** (Single select): API, User Guide, Tutorial, Reference, Architecture
+
+- **Doc Type** (Single select): API, User Guide, Tutorial, Reference,
+  Architecture
 - **Audience** (Single select): End User, Contributor, Maintainer, Admin
 - **Doc Status** (Status): Missing, Outdated, Needs Review, Up to Date
 - **Priority** (Single select): Critical, High, Medium, Low
@@ -187,24 +217,29 @@ Pre-Arrival → Week 1 → Week 2 → Week 3 → Week 4 → Alumni
 - **Review Cycle** (Single select): Monthly, Quarterly, Yearly
 
 **Workflows:**
+
 - Flag outdated docs
 - Request SME review
 - Auto-link to related code
 - Track doc coverage metrics
 
 **Board Layout:**
+
 ```
 Identified → Writing → Review → Published → Maintenance
 ```
 
 ### 7. 🔒 Security & Compliance
 
-**Purpose**: Track security work and compliance requirements  
-**Views**: By Severity, By Compliance Area, Remediation Timeline  
-**Duration**: Ongoing  
+**Purpose**: Track security work and compliance requirements\
+**Views**: By
+Severity, By Compliance Area, Remediation Timeline\
+**Duration**: Ongoing
 
 **Custom Fields:**
-- **Type** (Single select): Vulnerability, Compliance, Security Enhancement, Audit
+
+- **Type** (Single select): Vulnerability, Compliance, Security Enhancement,
+  Audit
 - **Severity** (Single select): Critical, High, Medium, Low, Info
 - **CVE** (Text): CVE identifier if applicable
 - **Compliance** (Multiple select): GDPR, SOC2, HIPAA, PCI-DSS
@@ -215,50 +250,60 @@ Identified → Writing → Review → Published → Maintenance
 - **False Positive** (Checkbox)
 
 **Workflows:**
+
 - Auto-create from security scans
 - Escalate based on SLA
 - Require verification before close
 - Generate compliance reports
 
 **Board Layout:**
+
 ```
 New → Assessed → Scheduled → In Progress → Verification → Closed
 ```
 
 ### 8. 🌟 Community Engagement
 
-**Purpose**: Track community initiatives and contributions  
-**Views**: By Initiative, By Contributor, By Status  
-**Duration**: Ongoing  
+**Purpose**: Track community initiatives and contributions\
+**Views**: By
+Initiative, By Contributor, By Status\
+**Duration**: Ongoing
 
 **Custom Fields:**
-- **Initiative Type** (Single select): Event, Content, Outreach, Support, Recognition
+
+- **Initiative Type** (Single select): Event, Content, Outreach, Support,
+  Recognition
 - **Status** (Status): Idea, Planning, In Progress, Completed
 - **Contributor** (Person)
-- **Target Audience** (Multiple select): New Contributors, Active, Maintainers, Users
+- **Target Audience** (Multiple select): New Contributors, Active, Maintainers,
+  Users
 - **Reach** (Number): Estimated people impacted
 - **Success Metric** (Text)
 - **Budget Required** (Checkbox)
 - **Partner Organizations** (Text)
 
 **Workflows:**
+
 - Track initiative completion rate
 - Send thank-you notes
 - Highlight contributions
 - Generate community reports
 
 **Board Layout:**
+
 ```
 Ideas → Planning → Execution → Follow-up → Retrospective
 ```
 
 ### 9. ⚡ Performance Optimization
 
-**Purpose**: Track performance improvements and benchmarks  
-**Views**: By Impact, By Component, Timeline  
-**Duration**: Quarterly  
+**Purpose**: Track performance improvements and benchmarks\
+**Views**: By
+Impact, By Component, Timeline\
+**Duration**: Quarterly
 
 **Custom Fields:**
+
 - **Metric** (Single select): Load Time, Response Time, Throughput, Memory, CPU
 - **Component** (Single select): Frontend, Backend, Database, Network, Storage
 - **Current Value** (Number)
@@ -269,24 +314,29 @@ Ideas → Planning → Execution → Follow-up → Retrospective
 - **Benchmark Results** (Text): Link to results
 
 **Workflows:**
+
 - Track before/after metrics
 - Validate improvements
 - Rollback if regression
 - Publish results
 
 **Board Layout:**
+
 ```
 Baseline → Analysis → Implementation → Validation → Deployed
 ```
 
 ### 10. 🎨 Design System
 
-**Purpose**: Track design system components and tokens  
-**Views**: By Component Type, By Status, Adoption View  
-**Duration**: Ongoing  
+**Purpose**: Track design system components and tokens\
+**Views**: By Component
+Type, By Status, Adoption View\
+**Duration**: Ongoing
 
 **Custom Fields:**
-- **Component Type** (Single select): Layout, Navigation, Form, Data Display, Feedback
+
+- **Component Type** (Single select): Layout, Navigation, Form, Data Display,
+  Feedback
 - **Status** (Status): Proposed, Designing, Developing, Documenting, Published
 - **Design Status** (Single select): Not Started, In Progress, Review, Approved
 - **Dev Status** (Single select): Not Started, In Progress, Review, Complete
@@ -297,12 +347,14 @@ Baseline → Analysis → Implementation → Validation → Deployed
 - **A11y Tested** (Checkbox)
 
 **Workflows:**
+
 - Coordinate design and dev
 - Track component adoption
 - Request accessibility review
 - Update documentation
 
 **Board Layout:**
+
 ```
 Proposal → Design → Development → Documentation → Published
 ```
@@ -314,6 +366,7 @@ Proposal → Design → Development → Documentation → Published
 **Best for**: Detailed data entry and bulk editing
 
 **Configuration:**
+
 ```yaml
 Columns:
   - Title (always visible)
@@ -333,6 +386,7 @@ Filtering: Active items only
 **Best for**: Kanban-style workflow visualization
 
 **Configuration:**
+
 ```yaml
 Columns: Based on Status field
 Card Display:
@@ -340,7 +394,7 @@ Card Display:
   - Assignees
   - Labels
   - Priority badge
-  
+
 Column Limits:
   - In Progress: 5 (per person)
   - Review: 10 (team-wide)
@@ -351,6 +405,7 @@ Column Limits:
 **Best for**: Timeline and date-based planning
 
 **Configuration:**
+
 ```yaml
 Timeline: By Quarter or Month
 Items: Sized by Story Points or Duration
@@ -358,7 +413,7 @@ Markers:
   - Release dates
   - Milestones
   - Deadlines
-  
+
 Grouping: By Theme or Epic
 Colors: By Priority
 ```
@@ -368,6 +423,7 @@ Colors: By Priority
 **Best for**: Event and deadline tracking
 
 **Configuration:**
+
 ```yaml
 Date Field: Due Date or Target Date
 Views:
@@ -386,34 +442,38 @@ Filters:
 ### Field Types
 
 1. **Text**: Free-form text (URLs, descriptions, IDs)
-2. **Number**: Numeric values (story points, hours, percentages)
-3. **Date**: Deadlines, start dates, target dates
-4. **Single select**: One option from a list
-5. **Multiple select**: Multiple options from a list
-6. **Iteration**: Sprint/iteration planning
-7. **Person**: Team member assignment
-8. **Checkbox**: Boolean flags
-9. **Status**: Workflow states
+1. **Number**: Numeric values (story points, hours, percentages)
+1. **Date**: Deadlines, start dates, target dates
+1. **Single select**: One option from a list
+1. **Multiple select**: Multiple options from a list
+1. **Iteration**: Sprint/iteration planning
+1. **Person**: Team member assignment
+1. **Checkbox**: Boolean flags
+1. **Status**: Workflow states
 
 ### Field Best Practices
 
 **Naming Conventions:**
+
 - Use clear, descriptive names
 - Be consistent across projects
 - Avoid abbreviations
 - Use sentence case
 
 **Single vs Multiple Select:**
+
 - Use Single select for: Priority, Status, Owner
 - Use Multiple select for: Labels, Tags, Components
 
 **Required vs Optional:**
+
 - Required: Status, Priority, Assignee
 - Optional: Most custom fields
 
 ### Standard Field Set
 
 Recommended fields for all projects:
+
 - **Status**: Workflow state
 - **Priority**: Importance level
 - **Assignee**: Who's responsible
@@ -426,6 +486,7 @@ Recommended fields for all projects:
 ### Built-in Workflows
 
 #### Auto-add Items
+
 ```yaml
 Trigger: Issues/PRs matching criteria
 Action: Add to project
@@ -436,6 +497,7 @@ Criteria:
 ```
 
 #### Auto-set Values
+
 ```yaml
 Trigger: Item added to project
 Action: Set field values
@@ -446,6 +508,7 @@ Example:
 ```
 
 #### Auto-update Status
+
 ```yaml
 Trigger: PR state changes
 Action: Update status field
@@ -456,6 +519,7 @@ Examples:
 ```
 
 #### Auto-archive Items
+
 ```yaml
 Trigger: Status changed to "Done"
 Action: Archive after X days
@@ -491,11 +555,12 @@ jobs:
 ### Advanced Automation Examples
 
 **Velocity Tracking:**
+
 ```yaml
 # Calculate and update sprint velocity
 on:
   schedule:
-    - cron: '0 0 * * 1'  # Every Monday
+    - cron: "0 0 * * 1" # Every Monday
 
 jobs:
   calculate-velocity:
@@ -506,11 +571,12 @@ jobs:
 ```
 
 **SLA Monitoring:**
+
 ```yaml
 # Alert on SLA violations
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: "0 */6 * * *" # Every 6 hours
 
 jobs:
   check-sla:
@@ -521,6 +587,7 @@ jobs:
 ```
 
 **Dependency Tracking:**
+
 ```yaml
 # Block items with incomplete dependencies
 on:
@@ -540,13 +607,14 @@ jobs:
 ### Cross-Repository Projects
 
 **Organization-Level Projects:**
+
 ```yaml
 Scope: All organization repositories
 Use Cases:
   - Organization-wide initiatives
   - Cross-team dependencies
   - Leadership visibility
-  
+
 Setup:
   - Create at organization level
   - Auto-add from multiple repos
@@ -554,13 +622,14 @@ Setup:
 ```
 
 **Multi-Repo Product Project:**
+
 ```yaml
 Scope: Product feature across repos
 Repositories:
   - frontend-repo
   - backend-repo
   - docs-repo
-  
+
 Views:
   - By Repository
   - By Component
@@ -570,14 +639,17 @@ Views:
 ### Issue/PR Linking
 
 **Reference Projects:**
+
 ```markdown
 <!-- In issue body -->
+
 This relates to project X
 See project board for context
 Part of Q1 2025 roadmap
 ```
 
 **Multiple Projects:**
+
 - Same issue can be in multiple projects
 - Shows different aspects/contexts
 - Useful for cross-functional tracking
@@ -585,6 +657,7 @@ Part of Q1 2025 roadmap
 ### External Tool Integration
 
 **Slack Integration:**
+
 ```yaml
 Webhooks:
   - Project updates → Slack channel
@@ -593,6 +666,7 @@ Webhooks:
 ```
 
 **Analytics Integration:**
+
 ```yaml
 Export Data:
   - GraphQL API queries
@@ -605,42 +679,42 @@ Export Data:
 ### Project Structure
 
 1. **One Project per Initiative**: Don't try to track everything in one project
-2. **Clear Ownership**: Each project should have a clear owner
-3. **Regular Grooming**: Weekly review and updates
-4. **Archive Completed**: Keep projects focused on active work
-5. **Template Reuse**: Use templates for consistency
+1. **Clear Ownership**: Each project should have a clear owner
+1. **Regular Grooming**: Weekly review and updates
+1. **Archive Completed**: Keep projects focused on active work
+1. **Template Reuse**: Use templates for consistency
 
 ### Field Management
 
 1. **Start Simple**: Add fields as needed
-2. **Consistent Options**: Use same option lists across projects
-3. **Document Meanings**: Explain what fields mean
-4. **Regular Cleanup**: Remove unused fields
-5. **Validate Data**: Ensure fields are filled correctly
+1. **Consistent Options**: Use same option lists across projects
+1. **Document Meanings**: Explain what fields mean
+1. **Regular Cleanup**: Remove unused fields
+1. **Validate Data**: Ensure fields are filled correctly
 
 ### View Organization
 
 1. **Default View**: Most commonly used view as default
-2. **Save Filters**: Create saved views for common filters
-3. **Appropriate View Types**: Board for workflow, table for data
-4. **Mobile-Friendly**: Consider mobile access when designing
-5. **Share Links**: Use direct view links in docs
+1. **Save Filters**: Create saved views for common filters
+1. **Appropriate View Types**: Board for workflow, table for data
+1. **Mobile-Friendly**: Consider mobile access when designing
+1. **Share Links**: Use direct view links in docs
 
 ### Collaboration
 
 1. **Transparency**: Make projects visible to all
-2. **Comment Culture**: Use comments for context
-3. **@mention Sparingly**: Tag only when needed
-4. **Status Updates**: Regular project status updates
-5. **Celebrate Wins**: Acknowledge completed work
+1. **Comment Culture**: Use comments for context
+1. **@mention Sparingly**: Tag only when needed
+1. **Status Updates**: Regular project status updates
+1. **Celebrate Wins**: Acknowledge completed work
 
 ### Performance
 
 1. **Archive Regularly**: Archive completed items
-2. **Limit Scope**: Don't track more than 6 months in one project
-3. **Optimize Queries**: Use filters to reduce load
-4. **Batch Updates**: Bulk edit when possible
-5. **Async Loading**: Let views load in background
+1. **Limit Scope**: Don't track more than 6 months in one project
+1. **Optimize Queries**: Use filters to reduce load
+1. **Batch Updates**: Bulk edit when possible
+1. **Async Loading**: Let views load in background
 
 ## Project Examples
 
@@ -731,6 +805,7 @@ Outcome:
 ## Project Templates Repository
 
 See `/.github/project-templates/` for:
+
 - YAML configuration files
 - Automation scripts
 - View configurations
@@ -786,5 +861,6 @@ query OrgProjects {
 
 ---
 
-**Last Updated**: 2025-12-28  
-**Maintained By**: @ivviiviivvi project management team
+**Last Updated**: 2025-12-28\
+**Maintained By**: @ivviiviivvi project management
+team

@@ -5,11 +5,11 @@ name: Repository Health Check
 on:
   schedule:
     # Run weekly on Monday at 9 AM UTC
-    - cron: '0 9 * * 1'
+    - cron: "0 9 * * 1"
   workflow_dispatch:
     inputs:
       full_scan:
-        description: 'Perform full comprehensive scan'
+        description: "Perform full comprehensive scan"
         required: false
         type: boolean
         default: false
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history for comprehensive analysis
+          fetch-depth: 0 # Full history for comprehensive analysis
 
       - name: Check branch protection
         id: branch-protection

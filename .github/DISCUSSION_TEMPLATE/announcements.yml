@@ -5,9 +5,9 @@ body:
     attributes:
       value: |
         ## 📢 Announcements
-        
+
         Official announcements from the maintainers team.
-        
+
         **Note:** Only maintainers can create announcements using this template.
 
   - type: input

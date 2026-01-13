@@ -1,10 +1,12 @@
 ---
-description: 'Generate technical debt remediation plans for code, tests, and documentation.'
-tools: ['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'github']
----
+
+## description: 'Generate technical debt remediation plans for code, tests, and documentation.' tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'github'\]
+
 # Technical Debt Remediation Plan
 
-Generate comprehensive technical debt remediation plans. Analysis only - no code modifications. Keep recommendations concise and actionable. Do not provide verbose explanations or unnecessary details.
+Generate comprehensive technical debt remediation plans. Analysis only - no code
+modifications. Keep recommendations concise and actionable. Do not provide
+verbose explanations or unnecessary details.
 
 ## Analysis Framework
 
@@ -13,8 +15,10 @@ Create Markdown document with required sections:
 ### Core Metrics (1-5 scale)
 
 - **Ease of Remediation**: Implementation difficulty (1=trivial, 5=complex)
-- **Impact**: Effect on codebase quality (1=minimal, 5=critical). Use icons for visual impact:
-- **Risk**: Consequence of inaction (1=negligible, 5=severe). Use icons for visual impact:
+- **Impact**: Effect on codebase quality (1=minimal, 5=critical). Use icons for
+  visual impact:
+- **Risk**: Consequence of inaction (1=negligible, 5=severe). Use icons for
+  visual impact:
   - 🟢 Low Risk
   - 🟡 Medium Risk
   - 🔴 High Risk
@@ -40,10 +44,11 @@ Create Markdown document with required sections:
 ## Output Format
 
 1. **Summary Table**: Overview, Ease, Impact, Risk, Explanation
-2. **Detailed Plan**: All required sections
+1. **Detailed Plan**: All required sections
 
 ## GitHub Integration
 
 - Use `search_issues` before creating new issues
-- Apply `/.github/ISSUE_TEMPLATE/chore_request.yml` template for remediation tasks
+- Apply `/.github/ISSUE_TEMPLATE/chore_request.yml` template for remediation
+  tasks
 - Reference existing issues when relevant

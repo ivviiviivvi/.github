@@ -2,7 +2,8 @@
 
 ## 🚀 Ready to Begin? Start Here!
 
-This guide provides the **exact steps** to implement the workflow optimization analysis, prioritized by impact and effort.
+This guide provides the **exact steps** to implement the workflow optimization
+analysis, prioritized by impact and effort.
 
 ---
 
@@ -12,14 +13,17 @@ This guide provides the **exact steps** to implement the workflow optimization a
 
 #### Step 1: Pin Unpinned Actions
 
-**What to do**: Fix the 3 unpinned actions that pose a supply chain security risk.
+**What to do**: Fix the 3 unpinned actions that pose a supply chain security
+risk.
 
 **Files to edit**:
+
 1. `.github/workflows/docker-build-push.yml` (line ~274)
-2. `.github/workflows/security-scan.yml` (line ~74)
-3. `.github/workflows/ci-advanced.yml` (if exists)
+1. `.github/workflows/security-scan.yml` (line ~74)
+1. `.github/workflows/ci-advanced.yml` (if exists)
 
 **Change**:
+
 ```yaml
 # ❌ BEFORE (insecure)
 uses: aquasecurity/trivy-action@master
@@ -29,6 +33,7 @@ uses: aquasecurity/trivy-action@0.28.0  # Or latest stable version
 ```
 
 **How to find the right version**:
+
 ```bash
 # Get latest release commit SHA
 gh api repos/aquasecurity/trivy-action/releases/latest --jq '.tag_name'
@@ -45,11 +50,12 @@ gh api repos/aquasecurity/trivy-action/releases/latest --jq '.tag_name'
 #### Step 2: Add Caching to Top 5 Workflows
 
 **Target workflows** (in order of impact):
+
 1. `.github/workflows/ci.yml`
-2. `.github/workflows/code-coverage.yml`
-3. `.github/workflows/build-pages-site.yml`
-4. `.github/workflows/security-scan.yml`
-5. `.github/workflows/agentsphere-deployment.yml`
+1. `.github/workflows/code-coverage.yml`
+1. `.github/workflows/build-pages-site.yml`
+1. `.github/workflows/security-scan.yml`
+1. `.github/workflows/agentsphere-deployment.yml`
 
 **For Python workflows (ci.yml, code-coverage.yml, security-scan.yml)**:
 
@@ -60,14 +66,14 @@ Find the `setup-python` step and add `cache: 'pip'`:
 - name: Set up Python
   uses: actions/setup-python@v5
   with:
-    python-version: '3.12'
+    python-version: "3.12"
 
 # After:
 - name: Set up Python
   uses: actions/setup-python@v5
   with:
-    python-version: '3.12'
-    cache: 'pip'  # ⭐ ADD THIS LINE
+    python-version: "3.12"
+    cache: "pip" # ⭐ ADD THIS LINE
 ```
 
 **For Ruby workflows (build-pages-site.yml)**:
@@ -76,13 +82,13 @@ Find the `setup-python` step and add `cache: 'pip'`:
 # Before:
 - uses: ruby/setup-ruby@v1
   with:
-    ruby-version: '3.1'
+    ruby-version: "3.1"
 
 # After:
 - uses: ruby/setup-ruby@v1
   with:
-    ruby-version: '3.1'
-    bundler-cache: true  # ⭐ ADD THIS LINE
+    ruby-version: "3.1"
+    bundler-cache: true # ⭐ ADD THIS LINE
 ```
 
 **Commit message**: `perf: enable dependency caching for top 5 workflows`
@@ -97,9 +103,10 @@ Find the `setup-python` step and add `cache: 'pip'`:
 
 **Create file**: `.github/WORKFLOW_GUIDE.md`
 
-**Template** (adapt from WORKFLOW_OPTIMIZATION_ROADMAP.md, Phase 1, section "Documentation"):
+**Template** (adapt from WORKFLOW_OPTIMIZATION_ROADMAP.md, Phase 1, section
+"Documentation"):
 
-```markdown
+````markdown
 # Workflow Developer Guide
 
 ## Quick Start for Contributors
@@ -107,6 +114,7 @@ Find the `setup-python` step and add `cache: 'pip'`:
 ### Our 76 Workflows Organized
 
 **Categories**:
+
 - **CI/CD** (10 workflows): Testing, linting, building
 - **Security** (8 workflows): Scanning, auditing, vulnerability detection
 - **Deployment** (12 workflows): Pages, Docker, AgentSphere
@@ -118,6 +126,7 @@ Find the `setup-python` step and add `cache: 'pip'`:
 ### Adding or Modifying a Workflow
 
 **Best Practices Checklist**:
+
 - [ ] Pin all actions to commit SHAs or specific versions (never @master/@main)
 - [ ] Set minimal GITHUB_TOKEN permissions explicitly
 - [ ] Add `timeout-minutes` to all jobs (prevent hanging)
@@ -127,6 +136,7 @@ Find the `setup-python` step and add `cache: 'pip'`:
 - [ ] Add clear job and step names
 
 **Template**:
+
 ```yaml
 name: My New Workflow
 
@@ -134,7 +144,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'relevant/**'
+      - "relevant/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -151,21 +161,25 @@ jobs:
       - uses: actions/checkout@v4
       # Your steps here
 ```
+````
 
 ### Common Tasks
 
 #### Adding Caching
-[Examples from WORKFLOW_QUICK_REFERENCE.md]
+
+\[Examples from WORKFLOW_QUICK_REFERENCE.md\]
 
 #### Debugging Workflows
-[Troubleshooting section from WORKFLOW_QUICK_REFERENCE.md]
+
+\[Troubleshooting section from WORKFLOW_QUICK_REFERENCE.md\]
 
 ### Getting Help
 
 - **Quick Reference**: See `WORKFLOW_QUICK_REFERENCE.md`
 - **Security**: See `WORKFLOW_SECURITY_AUDIT.md`
 - **Roadmap**: See `WORKFLOW_OPTIMIZATION_ROADMAP.md`
-```
+
+````
 
 **Commit message**: `docs: add workflow contributor guide`
 
@@ -188,7 +202,7 @@ jobs:
     echo ""
     echo "🚀 Registering application with AgentSphere..."
     # ... rest of simulation code
-```
+````
 
 **Also update PR creation to mention simulation**:
 
@@ -200,11 +214,11 @@ jobs:
     title: "🚀 Add Live Demo Badge (SIMULATION MODE)"
     body: |
       ## ⚠️ Live Demo Deployment (Simulation Mode)
-      
+
       **Note**: This is currently in simulation mode. The demo URL is for testing purposes.
-      To implement real AgentSphere integration, see the implementation guide in 
+      To implement real AgentSphere integration, see the implementation guide in
       `WORKFLOW_OPTIMIZATION_ROADMAP.md`.
-      
+
       **Simulated Demo URL:** ${{ steps.register.outputs.demo_url }}
       # ... rest of body
 ```
@@ -231,6 +245,7 @@ gh run view --log
 ```
 
 **Checklist**:
+
 - [ ] All modified workflows run successfully
 - [ ] Caching shows in workflow logs ("Cache restored from key...")
 - [ ] Build times reduced (compare before/after)
@@ -273,6 +288,7 @@ gh run view --log
 - [ ] **All changes tested**: Workflows run successfully
 
 **Expected outcomes**:
+
 - ✅ Critical security vulnerability eliminated
 - ✅ 30-40% faster builds (on cache hit)
 - ✅ Better contributor experience
@@ -290,20 +306,24 @@ gh run view --log
 **Goal**: Enable caching in remaining ~18 workflows that install dependencies
 
 **Process**:
+
 1. Audit all workflows for dependency installation:
+
    ```bash
    grep -r "pip install\|npm install\|bundle install\|go build" .github/workflows/
    ```
 
-2. For each workflow found, add appropriate caching:
+1. For each workflow found, add appropriate caching:
+
    - Python: `cache: 'pip'` in setup-python
    - Node.js: `cache: 'npm'` in setup-node
    - Ruby: `bundler-cache: true` in setup-ruby
    - Go: `cache: true` in setup-go
 
-3. Test each workflow after modification
+1. Test each workflow after modification
 
-**Batch commits**: Group similar changes (e.g., "perf: enable pip caching for Python workflows")
+**Batch commits**: Group similar changes (e.g., "perf: enable pip caching for
+Python workflows")
 
 ---
 
@@ -338,16 +358,16 @@ jobs:
       app_type: ${{ steps.detect.outputs.app_type }}
       startup_command: ${{ steps.detect.outputs.startup_command }}
       port: ${{ steps.detect.outputs.port }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Detect application type
         id: detect
         run: |
           # Copy detection logic from agentsphere-deployment.yml
           # (lines 82-225)
-          
+
           # Node.js detection
           if [ -f "package.json" ]; then
             if grep -q '"react"' package.json 2>/dev/null; then
@@ -359,13 +379,13 @@ jobs:
             fi
             echo "startup_command=npm start" >> $GITHUB_OUTPUT
             echo "port=3000" >> $GITHUB_OUTPUT
-            
+
           # Python detection
           elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
             echo "app_type=python" >> $GITHUB_OUTPUT
             echo "startup_command=python app.py" >> $GITHUB_OUTPUT
             echo "port=8000" >> $GITHUB_OUTPUT
-            
+
           # Add other language detection...
           else
             echo "app_type=unknown" >> $GITHUB_OUTPUT
@@ -379,7 +399,7 @@ jobs:
 jobs:
   detect:
     uses: ./.github/workflows/reusable-app-detect.yml
-  
+
   deploy:
     needs: detect
     runs-on: ubuntu-latest
@@ -402,7 +422,7 @@ name: Workflow Metrics Collection
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: "0 */6 * * *" # Every 6 hours
   workflow_dispatch:
 
 permissions:
@@ -414,21 +434,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Collect metrics
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            
+
             // Get all workflows
             const workflows = await github.rest.actions.listRepoWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            
+
             const metrics = [];
-            
+
             for (const workflow of workflows.data.workflows) {
               // Get recent runs
               const runs = await github.rest.actions.listWorkflowRuns({
@@ -437,11 +457,11 @@ jobs:
                 workflow_id: workflow.id,
                 per_page: 20
               });
-              
+
               const recentRuns = runs.data.workflow_runs;
               const successful = recentRuns.filter(r => r.conclusion === 'success').length;
               const total = recentRuns.length;
-              
+
               // Calculate average duration
               const durations = recentRuns
                 .filter(r => r.conclusion === 'success')
@@ -450,11 +470,11 @@ jobs:
                   const end = new Date(r.updated_at);
                   return (end - start) / 1000 / 60; // minutes
                 });
-              
-              const avgDuration = durations.length > 0 
-                ? durations.reduce((a, b) => a + b, 0) / durations.length 
+
+              const avgDuration = durations.length > 0
+                ? durations.reduce((a, b) => a + b, 0) / durations.length
                 : 0;
-              
+
               metrics.push({
                 name: workflow.name,
                 path: workflow.path,
@@ -463,15 +483,15 @@ jobs:
                 avg_duration_min: avgDuration.toFixed(1)
               });
             }
-            
+
             // Sort by runs (most active first)
             metrics.sort((a, b) => b.runs - a.runs);
-            
+
             // Create metrics directory if it doesn't exist
             if (!fs.existsSync('metrics')) {
               fs.mkdirSync('metrics');
             }
-            
+
             // Write metrics
             fs.writeFileSync(
               'metrics/workflow-metrics.json',
@@ -481,9 +501,9 @@ jobs:
                 metrics: metrics
               }, null, 2)
             );
-            
+
             console.log(`📊 Collected metrics for ${metrics.length} workflows`);
-      
+
       - name: Commit metrics
         run: |
           git config user.name "github-actions[bot]"
@@ -495,7 +515,7 @@ jobs:
 
 **Create**: `metrics/README.md`
 
-```markdown
+````markdown
 # Workflow Metrics
 
 This directory contains automatically collected metrics about workflow performance.
@@ -517,7 +537,9 @@ This directory contains automatically collected metrics about workflow performan
 # Pretty print latest metrics
 cat metrics/workflow-metrics.json | jq '.metrics[] | select(.runs > 10) | {name, success_rate, avg_duration_min}'
 ```
-```
+````
+
+````
 
 **Commit message**: `feat: add automated workflow metrics collection`
 
@@ -589,7 +611,7 @@ act -W .github/workflows/ci.yml
 
 # Test with specific event
 act push -W .github/workflows/ci.yml
-```
+````
 
 ### Checking Workflow Status
 
@@ -627,19 +649,23 @@ gh run view <run-id> --json jobs --jq '.jobs[] | {name, conclusion, duration: .c
 ## Week of [Date]
 
 ### Completed
+
 - [ ] Task 1
 - [ ] Task 2
 
 ### Metrics
+
 - Workflows optimized: X/76
 - Avg build time: X min (target: <5 min)
 - Cache hit rate: X% (target: >70%)
 - Success rate: X% (target: >95%)
 
 ### Blockers
+
 - None / [List blockers]
 
 ### Next Week
+
 - [ ] Priority 1
 - [ ] Priority 2
 ```
@@ -647,6 +673,7 @@ gh run view <run-id> --json jobs --jq '.jobs[] | {name, conclusion, duration: .c
 ### Monthly Metrics Review
 
 Compare against baseline:
+
 - Build time reduction (%)
 - Cost savings ($)
 - Success rate improvement
@@ -657,17 +684,20 @@ Compare against baseline:
 ## Getting Help
 
 ### Documentation Reference
+
 - **Quick fixes**: `WORKFLOW_QUICK_REFERENCE.md`
 - **Security issues**: `WORKFLOW_SECURITY_AUDIT.md`
 - **Detailed roadmap**: `WORKFLOW_OPTIMIZATION_ROADMAP.md`
 - **Full analysis**: `COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`
 
 ### Common Issues
+
 - **Cache not working**: Check hashFiles includes all dependency files
 - **Permission denied**: Add required permission to workflow
 - **Workflow not triggering**: Check path filters
 
 ### Support
+
 - Open issue in this repository
 - Tag workflow changes in PR for review
 - Use #workflow-optimization Slack channel (if available)
@@ -677,18 +707,21 @@ Compare against baseline:
 ## Success Criteria
 
 ### Week 1 ✅
+
 - 3 security fixes
 - 5 workflows with caching
 - Contributor guide created
 - Baseline metrics captured
 
 ### Month 1 ✅
+
 - 90% workflows have caching
 - 3+ reusable workflows
 - Basic metrics dashboard
 - 40% build time reduction
 
 ### Quarter 1 ✅
+
 - Smart test selection
 - Progressive deployment
 - 95% success rate
@@ -697,6 +730,7 @@ Compare against baseline:
 
 ---
 
-**Questions or need clarification?** Open an issue or reach out to the workflow optimization team.
+**Questions or need clarification?** Open an issue or reach out to the workflow
+optimization team.
 
 **Ready to start?** Begin with Day 1, Morning - Pin those 3 actions! 🚀

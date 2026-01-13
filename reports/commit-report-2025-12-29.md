@@ -5,13 +5,17 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 38 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
       9 2025-12-22
      14 2025-12-23
@@ -24,6 +28,7 @@
 ```
 
 ### Recent Commits
+
 ```
 5d24138 - google-labs-jules[bot], 15 hours ago : ⚡ Bolt: Optimize SSRF hostname validation (#123)
 acfd509 - Copilot, 31 hours ago : Add House-Keeping--Pull-Request--Branch--Deep-Cleaner agent (#116)

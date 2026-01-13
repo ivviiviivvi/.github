@@ -2,7 +2,8 @@
 
 ## Commit Guidelines
 
-We follow a structured approach to tracking and managing commits in this project. Please adhere to these guidelines when contributing.
+We follow a structured approach to tracking and managing commits in this
+project. Please adhere to these guidelines when contributing.
 
 ### Commit Message Format
 
@@ -23,7 +24,8 @@ Must be one of the following:
 - **feat**: A new feature
 - **fix**: A bug fix
 - **docs**: Documentation only changes
-- **style**: Changes that don't affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **style**: Changes that don't affect the meaning of the code (white-space,
+  formatting, missing semi-colons, etc)
 - **refactor**: A code change that neither fixes a bug nor adds a feature
 - **perf**: A code change that improves performance
 - **test**: Adding missing tests or correcting existing tests
@@ -40,11 +42,13 @@ The subject contains a succinct description of the change:
 
 #### Body (Optional)
 
-Just as in the subject, use the imperative, present tense. The body should include the motivation for the change and contrast this with previous behavior.
+Just as in the subject, use the imperative, present tense. The body should
+include the motivation for the change and contrast this with previous behavior.
 
 #### Footer (Optional)
 
-The footer should contain any information about Breaking Changes and is also the place to reference issues that this commit closes.
+The footer should contain any information about Breaking Changes and is also the
+place to reference issues that this commit closes.
 
 ### Examples
 
@@ -97,7 +101,8 @@ This will set the template for your local repository.
 
 This repository includes automated commit tracking via GitHub Actions:
 
-- **Commit Validation**: All commits are validated for proper format and meaningful content
+- **Commit Validation**: All commits are validated for proper format and
+  meaningful content
 - **Commit Statistics**: Statistics are generated for recent commit activity
 - **Author Tracking**: Tracks contributions by different authors
 - **Pull Request Tracking**: Monitors all commits in pull requests
@@ -107,15 +112,17 @@ This repository includes automated commit tracking via GitHub Actions:
 When creating a pull request:
 
 1. Ensure all commits follow the commit message format
-2. Keep commits atomic - one logical change per commit
-3. Squash "fix typo" or "address review comments" commits before merging
-4. Reference relevant issues in commit messages or PR description
-5. Review the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) to understand and address automated compliance checks
+1. Keep commits atomic - one logical change per commit
+1. Squash "fix typo" or "address review comments" commits before merging
+1. Reference relevant issues in commit messages or PR description
+1. Review the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) to understand and
+   address automated compliance checks
 
 ### Questions?
 
 If you have questions about contributing, please open an issue for discussion.
-Thank you for considering contributing to our projects! We welcome contributions from everyone.
+Thank you for considering contributing to our projects! We welcome contributions
+from everyone.
 
 ## How to Contribute
 
@@ -132,11 +139,12 @@ Thank you for considering contributing to our projects! We welcome contributions
 ### Submitting Pull Requests
 
 1. **Fork the repository** and create your branch from the default branch
-2. **Make your changes** following the code style of the project
-3. **Test your changes** to ensure they work as expected
-4. **Commit your changes** with clear, descriptive commit messages
-5. **Push to your fork** and submit a pull request
-6. **Address compliance checks** - Review any automated compliance feedback using the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md)
+1. **Make your changes** following the code style of the project
+1. **Test your changes** to ensure they work as expected
+1. **Commit your changes** with clear, descriptive commit messages
+1. **Push to your fork** and submit a pull request
+1. **Address compliance checks** - Review any automated compliance feedback
+   using the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md)
 
 ### Pull Request Guidelines
 
@@ -146,7 +154,8 @@ Thank you for considering contributing to our projects! We welcome contributions
 - Update documentation as needed
 - Ensure all tests pass before submitting
 - Reference related issues in your PR description
-- Address all compliance check warnings and errors (see [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md))
+- Address all compliance check warnings and errors (see
+  [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md))
 
 ### Code Style
 
@@ -163,17 +172,20 @@ Thank you for considering contributing to our projects! We welcome contributions
 
 ## Code Review Process
 
-All submissions require review before being merged. We aim to review pull requests promptly and provide constructive feedback.
+All submissions require review before being merged. We aim to review pull
+requests promptly and provide constructive feedback.
 
 ### Automated Compliance Checks
 
 All pull requests are subject to automated compliance checks covering:
+
 - **Security**: Error handling, input validation, secure coding practices
 - **Code Quality**: Naming conventions, edge case handling, maintainability
 - **Ticket Compliance**: Issue references and traceability
 - **Custom Rules**: Organization-specific best practices
 
-See the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) for detailed information on understanding and addressing compliance check results.
+See the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) for detailed information
+on understanding and addressing compliance check results.
 
 ## Community
 
@@ -183,6 +195,7 @@ See the [PR Compliance Guide](PR_COMPLIANCE_GUIDE.md) for detailed information o
 
 ## Questions?
 
-If you have questions, please check our [Support documentation](SUPPORT.md) or open an issue for discussion.
+If you have questions, please check our [Support documentation](SUPPORT.md) or
+open an issue for discussion.
 
 Thank you for contributing! 🎉

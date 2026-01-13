@@ -8,16 +8,19 @@
 
 ## Core Philosophy
 
-**This mode is designed for solo developers working with AI assistants to build and ship features rapidly with minimal friction and maximum automation.**
+**This mode is designed for solo developers working with AI assistants to build
+and ship features rapidly with minimal friction and maximum automation.**
 
 ### Guiding Principles
 
-1. **AI Does Everything Possible** - The human focuses on strategic decisions only
-2. **Auto-fix Always, Block Never** - CI fixes issues automatically rather than blocking commits
-3. **Speed Metrics Matter** - Measure time from idea to production deployment
-4. **Trust the Automation** - If CI passes and security scans are clean, ship it
-5. **Fix Forward** - Don't let perfection be the enemy of good enough
-6. **Batch Similar Work** - Group related changes to minimize context switching
+1. **AI Does Everything Possible** - The human focuses on strategic decisions
+   only
+1. **Auto-fix Always, Block Never** - CI fixes issues automatically rather than
+   blocking commits
+1. **Speed Metrics Matter** - Measure time from idea to production deployment
+1. **Trust the Automation** - If CI passes and security scans are clean, ship it
+1. **Fix Forward** - Don't let perfection be the enemy of good enough
+1. **Batch Similar Work** - Group related changes to minimize context switching
 
 ---
 
@@ -26,6 +29,7 @@
 ### What AI Does Automatically
 
 #### 1. Code Generation
+
 - Implement features based on natural language descriptions
 - Follow existing code patterns and conventions
 - Add inline comments only when logic is non-obvious
@@ -33,6 +37,7 @@
 - Follow organization's coding standards (PEP 8, Black formatting)
 
 #### 2. Commit Messages
+
 - Generate conventional commit messages automatically
 - Determine appropriate type (feat, fix, docs, etc.)
 - Extract scope from file paths
@@ -40,18 +45,21 @@
 - Use imperative mood ("add" not "added")
 
 #### 3. Documentation
+
 - Extract and update docstrings
 - Generate API documentation from code
 - Update README when adding new scripts or features
 - Keep documentation synchronized with code changes
 
 #### 4. Testing
+
 - Write tests that match existing patterns (if tests exist)
 - Run tests before committing
 - Fix failing tests automatically when possible
 - Skip test creation if no test infrastructure exists
 
 #### 5. Code Quality
+
 - Auto-format with Black (Python) or Prettier (JS/TS)
 - Sort imports with isort (--profile=black)
 - Fix trailing whitespace, line endings, EOF issues
@@ -67,22 +75,26 @@
 The lazy human only needs to intervene for:
 
 1. **Strategic Decisions**
+
    - Architecture and design choices
    - Technology stack selection
    - Breaking changes that affect APIs
    - Major refactoring decisions
 
-2. **Security Reviews**
+1. **Security Reviews**
+
    - Review HIGH severity security vulnerabilities
    - Approve changes to authentication/authorization
    - Review secrets management changes
 
-3. **Deployments**
+1. **Deployments**
+
    - Production deployments (after CI passes)
    - Infrastructure changes
    - Database migrations in production
 
-4. **Final Approval**
+1. **Final Approval**
+
    - PR merge (but can be auto-merged if configured)
    - Release tagging
    - Public announcements
@@ -95,25 +107,25 @@ The lazy human only needs to intervene for:
 
 ### Enforcement Levels
 
-| Standard | Normal Mode | Rapid Dev Mode | Rationale |
-|----------|-------------|----------------|-----------|
-| Code formatting | Blocking | Auto-fix | Speed: Don't interrupt flow |
-| Import sorting | Blocking | Auto-fix | Speed: Automated is sufficient |
-| Type hints | Required | Encouraged | Speed: Add when meaningful |
-| Docstrings | Required | Encouraged | Speed: Add for public APIs only |
-| Test coverage | 80% required | 50% encouraged | Speed: Cover critical paths |
-| Security scans | Blocking HIGH | Blocking HIGH only | Safety: Keep critical checks |
-| Linting errors | Blocking | Warn-only | Speed: Fix in batches |
-| Trailing whitespace | Blocking | Auto-fix | Speed: Automated cleanup |
-| Commit message format | Blocking | Auto-fix | Speed: AI-generated is sufficient |
+| Standard              | Normal Mode   | Rapid Dev Mode     | Rationale                         |
+| --------------------- | ------------- | ------------------ | --------------------------------- |
+| Code formatting       | Blocking      | Auto-fix           | Speed: Don't interrupt flow       |
+| Import sorting        | Blocking      | Auto-fix           | Speed: Automated is sufficient    |
+| Type hints            | Required      | Encouraged         | Speed: Add when meaningful        |
+| Docstrings            | Required      | Encouraged         | Speed: Add for public APIs only   |
+| Test coverage         | 80% required  | 50% encouraged     | Speed: Cover critical paths       |
+| Security scans        | Blocking HIGH | Blocking HIGH only | Safety: Keep critical checks      |
+| Linting errors        | Blocking      | Warn-only          | Speed: Fix in batches             |
+| Trailing whitespace   | Blocking      | Auto-fix           | Speed: Automated cleanup          |
+| Commit message format | Blocking      | Auto-fix           | Speed: AI-generated is sufficient |
 
 ### Relaxed Rules
 
 1. **Documentation**: Write docs for public APIs only, skip internal utilities
-2. **Comments**: Add when logic is complex, skip obvious code
-3. **Refactoring**: Fix what you touch, don't refactor unrelated code
-4. **Test Coverage**: Focus on critical paths, skip trivial getters/setters
-5. **Code Review**: Auto-merge when CI passes, unless labeled "needs-review"
+1. **Comments**: Add when logic is complex, skip obvious code
+1. **Refactoring**: Fix what you touch, don't refactor unrelated code
+1. **Test Coverage**: Focus on critical paths, skip trivial getters/setters
+1. **Code Review**: Auto-merge when CI passes, unless labeled "needs-review"
 
 ---
 
@@ -141,9 +153,9 @@ pre-commit install
 ### Hook Categories
 
 1. **Auto-fix**: Black, isort, prettier, trailing-whitespace, end-of-file-fixer
-2. **Validate-only**: check-yaml, check-json, shellcheck
-3. **Warn-only**: flake8, eslint, mypy
-4. **Security**: bandit (HIGH/MEDIUM), detect-secrets
+1. **Validate-only**: check-yaml, check-json, shellcheck
+1. **Warn-only**: flake8, eslint, mypy
+1. **Security**: bandit (HIGH/MEDIUM), detect-secrets
 
 ---
 
@@ -171,9 +183,11 @@ Follows **Conventional Commits** specification:
 [optional footer]
 ```
 
-**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `security`
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`,
+`security`
 
 **Examples**:
+
 ```
 feat(auth): add OAuth2 provider integration
 fix(api): resolve null pointer in user service
@@ -184,6 +198,7 @@ security(deps): bump cryptography to 41.0.0
 ### Scope Detection
 
 AI determines scope from file paths:
+
 - `src/api/*` → scope: api
 - `src/auth/*` → scope: auth
 - `docs/*` → scope: docs
@@ -208,13 +223,13 @@ branches:
           - "ci/test"
           - "security/scan"
       required_pull_request_reviews:
-        required_approving_review_count: 0  # Solo dev: no reviews required
-      enforce_admins: false  # Allow admin bypass
-      restrictions: null     # No push restrictions
-      
+        required_approving_review_count: 0 # Solo dev: no reviews required
+      enforce_admins: false # Allow admin bypass
+      restrictions: null # No push restrictions
+
     auto_merge:
       enabled: true
-      merge_method: squash   # Clean history
+      merge_method: squash # Clean history
       delete_branch_on_merge: true
 ```
 
@@ -232,10 +247,10 @@ branches:
 ### Pipeline Optimization
 
 1. **Parallel Jobs** - Run tests, linting, security scans simultaneously
-2. **Dependency Caching** - Cache pip, npm, yarn dependencies
-3. **Incremental Builds** - Only rebuild changed components
-4. **Skip on Docs** - Skip CI for documentation-only changes
-5. **Fast Feedback** - Run unit tests before integration tests
+1. **Dependency Caching** - Cache pip, npm, yarn dependencies
+1. **Incremental Builds** - Only rebuild changed components
+1. **Skip on Docs** - Skip CI for documentation-only changes
+1. **Fast Feedback** - Run unit tests before integration tests
 
 ### CI Configuration Example
 
@@ -251,15 +266,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
-      
+          python-version: "3.11"
+          cache: "pip"
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      
+
       - name: Run tests
         run: pytest --maxfail=1 --tb=short
-        
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -269,15 +284,15 @@ jobs:
       - run: black --check .
       - run: isort --check-only .
       - run: flake8 --max-line-length=88
-        continue-on-error: true  # Warn only
-        
+        continue-on-error: true # Warn only
+
   security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
       - run: pip install bandit
-      - run: bandit -r . -f json -o bandit-report.json -ll  # HIGH only
+      - run: bandit -r . -f json -o bandit-report.json -ll # HIGH only
 ```
 
 ---
@@ -297,26 +312,27 @@ python scripts/auto-docs.py --src-dir src --update-readme
 ### Documentation Standards
 
 1. **Module Docstrings** - One-liner describing module purpose
-2. **Class Docstrings** - Brief description and usage example
-3. **Function Docstrings** - Parameters, return values, exceptions (Google style)
-4. **Type Hints** - Required for public functions, encouraged for private
+1. **Class Docstrings** - Brief description and usage example
+1. **Function Docstrings** - Parameters, return values, exceptions (Google
+   style)
+1. **Type Hints** - Required for public functions, encouraged for private
 
 ### Example Docstring Format
 
 ```python
 def calculate_score(user_id: int, metrics: dict[str, float]) -> float:
     """Calculate user score based on performance metrics.
-    
+
     Args:
         user_id: Unique identifier for the user
         metrics: Dictionary of metric names to values
-        
+
     Returns:
         Calculated score between 0.0 and 100.0
-        
+
     Raises:
         ValueError: If user_id is invalid or metrics is empty
-        
+
     Example:
         >>> calculate_score(123, {"accuracy": 0.95, "speed": 0.87})
         91.0
@@ -390,18 +406,18 @@ git push
 ### Measure These
 
 1. **Time to Production** - Hours from idea to deployed feature
-2. **PR Throughput** - Number of PRs merged per day
-3. **CI Pass Rate** - Percentage of CI runs that pass on first try
-4. **Auto-merge Rate** - Percentage of PRs that auto-merge (target: >80%)
-5. **Security Fix Time** - Hours from vulnerability detection to fix deployed
+1. **PR Throughput** - Number of PRs merged per day
+1. **CI Pass Rate** - Percentage of CI runs that pass on first try
+1. **Auto-merge Rate** - Percentage of PRs that auto-merge (target: >80%)
+1. **Security Fix Time** - Hours from vulnerability detection to fix deployed
 
 ### Goals for Rapid Development
 
 - **Feature Delivery**: 2-5 features per day
-- **PR Lifecycle**: <4 hours from creation to merge
-- **CI Feedback**: <5 minutes from push to result
-- **Bug Fix Cycle**: <2 hours from report to fix deployed
-- **Documentation Lag**: <24 hours (docs updated within 1 day of code)
+- **PR Lifecycle**: \<4 hours from creation to merge
+- **CI Feedback**: \<5 minutes from push to result
+- **Bug Fix Cycle**: \<2 hours from report to fix deployed
+- **Documentation Lag**: \<24 hours (docs updated within 1 day of code)
 
 ---
 
@@ -441,23 +457,21 @@ git push
 
 ### Do's
 
-✅ **Trust the automation** - If CI passes, it's good enough
-✅ **Batch related PRs** - Merge dependent changes together
-✅ **Use labels** - `auto-merge`, `batch:*`, `skip-ci`
-✅ **Let AI write commits** - Faster and more consistent
-✅ **Fix forward** - Don't roll back unless critical
-✅ **Keep branches short-lived** - Max 48 hours old
-✅ **Auto-generate docs** - Let code be source of truth
+✅ **Trust the automation** - If CI passes, it's good enough ✅ **Batch related
+PRs** - Merge dependent changes together ✅ **Use labels** - `auto-merge`,
+`batch:*`, `skip-ci` ✅ **Let AI write commits** - Faster and more consistent ✅
+**Fix forward** - Don't roll back unless critical ✅ **Keep branches
+short-lived** - Max 48 hours old ✅ **Auto-generate docs** - Let code be source
+of truth
 
 ### Don'ts
 
-❌ **Don't manually review every PR** - Only review critical changes
-❌ **Don't refactor unrelated code** - Stay focused on the task
-❌ **Don't block on style** - Let auto-fix handle it
-❌ **Don't wait for 100% coverage** - 50% is fine for rapid dev
-❌ **Don't write docs manually** - Use auto-docs script
-❌ **Don't create long-lived branches** - Merge or close within 48h
-❌ **Don't skip security scans** - Always run Bandit/CodeQL
+❌ **Don't manually review every PR** - Only review critical changes ❌ **Don't
+refactor unrelated code** - Stay focused on the task ❌ **Don't block on style**
+\- Let auto-fix handle it ❌ **Don't wait for 100% coverage** - 50% is fine for
+rapid dev ❌ **Don't write docs manually** - Use auto-docs script ❌ **Don't
+create long-lived branches** - Merge or close within 48h ❌ **Don't skip security
+scans** - Always run Bandit/CodeQL
 
 ---
 
@@ -494,27 +508,27 @@ pre-commit install
 ### CI Keeps Failing
 
 1. Check if it's a flaky test - retry the workflow
-2. Let AI analyze logs and propose fix
-3. If persistent, add `needs-review` label for human input
+1. Let AI analyze logs and propose fix
+1. If persistent, add `needs-review` label for human input
 
 ### Auto-merge Not Working
 
 1. Verify `auto-merge` label is present
-2. Check branch protection rules allow auto-merge
-3. Ensure all required status checks passed
-4. Check for merge conflicts
+1. Check branch protection rules allow auto-merge
+1. Ensure all required status checks passed
+1. Check for merge conflicts
 
 ### Commit Message Rejected
 
 1. Verify conventional commit format
-2. Use `./scripts/aicommit.sh` to generate proper format
-3. Check `.git/hooks/commit-msg` is installed
+1. Use `./scripts/aicommit.sh` to generate proper format
+1. Check `.git/hooks/commit-msg` is installed
 
 ### Pre-commit Hooks Blocking
 
 1. Verify using `.pre-commit-config-rapid.yaml`
-2. Run `pre-commit run --all-files` to see errors
-3. Check hook configuration for `fail_fast: false`
+1. Run `pre-commit run --all-files` to see errors
+1. Check hook configuration for `fail_fast: false`
 
 ---
 

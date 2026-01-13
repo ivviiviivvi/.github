@@ -6,7 +6,8 @@
 
 ## Overview
 
-This guide covers integrating the Context Handoff System into various project types and orchestration frameworks.
+This guide covers integrating the Context Handoff System into various project
+types and orchestration frameworks.
 
 ---
 
@@ -16,7 +17,7 @@ This guide covers integrating the Context Handoff System into various project ty
 
 Add context generation capability to your existing orchestrator:
 
-```python
+````python
 from pathlib import Path
 from context_generator import ContextPayloadGenerator, CompressionLevel
 
@@ -106,7 +107,7 @@ class Orchestrator:
             import json
             f.write(json.dumps(context, indent=2))
             f.write("\n```\n")
-```
+````
 
 ### Automatic Checkpointing
 
@@ -159,9 +160,9 @@ on:
   workflow_dispatch:
     inputs:
       level:
-        description: 'Compression level'
+        description: "Compression level"
         required: true
-        default: 'standard'
+        default: "standard"
         type: choice
         options:
           - minimal
@@ -169,7 +170,7 @@ on:
           - full
   schedule:
     # Generate context every 4 hours during work days
-    - cron: '0 9-17/4 * * 1-5'
+    - cron: "0 9-17/4 * * 1-5"
 
 jobs:
   generate-context:
@@ -181,7 +182,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Generate context
         run: |
@@ -282,6 +283,7 @@ if __name__ == '__main__':
 ```
 
 Usage:
+
 ```bash
 python cli.py handoff --level standard
 ```
@@ -342,7 +344,7 @@ CMD ["bash", "-c", "cd /app/context-handoff && ./generate_context.sh standard"]
 ### Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   orchestrator:
@@ -532,8 +534,8 @@ def test_full_context(example_state):
 ### When to Integrate
 
 1. **Before deploying to production** - Test with your actual orchestrator state
-2. **During initial development** - Set up early for consistent handoffs
-3. **When scaling up** - Essential for projects with >50 tasks
+1. **During initial development** - Set up early for consistent handoffs
+1. **When scaling up** - Essential for projects with >50 tasks
 
 ### Integration Checklist
 
@@ -549,17 +551,19 @@ def test_full_context(example_state):
 
 ### Common Pitfalls
 
-1. **State file format mismatch** - Ensure your orchestrator saves complete state
-2. **Missing fields** - Validate state file has all required fields
-3. **Token count drift** - Monitor and adjust compression level as project grows
-4. **Stale state** - Ensure state file is updated before generating context
-5. **Template misalignment** - Keep templates in sync with schema changes
+1. **State file format mismatch** - Ensure your orchestrator saves complete
+   state
+1. **Missing fields** - Validate state file has all required fields
+1. **Token count drift** - Monitor and adjust compression level as project grows
+1. **Stale state** - Ensure state file is updated before generating context
+1. **Template misalignment** - Keep templates in sync with schema changes
 
 ---
 
 ## Support
 
 For integration assistance:
+
 - Review examples in `examples/` directory
 - Check test suite in `tests/` directory
 - Consult schema documentation in `docs/SCHEMA.md`
@@ -567,4 +571,4 @@ For integration assistance:
 
 ---
 
-*Context Handoff System v1.0.0*
+_Context Handoff System v1.0.0_

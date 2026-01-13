@@ -30,7 +30,7 @@ jobs:
     name: 'Collect GitHub Actions Usage Metrics'
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    
+
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
           github_token = os.getenv('GITHUB_TOKEN')
           org = os.getenv('GITHUB_ORG')
           report_period = os.getenv('REPORT_PERIOD', 'daily')
-          
+
           headers = {
               'Authorization': f'token {github_token}',
               'Accept': 'application/vnd.github.v3+json'
@@ -82,7 +82,7 @@ jobs:
 
           # Fetch workflow runs across organization repos
           all_runs = []
-          
+
           # Get organization repos
           repos_url = f'https://api.github.com/orgs/{org}/repos'
           repos_response = requests.get(repos_url, headers=headers, params={'per_page': 100})
@@ -92,22 +92,22 @@ jobs:
 
           for repo in repos[:50]:  # Limit to 50 repos to avoid rate limits
               repo_name = repo['full_name']
-              
+
               # Fetch workflow runs for this repo
               runs_url = f'https://api.github.com/repos/{repo_name}/actions/runs'
               params = {
                   'per_page': 100,
                   'status': 'completed'
               }
-              
+
               try:
                   runs_response = requests.get(runs_url, headers=headers, params=params, timeout=10)
                   if runs_response.status_code == 200:
                       runs_data = runs_response.json()
-                      
+
                       for run in runs_data.get('workflow_runs', []):
                           run_date = parser.isoparse(run['created_at'].replace('Z', '+00:00'))
-                          
+
                           if run_date >= cutoff_date.replace(tzinfo=run_date.tzinfo):
                               # Extract relevant metrics
                               all_runs.append({
@@ -147,7 +147,7 @@ jobs:
 
           github_token = os.getenv('GITHUB_TOKEN')
           org = os.getenv('GITHUB_ORG')
-          
+
           headers = {
               'Authorization': f'token {github_token}',
               'Accept': 'application/vnd.github.v3+json'
@@ -155,27 +155,27 @@ jobs:
 
           # Fetch Actions billing info (requires org admin permissions)
           billing_url = f'https://api.github.com/orgs/{org}/settings/billing/actions'
-          
+
           try:
               response = requests.get(billing_url, headers=headers, timeout=10)
-              
+
               if response.status_code == 200:
                   billing_data = response.json()
-                  
+
                   total_minutes = billing_data.get('total_minutes_used', 0)
                   included_minutes = billing_data.get('included_minutes', 0)
                   total_paid_minutes = billing_data.get('total_paid_minutes_used', 0)
-                  
+
                   print(f"Total minutes used: {total_minutes}")
                   print(f"Included minutes: {included_minutes}")
                   print(f"Paid minutes: {total_paid_minutes}")
-                  
+
                   # Calculate percentage of quota used
                   if included_minutes > 0:
                       quota_percent = (total_minutes / included_minutes) * 100
                   else:
                       quota_percent = 0
-                  
+
                   with open('billing_info.json', 'w') as f:
                       json.dump({
                           'total_minutes_used': total_minutes,
@@ -184,7 +184,7 @@ jobs:
                           'quota_percentage': round(quota_percent, 2),
                           'remaining_minutes': max(0, included_minutes - total_minutes)
                       }, f, indent=2)
-                  
+
                   with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                       f.write(f"total_minutes={total_minutes}\n")
                       f.write(f"included_minutes={included_minutes}\n")
@@ -194,14 +194,14 @@ jobs:
               else:
                   print(f"Unable to fetch billing info: {response.status_code}")
                   print("This may require organization admin permissions")
-                  
+
                   with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                       f.write(f"billing_available=false\n")
                       f.write(f"total_minutes=0\n")
                       f.write(f"included_minutes=0\n")
                       f.write(f"quota_percentage=0\n")
                       f.write(f"remaining_minutes=0\n")
-          
+
           except Exception as e:
               print(f"Error fetching billing info: {e}")
               with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
@@ -311,7 +311,7 @@ jobs:
           caution_threshold = 70
 
           alert_level = 'normal'
-          
+
           if quota_percentage >= critical_threshold:
               alert_level = 'critical'
               print(f"🔴 CRITICAL: {quota_percentage}% of quota used!")
@@ -327,7 +327,7 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"alert_level={alert_level}\n")
               f.write(f"should_alert={'true' if alert_level in ['critical', 'warning'] else 'false'}\n")
-          
+
           env_vars = {
               'QUOTA_PERCENTAGE': os.getenv('QUOTA_PERCENTAGE', '0'),
               'REMAINING_MINUTES': os.getenv('REMAINING_MINUTES', '0')
@@ -350,7 +350,7 @@ jobs:
               metrics = json.load(f)
 
           billing_available = os.getenv('BILLING_AVAILABLE', 'false') == 'true'
-          
+
           if billing_available:
               with open('billing_info.json', 'r') as f:
                   billing = json.load(f)
@@ -370,8 +370,8 @@ jobs:
           # Generate markdown report
           report = f"""# GitHub Actions Usage Report
 
-**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}  
-**Report Period:** Last {lookback_days} day(s)  
+**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
+**Report Period:** Last {lookback_days} day(s)
 **Alert Level:** {alert_level.upper()}
 
 ## Executive Summary
@@ -512,25 +512,25 @@ Quota consumption is within normal parameters. Continue monitoring.
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           mkdir -p .github/usage-reports
-          
+
           # Save with timestamp
           TIMESTAMP=$(date +%Y%m%d-%H%M%S)
           cp usage_report.md ".github/usage-reports/usage-report-${TIMESTAMP}.md"
-          
+
           # Also save as latest
           cp usage_report.md ".github/usage-reports/usage-report-latest.md"
-          
+
           # Save metrics as JSON
           cp walkthrough_metrics.json ".github/usage-reports/metrics-${TIMESTAMP}.json"
-          
+
           if [ -f "billing_info.json" ]; then
             cp billing_info.json ".github/usage-reports/billing-${TIMESTAMP}.json"
           fi
-          
+
           git add .github/usage-reports/
-          
+
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -548,44 +548,44 @@ Quota consumption is within normal parameters. Continue monitoring.
             const alertLevel = '${{ steps.check_thresholds.outputs.alert_level }}';
             const quotaPercentage = '${{ steps.billing.outputs.quota_percentage }}';
             const remainingMinutes = '${{ steps.billing.outputs.remaining_minutes }}';
-            
+
             const emoji = alertLevel === 'critical' ? '🔴' : '🟡';
             const title = `${emoji} GitHub Actions Quota Alert: ${quotaPercentage}% Used`;
             const body = `
             ## ${emoji} GitHub Actions Quota Alert
-            
-            **Alert Level:** ${alertLevel.toUpperCase()}  
-            **Quota Used:** ${quotaPercentage}%  
+
+            **Alert Level:** ${alertLevel.toUpperCase()}
+            **Quota Used:** ${quotaPercentage}%
             **Remaining Minutes:** ${remainingMinutes}
-            
+
             ### Immediate Actions Required
-            
-            ${alertLevel === 'critical' ? 
+
+            ${alertLevel === 'critical' ?
               '⛔ **CRITICAL:** Quota nearly exhausted! Pause non-essential workflows immediately.' :
               '⚠️ **WARNING:** High quota usage detected. Review and optimize workflows.'}
-            
+
             ### Usage Report
-            
+
             ${report}
-            
+
             ### Next Steps
-            
+
             1. Review the full usage report above
             2. Enable Safeguard 7 (Staggered Scheduling) if not already active
             3. Consider workflow optimizations
             4. Monitor usage daily until levels normalize
-            
+
             ### Files
-            
+
             - Full report: \`.github/usage-reports/usage-report-latest.md\`
             - Metrics: \`.github/usage-reports/metrics-*.json\`
             - Billing: \`.github/usage-reports/billing-*.json\`
-            
+
             ---
-            
+
             **This alert was generated by Safeguard 8: Usage Monitoring & Reporting**
             `;
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,

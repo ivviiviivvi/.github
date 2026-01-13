@@ -5,53 +5,53 @@ Pre-configured DevContainer templates for different project types.
 ## Available Templates
 
 ### 1. Basic Workspace
-**Location**: `basic/`
-**Use Case**: Simple single-language projects
+
+**Location**: `basic/` **Use Case**: Simple single-language projects
 **Includes**: Base Ubuntu image, Git, basic tools
 
 ### 2. Full-Stack Web
-**Location**: `fullstack/`
-**Use Case**: Web applications with database
+
+**Location**: `fullstack/` **Use Case**: Web applications with database
 **Includes**: Node.js, Python, PostgreSQL, Redis, MailHog
 
 ### 3. Data Science
-**Location**: `datascience/`
-**Use Case**: ML/AI and data analysis
-**Includes**: Python, Jupyter, PostgreSQL, data science libraries
+
+**Location**: `datascience/` **Use Case**: ML/AI and data analysis **Includes**:
+Python, Jupyter, PostgreSQL, data science libraries
 
 ### 4. Microservices
-**Location**: `microservices/`
-**Use Case**: Distributed systems development
+
+**Location**: `microservices/` **Use Case**: Distributed systems development
 **Includes**: Multiple service containers, message queue, monitoring
 
 ### 5. Mobile Development
-**Location**: `mobile/`
-**Use Case**: React Native, Flutter development
+
+**Location**: `mobile/` **Use Case**: React Native, Flutter development
 **Includes**: Android SDK, iOS tools, emulators
 
 ### 6. Go Development
-**Location**: `golang/`
-**Use Case**: Go microservices and APIs
-**Includes**: Go, PostgreSQL, Redis, air (hot reload)
+
+**Location**: `golang/` **Use Case**: Go microservices and APIs **Includes**:
+Go, PostgreSQL, Redis, air (hot reload)
 
 ### 7. Rust Development
-**Location**: `rust/`
-**Use Case**: Rust applications
-**Includes**: Rust toolchain, cargo tools, PostgreSQL
+
+**Location**: `rust/` **Use Case**: Rust applications **Includes**: Rust
+toolchain, cargo tools, PostgreSQL
 
 ### 8. Java Development
-**Location**: `java/`
-**Use Case**: Java/Spring Boot applications
-**Includes**: JDK, Maven/Gradle, PostgreSQL, Redis
+
+**Location**: `java/` **Use Case**: Java/Spring Boot applications **Includes**:
+JDK, Maven/Gradle, PostgreSQL, Redis
 
 ### 9. .NET Development
-**Location**: `dotnet/`
-**Use Case**: ASP.NET Core applications
-**Includes**: .NET SDK, SQL Server, Redis
+
+**Location**: `dotnet/` **Use Case**: ASP.NET Core applications **Includes**:
+.NET SDK, SQL Server, Redis
 
 ### 10. Cloud Native
-**Location**: `cloud-native/`
-**Use Case**: Kubernetes-native development
+
+**Location**: `cloud-native/` **Use Case**: Kubernetes-native development
 **Includes**: kubectl, helm, kind, docker-in-docker
 
 ## Usage
@@ -80,10 +80,10 @@ code .
 ### Option 3: Manual Selection (VS Code)
 
 1. Open Command Palette (F1)
-2. Select: `Dev Containers: Add Dev Container Configuration Files...`
-3. Choose template from list
-4. Customize options
-5. Reopen in container
+1. Select: `Dev Containers: Add Dev Container Configuration Files...`
+1. Choose template from list
+1. Customize options
+1. Reopen in container
 
 ## Template Structure
 
@@ -103,6 +103,7 @@ template-name/
 ### Modify Resources
 
 Edit `devcontainer.json`:
+
 ```json
 {
   "hostRequirements": {
@@ -116,6 +117,7 @@ Edit `devcontainer.json`:
 ### Add Services
 
 Edit `docker-compose.yml`:
+
 ```yaml
 services:
   mongodb:
@@ -127,6 +129,7 @@ services:
 ### Add Tools
 
 Edit `post-create.sh`:
+
 ```bash
 # Install additional tools
 npm install -g yarn pnpm
@@ -136,14 +139,15 @@ pip install black flake8
 ## Best Practices
 
 1. **Start with a template** - Don't build from scratch
-2. **Customize minimally** - Keep it simple
-3. **Version everything** - Pin all versions
-4. **Document changes** - Update README
-5. **Test thoroughly** - Rebuild container after changes
+1. **Customize minimally** - Keep it simple
+1. **Version everything** - Pin all versions
+1. **Document changes** - Update README
+1. **Test thoroughly** - Rebuild container after changes
 
 ## Creating Custom Templates
 
-See [Template Development Guide](../../docs/guides/DEVCONTAINER_TEMPLATE_GUIDE.md)
+See
+[Template Development Guide](../../docs/guides/DEVCONTAINER_TEMPLATE_GUIDE.md)
 
 ## Support
 

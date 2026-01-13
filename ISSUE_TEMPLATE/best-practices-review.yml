@@ -9,9 +9,9 @@ body:
     attributes:
       value: |
         ## 🏆 Best Practices Review Request
-        
+
         Request a comprehensive review of how well a repository implements GitHub best practices.
-        
+
         This template helps ensure repositories meet organizational standards for:
         - Security & Compliance
         - Code Quality

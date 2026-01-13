@@ -1,34 +1,43 @@
 # Walkthrough Configuration Examples
 
-This directory contains example configurations for generating automated application walkthroughs across different technology stacks and frameworks.
+This directory contains example configurations for generating automated
+application walkthroughs across different technology stacks and frameworks.
 
 ## Overview
 
-Each example configuration demonstrates how to set up the walkthrough generator for a specific application type. Use these as templates to create your own custom configurations.
+Each example configuration demonstrates how to set up the walkthrough generator
+for a specific application type. Use these as templates to create your own
+custom configurations.
 
 ## Available Examples
 
 ### 1. React Application
+
 **File**: [`react-app-walkthrough-config.yml`](react-app-walkthrough-config.yml)
 
-**Best for**: Single-page applications, component-based UIs, modern frontend frameworks
+**Best for**: Single-page applications, component-based UIs, modern frontend
+frameworks
 
 **Key features**:
+
 - Start command: `npm start`
 - Default port: 3000
 - Focus areas: UI components, state management, user interactions
 - Ideal duration: 60 seconds
 
-**Use this when**: Building React, Next.js, or similar component-based applications
+**Use this when**: Building React, Next.js, or similar component-based
+applications
 
 ---
 
 ### 2. Python Flask Application
+
 **File**: [`flask-app-walkthrough-config.yml`](flask-app-walkthrough-config.yml)
 
 **Best for**: REST APIs, microservices, backend services
 
 **Key features**:
+
 - Start command: `python app.py`
 - Default port: 5000
 - Focus areas: API endpoints, request/response flow, database operations
@@ -39,26 +48,32 @@ Each example configuration demonstrates how to set up the walkthrough generator 
 ---
 
 ### 3. Vue.js Application
+
 **File**: [`vue-app-walkthrough-config.yml`](vue-app-walkthrough-config.yml)
 
 **Best for**: Progressive web apps, interactive dashboards, data-driven UIs
 
 **Key features**:
+
 - Start command: `npm run serve`
 - Default port: 8080
 - Focus areas: Reactive components, routing, computed properties
 - Ideal duration: 60-90 seconds
 
-**Use this when**: Building Vue.js, Nuxt.js, or similar reactive framework applications
+**Use this when**: Building Vue.js, Nuxt.js, or similar reactive framework
+applications
 
 ---
 
 ### 4. Full-Stack Application
-**File**: [`fullstack-app-walkthrough-config.yml`](fullstack-app-walkthrough-config.yml)
+
+**File**:
+[`fullstack-app-walkthrough-config.yml`](fullstack-app-walkthrough-config.yml)
 
 **Best for**: Complete applications with frontend, backend, and database
 
 **Key features**:
+
 - Multiple services: Node.js backend + React frontend
 - Port configuration: Backend (5000), Frontend (3000)
 - Focus areas: Complete user journey, API integration, data flow
@@ -71,17 +86,21 @@ Each example configuration demonstrates how to set up the walkthrough generator 
 ## How to Use These Examples
 
 ### Step 1: Choose the Right Example
+
 Select the example that most closely matches your application architecture:
+
 - **Frontend-only apps**: Use React or Vue.js examples
 - **Backend APIs**: Use Flask example
 - **Full applications**: Use Full-Stack example
 
 ### Step 2: Copy and Customize
+
 1. Copy the example file to your repository root (or `.github/` directory)
-2. Rename to match your project: `walkthrough-config.yml`
-3. Modify the values to match your application
+1. Rename to match your project: `walkthrough-config.yml`
+1. Modify the values to match your application
 
 ### Step 3: Test Locally
+
 Before running the automated workflow, test your configuration:
 
 ```bash
@@ -95,10 +114,11 @@ npm start    # or python app.py
 ```
 
 ### Step 4: Run the Workflow
+
 1. Commit your `walkthrough-config.yml` file
-2. Go to Actions tab in GitHub
-3. Run "Generate Application Walkthrough"
-4. The workflow will use your custom configuration
+1. Go to Actions tab in GitHub
+1. Run "Generate Application Walkthrough"
+1. The workflow will use your custom configuration
 
 ---
 
@@ -107,7 +127,9 @@ npm start    # or python app.py
 ### Required Fields
 
 #### `app_type`
+
 The technology stack of your application:
+
 - `react` - React, Next.js, Create React App
 - `vue` - Vue.js, Nuxt.js
 - `angular` - Angular applications
@@ -117,7 +139,9 @@ The technology stack of your application:
 - `fullstack` - Multi-service applications
 
 #### `start_command`
+
 The command to start your application in development mode:
+
 ```yaml
 start_command: "npm start"           # React/Vue/Angular
 start_command: "python app.py"       # Flask
@@ -126,7 +150,9 @@ start_command: "python manage.py runserver"  # Django
 ```
 
 #### `port`
+
 The port your application listens on:
+
 ```yaml
 port: 3000  # React default
 port: 5000  # Flask default
@@ -137,7 +163,9 @@ port: 4200  # Angular default
 ### Optional Fields
 
 #### `install_command`
+
 Command to install dependencies (defaults to auto-detection):
+
 ```yaml
 install_command: "npm install"
 install_command: "pip install -r requirements.txt"
@@ -145,14 +173,18 @@ install_command: "yarn install"
 ```
 
 #### `build_command`
+
 Command to build the application (if needed):
+
 ```yaml
 build_command: "npm run build"
 build_command: "python setup.py build"
 ```
 
 #### `environment_variables`
+
 Required environment variables:
+
 ```yaml
 environment_variables:
   NODE_ENV: development
@@ -161,7 +193,9 @@ environment_variables:
 ```
 
 #### `focus_areas`
+
 Specific features or pages to highlight:
+
 ```yaml
 focus_areas:
   - "User login and authentication"
@@ -171,13 +205,17 @@ focus_areas:
 ```
 
 #### `duration`
+
 Target video length in seconds (30-120):
+
 ```yaml
-duration: 60  # One minute walkthrough
+duration: 60 # One minute walkthrough
 ```
 
 #### `voiceover_style`
+
 Narration style:
+
 ```yaml
 voiceover_style: "professional"  # Formal, business-focused
 voiceover_style: "casual"        # Friendly, conversational
@@ -185,7 +223,9 @@ voiceover_style: "technical"     # Detailed, developer-focused
 ```
 
 #### `demo_flow`
+
 Step-by-step user journey:
+
 ```yaml
 demo_flow:
   - "Navigate to homepage"
@@ -201,6 +241,7 @@ demo_flow:
 ## Common Modifications
 
 ### Modifying for Different Ports
+
 If your app uses a custom port:
 
 ```yaml
@@ -212,6 +253,7 @@ port: 8000
 ```
 
 ### Adding Environment Variables
+
 For apps requiring configuration:
 
 ```yaml
@@ -222,6 +264,7 @@ environment_variables:
 ```
 
 ### Customizing Focus Areas
+
 Be specific about what to demonstrate:
 
 ```yaml
@@ -238,6 +281,7 @@ focus_areas:
 ```
 
 ### Adjusting Duration
+
 Match duration to complexity:
 
 ```yaml
@@ -254,11 +298,14 @@ duration: 120  # Comprehensive tour
 For applications with multiple services (frontend + backend + database):
 
 ### Option 1: Separate Walkthroughs
+
 Create one walkthrough per service:
+
 - `frontend-walkthrough-config.yml`
 - `backend-walkthrough-config.yml`
 
 ### Option 2: Integrated Walkthrough
+
 Use the full-stack example and configure all services:
 
 ```yaml
@@ -277,36 +324,42 @@ services:
 ## Framework-Specific Notes
 
 ### React / Next.js
+
 - Use `npm start` or `npm run dev`
 - Default port: 3000
 - Consider showing component interactivity
 - Highlight state management (Redux, Context API)
 
 ### Vue.js / Nuxt.js
+
 - Use `npm run serve` or `npm run dev`
 - Default port: 8080
 - Show reactive data binding
 - Demonstrate routing and navigation
 
 ### Angular
+
 - Use `ng serve`
 - Default port: 4200
 - Focus on services and dependency injection
 - Show form validation and routing
 
 ### Flask / FastAPI
+
 - Use `python app.py` or `uvicorn main:app`
 - Default port: 5000 (Flask) or 8000 (FastAPI)
 - Demonstrate API endpoints with tools like Postman or curl
 - Show request/response cycles
 
 ### Express / Node.js
+
 - Use `npm start` or `node server.js`
 - Custom port (often 3000, 5000, or 8080)
 - Show REST API endpoints
 - Demonstrate middleware and routing
 
 ### Django
+
 - Use `python manage.py runserver`
 - Default port: 8000
 - Show admin interface
@@ -317,7 +370,9 @@ services:
 ## Troubleshooting Configuration Issues
 
 ### Issue: App doesn't start
+
 **Solution**: Verify your start command locally:
+
 ```bash
 # Test in your terminal
 npm start
@@ -326,19 +381,25 @@ python app.py
 ```
 
 ### Issue: Wrong port detected
+
 **Solution**: Explicitly set the port in your config:
+
 ```yaml
-port: 3000  # Your actual port
+port: 3000 # Your actual port
 ```
 
 ### Issue: Missing dependencies
+
 **Solution**: Add install command:
+
 ```yaml
 install_command: "npm install && npm run build"
 ```
 
 ### Issue: Environment variables needed
+
 **Solution**: Document required variables:
+
 ```yaml
 environment_variables:
   DATABASE_URL: "sqlite:///dev.db"
@@ -346,29 +407,36 @@ environment_variables:
 ```
 
 ### Issue: Long startup time
+
 **Solution**: Increase wait time in config:
+
 ```yaml
-startup_wait: 30  # seconds to wait after starting
+startup_wait: 30 # seconds to wait after starting
 ```
 
 ---
 
 ## Best Practices
 
-1. **Test Locally First**: Always verify your start command works before creating a walkthrough
-2. **Be Specific**: Use detailed focus areas for better results
-3. **Keep It Short**: 60-90 seconds is ideal for most walkthroughs
-4. **Document Dependencies**: List all required environment variables and services
-5. **Use Descriptive Names**: Name your config file clearly (e.g., `react-dashboard-config.yml`)
-6. **Version Control**: Commit your config file to track changes over time
+1. **Test Locally First**: Always verify your start command works before
+   creating a walkthrough
+1. **Be Specific**: Use detailed focus areas for better results
+1. **Keep It Short**: 60-90 seconds is ideal for most walkthroughs
+1. **Document Dependencies**: List all required environment variables and
+   services
+1. **Use Descriptive Names**: Name your config file clearly (e.g.,
+   `react-dashboard-config.yml`)
+1. **Version Control**: Commit your config file to track changes over time
 
 ---
 
 ## Need Help?
 
 - **Quick Start Guide**: [Get started in 5 minutes](../docs/QUICK_START.md)
-- **GitHub Issues**: [Report problems](https://github.com/ivviiviivvi/.github/issues)
-- **Discussions**: [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
+- **GitHub Issues**:
+  [Report problems](https://github.com/ivviiviivvi/.github/issues)
+- **Discussions**:
+  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
 - **Contact**: [@4444JPP](https://github.com/4444JPP)
 
 ---
@@ -378,12 +446,12 @@ startup_wait: 30  # seconds to wait after starting
 Have a configuration for a framework not listed here? We welcome contributions!
 
 1. Create your example config file
-2. Test it thoroughly
-3. Submit a PR with your example
-4. Update this README
+1. Test it thoroughly
+1. Submit a PR with your example
+1. Update this README
 
 See [Contributing Guidelines](../../docs/CONTRIBUTING.md) for details.
 
 ---
 
-*Last updated: 2025-12-21 | Maintained by @4444JPP*
+_Last updated: 2025-12-21 | Maintained by @4444JPP_

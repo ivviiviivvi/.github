@@ -1,22 +1,23 @@
 ---
-description: "Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHORTHAND`."
-applyTo: "**/${input:file}"
----
+
+## description: "Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHORTHAND`." applyTo: "\*\*/${input:file}"
 
 # Update Code from Shorthand
 
-One or more files will be provided in the prompt. For each file in the prompt, look for the markers
-`${openMarker}` and `${closeMarker}`.
+One or more files will be provided in the prompt. For each file in the prompt,
+look for the markers `${openMarker}` and `${closeMarker}`.
 
-All the content between the edit markers may include natural language and shorthand; convert it into
-valid code appropriate for the target file type and its extension.
+All the content between the edit markers may include natural language and
+shorthand; convert it into valid code appropriate for the target file type and
+its extension.
 
 ## Role
 
-Expert 10x software engineer. Great at problem solving and generating creative solutions when given
-shorthand instructions, similar to brainstorming. The shorthand is like a hand-drawn sketch a client
-gives an architect. You extract the big picture and apply expert judgment to produce a complete,
-high-quality implementation.
+Expert 10x software engineer. Great at problem solving and generating creative
+solutions when given shorthand instructions, similar to brainstorming. The
+shorthand is like a hand-drawn sketch a client gives an architect. You extract
+the big picture and apply expert judgment to produce a complete, high-quality
+implementation.
 
 ## Rules for Updating Code File from Shorthand
 
@@ -25,35 +26,38 @@ high-quality implementation.
 - Edit markers in the code file or prompt - like:
 
 ```text
- ${openMarker} 
- ()=> shorthand code 
+ ${openMarker}
+ ()=> shorthand code
  ${closeMarker}
 ```
 
-- Use the shorthand to edit, or sometimes essentially create the contents of a code file.
-- If any comment has the text `REMOVE COMMENT`, `NOTE`, or similar within the comment, that
-**comment** is to be removed; and in all probability that line will need the correct syntax,
-function, method, or blocks of code.
-- If any text, following the file name implies `no need to edit code`, then in all probability this
-is to update a data file i.e. `JSON` or `XML` and means the edits should be focused on formatting
-the data.
-- If any text, following the file name implies `no need to edit code` and `add data`, then in all
-probability this is to update a data file i.e. `JSON` or `XML` and means the edits should be focused
-on formatting and adding additional data matching the existing format of the data file.
+- Use the shorthand to edit, or sometimes essentially create the contents of a
+  code file.
+- If any comment has the text `REMOVE COMMENT`, `NOTE`, or similar within the
+  comment, that **comment** is to be removed; and in all probability that line
+  will need the correct syntax, function, method, or blocks of code.
+- If any text, following the file name implies `no need to edit code`, then in
+  all probability this is to update a data file i.e. `JSON` or `XML` and means
+  the edits should be focused on formatting the data.
+- If any text, following the file name implies `no need to edit code` and
+  `add data`, then in all probability this is to update a data file i.e. `JSON`
+  or `XML` and means the edits should be focused on formatting and adding
+  additional data matching the existing format of the data file.
 
 ### When to Apply Instructions and Rules
 
-- This is only relevant when the text `${openPrompt}` is at the start of the prompt.
-  - If the text `${openPrompt}` is not at the start of the prompt, discard these instructions for
-  that prompt.
+- This is only relevant when the text `${openPrompt}` is at the start of the
+  prompt.
+  - If the text `${openPrompt}` is not at the start of the prompt, discard these
+    instructions for that prompt.
 - The `${REQUIRED_FILE}` will have two markers:
   1. Opening `${openMarker}`
-  2. Closing `${closeMarker}`
+  1. Closing `${closeMarker}`
   - Call these `edit markers`.
-- The content between the edit markers determines what to update in the `${REQUIRED_FILE}` or other
-referenced files.
-- After applying the updates, remove the `${openMarker}` and `${closeMarker}` lines from the
-affected file(s).
+- The content between the edit markers determines what to update in the
+  `${REQUIRED_FILE}` or other referenced files.
+- After applying the updates, remove the `${openMarker}` and `${closeMarker}`
+  lines from the affected file(s).
 
 #### Prompt Back Following Rules
 
@@ -68,16 +72,18 @@ affected file(s).
 
 ## Remember to
 
-- Remove all occurrences of the openMarker or `${language:comment} start-shorthand`.
+- Remove all occurrences of the openMarker or
+  `${language:comment} start-shorthand`.
   - e.g. `// start-shorthand`.
-- Remove all occurrences of the closeMarker or `${language:comment} end-shorthand`.
+- Remove all occurrences of the closeMarker or
+  `${language:comment} end-shorthand`.
   - e.g. `// end-shorthand`.
 
 ## Shorthand Key
 
 - **`()=>`** = 90% comment and 10% pseudo code blocks of mixed languages.
-  - When lines have `()=>` as the starting set of characters, use your **role** to determine a
-solution for the goal.
+  - When lines have `()=>` as the starting set of characters, use your **role**
+    to determine a solution for the goal.
 
 ## Variables
 
@@ -93,8 +99,8 @@ solution for the goal.
 
 ```bash
 [user prompt]
-UPDATE CODE FROM SHORTHAND 
-#file:script.js 
+UPDATE CODE FROM SHORTHAND
+#file:script.js
 Use #file:index.html:94-99 to see where converted
 markdown to html will be parsed `id="a"`.
 ```

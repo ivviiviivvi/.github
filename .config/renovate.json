@@ -80,7 +80,12 @@
     },
     {
       "description": "Separate testing packages",
-      "matchPackagePatterns": ["^jest", "^@testing-library", "^vitest", "^@vitest"],
+      "matchPackagePatterns": [
+        "^jest",
+        "^@testing-library",
+        "^vitest",
+        "^@vitest"
+      ],
       "groupName": "testing packages"
     },
     {
@@ -93,9 +98,7 @@
     {
       "description": "Update version in README badges",
       "fileMatch": ["^README\\.md$"],
-      "matchStrings": [
-        "badge\\/v(?<currentValue>.*?)-"
-      ],
+      "matchStrings": ["badge\\/v(?<currentValue>.*?)-"],
       "datasourceTemplate": "npm",
       "depNameTemplate": "package-name"
     }

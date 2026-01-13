@@ -1,7 +1,19 @@
 id: swift-mcp-development
 name: Swift MCP Server Development
-description: 'Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features.'
-tags: [swift, mcp, model-context-protocol, server-development, sdk, ios, macos, concurrency, actor, async-await]
+description: "Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features."
+tags:
+  [
+    swift,
+    mcp,
+    model-context-protocol,
+    server-development,
+    sdk,
+    ios,
+    macos,
+    concurrency,
+    actor,
+    async-await,
+  ]
 items:
   - path: instructions/swift-mcp-server.instructions.md
     kind: instruction

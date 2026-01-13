@@ -3,17 +3,17 @@ name: Label Sync
 on:
   schedule:
     # Run weekly on Monday at 00:00 UTC
-    - cron: '0 0 * * 1'
+    - cron: 0 0 * * 1
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Perform a dry run (no changes will be made)'
+        description: Perform a dry run (no changes will be made)
         required: false
-        default: 'false'
+        default: "false"
         type: choice
         options:
-          - 'true'
-          - 'false'
+          - "true"
+          - "false"
 
 permissions:
   issues: write
@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install github-label-sync
         run: npm install -g github-label-sync

@@ -36,16 +36,12 @@
       "impact": "30-40% faster builds on cache hits"
     },
     "documentation_added": {
-      "files_created": [
-        ".github/WORKFLOW_GUIDE.md"
-      ],
+      "files_created": [".github/WORKFLOW_GUIDE.md"],
       "lines_added": 337,
       "impact": "Improved contributor onboarding"
     },
     "transparency_improvements": {
-      "files_modified": [
-        ".github/workflows/agentsphere-deployment.yml"
-      ],
+      "files_modified": [".github/workflows/agentsphere-deployment.yml"],
       "impact": "Clear simulation mode warnings"
     }
   },

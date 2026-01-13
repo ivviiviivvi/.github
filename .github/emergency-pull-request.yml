@@ -6,7 +6,6 @@ label: "emergency"
 
 # Branch prefix for emergency PRs
 branchPrefix: "emergency/"
-
 # Reviewers to request (optional)
 # reviewers:
 #   - user1

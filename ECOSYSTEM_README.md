@@ -1,16 +1,18 @@
 # Autonomous Walkthrough Generation Ecosystem
 
-> **Complete automation for application discovery, documentation, and deployment**
+> **Complete automation for application discovery, documentation, and
+> deployment**
 
 ## 🌟 Overview
 
-This ecosystem provides end-to-end automation for showcasing applications in the Ivviiviivvi organization. Every code push triggers a pipeline that:
+This ecosystem provides end-to-end automation for showcasing applications in the
+Ivviiviivvi organization. Every code push triggers a pipeline that:
 
 1. 📹 Generates a 1-minute video walkthrough
-2. 🚀 Deploys live demos to AgentSphere
-3. 🌐 Publishes to GitHub Pages gallery
-4. 🐳 Containerizes with Docker (when applicable)
-5. 💻 Configures GitHub Codespaces (for complex apps)
+1. 🚀 Deploys live demos to AgentSphere
+1. 🌐 Publishes to GitHub Pages gallery
+1. 🐳 Containerizes with Docker (when applicable)
+1. 💻 Configures GitHub Codespaces (for complex apps)
 
 ## 📁 File Structure
 
@@ -52,13 +54,15 @@ docs/                                   # Jekyll site root
 
 1. **Push code to main branch** - Everything happens automatically!
 
-2. **Check GitHub Actions** to see the workflows in progress
+1. **Check GitHub Actions** to see the workflows in progress
 
-3. **Review PRs** created by the automation:
+1. **Review PRs** created by the automation:
+
    - AgentSphere deployment PR with live demo link
    - Deployment configuration PR with strategy details
 
-4. **Access your app** through:
+1. **Access your app** through:
+
    - Gallery: https://ivviiviivvi.github.io
    - Direct live demo: Check PR description for URL
    - AgentSphere: Badge added to your README
@@ -66,16 +70,19 @@ docs/                                   # Jekyll site root
 ### For Organization Admins
 
 1. **Enable GitHub Pages**:
+
    - Go to Settings → Pages
    - Source: GitHub Actions
    - No custom domain needed initially
 
-2. **Configure Secrets** (optional):
+1. **Configure Secrets** (optional):
+
    - `DOCKER_USERNAME` - Docker Hub username (for Docker strategy)
    - `DOCKER_TOKEN` - Docker Hub access token
    - `AGENTSPHERE_API_KEY` - AgentSphere API key (if using real API)
 
-3. **Monitor the Gallery**:
+1. **Monitor the Gallery**:
+
    - Visit https://ivviiviivvi.github.io
    - Check that new apps appear automatically
    - Review deployment statuses
@@ -97,32 +104,36 @@ graph TD
 
 ### Workflow Triggers
 
-| Workflow | Trigger | Output |
-|----------|---------|--------|
-| AgentSphere Deployment | Push to main | Live demo + README badge |
-| Build Pages Site | Walkthrough completion + schedule | Updated gallery |
-| Generate Pages Index | Schedule (6h) + manual | YAML data files |
-| Deploy to Pages Live | Push to main + manual | Live app deployment |
-| Docker Build Push | Push to main (if Dockerfile) | Container image |
+| Workflow               | Trigger                           | Output                   |
+| ---------------------- | --------------------------------- | ------------------------ |
+| AgentSphere Deployment | Push to main                      | Live demo + README badge |
+| Build Pages Site       | Walkthrough completion + schedule | Updated gallery          |
+| Generate Pages Index   | Schedule (6h) + manual            | YAML data files          |
+| Deploy to Pages Live   | Push to main + manual             | Live app deployment      |
+| Docker Build Push      | Push to main (if Dockerfile)      | Container image          |
 
 ## 🎯 Deployment Strategies
 
 ### Strategy A: Pages Direct
+
 - **For:** React, Vue, Angular, Static HTML
 - **Output:** Live URL on GitHub Pages
 - **Example:** https://ivviiviivvi.github.io/react-app
 
 ### Strategy B: Docker
+
 - **For:** Express, Flask, Django APIs
 - **Output:** Docker image in GHCR
 - **Run:** `docker run -p 3000:3000 ghcr.io/ivviiviivvi/app`
 
 ### Strategy C: Codespaces
+
 - **For:** Microservices, complex apps
 - **Output:** "Open in Codespaces" button
 - **Access:** One-click browser IDE
 
 ### Strategy D: None
+
 - **For:** CLI tools, libraries
 - **Output:** Documentation + video only
 - **Access:** Installation instructions
@@ -130,30 +141,35 @@ graph TD
 ## 📊 Features
 
 ### Automatic Detection
+
 - ✅ Detects application type from repository structure
 - ✅ Selects optimal deployment strategy
 - ✅ Configures build settings automatically
 - ✅ Generates startup commands
 
 ### Video Walkthroughs
+
 - ✅ 1-minute automated walkthroughs
 - ✅ Embedded in gallery with playback controls
 - ✅ Lazy loading for performance
 - ✅ Fallback placeholders for missing videos
 
 ### Live Demos
+
 - ✅ Multi-strategy deployment (Pages/Docker/Codespaces)
 - ✅ Health checking and auto-restart
 - ✅ Error handling with fallbacks
 - ✅ Loading states and spinners
 
 ### Search & Discovery
+
 - ✅ Client-side search (instant results)
 - ✅ Technology filters
 - ✅ Responsive card grid
 - ✅ Dark mode support
 
 ### Documentation
+
 - ✅ Comprehensive setup guides
 - ✅ Troubleshooting sections
 - ✅ Example configurations
@@ -166,7 +182,7 @@ graph TD
 Create `.github/app-deployment-config.yml` in your repository:
 
 ```yaml
-deployment_strategy: pages_direct  # or docker, codespaces, none, auto
+deployment_strategy: pages_direct # or docker, codespaces, none, auto
 app_type: react
 port: 3000
 environment_variables:
@@ -197,8 +213,8 @@ Edit `docs/_layouts/default.html` to customize:
 
 ```css
 :root {
-  --primary-color: #2563eb;    /* Change primary color */
-  --secondary-color: #7c3aed;  /* Change secondary color */
+  --primary-color: #2563eb; /* Change primary color */
+  --secondary-color: #7c3aed; /* Change secondary color */
 }
 ```
 
@@ -246,23 +262,23 @@ google_analytics: UA-XXXXXXXXX-X
 ### Gallery Not Updating
 
 1. Check if workflows are enabled
-2. Verify GitHub Pages is configured
-3. Manually trigger `generate-pages-index.yml`
-4. Check workflow logs for errors
+1. Verify GitHub Pages is configured
+1. Manually trigger `generate-pages-index.yml`
+1. Check workflow logs for errors
 
 ### App Won't Deploy
 
 1. Check deployment strategy is correct
-2. Review workflow logs
-3. Validate configuration files
-4. Test builds locally
+1. Review workflow logs
+1. Validate configuration files
+1. Test builds locally
 
 ### Videos Not Appearing
 
 1. Verify walkthrough generation workflow ran
-2. Check artifact uploads
-3. Ensure video format is MP4
-4. Verify file size < 2GB
+1. Check artifact uploads
+1. Ensure video format is MP4
+1. Verify file size \< 2GB
 
 ## 📚 Documentation
 
@@ -275,8 +291,8 @@ google_analytics: UA-XXXXXXXXX-X
 This ecosystem is designed for organization-wide use. To suggest improvements:
 
 1. Open an issue describing the enhancement
-2. Create a pull request with changes
-3. Tag `@4444JPP` for review
+1. Create a pull request with changes
+1. Tag `@4444JPP` for review
 
 ## 📝 License
 
@@ -297,6 +313,6 @@ This configuration is part of the organization's infrastructure.
 
 **Ready for organization-wide deployment! 🚀**
 
-Generated: 2025-12-21  
-Organization: Ivviiviivvi  
+Generated: 2025-12-21\
+Organization: Ivviiviivvi\
 Maintainer: 4444JPP

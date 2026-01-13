@@ -1,17 +1,21 @@
 ---
-description: ' Azure Verified Modules (AVM) and Terraform'
-applyTo: '**/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json'
----
+
+## description: ' Azure Verified Modules (AVM) and Terraform' applyTo: '\*\*/_.terraform, \*\*/_.tf, \*\*/_.tfvars, \*\*/_.tfstate, \*\*/_.tflint.hcl, \*\*/_.tf.json, \*\*/\*.tfvars.json'
 
 # Azure Verified Modules (AVM) Terraform
 
 ## Overview
 
-Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and Bicep modules that follow Azure best practices. Use these modules to create, update, or review Azure Infrastructure as Code (IaC) with confidence.
+Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and
+Bicep modules that follow Azure best practices. Use these modules to create,
+update, or review Azure Infrastructure as Code (IaC) with confidence.
 
 ## Custom Instructions for GitHub Copilot Agents
 
-**IMPORTANT**: When GitHub Copilot Agent or GitHub Copilot Coding Agent is working on this repository, the following local unit tests MUST be executed to comply with PR checks. Failure to run these tests will cause PR validation failures:
+**IMPORTANT**: When GitHub Copilot Agent or GitHub Copilot Coding Agent is
+working on this repository, the following local unit tests MUST be executed to
+comply with PR checks. Failure to run these tests will cause PR validation
+failures:
 
 ```bash
 ./avm pre-commit
@@ -19,10 +23,13 @@ Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and 
 ./avm pr-check
 ```
 
-These commands must be run before any pull request is created or updated to ensure compliance with the Azure Verified Modules standards and prevent CI/CD pipeline failures.
-More details on the AVM process can be found in the [Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/).
+These commands must be run before any pull request is created or updated to
+ensure compliance with the Azure Verified Modules standards and prevent CI/CD
+pipeline failures. More details on the AVM process can be found in the
+[Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/).
 
-**Failure to run these tests will cause PR validation failures and prevent successful merges.**
+**Failure to run these tests will cause PR validation failures and prevent
+successful merges.**
 
 ## Module Discovery
 
@@ -34,26 +41,31 @@ More details on the AVM process can be found in the [Azure Verified Modules Cont
 
 ### Official AVM Index
 
-- **Terraform Resources**: `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/`
-- **Terraform Patterns**: `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-pattern-modules/`
-- **Bicep Resources**: `https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-resource-modules/`
-- **Bicep Patterns**: `https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-pattern-modules/`
+- **Terraform Resources**:
+  `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/`
+- **Terraform Patterns**:
+  `https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-pattern-modules/`
+- **Bicep Resources**:
+  `https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-resource-modules/`
+- **Bicep Patterns**:
+  `https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-pattern-modules/`
 
 ## Terraform Module Usage
 
 ### From Examples
 
 1. Copy the example code from the module documentation
-2. Replace `source = "../../"` with `source = "Azure/avm-res-{service}-{resource}/azurerm"`
-3. Add `version = "~> 1.0"` (use latest available)
-4. Set `enable_telemetry = true`
+1. Replace `source = "../../"` with
+   `source = "Azure/avm-res-{service}-{resource}/azurerm"`
+1. Add `version = "~> 1.0"` (use latest available)
+1. Set `enable_telemetry = true`
 
 ### From Scratch
 
 1. Copy the Provision Instructions from module documentation
-2. Configure required and optional inputs
-3. Pin the module version
-4. Enable telemetry
+1. Configure required and optional inputs
+1. Pin the module version
+1. Enable telemetry
 
 ### Example Usage
 
@@ -85,14 +97,17 @@ module "storage_account" {
 ### Service Naming
 
 - Use kebab-case for services and resources
-- Follow Azure service names (e.g., `storage-storageaccount`, `network-virtualnetwork`)
+- Follow Azure service names (e.g., `storage-storageaccount`,
+  `network-virtualnetwork`)
 
 ## Version Management
 
 ### Check Available Versions
 
-- Endpoint: `https://registry.terraform.io/v1/modules/Azure/{module}/azurerm/versions`
-- Example: `https://registry.terraform.io/v1/modules/Azure/avm-res-storage-storageaccount/azurerm/versions`
+- Endpoint:
+  `https://registry.terraform.io/v1/modules/Azure/{module}/azurerm/versions`
+- Example:
+  `https://registry.terraform.io/v1/modules/Azure/avm-res-storage-storageaccount/azurerm/versions`
 
 ### Version Pinning Best Practices
 
@@ -104,14 +119,18 @@ module "storage_account" {
 
 ### Terraform Registry
 
-- **URL Pattern**: `https://registry.terraform.io/modules/Azure/{module}/azurerm/latest`
-- **Example**: `https://registry.terraform.io/modules/Azure/avm-res-storage-storageaccount/azurerm/latest`
+- **URL Pattern**:
+  `https://registry.terraform.io/modules/Azure/{module}/azurerm/latest`
+- **Example**:
+  `https://registry.terraform.io/modules/Azure/avm-res-storage-storageaccount/azurerm/latest`
 
 ### GitHub Repository
 
-- **URL Pattern**: `https://github.com/Azure/terraform-azurerm-avm-{type}-{service}-{resource}`
+- **URL Pattern**:
+  `https://github.com/Azure/terraform-azurerm-avm-{type}-{service}-{resource}`
 - **Examples**:
-  - Resource: `https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount`
+  - Resource:
+    `https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount`
   - Pattern: `https://github.com/Azure/terraform-azurerm-avm-ptn-aks-enterprise`
 
 ## Development Best Practices
@@ -155,7 +174,8 @@ terraform validate
 ### Use Available Tools
 
 - **Deployment Guidance**: Use `azure_get_deployment_best_practices` tool
-- **Service Documentation**: Use `microsoft.docs.mcp` tool for Azure service-specific guidance
+- **Service Documentation**: Use `microsoft.docs.mcp` tool for Azure
+  service-specific guidance
 - **Schema Information**: Use `azure_get_schema_for_Bicep` for Bicep resources
 
 ### GitHub Copilot Integration
@@ -163,9 +183,9 @@ terraform validate
 When working with AVM repositories:
 
 1. Always check for existing modules before creating new resources
-2. Use the official examples as starting points
-3. Run all validation tests before committing
-4. Document any customizations or deviations from examples
+1. Use the official examples as starting points
+1. Run all validation tests before committing
+1. Document any customizations or deviations from examples
 
 ## Common Patterns
 
@@ -201,10 +221,11 @@ module "virtual_network" {
 
 ### Common Issues
 
-1. **Version Conflicts**: Always check compatibility between module and provider versions
-2. **Missing Dependencies**: Ensure all required resources are created first
-3. **Validation Failures**: Run AVM validation tools before committing
-4. **Documentation**: Always refer to the latest module documentation
+1. **Version Conflicts**: Always check compatibility between module and provider
+   versions
+1. **Missing Dependencies**: Ensure all required resources are created first
+1. **Validation Failures**: Run AVM validation tools before committing
+1. **Documentation**: Always refer to the latest module documentation
 
 ### Support Resources
 

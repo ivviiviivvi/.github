@@ -28,9 +28,10 @@ gh pr edit <PR#> --add-label "auto-merge"
 gh pr create --title "[auto-merge] Your feature"
 ```
 
-### 3. Done! 
+### 3. Done!
 
 The PR will automatically merge when:
+
 - ✅ All checks pass
 - ✅ Required approvals obtained
 - ✅ No conflicts exist
@@ -40,7 +41,8 @@ The PR will automatically merge when:
 Our repository includes pre-configured workflows:
 
 1. **`auto-merge.yml`** - Monitors PRs and merges when ready
-2. **`auto-enable-merge.yml`** - Automatically enables auto-merge for qualifying PRs
+1. **`auto-enable-merge.yml`** - Automatically enables auto-merge for qualifying
+   PRs
 
 Both use only the built-in `GITHUB_TOKEN` - no setup required!
 
@@ -56,21 +58,25 @@ Both use only the built-in `GITHUB_TOKEN` - no setup required!
 ## Trigger Methods
 
 ### Method 1: Label
+
 ```bash
 gh pr edit 123 --add-label "auto-merge"
 ```
 
 ### Method 2: Title Marker
+
 ```bash
 gh pr create --title "[auto-merge] Fix bug in auth"
 ```
 
 ### Method 3: Manual Dispatch
+
 ```bash
 gh workflow run auto-merge.yml -f pr_number=123
 ```
 
 ### Method 4: Automatic (for bots)
+
 Dependabot and other bot PRs are automatically enabled.
 
 ## Customization
@@ -81,7 +87,7 @@ Edit `.github/workflows/auto-merge.yml`:
 
 ```yaml
 # Line ~310
-merge_method: 'squash'  # or 'merge', 'rebase'
+merge_method: "squash" # or 'merge', 'rebase'
 ```
 
 ### Adjust Approval Requirements
@@ -90,7 +96,7 @@ Edit `.github/workflows/auto-merge.yml`:
 
 ```yaml
 # Line ~277
-const requiredApprovals = isHotfix ? 0 : 1;  # Change the number
+const requiredApprovals = isHotfix ? 0: 1; # Change the number
 ```
 
 ### Add Custom Rules
@@ -117,6 +123,7 @@ jobs:
 ### Auto-merge not triggering?
 
 **Checklist:**
+
 - [ ] Repository has auto-merge enabled: `gh repo edit --enable-auto-merge`
 - [ ] PR has `auto-merge` label or `[auto-merge]` in title
 - [ ] PR is not in draft mode
@@ -139,8 +146,8 @@ permissions:
 ### Still having issues?
 
 1. Check workflow run logs: `gh run list --workflow=auto-merge.yml`
-2. View specific run: `gh run view <run-id>`
-3. See [Full Documentation](./AUTO_MERGE_GUIDE.md)
+1. View specific run: `gh run view <run-id>`
+1. See [Full Documentation](./AUTO_MERGE_GUIDE.md)
 
 ## Advanced Usage
 
@@ -179,21 +186,27 @@ gh pr list --state open --label auto-merge
 ## Examples
 
 ### Dependabot Auto-Merge
+
 Automatically merges dependency update PRs:
+
 ```yaml
 # Included in auto-enable-merge.yml
 # Dependabot PRs (non-major) are auto-enabled
 ```
 
 ### Documentation Changes
+
 Auto-merge docs-only changes:
+
 ```yaml
 # Add 'documentation' label to your PR
 # PRs with <10 file changes are auto-enabled
 ```
 
 ### Hotfix Fast-Track
+
 Quick-merge critical fixes:
+
 ```yaml
 # Add 'hotfix' label
 # Bypasses approval requirements
@@ -201,18 +214,19 @@ Quick-merge critical fixes:
 
 ## Benefits
 
-| Feature | Manual Merge | Auto-Merge |
-|---------|-------------|------------|
-| Speed | Manual click | Automatic |
-| Availability | Business hours | 24/7 |
-| Consistency | Variable | Always same rules |
-| Audit Trail | Basic | Complete logs |
-| Cost | Time-consuming | Zero-cost |
-| Maintenance | N/A | Zero maintenance |
+| Feature      | Manual Merge   | Auto-Merge        |
+| ------------ | -------------- | ----------------- |
+| Speed        | Manual click   | Automatic         |
+| Availability | Business hours | 24/7              |
+| Consistency  | Variable       | Always same rules |
+| Audit Trail  | Basic          | Complete logs     |
+| Cost         | Time-consuming | Zero-cost         |
+| Maintenance  | N/A            | Zero maintenance  |
 
 ## Security
 
 ✅ **Secure by Default**
+
 - Uses GitHub's built-in authentication
 - Respects all branch protection rules
 - Full audit trail in Actions logs
@@ -224,7 +238,8 @@ Quick-merge critical fixes:
 - 📖 [Full Documentation](./AUTO_MERGE_GUIDE.md)
 - 🔧 [Reusable Workflow Template](../workflow-templates/auto-merge-reusable.yml)
 - 🤖 [Auto-Enable Workflow](../.github/workflows/auto-enable-merge.yml)
-- 📝 [GitHub Docs: Auto-merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
+- 📝
+  [GitHub Docs: Auto-merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
 
 ## Contributing
 
@@ -232,4 +247,5 @@ Found a bug or have a suggestion? Open an issue or PR!
 
 ---
 
-**This solution is eternal.** It uses only GitHub's native features and requires no maintenance.
+**This solution is eternal.** It uses only GitHub's native features and requires
+no maintenance.

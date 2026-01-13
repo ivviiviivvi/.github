@@ -6,15 +6,15 @@ name: Scheduled Walkthrough Generator
 on:
   # Scheduled execution - runs weekly on Monday at 9 AM UTC
   schedule:
-    - cron: '0 9 * * 1'  # Weekly, Monday 9 AM
+    - cron: 0 9 * * 1 # Weekly, Monday 9 AM
 
   # Manual trigger with options
   workflow_dispatch:
     inputs:
       target_repos:
-        description: 'Target repos to process'
+        description: Target repos to process
         required: false
-        default: 'active'
+        default: active
         type: choice
         options:
           - all
@@ -23,20 +23,20 @@ on:
           - custom
 
       custom_repo_list:
-        description: 'Custom repo list (comma-separated, only if target_repos=custom)'
+        description: Custom repo list (comma-separated, only if target_repos=custom)
         required: false
-        default: ''
+        default: ""
 
       force_regenerate:
-        description: 'Force regenerate even if no changes detected'
+        description: Force regenerate even if no changes detected
         required: false
         default: false
         type: boolean
 
       voiceover_style:
-        description: 'Voiceover style for all walkthroughs'
+        description: Voiceover style for all walkthroughs
         required: false
-        default: 'professional'
+        default: professional
         type: choice
         options:
           - professional
@@ -69,8 +69,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4.1.0
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: npm
 
       - name: Discover organization repositories
         id: discover
@@ -166,7 +166,7 @@ jobs:
     if: needs.discover-repos.outputs.repo-count > 0
 
     strategy:
-      max-parallel: 3  # Process 3 repos at a time to avoid rate limits
+      max-parallel: 3 # Process 3 repos at a time to avoid rate limits
       fail-fast: false
       matrix:
         repo: ${{ fromJson(needs.discover-repos.outputs.repo-matrix) }}

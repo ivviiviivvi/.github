@@ -18,33 +18,40 @@ Real-world examples of natural writing transformed into AI-optimized prompts.
 ### Example 1: Simple Request
 
 **Natural Input:**
+
 ```
 hey, can you help me add a dark mode toggle? users keep asking for it
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Create: Dark Mode Toggle Feature
 
 ## Objective
+
 Add a dark mode toggle feature to the application in response to user requests.
 
 ## Requirements
+
 - Implement dark mode toggle UI element
 - Create dark mode color scheme/theme
 - Persist user preference
 - Apply theme across application
 
 ## Key Concepts
+
 - Dark mode
 - Theme toggle
 - User preferences
 - UI theming
 
 ## Context
+
 Multiple user requests for dark mode functionality.
 
 ## Success Criteria
+
 - [ ] Toggle UI component implemented
 - [ ] Dark theme styles defined
 - [ ] User preference saved and persisted
@@ -56,41 +63,49 @@ Multiple user requests for dark mode functionality.
 ### Example 2: Urgent Bug Fix
 
 **Natural Input:**
+
 ```
 URGENT - login's totally broken after the deployment, users can't sign in,
 they keep getting redirected to homepage. need this fixed like NOW
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Fix: Critical Login Redirect Bug (URGENT)
 
 ## Objective
+
 Resolve critical login failure where users are incorrectly redirected to
 homepage instead of being authenticated.
 
 ## Priority
+
 🚨 URGENT - Production issue blocking user access
 
 ## Current Problem
+
 - Login functionality broken post-deployment
 - Users cannot successfully sign in
 - Incorrect redirect to homepage after login attempt
 - Blocking all user authentication
 
 ## Requirements
+
 - Identify root cause of login redirect issue
 - Fix authentication flow
 - Restore proper post-login behavior
 - Verify fix in production
 
 ## Investigation Steps
+
 1. Review recent deployment changes
 2. Check authentication service logs
 3. Verify redirect configuration
 4. Test login flow end-to-end
 
 ## Success Criteria
+
 - [ ] Users can successfully log in
 - [ ] Proper post-login redirect behavior restored
 - [ ] Issue root cause identified and documented
@@ -104,6 +119,7 @@ homepage instead of being authenticated.
 ### Example 3: API Design
 
 **Natural Input:**
+
 ```
 thinking we should build an API for third parties to pull user analytics.
 needs to be RESTful, probably need auth with API keys, rate limiting so
@@ -112,26 +128,31 @@ have to keep polling? GraphQL could work too but maybe that's overkill
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Design: Third-Party Analytics API
 
 ## Objective
+
 Design and implement a REST API enabling third-party access to user analytics
 data with appropriate security and performance controls.
 
 ## Requirements
 
 ### Core Functionality
+
 - RESTful API design
 - User analytics data endpoints
 - Query filtering and pagination
 
 ### Security
+
 - API key authentication
 - Rate limiting per API key
 - Access control and permissions
 
 ### Performance & Scalability
+
 - Rate limiting (prevent server overload)
 - Webhook support (alternative to polling)
 - Efficient data delivery
@@ -139,10 +160,12 @@ data with appropriate security and performance controls.
 ## Technical Considerations
 
 ### Architecture Decision: REST vs GraphQL
+
 - Primary: RESTful API (simpler, well-understood)
 - Consider: GraphQL for flexible querying (evaluate complexity vs benefit)
 
 ### Key Components
+
 1. API authentication layer (API keys)
 2. Rate limiting middleware
 3. Analytics data endpoints
@@ -150,6 +173,7 @@ data with appropriate security and performance controls.
 5. API documentation
 
 ## API Features
+
 - [ ] Authentication via API keys
 - [ ] Rate limiting (e.g., 1000 requests/hour)
 - [ ] Analytics data endpoints (users, events, metrics)
@@ -158,12 +182,14 @@ data with appropriate security and performance controls.
 - [ ] API documentation (OpenAPI/Swagger)
 
 ## Questions to Resolve
+
 - Rate limit thresholds per tier?
 - Which analytics data should be exposed?
 - Webhook event types to support?
 - GraphQL worth the additional complexity?
 
 ## Original Consideration
+
 > "GraphQL could work too but maybe that's overkill"
 
 Start with REST for simplicity. Can evaluate GraphQL later if querying
@@ -175,6 +201,7 @@ flexibility becomes a strong requirement.
 ### Example 4: Database Optimization
 
 **Natural Input:**
+
 ```
 our queries are getting super slow, like 10+ seconds for some reports.
 probably need to add indexes? or maybe the queries are just bad. could
@@ -182,19 +209,23 @@ be the data's getting too big. help me figure out what's wrong and fix it
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Solve: Database Query Performance Issues
 
 ## Objective
+
 Diagnose and resolve slow database query performance affecting report
 generation (currently 10+ seconds).
 
 ## Current Problem
+
 - Report queries taking 10+ seconds
 - Performance degradation over time
 - User impact: slow reporting experience
 
 ## Potential Root Causes
+
 1. Missing or inefficient indexes
 2. Poorly optimized queries
 3. Database growth (data volume)
@@ -204,6 +235,7 @@ generation (currently 10+ seconds).
 ## Investigation Plan
 
 ### Phase 1: Diagnosis
+
 - [ ] Enable slow query logging
 - [ ] Identify slowest queries
 - [ ] Analyze query execution plans (EXPLAIN)
@@ -212,6 +244,7 @@ generation (currently 10+ seconds).
 - [ ] Check server resources (CPU, memory, disk I/O)
 
 ### Phase 2: Analysis
+
 - [ ] Identify missing indexes
 - [ ] Review query patterns and structure
 - [ ] Evaluate data volume impact
@@ -219,6 +252,7 @@ generation (currently 10+ seconds).
 - [ ] Identify table scan operations
 
 ### Phase 3: Optimization
+
 - [ ] Add strategic indexes
 - [ ] Rewrite inefficient queries
 - [ ] Implement query result caching
@@ -227,17 +261,20 @@ generation (currently 10+ seconds).
 - [ ] Archive old data if appropriate
 
 ### Phase 4: Validation
+
 - [ ] Measure query performance improvements
 - [ ] Run load tests
 - [ ] Monitor production performance
 - [ ] Document optimizations made
 
 ## Success Criteria
+
 - Report queries complete in < 2 seconds
 - Sustained performance under load
 - Scalable solution for future growth
 
 ## Original Expression
+
 > "probably need to add indexes? or maybe the queries are just bad.
 > could be the data's getting too big."
 
@@ -251,6 +288,7 @@ All valid hypotheses! Investigation will determine the primary cause(s).
 ### Example 5: Social Features
 
 **Natural Input:**
+
 ```
 what if users could like... follow each other? see what projects their
 friends are working on, maybe give kudos or something? make it feel more
@@ -258,14 +296,17 @@ like a community and less lonely. twitter-style feed but for makers?
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Design: Social Features - User Following & Activity Feed
 
 ## Objective
+
 Create social features allowing users to follow each other, view friend
 activities, and engage with a community-oriented maker feed.
 
 ## Vision
+
 > "make it feel more like a community and less lonely. twitter-style feed
 > but for makers?"
 
@@ -275,21 +316,25 @@ where makers can discover and support each other's work.
 ## Core Features
 
 ### User Following
+
 - [ ] Follow/unfollow other users
 - [ ] Followers/following lists
 - [ ] User discovery and search
 
 ### Activity Feed
+
 - [ ] Timeline of followed users' activities
 - [ ] Project updates and milestones
 - [ ] Activity filtering and preferences
 
 ### Engagement
+
 - [ ] Kudos/appreciation system (like button alternative)
 - [ ] Comment on project updates
 - [ ] Share/reshare functionality
 
 ### Community Building
+
 - [ ] Suggested users to follow
 - [ ] Trending projects/makers
 - [ ] Community highlights
@@ -309,6 +354,7 @@ where makers can discover and support each other's work.
 **So that** I can show appreciation and encourage fellow makers
 
 ## Technical Components
+
 1. User relationship graph (following/followers)
 2. Activity feed generator
 3. Activity event system
@@ -317,12 +363,14 @@ where makers can discover and support each other's work.
 6. Privacy controls
 
 ## Privacy & Control
+
 - [ ] Private/public project settings
 - [ ] Activity visibility preferences
 - [ ] Block/mute functionality
 - [ ] Feed customization options
 
 ## Success Metrics
+
 - User engagement rate
 - Follow network growth
 - Activity feed interaction
@@ -330,6 +378,7 @@ where makers can discover and support each other's work.
 - Reduced user isolation (measured via engagement)
 
 ## Design Philosophy
+
 "Twitter-style feed but for makers" - Keep it simple, maker-focused, and
 positive. Emphasize creation and support over vanity metrics.
 ```
@@ -339,6 +388,7 @@ positive. Emphasize creation and support over vanity metrics.
 ### Example 6: Accessibility Feature
 
 **Natural Input:**
+
 ```
 we're not very accessible right now, screen readers probably hate us.
 need keyboard navigation, proper ARIA labels, maybe high contrast mode?
@@ -346,14 +396,17 @@ want everyone to be able to use this, not just people who can see/mouse well
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Improve: Accessibility Compliance and Inclusive Design
 
 ## Objective
+
 Improve application accessibility to ensure usability for all users,
 regardless of ability, assistive technology, or input method.
 
 ## Current State
+
 - Limited screen reader support
 - Insufficient keyboard navigation
 - Missing ARIA labels
@@ -361,6 +414,7 @@ regardless of ability, assistive technology, or input method.
 - Barriers for users with disabilities
 
 ## Vision
+
 > "want everyone to be able to use this, not just people who can see/mouse well"
 
 Create an inclusive experience that works for all users regardless of visual,
@@ -369,6 +423,7 @@ motor, or cognitive abilities.
 ## Requirements
 
 ### Screen Reader Support
+
 - [ ] Semantic HTML structure
 - [ ] Proper heading hierarchy
 - [ ] ARIA labels for interactive elements
@@ -377,6 +432,7 @@ motor, or cognitive abilities.
 - [ ] Screen reader testing (NVDA, JAWS, VoiceOver)
 
 ### Keyboard Navigation
+
 - [ ] All features accessible via keyboard
 - [ ] Logical tab order
 - [ ] Visible focus indicators
@@ -385,6 +441,7 @@ motor, or cognitive abilities.
 - [ ] No keyboard traps
 
 ### Visual Accessibility
+
 - [ ] High contrast mode option
 - [ ] Color contrast compliance (WCAG AA minimum)
 - [ ] Resizable text (up to 200%)
@@ -392,6 +449,7 @@ motor, or cognitive abilities.
 - [ ] Focus indicators clearly visible
 
 ### Additional Considerations
+
 - [ ] Reduced motion preferences
 - [ ] Form labels and error messages
 - [ ] Accessible error handling
@@ -401,24 +459,28 @@ motor, or cognitive abilities.
 ## Implementation Phases
 
 ### Phase 1: Foundation (Critical)
+
 1. Audit current accessibility issues
 2. Fix semantic HTML structure
 3. Add basic ARIA labels
 4. Implement keyboard navigation
 
 ### Phase 2: Enhancement
+
 1. Add high contrast mode
 2. Improve color contrast
 3. Add skip links
 4. Implement focus management
 
 ### Phase 3: Polish
+
 1. Add keyboard shortcuts
 2. Reduced motion support
 3. Comprehensive screen reader testing
 4. User testing with assistive technology users
 
 ## Testing Strategy
+
 - [ ] Automated testing (axe, Lighthouse)
 - [ ] Manual keyboard-only navigation
 - [ ] Screen reader testing
@@ -426,6 +488,7 @@ motor, or cognitive abilities.
 - [ ] User testing with people using assistive technology
 
 ## Success Criteria
+
 - WCAG 2.1 AA compliance
 - All features usable via keyboard only
 - Screen reader users can complete all tasks
@@ -433,6 +496,7 @@ motor, or cognitive abilities.
 - Positive feedback from users with disabilities
 
 ## Standards & Guidelines
+
 - Follow WCAG 2.1 Level AA
 - Use WAI-ARIA authoring practices
 - Test with actual assistive technology users
@@ -445,6 +509,7 @@ motor, or cognitive abilities.
 ### Example 7: Memory Leak Investigation
 
 **Natural Input:**
+
 ```
 something's eating memory like crazy, app starts at 100mb then balloons to
 2GB after a few hours. probably a leak somewhere? users are having to restart
@@ -453,20 +518,24 @@ idk but it's bad
 ```
 
 **Transformed Output:**
+
 ```markdown
 # Debug: Memory Leak Investigation and Resolution
 
 ## Objective
+
 Identify and fix memory leak causing application memory usage to grow from
 100MB to 2GB over several hours.
 
 ## Problem Statement
+
 - Initial memory: ~100MB
 - Memory after few hours: ~2GB
 - User impact: Frequent restarts required
 - Memory continuously grows (not garbage collected)
 
 ## Suspected Causes
+
 > "maybe it's the websocket connections? or the cache growing forever?"
 
 1. WebSocket connection leaks
@@ -478,6 +547,7 @@ Identify and fix memory leak causing application memory usage to grow from
 ## Investigation Plan
 
 ### Phase 1: Reproduce & Measure
+
 - [ ] Set up memory profiling tools
 - [ ] Reproduce memory growth locally
 - [ ] Create memory snapshots over time
@@ -485,6 +555,7 @@ Identify and fix memory leak causing application memory usage to grow from
 - [ ] Record heap dumps at intervals
 
 ### Phase 2: Analysis
+
 - [ ] Compare heap snapshots
 - [ ] Identify retained objects
 - [ ] Track object allocation patterns
@@ -496,23 +567,27 @@ Identify and fix memory leak causing application memory usage to grow from
 ### Phase 3: Hypothesis Testing
 
 **WebSocket Connections:**
+
 - [ ] Verify connections are properly closed
 - [ ] Check for connection cleanup on page navigation
 - [ ] Monitor active connection count over time
 - [ ] Review reconnection logic
 
 **Cache Growth:**
+
 - [ ] Check cache size limits
 - [ ] Verify cache eviction policy
 - [ ] Monitor cache size over time
 - [ ] Review cache key generation
 
 **Event Listeners:**
+
 - [ ] Audit addEventListener/removeEventListener pairs
 - [ ] Check component cleanup/unmount
 - [ ] Review global event handlers
 
 ### Phase 4: Fix & Verify
+
 - [ ] Implement fixes for identified leaks
 - [ ] Add proper cleanup in component lifecycle
 - [ ] Implement cache size limits
@@ -521,6 +596,7 @@ Identify and fix memory leak causing application memory usage to grow from
 - [ ] Verify memory stability
 
 ## Tools & Techniques
+
 - Chrome DevTools Memory Profiler
 - Heap snapshot comparison
 - Allocation timeline
@@ -528,17 +604,20 @@ Identify and fix memory leak causing application memory usage to grow from
 - Load testing with memory tracking
 
 ## Prevention
+
 - [ ] Add memory leak tests to CI
 - [ ] Implement memory usage alerts
 - [ ] Code review checklist for cleanup
 - [ ] Document resource lifecycle patterns
 
 ## Success Criteria
+
 - Memory usage stays under 200MB after 24 hours
 - No user reports of memory-related restarts
 - Heap size remains stable under load
 
 ## Original Expression
+
 > "something's eating memory like crazy... idk but it's bad"
 
 Systematic investigation will identify the culprit. Memory leaks are
@@ -552,6 +631,7 @@ findable with the right tools!
 ### Example 8: Onboarding Documentation
 
 **Natural Input:**
+
 ```
 new developers keep getting stuck onboarding. they don't know where to start,
 what to install, how things connect. need like a "day 1" guide or something.
@@ -560,14 +640,17 @@ style?
 ```
 
 **Transformed Output:**
-```markdown
+
+````markdown
 # Create: Developer Onboarding Guide ("Day 1" Walkthrough)
 
 ## Objective
+
 Create comprehensive, beginner-friendly onboarding documentation that guides
 new developers from zero to productive on their first day.
 
 ## Current Problem
+
 - New developers struggle with initial setup
 - Unclear where to start
 - Missing context on system architecture
@@ -577,6 +660,7 @@ new developers from zero to productive on their first day.
 ## Guide Requirements
 
 ### Content Structure
+
 1. **Welcome & Overview** (What you're building)
 2. **Prerequisites** (What you need installed)
 3. **Environment Setup** (Step-by-step setup)
@@ -585,6 +669,7 @@ new developers from zero to productive on their first day.
 6. **Resources & Next Steps** (Where to go from here)
 
 ### Style & Format
+
 > "hand-holding from zero to productive. maybe with screenshots? walkthrough style?"
 
 - Conversational, friendly tone
@@ -597,13 +682,16 @@ new developers from zero to productive on their first day.
 ## Content Outline
 
 ### 1. Welcome & Overview
+
 ```markdown
 # Welcome to [Project]!
 
 ## What We're Building
+
 [Friendly explanation of the project]
 
 ## What You'll Learn Today
+
 - ✅ Set up your development environment
 - ✅ Understand the project architecture
 - ✅ Make your first contribution
@@ -611,28 +699,35 @@ new developers from zero to productive on their first day.
 
 Let's get started! ☕
 ```
+````
 
 ### 2. Prerequisites
+
 - Required software (with version numbers)
 - Operating system notes
 - Access requirements (credentials, permissions)
 - Estimated time to complete
 
 ### 3. Environment Setup
+
 **Step-by-step with verification:**
+
 ```markdown
 ## Step 1: Clone the Repository
+
 [instruction]
 
 ✅ **Verify it worked:** [how to check]
 
 ## Step 2: Install Dependencies
+
 [instruction]
 
 ✅ **Verify it worked:** [how to check]
 ```
 
 ### 4. Architecture Overview
+
 - System diagram (visual)
 - Component explanation
 - How pieces connect
@@ -640,14 +735,17 @@ Let's get started! ☕
 - Key concepts and terminology
 
 ### 5. Your First Contribution
+
 **Guided exercise:**
+
 - Small, achievable task
 - Complete walkthrough
-- Explains *why* not just *how*
+- Explains _why_ not just _how_
 - Pull request process
 - Celebration of completion 🎉
 
 ### 6. Resources & Next Steps
+
 - Code of conduct
 - Communication channels (Slack, Discord, etc.)
 - Coding standards
@@ -664,22 +762,26 @@ Let's get started! ☕
 - [ ] "Day 1" test task with solution
 
 ## Success Criteria
+
 - New developers can complete setup independently
-- Reduced onboarding time from [X] days to [Y] days
+- Reduced onboarding time from \[X\] days to \[Y\] days
 - Decreased onboarding-related questions
 - Positive feedback from new team members
 
 ## Maintenance
+
 - [ ] Update when dependencies change
 - [ ] Collect feedback from each new developer
 - [ ] Keep screenshots current
 - [ ] Review quarterly for accuracy
 
 ## Original Vision
+
 > "hand-holding from zero to productive"
 
-Make it impossible to get lost. Every step verified, every question
-anticipated, every frustration smoothed away.
+Make it impossible to get lost. Every step verified, every question anticipated,
+every frustration smoothed away.
+
 ```
 
 ---
@@ -690,11 +792,13 @@ anticipated, every frustration smoothed away.
 
 **Natural Input:**
 ```
-imagine if our code could tell stories. like, you could see the journey of
-a function - where it was born, how it evolved, the bugs it survived, the
-refactors that shaped it. a timeline of its life. commits are just chapters
-in a longer story, right? visualize that story. make history alive.
-```
+
+imagine if our code could tell stories. like, you could see the journey of a
+function - where it was born, how it evolved, the bugs it survived, the
+refactors that shaped it. a timeline of its life. commits are just chapters in a
+longer story, right? visualize that story. make history alive.
+
+````
 
 **Transformed Output:**
 ```markdown
@@ -795,11 +899,12 @@ functions as narrative timelines, showing:
 ## Visual Design
 
 ### Timeline Style
-```
-Birth ----[changes]----[bug fix]----[refactor]----[feature]----> Present
-  ↓          ↓             ↓            ↓            ↓             ↓
- Story     Edits       Crisis      Renewal      Growth      Current
- Chapter   Chapter     Chapter     Chapter      Chapter      State
+````
+
+Birth ----\[changes\]----\[bug fix\]----\[refactor\]----\[feature\]----> Present
+↓ ↓ ↓ ↓ ↓ ↓ Story Edits Crisis Renewal Growth Current Chapter Chapter Chapter
+Chapter Chapter State
+
 ```
 
 ### Information Layers
@@ -812,27 +917,22 @@ Birth ----[changes]----[bug fix]----[refactor]----[feature]----> Present
 ## Example Narrative Output
 
 ```
+
 📖 The Story of `authenticateUser()`
 
-🌱 **Chapter 1: Birth** (Jan 2020)
-   Born in commit a1b2c3d by @jdoe
-   "Initial user authentication logic"
-   Simple password validation, 15 lines
+🌱 **Chapter 1: Birth** (Jan 2020) Born in commit a1b2c3d by @jdoe "Initial user
+authentication logic" Simple password validation, 15 lines
 
-⚡ **Chapter 2: Growing Pains** (Mar 2020)
-   Bug fix in commit d4e5f6g by @jdoe
-   "Fix auth bypass vulnerability"
-   Security hardening, now 42 lines
+⚡ **Chapter 2: Growing Pains** (Mar 2020) Bug fix in commit d4e5f6g by @jdoe
+"Fix auth bypass vulnerability" Security hardening, now 42 lines
 
-🔄 **Chapter 3: Transformation** (Jul 2020)
-   Refactor in commit h7i8j9k by @asmith
-   "Refactor auth to use JWT tokens"
-   Complete redesign, 68 lines, -3 complexity
+🔄 **Chapter 3: Transformation** (Jul 2020) Refactor in commit h7i8j9k by @asmith
+"Refactor auth to use JWT tokens" Complete redesign, 68 lines, -3 complexity
 
-✨ **Chapter 4: Maturity** (Present)
-   Now handles OAuth, 2FA, session management
-   95 lines, well-tested, battle-hardened
-   12 contributors, 47 commits, 3 major refactors
+✨ **Chapter 4: Maturity** (Present) Now handles OAuth, 2FA, session management
+95 lines, well-tested, battle-hardened 12 contributors, 47 commits, 3 major
+refactors
+
 ```
 
 ## Success Criteria
@@ -864,24 +964,28 @@ into the other, making the invisible visible, the forgotten remembered.
 ### Good Natural Writing (What Works)
 
 ✅ **Stream of consciousness:**
+
 ```
 thinking we should maybe add tests? like unit tests for the api handlers,
 integration tests for the full flows, maybe some e2e stuff with playwright?
 ```
 
 ✅ **Metaphorical:**
+
 ```
 our data pipeline is like a river that sometimes floods and sometimes runs dry,
 need to build some dams and reservoirs, control the flow you know?
 ```
 
 ✅ **Uncertain but specific:**
+
 ```
 login is broken i think? users are getting redirected wrong, might be the
 session cookie or maybe the oauth flow, not sure but definitely broken
 ```
 
 ✅ **Emotionally honest:**
+
 ```
 super frustrated with this bug, been hunting it for days. it only happens
 in production, can't reproduce locally, logs aren't helpful. help?
@@ -909,4 +1013,6 @@ in production, can't reproduce locally, logs aren't helpful. help?
 
 ---
 
-**Remember: Your imperfect, natural writing contains your intent. The Mouthpiece Filter helps AI understand it. Write naturally, transform automatically, review thoughtfully.** 🎯
+**Remember: Your imperfect, natural writing contains your intent. The Mouthpiece
+Filter helps AI understand it. Write naturally, transform automatically, review
+thoughtfully.** 🎯

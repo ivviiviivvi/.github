@@ -1,10 +1,12 @@
 # PR Automation Quick Reference
 
-Quick commands and tips for using the PR automation system for ALL PRs (Dependabot, Jules, GitHub Actions, Copilot, etc.).
+Quick commands and tips for using the PR automation system for ALL PRs
+(Dependabot, Jules, GitHub Actions, Copilot, etc.).
 
 ## 🚀 Quick Commands
 
 ### Batch Merge Automated PRs
+
 ```bash
 # View batches ready for merge
 gh workflow run auto-batch-prs.yml
@@ -20,6 +22,7 @@ gh workflow run pr-batch-merge.yml -f batch_label="batch:copilot"
 ```
 
 ### Emergency Bulk Operations
+
 ```bash
 # Approve all automated PRs (Jules, Dependabot, etc.) - dry run first!
 gh workflow run bulk-pr-operations.yml \
@@ -49,6 +52,7 @@ gh workflow run bulk-pr-operations.yml \
 ```
 
 ### Manual Nightly Cleanup
+
 ```bash
 # Run full cleanup
 gh workflow run nightly-cleanup.yml
@@ -67,11 +71,13 @@ gh workflow run nightly-cleanup.yml \
 ### Apply These to Control Automation
 
 **Enable auto-merge:**
+
 ```bash
 gh pr edit <PR_NUMBER> --add-label "auto-merge"
 ```
 
 **Prevent auto-merge:**
+
 ```bash
 gh pr edit <PR_NUMBER> --add-label "skip-auto-merge"
 # or
@@ -79,11 +85,13 @@ gh pr edit <PR_NUMBER> --add-label "needs-review"
 ```
 
 **Keep PR as draft:**
+
 ```bash
 gh pr edit <PR_NUMBER> --add-label "keep-draft"
 ```
 
 **Prevent stale closure:**
+
 ```bash
 gh pr edit <PR_NUMBER> --add-label "keep-open"
 ```
@@ -93,6 +101,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 ### Scenario 1: 100+ PRs from Multiple Sources (Jules, Dependabot, etc.)
 
 1. **Check current state:**
+
    ```bash
    gh pr list --label automated --limit 100
    # Or check specific sources
@@ -100,21 +109,24 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
    gh pr list --author dependabot --limit 50
    ```
 
-2. **Approve all automated PRs (dry run):**
+1. **Approve all automated PRs (dry run):**
+
    ```bash
    gh workflow run bulk-pr-operations.yml \
      -f operation=approve-all-automated \
      -f dry_run=true
    ```
 
-3. **Review dry run output**, then run for real:
+1. **Review dry run output**, then run for real:
+
    ```bash
    gh workflow run bulk-pr-operations.yml \
      -f operation=approve-all-automated \
      -f dry_run=false
    ```
 
-4. **Wait for CI, then merge ready PRs:**
+1. **Wait for CI, then merge ready PRs:**
+
    ```bash
    gh workflow run bulk-pr-operations.yml \
      -f operation=merge-all-ready \
@@ -125,13 +137,15 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 ### Scenario 2: Batch Similar PRs
 
 1. **Label PRs with a batch tag:**
+
    ```bash
    gh pr edit 123 --add-label "batch:api-updates"
    gh pr edit 124 --add-label "batch:api-updates"
    gh pr edit 125 --add-label "batch:api-updates"
    ```
 
-2. **Merge the batch:**
+1. **Merge the batch:**
+
    ```bash
    gh workflow run pr-batch-merge.yml -f batch_label="batch:api-updates"
    ```
@@ -139,13 +153,15 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 ### Scenario 3: Clean Up Old PRs
 
 1. **See what would be closed (dry run):**
+
    ```bash
    gh workflow run bulk-pr-operations.yml \
      -f operation=close-all-stale \
      -f dry_run=true
    ```
 
-2. **Close stale PRs:**
+1. **Close stale PRs:**
+
    ```bash
    gh workflow run bulk-pr-operations.yml \
      -f operation=close-all-stale \
@@ -163,6 +179,7 @@ gh workflow run bulk-pr-operations.yml \
 ## 🔍 Monitoring
 
 ### Check Workflow Status
+
 ```bash
 # List recent workflow runs
 gh run list --workflow=nightly-cleanup.yml --limit 5
@@ -175,6 +192,7 @@ gh run view <RUN_ID> --log
 ```
 
 ### Find PRs by Label
+
 ```bash
 # Auto-merge PRs
 gh pr list --label auto-merge
@@ -187,6 +205,7 @@ gh pr list --label batch:dependabot-npm
 ```
 
 ### Check Batch Status
+
 ```bash
 # List all batch labels
 gh label list | grep "batch:"
@@ -201,36 +220,44 @@ done
 ## ⚙️ Configuration Tips
 
 ### Adjust Dependabot Frequency
+
 Edit `.github/dependabot.yml`:
+
 ```yaml
 schedule:
-  interval: "weekly"  # or "daily", "monthly"
-  day: "monday"       # day of week
-  time: "03:00"       # UTC time
+  interval: "weekly" # or "daily", "monthly"
+  day: "monday" # day of week
+  time: "03:00" # UTC time
 ```
 
 ### Change Nightly Schedule
+
 Edit `.github/workflows/nightly-cleanup.yml`:
+
 ```yaml
 schedule:
-  - cron: '0 2 * * *'  # 2 AM UTC daily
+  - cron: "0 2 * * *" # 2 AM UTC daily
 ```
 
 ### Modify Stale Threshold
+
 Edit `.github/workflows/nightly-cleanup.yml`, find:
+
 ```javascript
 const staleDays = 90; // Change this value
 ```
 
 ### Add Trusted Agents
+
 Edit `.github/workflows/draft-to-ready-automation.yml`:
+
 ```javascript
 const trustedAgents = [
-  'Jules',
-  'dependabot[bot]',
-  'github-actions[bot]',
-  'copilot',
-  'your-agent-name'  // Add here
+  "Jules",
+  "dependabot[bot]",
+  "github-actions[bot]",
+  "copilot",
+  "your-agent-name", // Add here
 ];
 ```
 
@@ -249,6 +276,7 @@ Before running bulk operations:
 ## 📊 Useful Queries
 
 ### PRs by State
+
 ```bash
 # Ready to merge
 gh pr list --label auto-merge --json number,title,checks
@@ -261,6 +289,7 @@ gh pr list --state open --json number,title,draft -q '.[] | select(.draft==true)
 ```
 
 ### Workflow Statistics
+
 ```bash
 # Success rate for nightly cleanup
 gh run list --workflow=nightly-cleanup.yml --json conclusion \
@@ -270,6 +299,7 @@ gh run list --workflow=nightly-cleanup.yml --json conclusion \
 ## 🆘 Emergency Commands
 
 ### Stop All Auto-Merge
+
 ```bash
 # Remove auto-merge label from all PRs
 gh pr list --label auto-merge --json number -q '.[].number' | \
@@ -277,6 +307,7 @@ gh pr list --label auto-merge --json number -q '.[].number' | \
 ```
 
 ### Disable Workflows Temporarily
+
 ```bash
 # Disable a workflow
 gh workflow disable nightly-cleanup.yml
@@ -286,6 +317,7 @@ gh workflow enable nightly-cleanup.yml
 ```
 
 ### Revert Batch Merge
+
 ```bash
 # If a batch merge goes wrong
 git revert <merge-commit-sha>
@@ -302,31 +334,37 @@ git push origin main
 ## 💡 Tips & Tricks
 
 1. **Use aliases** for common commands:
+
    ```bash
    alias batch-approve='gh workflow run bulk-pr-operations.yml -f operation=approve-all-dependabot -f dry_run=false'
    alias batch-merge='gh workflow run bulk-pr-operations.yml -f operation=merge-all-ready -f dry_run=false'
    ```
 
-2. **Monitor with watch**:
+1. **Monitor with watch**:
+
    ```bash
    watch -n 30 'gh pr list --label auto-merge | head -20'
    ```
 
-3. **Create custom batch labels** for different types of work:
+1. **Create custom batch labels** for different types of work:
+
    ```bash
    gh label create "batch:security-updates" --color "d73a4a" --description "Security update batch"
    ```
 
-4. **Set up notifications** for batch completion:
+1. **Set up notifications** for batch completion:
+
    - Subscribe to workflow runs in GitHub
    - Use GitHub mobile app for instant alerts
 
-5. **Review batch summaries** regularly:
+1. **Review batch summaries** regularly:
+
    ```bash
    gh issue list --label bulk-operation --limit 10
    ```
 
 ---
 
-**Last Updated:** 2025-12-31  
-**Quick Help:** `gh workflow list` to see all available workflows
+**Last Updated:** 2025-12-31\
+**Quick Help:** `gh workflow list` to see all
+available workflows

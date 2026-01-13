@@ -37,7 +37,7 @@ updates:
       npm-types:
         patterns:
           - "@types/*"
-  
+
   # Enable version updates for pip (Python)
   - package-ecosystem: "pip"
     directory: "/"
@@ -62,7 +62,7 @@ updates:
         update-types:
           - "minor"
           - "patch"
-  
+
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -82,7 +82,7 @@ updates:
       github-actions:
         patterns:
           - "*"
-  
+
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     directory: "/"
@@ -102,7 +102,7 @@ updates:
       docker-images:
         patterns:
           - "*"
-  
+
   # Enable version updates for Go modules
   - package-ecosystem: "gomod"
     directory: "/"
@@ -125,7 +125,7 @@ updates:
         update-types:
           - "minor"
           - "patch"
-  
+
   # Enable version updates for Composer (PHP)
   - package-ecosystem: "composer"
     directory: "/"

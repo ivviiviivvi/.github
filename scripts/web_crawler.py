@@ -4,21 +4,22 @@ Web Crawler for GitHub Organization Health Monitoring
 Implements AI-GH-06, AI-GH-07, and AI-GH-08 modules
 """
 
+import concurrent.futures
+import functools
+import ipaddress
+import json
 import os
 import re
-import json
 import socket
-import ipaddress
-import requests
-import urllib3
-from requests.adapters import HTTPAdapter
+import ssl
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
-import functools
-import concurrent.futures
-import ssl
+
+import requests
+import urllib3
+from requests.adapters import HTTPAdapter
 
 # Disable warnings globally
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -32,11 +33,17 @@ class OrganizationCrawler:
     # incorrect matching of bare URLs inside markdown syntax (e.g. "url)")
     # Group 1: URL inside markdown link [text](URL) - excludes spaces to avoid malformed URLs
     # Group 2: Bare URL - excludes closing paren and spaces to avoid trailing punctuation
-    LINK_PATTERN = re.compile(r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)')
+    LINK_PATTERN = re.compile(
+        r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)'
+    )
 
-    def __init__(self, github_token: str = None, org_name: str = None, max_workers: int = 10):
+    def __init__(
+        self, github_token: str = None, org_name: str = None, max_workers: int = 10
+    ):
         self.github_token = github_token or os.environ.get("GITHUB_TOKEN")
-        self.org_name = org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
+        self.org_name = (
+            org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
+        )
         self.max_workers = max_workers
         self.session = requests.Session()
 
@@ -123,12 +130,18 @@ class OrganizationCrawler:
         # Filter links efficiently
         # Optimization: Filter WITHOUT sorting to avoid O(M log M).
         # Processing order is irrelevant due to concurrency.
-        links_to_check = [link for link in all_links if link.startswith(("http:", "https:"))]
+        links_to_check = [
+            link for link in all_links if link.startswith(("http:", "https:"))
+        ]
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers to be respectful but faster than serial
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            future_to_link = {executor.submit(self._check_link, link): link for link in links_to_check}
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
+            future_to_link = {
+                executor.submit(self._check_link, link): link for link in links_to_check
+            }
 
             for future in concurrent.futures.as_completed(future_to_link):
                 link = future_to_link[future]
@@ -138,7 +151,9 @@ class OrganizationCrawler:
                         results["valid"] += 1
                         print(f"  ✓ {link}")
                     elif status == 999:  # Rate limited or blocked
-                        results["warnings"].append({"url": link, "reason": "Rate limited or blocked by server"})
+                        results["warnings"].append(
+                            {"url": link, "reason": "Rate limited or blocked by server"}
+                        )
                         print(f"  ⚠️  {link} (rate limited)")
                     else:
                         results["broken"] += 1
@@ -146,7 +161,9 @@ class OrganizationCrawler:
                         print(f"  ✗ {link} (HTTP {status})")
                 except Exception as exc:
                     results["broken"] += 1
-                    results["broken_links"].append({"url": link, "status": f"Exception: {exc}"})
+                    results["broken_links"].append(
+                        {"url": link, "status": f"Exception: {exc}"}
+                    )
                     print(f"  ✗ {link} (Exception: {exc})")
 
         return results
@@ -282,13 +299,13 @@ class OrganizationCrawler:
 
                 # Create a temporary connection pool for this specific request
                 # allowing us to verify hostname against the IP connection
-                if scheme == 'https':
+                if scheme == "https":
                     # Use system default SSL context to avoid extra dependencies
                     # Optimization: Reuse pre-initialized SSL context
                     pool = urllib3.HTTPSConnectionPool(
                         host=safe_ip,
                         port=port,
-                        cert_reqs='CERT_REQUIRED',
+                        cert_reqs="CERT_REQUIRED",
                         ssl_context=self.ssl_context,
                         assert_hostname=hostname,
                         server_hostname=hostname,
@@ -301,9 +318,13 @@ class OrganizationCrawler:
                 # urllib3.request accepts a relative path here, and the pool handles the
                 # actual TCP/SSL connection to the configured host and port.
                 path = parsed.path or "/"
-                url_path = urllib.parse.urlunparse(("", "", path, parsed.params, parsed.query, parsed.fragment))
+                url_path = urllib.parse.urlunparse(
+                    ("", "", path, parsed.params, parsed.query, parsed.fragment)
+                )
 
-                response = pool.request("HEAD", url_path, timeout=timeout, retries=False, headers=headers)
+                response = pool.request(
+                    "HEAD", url_path, timeout=timeout, retries=False, headers=headers
+                )
 
                 # Handle Redirects
                 if 300 <= response.status < 400:
@@ -322,11 +343,7 @@ class OrganizationCrawler:
                 # Optimization: Skip GET if HEAD returns 404 (definitive Not Found) to save bandwidth
                 if response.status >= 400 and response.status != 404:
                     response = pool.request(
-                        'GET',
-                        url_path,
-                        timeout=timeout,
-                        retries=False,
-                        headers=headers
+                        "GET", url_path, timeout=timeout, retries=False, headers=headers
                     )
                     # If GET returns redirect
                     if 300 <= response.status < 400:
@@ -401,7 +418,9 @@ class OrganizationCrawler:
 
         # Calculate days since last update
         try:
-            updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
+            updated_at = datetime.fromisoformat(
+                repo["updated_at"].replace("Z", "+00:00")
+            )
             if updated_at.tzinfo is None:
                 updated_at = updated_at.replace(tzinfo=timezone.utc)
 
@@ -536,7 +555,9 @@ class OrganizationCrawler:
         """Generate comprehensive analysis report"""
         print("\n📝 Generating report...")
 
-        report_filename = f"org_health_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+        report_filename = (
+            f"org_health_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+        )
         report_path = output_dir / report_filename
 
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -645,7 +666,9 @@ Organization: {self.results['organization']}
             link_validation = self.validate_links(links_by_file)
             self.results["link_validation"] = link_validation
         else:
-            print("\n🌐 Skipping external link validation (use --validate-links to enable)")
+            print(
+                "\n🌐 Skipping external link validation (use --validate-links to enable)"
+            )
 
         # 4. Identify blind spots (AI-GH-08-A)
         blind_spots = self.identify_blind_spots(ecosystem, health)
@@ -704,7 +727,9 @@ def main():
         max_workers=args.max_workers,
     )
 
-    results = crawler.run_full_analysis(base_dir=args.base_dir, validate_external_links=args.validate_links)
+    results = crawler.run_full_analysis(
+        base_dir=args.base_dir, validate_external_links=args.validate_links
+    )
 
     # Print summary
     print("\n" + "=" * 60)
@@ -719,7 +744,7 @@ def main():
         + len(em.get("copilot_instructions", []))
         + len(em.get("copilot_prompts", []))
         + len(em.get("copilot_chatmodes", []))
-        )
+    )
     print(f"Copilot Customizations: {copilot_count}")
 
     if "repository_health" in results and "total_repos" in results["repository_health"]:

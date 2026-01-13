@@ -1,17 +1,17 @@
 ---
-mode: 'agent'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'problems']
-description: 'Get best practices for C# async programming'
----
+
+## mode: 'agent' tools: \['changes', 'search/codebase', 'edit/editFiles', 'problems'\] description: 'Get best practices for C# async programming'
 
 # C# Async Programming Best Practices
 
-Your goal is to help me follow best practices for asynchronous programming in C#.
+Your goal is to help me follow best practices for asynchronous programming in
+C#.
 
 ## Naming Conventions
 
 - Use the 'Async' suffix for all async methods
-- Match method names with their synchronous counterparts when applicable (e.g., `GetDataAsync()` for `GetData()`)
+- Match method names with their synchronous counterparts when applicable (e.g.,
+  `GetDataAsync()` for `GetData()`)
 
 ## Return Types
 
@@ -24,13 +24,16 @@ Your goal is to help me follow best practices for asynchronous programming in C#
 
 - Use try/catch blocks around await expressions
 - Avoid swallowing exceptions in async methods
-- Use `ConfigureAwait(false)` when appropriate to prevent deadlocks in library code
-- Propagate exceptions with `Task.FromException()` instead of throwing in async Task returning methods
+- Use `ConfigureAwait(false)` when appropriate to prevent deadlocks in library
+  code
+- Propagate exceptions with `Task.FromException()` instead of throwing in async
+  Task returning methods
 
 ## Performance
 
 - Use `Task.WhenAll()` for parallel execution of multiple tasks
-- Use `Task.WhenAny()` for implementing timeouts or taking the first completed task
+- Use `Task.WhenAny()` for implementing timeouts or taking the first completed
+  task
 - Avoid unnecessary async/await when simply passing through task results
 - Consider cancellation tokens for long-running operations
 
@@ -44,7 +47,9 @@ Your goal is to help me follow best practices for asynchronous programming in C#
 ## Implementation Patterns
 
 - Implement the async command pattern for long-running operations
-- Use async streams (IAsyncEnumerable<T>) for processing sequences asynchronously
+- Use async streams (IAsyncEnumerable<T>) for processing sequences
+  asynchronously
 - Consider the task-based asynchronous pattern (TAP) for public APIs
 
-When reviewing my C# code, identify these issues and suggest improvements that follow these best practices.
+When reviewing my C# code, identify these issues and suggest improvements that
+follow these best practices.

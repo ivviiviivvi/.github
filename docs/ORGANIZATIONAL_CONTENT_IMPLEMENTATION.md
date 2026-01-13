@@ -2,7 +2,8 @@
 
 > **Step-by-step guide to deploying comprehensive organizational content**
 
-This guide walks you through implementing the complete organizational content framework across your repositories.
+This guide walks you through implementing the complete organizational content
+framework across your repositories.
 
 ## Table of Contents
 
@@ -21,6 +22,7 @@ This guide walks you through implementing the complete organizational content fr
 ### What You're Implementing
 
 This guide helps you deploy:
+
 - **Issue Management System** - 20+ issue types with taxonomy
 - **Discussion Framework** - 12 categories with engagement strategy
 - **Project Boards** - 10 templates for different workflows
@@ -28,27 +30,27 @@ This guide helps you deploy:
 
 ### Timeline
 
-| Phase | Duration | Effort Level |
-|-------|----------|--------------|
-| Planning | 2-4 hours | Low |
-| Initial Setup | 1-2 hours | Low |
-| Content Deployment | 2-4 hours | Medium |
-| Customization | 4-8 hours | Medium-High |
-| Training & Rollout | 1-2 days | Medium |
-| Monitoring & Iteration | Ongoing | Low |
+| Phase                  | Duration  | Effort Level |
+| ---------------------- | --------- | ------------ |
+| Planning               | 2-4 hours | Low          |
+| Initial Setup          | 1-2 hours | Low          |
+| Content Deployment     | 2-4 hours | Medium       |
+| Customization          | 4-8 hours | Medium-High  |
+| Training & Rollout     | 1-2 days  | Medium       |
+| Monitoring & Iteration | Ongoing   | Low          |
 
-**Total Initial Setup**: 1-2 days  
+**Total Initial Setup**: 1-2 days\
 **To Full Maturity**: 2-4 weeks
 
 ### Team Roles
 
-| Role | Responsibilities | Time Commitment |
-|------|------------------|-----------------|
-| **Project Lead** | Overall coordination | 4-8 hours |
-| **Documentation Owner** | Wiki setup and maintenance | 4-6 hours |
-| **Community Manager** | Discussions and engagement | 3-5 hours |
-| **Project Manager** | Project board configuration | 2-4 hours |
-| **Developers** | Issue triage and labeling | 1-2 hours |
+| Role                    | Responsibilities            | Time Commitment |
+| ----------------------- | --------------------------- | --------------- |
+| **Project Lead**        | Overall coordination        | 4-8 hours       |
+| **Documentation Owner** | Wiki setup and maintenance  | 4-6 hours       |
+| **Community Manager**   | Discussions and engagement  | 3-5 hours       |
+| **Project Manager**     | Project board configuration | 2-4 hours       |
+| **Developers**          | Issue triage and labeling   | 1-2 hours       |
 
 ## Prerequisites
 
@@ -69,11 +71,12 @@ This guide helps you deploy:
 ### Recommended Reading
 
 Before starting, read:
+
 1. [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - 20 min
-2. [Issue Taxonomy](ISSUE_TAXONOMY.md) - 25 min
-3. [Discussion Guide](DISCUSSION_GUIDE.md) - 40 min
-4. [Projects Guide](PROJECTS_GUIDE.md) - 50 min
-5. [Wiki Guide](WIKI_GUIDE.md) - 60 min
+1. [Issue Taxonomy](ISSUE_TAXONOMY.md) - 25 min
+1. [Discussion Guide](DISCUSSION_GUIDE.md) - 40 min
+1. [Projects Guide](PROJECTS_GUIDE.md) - 50 min
+1. [Wiki Guide](WIKI_GUIDE.md) - 60 min
 
 **Total**: ~3 hours (can be spread over days)
 
@@ -92,6 +95,7 @@ done
 ```
 
 Document:
+
 - [ ] Which repositories have which features enabled
 - [ ] Current issue/discussion/project usage
 - [ ] Existing wiki content
@@ -101,20 +105,22 @@ Document:
 
 **Decide what to implement** (30 minutes):
 
-| Feature | Priority | Repositories | Notes |
-|---------|----------|--------------|-------|
-| Issues | High/Medium/Low | List repos | |
-| Discussions | High/Medium/Low | List repos | |
-| Projects | High/Medium/Low | List repos | |
-| Wikis | High/Medium/Low | List repos | |
+| Feature     | Priority        | Repositories | Notes |
+| ----------- | --------------- | ------------ | ----- |
+| Issues      | High/Medium/Low | List repos   |       |
+| Discussions | High/Medium/Low | List repos   |       |
+| Projects    | High/Medium/Low | List repos   |       |
+| Wikis       | High/Medium/Low | List repos   |       |
 
-**Recommendation**: Start with 2-3 pilot repositories before organization-wide rollout.
+**Recommendation**: Start with 2-3 pilot repositories before organization-wide
+rollout.
 
 ### Step 1.3: Customize Strategy
 
 **Adapt framework to your needs** (1 hour):
 
 Review each guide and note:
+
 - [ ] Which templates need customization
 - [ ] Which categories/types are relevant
 - [ ] What terminology to use
@@ -128,21 +134,25 @@ Review each guide and note:
 ## Implementation Timeline
 
 ### Week 1: Setup
+
 - [ ] Enable features
 - [ ] Deploy templates
 - [ ] Initial customization
 
 ### Week 2: Content Creation
+
 - [ ] Create initial issues
 - [ ] Start first discussions
 - [ ] Set up project boards
 
 ### Week 3: Training
+
 - [ ] Team training sessions
 - [ ] Documentation review
 - [ ] Q&A sessions
 
 ### Week 4: Rollout
+
 - [ ] Organization-wide announcement
 - [ ] Monitor adoption
 - [ ] Collect feedback
@@ -176,20 +186,24 @@ gh repo view $REPO --json hasIssuesEnabled,hasDiscussionsEnabled,hasProjectsEnab
 For each repository:
 
 1. **Issues**:
+
    - Enable issue templates
    - Disable blank issues (optional)
    - Set up labels (see Step 2.3)
 
-2. **Discussions**:
+1. **Discussions**:
+
    - Enable discussions
    - Create categories (see Step 3.2)
    - Set category settings
 
-3. **Projects**:
+1. **Projects**:
+
    - Enable projects v2
    - Create initial project (see Step 3.3)
 
-4. **Wiki**:
+1. **Wiki**:
+
    - Enable wiki
    - Restrict editing (optional)
 
@@ -281,14 +295,16 @@ gh workflow run create-organizational-content.yml \
 
 **Option B: Manual Creation**
 
-Select 5-10 most important issues from the [Issue Taxonomy](ISSUE_TAXONOMY.md) and create manually.
+Select 5-10 most important issues from the [Issue Taxonomy](ISSUE_TAXONOMY.md)
+and create manually.
 
 **Recommended Initial Issues**:
+
 1. Documentation Audit
-2. Security Hardening
-3. Testing Coverage
-4. Community Health
-5. Onboarding Improvement
+1. Security Hardening
+1. Testing Coverage
+1. Community Health
+1. Onboarding Improvement
 
 ### Step 3.2: Set Up Discussions
 
@@ -297,6 +313,7 @@ Select 5-10 most important issues from the [Issue Taxonomy](ISSUE_TAXONOMY.md) a
 In repository settings → Discussions:
 
 1. **Create Categories**:
+
    - 📢 Announcements (read-only)
    - 💡 Ideas & Feature Proposals
    - ❓ Q&A
@@ -304,12 +321,14 @@ In repository settings → Discussions:
    - 🎯 Best Practices
    - 🐛 Troubleshooting & Support
 
-2. **Configure Each Category**:
+1. **Configure Each Category**:
+
    - Set appropriate format (Discussion/Q&A/Announcement)
    - Write category descriptions
    - Set moderation policies
 
-3. **Create Initial Discussions**:
+1. **Create Initial Discussions**:
+
    ```bash
    # Welcome discussion
    gh discussion create \
@@ -317,7 +336,7 @@ In repository settings → Discussions:
      --category "General" \
      --title "👋 Welcome to Our Community!" \
      --body-file .github/discussion-starters/welcome.md
-   
+
    # Best practices discussion
    gh discussion create \
      --repo YOUR_ORG/your-repo \
@@ -333,17 +352,22 @@ In repository settings → Discussions:
 **Using GitHub Web UI** (Projects v2 CLI support is limited):
 
 1. **Create Product Roadmap Project**:
+
    - Go to organization → Projects → New project
    - Choose "Roadmap" template or blank
-   - Add custom fields from [product-roadmap.json](.github/project-templates/product-roadmap.json)
+   - Add custom fields from
+     [product-roadmap.json](.github/project-templates/product-roadmap.json)
    - Set up views (Roadmap, By Status, By Priority)
 
-2. **Create Bug Triage Project**:
+1. **Create Bug Triage Project**:
+
    - Create new project
-   - Add custom fields from [bug-triage.json](.github/project-templates/bug-triage.json)
+   - Add custom fields from
+     [bug-triage.json](.github/project-templates/bug-triage.json)
    - Set up board view grouped by priority
 
-3. **Link to Repository**:
+1. **Link to Repository**:
+
    - Add repository to project
    - Set up auto-add workflows
    - Configure status automations
@@ -386,16 +410,19 @@ git push
 **Adapt to your workflow** (1-2 hours):
 
 1. **Review Issue Types**:
+
    - Remove irrelevant types
    - Add domain-specific types
    - Adjust priority levels
 
-2. **Customize Templates**:
+1. **Customize Templates**:
+
    - Edit `.github/ISSUE_TEMPLATE/*.yml`
    - Adjust fields and options
    - Update descriptions
 
-3. **Define Your SLAs**:
+1. **Define Your SLAs**:
+
    - Set realistic response times
    - Define escalation procedures
    - Document in taxonomy
@@ -405,16 +432,19 @@ git push
 **Adapt categories to your community** (1 hour):
 
 1. **Adjust Categories**:
+
    - Add/remove categories
    - Rename for your terminology
    - Reorder by importance
 
-2. **Create Custom Starters**:
+1. **Create Custom Starters**:
+
    - Write domain-specific templates
    - Add recurring discussion topics
    - Prepare FAQ content
 
-3. **Set Moderation Policies**:
+1. **Set Moderation Policies**:
+
    - Define response expectations
    - Assign category moderators
    - Create escalation procedures
@@ -424,16 +454,19 @@ git push
 **Customize for your workflows** (2 hours):
 
 1. **Adjust Project Templates**:
+
    - Modify custom fields
    - Change status options
    - Add/remove columns
 
-2. **Set Up Automations**:
+1. **Set Up Automations**:
+
    - Auto-add items based on labels
    - Auto-set field values
    - Status transitions
 
-3. **Create Views**:
+1. **Create Views**:
+
    - Team-specific views
    - Sprint/milestone views
    - Leadership dashboards
@@ -443,16 +476,19 @@ git push
 **Structure for your content** (1-2 hours):
 
 1. **Plan Wiki Structure**:
+
    - Identify main sections
    - Plan page hierarchy
    - Design navigation
 
-2. **Customize Templates**:
+1. **Customize Templates**:
+
    - Adjust page templates
    - Add domain-specific sections
    - Create custom templates
 
-3. **Create Content Plan**:
+1. **Create Content Plan**:
+
    - List pages to create
    - Assign content owners
    - Set deadlines
@@ -464,16 +500,19 @@ git push
 **Prepare team for new system** (2-3 hours):
 
 1. **Quick Reference Guides**:
+
    - One-pagers for each feature
    - Common workflows
    - Where to find what
 
-2. **Video Walkthroughs**:
+1. **Video Walkthroughs**:
+
    - Screen recordings of key tasks
    - 2-5 minutes each
    - Upload to YouTube or internal platform
 
-3. **FAQ Document**:
+1. **FAQ Document**:
+
    - Anticipated questions
    - Answers with examples
    - Links to detailed docs
@@ -483,18 +522,21 @@ git push
 **Train the team** (2-4 hours total):
 
 **Session 1: Issues & Projects** (60 min)
+
 - Overview of issue taxonomy
 - How to create and label issues
 - Using project boards
 - Q&A
 
 **Session 2: Discussions & Wiki** (60 min)
+
 - Discussion categories and when to use
 - How to start discussions
 - Wiki structure and editing
 - Q&A
 
 **Session 3: Best Practices** (60 min)
+
 - Do's and don'ts
 - Real examples
 - Workflows and integration
@@ -505,23 +547,27 @@ git push
 **Announce to organization** (1 hour):
 
 1. **Create Announcement**:
+
    ```markdown
    # 🎉 New Organizational Content Framework
 
    We're excited to announce a comprehensive new framework for issues, discussions, projects, and wikis!
 
    ## What's New
+
    - Structured issue taxonomy
    - Discussion categories for community engagement
    - Project templates for better tracking
    - Organized wiki for documentation
 
    ## Resources
+
    - [Master Index](link) - Start here
    - [Training Videos](link) - Quick walkthroughs
    - [FAQ](link) - Common questions
 
    ## Getting Help
+
    - Ask in #org-content-help Slack channel
    - Comment on this discussion
    - Attend office hours (Fridays 2-3pm)
@@ -529,7 +575,8 @@ git push
    We're here to help! 🚀
    ```
 
-2. **Distribution Channels**:
+1. **Distribution Channels**:
+
    - [ ] GitHub Discussions announcement
    - [ ] Slack/Teams announcement
    - [ ] Email to organization
@@ -541,16 +588,19 @@ git push
 **Help team during transition** (ongoing):
 
 1. **Office Hours**:
+
    - Weekly drop-in sessions
    - First 2-4 weeks
    - Record and share
 
-2. **Slack Channel**:
+1. **Slack Channel**:
+
    - Dedicated help channel
    - Monitor actively
    - Build FAQ from questions
 
-3. **Documentation**:
+1. **Documentation**:
+
    - Keep docs updated
    - Add examples from real use
    - Iterate based on feedback
@@ -575,6 +625,7 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 ```
 
 **Key Metrics**:
+
 - Issue creation rate
 - Response times
 - Discussion participation
@@ -586,16 +637,19 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 **Learn what works** (monthly):
 
 1. **Surveys**:
+
    - Monthly pulse surveys
    - Specific feature feedback
    - Improvement suggestions
 
-2. **Retrospectives**:
+1. **Retrospectives**:
+
    - Monthly retro meeting
    - Review what's working
    - Identify pain points
 
-3. **Usage Analysis**:
+1. **Usage Analysis**:
+
    - Most/least used features
    - Common workflows
    - Bottlenecks
@@ -605,18 +659,21 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 **Continuously improve** (ongoing):
 
 1. **Monthly Reviews**:
+
    - [ ] Review metrics
    - [ ] Analyze feedback
    - [ ] Identify improvements
    - [ ] Update documentation
 
-2. **Quarterly Updates**:
+1. **Quarterly Updates**:
+
    - [ ] Major taxonomy updates
    - [ ] New templates
    - [ ] Process improvements
    - [ ] Training refreshers
 
-3. **Annual Assessment**:
+1. **Annual Assessment**:
+
    - [ ] Full system review
    - [ ] ROI analysis
    - [ ] Strategic adjustments
@@ -627,24 +684,34 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 ### Common Issues
 
 #### "Features won't enable"
-**Cause**: Insufficient permissions  
-**Solution**: Ensure organization owner/admin access
+
+**Cause**: Insufficient permissions\
+**Solution**: Ensure organization
+owner/admin access
 
 #### "Templates not showing"
-**Cause**: Not in `.github` directory or wrong format  
-**Solution**: Verify file location and YAML syntax
+
+**Cause**: Not in `.github` directory or wrong format\
+**Solution**: Verify file
+location and YAML syntax
 
 #### "Low adoption rate"
-**Cause**: Lack of training or unclear value  
-**Solution**: More training, better communication, leadership buy-in
+
+**Cause**: Lack of training or unclear value\
+**Solution**: More training,
+better communication, leadership buy-in
 
 #### "Too complex for our needs"
-**Cause**: Over-engineering  
-**Solution**: Start smaller, use only what you need, simplify
+
+**Cause**: Over-engineering\
+**Solution**: Start smaller, use only what you
+need, simplify
 
 #### "Duplicates across repos"
-**Cause**: Lack of coordination  
-**Solution**: Use org-level projects, cross-repo discussions
+
+**Cause**: Lack of coordination\
+**Solution**: Use org-level projects,
+cross-repo discussions
 
 ### Getting Help
 
@@ -656,6 +723,7 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 ## Success Checklist
 
 ### Week 1
+
 - [ ] Features enabled on pilot repos
 - [ ] Labels configured
 - [ ] Initial issues created
@@ -664,6 +732,7 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 - [ ] Wiki initialized
 
 ### Month 1
+
 - [ ] Training completed
 - [ ] Organization announced
 - [ ] Active usage started
@@ -671,6 +740,7 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 - [ ] First iteration complete
 
 ### Quarter 1
+
 - [ ] Full adoption across pilot repos
 - [ ] Metrics showing value
 - [ ] Community engagement strong
@@ -682,27 +752,33 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 After successful pilot:
 
 1. **Expand to More Repositories**:
+
    - Apply learnings
    - Streamline process
    - Automate where possible
 
-2. **Enhance Automation**:
+1. **Enhance Automation**:
+
    - More workflow automations
    - Integration with other tools
    - Reporting dashboards
 
-3. **Community Building**:
+1. **Community Building**:
+
    - Foster engagement
    - Recognize contributors
    - Build culture
 
-4. **Continuous Improvement**:
+1. **Continuous Improvement**:
+
    - Regular reviews
    - Keep current with GitHub features
    - Adapt to changing needs
 
 ---
 
-**Remember**: This is a journey, not a destination. Start small, learn, iterate, and grow! 🚀
+**Remember**: This is a journey, not a destination. Start small, learn, iterate,
+and grow! 🚀
 
-**Questions?** See [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) or ask in Discussions.
+**Questions?** See [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) or ask in
+Discussions.

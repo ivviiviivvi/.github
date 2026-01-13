@@ -7,16 +7,19 @@ Complete guide for using GitHub Codespaces with this repository.
 ### Create a Codespace
 
 **Via Web**:
+
 1. Go to repository on GitHub
-2. Click "Code" → "Codespaces" tab
-3. Click "Create codespace on main"
+1. Click "Code" → "Codespaces" tab
+1. Click "Create codespace on main"
 
 **Via CLI**:
+
 ```bash
 gh codespace create --repo ivviiviivvi/.github
 ```
 
 **Via URL**:
+
 ```
 https://github.dev/ivviiviivvi/.github
 ```
@@ -40,6 +43,7 @@ Edit `.devcontainer/devcontainer.json`:
 ```
 
 **Available Machine Types**:
+
 - 2-core: 8GB RAM, 32GB storage (Free tier)
 - 4-core: 16GB RAM, 32GB storage
 - 8-core: 32GB RAM, 64GB storage
@@ -49,6 +53,7 @@ Edit `.devcontainer/devcontainer.json`:
 ### Timeout Configuration
 
 **Set idle timeout**:
+
 ```bash
 # Via CLI
 gh codespace edit --idle-timeout 30m
@@ -58,6 +63,7 @@ gh codespace edit --idle-timeout 30m
 ```
 
 **Auto-delete after inactivity**:
+
 ```bash
 # Via CLI
 gh codespace edit --retention-period 7d
@@ -83,6 +89,7 @@ Ports are automatically forwarded and accessible:
 ```
 
 **Access forwarded ports**:
+
 - Private: Only you can access
 - Organization: Anyone in org can access
 - Public: Anyone with link can access
@@ -90,6 +97,7 @@ Ports are automatically forwarded and accessible:
 ### Secrets
 
 **Add secrets**:
+
 ```bash
 # Via CLI
 gh secret set API_KEY --repos ivviiviivvi/.github
@@ -99,6 +107,7 @@ gh secret set API_KEY --repos ivviiviivvi/.github
 ```
 
 **Use in devcontainer**:
+
 ```json
 {
   "remoteEnv": {
@@ -110,11 +119,13 @@ gh secret set API_KEY --repos ivviiviivvi/.github
 ### Dotfiles
 
 **Auto-install dotfiles**:
+
 1. Create a repo named `dotfiles`
-2. Add your configurations
-3. Codespaces will auto-clone and run `install.sh`
+1. Add your configurations
+1. Codespaces will auto-clone and run `install.sh`
 
 Example `dotfiles/install.sh`:
+
 ```bash
 #!/bin/bash
 ln -s ~/dotfiles/.bashrc ~/.bashrc
@@ -124,6 +135,7 @@ ln -s ~/dotfiles/.gitconfig ~/.gitconfig
 ### Extensions
 
 **Pre-install extensions**:
+
 ```json
 {
   "customizations": {
@@ -158,11 +170,13 @@ gh codespace code -c <codespace-name>
 ### Browser
 
 Access via web:
+
 ```
 https://github.dev/ivviiviivvi/.github
 ```
 
 Or from Codespace:
+
 ```
 https://<codespace-name>.github.dev
 ```
@@ -170,6 +184,7 @@ https://<codespace-name>.github.dev
 ### SSH
 
 Connect via SSH:
+
 ```bash
 # SSH into codespace
 gh codespace ssh
@@ -185,6 +200,7 @@ gh codespace ports forward 3000:3000
 ### CLI
 
 Execute commands:
+
 ```bash
 # Run command in codespace
 gh codespace ssh -c "npm test"
@@ -198,21 +214,25 @@ gh codespace ssh
 ### Lifecycle
 
 **Stop codespace**:
+
 ```bash
 gh codespace stop
 ```
 
 **Start codespace**:
+
 ```bash
 gh codespace start
 ```
 
 **Delete codespace**:
+
 ```bash
 gh codespace delete
 ```
 
 **Rebuild container**:
+
 ```bash
 # In codespace terminal
 # F1 → Codespaces: Rebuild Container
@@ -243,10 +263,12 @@ gh codespace logs -f
 ### Free Tier
 
 **GitHub Free**:
+
 - 120 core-hours/month
 - 15GB storage
 
 **GitHub Pro**:
+
 - 180 core-hours/month
 - 20GB storage
 
@@ -263,26 +285,31 @@ gh api /user/codespaces/billing
 ### Optimization Tips
 
 1. **Stop when not using**:
+
    ```bash
    gh codespace stop
    ```
 
-2. **Set short idle timeout**:
+1. **Set short idle timeout**:
+
    ```bash
    gh codespace edit --idle-timeout 30m
    ```
 
-3. **Use smaller machine types**:
+1. **Use smaller machine types**:
+
    - Development: 2-core
    - Building: 4-core
    - Heavy workloads: 8-core+
 
-4. **Auto-delete old codespaces**:
+1. **Auto-delete old codespaces**:
+
    ```bash
    gh codespace edit --retention-period 7d
    ```
 
-5. **Use prebuilds** (for frequent access):
+1. **Use prebuilds** (for frequent access):
+
    ```yaml
    # .github/workflows/codespaces-prebuild.yml
    on:
@@ -297,9 +324,9 @@ Speed up codespace creation with prebuilds.
 ### Enable Prebuilds
 
 1. Go to repository settings
-2. Codespaces → Set up prebuilds
-3. Select branch and region
-4. Configure prebuild triggers
+1. Codespaces → Set up prebuilds
+1. Select branch and region
+1. Configure prebuild triggers
 
 ### Prebuild Configuration
 
@@ -333,18 +360,18 @@ jobs:
 ### Shared Codespaces
 
 1. Create codespace
-2. Make it public:
+1. Make it public:
    ```bash
    gh codespace edit --visibility org
    ```
-3. Share URL with team
+1. Share URL with team
 
 ### Live Share
 
 1. Install Live Share extension
-2. Start session
-3. Share link with collaborators
-4. Collaborate in real-time
+1. Start session
+1. Share link with collaborators
+1. Collaborate in real-time
 
 ### Code Review in Codespace
 
@@ -375,6 +402,7 @@ Never commit secrets. Use Codespaces secrets or environment variables.
 ### 4. Set Appropriate Timeouts
 
 Balance between cost and convenience:
+
 - Active development: 30-60 minutes
 - Occasional use: 15-30 minutes
 
@@ -390,6 +418,7 @@ gh codespace list --json | \
 ### 6. Use .gitignore
 
 Ensure large files and dependencies aren't committed:
+
 ```
 node_modules/
 .venv/
@@ -406,12 +435,14 @@ Use multi-stage builds and minimize layers.
 ### Codespace Won't Start
 
 **Check status**:
+
 ```bash
 gh codespace list
 gh codespace logs
 ```
 
 **Solutions**:
+
 - Check devcontainer configuration
 - Verify base image exists
 - Review build logs
@@ -419,6 +450,7 @@ gh codespace logs
 ### Slow Performance
 
 **Check resources**:
+
 ```bash
 # In codespace terminal
 top
@@ -427,6 +459,7 @@ docker stats
 ```
 
 **Solutions**:
+
 - Upgrade machine type
 - Enable prebuilds
 - Optimize container image
@@ -434,11 +467,13 @@ docker stats
 ### Port Forwarding Issues
 
 **Check ports**:
+
 ```bash
 gh codespace ports
 ```
 
 **Solutions**:
+
 - Verify service is running
 - Check firewall settings
 - Try different port
@@ -446,6 +481,7 @@ gh codespace ports
 ### Connection Timeouts
 
 **Solutions**:
+
 - Check internet connection
 - Verify GitHub status
 - Try different browser
@@ -455,27 +491,29 @@ gh codespace ports
 ### From Local to Codespaces
 
 1. **Push changes**:
+
    ```bash
    git add .
    git commit -m "WIP: migrate to codespace"
    git push
    ```
 
-2. **Create codespace**:
+1. **Create codespace**:
+
    ```bash
    gh codespace create
    ```
 
-3. **Continue work** in browser or VS Code
+1. **Continue work** in browser or VS Code
 
 ### From Codespaces to Local
 
 1. **Commit changes** in codespace
-2. **Pull changes** locally:
+1. **Pull changes** locally:
    ```bash
    git pull
    ```
-3. **Reopen in local container**
+1. **Reopen in local container**
 
 ## Advanced Usage
 
@@ -526,4 +564,4 @@ services:
 
 ---
 
-*Last Updated: 2024-01-01*
+_Last Updated: 2024-01-01_

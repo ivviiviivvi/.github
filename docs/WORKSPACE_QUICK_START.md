@@ -1,6 +1,7 @@
 # Workspace & Containerization Quick Start
 
-Get started with lightweight local systems and flexible remote access in 5 minutes.
+Get started with lightweight local systems and flexible remote access in 5
+minutes.
 
 ## Choose Your Path
 
@@ -9,18 +10,21 @@ Get started with lightweight local systems and flexible remote access in 5 minut
 **Best for**: Daily development with full IDE features
 
 1. **Install Prerequisites**:
+
    - [Docker Desktop](https://www.docker.com/products/docker-desktop)
    - [VS Code](https://code.visualstudio.com/)
    - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-2. **Clone and Open**:
+1. **Clone and Open**:
+
    ```bash
    git clone https://github.com/ivviiviivvi/.github.git
    cd .github
    code .
    ```
 
-3. **Reopen in Container**:
+1. **Reopen in Container**:
+
    - Press `F1` → `Dev Containers: Reopen in Container`
    - Wait for build (2-5 minutes first time)
    - Start coding!
@@ -34,12 +38,15 @@ Get started with lightweight local systems and flexible remote access in 5 minut
 **Best for**: Quick access, no local setup, collaboration
 
 1. **Create Codespace**:
+
    ```bash
    gh codespace create --repo ivviiviivvi/.github
    ```
+
    Or via GitHub UI: Repository → Code → Codespaces → Create
 
-2. **Start Coding**:
+1. **Start Coding**:
+
    - Opens automatically in browser
    - Or connect with VS Code Desktop
    - Full development environment ready
@@ -55,25 +62,28 @@ Get started with lightweight local systems and flexible remote access in 5 minut
 **Best for**: Self-hosting, team access, no limits
 
 1. **Deploy on Server**:
+
    ```bash
    # On your server
    git clone YOUR_REPO
    cd YOUR_REPO
-   
+
    # Set password
    export CODE_SERVER_PASSWORD=$(openssl rand -base64 32)
    export CODE_SERVER_DOMAIN=code.yourdomain.com
-   
+
    # Deploy
    docker-compose -f docker-compose.code-server.yml up -d
    ```
 
-2. **Setup SSL** (recommended):
+1. **Setup SSL** (recommended):
+
    ```bash
    certbot certonly --standalone -d code.yourdomain.com
    ```
 
-3. **Access**:
+1. **Access**:
+
    - Open `https://code.yourdomain.com`
    - Enter password
    - Start coding!
@@ -87,15 +97,18 @@ Get started with lightweight local systems and flexible remote access in 5 minut
 **Best for**: Quick edits, reviewing code, mobile access
 
 1. **GitHub.dev** (instant):
+
    - Press `.` on any GitHub repository
    - Or visit `https://github.dev/ivviiviivvi/.github`
    - Edit files directly
 
-2. **StackBlitz** (for web projects):
+1. **StackBlitz** (for web projects):
+
    - Visit `https://stackblitz.com/github/ivviiviivvi/.github`
    - Full Node.js environment
 
-3. **GitPod**:
+1. **GitPod**:
+
    - Visit `https://gitpod.io/#https://github.com/ivviiviivvi/.github`
    - Full cloud IDE
 
@@ -112,9 +125,10 @@ Get started with lightweight local systems and flexible remote access in 5 minut
 ```
 
 Follow the prompts:
+
 1. Enter workspace name
-2. Select template
-3. Choose additional services
+1. Select template
+1. Choose additional services
 
 ### Command Line Mode
 
@@ -132,13 +146,13 @@ Follow the prompts:
 ### Available Templates
 
 1. **basic** - Simple single-language projects
-2. **fullstack** - Web apps with database (Node.js, Python, PostgreSQL, Redis)
-3. **datascience** - ML/AI with Jupyter (Python, PostgreSQL)
-4. **microservices** - Distributed systems
-5. **golang** - Go development
-6. **rust** - Rust development
-7. **java** - Java/Spring Boot
-8. **dotnet** - .NET Core
+1. **fullstack** - Web apps with database (Node.js, Python, PostgreSQL, Redis)
+1. **datascience** - ML/AI with Jupyter (Python, PostgreSQL)
+1. **microservices** - Distributed systems
+1. **golang** - Go development
+1. **rust** - Rust development
+1. **java** - Java/Spring Boot
+1. **dotnet** - .NET Core
 
 ---
 
@@ -191,6 +205,7 @@ open http://localhost:8080
 ### Access Services
 
 Common service ports:
+
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:3001
 - **PostgreSQL**: localhost:5432
@@ -254,8 +269,8 @@ ports:
 ### Customize Your Workspace
 
 1. **Add VS Code extensions** - Edit `.devcontainer/devcontainer.json`
-2. **Add services** - Edit `docker-compose.yml`
-3. **Add tools** - Edit `.devcontainer/post-create.sh`
+1. **Add services** - Edit `docker-compose.yml`
+1. **Add tools** - Edit `.devcontainer/post-create.sh`
 
 ### Learn More
 
@@ -273,17 +288,17 @@ ports:
 
 ## Comparison Matrix
 
-| Feature | VS Code Desktop | Codespaces | Code-Server | Browser |
-|---------|----------------|------------|-------------|---------|
-| **Setup Time** | 5-10 min | 2-3 min | 15-30 min | Instant |
-| **Local Resources** | Docker only | None | None | None |
-| **Offline Capable** | ✅ | ❌ | ❌ | ❌ |
-| **Full IDE** | ✅ | ✅ | ✅ | Limited |
-| **Terminal** | ✅ | ✅ | ✅ | Limited |
-| **Extensions** | ✅ | ✅ | ✅ | Limited |
-| **Cost** | Free | Free tier | Server cost | Free |
-| **Team Access** | Via Git | ✅ | ✅ | Via Git |
-| **Best For** | Daily dev | Quick access | Self-hosting | Quick edits |
+| Feature             | VS Code Desktop | Codespaces   | Code-Server  | Browser     |
+| ------------------- | --------------- | ------------ | ------------ | ----------- |
+| **Setup Time**      | 5-10 min        | 2-3 min      | 15-30 min    | Instant     |
+| **Local Resources** | Docker only     | None         | None         | None        |
+| **Offline Capable** | ✅              | ❌           | ❌           | ❌          |
+| **Full IDE**        | ✅              | ✅           | ✅           | Limited     |
+| **Terminal**        | ✅              | ✅           | ✅           | Limited     |
+| **Extensions**      | ✅              | ✅           | ✅           | Limited     |
+| **Cost**            | Free            | Free tier    | Server cost  | Free        |
+| **Team Access**     | Via Git         | ✅           | ✅           | Via Git     |
+| **Best For**        | Daily dev       | Quick access | Self-hosting | Quick edits |
 
 ---
 
@@ -292,6 +307,7 @@ ports:
 ### 1. Use Aliases
 
 Add to `.bashrc`:
+
 ```bash
 alias dc='docker-compose'
 alias dcu='docker-compose up -d'
@@ -302,6 +318,7 @@ alias dcl='docker-compose logs -f'
 ### 2. Customize Prompt
 
 Show current container:
+
 ```bash
 export PS1='[\u@container:\w]\$ '
 ```
@@ -316,6 +333,7 @@ pre-commit run --all-files
 ### 4. Hot Reload
 
 For Node.js:
+
 ```json
 {
   "scripts": {
@@ -334,4 +352,4 @@ command: sh -c "npm run migrate && npm run dev"
 
 ---
 
-*Last Updated: 2024-01-01*
+_Last Updated: 2024-01-01_

@@ -1,5 +1,5 @@
 # Reusable Auto-Merge Workflow Template
-# 
+#
 # This workflow can be used in any repository to automatically merge pull requests
 # when all conditions are met. No external API tokens required!
 #
@@ -18,21 +18,21 @@ on:
   check_suite:
     types: [completed]
   status: {}
-  
+
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to evaluate for auto-merge'
+        description: PR number to evaluate for auto-merge
         required: true
         type: number
 
 # Required permissions for GITHUB_TOKEN
 permissions:
-  contents: write        # To merge PRs and delete branches
-  pull-requests: write   # To update PR status and comments
-  issues: write          # To add comments
-  checks: read           # To verify status checks
+  contents: write # To merge PRs and delete branches
+  pull-requests: write # To update PR status and comments
+  issues: write # To add comments
+  checks: read # To verify status checks
 
 concurrency:
   group: auto-merge-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
@@ -43,7 +43,7 @@ jobs:
     name: Evaluate and Auto-Merge
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -70,7 +70,7 @@ jobs:
         with:
           script: |
             const prNumber = ${{ steps.pr-number.outputs.number }};
-            
+
             const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -90,14 +90,14 @@ jobs:
             }
 
             // Check for auto-merge indicators
-            const hasAutoMergeLabel = pr.labels.some(l => 
-              l.name === 'auto-merge' || 
+            const hasAutoMergeLabel = pr.labels.some(l =>
+              l.name === 'auto-merge' ||
               l.name === 'automerge' ||
               l.name === 'auto-created'
             );
-            
+
             const titleIndicatesAutoMerge = /\[auto-?merge\]/i.test(pr.title);
-            
+
             const shouldAutoMerge = hasAutoMergeLabel || titleIndicatesAutoMerge;
 
             if (!shouldAutoMerge) {
@@ -114,7 +114,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          running-workflow-name: 'Evaluate and Auto-Merge'
+          running-workflow-name: Evaluate and Auto-Merge
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
           allowed-conclusions: success,skipped,neutral
@@ -160,7 +160,7 @@ jobs:
 
             core.setOutput('approved', approved ? 'true' : 'false');
             console.log(`Approvals: ${approvals}/${requiredApprovals}, Changes requested: ${changesRequested}`);
-            
+
             return { approved, approvals, required: requiredApprovals };
 
       - name: Auto-merge PR
@@ -173,12 +173,12 @@ jobs:
         run: |
           # Enable and execute auto-merge
           gh pr merge --auto --squash "$PR_URL" || true
-          
+
           # Add success comment
           gh pr comment "$PR_URL" --body "✅ **Auto-Merge Enabled**
 
           This PR will be automatically merged once all checks pass.
-          
+
           - All required status checks: ✅
           - Required approvals: ✅
           - No merge conflicts: ✅"
@@ -187,10 +187,10 @@ jobs:
         if: failure()
         run: |
           echo "::error::Auto-merge evaluation failed. Check logs for details."
-          
+
           if [ -n "${{ steps.check-eligibility.outputs.pr-url }}" ]; then
             gh pr comment "${{ steps.check-eligibility.outputs.pr-url }}" --body "❌ **Auto-Merge Failed**
-            
+
             There was an error evaluating this PR for auto-merge.
             Please check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
           fi
@@ -202,13 +202,13 @@ jobs:
         run: |
           echo "### 🤖 Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -n "${{ steps.pr-number.outputs.number }}" ]; then
             echo "**PR:** #${{ steps.pr-number.outputs.number }}" >> $GITHUB_STEP_SUMMARY
             echo "**Eligible:** ${{ steps.check-eligibility.outputs.eligible || 'false' }}" >> $GITHUB_STEP_SUMMARY
             echo "**Approved:** ${{ steps.check-approvals.outputs.approved || 'false' }}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            
+
             if [ "${{ steps.check-approvals.outputs.approved }}" = "true" ]; then
               echo "✅ PR is ready for auto-merge" >> $GITHUB_STEP_SUMMARY
             else

@@ -17,29 +17,31 @@ What performance improvements does this PR provide?
 ### Benchmarks
 
 #### Before
+
 ```
 [Include benchmark results before the change]
 ```
 
 #### After
+
 ```
 [Include benchmark results after the change]
 ```
 
 ### Improvement Metrics
 
-- Response time: 
-- Throughput: 
-- Memory usage: 
-- CPU usage: 
-- Other relevant metrics: 
+- Response time:
+- Throughput:
+- Memory usage:
+- CPU usage:
+- Other relevant metrics:
 
 ### Implementation Approach
 
 How did you achieve these performance improvements?
 
-- 
-- 
+-
+-
 
 ### Trade-offs
 
@@ -48,7 +50,7 @@ Are there any trade-offs with this optimization?
 - [ ] No trade-offs
 - [ ] Increased code complexity
 - [ ] Increased memory usage
-- [ ] Other: ___________
+- [ ] Other: \_\_\_\_\_\_\_\_\_\_\_
 
 ### Testing
 

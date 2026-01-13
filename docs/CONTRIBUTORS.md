@@ -4,33 +4,41 @@ This file recognizes the people who have contributed to this project.
 
 ## How to Contribute
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md)
+for details on how to get started.
 
 ---
 
 ## Core Maintainers
 
-These individuals are responsible for the overall direction and maintenance of the project:
+These individuals are responsible for the overall direction and maintenance of
+the project:
 
-- **[@ivi374forivi](https://github.com/ivi374forivi)** - Project Owner & Lead Maintainer
+- **[@ivi374forivi](https://github.com/ivi374forivi)** - Project Owner & Lead
+  Maintainer
 
 ---
 
 ## Contributors
 
-We appreciate all contributions to this project, whether it's code, documentation, bug reports, or feature suggestions.
+We appreciate all contributions to this project, whether it's code,
+documentation, bug reports, or feature suggestions.
 
 ### All Contributors
 
-This project follows the [all-contributors](https://allcontributors.org) specification.
+This project follows the [all-contributors](https://allcontributors.org)
+specification.
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore-start -->
+
 <!-- markdownlint-disable -->
 
 <!-- Contributors table will be automatically generated here -->
 
 <!-- markdownlint-restore -->
+
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
@@ -43,8 +51,8 @@ This project follows the [all-contributors](https://allcontributors.org) specifi
 
 <!-- This section can be manually updated or automated -->
 
-| Contributor | Contributions |
-|-------------|---------------|
+| Contributor                                      | Contributions              |
+| ------------------------------------------------ | -------------------------- |
 | [@ivi374forivi](https://github.com/ivi374forivi) | Project creation and setup |
 
 ### 📝 Documentation Contributors
@@ -53,7 +61,8 @@ Special thanks to those who have improved our documentation.
 
 ### 🐛 Bug Hunters
 
-Thanks to everyone who has reported bugs and helped improve the quality of this project.
+Thanks to everyone who has reported bugs and helped improve the quality of this
+project.
 
 ### 💡 Feature Requesters
 
@@ -63,7 +72,8 @@ Thank you to those who have suggested new features and improvements.
 
 ## How to Add Yourself
 
-We use the [All Contributors](https://allcontributors.org/) bot to manage our contributors list.
+We use the [All Contributors](https://allcontributors.org/) bot to manage our
+contributors list.
 
 To add yourself to the contributors list, comment on an issue or PR with:
 
@@ -86,7 +96,8 @@ Where `username` is your GitHub username and the contribution types can be:
 - `question` - Answering questions
 - `tutorial` - Tutorials
 
-See the [emoji key](https://allcontributors.org/docs/en/emoji-key) for all contribution types.
+See the [emoji key](https://allcontributors.org/docs/en/emoji-key) for all
+contribution types.
 
 ---
 
@@ -114,6 +125,6 @@ We'd like to give special thanks to:
 
 ---
 
-*Last updated: 2024-11-08*
+_Last updated: 2024-11-08_
 
 <!-- Note: This file can be automatically updated using GitHub Actions workflows -->

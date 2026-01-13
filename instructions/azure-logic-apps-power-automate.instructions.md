@@ -1,30 +1,35 @@
 ---
-description: 'Guidelines for developing Azure Logic Apps and Power Automate workflows with best practices for Workflow Definition Language (WDL), integration patterns, and enterprise automation'
-applyTo: "**/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json"
----
+
+## description: 'Guidelines for developing Azure Logic Apps and Power Automate workflows with best practices for Workflow Definition Language (WDL), integration patterns, and enterprise automation' applyTo: "**/\*.json,**/_.logicapp.json,**/workflow.json,**/_-definition.json,\*\*/\*.flow.json"
 
 # Azure Logic Apps and Power Automate Instructions
 
 ## Overview
 
-These instructions will guide you in writing high-quality Azure Logic Apps and Microsoft Power Automate workflow definitions using the JSON-based Workflow Definition Language (WDL). Azure Logic Apps is a cloud-based integration platform as a service (iPaaS) that provides 1,400+ connectors to simplify integration across services and protocols. Follow these guidelines to create robust, efficient, and maintainable cloud workflow automation solutions.
+These instructions will guide you in writing high-quality Azure Logic Apps and
+Microsoft Power Automate workflow definitions using the JSON-based Workflow
+Definition Language (WDL). Azure Logic Apps is a cloud-based integration
+platform as a service (iPaaS) that provides 1,400+ connectors to simplify
+integration across services and protocols. Follow these guidelines to create
+robust, efficient, and maintainable cloud workflow automation solutions.
 
 ## Workflow Definition Language Structure
 
-When working with Logic Apps or Power Automate flow JSON files, ensure your workflow follows this standard structure:
+When working with Logic Apps or Power Automate flow JSON files, ensure your
+workflow follows this standard structure:
 
 ```json
 {
   "definition": {
     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "actions": { },
+    "actions": {},
     "contentVersion": "1.0.0.0",
-    "outputs": { },
-    "parameters": { },
-    "staticResults": { },
-    "triggers": { }
+    "outputs": {},
+    "parameters": {},
+    "staticResults": {},
+    "triggers": {}
   },
-  "parameters": { }
+  "parameters": {}
 }
 ```
 
@@ -35,7 +40,8 @@ When working with Logic Apps or Power Automate flow JSON files, ensure your work
 - **Use appropriate trigger types** based on your scenario:
   - **Request trigger**: For synchronous API-like workflows
   - **Recurrence trigger**: For scheduled operations
-  - **Event-based triggers**: For reactive patterns (Service Bus, Event Grid, etc.)
+  - **Event-based triggers**: For reactive patterns (Service Bus, Event Grid,
+    etc.)
 - **Configure proper trigger settings**:
   - Set reasonable timeout periods
   - Use pagination settings for high-volume data sources
@@ -169,6 +175,7 @@ When working with Logic Apps or Power Automate flow JSON files, ensure your work
 - **Document complex expressions** with comments
 
 Common expression patterns:
+
 - String manipulation: `concat()`, `replace()`, `substring()`
 - Collection operations: `filter()`, `map()`, `select()`
 - Conditional logic: `if()`, `and()`, `or()`, `equals()`
@@ -193,39 +200,45 @@ Common expression patterns:
 
 #### Using Expressions in Power Automate Conditions
 
-Power Automate supports advanced expressions in conditions to check multiple values. When working with complex logical conditions, use the following pattern:
+Power Automate supports advanced expressions in conditions to check multiple
+values. When working with complex logical conditions, use the following pattern:
 
 - For comparing a single value: Use the basic condition designer interface
 - For multiple conditions: Use advanced expressions in advanced mode
 
 Common logical expression functions for conditions in Power Automate:
 
-| Expression | Description | Example |
-|------------|-------------|---------|
-| `and` | Returns true if both arguments are true | `@and(equals(item()?['Status'], 'completed'), equals(item()?['Assigned'], 'John'))` |
-| `or` | Returns true if either argument is true | `@or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))` |
-| `equals` | Checks if values are equal | `@equals(item()?['Status'], 'blocked')` |
-| `greater` | Checks if first value is greater than second | `@greater(item()?['Due'], item()?['Paid'])` |
-| `less` | Checks if first value is less than second | `@less(item()?['dueDate'], addDays(utcNow(),1))` |
-| `empty` | Checks if object, array or string is empty | `@empty(item()?['Status'])` |
-| `not` | Returns opposite of a boolean value | `@not(contains(item()?['Status'], 'Failed'))` |
+| Expression | Description                                  | Example                                                                                 |
+| ---------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `and`      | Returns true if both arguments are true      | `@and(equals(item()?['Status'], 'completed'), equals(item()?['Assigned'], 'John'))`     |
+| `or`       | Returns true if either argument is true      | `@or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))` |
+| `equals`   | Checks if values are equal                   | `@equals(item()?['Status'], 'blocked')`                                                 |
+| `greater`  | Checks if first value is greater than second | `@greater(item()?['Due'], item()?['Paid'])`                                             |
+| `less`     | Checks if first value is less than second    | `@less(item()?['dueDate'], addDays(utcNow(),1))`                                        |
+| `empty`    | Checks if object, array or string is empty   | `@empty(item()?['Status'])`                                                             |
+| `not`      | Returns opposite of a boolean value          | `@not(contains(item()?['Status'], 'Failed'))`                                           |
 
 Example: Check if a status is "completed" OR "unnecessary":
+
 ```
 @or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))
 ```
 
 Example: Check if status is "blocked" AND assigned to specific person:
+
 ```
 @and(equals(item()?['Status'], 'blocked'), equals(item()?['Assigned'], 'John Wonder'))
 ```
 
 Example: Check if a payment is overdue AND incomplete:
+
 ```
 @and(greater(item()?['Due'], item()?['Paid']), less(item()?['dueDate'], utcNow()))
 ```
 
-**Note:** In Power Automate, when accessing dynamic values from previous steps in expressions, use the syntax `item()?['PropertyName']` to safely access properties in a collection.
+**Note:** In Power Automate, when accessing dynamic values from previous steps
+in expressions, use the syntax `item()?['PropertyName']` to safely access
+properties in a collection.
 
 ### 5. Parameters and Variables
 
@@ -386,11 +399,15 @@ Example: Check if a payment is overdue AND incomplete:
 ### Workflow Design Best Practices
 
 - **Limit workflows to 50 actions or less** for optimal designer performance
-- **Split complex business logic** into multiple smaller workflows when necessary
-- **Use deployment slots** for mission-critical logic apps that require zero downtime deployments
+- **Split complex business logic** into multiple smaller workflows when
+  necessary
+- **Use deployment slots** for mission-critical logic apps that require zero
+  downtime deployments
 - **Avoid hardcoded properties** in trigger and action definitions
-- **Add descriptive comments** to provide context about trigger and action definitions
-- **Use built-in operations** when available instead of shared connectors for better performance
+- **Add descriptive comments** to provide context about trigger and action
+  definitions
+- **Use built-in operations** when available instead of shared connectors for
+  better performance
 - **Use an Integration Account** for B2B scenarios and EDI message processing
 - **Reuse workflow templates** for standard patterns across your organization
 - **Avoid deep nesting** of scopes and actions to maintain readability
@@ -407,15 +424,18 @@ Example: Check if a payment is overdue AND incomplete:
 
 ### Azure Logic Apps vs Power Automate
 
-While Azure Logic Apps and Power Automate share the same underlying workflow engine and language, they have different target audiences and capabilities:
+While Azure Logic Apps and Power Automate share the same underlying workflow
+engine and language, they have different target audiences and capabilities:
 
-- **Power Automate**: 
+- **Power Automate**:
+
   - User-friendly interface for business users
   - Part of the Power Platform ecosystem
   - Integration with Microsoft 365 and Dynamics 365
   - Desktop flow capabilities for UI automation
 
 - **Azure Logic Apps**:
+
   - Enterprise-grade integration platform
   - Developer-focused with advanced capabilities
   - Deeper Azure service integration
@@ -424,42 +444,56 @@ While Azure Logic Apps and Power Automate share the same underlying workflow eng
 ### Logic App Types
 
 #### Consumption Logic Apps
+
 - Pay-per-execution pricing model
 - Serverless architecture
 - Suitable for variable or unpredictable workloads
 
 #### Standard Logic Apps
+
 - Fixed pricing based on App Service Plan
 - Predictable performance
 - Local development support
 - Integration with VNets
 
 #### Integration Service Environment (ISE)
+
 - Dedicated deployment environment
 - Higher throughput and longer execution durations
 - Direct access to VNet resources
 - Isolated runtime environment
 
 ### Power Automate License Types
+
 - **Power Automate per user plan**: For individual users
 - **Power Automate per flow plan**: For specific workflows
 - **Power Automate Process plan**: For RPA capabilities
-- **Power Automate included with Office 365**: Limited capabilities for Office 365 users
+- **Power Automate included with Office 365**: Limited capabilities for Office
+  365 users
 
 ## Common Integration Patterns
 
 ### Architectural Patterns
-- **Mediator Pattern**: Use Logic Apps/Power Automate as an orchestration layer between systems
-- **Content-Based Routing**: Route messages based on content to different destinations
-- **Message Transformation**: Transform messages between formats (JSON, XML, EDI, etc.)
+
+- **Mediator Pattern**: Use Logic Apps/Power Automate as an orchestration layer
+  between systems
+- **Content-Based Routing**: Route messages based on content to different
+  destinations
+- **Message Transformation**: Transform messages between formats (JSON, XML,
+  EDI, etc.)
 - **Scatter-Gather**: Distribute work in parallel and aggregate results
-- **Protocol Bridging**: Connect systems with different protocols (REST, SOAP, FTP, etc.)
+- **Protocol Bridging**: Connect systems with different protocols (REST, SOAP,
+  FTP, etc.)
 - **Claim Check**: Store large payloads externally in blob storage or databases
-- **Saga Pattern**: Manage distributed transactions with compensating actions for failures
-- **Choreography Pattern**: Coordinate multiple services without a central orchestrator
+- **Saga Pattern**: Manage distributed transactions with compensating actions
+  for failures
+- **Choreography Pattern**: Coordinate multiple services without a central
+  orchestrator
 
 ### Action Patterns
+
 - **Asynchronous Processing Pattern**: For long-running operations
+
   ```json
   "LongRunningAction": {
     "type": "Http",
@@ -477,6 +511,7 @@ While Azure Logic Apps and Power Automate share the same underlying workflow eng
   ```
 
 - **Webhook Pattern**: For callback-based processing
+
   ```json
   "WebhookAction": {
     "type": "ApiConnectionWebhook",
@@ -495,11 +530,17 @@ While Azure Logic Apps and Power Automate share the same underlying workflow eng
   ```
 
 ### Enterprise Integration Patterns
-- **B2B Message Exchange**: Exchange EDI documents between trading partners (AS2, X12, EDIFACT)
-- **Integration Account**: Use for storing and managing B2B artifacts (agreements, schemas, maps)
-- **Rules Engine**: Implement complex business rules using the Azure Logic Apps Rules Engine
-- **Message Validation**: Validate messages against schemas for compliance and data integrity
-- **Transaction Processing**: Process business transactions with compensating transactions for rollback
+
+- **B2B Message Exchange**: Exchange EDI documents between trading partners
+  (AS2, X12, EDIFACT)
+- **Integration Account**: Use for storing and managing B2B artifacts
+  (agreements, schemas, maps)
+- **Rules Engine**: Implement complex business rules using the Azure Logic Apps
+  Rules Engine
+- **Message Validation**: Validate messages against schemas for compliance and
+  data integrity
+- **Transaction Processing**: Process business transactions with compensating
+  transactions for rollback
 
 ## DevOps and CI/CD for Logic Apps
 
@@ -522,35 +563,39 @@ While Azure Logic Apps and Power Automate share the same underlying workflow eng
 trigger:
   branches:
     include:
-    - main
-    - release/*
+      - main
+      - release/*
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 steps:
-- task: AzureResourceManagerTemplateDeployment@3
-  inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Your-Azure-Connection'
-    subscriptionId: '$(subscriptionId)'
-    action: 'Create Or Update Resource Group'
-    resourceGroupName: '$(resourceGroupName)'
-    location: '$(location)'
-    templateLocation: 'Linked artifact'
-    csmFile: '$(System.DefaultWorkingDirectory)/arm-templates/logicapp-template.json'
-    csmParametersFile: '$(System.DefaultWorkingDirectory)/arm-templates/logicapp-parameters-$(Environment).json'
-    deploymentMode: 'Incremental'
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: "Resource Group"
+      azureResourceManagerConnection: "Your-Azure-Connection"
+      subscriptionId: "$(subscriptionId)"
+      action: "Create Or Update Resource Group"
+      resourceGroupName: "$(resourceGroupName)"
+      location: "$(location)"
+      templateLocation: "Linked artifact"
+      csmFile: "$(System.DefaultWorkingDirectory)/arm-templates/logicapp-template.json"
+      csmParametersFile: "$(System.DefaultWorkingDirectory)/arm-templates/logicapp-parameters-$(Environment).json"
+      deploymentMode: "Incremental"
 ```
 
 ## Cross-Platform Considerations
 
 When working with both Azure Logic Apps and Power Automate:
 
-- **Export/Import Compatibility**: Flows can be exported from Power Automate and imported into Logic Apps, but some modifications may be required
-- **Connector Differences**: Some connectors are available in one platform but not the other
-- **Environment Isolation**: Power Automate environments provide isolation and may have different policies
-- **ALM Practices**: Consider using Azure DevOps for Logic Apps and Solutions for Power Automate
+- **Export/Import Compatibility**: Flows can be exported from Power Automate and
+  imported into Logic Apps, but some modifications may be required
+- **Connector Differences**: Some connectors are available in one platform but
+  not the other
+- **Environment Isolation**: Power Automate environments provide isolation and
+  may have different policies
+- **ALM Practices**: Consider using Azure DevOps for Logic Apps and Solutions
+  for Power Automate
 
 ### Migration Strategies
 
@@ -598,7 +643,9 @@ When working with both Azure Logic Apps and Power Automate:
 
 ### HTTP Request Handler with API Integration
 
-This example demonstrates a Logic App that accepts an HTTP request, validates the input data, calls an external API, transforms the response, and returns a formatted result.
+This example demonstrates a Logic App that accepts an HTTP request, validates
+the input data, calls an external API, transforms the response, and returns a
+formatted result.
 
 ```json
 {
@@ -611,18 +658,12 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
           "and": [
             {
               "not": {
-                "equals": [
-                  "@triggerBody()?['customerId']",
-                  null
-                ]
+                "equals": ["@triggerBody()?['customerId']", null]
               }
             },
             {
               "not": {
-                "equals": [
-                  "@triggerBody()?['requestType']",
-                  null
-                ]
+                "equals": ["@triggerBody()?['requestType']", null]
               }
             }
           ]
@@ -639,9 +680,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
               }
             },
             "runAfter": {
-              "Get_API_Key": [
-                "Succeeded"
-              ]
+              "Get_API_Key": ["Succeeded"]
             }
           },
           "Get_API_Key": {
@@ -683,9 +722,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
               }
             },
             "runAfter": {
-              "Get_Customer_Data": [
-                "Succeeded"
-              ]
+              "Get_Customer_Data": ["Succeeded"]
             }
           },
           "Switch_Request_Type": {
@@ -731,9 +768,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
                       }
                     },
                     "runAfter": {
-                      "Calculate_Order_Statistics": [
-                        "Succeeded"
-                      ]
+                      "Calculate_Order_Statistics": ["Succeeded"]
                     }
                   }
                 }
@@ -747,19 +782,14 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
                     "name": "responsePayload",
                     "value": {
                       "error": "Invalid request type specified",
-                      "validTypes": [
-                        "Profile",
-                        "OrderSummary"
-                      ]
+                      "validTypes": ["Profile", "OrderSummary"]
                     }
                   }
                 }
               }
             },
             "runAfter": {
-              "Parse_Customer_Response": [
-                "Succeeded"
-              ]
+              "Parse_Customer_Response": ["Succeeded"]
             }
           },
           "Log_Successful_Request": {
@@ -779,9 +809,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
               }
             },
             "runAfter": {
-              "Switch_Request_Type": [
-                "Succeeded"
-              ]
+              "Switch_Request_Type": ["Succeeded"]
             }
           },
           "Return_Success_Response": {
@@ -795,9 +823,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
               }
             },
             "runAfter": {
-              "Log_Successful_Request": [
-                "Succeeded"
-              ]
+              "Log_Successful_Request": ["Succeeded"]
             }
           }
         },
@@ -818,9 +844,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
           }
         },
         "runAfter": {
-          "Initialize_Response_Variable": [
-            "Succeeded"
-          ]
+          "Initialize_Response_Variable": ["Succeeded"]
         }
       },
       "Initialize_Response_Variable": {
@@ -857,10 +881,7 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
               },
               "requestType": {
                 "type": "string",
-                "enum": [
-                  "Profile",
-                  "OrderSummary"
-                ]
+                "enum": ["Profile", "OrderSummary"]
               }
             }
           }
@@ -889,7 +910,9 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
 
 ### Event-Driven Process with Error Handling
 
-This example demonstrates a Logic App that processes events from Azure Service Bus, handles the message processing with robust error handling, and implements the retry pattern for resilience.
+This example demonstrates a Logic App that processes events from Azure Service
+Bus, handles the message processing with robust error handling, and implements
+the retry pattern for resilience.
 
 ```json
 {
@@ -944,9 +967,7 @@ This example demonstrates a Logic App that processes events from Azure Service B
               }
             },
             "runAfter": {
-              "Get_API_Key": [
-                "Succeeded"
-              ]
+              "Get_API_Key": ["Succeeded"]
             },
             "retryPolicy": {
               "type": "exponential",
@@ -1031,16 +1052,12 @@ This example demonstrates a Logic App that processes events from Azure Service B
                   }
                 },
                 "runAfter": {
-                  "Check_Product_Stock": [
-                    "Succeeded"
-                  ]
+                  "Check_Product_Stock": ["Succeeded"]
                 }
               }
             },
             "runAfter": {
-              "Get_Customer_Details": [
-                "Succeeded"
-              ]
+              "Get_Customer_Details": ["Succeeded"]
             }
           },
           "Check_Order_Validity": {
@@ -1048,16 +1065,10 @@ This example demonstrates a Logic App that processes events from Azure Service B
             "expression": {
               "and": [
                 {
-                  "equals": [
-                    "@length(variables('invalidItems'))",
-                    0
-                  ]
+                  "equals": ["@length(variables('invalidItems'))", 0]
                 },
                 {
-                  "greater": [
-                    "@length(variables('validItems'))",
-                    0
-                  ]
+                  "greater": ["@length(variables('validItems'))", 0]
                 }
               ]
             },
@@ -1100,9 +1111,7 @@ This example demonstrates a Logic App that processes events from Azure Service B
                   }
                 },
                 "runAfter": {
-                  "Process_Valid_Order": [
-                    "Succeeded"
-                  ]
+                  "Process_Valid_Order": ["Succeeded"]
                 }
               },
               "Complete_Message": {
@@ -1122,9 +1131,7 @@ This example demonstrates a Logic App that processes events from Azure Service B
                   }
                 },
                 "runAfter": {
-                  "Send_Order_Confirmation": [
-                    "Succeeded"
-                  ]
+                  "Send_Order_Confirmation": ["Succeeded"]
                 }
               }
             },
@@ -1168,24 +1175,18 @@ This example demonstrates a Logic App that processes events from Azure Service B
                     }
                   },
                   "runAfter": {
-                    "Send_Invalid_Stock_Notification": [
-                      "Succeeded"
-                    ]
+                    "Send_Invalid_Stock_Notification": ["Succeeded"]
                   }
                 }
               }
             },
             "runAfter": {
-              "Validate_Stock": [
-                "Succeeded"
-              ]
+              "Validate_Stock": ["Succeeded"]
             }
           }
         },
         "runAfter": {
-          "Initialize_Variables": [
-            "Succeeded"
-          ]
+          "Initialize_Variables": ["Succeeded"]
         }
       },
       "Initialize_Variables": {
@@ -1205,9 +1206,7 @@ This example demonstrates a Logic App that processes events from Azure Service B
           ]
         },
         "runAfter": {
-          "Parse_Message": [
-            "Succeeded"
-          ]
+          "Parse_Message": ["Succeeded"]
         }
       },
       "Handle_Process_Error": {
@@ -1249,9 +1248,7 @@ This example demonstrates a Logic App that processes events from Azure Service B
               }
             },
             "runAfter": {
-              "Log_Error_Details": [
-                "Succeeded"
-              ]
+              "Log_Error_Details": ["Succeeded"]
             }
           },
           "Send_Alert_To_Operations": {
@@ -1273,17 +1270,12 @@ This example demonstrates a Logic App that processes events from Azure Service B
               }
             },
             "runAfter": {
-              "Abandon_Message": [
-                "Succeeded"
-              ]
+              "Abandon_Message": ["Succeeded"]
             }
           }
         },
         "runAfter": {
-          "Try_Process_Order": [
-            "Failed",
-            "TimedOut"
-          ]
+          "Try_Process_Order": ["Failed", "TimedOut"]
         }
       }
     },
@@ -1356,11 +1348,14 @@ This example demonstrates a Logic App that processes events from Azure Service B
 Implement a multi-layered exception handling approach for robust workflows:
 
 1. **Preventative Measures**:
+
    - Use schema validation for all incoming messages
-   - Implement defensive expression evaluations using `coalesce()` and `?` operators
+   - Implement defensive expression evaluations using `coalesce()` and `?`
+     operators
    - Add pre-condition checks before critical operations
 
-2. **Runtime Error Handling**:
+1. **Runtime Error Handling**:
+
    - Use structured error handling scopes with nested try/catch patterns
    - Implement circuit breaker patterns for external dependencies
    - Capture and handle specific error types differently
@@ -1451,7 +1446,8 @@ Implement a multi-layered exception handling approach for robust workflows:
 ```
 
 3. **Centralized Error Logging**:
-   - Create a dedicated Logic App for error handling that other workflows can call
+   - Create a dedicated Logic App for error handling that other workflows can
+     call
    - Log errors with correlation IDs for traceability across systems
    - Categorize errors by type and severity for better analysis
 
@@ -1460,17 +1456,23 @@ Implement a multi-layered exception handling approach for robust workflows:
 Implement a comprehensive monitoring strategy that covers:
 
 1. **Operational Monitoring**:
+
    - **Health Probes**: Create dedicated health check workflows
-   - **Heartbeat Patterns**: Implement periodic check-ins to verify system health
+   - **Heartbeat Patterns**: Implement periodic check-ins to verify system
+     health
    - **Dead Letter Handling**: Process and analyze failed messages
 
-2. **Business Process Monitoring**:
-   - **Business Metrics**: Track key business KPIs (order processing times, approval rates)
+1. **Business Process Monitoring**:
+
+   - **Business Metrics**: Track key business KPIs (order processing times,
+     approval rates)
    - **SLA Monitoring**: Measure performance against service level agreements
    - **Correlated Tracing**: Implement end-to-end transaction tracking
 
-3. **Alerting Strategy**:
-   - **Multi-channel Alerts**: Configure alerts to appropriate channels (email, SMS, Teams)
+1. **Alerting Strategy**:
+
+   - **Multi-channel Alerts**: Configure alerts to appropriate channels (email,
+     SMS, Teams)
    - **Severity-based Routing**: Route alerts based on business impact
    - **Alert Correlation**: Group related alerts to prevent alert fatigue
 
@@ -1528,7 +1530,8 @@ Implement a comprehensive monitoring strategy that covers:
 
 ## API Management Integration
 
-Integrate Logic Apps with Azure API Management for enhanced security, governance, and management:
+Integrate Logic Apps with Azure API Management for enhanced security,
+governance, and management:
 
 ### API Management Frontend
 
@@ -1552,15 +1555,15 @@ Integrate Logic Apps with Azure API Management for enhanced security, governance
         </claim>
       </required-claims>
     </validate-jwt>
-    
+
     <!-- Rate limiting -->
     <rate-limit calls="5" renewal-period="60" />
-    
+
     <!-- Request transformation -->
     <set-header name="Correlation-Id" exists-action="override">
       <value>@(context.RequestId)</value>
     </set-header>
-    
+
     <!-- Logging -->
     <log-to-eventhub logger-id="api-logger">
       @{
@@ -1630,14 +1633,17 @@ Implement robust versioning approaches for Logic Apps and Power Automate flows:
 ### Versioning Patterns
 
 1. **URI Path Versioning**:
+
    - Include version in HTTP trigger path (/api/v1/resource)
    - Maintain separate Logic Apps for each major version
 
-2. **Parameter Versioning**:
+1. **Parameter Versioning**:
+
    - Add version parameter to workflow definitions
    - Use conditional logic based on version parameter
 
-3. **Side-by-Side Versioning**:
+1. **Side-by-Side Versioning**:
+
    - Deploy new versions alongside existing ones
    - Implement traffic routing between versions
 
@@ -1733,21 +1739,25 @@ Implement robust versioning approaches for Logic Apps and Power Automate flows:
 
 ## Cost Optimization Techniques
 
-Implement strategies to optimize the cost of Logic Apps and Power Automate solutions:
+Implement strategies to optimize the cost of Logic Apps and Power Automate
+solutions:
 
 ### Logic Apps Consumption Optimization
 
 1. **Trigger Optimization**:
+
    - Use batching in triggers to process multiple items in a single run
    - Implement proper recurrence intervals (avoid over-polling)
    - Use webhook-based triggers instead of polling triggers
 
-2. **Action Optimization**:
+1. **Action Optimization**:
+
    - Reduce action count by combining related operations
    - Use built-in functions instead of custom actions
    - Implement proper concurrency settings for foreach loops
 
-3. **Data Transfer Optimization**:
+1. **Data Transfer Optimization**:
+
    - Minimize payload sizes in HTTP requests/responses
    - Use local file operations instead of repeated API calls
    - Implement data compression for large payloads
@@ -1755,11 +1765,13 @@ Implement strategies to optimize the cost of Logic Apps and Power Automate solut
 ### Logic Apps Standard (Workflow) Cost Optimization
 
 1. **App Service Plan Selection**:
+
    - Right-size App Service Plans for workload requirements
    - Implement auto-scaling based on load patterns
    - Consider reserved instances for predictable workloads
 
-2. **Resource Sharing**:
+1. **Resource Sharing**:
+
    - Consolidate workflows in shared App Service Plans
    - Implement shared connections and integration resources
    - Use integration accounts efficiently
@@ -1767,11 +1779,13 @@ Implement strategies to optimize the cost of Logic Apps and Power Automate solut
 ### Power Automate Licensing Optimization
 
 1. **License Type Selection**:
+
    - Choose appropriate license types based on workflow complexity
    - Implement proper user assignment for per-user plans
    - Consider premium connectors usage requirements
 
-2. **API Call Reduction**:
+1. **API Call Reduction**:
+
    - Cache frequently accessed data
    - Implement batch processing for multiple records
    - Reduce trigger frequency for scheduled flows
@@ -1807,16 +1821,19 @@ Implement strategies to optimize the cost of Logic Apps and Power Automate solut
 
 ## Enhanced Security Practices
 
-Implement comprehensive security measures for Logic Apps and Power Automate workflows:
+Implement comprehensive security measures for Logic Apps and Power Automate
+workflows:
 
 ### Sensitive Data Handling
 
 1. **Data Classification and Protection**:
+
    - Identify and classify sensitive data in workflows
    - Implement masking for sensitive data in logs and monitoring
    - Apply encryption for data at rest and in transit
 
-2. **Secure Parameter Handling**:
+1. **Secure Parameter Handling**:
+
    - Use Azure Key Vault for all secrets and credentials
    - Implement dynamic parameter resolution at runtime
    - Apply parameter encryption for sensitive values
@@ -1863,16 +1880,19 @@ Implement comprehensive security measures for Logic Apps and Power Automate work
 ### Advanced Identity and Access Controls
 
 1. **Fine-grained Access Control**:
+
    - Implement custom roles for Logic Apps management
    - Apply principle of least privilege for connections
    - Use managed identities for all Azure service access
 
-2. **Access Reviews and Governance**:
+1. **Access Reviews and Governance**:
+
    - Implement regular access reviews for Logic Apps resources
    - Apply Just-In-Time access for administrative operations
    - Audit all access and configuration changes
 
-3. **Network Security**:
+1. **Network Security**:
+
    - Implement network isolation using private endpoints
    - Apply IP restrictions for trigger endpoints
    - Use Virtual Network integration for Logic Apps Standard

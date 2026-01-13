@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   workspace:
@@ -22,7 +22,7 @@ services:
       POSTGRES_DB: devdb
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - 5432:5432
 
   redis:
     image: redis:7-alpine
@@ -30,14 +30,14 @@ services:
     volumes:
       - redis-data:/data
     ports:
-      - "6379:6379"
+      - 6379:6379
 
   mailhog:
     image: mailhog/mailhog:latest
     restart: unless-stopped
     ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
+      - 1025:1025 # SMTP
+      - 8025:8025 # Web UI
 
 volumes:
   postgres-data:

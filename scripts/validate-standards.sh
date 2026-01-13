@@ -38,15 +38,15 @@ info() {
 # Validate branch name
 validate_branch_name() {
     local branch_name="${1:-$(git rev-parse --abbrev-ref HEAD)}"
-    
+
     info "Validating branch name: $branch_name"
-    
+
     # Skip validation for protected branches
     if [[ "$branch_name" == "main" ]] || [[ "$branch_name" == "master" ]] || [[ "$branch_name" == "develop" ]]; then
         info "Skipping validation for protected branch: $branch_name"
         return 0
     fi
-    
+
     # Valid patterns according to VERSION_CONTROL_STANDARDS.md
     local valid_patterns=(
         "^(develop|experimental|production|maintenance|deprecated|archive)/(feature|bugfix|hotfix|enhancement|refactor|docs|test|chore)/[a-z0-9-]+(/[a-z0-9-]+)?(/[a-z0-9-]+)?$"
@@ -55,7 +55,7 @@ validate_branch_name() {
         "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"
         "^archive/[a-z0-9-]+/[a-z0-9-]+$"
     )
-    
+
     local valid=false
     for pattern in "${valid_patterns[@]}"; do
         if [[ "$branch_name" =~ $pattern ]]; then
@@ -64,7 +64,7 @@ validate_branch_name() {
             break
         fi
     done
-    
+
     if [ "$valid" = false ]; then
         error "Branch name '$branch_name' does not follow naming conventions"
         echo "Expected format: <lifecycle>/<type>/<component>[/<subcomponent>]"
@@ -75,45 +75,45 @@ validate_branch_name() {
         echo "See VERSION_CONTROL_STANDARDS.md for details"
         return 1
     fi
-    
+
     return 0
 }
 
 # Validate commit messages
 validate_commit_messages() {
     local base_branch="${1:-origin/develop}"
-    
+
     info "Validating commit messages against $base_branch"
-    
+
     # Check if base branch exists
     if ! git rev-parse --verify "$base_branch" > /dev/null 2>&1; then
         warning "Base branch '$base_branch' not found, skipping commit validation"
         return 0
     fi
-    
+
     # Get commits in current branch not in base branch
     local commits
     commits=$(git log "$base_branch"..HEAD --pretty=format:"%H|%s" 2>/dev/null || echo "")
-    
+
     if [ -z "$commits" ]; then
         info "No commits to validate"
         return 0
     fi
-    
+
     local invalid_count=0
     while IFS= read -r line; do
         if [ -z "$line" ]; then
             continue
         fi
-        
+
         local hash=$(echo "$line" | cut -d'|' -f1)
         local message=$(echo "$line" | cut -d'|' -f2-)
-        
+
         # Skip merge commits
         if [[ "$message" =~ ^Merge ]]; then
             continue
         fi
-        
+
         # Conventional Commits pattern
         # Format: type(scope): subject or type: subject
         if [[ ! "$message" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?:\ .+ ]]; then
@@ -123,7 +123,7 @@ validate_commit_messages() {
             success "Valid commit: $message"
         fi
     done <<< "$commits"
-    
+
     if [ $invalid_count -gt 0 ]; then
         echo ""
         echo "Expected format: <type>(<scope>): <subject>"
@@ -135,23 +135,23 @@ validate_commit_messages() {
         echo "See VERSION_CONTROL_STANDARDS.md for details"
         return 1
     fi
-    
+
     return 0
 }
 
 # Validate markdown style (check for emoji)
 validate_markdown_style() {
     info "Validating markdown style"
-    
+
     # Find all markdown files
     local md_files
     md_files=$(find . -name "*.md" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/vendor/*")
-    
+
     if [ -z "$md_files" ]; then
         info "No markdown files found"
         return 0
     fi
-    
+
     local emoji_found=false
     while IFS= read -r file; do
         # Check for emoji characters (actual emoji, not box-drawing/geometric)
@@ -161,7 +161,7 @@ validate_markdown_style() {
             warning "Cannot read file: $file"
             continue
         fi
-        
+
         if python3 -c "
 import re, sys
 try:
@@ -176,14 +176,14 @@ except Exception as e:
             emoji_found=true
         fi
     done <<< "$md_files"
-    
+
     if [ "$emoji_found" = true ]; then
         echo ""
         echo "Our style guide prohibits emoji in documentation"
         echo "See MARKDOWN_STYLE_GUIDE.md section 'No Visual Embellishments'"
         return 1
     fi
-    
+
     success "No emoji found in markdown files"
     return 0
 }
@@ -194,7 +194,7 @@ main() {
     local validate_branch_flag=false
     local validate_commits_flag=false
     local validate_markdown_flag=false
-    
+
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -231,28 +231,28 @@ main() {
                 ;;
         esac
     done
-    
+
     echo "================================"
     echo "Version Control Standards Check"
     echo "================================"
     echo ""
-    
+
     # Run validations
     if [ "$validate_all" = true ] || [ "$validate_branch_flag" = true ]; then
         validate_branch_name || true
         echo ""
     fi
-    
+
     if [ "$validate_all" = true ] || [ "$validate_commits_flag" = true ]; then
         validate_commit_messages || true
         echo ""
     fi
-    
+
     if [ "$validate_all" = true ] || [ "$validate_markdown_flag" = true ]; then
         validate_markdown_style || true
         echo ""
     fi
-    
+
     # Summary
     echo "================================"
     echo "Validation Summary"

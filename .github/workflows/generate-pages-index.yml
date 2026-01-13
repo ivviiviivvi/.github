@@ -1,9 +1,9 @@
-name: "Generate Pages Index"
+name: Generate Pages Index
 
 on:
   # Run on schedule (every 6 hours)
   schedule:
-    - cron: "30 */6 * * *"
+    - cron: 30 */6 * * *
   # Manual trigger
   workflow_dispatch:
   # Allow reuse from other repositories
@@ -16,7 +16,7 @@ on:
       - deployment-updated
 
 concurrency:
-  group: "pages-index-generation"
+  group: pages-index-generation
   cancel-in-progress: false
 
 permissions:
@@ -28,19 +28,19 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Install yq"
+      - name: Install yq
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
           yq --version
 
-      - name: "Query GitHub API for walkthroughs"
+      - name: Query GitHub API for walkthroughs
         id: query
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -196,25 +196,25 @@ jobs:
             # Check for deployment configuration
             # If a repo has .github/app-deployment-config.yml, query its deployment status
             DEPLOY_CONFIG=$(gh api "repos/$REPO_FULL_NAME/contents/.github/app-deployment-config.yml" 2>/dev/null || echo "{}")
-            
+
             if [ "$DEPLOY_CONFIG" != "{}" ]; then
               echo "    ✓ Found deployment configuration"
-              
+
               # Parse deployment config using yq
               CONFIG_CONTENT=$(echo "$DEPLOY_CONFIG" | jq -r '.content' | base64 -d)
               DEPLOY_ENABLED=$(echo "$CONFIG_CONTENT" | yq eval '.deployment.enabled // true' - 2>/dev/null || echo "true")
               DEPLOY_STRATEGY=$(echo "$CONFIG_CONTENT" | yq eval '.deployment.strategy // "auto"' - 2>/dev/null || echo "auto")
-              
+
               if [ "$DEPLOY_ENABLED" = "true" ]; then
                 # Query recent successful deployment runs
                 DEPLOY_RUNS=$(gh api "repos/$REPO_FULL_NAME/actions/workflows/deploy-to-pages-live.yml/runs?per_page=1&status=success" 2>/dev/null || echo '{"workflow_runs": []}')
                 LATEST_RUN=$(echo "$DEPLOY_RUNS" | jq -r '.workflow_runs[0]' 2>/dev/null || echo "{}")
-                
+
                 if [ "$LATEST_RUN" != "{}" ] && [ "$LATEST_RUN" != "null" ]; then
                   RUN_ID=$(echo "$LATEST_RUN" | jq -r '.id')
                   RUN_DATE=$(echo "$LATEST_RUN" | jq -r '.updated_at')
                   RUN_URL=$(echo "$LATEST_RUN" | jq -r '.html_url')
-                  
+
                   # Construct deployment URL based on strategy
                   if [ "$DEPLOY_STRATEGY" = "pages-direct" ] || [ "$DEPLOY_STRATEGY" = "auto" ]; then
                     DEPLOY_URL="https://${ORG_NAME}.github.io/${REPO_NAME}"
@@ -223,9 +223,9 @@ jobs:
                   else
                     DEPLOY_URL="$REPO_URL"
                   fi
-                  
+
                   echo "    ✓ Found deployment: $DEPLOY_URL"
-                  
+
                   # Add to app-deployments data
                   cat >> docs/_data/app-deployments.yml <<EOF
           - repository: "$REPO_FULL_NAME"
@@ -238,7 +238,7 @@ jobs:
             workflow_run_url: "$RUN_URL"
 
           EOF
-                  
+
                   DEPLOYMENT_COUNT=$((DEPLOYMENT_COUNT + 1))
                 fi
               fi
@@ -258,7 +258,7 @@ jobs:
           echo "   Live Demos: $DEMO_COUNT"
           echo "   Deployments: $DEPLOYMENT_COUNT"
 
-      - name: "Generate statistics file"
+      - name: Generate statistics file
         run: |
           cat > docs/_data/statistics.yml <<EOF
           # Statistics
@@ -273,7 +273,7 @@ jobs:
 
           echo "✅ Statistics file created"
 
-      - name: "Check for changes"
+      - name: Check for changes
         id: changes
         run: |
           git add docs/_data/*.yml
@@ -286,7 +286,7 @@ jobs:
             echo "✓ Changes detected"
           fi
 
-      - name: "Commit and push changes"
+      - name: Commit and push changes
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -304,7 +304,7 @@ jobs:
 
           echo "✅ Changes committed and pushed"
 
-      - name: "Trigger Pages build"
+      - name: Trigger Pages build
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           # Trigger build-pages-site workflow
@@ -313,7 +313,7 @@ jobs:
 
           echo "✅ Pages build triggered"
 
-      - name: "Generate summary"
+      - name: Generate summary
         if: always()
         run: |
           echo "## Pages Index Generation Summary" >> $GITHUB_STEP_SUMMARY

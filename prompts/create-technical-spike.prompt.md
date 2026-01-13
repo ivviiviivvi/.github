@@ -1,16 +1,18 @@
 ---
-mode: 'agent'
-description: 'Create time-boxed technical spike documents for researching and resolving critical development decisions before implementation.'
-tools: ['runCommands', 'runTasks', 'edit', 'search', 'extensions', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'todos', 'Microsoft Docs', 'search']
----
+
+## mode: 'agent' description: 'Create time-boxed technical spike documents for researching and resolving critical development decisions before implementation.' tools: \['runCommands', 'runTasks', 'edit', 'search', 'extensions', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'todos', 'Microsoft Docs', 'search'\]
 
 # Create Technical Spike Document
 
-Create time-boxed technical spike documents for researching critical questions that must be answered before development can proceed. Each spike focuses on a specific technical decision with clear deliverables and timelines.
+Create time-boxed technical spike documents for researching critical questions
+that must be answered before development can proceed. Each spike focuses on a
+specific technical decision with clear deliverables and timelines.
 
 ## Document Structure
 
-Create individual files in `${input:FolderPath|docs/spikes}` directory. Name each file using the pattern: `[category]-[short-description]-spike.md` (e.g., `api-copilot-integration-spike.md`, `performance-realtime-audio-spike.md`).
+Create individual files in `${input:FolderPath|docs/spikes}` directory. Name
+each file using the pattern: `[category]-[short-description]-spike.md` (e.g.,
+`api-copilot-integration-spike.md`, `performance-realtime-audio-spike.md`).
 
 ```md
 ---
@@ -114,11 +116,11 @@ tags: ["technical-spike", "${input:Category|technical}", "research"]
 
 ## Status History
 
-| Date   | Status         | Notes                      |
-| ------ | -------------- | -------------------------- |
-| [Date] | 🔴 Not Started | Spike created and scoped   |
-| [Date] | 🟡 In Progress | Research commenced         |
-| [Date] | 🟢 Complete    | [Resolution summary]       |
+| Date   | Status         | Notes                    |
+| ------ | -------------- | ------------------------ |
+| [Date] | 🔴 Not Started | Spike created and scoped |
+| [Date] | 🟡 In Progress | Research commenced       |
+| [Date] | 🟢 Complete    | [Resolution summary]     |
 
 ---
 
@@ -165,7 +167,8 @@ _Last updated: [Date] by [Name]_
 
 ## File Naming Conventions
 
-Use descriptive, kebab-case names that indicate the category and specific unknown:
+Use descriptive, kebab-case names that indicate the category and specific
+unknown:
 
 **API/Integration Examples:**
 
@@ -187,37 +190,43 @@ Use descriptive, kebab-case names that indicate the category and specific unknow
 
 ## Best Practices for AI Agents
 
-1. **One Question Per Spike:** Each document focuses on a single technical decision or research question
+1. **One Question Per Spike:** Each document focuses on a single technical
+   decision or research question
 
-2. **Time-Boxed Research:** Define specific time limits and deliverables for each spike
+1. **Time-Boxed Research:** Define specific time limits and deliverables for
+   each spike
 
-3. **Evidence-Based Decisions:** Require concrete evidence (tests, prototypes, documentation) before marking as complete
+1. **Evidence-Based Decisions:** Require concrete evidence (tests, prototypes,
+   documentation) before marking as complete
 
-4. **Clear Recommendations:** Document specific recommendations and rationale for implementation
+1. **Clear Recommendations:** Document specific recommendations and rationale
+   for implementation
 
-5. **Dependency Tracking:** Identify how spikes relate to each other and impact project decisions
+1. **Dependency Tracking:** Identify how spikes relate to each other and impact
+   project decisions
 
-6. **Outcome-Focused:** Every spike must result in an actionable decision or recommendation
+1. **Outcome-Focused:** Every spike must result in an actionable decision or
+   recommendation
 
 ## Research Strategy
 
 ### Phase 1: Information Gathering
 
 1. **Search existing documentation** using search/fetch tools
-2. **Analyze codebase** for existing patterns and constraints
-3. **Research external resources** (APIs, libraries, examples)
+1. **Analyze codebase** for existing patterns and constraints
+1. **Research external resources** (APIs, libraries, examples)
 
 ### Phase 2: Validation & Testing
 
 1. **Create focused prototypes** to test specific hypotheses
-2. **Run targeted experiments** to validate assumptions
-3. **Document test results** with supporting evidence
+1. **Run targeted experiments** to validate assumptions
+1. **Document test results** with supporting evidence
 
 ### Phase 3: Decision & Documentation
 
 1. **Synthesize findings** into clear recommendations
-2. **Document implementation guidance** for development team
-3. **Create follow-up tasks** for implementation
+1. **Document implementation guidance** for development team
+1. **Create follow-up tasks** for implementation
 
 ## Tools Usage
 
@@ -228,4 +237,5 @@ Use descriptive, kebab-case names that indicate the category and specific unknow
 - **editFiles:** Update research progress and findings
 - **vscodeAPI:** Test VS Code extension capabilities and limitations
 
-Focus on time-boxed research that resolves critical technical decisions and unblocks development progress.
+Focus on time-boxed research that resolves critical technical decisions and
+unblocks development progress.

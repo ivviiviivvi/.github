@@ -11,7 +11,7 @@
     },
     {
       "name": "Perplexity_Pro_API",
-      "quota": 5.00,
+      "quota": 5.0,
       "unit": "dollars",
       "reset_cadence": "monthly",
       "relevant_workflows": ["perplexity_workflow.yml"],
@@ -20,7 +20,7 @@
     },
     {
       "name": "Grok_API",
-      "quota": 150.00,
+      "quota": 150.0,
       "unit": "dollars",
       "reset_cadence": "monthly",
       "relevant_workflows": ["grok_workflow.yml"],
@@ -29,7 +29,7 @@
     },
     {
       "name": "Gemini_API_Tier1",
-      "quota": 100.00,
+      "quota": 100.0,
       "unit": "dollars",
       "reset_cadence": "monthly",
       "relevant_workflows": ["gemini_workflow.yml"],
@@ -38,7 +38,7 @@
     },
     {
       "name": "OpenAI_API",
-      "quota": 100.00,
+      "quota": 100.0,
       "unit": "dollars",
       "reset_cadence": "monthly",
       "relevant_workflows": ["openai_workflow.yml"],
