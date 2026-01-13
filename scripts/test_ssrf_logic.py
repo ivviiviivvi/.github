@@ -1,10 +1,10 @@
-import unittest
-from unittest.mock import patch, MagicMock
-import socket
 import ipaddress
-import urllib.parse
-import sys
 import os
+import socket
+import sys
+import unittest
+import urllib.parse
+from unittest.mock import MagicMock, patch
 
 # Add scripts directory to path to handle imports correctly regardless of where test is run
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,12 +14,15 @@ if current_dir not in sys.path:
 # Import the module under test
 import web_crawler
 
+
 class TestSSRFLogic(unittest.TestCase):
     def setUp(self):
         # Initialize crawler with dummy values to avoid API calls or env var issues
-        self.crawler = web_crawler.OrganizationCrawler(github_token="dummy", org_name="dummy")
+        self.crawler = web_crawler.OrganizationCrawler(
+            github_token="dummy", org_name="dummy"
+        )
 
-    @patch('socket.gethostbyname')
+    @patch("socket.gethostbyname")
     def test_is_safe_url(self, mock_gethostbyname):
         # Case 1: Safe Public IP
         mock_gethostbyname.return_value = "8.8.8.8"
@@ -37,5 +40,6 @@ class TestSSRFLogic(unittest.TestCase):
         mock_gethostbyname.return_value = "169.254.169.254"
         self.assertFalse(self.crawler._is_safe_url("http://169.254.169.254"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

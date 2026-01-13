@@ -2,19 +2,19 @@
 # This site showcases all walkthrough videos and live demos for Ivviiviivvi organization
 
 # Site settings
-title: 'Ivviiviivvi Walkthrough Gallery'
-description: 'Comprehensive gallery of application walkthroughs and live demos for all Ivviiviivvi organization repositories'
-url: 'https://ivviiviivvi.github.io'
-baseurl: '/.github'
-author: '4444JPP'
-email: 'support@ivviiviivvi.dev'
+title: Ivviiviivvi Walkthrough Gallery
+description: Comprehensive gallery of application walkthroughs and live demos for all Ivviiviivvi organization repositories
+url: https://ivviiviivvi.github.io
+baseurl: /.github
+author: 4444JPP
+email: support@ivviiviivvi.dev
 
 # Organization settings
 organization:
-  name: 'Ivviiviivvi'
-  github_url: 'https://github.com/ivviiviivvi'
-  logo_url: ''
-  tagline: 'Building innovative solutions through automation and AI'
+  name: Ivviiviivvi
+  github_url: https://github.com/ivviiviivvi
+  logo_url: ""
+  tagline: Building innovative solutions through automation and AI
 
 # Build settings
 markdown: kramdown
@@ -25,7 +25,7 @@ kramdown:
   input: GFM
   syntax_highlighter: rouge
   syntax_highlighter_opts:
-    css_class: 'highlight'
+    css_class: highlight
     span:
       line_numbers: false
     block:
@@ -47,15 +47,15 @@ collections:
 # Defaults
 defaults:
   - scope:
-      path: ''
-      type: 'walkthroughs'
+      path: ""
+      type: walkthroughs
     values:
-      layout: 'walkthrough'
+      layout: walkthrough
   - scope:
-      path: ''
-      type: 'pages'
+      path: ""
+      type: pages
     values:
-      layout: 'default'
+      layout: default
 
 # Exclude from build
 exclude:
@@ -94,30 +94,30 @@ gallery:
   # Enable filtering
   enable_filtering: true
   # Sort order: date, name, repository
-  default_sort: 'date'
+  default_sort: date
   # Sort direction: asc, desc
-  default_sort_direction: 'desc'
+  default_sort_direction: desc
   # Video player settings
   video_player:
     autoplay: false
     controls: true
     loop: false
     muted: false
-    preload: 'metadata'
+    preload: metadata
   # Thumbnail settings
   thumbnail:
     width: 320
     height: 180
-    fallback_image: '/assets/images/video-placeholder.png'
+    fallback_image: /assets/images/video-placeholder.png
 
 # Search settings
 search:
   # Search fields: title, description, repository, tags
   fields:
-    - 'title'
-    - 'description'
-    - 'repository'
-    - 'tags'
+    - title
+    - description
+    - repository
+    - tags
   # Minimum search length
   min_length: 2
   # Case sensitive
@@ -126,26 +126,26 @@ search:
 # Theme customization
 theme_customization:
   # Primary color
-  primary_color: '#2ea44f'
+  primary_color: "#2ea44f"
   # Secondary color
-  secondary_color: '#0969da'
+  secondary_color: "#0969da"
   # Background color
-  background_color: '#ffffff'
+  background_color: "#ffffff"
   # Text color
-  text_color: '#24292f'
+  text_color: "#24292f"
   # Header background (gradient)
-  header_gradient_start: '#2ea44f'
-  header_gradient_end: '#0969da'
+  header_gradient_start: "#2ea44f"
+  header_gradient_end: "#0969da"
   # Dark mode
   dark_mode:
     enabled: true
     # Auto-detect user preference
     auto_detect: true
     # Dark mode colors
-    background_color: '#0d1117'
-    text_color: '#c9d1d9'
-    primary_color: '#58a6ff'
-    secondary_color: '#238636'
+    background_color: "#0d1117"
+    text_color: "#c9d1d9"
+    primary_color: "#58a6ff"
+    secondary_color: "#238636"
 
 # Footer settings
 footer:
@@ -153,27 +153,27 @@ footer:
   show_copyright: true
   copyright_year: 2025
   links:
-    - title: 'GitHub'
-      url: 'https://github.com/ivviiviivvi'
-      icon: 'github'
-    - title: 'Documentation'
-      url: 'https://github.com/ivviiviivvi/.github/tree/main/docs'
-      icon: 'book'
-    - title: 'Support'
-      url: 'https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md'
-      icon: 'help'
+    - title: GitHub
+      url: https://github.com/ivviiviivvi
+      icon: github
+    - title: Documentation
+      url: https://github.com/ivviiviivvi/.github/tree/main/docs
+      icon: book
+    - title: Support
+      url: https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md
+      icon: help
 
 # Analytics (optional)
 analytics:
   enabled: false
-  provider: 'google'
-  tracking_id: ''
+  provider: google
+  tracking_id: ""
 
 # SEO settings
 seo:
-  twitter_card: 'summary_large_image'
-  twitter_creator: '@4444JPP'
-  og_image: '/assets/images/og-image.png'
+  twitter_card: summary_large_image
+  twitter_creator: "@4444JPP"
+  og_image: /assets/images/og-image.png
 
 # Performance settings
 performance:
@@ -187,7 +187,7 @@ performance:
 # Deployment settings
 deployment:
   # Branch for GitHub Pages
-  branch: 'gh-pages'
+  branch: gh-pages
   # Build on schedule
   schedule_enabled: true
   # Build interval (hours)
@@ -198,11 +198,11 @@ deployment:
 # Data sources
 data_sources:
   # Walkthrough metadata file
-  walkthroughs_data: '_data/walkthroughs.yml'
+  walkthroughs_data: _data/walkthroughs.yml
   # Repositories metadata file
-  repositories_data: '_data/repositories.yml'
+  repositories_data: _data/repositories.yml
   # Live demos metadata file
-  live_demos_data: '_data/live_demos.yml'
+  live_demos_data: _data/live_demos.yml
 
 # Feature flags
 features:
@@ -220,8 +220,8 @@ features:
   comments: false
 
 # Locale settings
-locale: 'en_US'
-timezone: 'UTC'
+locale: en_US
+timezone: UTC
 
 # Safe mode (GitHub Pages compatible)
 safe: true

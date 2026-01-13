@@ -35,13 +35,13 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
           echo "Branch name: $BRANCH_NAME"
-          
+
           # Skip validation for protected branches
           if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]] || [[ "$BRANCH_NAME" == "develop" ]]; then
             echo "Skipping validation for protected branch: $BRANCH_NAME"
             exit 0
           fi
-          
+
           # Valid patterns according to VERSION_CONTROL_STANDARDS.md
           VALID_PATTERNS=(
             "^(develop|experimental|production|maintenance|deprecated|archive)/(feature|bugfix|hotfix|enhancement|refactor|docs|test|chore)/[a-z0-9-]+(/[a-z0-9-]+)?(/[a-z0-9-]+)?$"
@@ -50,7 +50,7 @@ jobs:
             "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"
             "^archive/[a-z0-9-]+/[a-z0-9-]+$"
           )
-          
+
           VALID=false
           for pattern in "${VALID_PATTERNS[@]}"; do
             if [[ "$BRANCH_NAME" =~ $pattern ]]; then
@@ -59,7 +59,7 @@ jobs:
               break
             fi
           done
-          
+
           if [ "$VALID" = false ]; then
             echo "::error::Branch name '$BRANCH_NAME' does not follow naming conventions"
             echo "::error::Expected format: <lifecycle>/<type>/<component>[/<subcomponent>]"
@@ -70,7 +70,7 @@ jobs:
             echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
             exit 1
           fi
-          
+
           echo "Branch name is valid"
 
       - name: Validate commit messages
@@ -80,23 +80,23 @@ jobs:
           # Get commits in the PR
           git fetch origin ${{ github.base_ref }}
           COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --pretty=format:"%H|%s")
-          
+
           echo "Validating commit messages..."
-          
+
           INVALID_COMMITS=()
           while IFS= read -r line; do
             if [ -z "$line" ]; then
               continue
             fi
-            
+
             HASH=$(echo "$line" | cut -d'|' -f1)
             MESSAGE=$(echo "$line" | cut -d'|' -f2-)
-            
+
             # Skip merge commits
             if [[ "$MESSAGE" =~ ^Merge ]]; then
               continue
             fi
-            
+
             # Conventional Commits pattern
             # Format: type(scope): subject or type: subject
             if [[ ! "$MESSAGE" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?:\ .+ ]]; then
@@ -104,7 +104,7 @@ jobs:
             fi
             fi
           done <<< "$COMMITS"
-          
+
           if [ ${#INVALID_COMMITS[@]} -gt 0 ]; then
             echo "::error::Found commits not following Conventional Commits format:"
             for commit in "${INVALID_COMMITS[@]}"; do
@@ -119,7 +119,7 @@ jobs:
             echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
             exit 1
           fi
-          
+
           echo "All commit messages are valid"
 
       - name: Comment on PR with validation results
@@ -128,17 +128,17 @@ jobs:
         with:
           script: |
             const body = `## Version Control Standards Validation Failed
-            
+
             This pull request does not meet our version control standards.
-            
+
             **Common Issues:**
-            
+
             1. **Branch Name**: Must follow format \`<lifecycle>/<type>/<component>[/<subcomponent>]\`
                - Examples:
                  - \`develop/feature/user-authentication\`
                  - \`production/hotfix/critical-security-fix\`
                  - \`maintenance/v1.x/security-patches\`
-            
+
             2. **Commit Messages**: Must follow Conventional Commits format
                - Format: \`<type>(<scope>): <subject>\`
                - Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
@@ -146,14 +146,14 @@ jobs:
                  - \`feat(auth): add OAuth2 authentication\`
                  - \`fix: resolve memory leak\`
                  - \`docs: update installation guide\`
-            
+
             **Documentation:**
             - [VERSION_CONTROL_STANDARDS.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/VERSION_CONTROL_STANDARDS.md)
             - [GIT_WORKFLOW.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/GIT_WORKFLOW.md)
             - [BRANCH_STRATEGY.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/BRANCH_STRATEGY.md)
-            
+
             Please update your branch name and/or commit messages to follow the standards.`;
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -181,9 +181,9 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Checking markdown files for emoji..."
-          
+
           EMOJI_FOUND=false
-          
+
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             # Check for emoji characters (actual emoji, not box-drawing/geometric)
             # Focus on emoji faces, symbols, and objects ranges
@@ -191,7 +191,7 @@ jobs:
               echo "::warning file=$file::Cannot read file for emoji validation"
               continue
             fi
-            
+
             if python3 -c "
 import re, sys
 try:
@@ -206,14 +206,14 @@ except Exception as e:
               EMOJI_FOUND=true
             fi
           done
-          
+
           if [ "$EMOJI_FOUND" = true ]; then
             echo "::error::Emoji found in markdown files"
             echo "::error::Our style guide prohibits emoji in documentation"
             echo "::error::See MARKDOWN_STYLE_GUIDE.md section 'No Visual Embellishments'"
             exit 1
           fi
-          
+
           echo "No emoji found in markdown files"
 
       - name: Comment on PR if emoji found
@@ -222,22 +222,22 @@ except Exception as e:
         with:
           script: |
             const body = `## Markdown Style Violation: Emoji Detected
-            
+
             This pull request contains emoji in markdown files, which violates our [Markdown Style Guide](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/MARKDOWN_STYLE_GUIDE.md).
-            
+
             **Our Standard:**
             > DO NOT use emoji or decorative Unicode characters in documentation.
-            
+
             **Why?**
             - Ensures professionalism
             - Improves accessibility
             - Maintains consistency across all documentation
             - Better readability in all contexts
-            
+
             Please remove all emoji from markdown files before merging.
-            
+
             **Reference:** [MARKDOWN_STYLE_GUIDE.md - No Visual Embellishments](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/MARKDOWN_STYLE_GUIDE.md#5-no-visual-embellishments)`;
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

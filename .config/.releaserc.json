@@ -75,11 +75,7 @@
           }
         ],
         "parserOpts": {
-          "noteKeywords": [
-            "BREAKING CHANGE",
-            "BREAKING CHANGES",
-            "BREAKING"
-          ]
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
         }
       }
     ],
@@ -178,9 +174,7 @@
         "successComment": false,
         "failTitle": false,
         "failComment": false,
-        "labels": [
-          "released"
-        ],
+        "labels": ["released"],
         "releasedLabels": [
           "released<%= nextRelease.channel ? `-${nextRelease.channel}` : \"\" %>-<%= nextRelease.gitTag %>"
         ]

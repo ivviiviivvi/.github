@@ -39,52 +39,71 @@ class MouthpieceFilter:
     """
 
     # Pre-compiled patterns for performance
-    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
     _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
     _QUOTED_SINGLE = re.compile(r"'([^']+)'")
-    _TECHNICAL_TERMS_MIXED = re.compile(r'\b\w+[._]\w+\b')
-    _TECHNICAL_TERMS_CAMEL = re.compile(r'\b[a-z]+[A-Z]\w+\b')
+    _TECHNICAL_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
+    _TECHNICAL_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")
 
     _METAPHOR_INDICATORS = [
-        "like", "as if", "seems", "feels like", "reminds me of",
-        "poetry", "blossomed", "flowers", "blooms", "seeds",
-        "river", "ocean", "mountain", "storm", "light", "shadow"
+        "like",
+        "as if",
+        "seems",
+        "feels like",
+        "reminds me of",
+        "poetry",
+        "blossomed",
+        "flowers",
+        "blooms",
+        "seeds",
+        "river",
+        "ocean",
+        "mountain",
+        "storm",
+        "light",
+        "shadow",
     ]
     _METAPHOR_PATTERN = re.compile(
-        r'|'.join(map(re.escape, _METAPHOR_INDICATORS)),
-        re.IGNORECASE
+        r"|".join(map(re.escape, _METAPHOR_INDICATORS)), re.IGNORECASE
     )
 
-    _SENTENCE_SPLIT = re.compile(r'[.!?]+')
-    _QUESTIONS_PATTERN = re.compile(r'([^.!?]*\?)')
-    _STEPS_PATTERN = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b', re.IGNORECASE)
-    _PARAGRAPH_SPLIT = re.compile(r'\n\s*\n')
+    _SENTENCE_SPLIT = re.compile(r"[.!?]+")
+    _QUESTIONS_PATTERN = re.compile(r"([^.!?]*\?)")
+    _STEPS_PATTERN = re.compile(
+        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b",
+        re.IGNORECASE,
+    )
+    _PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
     # Compile regex patterns once for better performance
-    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
     _DOUBLE_QUOTES = re.compile(r'"([^"]+)"')
     _SINGLE_QUOTES = re.compile(r"'([^']+)'")
-    _TECHNICAL_TERMS_DOT_UNDERSCORE = re.compile(r'\b\w+[._]\w+\b')
-    _CAMEL_CASE = re.compile(r'\b[a-z]+[A-Z]\w+\b')
-    _SENTENCE_SPLIT = re.compile(r'[.!?]+')
-    _QUESTIONS = re.compile(r'([^.!?]*\?)')
-    _STEPS = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b')
-    _PARAGRAPHS = re.compile(r'\n\s*\n')
+    _TECHNICAL_TERMS_DOT_UNDERSCORE = re.compile(r"\b\w+[._]\w+\b")
+    _CAMEL_CASE = re.compile(r"\b[a-z]+[A-Z]\w+\b")
+    _SENTENCE_SPLIT = re.compile(r"[.!?]+")
+    _QUESTIONS = re.compile(r"([^.!?]*\?)")
+    _STEPS = re.compile(
+        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
+    )
+    _PARAGRAPHS = re.compile(r"\n\s*\n")
     # Compile regex patterns once for performance
     # Capitalized words (potential proper nouns or important concepts)
-    _CAPITALIZED_WORDS = re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')
+    _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
     # Quoted terms
     _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
     _QUOTED_SINGLE = re.compile(r"'([^']+)'")
     # Technical-looking terms (contains underscores, dots, or mixed case)
-    _TECH_TERMS_MIXED = re.compile(r'\b\w+[._]\w+\b')
-    _TECH_TERMS_CAMEL = re.compile(r'\b[a-z]+[A-Z]\w+\b')  # camelCase
+    _TECH_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
+    _TECH_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")  # camelCase
     # Sentence splitters
-    _SENTENCE_SPLITTER = re.compile(r'[.!?]+')
-    _PARAGRAPH_SPLITTER = re.compile(r'\n\s*\n')
+    _SENTENCE_SPLITTER = re.compile(r"[.!?]+")
+    _PARAGRAPH_SPLITTER = re.compile(r"\n\s*\n")
     # Questions
-    _QUESTIONS = re.compile(r'([^.!?]*\?)')
+    _QUESTIONS = re.compile(r"([^.!?]*\?)")
     # Steps
-    _STEPS = re.compile(r'\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b')
+    _STEPS = re.compile(
+        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
+    )
 
     def __init__(self, config: Optional[Dict] = None):
         """Initialize the filter with optional configuration."""
@@ -139,7 +158,9 @@ class MouthpieceFilter:
         analysis = {
             "intent": self._detect_intent(text),
             "concepts": concepts,
-            "metaphors": self._extract_metaphors(text) if self.config["extract_metaphors"] else [],
+            "metaphors": self._extract_metaphors(text)
+            if self.config["extract_metaphors"]
+            else [],
             "tone": self._detect_tone(text),
             "complexity": self._assess_complexity(text, concepts),
             "key_verbs": self._extract_key_verbs(text),
@@ -152,17 +173,33 @@ class MouthpieceFilter:
         text_lower = text.lower()
 
         # Intent patterns
-        if any(word in text_lower for word in ["create", "build", "implement", "make", "develop"]):
+        if any(
+            word in text_lower
+            for word in ["create", "build", "implement", "make", "develop"]
+        ):
             return "creation"
-        elif any(word in text_lower for word in ["fix", "repair", "solve", "debug", "resolve"]):
+        elif any(
+            word in text_lower
+            for word in ["fix", "repair", "solve", "debug", "resolve"]
+        ):
             return "problem_solving"
-        elif any(word in text_lower for word in ["explain", "understand", "learn", "how", "why", "what"]):
+        elif any(
+            word in text_lower
+            for word in ["explain", "understand", "learn", "how", "why", "what"]
+        ):
             return "understanding"
-        elif any(word in text_lower for word in ["improve", "optimize", "enhance", "better", "refactor"]):
+        elif any(
+            word in text_lower
+            for word in ["improve", "optimize", "enhance", "better", "refactor"]
+        ):
             return "improvement"
-        elif any(word in text_lower for word in ["design", "architect", "plan", "structure"]):
+        elif any(
+            word in text_lower for word in ["design", "architect", "plan", "structure"]
+        ):
             return "design"
-        elif any(word in text_lower for word in ["analyze", "review", "examine", "inspect"]):
+        elif any(
+            word in text_lower for word in ["analyze", "review", "examine", "inspect"]
+        ):
             return "analysis"
         else:
             return "general"
@@ -209,13 +246,25 @@ class MouthpieceFilter:
         text_lower = text.lower()
 
         # Simple tone detection
-        if any(word in text_lower for word in ["urgent", "immediately", "asap", "critical", "emergency"]):
+        if any(
+            word in text_lower
+            for word in ["urgent", "immediately", "asap", "critical", "emergency"]
+        ):
             return "urgent"
-        elif any(word in text_lower for word in ["please", "could you", "would you", "kindly"]):
+        elif any(
+            word in text_lower
+            for word in ["please", "could you", "would you", "kindly"]
+        ):
             return "polite"
-        elif any(word in text_lower for word in ["excited", "amazing", "wonderful", "love", "great"]):
+        elif any(
+            word in text_lower
+            for word in ["excited", "amazing", "wonderful", "love", "great"]
+        ):
             return "enthusiastic"
-        elif any(word in text_lower for word in ["confused", "unclear", "not sure", "maybe", "perhaps"]):
+        elif any(
+            word in text_lower
+            for word in ["confused", "unclear", "not sure", "maybe", "perhaps"]
+        ):
             return "uncertain"
         else:
             return "neutral"
@@ -242,13 +291,36 @@ class MouthpieceFilter:
         """Extract action verbs that indicate what should be done."""
         # Common action verbs in technical contexts
         action_verbs = [
-            "create", "build", "implement", "develop", "design",
-            "fix", "solve", "debug", "repair", "resolve",
-            "optimize", "improve", "enhance", "refactor",
-            "analyze", "review", "examine", "test",
-            "explain", "describe", "document", "clarify",
-            "integrate", "connect", "combine", "merge",
-            "transform", "convert", "translate", "filter",
+            "create",
+            "build",
+            "implement",
+            "develop",
+            "design",
+            "fix",
+            "solve",
+            "debug",
+            "repair",
+            "resolve",
+            "optimize",
+            "improve",
+            "enhance",
+            "refactor",
+            "analyze",
+            "review",
+            "examine",
+            "test",
+            "explain",
+            "describe",
+            "document",
+            "clarify",
+            "integrate",
+            "connect",
+            "combine",
+            "merge",
+            "transform",
+            "convert",
+            "translate",
+            "filter",
         ]
 
         found_verbs = []
@@ -280,17 +352,38 @@ class MouthpieceFilter:
 
     def _has_context(self, text: str) -> bool:
         """Check if the text provides context."""
-        context_indicators = ["background", "context", "currently", "existing", "we have", "i have"]
+        context_indicators = [
+            "background",
+            "context",
+            "currently",
+            "existing",
+            "we have",
+            "i have",
+        ]
         return any(indicator in text.lower() for indicator in context_indicators)
 
     def _has_constraints(self, text: str) -> bool:
         """Check if the text specifies constraints."""
-        constraint_indicators = ["must", "should", "need to", "required", "constraint", "limitation"]
+        constraint_indicators = [
+            "must",
+            "should",
+            "need to",
+            "required",
+            "constraint",
+            "limitation",
+        ]
         return any(indicator in text.lower() for indicator in constraint_indicators)
 
     def _has_examples(self, text: str) -> bool:
         """Check if the text includes examples."""
-        example_indicators = ["example", "for instance", "such as", "like", "e.g.", "i.e."]
+        example_indicators = [
+            "example",
+            "for instance",
+            "such as",
+            "like",
+            "e.g.",
+            "i.e.",
+        ]
         return any(indicator in text.lower() for indicator in example_indicators)
 
     def _has_steps(self, text: str) -> bool:
@@ -323,7 +416,9 @@ class MouthpieceFilter:
         else:
             return self._build_structured_prompt(text, analysis, structure)
 
-    def _build_structured_prompt(self, text: str, analysis: Dict, structure: Dict) -> str:
+    def _build_structured_prompt(
+        self, text: str, analysis: Dict, structure: Dict
+    ) -> str:
         """Build a structured prompt format."""
         prompt_parts = []
 
@@ -342,7 +437,9 @@ class MouthpieceFilter:
         # Header
         if self.config["preserve_poetry"] and analysis["metaphors"]:
             prompt_parts.append(f"# {title}: {text.split('.')[0].strip()}...\n")
-            prompt_parts.append(f"_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else "")
+            prompt_parts.append(
+                f"_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else ""
+            )
         else:
             prompt_parts.append(f"# {title}\n")
 
@@ -438,7 +535,9 @@ class MouthpieceFilter:
                 output.append(f"  Intent: {result['metadata']['intent']}")
                 output.append(f"  Tone: {result['metadata']['tone']}")
                 output.append(f"  Complexity: {result['metadata']['complexity']}")
-                output.append(f"  Concepts found: {result['metadata']['concept_count']}")
+                output.append(
+                    f"  Concepts found: {result['metadata']['concept_count']}"
+                )
                 output.append("")
 
             output.append("-" * 80)
@@ -472,7 +571,7 @@ Examples:
   python mouthpiece_filter.py --file my_thoughts.txt
   echo "help me understand recursion" | python mouthpiece_filter.py --stdin
   python mouthpiece_filter.py "create magic" --format prompt_only
-        """
+        """,
     )
 
     # Input options
@@ -483,12 +582,18 @@ Examples:
 
     # Configuration options
     parser.add_argument("--config", "-c", help="Path to config JSON file")
-    parser.add_argument("--format", choices=["full", "prompt_only", "json"],
-                       default="full", help="Output format")
-    parser.add_argument("--no-poetry", action="store_true",
-                       help="Don't preserve poetic elements")
-    parser.add_argument("--no-voice", action="store_true",
-                       help="Don't maintain original voice")
+    parser.add_argument(
+        "--format",
+        choices=["full", "prompt_only", "json"],
+        default="full",
+        help="Output format",
+    )
+    parser.add_argument(
+        "--no-poetry", action="store_true", help="Don't preserve poetic elements"
+    )
+    parser.add_argument(
+        "--no-voice", action="store_true", help="Don't maintain original voice"
+    )
     parser.add_argument("--output", "-o", help="Write output to file")
 
     args = parser.parse_args()
@@ -497,7 +602,7 @@ Examples:
     if args.text:
         text = args.text
     elif args.file:
-        with open(args.file, 'r') as f:
+        with open(args.file, "r") as f:
             text = f.read()
     elif args.stdin:
         text = sys.stdin.read()
@@ -505,7 +610,7 @@ Examples:
     # Load configuration
     config = None
     if args.config:
-        with open(args.config, 'r') as f:
+        with open(args.config, "r") as f:
             config = json.load(f)
     else:
         config = {}
@@ -525,7 +630,7 @@ Examples:
 
     # Write or print
     if args.output:
-        with open(args.output, 'w') as f:
+        with open(args.output, "w") as f:
             f.write(output)
         print(f"Output written to {args.output}")
     else:

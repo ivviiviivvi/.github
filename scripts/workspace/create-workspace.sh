@@ -26,7 +26,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Options:
   -t, --template NAME       Template to use (default: basic)
-                           Available: basic, fullstack, datascience, 
+                           Available: basic, fullstack, datascience,
                                      microservices, golang, rust, java, dotnet
   -n, --name NAME          Workspace name (required)
   -s, --services SERVICES  Comma-separated list of additional services
@@ -83,10 +83,10 @@ done
 if [ "$INTERACTIVE" = true ]; then
   echo -e "${GREEN}🚀 Workspace Creation Wizard${NC}"
   echo ""
-  
+
   # Workspace name
   read -p "Workspace name: " WORKSPACE_NAME
-  
+
   # Template selection
   echo ""
   echo "Available templates:"
@@ -99,7 +99,7 @@ if [ "$INTERACTIVE" = true ]; then
   echo "  7) java         - Java/Spring Boot"
   echo "  8) dotnet       - .NET Core"
   read -p "Select template (1-8): " TEMPLATE_NUM
-  
+
   case $TEMPLATE_NUM in
     1) TEMPLATE="basic" ;;
     2) TEMPLATE="fullstack" ;;
@@ -111,7 +111,7 @@ if [ "$INTERACTIVE" = true ]; then
     8) TEMPLATE="dotnet" ;;
     *) echo -e "${RED}Invalid selection${NC}"; exit 1 ;;
   esac
-  
+
   # Additional services
   echo ""
   echo "Additional services (comma-separated, or press Enter to skip):"

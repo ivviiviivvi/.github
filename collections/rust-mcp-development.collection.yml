@@ -1,7 +1,18 @@
 id: rust-mcp-development
 name: Rust MCP Server Development
 description: Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations.
-tags: [rust, mcp, model-context-protocol, server-development, sdk, tokio, async, macros, rmcp]
+tags:
+  [
+    rust,
+    mcp,
+    model-context-protocol,
+    server-development,
+    sdk,
+    tokio,
+    async,
+    macros,
+    rmcp,
+  ]
 items:
   - path: instructions/rust-mcp-server.instructions.md
     kind: instruction
@@ -34,4 +45,3 @@ items:
 display:
   ordering: manual
   show_badge: true
-

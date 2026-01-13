@@ -1,6 +1,7 @@
 # Development Environment Setup Guide
 
-> **Complete guide to configuring your development environment for optimal GitHub Copilot integration**
+> **Complete guide to configuring your development environment for optimal
+> GitHub Copilot integration**
 
 ## Table of Contents
 
@@ -37,7 +38,10 @@
 
 ## Overview
 
-This guide helps you set up a consistent, optimized development environment that maximizes GitHub Copilot's effectiveness. Whether you're using DevContainers, local development, or a hybrid approach, you'll find comprehensive instructions for creating an environment that:
+This guide helps you set up a consistent, optimized development environment that
+maximizes GitHub Copilot's effectiveness. Whether you're using DevContainers,
+local development, or a hybrid approach, you'll find comprehensive instructions
+for creating an environment that:
 
 - **Enhances Copilot suggestions** through proper tooling and configuration
 - **Standardizes team setups** for consistency across projects
@@ -82,42 +86,48 @@ This guide helps you set up a consistent, optimized development environment that
 For the fastest, most consistent setup:
 
 1. **Install prerequisites**:
-   - [VS Code](https://code.visualstudio.com/) or [VS Code Insiders](https://code.visualstudio.com/insiders/)
+
+   - [VS Code](https://code.visualstudio.com/) or
+     [VS Code Insiders](https://code.visualstudio.com/insiders/)
    - [Docker Desktop](https://www.docker.com/products/docker-desktop)
    - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-2. **Open in container**:
+1. **Open in container**:
+
    ```bash
    git clone https://github.com/ivviiviivvi/.github.git
    cd .github
    code .
    ```
 
-3. **Reopen in container**:
+1. **Reopen in container**:
+
    - Press `Cmd/Ctrl + Shift + P`
    - Select "Dev Containers: Reopen in Container"
    - Wait for container to build (first time only)
 
-4. **Start coding**: Everything is pre-configured and ready!
+1. **Start coding**: Everything is pre-configured and ready!
 
 ### Option 2: Local Setup
 
 For developers who prefer local development:
 
 1. **Clone and copy configurations**:
+
    ```bash
    git clone https://github.com/ivviiviivvi/.github.git
-   
+
    # Copy VS Code settings
    cp .github/.vscode/settings.json ~/.vscode/settings.json
-   
+
    # Copy Git configuration (review before using)
    # cat .github/.gitconfig >> ~/.gitconfig
    ```
 
-2. **Install extensions** (see [VS Code Configuration](#vs-code-configuration))
+1. **Install extensions** (see [VS Code Configuration](#vs-code-configuration))
 
-3. **Configure languages** (see [Language-Specific Setup](#language-specific-setup))
+1. **Configure languages** (see
+   [Language-Specific Setup](#language-specific-setup))
 
 ---
 
@@ -125,7 +135,8 @@ For developers who prefer local development:
 
 ### What is a DevContainer?
 
-A **Development Container** (DevContainer) is a fully configured development environment running in a Docker container. It provides:
+A **Development Container** (DevContainer) is a fully configured development
+environment running in a Docker container. It provides:
 
 - **Consistent environment**: Same tools, versions, and settings for everyone
 - **Isolated workspace**: No conflicts with other projects or system tools
@@ -149,12 +160,14 @@ Our DevContainer (`.devcontainer/devcontainer.json`) includes:
 #### VS Code Extensions
 
 ##### Core Development
+
 - **GitHub Copilot**: AI-powered code completion
 - **GitHub Copilot Chat**: Conversational AI assistance
 - **GitLens**: Enhanced Git integration
 - **GitHub Pull Requests**: PR management in VS Code
 
 ##### Language Support
+
 - **Python** (Pylance, Black formatter, Flake8)
 - **ESLint** (JavaScript/TypeScript linting)
 - **Prettier** (Code formatting)
@@ -162,12 +175,14 @@ Our DevContainer (`.devcontainer/devcontainer.json`) includes:
 - **Rust Analyzer** (Rust language support)
 
 ##### Infrastructure & DevOps
+
 - **Docker**: Container management
 - **Terraform**: Infrastructure as code
 - **YAML**: YAML language support
 - **Makefile Tools**: Makefile support
 
 ##### Additional AI Tools
+
 - **Sourcegraph Cody**: Alternative AI assistant
 - **TabNine**: AI code completion
 
@@ -194,13 +209,15 @@ Our DevContainer (`.devcontainer/devcontainer.json`) includes:
 #### Prerequisites
 
 1. **Docker Desktop** (or compatible container runtime)
+
    ```bash
    # Verify Docker is running
    docker --version
    docker ps
    ```
 
-2. **VS Code** with **Dev Containers** extension
+1. **VS Code** with **Dev Containers** extension
+
    ```bash
    # Install extension (or use VS Code marketplace)
    code --install-extension ms-vscode-remote.remote-containers
@@ -209,18 +226,21 @@ Our DevContainer (`.devcontainer/devcontainer.json`) includes:
 #### Opening a Project in a Container
 
 **Method 1: From VS Code**
+
 1. Open the project folder in VS Code
-2. Press `Cmd/Ctrl + Shift + P`
-3. Select "Dev Containers: Reopen in Container"
-4. Wait for build to complete
+1. Press `Cmd/Ctrl + Shift + P`
+1. Select "Dev Containers: Reopen in Container"
+1. Wait for build to complete
 
 **Method 2: From Command Line**
+
 ```bash
 # Open project in container directly
 code --folder-uri vscode-remote://dev-container+$(pwd | sed 's/\//%2F/g')/workspace
 ```
 
 **Method 3: Using GitHub Codespaces**
+
 ```bash
 # Create a codespace (uses the same devcontainer.json)
 gh codespace create --repo ivviiviivvi/.github
@@ -231,15 +251,16 @@ gh codespace create --repo ivviiviivvi/.github
 On first run, the container will:
 
 1. **Pull base images** (Ubuntu with VS Code Server)
-2. **Install features** (Node, Python, Go, Rust, etc.)
-3. **Install extensions** (Copilot, language support, tools)
-4. **Run post-create script** (`.devcontainer/post-create.sh`):
+1. **Install features** (Node, Python, Go, Rust, etc.)
+1. **Install extensions** (Copilot, language support, tools)
+1. **Run post-create script** (`.devcontainer/post-create.sh`):
    - Install additional dependencies
    - Configure Git settings
    - Set up pre-commit hooks
    - Initialize language-specific tools
 
 **Post-create script includes:**
+
 ```bash
 #!/bin/bash
 # Install global npm packages
@@ -281,10 +302,7 @@ Edit `.devcontainer/devcontainer.json`:
 {
   "customizations": {
     "vscode": {
-      "extensions": [
-        "svelte.svelte-vscode",
-        "prisma.prisma"
-      ]
+      "extensions": ["svelte.svelte-vscode", "prisma.prisma"]
     }
   }
 }
@@ -339,32 +357,32 @@ Our recommended extensions (automatically installed in DevContainer):
 
 #### Essential
 
-| Extension | Purpose |
-|-----------|---------|
-| **GitHub Copilot** | AI code completion |
-| **GitHub Copilot Chat** | Conversational AI assistant |
-| **GitLens** | Enhanced Git capabilities |
-| **Prettier** | Code formatting |
-| **ESLint** | JavaScript/TypeScript linting |
+| Extension               | Purpose                       |
+| ----------------------- | ----------------------------- |
+| **GitHub Copilot**      | AI code completion            |
+| **GitHub Copilot Chat** | Conversational AI assistant   |
+| **GitLens**             | Enhanced Git capabilities     |
+| **Prettier**            | Code formatting               |
+| **ESLint**              | JavaScript/TypeScript linting |
 
 #### Language-Specific
 
-| Extension | Language |
-|-----------|----------|
-| **Python** | Python development |
-| **Pylance** | Python language server |
-| **Black Formatter** | Python formatting |
-| **Rust Analyzer** | Rust development |
-| **Go** | Go development |
+| Extension           | Language               |
+| ------------------- | ---------------------- |
+| **Python**          | Python development     |
+| **Pylance**         | Python language server |
+| **Black Formatter** | Python formatting      |
+| **Rust Analyzer**   | Rust development       |
+| **Go**              | Go development         |
 
 #### Infrastructure
 
-| Extension | Purpose |
-|-----------|---------|
-| **Docker** | Container management |
-| **Terraform** | Infrastructure as code |
-| **YAML** | YAML editing |
-| **Remote Containers** | DevContainer support |
+| Extension             | Purpose                |
+| --------------------- | ---------------------- |
+| **Docker**            | Container management   |
+| **Terraform**         | Infrastructure as code |
+| **YAML**              | YAML editing           |
+| **Remote Containers** | DevContainer support   |
 
 ### Settings
 
@@ -410,14 +428,14 @@ Key VS Code settings (`.vscode/settings.json`):
 
 Recommended shortcuts for GitHub Copilot:
 
-| Action | Shortcut (Mac) | Shortcut (Windows/Linux) |
-|--------|----------------|--------------------------|
-| Accept suggestion | `Tab` | `Tab` |
-| Reject suggestion | `Esc` | `Esc` |
-| Next suggestion | `Option + ]` | `Alt + ]` |
-| Previous suggestion | `Option + [` | `Alt + [` |
-| Open Copilot Chat | `Cmd + I` | `Ctrl + I` |
-| Trigger inline suggestions | `Option + \` | `Alt + \` |
+| Action                     | Shortcut (Mac) | Shortcut (Windows/Linux) |
+| -------------------------- | -------------- | ------------------------ |
+| Accept suggestion          | `Tab`          | `Tab`                    |
+| Reject suggestion          | `Esc`          | `Esc`                    |
+| Next suggestion            | `Option + ]`   | `Alt + ]`                |
+| Previous suggestion        | `Option + [`   | `Alt + [`                |
+| Open Copilot Chat          | `Cmd + I`      | `Ctrl + I`               |
+| Trigger inline suggestions | `Option + \`   | `Alt + \`                |
 
 ---
 
@@ -426,17 +444,20 @@ Recommended shortcuts for GitHub Copilot:
 ### Basic Setup
 
 1. **Install GitHub Copilot**:
+
    - Open VS Code
    - Go to Extensions (`Cmd/Ctrl + Shift + X`)
    - Search "GitHub Copilot"
    - Install both "GitHub Copilot" and "GitHub Copilot Chat"
 
-2. **Sign in**:
+1. **Sign in**:
+
    - Click "Sign in to GitHub" in the status bar
    - Authorize VS Code in your browser
    - Verify Copilot icon appears in status bar
 
-3. **Verify installation**:
+1. **Verify installation**:
+
    - Open a code file
    - Start typing - you should see suggestions
    - Press `Cmd/Ctrl + I` to open Copilot Chat
@@ -488,6 +509,7 @@ Optimize Copilot Chat:
 ### Python
 
 **Tools to install:**
+
 ```bash
 # Core tools
 pip install black flake8 pytest mypy
@@ -500,6 +522,7 @@ pip install ipython jupyter pre-commit
 ```
 
 **VS Code settings:**
+
 ```json
 {
   "[python]": {
@@ -518,6 +541,7 @@ pip install ipython jupyter pre-commit
 ### TypeScript/JavaScript
 
 **Tools to install:**
+
 ```bash
 # Core tools
 npm install -g typescript ts-node
@@ -531,6 +555,7 @@ npm install -D jest ts-jest @types/jest
 ```
 
 **VS Code settings:**
+
 ```json
 {
   "[typescript]": {
@@ -548,6 +573,7 @@ npm install -D jest ts-jest @types/jest
 ### Java
 
 **Tools to install:**
+
 ```bash
 # Via SDKMAN (recommended)
 curl -s "https://get.sdkman.io" | bash
@@ -557,6 +583,7 @@ sdk install gradle
 ```
 
 **VS Code extensions:**
+
 - Extension Pack for Java
 - Spring Boot Extension Pack
 - Lombok
@@ -564,6 +591,7 @@ sdk install gradle
 ### C#/.NET
 
 **Tools to install:**
+
 ```bash
 # .NET SDK
 wget https://dot.net/v1/dotnet-install.sh
@@ -575,6 +603,7 @@ dotnet tool install -g dotnet-ef
 ```
 
 **VS Code extensions:**
+
 - C# (Official)
 - C# Dev Kit
 - .NET Core Test Explorer
@@ -582,6 +611,7 @@ dotnet tool install -g dotnet-ef
 ### Go
 
 **Tools to install:**
+
 ```bash
 # Via Go install
 go install golang.org/x/tools/gopls@latest
@@ -590,6 +620,7 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 ```
 
 **VS Code settings:**
+
 ```json
 {
   "[go]": {
@@ -606,6 +637,7 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 ### Rust
 
 **Tools to install:**
+
 ```bash
 # Via rustup
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -617,6 +649,7 @@ rustup component add clippy
 ```
 
 **VS Code extensions:**
+
 - rust-analyzer (Official)
 
 ---
@@ -729,37 +762,42 @@ eval "$(starship init zsh)"
 **Problem**: Container fails to build
 
 **Solutions**:
+
 1. Check Docker is running: `docker ps`
-2. Clear Docker cache: `docker system prune -a`
-3. Rebuild without cache: `Cmd/Ctrl + Shift + P` > "Dev Containers: Rebuild Container"
-4. Check logs: View > Output > Dev Containers
+1. Clear Docker cache: `docker system prune -a`
+1. Rebuild without cache: `Cmd/Ctrl + Shift + P` > "Dev Containers: Rebuild
+   Container"
+1. Check logs: View > Output > Dev Containers
 
 **Problem**: Extensions not installing
 
 **Solutions**:
+
 1. Verify internet connection
-2. Check VS Code extension marketplace status
-3. Install extensions manually in container
-4. Check `devcontainer.json` for syntax errors
+1. Check VS Code extension marketplace status
+1. Install extensions manually in container
+1. Check `devcontainer.json` for syntax errors
 
 ### GitHub Copilot Issues
 
 **Problem**: Copilot not providing suggestions
 
 **Solutions**:
+
 1. Verify Copilot is enabled (check status bar icon)
-2. Check file type is supported
-3. Ensure GitHub Copilot license is active
-4. Restart VS Code
-5. Check output logs: View > Output > GitHub Copilot
+1. Check file type is supported
+1. Ensure GitHub Copilot license is active
+1. Restart VS Code
+1. Check output logs: View > Output > GitHub Copilot
 
 **Problem**: Poor suggestion quality
 
 **Solutions**:
+
 1. Install custom instructions for your language
-2. Provide more context in comments
-3. Use Copilot Chat for complex tasks
-4. Check language server is working
+1. Provide more context in comments
+1. Use Copilot Chat for complex tasks
+1. Check language server is working
 
 ---
 
@@ -801,14 +839,16 @@ eval "$(starship init zsh)"
 
 ### Organization Resources
 
-- [Custom Instructions Setup](CUSTOM_INSTRUCTIONS_SETUP.md) - Configure coding standards
+- [Custom Instructions Setup](CUSTOM_INSTRUCTIONS_SETUP.md) - Configure coding
+  standards
 - [MCP Server Setup](MCP_SERVER_SETUP.md) - Integrate MCP servers
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Build custom agents
 - [Contributing Guide](CONTRIBUTING.md) - Contribute to this repository
 
 ### Templates
 
-- [DevContainer Template](../.devcontainer/devcontainer.json) - Base configuration
+- [DevContainer Template](../.devcontainer/devcontainer.json) - Base
+  configuration
 - [VS Code Settings Template](../.vscode/settings.json) - Recommended settings
 - [Git Configuration Template](../.gitconfig) - Git setup examples
 
@@ -817,21 +857,23 @@ eval "$(starship init zsh)"
 ## Next Steps
 
 1. **Choose your setup method**: DevContainer or local installation
-2. **Follow the Quick Start** for your chosen method
-3. **Install GitHub Copilot** and verify it's working
-4. **Add custom instructions** for your languages
-5. **Configure MCP servers** if needed
-6. **Customize to your needs** based on your workflow
-7. **Share with your team** and iterate based on feedback
+1. **Follow the Quick Start** for your chosen method
+1. **Install GitHub Copilot** and verify it's working
+1. **Add custom instructions** for your languages
+1. **Configure MCP servers** if needed
+1. **Customize to your needs** based on your workflow
+1. **Share with your team** and iterate based on feedback
 
 ---
 
 **Questions or Issues?**
+
 - Check the [Troubleshooting](#troubleshooting) section
-- Review related guides: [Custom Instructions](CUSTOM_INSTRUCTIONS_SETUP.md) | [MCP Servers](MCP_SERVER_SETUP.md)
+- Review related guides: [Custom Instructions](CUSTOM_INSTRUCTIONS_SETUP.md) |
+  [MCP Servers](MCP_SERVER_SETUP.md)
 - Open an issue in this repository
 - Ask in GitHub Discussions
 
 ---
 
-*Last Updated: 2025-12-31*
+_Last Updated: 2025-12-31_

@@ -11,42 +11,42 @@ on:
   workflow_dispatch:
     inputs:
       check_type:
-        description: 'Type of health check to run'
+        description: Type of health check to run
         required: false
         type: choice
         options:
-          - 'full'
-          - 'quick'
-          - 'security'
-        default: 'quick'
-      
+          - full
+          - quick
+          - security
+        default: quick
+
       notify_on_completion:
-        description: 'Send notifications on completion'
+        description: Send notifications on completion
         required: false
         type: boolean
         default: false
-      
+
       severity_threshold:
-        description: 'Minimum severity level to report'
+        description: Minimum severity level to report
         required: false
         type: choice
         options:
-          - 'critical'
-          - 'high'
-          - 'medium'
-          - 'low'
-        default: 'medium'
+          - critical
+          - high
+          - medium
+          - low
+        default: medium
 
   # Optional: Enable other triggers as needed
   schedule:
     # Run weekly on Monday at 2 AM UTC
-    - cron: '0 2 * * 1'
-  
+    - cron: 0 2 * * 1
+
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/org-health-check.yml'
+      - .github/workflows/org-health-check.yml
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -59,17 +59,17 @@ permissions:
 
 jobs:
   health-check:
-    name: 'Repository Health Check'
+    name: Repository Health Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
-      - name: 'Checkout repository'
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          fetch-depth: 0  # Full history for comprehensive checks
+          fetch-depth: 0 # Full history for comprehensive checks
 
-      - name: 'Display workflow inputs'
+      - name: Display workflow inputs
         run: |
           echo "## 🔍 Health Check Configuration" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -78,7 +78,7 @@ jobs:
           echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: 'Check for README'
+      - name: Check for README
         id: check-readme
         run: |
           if [ -f "README.md" ]; then
@@ -90,7 +90,7 @@ jobs:
             echo "severity=high" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for LICENSE'
+      - name: Check for LICENSE
         id: check-license
         run: |
           if [ -f "LICENSE" ] || [ -f "LICENSE.md" ] || [ -f "LICENSE.txt" ]; then
@@ -102,7 +102,7 @@ jobs:
             echo "severity=medium" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for CONTRIBUTING guidelines'
+      - name: Check for CONTRIBUTING guidelines
         id: check-contributing
         run: |
           if [ -f "CONTRIBUTING.md" ] || [ -f ".github/CONTRIBUTING.md" ]; then
@@ -114,7 +114,7 @@ jobs:
             echo "severity=low" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for CI/CD workflows'
+      - name: Check for CI/CD workflows
         id: check-workflows
         run: |
           if [ -d ".github/workflows" ] && [ "$(ls -A .github/workflows)" ]; then
@@ -129,7 +129,7 @@ jobs:
             echo "count=0" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for security policy'
+      - name: Check for security policy
         id: check-security
         run: |
           if [ -f "SECURITY.md" ] || [ -f ".github/SECURITY.md" ]; then
@@ -141,7 +141,7 @@ jobs:
             echo "severity=medium" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for code of conduct'
+      - name: Check for code of conduct
         id: check-coc
         run: |
           if [ -f "CODE_OF_CONDUCT.md" ] || [ -f ".github/CODE_OF_CONDUCT.md" ]; then
@@ -153,7 +153,7 @@ jobs:
             echo "severity=low" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check for dependabot configuration'
+      - name: Check for dependabot configuration
         id: check-dependabot
         run: |
           if [ -f ".github/dependabot.yml" ]; then
@@ -165,7 +165,7 @@ jobs:
             echo "severity=low" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Check branch protection'
+      - name: Check branch protection
         id: check-branch-protection
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -173,7 +173,7 @@ jobs:
           RESPONSE=$(gh api \
             /repos/${{ github.repository }}/branches/${{ github.event.repository.default_branch }}/protection \
             2>&1 || echo "not-protected")
-          
+
           if echo "$RESPONSE" | grep -q "not-protected\|404"; then
             echo "status=⚠️" >> $GITHUB_OUTPUT
             echo "message=Default branch is not protected" >> $GITHUB_OUTPUT
@@ -183,17 +183,17 @@ jobs:
             echo "message=Default branch is protected" >> $GITHUB_OUTPUT
           fi
 
-      - name: 'Generate health report'
+      - name: Generate health report
         run: |
           cat << 'EOF' >> $GITHUB_STEP_SUMMARY
           ## 📊 Repository Health Report
-          
+
           **Repository:** ${{ github.repository }}
           **Check Type:** ${{ github.event.inputs.check_type || 'scheduled' }}
           **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          
+
           ### Results
-          
+
           | Check | Status | Details |
           |-------|--------|---------|
           | README | ${{ steps.check-readme.outputs.status }} | ${{ steps.check-readme.outputs.message }} |
@@ -204,18 +204,18 @@ jobs:
           | Code of Conduct | ${{ steps.check-coc.outputs.status }} | ${{ steps.check-coc.outputs.message }} |
           | Dependabot | ${{ steps.check-dependabot.outputs.status }} | ${{ steps.check-dependabot.outputs.message }} |
           | Branch Protection | ${{ steps.check-branch-protection.outputs.status }} | ${{ steps.check-branch-protection.outputs.message }} |
-          
+
           ### Legend
-          
+
           - ✅ Passed
           - ⚠️ Warning
           - ❌ Failed
           - ℹ️ Informational
           EOF
 
-      - name: 'Create issue for critical findings'
+      - name: Create issue for critical findings
         if: |
-          always() && 
+          always() &&
           github.event.inputs.notify_on_completion == 'true' &&
           (steps.check-readme.outputs.severity == 'critical' ||
            steps.check-branch-protection.outputs.severity == 'high')
@@ -229,43 +229,43 @@ jobs:
               labels: 'health-check',
               per_page: 1
             });
-            
+
             const findings = [];
-            
+
             if ('${{ steps.check-readme.outputs.severity }}' === 'critical') {
               findings.push('- ❌ **README.md is missing** (Critical)');
             }
-            
+
             if ('${{ steps.check-branch-protection.outputs.severity }}' === 'high') {
               findings.push('- ⚠️ **Default branch is not protected** (High)');
             }
-            
+
             if (findings.length === 0) {
               console.log('No critical findings to report');
               return;
             }
-            
+
             const body = `## 🚨 Repository Health Check Findings
-            
+
             This issue was automatically created by the organization health check workflow.
-            
+
             **Generated:** ${new Date().toISOString()}
-            
+
             ### Critical Issues
-            
+
             ${findings.join('\n')}
-            
+
             ### Recommended Actions
-            
+
             1. Review the [workflow run](${context.payload.repository.html_url}/actions/runs/${context.runId}) for details
             2. Address critical and high-severity findings
             3. Re-run the health check to verify fixes
-            
+
             ---
-            
+
             *This issue will be automatically closed when all critical issues are resolved.*
             `;
-            
+
             if (issues.data.length > 0) {
               // Update existing issue
               await github.rest.issues.createComment({
@@ -287,11 +287,11 @@ jobs:
               console.log(`Created new issue #${issue.data.number}`);
             }
 
-      - name: 'Export health metrics'
+      - name: Export health metrics
         id: export-metrics
         run: |
           mkdir -p health-reports
-          
+
           cat << EOF > health-reports/health-check-$(date +%Y%m%d-%H%M%S).json
           {
             "repository": "${{ github.repository }}",
@@ -335,7 +335,7 @@ jobs:
           }
           EOF
 
-      - name: 'Upload health report'
+      - name: Upload health report
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.5.0
         with:
           name: health-report-${{ github.run_number }}

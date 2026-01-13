@@ -2,21 +2,25 @@
 
 ## Our Vision
 
-At **ivi374forivi**, we believe in the power of open collaboration and transparent development. This manifesto outlines our core principles and values.
+At **ivi374forivi**, we believe in the power of open collaboration and
+transparent development. This manifesto outlines our core principles and values.
 
 ## Core Principles
 
 ### 1. Openness
 
-We develop in the open, sharing our work, decisions, and learnings with the community. Transparency builds trust and enables collaboration.
+We develop in the open, sharing our work, decisions, and learnings with the
+community. Transparency builds trust and enables collaboration.
 
 ### 2. Collaboration
 
-We believe the best solutions come from diverse perspectives. We welcome contributors from all backgrounds and experience levels.
+We believe the best solutions come from diverse perspectives. We welcome
+contributors from all backgrounds and experience levels.
 
 ### 3. Quality
 
 We are committed to delivering high-quality software through:
+
 - Thorough code review
 - Comprehensive testing
 - Clear documentation
@@ -24,15 +28,18 @@ We are committed to delivering high-quality software through:
 
 ### 4. Respect
 
-Every person deserves to be treated with dignity and respect. We maintain an inclusive, welcoming environment for all contributors.
+Every person deserves to be treated with dignity and respect. We maintain an
+inclusive, welcoming environment for all contributors.
 
 ### 5. Innovation
 
-We encourage experimentation and creative problem-solving. Failure is a learning opportunity, not a setback.
+We encourage experimentation and creative problem-solving. Failure is a learning
+opportunity, not a setback.
 
 ### 6. Sustainability
 
 We build projects that are:
+
 - Maintainable long-term
 - Well-documented
 - Supported by a healthy community
@@ -66,13 +73,15 @@ We build projects that are:
 We invite you to join us in building something meaningful:
 
 1. **Use our projects** and provide feedback
-2. **Contribute** through code, documentation, or design
-3. **Support others** by answering questions and reviewing code
-4. **Spread the word** about projects you find valuable
+1. **Contribute** through code, documentation, or design
+1. **Support others** by answering questions and reviewing code
+1. **Spread the word** about projects you find valuable
 
 ## Living Document
 
-This manifesto is not set in stone. As our community grows and evolves, so too will our principles and commitments. We welcome discussion on how to improve and refine these values.
+This manifesto is not set in stone. As our community grows and evolves, so too
+will our principles and commitments. We welcome discussion on how to improve and
+refine these values.
 
 ---
 

@@ -1,4 +1,4 @@
-name: "AgentSphere Live Demo Deployment"
+name: AgentSphere Live Demo Deployment
 
 on:
   push:
@@ -8,28 +8,28 @@ on:
   workflow_dispatch:
     inputs:
       force_deploy:
-        description: "Force deployment even if app type cannot be detected"
+        description: Force deployment even if app type cannot be detected
         required: false
         type: boolean
         default: false
       custom_command:
-        description: "Custom startup command (optional)"
+        description: Custom startup command (optional)
         required: false
         type: string
   workflow_call:
     inputs:
       force_deploy:
-        description: "Force deployment even if app type cannot be detected"
+        description: Force deployment even if app type cannot be detected
         required: false
         type: boolean
         default: false
       custom_command:
-        description: "Custom startup command (optional)"
+        description: Custom startup command (optional)
         required: false
         type: string
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -43,12 +43,12 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: "Load AgentSphere configuration"
+      - name: Load AgentSphere configuration
         id: load-config
         run: |
           CONFIG_FILE=".github/agentsphere-config.yml"
@@ -79,7 +79,7 @@ jobs:
           echo "badge_style=$BADGE_STYLE" >> $GITHUB_OUTPUT
           echo "badge_position=$BADGE_POSITION" >> $GITHUB_OUTPUT
 
-      - name: "Detect application type"
+      - name: Detect application type
         id: detect-app
         if: steps.load-config.outputs.enabled == 'true'
         env:
@@ -224,7 +224,7 @@ jobs:
             exit 1
           fi
 
-      - name: "Register with AgentSphere"
+      - name: Register with AgentSphere
         id: register
         if: steps.detect-app.outputs.app_type != 'unknown' || inputs.force_deploy == true || github.event.inputs.force_deploy == 'true'
         run: |
@@ -281,7 +281,7 @@ jobs:
           echo "demo_id=$DEMO_ID" >> $GITHUB_OUTPUT
           echo "deployment_status=success" >> $GITHUB_OUTPUT
 
-      - name: "Generate README badge"
+      - name: Generate README badge
         id: generate-badge
         if: steps.register.outputs.deployment_status == 'success'
         run: |
@@ -297,7 +297,7 @@ jobs:
 
           echo "Generated badge: $BADGE_MD"
 
-      - name: "Update README with badge"
+      - name: Update README with badge
         if: steps.register.outputs.deployment_status == 'success'
         run: |
           if [ ! -f "README.md" ]; then
@@ -328,36 +328,36 @@ jobs:
 
           echo "✅ Badge added to README.md"
 
-      - name: "Create pull request"
+      - name: Create pull request
         if: steps.register.outputs.deployment_status == 'success'
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # ratchet:peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "feat: add AgentSphere live demo badge to README (SIMULATION)"
-          title: "🚀 Add Live Demo Badge (Simulation Mode)"
+          title: 🚀 Add Live Demo Badge (Simulation Mode)
           body: |
             ## ⚠️ Live Demo Deployment (SIMULATION MODE)
-            
+
             **Important**: This workflow is currently in **simulation mode**. The generated URLs are for demonstration and testing purposes only and do not point to actual live deployments.
-            
+
             ### Simulated Deployment Information
-            
+
             **Simulated Demo URL:** ${{ steps.register.outputs.demo_url }}
             **Simulated Demo ID:** ${{ steps.register.outputs.demo_id }}
             **Application Type:** ${{ steps.detect-app.outputs.app_type }}
             **Startup Command:** `${{ steps.detect-app.outputs.startup_command }}`
-            
+
             This PR adds a "Live Demo" badge to the README. However, **the badge links to a simulated URL that is not functional**.
-            
+
             ---
-            
+
             ### To Implement Real AgentSphere Integration
-            
+
             See the implementation guides:
             - `WORKFLOW_OPTIMIZATION_ROADMAP.md` - Complete implementation plan
             - `NEXT_STEPS_IMPLEMENTATION.md` - Step-by-step instructions
             - Week 2-4 tasks include real API integration
-            
+
             ---
 
             ### What's Next?
@@ -373,10 +373,10 @@ jobs:
             ---
 
             _Automated by [AgentSphere Deployment Workflow](.github/workflows/agentsphere-deployment.yml)_
-          branch: "agentsphere/add-live-demo-badge"
+          branch: agentsphere/add-live-demo-badge
           delete-branch: true
 
-      - name: "Deployment summary"
+      - name: Deployment summary
         if: always()
         run: |
           echo "## AgentSphere Deployment Summary" >> $GITHUB_STEP_SUMMARY

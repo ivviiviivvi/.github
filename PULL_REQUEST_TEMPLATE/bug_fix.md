@@ -3,9 +3,8 @@ PR Automation Metadata
 type: bugfix
 labels: bug, fix
 priority: <!-- low | medium | high | critical -->
-size: <!-- small | medium | large -->
-regression: <!-- yes | no -->
--->
+
+size: <!-- small | medium | large --> regression: <!-- yes | no --> -->
 
 ## Pull Request - Bug Fix
 
@@ -21,8 +20,7 @@ regression: <!-- yes | no -->
 
 What bug does this PR fix?
 
-Fixes #(issue)
-Related to #(related issues)
+Fixes #(issue) Related to #(related issues)
 
 ### Root Cause
 
@@ -32,8 +30,8 @@ What was causing the bug?
 
 What changes did you make to fix the bug?
 
-- 
-- 
+-
+-
 
 ### Testing
 
@@ -48,9 +46,9 @@ How did you test this fix?
 
 How can reviewers verify the fix works?
 
-1. 
-2. 
-3. 
+1.
+1.
+1.
 
 ### Screenshots/Recordings (if applicable)
 
@@ -61,6 +59,7 @@ Add visual evidence of the fix working.
 <!-- ✅ These checkboxes can trigger automation workflows -->
 
 #### Code Quality
+
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code where necessary
@@ -68,6 +67,7 @@ Add visual evidence of the fix working.
 - [ ] Code passes linting and formatting checks
 
 #### Testing & Verification
+
 - [ ] I have added tests that prove my fix is effective
 - [ ] New and existing unit tests pass locally
 - [ ] I have added regression tests to prevent this bug from recurring
@@ -75,17 +75,20 @@ Add visual evidence of the fix working.
 - [ ] Verified the fix in the environment where the bug was reported
 
 #### Documentation
+
 - [ ] I have updated the documentation accordingly
 - [ ] CHANGELOG.md updated
 - [ ] Added comments explaining the fix (if code is complex)
 
 #### Impact Assessment
+
 - [ ] I have verified this fix doesn't introduce new bugs
 - [ ] I have checked for potential side effects
 - [ ] Backward compatibility maintained
 - [ ] No performance regressions introduced
 
 #### Security
+
 - [ ] I have verified this fix doesn't create security vulnerabilities
 - [ ] No sensitive data exposed in logs or error messages
 

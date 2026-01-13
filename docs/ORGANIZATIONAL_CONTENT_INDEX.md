@@ -1,8 +1,10 @@
 # Organizational Content Master Index
 
-> **Complete guide to issues, discussions, projects, and wikis in the Ivviiviivvi organization**
+> **Complete guide to issues, discussions, projects, and wikis in the
+> Ivviiviivvi organization**
 
-This document serves as the central index for all organizational content creation resources, guidelines, and templates.
+This document serves as the central index for all organizational content
+creation resources, guidelines, and templates.
 
 ## 📋 Table of Contents
 
@@ -19,13 +21,14 @@ This document serves as the central index for all organizational content creatio
 This organization provides comprehensive frameworks for creating and managing:
 
 1. **📝 Issues** - Tracking work, bugs, and improvements
-2. **💬 Discussions** - Community engagement and knowledge sharing
-3. **📊 Projects** - Visual project management and tracking
-4. **📚 Wikis** - Collaborative documentation and knowledge bases
+1. **💬 Discussions** - Community engagement and knowledge sharing
+1. **📊 Projects** - Visual project management and tracking
+1. **📚 Wikis** - Collaborative documentation and knowledge bases
 
 ### Why This Matters
 
 Effective organizational content:
+
 - ✅ **Improves transparency** - Everyone knows what's happening
 - ✅ **Enhances collaboration** - Easy communication and coordination
 - ✅ **Preserves knowledge** - Documented decisions and solutions
@@ -76,6 +79,7 @@ gh repo edit owner/repo \
 **2. Review Documentation** (30 minutes)
 
 Read the guide relevant to what you're setting up:
+
 - [Issue Taxonomy](docs/ISSUE_TAXONOMY.md) - Issue classification
 - [Discussion Guide](docs/DISCUSSION_GUIDE.md) - Discussion framework
 - [Projects Guide](docs/PROJECTS_GUIDE.md) - Project management
@@ -102,6 +106,7 @@ gh workflow run create-organizational-content.yml \
 **1. Choose Your Content Type**
 
 What are you creating today?
+
 - 📝 [Creating Issues](#creating-issues) - Track work items
 - 💬 [Starting Discussions](#starting-discussions) - Engage community
 - 📊 [Managing Projects](#managing-projects) - Organize work
@@ -135,23 +140,23 @@ See the relevant guide for standards and conventions.
 
 ### Core Guides
 
-| Document | Purpose | Audience | Length |
-|----------|---------|----------|--------|
-| [🚀 Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md) | Get started in 15 minutes | Everyone | ~5 min read |
-| [🛠️ Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) | Step-by-step deployment | Administrators | ~45 min read |
-| [📝 Issue Taxonomy](ISSUE_TAXONOMY.md) | Comprehensive issue classification | Maintainers, Contributors | ~25 min read |
-| [💬 Discussion Guide](DISCUSSION_GUIDE.md) | Discussion framework and templates | Community Managers | ~40 min read |
-| [📊 Projects Guide](PROJECTS_GUIDE.md) | Project management best practices | Project Managers | ~50 min read |
-| [📚 Wiki Guide](WIKI_GUIDE.md) | Wiki structure and maintenance | Documentation Team | ~60 min read |
+| Document                                                            | Purpose                            | Audience                  | Length       |
+| ------------------------------------------------------------------- | ---------------------------------- | ------------------------- | ------------ |
+| [🚀 Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)             | Get started in 15 minutes          | Everyone                  | ~5 min read  |
+| [🛠️ Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) | Step-by-step deployment            | Administrators            | ~45 min read |
+| [📝 Issue Taxonomy](ISSUE_TAXONOMY.md)                              | Comprehensive issue classification | Maintainers, Contributors | ~25 min read |
+| [💬 Discussion Guide](DISCUSSION_GUIDE.md)                          | Discussion framework and templates | Community Managers        | ~40 min read |
+| [📊 Projects Guide](PROJECTS_GUIDE.md)                              | Project management best practices  | Project Managers          | ~50 min read |
+| [📚 Wiki Guide](WIKI_GUIDE.md)                                      | Wiki structure and maintenance     | Documentation Team        | ~60 min read |
 
 ### Quick References
 
-| Document | Purpose | Time |
-|----------|---------|------|
-| [Issue Quick Ref](#issue-quick-reference) | Common issue patterns | 5 min |
-| [Discussion Quick Ref](#discussion-quick-reference) | Discussion templates | 5 min |
-| [Project Quick Ref](#project-quick-reference) | Project setup | 10 min |
-| [Wiki Quick Ref](#wiki-quick-reference) | Wiki page creation | 10 min |
+| Document                                            | Purpose               | Time   |
+| --------------------------------------------------- | --------------------- | ------ |
+| [Issue Quick Ref](#issue-quick-reference)           | Common issue patterns | 5 min  |
+| [Discussion Quick Ref](#discussion-quick-reference) | Discussion templates  | 5 min  |
+| [Project Quick Ref](#project-quick-reference)       | Project setup         | 10 min |
+| [Wiki Quick Ref](#wiki-quick-reference)             | Wiki page creation    | 10 min |
 
 ### Supporting Documentation
 
@@ -166,17 +171,18 @@ See the relevant guide for standards and conventions.
 
 **Location**: `ISSUE_TEMPLATE/`
 
-| Template | Use Case | When to Use |
-|----------|----------|-------------|
-| Bug Report | Report defects | Something is broken |
-| Feature Request | Suggest features | New functionality needed |
-| Documentation | Doc improvements | Docs missing or unclear |
-| Question | Ask questions | Need clarification |
-| Security Vulnerability | Report security issues | Found a security flaw |
-| Performance | Performance issues | Something is slow |
-| Best Practices Review | Request review | Want feedback on approach |
+| Template               | Use Case               | When to Use               |
+| ---------------------- | ---------------------- | ------------------------- |
+| Bug Report             | Report defects         | Something is broken       |
+| Feature Request        | Suggest features       | New functionality needed  |
+| Documentation          | Doc improvements       | Docs missing or unclear   |
+| Question               | Ask questions          | Need clarification        |
+| Security Vulnerability | Report security issues | Found a security flaw     |
+| Performance            | Performance issues     | Something is slow         |
+| Best Practices Review  | Request review         | Want feedback on approach |
 
 **Usage**:
+
 ```bash
 # Create issue from template
 gh issue create --template bug_report.yml
@@ -186,15 +192,16 @@ gh issue create --template bug_report.yml
 
 **Location**: `.github/discussion-starters/`
 
-| Template | Category | Purpose |
-|----------|----------|---------|
-| Welcome | General | Onboard new members |
-| Monthly Showcase | Show and Tell | Highlight community work |
-| Best Practices | Best Practices | Share knowledge |
-| Q&A Template | Q&A | Structured questions |
-| Feature Proposal | Ideas | Propose features |
+| Template         | Category       | Purpose                  |
+| ---------------- | -------------- | ------------------------ |
+| Welcome          | General        | Onboard new members      |
+| Monthly Showcase | Show and Tell  | Highlight community work |
+| Best Practices   | Best Practices | Share knowledge          |
+| Q&A Template     | Q&A            | Structured questions     |
+| Feature Proposal | Ideas          | Propose features         |
 
 **Usage**:
+
 ```bash
 # Start discussion from template
 cat .github/discussion-starters/welcome.md | \
@@ -206,34 +213,36 @@ cat .github/discussion-starters/welcome.md | \
 
 **Location**: `.github/project-templates/`
 
-| Template | Focus | Best For |
-|----------|-------|----------|
-| Product Roadmap | Features & releases | Product planning |
-| Bug Triage | Bug management | Quality assurance |
-| Sprint Planning | Agile sprints | Development teams |
-| Infrastructure | DevOps work | Infrastructure teams |
-| Documentation | Doc tracking | Doc writers |
-| Security | Security work | Security teams |
+| Template        | Focus               | Best For             |
+| --------------- | ------------------- | -------------------- |
+| Product Roadmap | Features & releases | Product planning     |
+| Bug Triage      | Bug management      | Quality assurance    |
+| Sprint Planning | Agile sprints       | Development teams    |
+| Infrastructure  | DevOps work         | Infrastructure teams |
+| Documentation   | Doc tracking        | Doc writers          |
+| Security        | Security work       | Security teams       |
 
-**Usage**: Import via GitHub web UI or API (CLI doesn't support Projects v2 creation yet)
+**Usage**: Import via GitHub web UI or API (CLI doesn't support Projects v2
+creation yet)
 
 ### Wiki Templates
 
 **Location**: `.github/wiki-templates/`
 
-| Template | Purpose | Sections |
-|----------|---------|----------|
-| Home | Wiki entry point | Overview, navigation |
-| Installation | Setup guide | Requirements, steps |
-| Quick Start | Getting started | First steps |
-| Tutorial | Step-by-step guide | Learning path |
-| How-To | Task guide | Specific tasks |
-| Reference | API/CLI docs | Complete reference |
-| FAQ | Common questions | Q&A format |
-| Troubleshooting | Problem solving | Issues & solutions |
-| Architecture | System design | Technical overview |
+| Template        | Purpose            | Sections             |
+| --------------- | ------------------ | -------------------- |
+| Home            | Wiki entry point   | Overview, navigation |
+| Installation    | Setup guide        | Requirements, steps  |
+| Quick Start     | Getting started    | First steps          |
+| Tutorial        | Step-by-step guide | Learning path        |
+| How-To          | Task guide         | Specific tasks       |
+| Reference       | API/CLI docs       | Complete reference   |
+| FAQ             | Common questions   | Q&A format           |
+| Troubleshooting | Problem solving    | Issues & solutions   |
+| Architecture    | System design      | Technical overview   |
 
 **Usage**:
+
 ```bash
 # Initialize wiki from templates
 git clone https://github.com/org/repo.wiki.git
@@ -250,6 +259,7 @@ cd repo.wiki && git add . && git commit -m "Initialize" && git push
 **Purpose**: Automate creation of issues, discussions, projects, and wikis
 
 **Features**:
+
 - ✅ Batch issue creation (20+ pre-defined issues)
 - ✅ Discussion starter generation
 - ✅ Project template export
@@ -284,11 +294,11 @@ gh workflow run create-organizational-content.yml \
 
 **Inputs**:
 
-| Input | Description | Options | Default |
-|-------|-------------|---------|---------|
-| `content_type` | What to create | `all`, `issues`, `discussions`, `projects`, `wiki` | Required |
-| `target_repo` | Target repository | Repository slug or empty for current | Current repo |
-| `dry_run` | Preview only | `true`, `false` | `true` |
+| Input          | Description       | Options                                            | Default      |
+| -------------- | ----------------- | -------------------------------------------------- | ------------ |
+| `content_type` | What to create    | `all`, `issues`, `discussions`, `projects`, `wiki` | Required     |
+| `target_repo`  | Target repository | Repository slug or empty for current               | Current repo |
+| `dry_run`      | Preview only      | `true`, `false`                                    | `true`       |
 
 ### Other Automation
 
@@ -304,6 +314,7 @@ See [Automation Guide](docs/automation/) for details.
 ### Issue Management
 
 **Do**:
+
 - ✅ Use descriptive, searchable titles
 - ✅ Fill out templates completely
 - ✅ Apply appropriate labels
@@ -312,30 +323,38 @@ See [Automation Guide](docs/automation/) for details.
 - ✅ Update status regularly
 
 **Don't**:
+
 - ❌ Create duplicate issues (search first)
 - ❌ Use issues for questions (use Discussions)
 - ❌ Leave issues stale without updates
 - ❌ Use vague titles like "Bug" or "Help"
 
 **Example Good Issue**:
+
 ```markdown
 Title: "API: /users endpoint returns 500 on invalid email format"
 
 Body:
+
 ## Description
+
 The /users endpoint crashes when receiving an invalid email format.
 
 ## Steps to Reproduce
+
 1. POST to /users with email: "invalid.email"
 2. Observe 500 response
 
 ## Expected
+
 - 400 Bad Request with validation error
 
 ## Actual
+
 - 500 Internal Server Error
 
 ## Environment
+
 - Version: 1.2.3
 - OS: Ubuntu 22.04
 ```
@@ -343,6 +362,7 @@ The /users endpoint crashes when receiving an invalid email format.
 ### Discussion Management
 
 **Do**:
+
 - ✅ Choose the right category
 - ✅ Use welcoming, inclusive language
 - ✅ Mark helpful answers
@@ -350,6 +370,7 @@ The /users endpoint crashes when receiving an invalid email format.
 - ✅ Link to related issues/docs
 
 **Don't**:
+
 - ❌ Use Discussions for bug reports
 - ❌ Hijack others' discussions
 - ❌ Leave questions unanswered
@@ -358,6 +379,7 @@ The /users endpoint crashes when receiving an invalid email format.
 ### Project Management
 
 **Do**:
+
 - ✅ Keep projects focused and scoped
 - ✅ Update status regularly
 - ✅ Use custom fields consistently
@@ -365,6 +387,7 @@ The /users endpoint crashes when receiving an invalid email format.
 - ✅ Review and groom weekly
 
 **Don't**:
+
 - ❌ Try to track everything in one project
 - ❌ Let projects get stale
 - ❌ Ignore automation opportunities
@@ -373,6 +396,7 @@ The /users endpoint crashes when receiving an invalid email format.
 ### Wiki Maintenance
 
 **Do**:
+
 - ✅ Keep content current
 - ✅ Use consistent formatting
 - ✅ Link between related pages
@@ -380,6 +404,7 @@ The /users endpoint crashes when receiving an invalid email format.
 - ✅ Back up regularly
 
 **Don't**:
+
 - ❌ Let documentation go stale
 - ❌ Use wiki for official release docs
 - ❌ Forget to update after code changes
@@ -478,20 +503,20 @@ open https://github.com/org/repo/wiki
 
 ### Issue Metrics
 
-- **Time to Triage**: < 24 hours
-- **Time to First Response**: < 48 hours
+- **Time to Triage**: \< 24 hours
+- **Time to First Response**: \< 48 hours
 - **Resolution Time**: Varies by priority
   - P0: 4 hours
   - P1: 24 hours
   - P2: 1 week
   - P3: As capacity allows
-- **Backlog Size**: < 100 open issues
-- **Stale Rate**: < 10% > 60 days old
+- **Backlog Size**: \< 100 open issues
+- **Stale Rate**: \< 10% > 60 days old
 
 ### Discussion Metrics
 
 - **Response Rate**: > 80% get response
-- **Response Time**: < 24 hours median
+- **Response Time**: \< 24 hours median
 - **Answer Rate**: > 60% Q&A marked answered
 - **Participation**: > 20% of community active monthly
 - **Satisfaction**: > 4.5/5 helpfulness rating
@@ -500,8 +525,8 @@ open https://github.com/org/repo/wiki
 
 - **Completion Rate**: > 80% items completed
 - **Velocity**: Consistent sprint-to-sprint
-- **Cycle Time**: < 1 week median
-- **Blocked Rate**: < 10% items blocked
+- **Cycle Time**: \< 1 week median
+- **Blocked Rate**: \< 10% items blocked
 - **Accuracy**: 90%+ estimates accurate
 
 ### Wiki Metrics
@@ -517,16 +542,19 @@ open https://github.com/org/repo/wiki
 ### Getting Help
 
 **For Users**:
+
 - 💬 [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)
 - 📖 Read the documentation guides
 - 🔍 Search existing issues and discussions
 
 **For Maintainers**:
+
 - 📧 Contact organization administrators
 - 📞 Schedule office hours
 - 📚 Review detailed guides
 
 **For Contributors**:
+
 - 🤝 [Contributing Guide](docs/CONTRIBUTING.md)
 - 💬 [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)
 - 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
@@ -534,6 +562,7 @@ open https://github.com/org/repo/wiki
 ### Feedback & Improvements
 
 This framework is continuously evolving. We welcome:
+
 - 💡 Suggestions for improvements
 - 🐛 Bug reports in templates or docs
 - 📖 Documentation enhancements
@@ -542,12 +571,14 @@ This framework is continuously evolving. We welcome:
 ### Resources
 
 **Internal**:
+
 - [Organization README](README.md)
 - [Contributing Guidelines](docs/CONTRIBUTING.md)
 - [Code of Conduct](docs/CODE_OF_CONDUCT.md)
 - [Security Policy](docs/SECURITY.md)
 
 **External**:
+
 - [GitHub Issues Docs](https://docs.github.com/en/issues)
 - [GitHub Discussions Docs](https://docs.github.com/en/discussions)
 - [GitHub Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
@@ -555,21 +586,24 @@ This framework is continuously evolving. We welcome:
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2025-12-28 | Initial comprehensive framework release |
+| Version | Date       | Changes                                 |
+| ------- | ---------- | --------------------------------------- |
+| 1.0.0   | 2025-12-28 | Initial comprehensive framework release |
 
 ## Maintenance
 
-**Document Owner**: @ivviiviivvi/documentation-team  
-**Review Frequency**: Quarterly  
-**Last Reviewed**: 2025-12-28  
+**Document Owner**: @ivviiviivvi/documentation-team\
+**Review Frequency**:
+Quarterly\
+**Last Reviewed**: 2025-12-28\
 **Next Review**: 2026-03-28
 
 ---
 
-**📝 Contribute**: See [CONTRIBUTING.md](docs/CONTRIBUTING.md)  
-**💬 Discuss**: [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)  
-**🐛 Report Issues**: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
+**📝 Contribute**: See [CONTRIBUTING.md](docs/CONTRIBUTING.md)\
+**💬 Discuss**:
+[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)\
+**🐛
+Report Issues**: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
 
 **Built with ❤️ by the Ivviiviivvi community**

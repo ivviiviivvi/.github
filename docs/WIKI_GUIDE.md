@@ -1,8 +1,11 @@
 # GitHub Wiki Guide
 
-> **Comprehensive guide for creating and maintaining GitHub Wikis in the Ivviiviivvi organization**
+> **Comprehensive guide for creating and maintaining GitHub Wikis in the
+> Ivviiviivvi organization**
 
-This guide provides an exhaustive framework for leveraging GitHub Wikis as a knowledge management and documentation platform across all organization repositories.
+This guide provides an exhaustive framework for leveraging GitHub Wikis as a
+knowledge management and documentation platform across all organization
+repositories.
 
 ## Table of Contents
 
@@ -17,6 +20,7 @@ This guide provides an exhaustive framework for leveraging GitHub Wikis as a kno
 ## Overview
 
 GitHub Wikis provide collaborative documentation with:
+
 - **Git-based versioning** for all content
 - **Markdown formatting** for easy writing
 - **No PR required** for quick updates (when enabled)
@@ -26,16 +30,18 @@ GitHub Wikis provide collaborative documentation with:
 
 ### When to Use Wiki vs Docs Folder
 
-| Wiki | Docs Folder (`/docs`) |
-|------|----------------------|
+| Wiki                              | Docs Folder (`/docs`)                      |
+| --------------------------------- | ------------------------------------------ |
 | Community-editable knowledge base | Official, version-controlled documentation |
-| Frequently updated content | Stable, release-tied documentation |
-| Collaborative how-tos and guides | API references and specifications |
-| FAQs and troubleshooting | Architecture and design documents |
-| Process documentation | Legal and compliance docs |
-| Quick reference | Code-reviewed documentation |
+| Frequently updated content        | Stable, release-tied documentation         |
+| Collaborative how-tos and guides  | API references and specifications          |
+| FAQs and troubleshooting          | Architecture and design documents          |
+| Process documentation             | Legal and compliance docs                  |
+| Quick reference                   | Code-reviewed documentation                |
 
-**General Rule**: Use wikis for living documentation that benefits from community contribution. Use `/docs` for official documentation that requires review.
+**General Rule**: Use wikis for living documentation that benefits from
+community contribution. Use `/docs` for official documentation that requires
+review.
 
 ## Wiki Structure
 
@@ -105,31 +111,37 @@ Create `_Sidebar.md` for navigation:
 ## Navigation
 
 **Getting Started**
+
 - [[Home]]
 - [[Installation]]
 - [[Quick Start]]
 - [[Tutorials]]
 
 **Guides**
+
 - [[User Guide]]
 - [[Developer Guide]]
 - [[Admin Guide]]
 
 **Reference**
+
 - [[API Reference]]
 - [[CLI Reference]]
 - [[Configuration]]
 
 **How-To**
+
 - [[Common Tasks]]
 - [[Troubleshooting]]
 - [[FAQ]]
 
 **Contributing**
+
 - [[How to Contribute]]
 - [[Code Review]]
 
 **Resources**
+
 - [[External Links]]
 - [[Glossary]]
 
@@ -161,6 +173,7 @@ Licensed under [MIT License](LICENSE) | [Code of Conduct](CODE_OF_CONDUCT.md) | 
 **Purpose**: Entry point and overview
 
 **Template**:
+
 ```markdown
 # Project Name Wiki
 
@@ -179,18 +192,21 @@ Welcome to the [Project Name] wiki! This is the community-maintained knowledge b
 ## 📖 Documentation Sections
 
 ### For Users
+
 - [[Installation]] - Setup instructions
 - [[User Guide]] - Feature documentation
 - [[Tutorials]] - Step-by-step guides
 - [[Recipes]] - Common use cases
 
 ### For Developers
+
 - [[Development Setup]] - Contributor environment
 - [[Architecture]] - System design
 - [[API Reference]] - Programmatic interface
 - [[Contributing]] - How to contribute
 
 ### For Administrators
+
 - [[Deployment Guide]] - Production deployment
 - [[Configuration]] - Settings and options
 - [[Monitoring]] - Observability setup
@@ -225,7 +241,8 @@ This wiki is community-maintained. See [[Wiki Contribution Guide]] for how to he
 ### 2. Installation Guide
 
 **Template**:
-```markdown
+
+````markdown
 # Installation
 
 > **Prerequisites**: List what's needed before installation
@@ -238,32 +255,36 @@ The fastest way to get started:
 # One-line install command
 curl -sSL https://get.project.com | bash
 ```
+````
 
 ## Detailed Installation
 
 ### 1. System Requirements
 
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| OS | Linux 4.x, macOS 10.14, Windows 10 | Latest stable |
-| RAM | 2 GB | 4 GB |
-| Disk | 500 MB | 2 GB |
-| Network | Internet connection | High-speed |
+| Component | Minimum                            | Recommended   |
+| --------- | ---------------------------------- | ------------- |
+| OS        | Linux 4.x, macOS 10.14, Windows 10 | Latest stable |
+| RAM       | 2 GB                               | 4 GB          |
+| Disk      | 500 MB                             | 2 GB          |
+| Network   | Internet connection                | High-speed    |
 
 ### 2. Install Dependencies
 
 #### Ubuntu/Debian
+
 ```bash
 sudo apt-get update
 sudo apt-get install -y dependency1 dependency2
 ```
 
 #### macOS
+
 ```bash
 brew install dependency1 dependency2
 ```
 
 #### Windows
+
 ```powershell
 choco install dependency1 dependency2
 ```
@@ -273,6 +294,7 @@ choco install dependency1 dependency2
 Choose your preferred method:
 
 #### Option A: Package Manager
+
 ```bash
 npm install -g project-name
 # or
@@ -282,6 +304,7 @@ brew install project-name
 ```
 
 #### Option B: From Source
+
 ```bash
 git clone https://github.com/org/repo.git
 cd repo
@@ -289,9 +312,10 @@ make install
 ```
 
 #### Option C: Download Binary
+
 1. Go to [Releases](https://github.com/org/repo/releases)
-2. Download the binary for your OS
-3. Extract and add to PATH
+1. Download the binary for your OS
+1. Extract and add to PATH
 
 ### 4. Verify Installation
 
@@ -310,13 +334,16 @@ project-name init
 ## Platform-Specific Notes
 
 ### Linux
-- [Additional Linux setup]
+
+- \[Additional Linux setup\]
 
 ### macOS
-- [Additional macOS setup]
+
+- \[Additional macOS setup\]
 
 ### Windows
-- [Additional Windows setup]
+
+- \[Additional Windows setup\]
 
 ## Docker Installation
 
@@ -325,25 +352,25 @@ docker pull org/project:latest
 docker run -p 8080:8080 org/project
 ```
 
-See [[Docker Guide]] for details.
+See \[\[Docker Guide\]\] for details.
 
 ## Troubleshooting Installation
 
-**Problem**: Error message X
-**Solution**: Do Y
+**Problem**: Error message X **Solution**: Do Y
 
-**Problem**: Error message Z
-**Solution**: Do W
+**Problem**: Error message Z **Solution**: Do W
 
-See [[Troubleshooting]] for more help.
+See \[\[Troubleshooting\]\] for more help.
 
 ## Next Steps
 
 After installation:
-1. [[Quick Start]] - Get started immediately
-2. [[Configuration]] - Customize your setup
-3. [[First Tutorial]] - Build your first project
-```
+
+1. \[\[Quick Start\]\] - Get started immediately
+1. \[\[Configuration\]\] - Customize your setup
+1. \[\[First Tutorial\]\] - Build your first project
+
+````
 
 ### 3. Tutorial Template
 
@@ -351,8 +378,8 @@ After installation:
 ```markdown
 # Tutorial: [Tutorial Name]
 
-> **Level**: Beginner | Intermediate | Advanced  
-> **Time**: ~30 minutes  
+> **Level**: Beginner | Intermediate | Advanced
+> **Time**: ~30 minutes
 > **Prerequisites**: [[Installation]], [[Quick Start]]
 
 ## What You'll Learn
@@ -384,7 +411,7 @@ Before starting, ensure you have:
 ```language
 // Code snippet
 const example = "code";
-```
+````
 
 ### Expected Output
 
@@ -395,16 +422,17 @@ Expected output here
 ### ✅ Checkpoint
 
 At this point, you should have:
+
 - [ ] Achievement 1
 - [ ] Achievement 2
 
-## Step 2: [Second Step]
+## Step 2: \[Second Step\]
 
-[Repeat structure]
+\[Repeat structure\]
 
-## Step 3: [Third Step]
+## Step 3: \[Third Step\]
 
-[Repeat structure]
+\[Repeat structure\]
 
 ## Putting It All Together
 
@@ -417,20 +445,21 @@ const full = "example";
 
 ## Next Steps
 
-- [[Related Tutorial]]
-- [[Advanced Topic]]
-- [[Reference Documentation]]
+- \[\[Related Tutorial\]\]
+- \[\[Advanced Topic\]\]
+- \[\[Reference Documentation\]\]
 
 ## Troubleshooting
 
-**Issue**: Common problem  
+**Issue**: Common problem\
 **Solution**: How to fix
 
 ## Additional Resources
 
-- [External resource 1]
-- [External resource 2]
-```
+- \[External resource 1\]
+- \[External resource 2\]
+
+````
 
 ### 4. How-To Guide Template
 
@@ -458,34 +487,37 @@ For experienced users, here's the TL;DR:
 
 ```bash
 command-here --options
-```
+````
 
 ## Detailed Steps
 
-### Method 1: [Recommended Method]
+### Method 1: \[Recommended Method\]
 
 **Best for**: Explanation of when to use this method
 
 1. **Step 1**: Explanation
+
    ```bash
    command
    ```
 
-2. **Step 2**: Explanation
+1. **Step 2**: Explanation
+
    ```bash
    command
    ```
 
-3. **Step 3**: Explanation
+1. **Step 3**: Explanation
+
    ```bash
    command
    ```
 
-### Method 2: [Alternative Method]
+### Method 2: \[Alternative Method\]
 
 **Best for**: Explanation of when to use this method
 
-[Same structure as Method 1]
+\[Same structure as Method 1\]
 
 ## Verification
 
@@ -496,6 +528,7 @@ verification-command
 ```
 
 You should see:
+
 ```
 Expected output
 ```
@@ -503,23 +536,24 @@ Expected output
 ## Common Pitfalls
 
 ### Pitfall 1
-**Problem**: Description
-**Solution**: How to avoid
+
+**Problem**: Description **Solution**: How to avoid
 
 ### Pitfall 2
-**Problem**: Description
-**Solution**: How to avoid
+
+**Problem**: Description **Solution**: How to avoid
 
 ## Related How-Tos
 
-- [[Related Task 1]]
-- [[Related Task 2]]
+- \[\[Related Task 1\]\]
+- \[\[Related Task 2\]\]
 
 ## See Also
 
-- [[Reference Documentation]]
-- [[Troubleshooting]]
-```
+- \[\[Reference Documentation\]\]
+- \[\[Troubleshooting\]\]
+
+````
 
 ### 5. Reference Documentation Template
 
@@ -535,8 +569,10 @@ High-level overview of what this component does.
 
 ## Syntax
 
-```
+````
+
 basic-syntax-pattern
+
 ```
 
 ## Parameters
@@ -551,14 +587,16 @@ basic-syntax-pattern
 
 ### Option 1
 
-**Type**: `string`  
-**Default**: `"default"`  
+**Type**: `string`
+**Default**: `"default"`
 **Description**: What this option does
 
 **Example**:
 ```
+
 example-usage
-```
+
+````
 
 ### Option 2
 
@@ -566,7 +604,7 @@ example-usage
 
 ## Return Value
 
-**Type**: `ReturnType`  
+**Type**: `ReturnType`
 **Description**: What is returned
 
 ## Examples
@@ -576,9 +614,10 @@ example-usage
 ```language
 // Simple example
 code here
-```
+````
 
 **Output**:
+
 ```
 output here
 ```
@@ -599,10 +638,10 @@ code here
 
 ## Error Handling
 
-| Error Code | Description | Solution |
-|------------|-------------|----------|
-| ERR001 | Error description | How to fix |
-| ERR002 | Error description | How to fix |
+| Error Code | Description       | Solution   |
+| ---------- | ----------------- | ---------- |
+| ERR001     | Error description | How to fix |
+| ERR002     | Error description | How to fix |
 
 ## Performance Considerations
 
@@ -615,13 +654,14 @@ code here
 
 ## Related
 
-- [[Related Component 1]]
-- [[Related Component 2]]
+- \[\[Related Component 1\]\]
+- \[\[Related Component 2\]\]
 
 ## See Also
 
 - External documentation link
-```
+
+````
 
 ### 6. FAQ Template
 
@@ -684,15 +724,15 @@ See [[How To: Common Task]] for a complete guide.
 
 ### [Project] won't start
 
-**Symptoms**: Describe symptoms  
-**Cause**: Common causes  
+**Symptoms**: Describe symptoms
+**Cause**: Common causes
 **Solution**: Step-by-step solution
 
 See [[Troubleshooting]] for more issues.
 
 ### Error: "[Common Error Message]"
 
-**Cause**: Why this happens  
+**Cause**: Why this happens
 **Solution**: How to fix
 
 ### Performance is slow
@@ -751,12 +791,13 @@ You can support [Project] by:
 ---
 
 **Don't see your question?** [Ask it in Discussions](link)
-```
+````
 
 ### 7. Troubleshooting Guide Template
 
 **Template**:
-```markdown
+
+````markdown
 # Troubleshooting Guide
 
 > **Quick Search**: Use Ctrl/Cmd+F to find your issue
@@ -764,6 +805,7 @@ You can support [Project] by:
 ## Getting Help
 
 If you can't find your issue here:
+
 1. Search [existing issues](link)
 2. Ask in [Discussions](link)
 3. [Open a new issue](link)
@@ -785,6 +827,7 @@ project-name doctor
 # Check logs
 cat ~/.project/logs/latest.log
 ```
+````
 
 ## Common Issues
 
@@ -795,33 +838,38 @@ cat ~/.project/logs/latest.log
 **Symptoms**: Running `project-name` results in "command not found"
 
 **Causes**:
+
 - Project not installed
 - Project not in PATH
 
 **Solutions**:
 
 1. **Verify installation**:
+
    ```bash
    which project-name
    ```
 
-2. **Add to PATH**:
+1. **Add to PATH**:
+
    ```bash
    export PATH="$PATH:/path/to/project/bin"
    ```
 
-3. **Reinstall**:
+1. **Reinstall**:
+
    ```bash
    # Reinstall command
    ```
 
-See [[Installation]] for help.
+See \[\[Installation\]\] for help.
 
 #### Issue: "Permission denied"
 
 **Symptoms**: Installation fails with permission error
 
 **Solution**:
+
 ```bash
 # Don't use sudo with package managers
 # Instead, fix permissions
@@ -835,6 +883,7 @@ sudo chown -R $(whoami) /install/directory
 **Symptoms**: Cannot connect to server
 
 **Diagnosis**:
+
 ```bash
 # Check if service is running
 ps aux | grep project-name
@@ -846,16 +895,19 @@ netstat -an | grep 8080
 **Solutions**:
 
 1. **Start the service**:
+
    ```bash
    project-name start
    ```
 
-2. **Check port configuration**:
+1. **Check port configuration**:
+
    ```bash
    project-name config get port
    ```
 
-3. **Check firewall**:
+1. **Check firewall**:
+
    ```bash
    # Platform-specific firewall commands
    ```
@@ -865,6 +917,7 @@ netstat -an | grep 8080
 **Symptoms**: System becomes slow, out of memory errors
 
 **Diagnosis**:
+
 ```bash
 # Check memory usage
 project-name stats
@@ -876,17 +929,18 @@ project-name profile --memory
 **Solutions**:
 
 1. **Increase memory limit**:
+
    ```bash
    project-name config set max-memory 4GB
    ```
 
-2. **Enable memory optimization**:
+1. **Enable memory optimization**:
+
    ```bash
    project-name optimize --memory
    ```
 
-3. **Check for memory leaks**:
-   See [[Performance Tuning#Memory]]
+1. **Check for memory leaks**: See \[\[Performance Tuning#Memory\]\]
 
 ### Configuration Issues
 
@@ -895,12 +949,14 @@ project-name profile --memory
 **Symptoms**: Configuration changes don't work
 
 **Checklist**:
+
 - [ ] Configuration file in correct location
 - [ ] Correct syntax (YAML, JSON, etc.)
 - [ ] Service restarted after changes
 - [ ] No conflicting settings
 
 **Debug**:
+
 ```bash
 # Validate configuration
 project-name config validate
@@ -913,18 +969,21 @@ project-name config show
 
 ### Linux
 
-#### Issue: [Linux-specific issue]
-[Solution]
+#### Issue: \[Linux-specific issue\]
+
+\[Solution\]
 
 ### macOS
 
-#### Issue: [macOS-specific issue]
-[Solution]
+#### Issue: \[macOS-specific issue\]
+
+\[Solution\]
 
 ### Windows
 
-#### Issue: [Windows-specific issue]
-[Solution]
+#### Issue: \[Windows-specific issue\]
+
+\[Solution\]
 
 ## Error Messages
 
@@ -933,22 +992,25 @@ project-name config show
 **Meaning**: Connection was refused by the server
 
 **Common causes**:
-1. Service not running
-2. Wrong port
-3. Firewall blocking
 
-**Solutions**: See [[Runtime Issues#Connection refused]]
+1. Service not running
+1. Wrong port
+1. Firewall blocking
+
+**Solutions**: See \[\[Runtime Issues#Connection refused\]\]
 
 ### "Error: ENOENT"
 
 **Meaning**: File or directory not found
 
 **Common causes**:
+
 1. Incorrect file path
-2. File doesn't exist
-3. Permissions issue
+1. File doesn't exist
+1. Permissions issue
 
 **Solutions**:
+
 ```bash
 # Check file exists
 ls -la /path/to/file
@@ -962,21 +1024,24 @@ ls -ld /path/to/directory
 ### Slow startup
 
 **Diagnosis**:
+
 ```bash
 # Profile startup
 project-name start --profile
 ```
 
 **Solutions**:
-1. Disable unnecessary plugins
-2. Increase startup timeout
-3. Check disk I/O
 
-See [[Performance Tuning#Startup]]
+1. Disable unnecessary plugins
+1. Increase startup timeout
+1. Check disk I/O
+
+See \[\[Performance Tuning#Startup\]\]
 
 ### Slow operations
 
 **Diagnosis**:
+
 ```bash
 # Enable verbose logging
 project-name --verbose operation
@@ -986,6 +1051,7 @@ project-name profile operation
 ```
 
 **Solutions**:
+
 - Enable caching
 - Optimize database queries
 - Increase resources
@@ -1020,11 +1086,12 @@ Include this when asking for help!
 
 ## See Also
 
-- [[FAQ]]
-- [[Installation]]
-- [[Configuration]]
-- [[Performance Tuning]]
-```
+- \[\[FAQ\]\]
+- \[\[Installation\]\]
+- \[\[Configuration\]\]
+- \[\[Performance Tuning\]\]
+
+````
 
 ### 8. Architecture Documentation Template
 
@@ -1032,17 +1099,18 @@ Include this when asking for help!
 ```markdown
 # Architecture Overview
 
-> **Last Updated**: 2025-12-28  
+> **Last Updated**: 2025-12-28
 > **Status**: Current
 
 ## System Overview
 
 [High-level description of the system]
 
-```
-┌─────────────┐       ┌─────────────┐       ┌─────────────┐
-│   Client    │──────▶│   Server    │──────▶│  Database   │
-└─────────────┘       └─────────────┘       └─────────────┘
+````
+
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ Client │──────▶│ Server
+│──────▶│ Database │ └─────────────┘ └─────────────┘ └─────────────┘
+
 ```
 
 ## Components
@@ -1075,10 +1143,11 @@ Include this when asking for help!
 ## Data Flow
 
 ```
-User Request → API Gateway → Auth Service → Business Logic → Database
-                                ↓
-                          Response ← Transform ← Query Result
-```
+
+User Request → API Gateway → Auth Service → Business Logic → Database ↓ Response
+← Transform ← Query Result
+
+````
 
 ### Request Flow
 
@@ -1100,9 +1169,10 @@ interface Entity1 {
   createdAt: Date;
   updatedAt: Date;
 }
-```
+````
 
 **Relationships**:
+
 - Has many Entity2
 - Belongs to Entity3
 
@@ -1127,21 +1197,25 @@ interface Entity1 {
 ### Technology Stack
 
 **Frontend**:
+
 - Framework: React
 - State: Redux
 - UI: Material-UI
 
 **Backend**:
+
 - Runtime: Node.js
 - Framework: Express
 - ORM: TypeORM
 
 **Database**:
+
 - Primary: PostgreSQL
 - Cache: Redis
 - Search: Elasticsearch
 
 **Infrastructure**:
+
 - Cloud: AWS
 - Containers: Docker
 - Orchestration: Kubernetes
@@ -1171,7 +1245,7 @@ interface Entity1 {
 ### Performance Optimization
 
 - Caching strategy: Multi-level cache
-- Database indexing: See [[Database Schema]]
+- Database indexing: See \[\[Database Schema\]\]
 - CDN: CloudFront for static assets
 
 ## Monitoring & Observability
@@ -1212,7 +1286,7 @@ Code → Build → Test → Stage → Production
 
 ## Design Decisions
 
-See [[Architecture Decision Records]] for detailed decision history.
+See \[\[Architecture Decision Records\]\] for detailed decision history.
 
 ### ADR 001: Why we chose Technology X
 
@@ -1226,11 +1300,12 @@ See [[Architecture Decision Records]] for detailed decision history.
 
 ## Further Reading
 
-- [[API Reference]]
-- [[Database Schema]]
-- [[Security Architecture]]
-- [[Deployment Guide]]
-```
+- \[\[API Reference\]\]
+- \[\[Database Schema\]\]
+- \[\[Security Architecture\]\]
+- \[\[Deployment Guide\]\]
+
+````
 
 ## Maintenance & Governance
 
@@ -1259,11 +1334,12 @@ See [[Architecture Decision Records]] for detailed decision history.
 2. Update "Last Updated" date
 3. Notify content owner
 4. Add to changelog
-```
+````
 
 ### Quality Standards
 
 **All wiki pages must**:
+
 - [ ] Have clear title
 - [ ] Include "Last Updated" date
 - [ ] Use proper heading hierarchy (H1 → H2 → H3)
@@ -1274,7 +1350,8 @@ See [[Architecture Decision Records]] for detailed decision history.
 
 ### Style Guide
 
-See [[Wiki Style Guide]] for:
+See \[\[Wiki Style Guide\]\] for:
+
 - Formatting standards
 - Voice and tone
 - Terminology
@@ -1285,6 +1362,7 @@ See [[Wiki Style Guide]] for:
 ### Linking Between Wiki and Repo
 
 **From Wiki to Repo**:
+
 ```markdown
 [README](https://github.com/org/repo/blob/main/README.md)
 [Issue #123](https://github.com/org/repo/issues/123)
@@ -1292,6 +1370,7 @@ See [[Wiki Style Guide]] for:
 ```
 
 **From Repo to Wiki**:
+
 ```markdown
 [Wiki Home](https://github.com/org/repo/wiki)
 [Installation Guide](https://github.com/org/repo/wiki/Installation)
@@ -1300,19 +1379,21 @@ See [[Wiki Style Guide]] for:
 ### Automated Updates
 
 Use GitHub Actions to:
+
 - Auto-generate API reference from code
 - Update version numbers
 - Sync changelog
 - Validate links
 
 Example workflow:
+
 ```yaml
 name: Update Wiki
 on:
   push:
     branches: [main]
     paths:
-      - 'docs/**'
+      - "docs/**"
 
 jobs:
   sync-wiki:
@@ -1322,11 +1403,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository }}.wiki
-      
+
       - name: Update content
         run: |
           # Update wiki content from docs
-          
+
       - name: Commit and push
         run: |
           git config user.name "GitHub Actions"
@@ -1341,6 +1422,7 @@ jobs:
 ### Backup Strategy
 
 **Manual Backup**:
+
 ```bash
 # Clone wiki as git repository
 git clone https://github.com/org/repo.wiki.git
@@ -1350,12 +1432,13 @@ tar -czf wiki-backup-$(date +%Y%m%d).tar.gz repo.wiki/
 ```
 
 **Automated Backup**:
+
 ```yaml
 # .github/workflows/wiki-backup.yml
 name: Wiki Backup
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday
+    - cron: "0 0 * * 0" # Weekly on Sunday
 
 jobs:
   backup:
@@ -1363,10 +1446,10 @@ jobs:
     steps:
       - name: Clone wiki
         run: git clone https://github.com/${{ github.repository }}.wiki.git
-      
+
       - name: Create backup
         run: tar -czf wiki-backup-$(date +%Y%m%d).tar.gz *.wiki/
-      
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -1403,12 +1486,14 @@ mkdocs gh-deploy
 ### Search Optimization
 
 **Make content searchable**:
+
 - Use descriptive titles
 - Include keywords in first paragraph
 - Use proper headings for structure
 - Include synonyms and alternate terms
 
 **Search tips**:
+
 ```
 installation ubuntu      # Multiple keywords
 "exact phrase"           # Exact match
@@ -1418,25 +1503,27 @@ installation -windows    # Exclude term
 ### Cross-Linking Strategy
 
 **Every page should link to**:
+
 - Related pages (at least 2-3)
 - Parent/overview page
 - Next logical page
 - Home page (via sidebar)
 
 **Link text best practices**:
-- ✅ "See [[Installation Guide]]"
-- ✅ "Learn about [[API Authentication]]"
-- ❌ "Click [[here]]"
-- ❌ "[[Link]]"
+
+- ✅ "See \[\[Installation Guide\]\]"
+- ✅ "Learn about \[\[API Authentication\]\]"
+- ❌ "Click \[\[here\]\]"
+- ❌ "\[\[Link\]\]"
 
 ## Resources
 
 - [GitHub Wiki Documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
 - [Markdown Guide](https://www.markdownguide.org/)
-- [[Documentation Standards]]
-- [[Style Guide]]
+- \[\[Documentation Standards\]\]
+- \[\[Style Guide\]\]
 
 ---
 
-**Last Updated**: 2025-12-28  
+**Last Updated**: 2025-12-28\
 **Maintained By**: @ivviiviivvi documentation team

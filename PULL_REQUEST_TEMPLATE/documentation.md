@@ -14,14 +14,14 @@ Related to #(issue)
 - [ ] README updates
 - [ ] Architecture documentation
 - [ ] Contributing guidelines
-- [ ] Other: ___________
+- [ ] Other: \_\_\_\_\_\_\_\_\_\_\_
 
 ### Changes Summary
 
 Summarize the documentation changes:
 
-- 
-- 
+-
+-
 
 ### Motivation
 

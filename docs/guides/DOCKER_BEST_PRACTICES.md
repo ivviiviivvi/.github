@@ -1,6 +1,7 @@
 # Docker & Container Best Practices
 
-Comprehensive guide for containerization and Docker best practices in this repository.
+Comprehensive guide for containerization and Docker best practices in this
+repository.
 
 ## Table of Contents
 
@@ -331,7 +332,7 @@ dive myimage:latest
 ### Development Setup
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   app:
@@ -395,7 +396,7 @@ networks:
 ### Production Setup
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   app:
@@ -419,10 +420,10 @@ services:
         max_attempts: 3
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 512M
         reservations:
-          cpus: '0.25'
+          cpus: "0.25"
           memory: 256M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
@@ -452,8 +453,8 @@ name: Docker Build and Push
 
 on:
   push:
-    branches: [ main ]
-    tags: [ 'v*' ]
+    branches: [main]
+    tags: ["v*"]
 
 jobs:
   docker:
@@ -498,13 +499,13 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.version }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 ```
 
 ---
@@ -530,13 +531,13 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 ### Health Check Script (healthcheck.js)
 
 ```javascript
-const http = require('http');
+const http = require("http");
 
 const options = {
-  host: 'localhost',
+  host: "localhost",
   port: 3000,
-  path: '/health',
-  timeout: 2000
+  path: "/health",
+  timeout: 2000,
 };
 
 const req = http.request(options, (res) => {
@@ -547,7 +548,7 @@ const req = http.request(options, (res) => {
   }
 });
 
-req.on('error', () => {
+req.on("error", () => {
   process.exit(1);
 });
 

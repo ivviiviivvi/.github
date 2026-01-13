@@ -1,11 +1,11 @@
 <!--
 PR Automation Metadata
 type: <!-- feature | bugfix | refactor | docs | performance | security | chore -->
-labels: <!-- comma-separated labels -->
-size: <!-- small | medium | large -->
-priority: <!-- low | medium | high | critical -->
-breaking-changes: <!-- yes | no -->
--->
+
+labels: <!-- comma-separated labels --> size: <!-- small | medium | large -->
+priority: <!-- low | medium | high | critical --> breaking-changes:
+
+<!-- yes | no --> -->
 
 ## Pull Request
 
@@ -35,8 +35,7 @@ breaking-changes: <!-- yes | no -->
 
 **Why are these changes needed?**
 
-Closes #(issue number)
-Related to #(related issues)
+Closes #(issue number) Related to #(related issues)
 
 ### Type of Change
 
@@ -44,7 +43,8 @@ Related to #(related issues)
 
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
 - [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] 💥 Breaking change (fix or feature that would cause existing functionality
+      to not work as expected)
 - [ ] 📝 Documentation update
 - [ ] 🎨 Code refactoring (no functional changes)
 - [ ] ⚡ Performance improvement
@@ -57,13 +57,13 @@ Related to #(related issues)
 
 <!-- Provide a detailed list of changes -->
 
-**Key Changes:**
--
--
--
+## **Key Changes:**
 
-**Files Modified:**
+-
+- **Files Modified:**
+
 <!-- List major files changed and why -->
+
 -
 -
 
@@ -72,42 +72,47 @@ Related to #(related issues)
 <!-- Describe the testing you've done -->
 
 **Test Coverage:**
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] E2E tests added/updated
 - [ ] Manual testing performed
 - [ ] All tests pass locally
 
-**Test Scenarios Covered:**
-1.
-2.
-3.
+**Test Scenarios Covered:** 1. 2. 3.
 
 **How to Test:**
+
 <!-- Steps for reviewers to test your changes -->
+
 1.
-2.
-3.
+1.
+1.
 
 ### Impact Assessment
 
 **Areas Affected:**
-<!-- List components, features, or areas affected by this change -->
--
--
 
-**Breaking Changes:**
+<!-- List components, features, or areas affected by this change -->
+
+-
+- **Breaking Changes:**
+
 <!-- If yes, describe what breaks and migration path -->
+
 - [ ] No breaking changes
 - [ ] Breaking changes (explain below)
 
 **Performance Impact:**
+
 <!-- Describe any performance implications -->
+
 - [ ] No performance impact
 - [ ] Performance improvement
 - [ ] Potential performance degradation (explain below)
 
 **Security Impact:**
+
 - [ ] No security implications
 - [ ] Security improvement
 - [ ] Requires security review
@@ -126,9 +131,11 @@ Related to #(related issues)
 <!-- Add screenshots or videos if applicable -->
 
 **Before:**
+
 <!-- Screenshot/description of behavior before changes -->
 
 **After:**
+
 <!-- Screenshot/description of behavior after changes -->
 
 ### Checklist
@@ -136,6 +143,7 @@ Related to #(related issues)
 <!-- ✅ Automation workflows may check these items -->
 
 #### Code Quality
+
 - [ ] Code follows project style guidelines
 - [ ] Self-review completed
 - [ ] Complex code has explanatory comments
@@ -144,6 +152,7 @@ Related to #(related issues)
 - [ ] No commented-out code or debug logs
 
 #### Testing
+
 - [ ] Adequate test coverage for new code
 - [ ] All tests pass locally
 - [ ] Edge cases considered and tested
@@ -151,12 +160,14 @@ Related to #(related issues)
 - [ ] Regression tests added (for bug fixes)
 
 #### Documentation
+
 - [ ] User-facing documentation updated
 - [ ] API documentation updated (if applicable)
 - [ ] Code documentation (comments) added
 - [ ] Inline examples provided where helpful
 
 #### Security & Best Practices
+
 - [ ] No hardcoded secrets or credentials
 - [ ] Input validation implemented
 - [ ] No SQL injection vulnerabilities
@@ -166,6 +177,7 @@ Related to #(related issues)
 - [ ] No sensitive data in logs
 
 #### Dependencies
+
 - [ ] No new dependencies added OR
 - [ ] New dependencies are necessary and documented
 - [ ] Dependencies are from trusted sources
@@ -173,12 +185,14 @@ Related to #(related issues)
 - [ ] Security vulnerabilities checked
 
 #### Performance
+
 - [ ] No performance regressions
 - [ ] Database queries optimized (if applicable)
 - [ ] Caching considered where appropriate
 - [ ] Resource cleanup (connections, files, etc.)
 
 #### Deployment
+
 - [ ] Environment variables documented (if added/changed)
 - [ ] Database migrations included (if needed)
 - [ ] Backward compatible OR migration path provided
@@ -189,12 +203,12 @@ Related to #(related issues)
 
 <!-- Specific things you want reviewers to focus on -->
 
-**Areas needing special attention:**
--
+## **Areas needing special attention:**
+
 -
 
-**Questions for reviewers:**
--
+## **Questions for reviewers:**
+
 -
 
 ### Pre-Merge Checklist
@@ -229,4 +243,5 @@ For reviewers: Use GitHub's review features
 -->
 
 **Additional Context:**
+
 <!-- Any other information that would be helpful for reviewers -->

@@ -2,7 +2,9 @@
 
 ## Overview
 
-The **Organization-Wide Workflow Dispatch** workflow enables centralized triggering of workflows across all repositories in your GitHub organization. This is useful for:
+The **Organization-Wide Workflow Dispatch** workflow enables centralized
+triggering of workflows across all repositories in your GitHub organization.
+This is useful for:
 
 - Running security scans across all repositories
 - Triggering synchronized CI/CD operations
@@ -13,23 +15,27 @@ The **Organization-Wide Workflow Dispatch** workflow enables centralized trigger
 ## Features
 
 ✅ **Flexible Repository Targeting**
+
 - Target all repositories or specific ones
 - Exclude specific repositories
 - Filter by archived/private status
 - Limit the number of repositories processed
 
 ✅ **Smart Discovery**
+
 - Automatically discovers repositories in the organization
 - Verifies workflow existence before dispatching
 - Checks default branch for each repository
 
 ✅ **Safety Features**
+
 - Dry-run mode to preview actions
 - Rate limiting to avoid API throttling
 - Comprehensive error handling
 - Detailed logging and reporting
 
 ✅ **Customizable Workflow Inputs**
+
 - Pass JSON inputs to target workflows
 - Support for complex workflow parameters
 - Branch selection per repository
@@ -38,21 +44,21 @@ The **Organization-Wide Workflow Dispatch** workflow enables centralized trigger
 
 ### Required Inputs
 
-| Input | Description | Required | Default |
-|-------|-------------|----------|---------|
-| `workflow_file` | Name of the workflow file to trigger (e.g., `ci.yml`) | Yes | - |
+| Input           | Description                                           | Required | Default |
+| --------------- | ----------------------------------------------------- | -------- | ------- |
+| `workflow_file` | Name of the workflow file to trigger (e.g., `ci.yml`) | Yes      | -       |
 
 ### Optional Inputs
 
-| Input | Description | Required | Default |
-|-------|-------------|----------|---------|
-| `workflow_inputs` | JSON object of inputs to pass to workflows | No | `{}` |
-| `target_repos` | Comma-separated list of repos, or "all" | No | `all` |
-| `exclude_repos` | Comma-separated list of repos to exclude | No | `''` |
-| `dry_run` | Preview without triggering workflows | No | `false` |
-| `include_archived` | Include archived repositories | No | `false` |
-| `include_private` | Include private repositories | No | `true` |
-| `max_repos` | Maximum number of repos to process (0 = unlimited) | No | `0` |
+| Input              | Description                                        | Required | Default |
+| ------------------ | -------------------------------------------------- | -------- | ------- |
+| `workflow_inputs`  | JSON object of inputs to pass to workflows         | No       | `{}`    |
+| `target_repos`     | Comma-separated list of repos, or "all"            | No       | `all`   |
+| `exclude_repos`    | Comma-separated list of repos to exclude           | No       | `''`    |
+| `dry_run`          | Preview without triggering workflows               | No       | `false` |
+| `include_archived` | Include archived repositories                      | No       | `false` |
+| `include_private`  | Include private repositories                       | No       | `true`  |
+| `max_repos`        | Maximum number of repos to process (0 = unlimited) | No       | `0`     |
 
 ## Usage Examples
 
@@ -65,9 +71,10 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 This will:
+
 1. Discover all non-archived repositories
-2. Check each for `.github/workflows/ci.yml`
-3. Trigger the workflow on repositories that have it
+1. Check each for `.github/workflows/ci.yml`
+1. Trigger the workflow on repositories that have it
 
 ### Example 2: Security Scan with Specific Inputs
 
@@ -110,7 +117,8 @@ gh workflow run org-wide-workflow-dispatch.yml \
   -f dry_run=true
 ```
 
-This shows which repositories would be targeted without actually triggering workflows.
+This shows which repositories would be targeted without actually triggering
+workflows.
 
 ### Example 6: Limited Batch Processing
 
@@ -128,7 +136,7 @@ This processes only the first 10 repositories that match the criteria.
 For a workflow to be triggered by the organization-wide dispatcher, it must:
 
 1. **Exist in the repository** at `.github/workflows/<workflow_file>`
-2. **Have `workflow_dispatch` trigger** enabled:
+1. **Have `workflow_dispatch` trigger** enabled:
 
 ```yaml
 name: My Workflow
@@ -138,7 +146,7 @@ on:
     inputs:
       # Optional: define inputs your workflow accepts
       example_input:
-        description: 'Example input parameter'
+        description: "Example input parameter"
         required: false
         type: string
 ```
@@ -152,16 +160,16 @@ on:
   workflow_dispatch:
     inputs:
       check_type:
-        description: 'Type of health check to run'
+        description: "Type of health check to run"
         required: false
         type: choice
         options:
-          - 'full'
-          - 'quick'
-          - 'security'
-        default: 'quick'
+          - "full"
+          - "quick"
+          - "security"
+        default: "quick"
       notify:
-        description: 'Send notifications on completion'
+        description: "Send notifications on completion"
         required: false
         type: boolean
         default: false
@@ -172,12 +180,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Run health check
         run: |
           echo "Running ${{ github.event.inputs.check_type }} health check"
           # Your health check logic here
-      
+
       - name: Notify on completion
         if: github.event.inputs.notify == 'true'
         run: |
@@ -225,16 +233,19 @@ The workflow consists of three main jobs:
 The workflow interacts with GitHub API in the following ways:
 
 1. **List Organization Repositories**
+
    ```
    GET /orgs/{org}/repos
    ```
 
-2. **Check Workflow File Existence**
+1. **Check Workflow File Existence**
+
    ```
    GET /repos/{owner}/{repo}/contents/.github/workflows/{workflow_file}
    ```
 
-3. **Dispatch Workflow**
+1. **Dispatch Workflow**
+
    ```
    POST /repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches
    ```
@@ -246,7 +257,9 @@ The workflow requires the following permissions:
 - `contents: read` - To read workflow file from the repository
 - `actions: write` - To dispatch workflows in other repositories
 
-**Note:** The `GITHUB_TOKEN` used must have permissions to dispatch workflows in target repositories. For organization-wide operations, you may need to use a GitHub App token or PAT with broader permissions.
+**Note:** The `GITHUB_TOKEN` used must have permissions to dispatch workflows in
+target repositories. For organization-wide operations, you may need to use a
+GitHub App token or PAT with broader permissions.
 
 ## Rate Limiting and Performance
 
@@ -258,9 +271,9 @@ The workflow requires the following permissions:
 ### Built-in Protections
 
 1. **Delay between dispatches**: 0.5 seconds
-2. **Request timeout**: 15 seconds per dispatch
-3. **Maximum repositories**: Configurable via `max_repos` input
-4. **Pagination**: Efficiently fetches all organization repos
+1. **Request timeout**: 15 seconds per dispatch
+1. **Maximum repositories**: Configurable via `max_repos` input
+1. **Pagination**: Efficiently fetches all organization repos
 
 ### Performance Tips
 
@@ -305,7 +318,8 @@ The workflow creates a JSON artifact with detailed results:
 
 **Cause**: Target repository doesn't have the specified workflow file.
 
-**Solution**: 
+**Solution**:
+
 - Verify the workflow file name
 - Ensure the file exists at `.github/workflows/{workflow_file}`
 - Use dry-run mode to preview which repos have the workflow
@@ -315,6 +329,7 @@ The workflow creates a JSON artifact with detailed results:
 **Cause**: `GITHUB_TOKEN` lacks permissions to dispatch workflows.
 
 **Solution**:
+
 - Ensure workflow has `actions: write` permission
 - For cross-organization operations, use a PAT or GitHub App token
 - Check repository access settings
@@ -324,6 +339,7 @@ The workflow creates a JSON artifact with detailed results:
 **Cause**: Too many API requests in a short time.
 
 **Solution**:
+
 - Reduce `max_repos` to process smaller batches
 - Increase delay between dispatches
 - Wait for rate limit reset (shown in API response headers)
@@ -333,6 +349,7 @@ The workflow creates a JSON artifact with detailed results:
 **Cause**: Target workflow may not have `workflow_dispatch` trigger.
 
 **Solution**:
+
 - Add `workflow_dispatch` trigger to target workflow
 - Verify workflow syntax is correct
 - Check workflow run history in target repository
@@ -361,13 +378,15 @@ The workflow creates a JSON artifact with detailed results:
 ## Best Practices
 
 1. **Always test with dry-run first**
+
    ```bash
    gh workflow run org-wide-workflow-dispatch.yml \
      -f workflow_file="new-workflow.yml" \
      -f dry_run=true
    ```
 
-2. **Start with small batches**
+1. **Start with small batches**
+
    ```bash
    gh workflow run org-wide-workflow-dispatch.yml \
      -f workflow_file="critical-update.yml" \
@@ -375,7 +394,8 @@ The workflow creates a JSON artifact with detailed results:
      -f dry_run=false
    ```
 
-3. **Use specific targeting for critical operations**
+1. **Use specific targeting for critical operations**
+
    ```bash
    gh workflow run org-wide-workflow-dispatch.yml \
      -f workflow_file="prod-deploy.yml" \
@@ -383,7 +403,8 @@ The workflow creates a JSON artifact with detailed results:
      -f dry_run=false
    ```
 
-4. **Exclude sensitive repositories**
+1. **Exclude sensitive repositories**
+
    ```bash
    gh workflow run org-wide-workflow-dispatch.yml \
      -f workflow_file="experimental-feature.yml" \
@@ -391,7 +412,8 @@ The workflow creates a JSON artifact with detailed results:
      -f dry_run=false
    ```
 
-5. **Monitor results immediately**
+1. **Monitor results immediately**
+
    - Check workflow summary for failures
    - Download and review the results artifact
    - Investigate failed repositories promptly
@@ -405,7 +427,7 @@ name: Weekly Security Scan
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Every Sunday at midnight
+    - cron: "0 0 * * 0" # Every Sunday at midnight
   workflow_dispatch:
 
 jobs:
@@ -437,13 +459,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to update'
+        description: "Environment to update"
         required: true
         type: choice
         options:
-          - 'development'
-          - 'staging'
-          - 'production'
+          - "development"
+          - "staging"
+          - "production"
 
 jobs:
   trigger-updates:
@@ -463,7 +485,7 @@ jobs:
               echo "repos=prod-api,prod-web,prod-worker" >> $GITHUB_OUTPUT
               ;;
           esac
-      
+
       - name: Trigger updates
         run: |
           gh workflow run org-wide-workflow-dispatch.yml \
@@ -479,12 +501,15 @@ jobs:
 
 Potential improvements for this workflow:
 
-1. **Parallel Dispatching**: Use matrix strategy to dispatch to multiple repos concurrently
-2. **Status Monitoring**: Track and report on triggered workflow runs
-3. **Retry Logic**: Automatically retry failed dispatches
-4. **Conditional Targeting**: Support more complex filtering (e.g., by topic, language)
-5. **Workflow Dependencies**: Support dispatching workflows in a specific order
-6. **Result Aggregation**: Collect and summarize results from all triggered workflows
+1. **Parallel Dispatching**: Use matrix strategy to dispatch to multiple repos
+   concurrently
+1. **Status Monitoring**: Track and report on triggered workflow runs
+1. **Retry Logic**: Automatically retry failed dispatches
+1. **Conditional Targeting**: Support more complex filtering (e.g., by topic,
+   language)
+1. **Workflow Dependencies**: Support dispatching workflows in a specific order
+1. **Result Aggregation**: Collect and summarize results from all triggered
+   workflows
 
 ## Related Documentation
 
@@ -496,6 +521,7 @@ Potential improvements for this workflow:
 ## Support
 
 For issues or questions:
+
 - Check the workflow summary for error details
 - Review the dispatch results artifact
 - Consult organization documentation

@@ -1,7 +1,15 @@
 id: kotlin-mcp-development
 name: Kotlin MCP Server Development
 description: Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance.
-tags: [kotlin, mcp, model-context-protocol, kotlin-multiplatform, server-development, ktor]
+tags:
+  [
+    kotlin,
+    mcp,
+    model-context-protocol,
+    kotlin-multiplatform,
+    server-development,
+    ktor,
+  ]
 items:
   - path: instructions/kotlin-mcp-server.instructions.md
     kind: instruction

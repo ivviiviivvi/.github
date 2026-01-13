@@ -1,10 +1,11 @@
 ---
-description: 'Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation.'
-tools: ['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'github']
----
+
+## description: 'Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation.' tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'github'\]
+
 # C#/.NET Janitor
 
-Perform janitorial tasks on C#/.NET codebases. Focus on code cleanup, modernization, and technical debt remediation.
+Perform janitorial tasks on C#/.NET codebases. Focus on code cleanup,
+modernization, and technical debt remediation.
 
 ## Core Tasks
 
@@ -67,17 +68,17 @@ Query examples:
 ## Execution Rules
 
 1. **Validate Changes**: Run tests after each modification
-2. **Incremental Updates**: Make small, focused changes
-3. **Preserve Behavior**: Maintain existing functionality
-4. **Follow Conventions**: Apply consistent coding standards
-5. **Safety First**: Backup before major refactoring
+1. **Incremental Updates**: Make small, focused changes
+1. **Preserve Behavior**: Maintain existing functionality
+1. **Follow Conventions**: Apply consistent coding standards
+1. **Safety First**: Backup before major refactoring
 
 ## Analysis Order
 
 1. Scan for compiler warnings and errors
-2. Identify deprecated/obsolete usage
-3. Check test coverage gaps
-4. Review performance bottlenecks
-5. Assess documentation completeness
+1. Identify deprecated/obsolete usage
+1. Check test coverage gaps
+1. Review performance bottlenecks
+1. Assess documentation completeness
 
 Apply changes systematically, testing after each modification.

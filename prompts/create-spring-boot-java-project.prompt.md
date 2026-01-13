@@ -1,7 +1,6 @@
 ---
-mode: 'agent'
-description: 'Create Spring Boot Java Project Skeleton'
----
+
+## mode: 'agent' description: 'Create Spring Boot Java Project Skeleton'
 
 # Create Spring Boot Java project prompt
 
@@ -11,9 +10,13 @@ description: 'Create Spring Boot Java Project Skeleton'
   - Docker
   - Docker Compose
 
-- If you need to custom the project name, please change the `artifactId` and the `packageName` in [download-spring-boot-project-template](./create-spring-boot-java-project.prompt.md#download-spring-boot-project-template)
+- If you need to custom the project name, please change the `artifactId` and the
+  `packageName` in
+  [download-spring-boot-project-template](./create-spring-boot-java-project.prompt.md#download-spring-boot-project-template)
 
-- If you need to update the Spring Boot version, please change the `bootVersion` in [download-spring-boot-project-template](./create-spring-boot-java-project.prompt.md#download-spring-boot-project-template)
+- If you need to update the Spring Boot version, please change the `bootVersion`
+  in
+  [download-spring-boot-project-template](./create-spring-boot-java-project.prompt.md#download-spring-boot-project-template)
 
 ## Check Java version
 
@@ -65,7 +68,8 @@ cd ${input:projectName:demo-java}
 
 ## Add additional dependencies
 
-- Insert `springdoc-openapi-starter-webmvc-ui` and `archunit-junit5` dependency into `pom.xml` file
+- Insert `springdoc-openapi-starter-webmvc-ui` and `archunit-junit5` dependency
+  into `pom.xml` file
 
 ```xml
 <dependency>
@@ -128,7 +132,8 @@ spring.data.mongodb.database=test
 
 ## Add `docker-compose.yaml` with Redis, PostgreSQL and MongoDB services
 
-- Create `docker-compose.yaml` at project root and add following services: `redis:6`, `postgresql:17` and `mongo:8`.
+- Create `docker-compose.yaml` at project root and add following services:
+  `redis:6`, `postgresql:17` and `mongo:8`.
 
   - redis service should have
     - password `rootroot`
@@ -146,7 +151,8 @@ spring.data.mongodb.database=test
 
 ## Add `.gitignore` file
 
-- Insert `redis_data`, `postgres_data` and `mongo_data` directories in `.gitignore` file
+- Insert `redis_data`, `postgres_data` and `mongo_data` directories in
+  `.gitignore` file
 
 ## Run Maven test command
 
@@ -158,6 +164,8 @@ spring.data.mongodb.database=test
 
 ## Run Maven run command (Optional)
 
-- (Optional) `docker-compose up -d` to start the services, `./mvnw spring-boot:run` to run the Spring Boot project, `docker-compose rm -sf` to stop the services.
+- (Optional) `docker-compose up -d` to start the services,
+  `./mvnw spring-boot:run` to run the Spring Boot project,
+  `docker-compose rm -sf` to stop the services.
 
 ## Let's do this step by step

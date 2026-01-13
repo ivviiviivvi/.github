@@ -28,7 +28,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           echo "Validating branch: $BRANCH_NAME"
-          
+
           # Define valid patterns
           VALID_PATTERNS=(
             "^(exploration|development|testing|staging|production|maintenance|archive)/.*"
@@ -37,7 +37,7 @@ jobs:
             "^master$"
             "^develop$"
           )
-          
+
           VALID=false
           for pattern in "${VALID_PATTERNS[@]}"; do
             if [[ $BRANCH_NAME =~ $pattern ]]; then
@@ -45,7 +45,7 @@ jobs:
               break
             fi
           done
-          
+
           if [ "$VALID" = false ]; then
             echo "::error::Branch name '$BRANCH_NAME' does not follow naming conventions."
             echo "::error::Expected format: [lifecycle-phase]/[type]/[description]"
@@ -53,7 +53,7 @@ jobs:
             echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
             exit 1
           fi
-          
+
           echo "Branch name is valid"
 
   tag-archive-branch:
@@ -95,7 +95,7 @@ For archived version support:
 
 - Archive Date: ${ARCHIVE_DATE}
 EOF
-          
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ARCHIVE_NOTICE.md
@@ -111,57 +111,57 @@ EOF
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Find stale branches
         id: find-stale
         run: |
           echo "Finding merged branches older than 30 days..."
-          
+
           # Get default branch
           DEFAULT_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
-          
+
           # Create temp files
           BRANCHES_FILE=$(mktemp)
           ALL_BRANCHES_FILE=$(mktemp)
-          
+
           # Find merged branches - redirect to file instead of using while read subshell
           git branch -r --merged origin/$DEFAULT_BRANCH | \
             grep -v "HEAD\|$DEFAULT_BRANCH\|main\|master\|develop" | \
             grep "origin/feature/\|origin/fix/\|origin/hotfix/\|origin/release/" | \
             sed 's/origin\///' > "$ALL_BRANCHES_FILE"
-          
+
           # Process branches and filter by age
           if [ -s "$ALL_BRANCHES_FILE" ]; then
             while IFS= read -r branch; do
               if [ -z "$branch" ]; then
                 continue
               fi
-              
+
               # Check if remote branch exists before getting commit date
               if ! git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
                 echo "Branch $branch no longer exists on remote, skipping"
                 continue
               fi
-              
+
               LAST_COMMIT_DATE=$(git log -1 --format=%ct origin/$branch 2>/dev/null || echo "0")
               if [ "$LAST_COMMIT_DATE" = "0" ]; then
                 echo "Could not get commit date for $branch, skipping"
                 continue
               fi
-              
+
               CURRENT_DATE=$(date +%s)
               DAYS_OLD=$(( ($CURRENT_DATE - $LAST_COMMIT_DATE) / 86400 ))
-              
+
               if [ $DAYS_OLD -gt 30 ]; then
                 echo "Branch $branch is $DAYS_OLD days old (merged)"
                 echo "$branch" >> "$BRANCHES_FILE"
               fi
             done < "$ALL_BRANCHES_FILE"
           fi
-          
+
           # Cleanup temp file
           rm -f "$ALL_BRANCHES_FILE"
-          
+
           # Check if any branches found and set output
           if [ -s "$BRANCHES_FILE" ]; then
             echo "found=true" >> $GITHUB_OUTPUT
@@ -182,47 +182,47 @@ EOF
           script: |
             const fs = require('fs');
             const branchesFile = process.env.BRANCHES_FILE || '';
-            
+
             if (!branchesFile) {
               console.log('No branches file specified');
               return;
             }
-            
+
             // Check if file exists and read it
             if (!fs.existsSync(branchesFile)) {
               console.log('Branches file does not exist');
               return;
             }
-            
+
             const content = fs.readFileSync(branchesFile, 'utf8').trim();
             if (!content) {
               console.log('Branches file is empty');
               return;
             }
-            
+
             const branches = content.split('\n').filter(b => b.trim() !== '');
             if (branches.length === 0) {
               console.log('No valid branches found');
               return;
             }
-            
+
             console.log(`Found ${branches.length} stale branches`);
-            
+
             const body = `## Merged Branches Ready for Cleanup
-            
+
             The following branches have been merged and are older than 30 days:
-            
+
             ${branches.map(b => `- \`${b}\``).join('\n')}
-            
+
             These branches can be safely deleted according to our [retention policy](VERSION_CONTROL_STANDARDS.md#retention-policies).
-            
+
             To delete these branches, run:
             \`\`\`bash
             ${branches.map(b => `git push origin --delete ${b}`).join('\n')}
             \`\`\`
-            
+
             Or approve this issue to trigger automatic cleanup.`;
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -240,7 +240,7 @@ EOF
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Create maintenance branch
         run: |
           # This is a manual workflow that can be triggered
@@ -262,39 +262,39 @@ EOF
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Generate lifecycle report
         run: |
           echo "# Branch Lifecycle Report" > lifecycle-report.md
           echo "Generated: $(date)" >> lifecycle-report.md
           echo "" >> lifecycle-report.md
-          
+
           # Count branches by lifecycle phase
           echo "## Branches by Lifecycle Phase" >> lifecycle-report.md
           echo "" >> lifecycle-report.md
-          
+
           for phase in exploration development testing staging production maintenance archive; do
             COUNT=$(git branch -r | grep "origin/$phase/" | wc -l)
             echo "- **$phase**: $COUNT branches" >> lifecycle-report.md
           done
-          
+
           echo "" >> lifecycle-report.md
           echo "## Active Development Branches" >> lifecycle-report.md
           echo "" >> lifecycle-report.md
           git branch -r | grep "origin/development/\|origin/testing/" | sed 's/origin\///' >> lifecycle-report.md
-          
+
           echo "" >> lifecycle-report.md
           echo "## Maintenance Branches" >> lifecycle-report.md
           echo "" >> lifecycle-report.md
           git branch -r | grep "origin/maintenance/" | sed 's/origin\///' >> lifecycle-report.md
-          
+
           echo "" >> lifecycle-report.md
           echo "## Archive Branches" >> lifecycle-report.md
           echo "" >> lifecycle-report.md
           git branch -r | grep "origin/archive/" | sed 's/origin\///' >> lifecycle-report.md
-          
+
           cat lifecycle-report.md
-          
+
       - name: Upload report
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
         with:

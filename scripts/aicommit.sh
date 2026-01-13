@@ -85,7 +85,7 @@ get_diff_stats() {
 # Determine scope from file paths
 determine_scope() {
     local files="$1"
-    
+
     # Check for common patterns
     if echo "$files" | grep -q "^\.github/workflows/"; then
         echo "ci"
@@ -123,55 +123,55 @@ determine_scope() {
 determine_type() {
     local files="$1"
     local diff_content="$2"
-    
+
     # Security-related changes
     if echo "$files" | grep -q "SECURITY\|bandit\|\.secrets"; then
         echo "security"
         return
     fi
-    
+
     # Documentation changes
     if echo "$files" | grep -q "\.md$\|^docs/"; then
         echo "docs"
         return
     fi
-    
+
     # Test changes
     if echo "$files" | grep -q "^tests\?/\|test_.*\.py\|.*_test\.py"; then
         echo "test"
         return
     fi
-    
+
     # CI/CD changes
     if echo "$files" | grep -q "^\.github/workflows/\|\.travis\|\.circleci"; then
         echo "ci"
         return
     fi
-    
+
     # Configuration changes
     if echo "$files" | grep -q "\.ya?ml$\|\.json$\|\.toml$\|\.ini$\|\.conf$"; then
         echo "chore"
         return
     fi
-    
+
     # Dependency changes
     if echo "$files" | grep -q "requirements.*\.txt\|package\.json\|Gemfile\|go\.mod"; then
         echo "chore"
         return
     fi
-    
+
     # Check diff for indicators
     if echo "$diff_content" | grep -qi "fix\|bug\|patch\|correct"; then
         echo "fix"
         return
     fi
-    
+
     # Default to feat for code changes
     if echo "$files" | grep -q "\.py$\|\.js$\|\.ts$\|\.go$\|\.rb$\|\.java$"; then
         echo "feat"
         return
     fi
-    
+
     # Default
     echo "chore"
 }
@@ -180,19 +180,19 @@ determine_type() {
 generate_template_message() {
     local files="$1"
     local diff_stats="$2"
-    
+
     # Determine type and scope
     local type=$(determine_type "$files" "$(git diff --cached)")
     local scope=$(determine_scope "$files")
-    
+
     # Count changes
     local num_files=$(echo "$files" | wc -l)
     local additions=$(git diff --cached --numstat | awk '{sum+=$1} END {print sum}')
     local deletions=$(git diff --cached --numstat | awk '{sum+=$2} END {print sum}')
-    
+
     # Generate description
     local description=""
-    
+
     if [ "$type" = "docs" ]; then
         description="update documentation"
     elif [ "$type" = "test" ]; then
@@ -212,7 +212,7 @@ generate_template_message() {
     else
         description="update $scope"
     fi
-    
+
     # Build message
     if [ -n "$scope" ]; then
         echo "${type}(${scope}): ${description}"
@@ -224,10 +224,10 @@ generate_template_message() {
 # Generate commit message using GitHub Copilot
 generate_copilot_message() {
     print_info "Generating commit message with GitHub Copilot..."
-    
+
     # Get diff
     local diff_output=$(git diff --cached)
-    
+
     # Create prompt for Copilot
     local prompt="Generate a conventional commit message for these changes. Use format: type(scope): description
 
@@ -238,17 +238,17 @@ Keep it under 72 characters.
 Changes:
 $diff_output
 "
-    
+
     # Create secure temporary file
     local tmp_file=$(mktemp)
     trap "rm -f \"$tmp_file\"" EXIT
-    
+
     # Try to use gh copilot suggest
     if echo "$prompt" | gh copilot suggest --target shell 2>/dev/null | grep -E "^(feat|fix|docs|style|refactor|test|chore|security|perf)" > "$tmp_file"; then
         cat "$tmp_file"
         return 0
     fi
-    
+
     return 1
 }
 
@@ -258,7 +258,7 @@ $diff_output
 
 main() {
     print_header "AI Commit Message Generator"
-    
+
     # Check for staged changes
     if ! git diff --cached --quiet; then
         :  # Has staged changes
@@ -267,23 +267,23 @@ main() {
         print_info "Stage changes with: git add <files>"
         exit 1
     fi
-    
+
     # Get staged files
     local staged_files=$(get_staged_files)
     local num_files=$(echo "$staged_files" | wc -l)
-    
+
     print_info "Staged files: $num_files"
     echo "$staged_files" | sed 's/^/  - /'
     echo ""
-    
+
     # Show diff stats
     print_info "Changes:"
     get_diff_stats | sed 's/^/  /'
     echo ""
-    
+
     # Generate commit message
     local commit_msg=""
-    
+
     # Check if user provided message
     if [ $# -gt 0 ]; then
         commit_msg="$*"
@@ -292,7 +292,7 @@ main() {
         # Try GitHub Copilot first
         if has_gh_copilot; then
             commit_msg=$(generate_copilot_message)
-            
+
             if [ $? -eq 0 ] && [ -n "$commit_msg" ]; then
                 print_success "Generated with GitHub Copilot"
             else
@@ -304,16 +304,16 @@ main() {
             commit_msg=$(generate_template_message "$staged_files" "$(get_diff_stats)")
         fi
     fi
-    
+
     # Show generated message
     print_header "Generated Commit Message"
     echo -e "${GREEN}$commit_msg${NC}"
     echo ""
-    
+
     # Confirm with user
     print_info "Commit with this message? [Y/n/e(dit)] "
     read -r response
-    
+
     case "$response" in
         [nN]*)
             print_warning "Commit cancelled."
@@ -332,10 +332,10 @@ main() {
             # Default: yes
             ;;
     esac
-    
+
     # Commit
     print_info "Committing..."
-    
+
     if git commit -m "$commit_msg"; then
         print_success "Committed successfully!"
         echo ""

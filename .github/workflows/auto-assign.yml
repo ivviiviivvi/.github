@@ -41,7 +41,7 @@ jobs:
             // Request review from @copilot with retries
             const maxRetries = 3;
             let success = false;
-            
+
             for (let i = 0; i < maxRetries; i++) {
               try {
                 await github.rest.pulls.requestReviewers({
@@ -60,7 +60,7 @@ jobs:
                 }
               }
             }
-            
+
             if (!success) {
               console.log('⚠️ Could not request review from @copilot after all retries');
               console.log('Note: CODEOWNERS will still be requested by GitHub automatically');

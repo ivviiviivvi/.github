@@ -1,6 +1,7 @@
 # Workspace & Containerization Protocols
 
-> **Comprehensive protocols for lightweight local development with flexible remote access via VS Code Web, Desktop, and browser-based interfaces**
+> **Comprehensive protocols for lightweight local development with flexible
+> remote access via VS Code Web, Desktop, and browser-based interfaces**
 
 ## Table of Contents
 
@@ -25,13 +26,14 @@
 
 ## Overview
 
-This document defines the comprehensive workspace and containerization protocols for the **ivi374forivi** organization. The goal is to:
+This document defines the comprehensive workspace and containerization protocols
+for the **ivi374forivi** organization. The goal is to:
 
 1. **Keep local systems light** - Minimize dependencies on local machines
-2. **Enable flexible access** - Work from any device via web or desktop
-3. **Standardize environments** - Consistent development experience
-4. **Isolate services** - Clean separation of concerns
-5. **Maximize portability** - Work from anywhere, anytime
+1. **Enable flexible access** - Work from any device via web or desktop
+1. **Standardize environments** - Consistent development experience
+1. **Isolate services** - Clean separation of concerns
+1. **Maximize portability** - Work from anywhere, anytime
 
 ### Design Philosophy
 
@@ -50,6 +52,7 @@ This document defines the comprehensive workspace and containerization protocols
 ### 1. Workspace Isolation
 
 Each project/workspace runs in isolated containers with:
+
 - Dedicated filesystems
 - Separate networks
 - Independent service stacks
@@ -58,6 +61,7 @@ Each project/workspace runs in isolated containers with:
 ### 2. Stateless Local Systems
 
 Local machines should:
+
 - Require minimal software (browser, Docker, VS Code)
 - Not store project dependencies
 - Not run development services
@@ -66,6 +70,7 @@ Local machines should:
 ### 3. State Persistence
 
 All workspace state persists via:
+
 - Named Docker volumes
 - Git repositories
 - Cloud-synced configurations
@@ -74,6 +79,7 @@ All workspace state persists via:
 ### 4. Universal Access
 
 Support multiple access patterns:
+
 - **Desktop**: VS Code + Remote-Containers
 - **Web**: GitHub Codespaces
 - **Browser**: Code-server (self-hosted)
@@ -132,21 +138,25 @@ Support multiple access patterns:
 ### Component Layers
 
 #### 1. Access Layer
+
 - **Purpose**: Provide multiple entry points
 - **Components**: VS Code, browsers, terminals
 - **Requirements**: Minimal local software
 
 #### 2. Orchestration Layer
+
 - **Purpose**: Manage container lifecycle
 - **Components**: Docker, Docker Compose, Kubernetes (optional)
 - **Requirements**: Container runtime only
 
 #### 3. Workspace Layer
+
 - **Purpose**: Provide development environments
 - **Components**: DevContainers, service containers
 - **Requirements**: Defined in compose files
 
 #### 4. Persistence Layer
+
 - **Purpose**: Store state and data
 - **Components**: Volumes, repositories, cloud storage
 - **Requirements**: Backup and sync strategy
@@ -162,25 +172,28 @@ Support multiple access patterns:
 #### Setup
 
 1. **Install Prerequisites**:
+
    ```bash
    # Install Docker Desktop
    # macOS/Windows: https://www.docker.com/products/docker-desktop
-   
+
    # Install VS Code
    # https://code.visualstudio.com/
-   
+
    # Install Remote Development Extension Pack
    code --install-extension ms-vscode-remote.vscode-remote-extensionpack
    ```
 
-2. **Clone and Open**:
+1. **Clone and Open**:
+
    ```bash
    git clone <repository>
    cd <repository>
    code .
    ```
 
-3. **Open in Container**:
+1. **Open in Container**:
+
    - Press `F1` or `Cmd/Ctrl+Shift+P`
    - Select: `Dev Containers: Reopen in Container`
    - Wait for build (first time only)
@@ -188,6 +201,7 @@ Support multiple access patterns:
 #### Configuration
 
 VS Code Desktop uses `.devcontainer/devcontainer.json`:
+
 ```json
 {
   "name": "My Workspace",
@@ -199,6 +213,7 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 ```
 
 #### Advantages
+
 - ✅ Full IDE features
 - ✅ Native performance
 - ✅ Offline capable (after initial setup)
@@ -206,6 +221,7 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 - ✅ Rich extension ecosystem
 
 #### Limitations
+
 - ❌ Requires local Docker
 - ❌ Initial container build time
 - ❌ Local resource usage
@@ -219,23 +235,25 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 #### Setup
 
 1. **Create Codespace**:
+
    ```bash
    # Via GitHub UI
    # Repository → Code → Codespaces → Create codespace
-   
+
    # Via GitHub CLI
    gh codespace create --repo ivviiviivvi/.github
    ```
 
-2. **Access Methods**:
+1. **Access Methods**:
+
    - **Web**: https://github.dev or github.com/codespaces
    - **Desktop**: Connect via VS Code Desktop
    - **SSH**: `gh codespace ssh`
 
-3. **Configuration**:
-   Uses same `.devcontainer` as VS Code Desktop!
+1. **Configuration**: Uses same `.devcontainer` as VS Code Desktop!
 
 #### Advantages
+
 - ✅ Zero local setup
 - ✅ Access from anywhere
 - ✅ Powerful cloud resources
@@ -243,6 +261,7 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 - ✅ Free tier available
 
 #### Limitations
+
 - ❌ Requires internet
 - ❌ Costs for heavy usage
 - ❌ Slight latency
@@ -251,6 +270,7 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 #### Resource Configuration
 
 `.devcontainer/devcontainer.json`:
+
 ```json
 {
   "hostRequirements": {
@@ -263,10 +283,10 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
 
 #### Cost Management
 
-**Free Tier**: 60 hours/month (2-core)
-**Pro**: 90 hours/month (included)
+**Free Tier**: 60 hours/month (2-core) **Pro**: 90 hours/month (included)
 
 **Optimization**:
+
 ```bash
 # Set default idle timeout
 gh codespace edit --idle-timeout 30m
@@ -314,8 +334,9 @@ gh codespace delete
 1. **Deploy Code-Server**:
 
 Create `docker-compose.code-server.yml`:
+
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   code-server:
@@ -351,6 +372,7 @@ volumes:
 2. **Configure Nginx**:
 
 `nginx.conf`:
+
 ```nginx
 events {
     worker_connections 1024;
@@ -386,6 +408,7 @@ http {
 ```
 
 3. **Deploy**:
+
 ```bash
 # Set environment variables
 export CODE_SERVER_PASSWORD=$(openssl rand -base64 32)
@@ -400,19 +423,22 @@ docker-compose -f docker-compose.code-server.yml up -d
 #### Security Hardening
 
 1. **Enable HTTPS**:
+
    ```bash
    # Use Let's Encrypt
    certbot certonly --standalone -d code.yourdomain.com
    ```
 
-2. **Add Authentication Layer**:
+1. **Add Authentication Layer**:
+
    ```nginx
    # Add OAuth2 Proxy or Basic Auth
    auth_basic "Restricted Access";
    auth_basic_user_file /etc/nginx/.htpasswd;
    ```
 
-3. **Network Isolation**:
+1. **Network Isolation**:
+
    ```yaml
    networks:
      code-network:
@@ -421,6 +447,7 @@ docker-compose -f docker-compose.code-server.yml up -d
    ```
 
 #### Advantages
+
 - ✅ Full control over infrastructure
 - ✅ No usage limits
 - ✅ Data sovereignty
@@ -428,6 +455,7 @@ docker-compose -f docker-compose.code-server.yml up -d
 - ✅ Custom domain and branding
 
 #### Limitations
+
 - ❌ Requires server management
 - ❌ Need to handle backups
 - ❌ Security responsibility
@@ -442,6 +470,7 @@ docker-compose -f docker-compose.code-server.yml up -d
 #### GitHub.dev
 
 **Quick Edit Mode**:
+
 ```bash
 # Press '.' on any GitHub repo
 # Or change .com to .dev in URL
@@ -449,6 +478,7 @@ docker-compose -f docker-compose.code-server.yml up -d
 ```
 
 **Features**:
+
 - ✅ Instant access (no setup)
 - ✅ VS Code web interface
 - ✅ Git operations
@@ -459,12 +489,14 @@ docker-compose -f docker-compose.code-server.yml up -d
 #### StackBlitz
 
 **For Web Projects**:
+
 ```bash
 # Open project in StackBlitz
 https://stackblitz.com/github/ivviiviivvi/.github
 ```
 
 **Features**:
+
 - ✅ Full Node.js environment
 - ✅ NPM package installation
 - ✅ Live preview
@@ -475,12 +507,14 @@ https://stackblitz.com/github/ivviiviivvi/.github
 #### GitPod
 
 **Full Cloud IDE**:
+
 ```bash
 # Prefix repo URL
 https://gitpod.io/#https://github.com/ivviiviivvi/.github
 ```
 
 **Configuration** (`.gitpod.yml`):
+
 ```yaml
 image:
   file: .gitpod.Dockerfile
@@ -510,14 +544,15 @@ vscode:
 Every workspace consists of:
 
 1. **Development Container** - Your coding environment
-2. **Service Containers** - Databases, caches, queues
-3. **Tool Containers** - Linters, builders, testers
+1. **Service Containers** - Databases, caches, queues
+1. **Tool Containers** - Linters, builders, testers
 
 #### Standard Compose File
 
 `.devcontainer/docker-compose.yml`:
+
 ```yaml
-version: '3.9'
+version: "3.9"
 
 # Define shared network
 networks:
@@ -593,8 +628,8 @@ services:
     networks:
       - workspace-network
     ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
 
   # Message queue (optional)
   rabbitmq:
@@ -602,7 +637,7 @@ services:
     networks:
       - workspace-network
     ports:
-      - "5672:5672"   # AMQP
+      - "5672:5672" # AMQP
       - "15672:15672" # Management UI
     environment:
       - RABBITMQ_DEFAULT_USER=devuser
@@ -628,7 +663,7 @@ networks:
   # Public network (internet access)
   public:
     driver: bridge
-  
+
   # Private network (no internet)
   private:
     driver: bridge
@@ -639,10 +674,10 @@ services:
     networks:
       - public
       - private
-  
+
   database:
     networks:
-      - private  # Database has no internet access
+      - private # Database has no internet access
 ```
 
 #### Resource Limits
@@ -653,20 +688,20 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4.0'
+          cpus: "4.0"
           memory: 8G
         reservations:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 4G
-  
+
   postgres:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
+          cpus: "2.0"
           memory: 2G
         reservations:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 1G
 ```
 
@@ -863,12 +898,14 @@ echo "Workspace completely removed"
 #### Never Store Secrets in Containers
 
 **DON'T**:
+
 ```dockerfile
 # ❌ NEVER DO THIS
 ENV API_KEY=secret123
 ```
 
 **DO**:
+
 ```yaml
 # ✅ Use environment variables
 services:
@@ -880,6 +917,7 @@ services:
 #### Using Secret Management Tools
 
 **Docker Secrets**:
+
 ```yaml
 services:
   workspace:
@@ -892,6 +930,7 @@ secrets:
 ```
 
 **External Secret Managers**:
+
 ```bash
 # AWS Secrets Manager
 export API_KEY=$(aws secretsmanager get-secret-value \
@@ -922,7 +961,7 @@ services:
 # Role-based access
 services:
   workspace:
-    user: "1000:1000"  # Non-root user
+    user: "1000:1000" # Non-root user
     cap_drop:
       - ALL
     cap_add:
@@ -939,7 +978,7 @@ services:
   postgres:
     # Don't expose ports externally
     expose:
-      - "5432"  # Only accessible within network
+      - "5432" # Only accessible within network
     # ports:  # Never do this for databases
     #   - "5432:5432"
 ```
@@ -997,11 +1036,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4'
+          cpus: "4"
           memory: 8G
           pids: 1000
         reservations:
-          cpus: '2'
+          cpus: "2"
           memory: 4G
 ```
 
@@ -1013,10 +1052,10 @@ services:
 volumes:
   # Named volume (Docker managed)
   data:
-  
+
   # Bind mount (host filesystem)
   # - ./host-path:/container-path
-  
+
   # Tmpfs (memory)
   # type: tmpfs
   # tmpfs:
@@ -1100,7 +1139,7 @@ services:
 
 ```yaml
 # .devcontainer/docker-compose.yml
-version: '3.9'
+version: "3.9"
 
 services:
   workspace:
@@ -1115,7 +1154,7 @@ services:
 **Use Case**: Web application with database and cache
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   workspace:
@@ -1125,12 +1164,12 @@ services:
     depends_on:
       - postgres
       - redis
-  
+
   postgres:
     image: postgres:16-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  
+
   redis:
     image: redis:7-alpine
     volumes:
@@ -1146,7 +1185,7 @@ volumes:
 **Use Case**: Python data analysis with Jupyter
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   workspace:
@@ -1158,7 +1197,7 @@ services:
       - jupyter-data:/home/jovyan
     environment:
       - JUPYTER_ENABLE_LAB=yes
-  
+
   postgres:
     image: postgres:16-alpine
     volumes:
@@ -1174,7 +1213,7 @@ volumes:
 **Use Case**: Multiple services development
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 services:
   # API Gateway
@@ -1182,23 +1221,23 @@ services:
     build: ./services/gateway
     ports:
       - "8080:8080"
-  
+
   # User Service
   user-service:
     build: ./services/users
     depends_on:
       - postgres
-  
+
   # Order Service
   order-service:
     build: ./services/orders
     depends_on:
       - postgres
       - redis
-  
+
   postgres:
     image: postgres:16-alpine
-  
+
   redis:
     image: redis:7-alpine
 ```
@@ -1360,7 +1399,7 @@ USER vscode
 # Pin all versions
 services:
   postgres:
-    image: postgres:16.1-alpine  # Not just '16' or 'latest'
+    image: postgres:16.1-alpine # Not just '16' or 'latest'
 ```
 
 ### 4. Health Checks Always
@@ -1430,6 +1469,7 @@ services:
 **Symptoms**: Container exits immediately
 
 **Diagnosis**:
+
 ```bash
 # Check logs
 docker-compose logs workspace
@@ -1439,6 +1479,7 @@ docker-compose ps
 ```
 
 **Solutions**:
+
 - Check Dockerfile syntax
 - Verify base image exists
 - Check for port conflicts
@@ -1449,6 +1490,7 @@ docker-compose ps
 **Symptoms**: Connection refused errors
 
 **Diagnosis**:
+
 ```bash
 # Check if service is running
 docker-compose ps
@@ -1461,6 +1503,7 @@ docker-compose port postgres 5432
 ```
 
 **Solutions**:
+
 - Use service name as hostname (not localhost)
 - Verify service is healthy
 - Check network configuration
@@ -1471,6 +1514,7 @@ docker-compose port postgres 5432
 **Symptoms**: Operations take too long
 
 **Diagnosis**:
+
 ```bash
 # Check resource usage
 docker stats
@@ -1480,6 +1524,7 @@ docker system df
 ```
 
 **Solutions**:
+
 - Increase resource limits
 - Use volume caching (`:cached`)
 - Clean up unused resources
@@ -1490,6 +1535,7 @@ docker system df
 **Symptoms**: Cannot write to mounted volumes
 
 **Diagnosis**:
+
 ```bash
 # Check file ownership
 ls -la /workspace
@@ -1499,6 +1545,7 @@ docker-compose exec workspace id
 ```
 
 **Solutions**:
+
 - Match user UID in container to host
 - Use non-root user
 - Set correct permissions in Dockerfile
@@ -1508,6 +1555,7 @@ docker-compose exec workspace id
 **Symptoms**: Address already in use
 
 **Diagnosis**:
+
 ```bash
 # Find process using port
 lsof -i :5432
@@ -1516,6 +1564,7 @@ netstat -tulpn | grep 5432
 ```
 
 **Solutions**:
+
 - Kill process using port
 - Change port mapping
 - Use different port
@@ -1568,21 +1617,19 @@ docker-compose up -d
 
 These workspace and containerization protocols provide:
 
-✅ **Lightweight local systems** - Minimal dependencies
-✅ **Flexible access** - Work from anywhere
-✅ **Consistent environments** - Same setup everywhere
-✅ **Secure isolation** - Protected services
-✅ **Easy collaboration** - Share workspaces instantly
-✅ **Disaster recovery** - Backup and restore
-✅ **Scalable architecture** - Grow with your needs
+✅ **Lightweight local systems** - Minimal dependencies ✅ **Flexible access** -
+Work from anywhere ✅ **Consistent environments** - Same setup everywhere ✅
+**Secure isolation** - Protected services ✅ **Easy collaboration** - Share
+workspaces instantly ✅ **Disaster recovery** - Backup and restore ✅ **Scalable
+architecture** - Grow with your needs
 
 ### Next Steps
 
 1. Review your current setup
-2. Choose your primary access method
-3. Set up your first workspace
-4. Automate repetitive tasks
-5. Share with your team
+1. Choose your primary access method
+1. Set up your first workspace
+1. Automate repetitive tasks
+1. Share with your team
 
 ### Additional Resources
 
@@ -1599,4 +1646,4 @@ These workspace and containerization protocols provide:
 - 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
 - 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
 
-*Last Updated: 2024-01-01*
+_Last Updated: 2024-01-01_

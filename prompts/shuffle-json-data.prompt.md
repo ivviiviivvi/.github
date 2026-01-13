@@ -1,8 +1,6 @@
 ---
-mode: 'agent'
-description: 'Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries.'
-tools: ['edit/editFiles', 'runInTerminal', 'pylanceRunCodeSnippet']
----
+
+## mode: 'agent' description: 'Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries.' tools: \['edit/editFiles', 'runInTerminal', 'pylanceRunCodeSnippet'\]
 
 # Shuffle JSON Data
 
@@ -23,28 +21,28 @@ mathematical knowledge of randomizing data to protect data quality.
   behavior targets each object.
 - Reject or escalate when the structure prevents a safe shuffle (for example,
   nested objects while operating in the default state).
-- Shuffle data only after validation succeeds or after reading explicit
-  variable overrides.
+- Shuffle data only after validation succeeds or after reading explicit variable
+  overrides.
 
 ## Objectives
 
 1. Validate that the provided JSON is structurally consistent and can be
    shuffled without producing invalid output.
-2. Apply the default behavior—shuffle at the object level—when no variables
+1. Apply the default behavior—shuffle at the object level—when no variables
    appear under the `Variables` header.
-3. Honour variable overrides that adjust which collections are shuffled, which
+1. Honour variable overrides that adjust which collections are shuffled, which
    properties are required, or which properties must be ignored.
 
 ## Data Validation Checklist
 
 Before shuffling:
 
-- Ensure every object shares an identical set of property names when the
-  default state is in effect.
+- Ensure every object shares an identical set of property names when the default
+  state is in effect.
 - Confirm there are no nested objects in the default state.
 - Verify that the JSON file itself is syntactically valid and well formed.
-- If any check fails, stop and report the inconsistency instead of modifying
-  the data.
+- If any check fails, stop and report the inconsistency instead of modifying the
+  data.
 
 ## Acceptable JSON
 
@@ -94,13 +92,13 @@ data.
 
 1. **Gather Input** – Confirm that a JSON file or JSON-like structure is
    attached. If not, pause and request the data file.
-2. **Review Configuration** – Merge defaults with any supplied variables under
+1. **Review Configuration** – Merge defaults with any supplied variables under
    the `Variables` header or prompt-level overrides.
-3. **Validate Structure** – Apply the Data Validation Checklist to confirm that
+1. **Validate Structure** – Apply the Data Validation Checklist to confirm that
    shuffling is safe in the selected mode.
-4. **Shuffle Data** – Randomize the collection(s) described by the variables or
+1. **Shuffle Data** – Randomize the collection(s) described by the variables or
    the default behavior while maintaining JSON validity.
-5. **Return Results** – Output the shuffled data, preserving the original
+1. **Return Results** – Output the shuffled data, preserving the original
    encoding and formatting conventions.
 
 ## Requirements for Shuffling Data

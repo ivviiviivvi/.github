@@ -2,16 +2,23 @@
 
 **Production-Ready Framework for Seamless AI Session Coordination**
 
-A comprehensive, token-efficient solution for transferring context across AI sessions in complex multi-phase projects. Achieve **500-2,000 token handoffs** with **zero information loss** for critical state.
+A comprehensive, token-efficient solution for transferring context across AI
+sessions in complex multi-phase projects. Achieve **500-2,000 token handoffs**
+with **zero information loss** for critical state.
 
 ---
 
 ## Overview
 
-Managing context across AI sessions with limited token budgets is one of the critical challenges in modern AI orchestration. When implementing large-scale projects with hundreds of tasks, sessions inevitably hit token limits, requiring intelligent handoff mechanisms that preserve state without repeating work.
+Managing context across AI sessions with limited token budgets is one of the
+critical challenges in modern AI orchestration. When implementing large-scale
+projects with hundreds of tasks, sessions inevitably hit token limits, requiring
+intelligent handoff mechanisms that preserve state without repeating work.
 
 This framework provides:
-- **Token-efficient serialization**: 86% reduction from naive approaches (8,500 → 1,200 tokens)
+
+- **Token-efficient serialization**: 86% reduction from naive approaches (8,500
+  → 1,200 tokens)
 - **Zero information loss**: All critical state preserved
 - **Immediate implementability**: Ready for production use
 - **Cross-platform compatibility**: Linux, macOS, Windows support
@@ -22,11 +29,14 @@ This framework provides:
 
 ### Core Capabilities
 
-- **Three compression levels**: Minimal (~500 tokens), Standard (~1,200 tokens), Full (~2,000 tokens)
-- **Hierarchical JSON schema**: Optimized for both human readability and token efficiency
+- **Three compression levels**: Minimal (~500 tokens), Standard (~1,200 tokens),
+  Full (~2,000 tokens)
+- **Hierarchical JSON schema**: Optimized for both human readability and token
+  efficiency
 - **Differential state tracking**: Store only changes since last handoff
 - **Git-friendly**: Clean diffs, version control ready
-- **Production-tested**: Based on patterns from LangChain, AutoGPT, Airflow, Temporal.io
+- **Production-tested**: Based on patterns from LangChain, AutoGPT, Airflow,
+  Temporal.io
 
 ### Context Components
 
@@ -44,8 +54,8 @@ This framework provides:
 ### Installation
 
 1. **Clone or copy the context-handoff directory** to your project
-2. **Ensure Python 3.7+** is installed
-3. **No external dependencies required** (uses Python standard library only)
+1. **Ensure Python 3.7+** is installed
+1. **No external dependencies required** (uses Python standard library only)
 
 ### Basic Usage
 
@@ -109,14 +119,16 @@ context-handoff/
 ## Compression Levels
 
 ### Minimal (~500 tokens)
-**Use when**: Quick session handoffs, token budget is tight
-**Contains**: Current phase/task, active/failed tasks, next 3 eligible tasks
+
+**Use when**: Quick session handoffs, token budget is tight **Contains**:
+Current phase/task, active/failed tasks, next 3 eligible tasks
 
 ```bash
 ./generate_context.sh minimal
 ```
 
 ### Standard (~1,200 tokens) - **Recommended**
+
 **Use when**: Most production scenarios, balanced efficiency/completeness
 **Contains**: All minimal content plus errors, decisions, DAG snapshot
 
@@ -125,6 +137,7 @@ context-handoff/
 ```
 
 ### Full (~2,000 tokens)
+
 **Use when**: Multi-day resumption, complex debugging, comprehensive handoff
 **Contains**: All standard content plus file state, environment info
 
@@ -137,34 +150,36 @@ context-handoff/
 ## Handoff Templates
 
 ### Standard Handoff
+
 Complete context transfer with validation protocol.
 
-**Token budget**: ~1,200 tokens
-**Use case**: Regular session transitions
+**Token budget**: ~1,200 tokens **Use case**: Regular session transitions
 
 ### Minimal Handoff
+
 Fast context transfer for short sessions.
 
-**Token budget**: ~500 tokens
-**Use case**: Quick handoffs, tight budgets
+**Token budget**: ~500 tokens **Use case**: Quick handoffs, tight budgets
 
 ### Error Recovery
+
 Critical error recovery protocol.
 
-**Token budget**: ~800 tokens
-**Use case**: Failed tasks requiring immediate attention
+**Token budget**: ~800 tokens **Use case**: Failed tasks requiring immediate
+attention
 
 ### Multi-Day Resumption
+
 Comprehensive resumption for long-term projects.
 
-**Token budget**: ~1,800 tokens
-**Use case**: Resuming after days/weeks
+**Token budget**: ~1,800 tokens **Use case**: Resuming after days/weeks
 
 ---
 
 ## Orchestrator State Schema
 
-The context generator requires a `.orchestrator_state.json` file with the following structure:
+The context generator requires a `.orchestrator_state.json` file with the
+following structure:
 
 ```json
 {
@@ -241,7 +256,7 @@ name: Generate Context Handoff
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */4 * * *'  # Every 4 hours
+    - cron: "0 */4 * * *" # Every 4 hours
 
 jobs:
   generate-context:
@@ -265,21 +280,20 @@ jobs:
 
 ### Token Savings
 
-| Approach | Tokens/Handoff | 10 Handoffs | Cost (Claude Sonnet) |
-|----------|---------------|-------------|----------------------|
-| Naive full dump | 8,500 | 85,000 | $255 |
-| Compact JSON | 5,800 | 58,000 | $174 |
-| **This system (Standard)** | **1,200** | **12,000** | **$36** |
-| This system (Minimal) | 500 | 5,000 | $15 |
+| Approach                   | Tokens/Handoff | 10 Handoffs | Cost (Claude Sonnet) |
+| -------------------------- | -------------- | ----------- | -------------------- |
+| Naive full dump            | 8,500          | 85,000      | $255                 |
+| Compact JSON               | 5,800          | 58,000      | $174                 |
+| **This system (Standard)** | **1,200**      | **12,000**  | **$36**              |
+| This system (Minimal)      | 500            | 5,000       | $15                  |
 
 **Savings**: $219 per project (86% reduction)
 
 ### ROI Analysis
 
-**Implementation cost**: 3-8 hours
-**Savings per project**: $219 (tokens) + $300 (avoided rework) = **$519**
-**Break-even**: After first project
-**5-project value**: **$2,195 savings**
+**Implementation cost**: 3-8 hours **Savings per project**: $219 (tokens) + $300
+(avoided rework) = **$519** **Break-even**: After first project **5-project
+value**: **$2,195 savings**
 
 ---
 
@@ -289,10 +303,10 @@ jobs:
 
 - [ ] Test all 3 compression levels (minimal, standard, full)
 - [ ] Validate JSON schema with example state file
-- [ ] Verify token counts meet targets (<500, <1200, <2000)
+- [ ] Verify token counts meet targets (\<500, \<1200, \<2000)
 - [ ] Test cross-platform (macOS, Linux, Windows)
 - [ ] Simulate 5 handoff scenarios
-- [ ] Measure generation time (<5 min target)
+- [ ] Measure generation time (\<5 min target)
 - [ ] Test with multiple LLMs (Claude, GPT-4, Gemini)
 - [ ] Verify git diffs are clean
 - [ ] Load test with 500+ tasks
@@ -313,24 +327,24 @@ python validate_context.py
 ### When to Generate Context
 
 1. **Session approaching token limit** (>150k tokens used)
-2. **Before extended breaks** (end of day, weekend)
-3. **After major milestones** (phase completion)
-4. **Before risky operations** (large refactors, deployments)
-5. **After critical errors** (for recovery handoff)
+1. **Before extended breaks** (end of day, weekend)
+1. **After major milestones** (phase completion)
+1. **Before risky operations** (large refactors, deployments)
+1. **After critical errors** (for recovery handoff)
 
 ### Template Selection Guide
 
-| Scenario | Template | Compression Level |
-|----------|----------|------------------|
-| Quick session transition | Minimal | Minimal |
-| Standard workflow | Standard | Standard |
-| Multi-day break | Multi-Day Resumption | Full |
-| Critical error | Error Recovery | Standard |
-| Complex debugging | Standard | Full |
+| Scenario                 | Template             | Compression Level |
+| ------------------------ | -------------------- | ----------------- |
+| Quick session transition | Minimal              | Minimal           |
+| Standard workflow        | Standard             | Standard          |
+| Multi-day break          | Multi-Day Resumption | Full              |
+| Critical error           | Error Recovery       | Standard          |
+| Complex debugging        | Standard             | Full              |
 
 ### Token Budget Guidelines
 
-- **<500 tokens**: Excellent - minimal overhead
+- **\<500 tokens**: Excellent - minimal overhead
 - **500-1200 tokens**: Good - balanced efficiency
 - **1200-2000 tokens**: Acceptable - comprehensive
 - **>2000 tokens**: Consider reducing compression level
@@ -341,17 +355,17 @@ python validate_context.py
 
 ### Common Issues
 
-**Issue**: `FileNotFoundError: State file not found`
-**Solution**: Ensure `.orchestrator_state.json` exists in current directory
+**Issue**: `FileNotFoundError: State file not found` **Solution**: Ensure
+`.orchestrator_state.json` exists in current directory
 
-**Issue**: Token count higher than expected
-**Solution**: Use lower compression level or implement differential state
+**Issue**: Token count higher than expected **Solution**: Use lower compression
+level or implement differential state
 
-**Issue**: Context missing critical information
-**Solution**: Use higher compression level or customize schema
+**Issue**: Context missing critical information **Solution**: Use higher
+compression level or customize schema
 
-**Issue**: Python version incompatible
-**Solution**: Upgrade to Python 3.7+ (3.10+ recommended)
+**Issue**: Python version incompatible **Solution**: Upgrade to Python 3.7+
+(3.10+ recommended)
 
 ---
 
@@ -404,23 +418,23 @@ Track handoff history for debugging:
 
 ### Target Achievements
 
-- ✅ **<500 tokens for minimal context** (Achieved: 450 tokens average)
-- ✅ **<2000 tokens for comprehensive handoff** (Achieved: 1,187 tokens average)
+- ✅ **\<500 tokens for minimal context** (Achieved: 450 tokens average)
+- ✅ **\<2000 tokens for comprehensive handoff** (Achieved: 1,187 tokens average)
 - ✅ **Zero critical information loss** (All task state preserved)
-- ✅ **<5 minutes human overhead** (~2 minutes generation time)
+- ✅ **\<5 minutes human overhead** (~2 minutes generation time)
 - ✅ **>95% resumption accuracy** (With validation protocol)
 
 ### Benchmark Results
 
 Tested on 169-task project (Personal Digital Infrastructure System):
 
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| Minimal tokens | <500 | 448 | ✅ |
-| Standard tokens | <1200 | 1,187 | ✅ |
-| Full tokens | <2000 | 1,923 | ✅ |
-| Generation time | <5 min | 2.3 min | ✅ |
-| Information loss | 0% | 0% | ✅ |
+| Metric           | Target  | Actual  | Status |
+| ---------------- | ------- | ------- | ------ |
+| Minimal tokens   | \<500   | 448     | ✅     |
+| Standard tokens  | \<1200  | 1,187   | ✅     |
+| Full tokens      | \<2000  | 1,923   | ✅     |
+| Generation time  | \<5 min | 2.3 min | ✅     |
+| Information loss | 0%      | 0%      | ✅     |
 
 ---
 
@@ -438,7 +452,8 @@ Contributions welcome! Areas for enhancement:
 
 ## License
 
-This context handoff system is part of the ivi374forivi organization's .github repository and follows the organization's licensing terms.
+This context handoff system is part of the ivi374forivi organization's .github
+repository and follows the organization's licensing terms.
 
 ---
 
@@ -454,6 +469,7 @@ This context handoff system is part of the ivi374forivi organization's .github r
 ## Acknowledgments
 
 Based on proven patterns from:
+
 - LangChain (context management)
 - AutoGPT (session persistence)
 - Apache Airflow (DAG serialization)
@@ -461,11 +477,12 @@ Based on proven patterns from:
 - Model Context Protocol (MCP)
 
 Compression research from:
+
 - TOON (Efficient JSON for LLMs)
 - LLMLingua (Semantic compression)
 - Protocol Buffers (Binary serialization)
 
 ---
 
-**Generated by Context Handoff System v1.0.0**
-*Production-ready framework for seamless AI session coordination*
+**Generated by Context Handoff System v1.0.0** _Production-ready framework for
+seamless AI session coordination_

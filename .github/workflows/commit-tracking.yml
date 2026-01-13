@@ -1,18 +1,18 @@
 ---
 name: Commit Tracking
 
-'on':
+"on":
   push:
     branches:
       - main
       - develop
     paths:
-      - '**.py'
-      - '**.js'
-      - '**.ts'
-      - '**.go'
-      - '**.rs'
-      - 'src/**'
+      - "**.py"
+      - "**.js"
+      - "**.ts"
+      - "**.go"
+      - "**.rs"
+      - "src/**"
   pull_request:
     types: [opened, synchronize, reopened]
 

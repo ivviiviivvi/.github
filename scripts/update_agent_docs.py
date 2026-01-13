@@ -5,6 +5,7 @@ import re
 AGENTS_DIR = "agents"
 README_FILE = "docs/README.agents.md"
 
+
 def extract_metadata(filepath):
     try:
         with open(filepath, "r") as f:
@@ -14,26 +15,29 @@ def extract_metadata(filepath):
         return {
             "filename": os.path.basename(filepath),
             "title": os.path.basename(filepath),
-            "description": "Error reading file."
+            "description": "Error reading file.",
         }
 
     name_match = re.search(r"name: (.*)", content)
     desc_match = re.search(r"description: '(.*)'", content)
 
     if not desc_match:
-         desc_match = re.search(r"description: (.*)", content)
+        desc_match = re.search(r"description: (.*)", content)
 
     title_match = re.search(r"^# (.*)", content, re.MULTILINE)
 
     name = name_match.group(1).strip() if name_match else os.path.basename(filepath)
-    description = desc_match.group(1).strip() if desc_match else "No description available."
+    description = (
+        desc_match.group(1).strip() if desc_match else "No description available."
+    )
     title = title_match.group(1).strip() if title_match else name
 
     return {
         "filename": os.path.basename(filepath),
         "title": title,
-        "description": description
+        "description": description,
     }
+
 
 def generate_table(agents):
     table = "| Title | Description | MCP Servers |\n"
@@ -52,6 +56,7 @@ def generate_table(agents):
 
         table += f"| {link}{badge} | {agent['description']} |  |\n"
     return table
+
 
 def main():
     agents = []
@@ -82,6 +87,7 @@ def main():
         print(f"Updated {README_FILE}")
     else:
         print("Could not find table header in README")
+
 
 if __name__ == "__main__":
     main()

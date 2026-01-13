@@ -1,16 +1,19 @@
 # Branch Protection Best Practices
 
-This document outlines recommended branch protection settings for maintaining code quality and security across the organization.
+This document outlines recommended branch protection settings for maintaining
+code quality and security across the organization.
 
 ## Overview
 
-Branch protection rules help ensure code quality by requiring reviews, status checks, and other safeguards before code can be merged into important branches.
+Branch protection rules help ensure code quality by requiring reviews, status
+checks, and other safeguards before code can be merged into important branches.
 
 ## Recommended Settings for Main/Master Branch
 
 ### Required Settings
 
 #### Pull Request Requirements
+
 - ✅ **Require pull request reviews before merging**
   - Required number of approvers: **2** (increased from 1)
   - Dismiss stale pull request approvals when new commits are pushed: ✅
@@ -19,6 +22,7 @@ Branch protection rules help ensure code quality by requiring reviews, status ch
   - Restrict who can dismiss pull request reviews: ✅
 
 #### Status Checks
+
 - ✅ **Require status checks to pass before merging**
   - Require branches to be up to date before merging: ✅
   - Status checks that must pass:
@@ -30,6 +34,7 @@ Branch protection rules help ensure code quality by requiring reviews, status ch
     - Pre-commit hooks validation
 
 #### Additional Restrictions
+
 - ✅ **Require conversation resolution before merging**
 - ✅ **Require signed commits** (highly recommended for security)
 - ✅ **Require linear history** (no merge commits, use squash or rebase)
@@ -37,12 +42,14 @@ Branch protection rules help ensure code quality by requiring reviews, status ch
 - ✅ **Restrict pushes that create matching branches**
 
 #### Protection Against Force Pushes and Deletions
+
 - ✅ **Do not allow force pushes**
 - ✅ **Do not allow deletions**
 
 ### Optional Settings
 
-- **Require deployments to succeed before merging** (for production environments)
+- **Require deployments to succeed before merging** (for production
+  environments)
 - **Lock branch** (for archived or frozen releases)
 - **Restrict who can push to matching branches** (limit to specific teams/users)
 
@@ -51,11 +58,13 @@ Branch protection rules help ensure code quality by requiring reviews, status ch
 ### Required Settings
 
 #### Pull Request Requirements
+
 - ✅ **Require pull request reviews before merging**
   - Required number of approvers: 1
   - Dismiss stale pull request approvals: ❌ (optional)
 
 #### Status Checks
+
 - ✅ **Require status checks to pass before merging**
   - Require branches to be up to date: ❌ (optional)
   - Status checks that must pass:
@@ -64,6 +73,7 @@ Branch protection rules help ensure code quality by requiring reviews, status ch
     - Linting
 
 #### Additional Restrictions
+
 - ✅ **Require conversation resolution before merging**
 
 ## Implementation via GitHub API

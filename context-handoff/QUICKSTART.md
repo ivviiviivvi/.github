@@ -25,6 +25,7 @@ ls -la
 ```
 
 You should see:
+
 ```
 context_generator.py
 generate_context.sh
@@ -75,6 +76,7 @@ Create `.orchestrator_state.json` in your project root:
 ```
 
 Or use the example:
+
 ```bash
 cp context-handoff/examples/.orchestrator_state.json .
 ```
@@ -87,6 +89,7 @@ cd context-handoff
 ```
 
 Output:
+
 ```
 ═══════════════════════════════════════════════════════
    AI Session Context Generator
@@ -147,6 +150,7 @@ In your new AI session, paste the handoff message:
 **Project**: My Project
 
 ## Current State
+
 - **Phase**: phase_01 (0% complete)
 - **Progress**: 0% (0/1 tasks)
 - **Active**: task_001
@@ -154,7 +158,9 @@ In your new AI session, paste the handoff message:
 - **Next**: task_001
 
 ## Validation Required
+
 Before proceeding, confirm:
+
 1. Current phase: phase_01
 2. Current task: task_001
 3. Any blocking errors? No
@@ -174,9 +180,10 @@ cd context-handoff/tests
 ```
 
 This will:
+
 1. Generate contexts at all compression levels
-2. Validate each generated context
-3. Display results
+1. Validate each generated context
+1. Display results
 
 ### Step 9: Validate Context
 
@@ -186,6 +193,7 @@ python validate_context.py ../context_payload.json
 ```
 
 Output:
+
 ```
 ================================================================================
 Context Validation Report
@@ -293,11 +301,11 @@ export PYTHON=python3.10
 
 ## Compression Level Comparison
 
-| Level | Tokens | Use Case | Generation Time |
-|-------|--------|----------|-----------------|
-| **Minimal** | ~500 | Quick handoffs | <30 seconds |
-| **Standard** | ~1200 | Regular sessions | <1 minute |
-| **Full** | ~2000 | Multi-day breaks | <2 minutes |
+| Level        | Tokens | Use Case         | Generation Time |
+| ------------ | ------ | ---------------- | --------------- |
+| **Minimal**  | ~500   | Quick handoffs   | \<30 seconds    |
+| **Standard** | ~1200  | Regular sessions | \<1 minute      |
+| **Full**     | ~2000  | Multi-day breaks | \<2 minutes     |
 
 ---
 
@@ -339,7 +347,8 @@ cd context-handoff
 - **Full Documentation**: See [README.md](README.md)
 - **Integration Guide**: See [docs/INTEGRATION.md](docs/INTEGRATION.md)
 - **Schema Reference**: See [docs/SCHEMA.md](docs/SCHEMA.md)
-- **Example State**: See [examples/.orchestrator_state.json](examples/.orchestrator_state.json)
+- **Example State**: See
+  [examples/.orchestrator_state.json](examples/.orchestrator_state.json)
 
 ---
 
@@ -358,5 +367,4 @@ Start generating context handoffs and enjoy seamless AI session coordination.
 
 ---
 
-*Context Handoff System v1.0.0*
-*Quick Start Guide*
+_Context Handoff System v1.0.0_ _Quick Start Guide_

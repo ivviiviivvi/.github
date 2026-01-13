@@ -1,6 +1,7 @@
 # Self-Hosted Code-Server Setup Guide
 
-Complete guide for setting up and managing self-hosted VS Code in the browser using code-server.
+Complete guide for setting up and managing self-hosted VS Code in the browser
+using code-server.
 
 ## Table of Contents
 
@@ -17,7 +18,8 @@ Complete guide for setting up and managing self-hosted VS Code in the browser us
 
 ## Overview
 
-**code-server** is VS Code running on a remote server, accessible through a browser. Perfect for:
+**code-server** is VS Code running on a remote server, accessible through a
+browser. Perfect for:
 
 - ✅ Self-hosted development environments
 - ✅ Team access to shared environments
@@ -52,12 +54,14 @@ Complete guide for setting up and managing self-hosted VS Code in the browser us
 ### Server Requirements
 
 **Minimum**:
+
 - 2 CPU cores
 - 4GB RAM
 - 20GB storage
 - Ubuntu 20.04+ or similar
 
 **Recommended**:
+
 - 4+ CPU cores
 - 8GB+ RAM
 - 50GB+ storage
@@ -78,7 +82,7 @@ Complete guide for setting up and managing self-hosted VS Code in the browser us
 Create `docker-compose.yml`:
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 networks:
   code-network:
@@ -191,7 +195,7 @@ events {
 http {
     # Rate limiting
     limit_req_zone $binary_remote_addr zone=code:10m rate=10r/s;
-    
+
     # Upstream
     upstream code-server {
         server code-server:8080;
@@ -201,12 +205,12 @@ http {
     server {
         listen 80;
         server_name code.yourdomain.com;
-        
+
         # Let's Encrypt ACME challenge
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;
         }
-        
+
         location / {
             return 301 https://$server_name$request_uri;
         }
@@ -239,12 +243,12 @@ http {
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-            
+
             # WebSocket headers
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
-            
+
             # Timeouts
             proxy_connect_timeout 7d;
             proxy_send_timeout 7d;
@@ -259,7 +263,8 @@ http {
 
 ### VS Code Settings
 
-Create `settings.json` (mounted at `/home/coder/.local/share/code-server/User/settings.json`):
+Create `settings.json` (mounted at
+`/home/coder/.local/share/code-server/User/settings.json`):
 
 ```json
 {
@@ -330,6 +335,7 @@ sudo crontab -e
 ### 2. Authentication
 
 **Built-in Password**:
+
 ```yaml
 environment:
   - PASSWORD=${CODE_SERVER_PASSWORD}
@@ -370,13 +376,14 @@ sudo ufw enable
 ### 4. Access Control
 
 **IP Whitelist** (nginx):
+
 ```nginx
 location / {
     # Allow specific IPs
     allow 192.168.1.0/24;
     allow 10.0.0.0/8;
     deny all;
-    
+
     proxy_pass http://code-server;
 }
 ```
@@ -469,23 +476,23 @@ spec:
         app: code-server
     spec:
       containers:
-      - name: code-server
-        image: codercom/code-server:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: code-server-secret
-              key: password
-        volumeMounts:
-        - name: workspace
-          mountPath: /home/coder/project
+        - name: code-server
+          image: codercom/code-server:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: code-server-secret
+                  key: password
+          volumeMounts:
+            - name: workspace
+              mountPath: /home/coder/project
       volumes:
-      - name: workspace
-        persistentVolumeClaim:
-          claimName: code-server-pvc
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: code-server-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -495,8 +502,8 @@ spec:
   selector:
     app: code-server
   ports:
-  - port: 8080
-    targetPort: 8080
+    - port: 8080
+      targetPort: 8080
   type: LoadBalancer
 ```
 
@@ -579,17 +586,20 @@ curl -f http://localhost:8080/healthz || exit 1
 ### Can't Access Code-Server
 
 **Check if running**:
+
 ```bash
 docker-compose ps
 docker logs code-server
 ```
 
 **Check firewall**:
+
 ```bash
 sudo ufw status
 ```
 
 **Check DNS**:
+
 ```bash
 dig code.yourdomain.com
 ```
@@ -597,17 +607,19 @@ dig code.yourdomain.com
 ### Performance Issues
 
 **Increase resources**:
+
 ```yaml
 services:
   code-server:
     deploy:
       resources:
         limits:
-          cpus: '4'
+          cpus: "4"
           memory: 8G
 ```
 
 **Check resource usage**:
+
 ```bash
 docker stats
 ```
@@ -615,11 +627,13 @@ docker stats
 ### SSL Certificate Issues
 
 **Test certificate**:
+
 ```bash
 openssl s_client -connect code.yourdomain.com:443
 ```
 
 **Renew certificate**:
+
 ```bash
 sudo certbot renew
 ```
@@ -627,6 +641,7 @@ sudo certbot renew
 ### WebSocket Connection Failed
 
 **Check nginx config**:
+
 ```nginx
 proxy_http_version 1.1;
 proxy_set_header Upgrade $http_upgrade;
@@ -638,12 +653,12 @@ proxy_set_header Connection "upgrade";
 ## Best Practices
 
 1. **Use HTTPS** - Always encrypt traffic
-2. **Strong passwords** - Use password generator
-3. **Regular backups** - Automate backups
-4. **Monitor resources** - Set up alerts
-5. **Keep updated** - Regular security updates
-6. **Limit access** - Use IP whitelist or VPN
-7. **Use OAuth** - For team access
+1. **Strong passwords** - Use password generator
+1. **Regular backups** - Automate backups
+1. **Monitor resources** - Set up alerts
+1. **Keep updated** - Regular security updates
+1. **Limit access** - Use IP whitelist or VPN
+1. **Use OAuth** - For team access
 
 ---
 
@@ -661,4 +676,4 @@ proxy_set_header Connection "upgrade";
 
 ---
 
-*Last Updated: 2024-01-01*
+_Last Updated: 2024-01-01_

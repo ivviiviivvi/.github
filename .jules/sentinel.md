@@ -1,4 +1,14 @@
-## 2025-02-18 - [Fix Code Injection in GitHub Actions]
-**Vulnerability:** Unmitigated Code Injection in `.github/workflows/bulk-pr-operations.yml`. The workflow interpolated user inputs directly into a JavaScript code block executed by `actions/github-script`. A malicious user with workflow dispatch permissions could inject arbitrary JavaScript code.
-**Learning:** GitHub Actions `github-script` action executes code in a Node.js context. Direct interpolation of inputs (e.g., `const val = '${{ inputs.val }}'`) is dangerous because the input is evaluated before the script runs, allowing code injection (e.g., input `'; system('rm -rf /'); //`).
-**Prevention:** Always use environment variables to pass inputs to `github-script`. Map inputs to `env:` in the workflow step, and access them via `process.env.VAR_NAME` within the script. This ensures data is treated as data, not code.
+## 2025-02-18 - \[Fix Code Injection in GitHub Actions\]
+
+**Vulnerability:** Unmitigated Code Injection in
+`.github/workflows/bulk-pr-operations.yml`. The workflow interpolated user
+inputs directly into a JavaScript code block executed by
+`actions/github-script`. A malicious user with workflow dispatch permissions
+could inject arbitrary JavaScript code. **Learning:** GitHub Actions
+`github-script` action executes code in a Node.js context. Direct interpolation
+of inputs (e.g., `const val = '${{ inputs.val }}'`) is dangerous because the
+input is evaluated before the script runs, allowing code injection (e.g., input
+`'; system('rm -rf /'); //`). **Prevention:** Always use environment variables
+to pass inputs to `github-script`. Map inputs to `env:` in the workflow step,
+and access them via `process.env.VAR_NAME` within the script. This ensures data
+is treated as data, not code.

@@ -12,8 +12,10 @@ Thank you for using our projects! Here's how to get help:
 
 ### Community Support
 
-- **Issues**: Browse existing [issues](../../issues) to see if your question has been answered
-- **Discussions**: Participate in [discussions](../../discussions) (if enabled) for general questions
+- **Issues**: Browse existing [issues](../../issues) to see if your question has
+  been answered
+- **Discussions**: Participate in [discussions](../../discussions) (if enabled)
+  for general questions
 - **Pull Requests**: Review [pull requests](../../pulls) to see ongoing work
 
 ## How to Ask for Help
@@ -21,9 +23,10 @@ Thank you for using our projects! Here's how to get help:
 When seeking support:
 
 1. **Search first**: Check if your question has already been answered
-2. **Be specific**: Provide clear details about your issue
-3. **Include context**: Share relevant code, error messages, and environment details
-4. **Be patient**: Maintainers and community members volunteer their time
+1. **Be specific**: Provide clear details about your issue
+1. **Include context**: Share relevant code, error messages, and environment
+   details
+1. **Be patient**: Maintainers and community members volunteer their time
 
 ## Issue Guidelines
 
@@ -44,11 +47,13 @@ When opening an issue:
 
 ## Contributing
 
-If you want to help others or contribute to the project, see our [Contributing Guidelines](CONTRIBUTING.md).
+If you want to help others or contribute to the project, see our
+[Contributing Guidelines](CONTRIBUTING.md).
 
 ## Code of Conduct
 
-All interactions are governed by our [Code of Conduct](CODE_OF_CONDUCT.md). Please be respectful and constructive.
+All interactions are governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+Please be respectful and constructive.
 
 ---
 

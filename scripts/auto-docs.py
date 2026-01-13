@@ -303,9 +303,7 @@ class DocumentationGenerator:
 
         with open(index_path, "w", encoding="utf-8") as f:
             f.write("# API Documentation\n\n")
-            f.write(
-                f"> Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
-            )
+            f.write(f"> Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write("## Modules\n\n")
 
             for module_info in sorted(self.modules_info, key=lambda x: x["name"]):
@@ -316,7 +314,9 @@ class DocumentationGenerator:
                 summary = "No description"
                 if module_info["modules"]:
                     docstring = module_info["modules"][0]["docstring"]
-                    summary = docstring.split("\n")[0] if docstring else "No description"
+                    summary = (
+                        docstring.split("\n")[0] if docstring else "No description"
+                    )
 
                 f.write(f"- [{module_name}]({doc_file}) - {summary}\n")
 
@@ -455,7 +455,7 @@ def update_readme(readme_path: Path, summary: str) -> None:
         # Replace existing module section
         # Use a simpler, non-backtracking pattern to avoid ReDoS
         # Split content into sections by ## headers
-        sections = re.split(r'\n(?=##\s)', content)
+        sections = re.split(r"\n(?=##\s)", content)
         found = False
 
         for i, section in enumerate(sections):

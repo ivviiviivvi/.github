@@ -39,8 +39,9 @@ jobs:
             chore
             revert
           # Scopes are optional
-          requireScope: false
-          # Subject must not be empty
+          requireScope:
+            false
+            # Subject must not be empty
           subjectPattern: ^(?![A-Z]).+$
           subjectPatternError: |
             The subject found in the PR title must not start with an uppercase character.

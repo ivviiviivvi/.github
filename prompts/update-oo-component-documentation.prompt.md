@@ -1,27 +1,33 @@
 ---
-mode: 'agent'
-description: 'Update existing object-oriented component documentation following industry best practices and architectural documentation standards.'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
----
+
+## mode: 'agent' description: 'Update existing object-oriented component documentation following industry best practices and architectural documentation standards.' tools: \['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI'\]
+
 # Update Standard OO Component Documentation
 
-Update the existing documentation file at: `${file}` by analyzing the corresponding component code.
+Update the existing documentation file at: `${file}` by analyzing the
+corresponding component code.
 
-Extract the component path from the existing documentation's front matter (`component_path` field) or infer it from the documentation content. Analyze the current component implementation and update the documentation accordingly.
+Extract the component path from the existing documentation's front matter
+(`component_path` field) or infer it from the documentation content. Analyze the
+current component implementation and update the documentation accordingly.
 
 **Documentation Standards:**
 
-- DOC-001: Follow C4 Model documentation levels (Context, Containers, Components, Code)
+- DOC-001: Follow C4 Model documentation levels (Context, Containers,
+  Components, Code)
 - DOC-002: Align with Arc42 software architecture documentation template
 - DOC-003: Comply with IEEE 1016 Software Design Description standard
-- DOC-004: Use Agile Documentation principles (just enough documentation that adds value)
+- DOC-004: Use Agile Documentation principles (just enough documentation that
+  adds value)
 - DOC-005: Target developers and maintainers as primary audience
 
 **Analysis Instructions:**
 
-- ANA-001: Read existing documentation to understand component context and structure
+- ANA-001: Read existing documentation to understand component context and
+  structure
 - ANA-002: Identify component path from front matter or content analysis
-- ANA-003: Examine current source code files for class structures and inheritance
+- ANA-003: Examine current source code files for class structures and
+  inheritance
 - ANA-004: Compare existing documentation with current implementation
 - ANA-005: Identify design patterns and architectural changes
 - ANA-006: Update public APIs, interfaces, and dependencies
@@ -32,8 +38,10 @@ Extract the component path from the existing documentation's front matter (`comp
 
 **Language-Specific Optimizations:**
 
-- LNG-001: **C#/.NET** - async/await, dependency injection, configuration, disposal
-- LNG-002: **Java** - Spring framework, annotations, exception handling, packaging
+- LNG-001: **C#/.NET** - async/await, dependency injection, configuration,
+  disposal
+- LNG-002: **Java** - Spring framework, annotations, exception handling,
+  packaging
 - LNG-003: **TypeScript/JavaScript** - modules, async patterns, types, npm
 - LNG-004: **Python** - packages, virtual environments, type hints, testing
 
@@ -58,13 +66,16 @@ Extract the component path from the existing documentation's front matter (`comp
 
 **Output Format:**
 
-Update the existing Markdown file maintaining its structure while refreshing content to match current implementation. Preserve formatting, heading hierarchy, and existing organizational decisions.
+Update the existing Markdown file maintaining its structure while refreshing
+content to match current implementation. Preserve formatting, heading hierarchy,
+and existing organizational decisions.
 
 **Required Documentation Structure:**
 
-Update the existing documentation following the same template structure, ensuring all sections reflect current implementation:
+Update the existing documentation following the same template structure,
+ensuring all sections reflect current implementation:
 
-```md
+````md
 ---
 title: [Component Name] - Technical Documentation
 component_path: [Current component path]
@@ -82,6 +93,7 @@ tags: [Update tags as needed based on current functionality]
 ## 1. Component Overview
 
 ### Purpose/Responsibility
+
 - OVR-001: Update component's primary responsibility
 - OVR-002: Refresh scope (included/excluded functionality)
 - OVR-003: Update system context and relationships
@@ -97,6 +109,7 @@ tags: [Update tags as needed based on current functionality]
 ### Component Structure and Dependencies Diagram
 
 Update the mermaid diagram to show current:
+
 - **Component structure** - Current classes, interfaces, and their relationships
 - **Internal dependencies** - How components currently interact within the system
 - **External dependencies** - Current external libraries, services, databases, APIs
@@ -106,6 +119,7 @@ Update the mermaid diagram to show current:
 ```mermaid
 [Update diagram to reflect current architecture]
 ```
+````
 
 ## 3. Interface Documentation
 
@@ -113,9 +127,9 @@ Update the mermaid diagram to show current:
 - INT-002: Refresh method/property reference table with current API
 - INT-003: Update events/callbacks/notification mechanisms
 
-| Method/Property | Purpose | Parameters | Return Type | Usage Notes |
-|-----------------|---------|------------|-------------|-------------|
-| [Update table with current API] | | | | |
+| Method/Property                   | Purpose | Parameters | Return Type | Usage Notes |
+| --------------------------------- | ------- | ---------- | ----------- | ----------- |
+| \[Update table with current API\] |         |            |             |             |
 
 ## 4. Implementation Details
 
@@ -158,5 +172,7 @@ Update the mermaid diagram to show current:
 - REF-004: Refresh troubleshooting (common issues, error messages)
 - REF-005: Update related documentation links
 - REF-006: Add change history and migration notes for this update
+
+```
 
 ```

@@ -176,9 +176,7 @@
         "message": "Module 'bandit' not found. Required for security scanning.",
         "timestamp": "2025-01-15T12:30:00Z",
         "stack_trace": "Traceback (most recent call last):\n  File \"security_scan.py\", line 5, in <module>\n    import bandit\nImportError: No module named 'bandit'",
-        "attempted_fixes": [
-          "pip install bandit"
-        ]
+        "attempted_fixes": ["pip install bandit"]
       }
     ]
   },
@@ -282,9 +280,7 @@
           "required": true
         }
       ],
-      "missing_dependencies": [
-        "bandit"
-      ]
+      "missing_dependencies": ["bandit"]
     }
   }
 }

@@ -9,9 +9,9 @@ body:
     attributes:
       value: |
         ## 🌱 Community Health Check
-        
+
         Request an evaluation of repository community health files and practices.
-        
+
         This ensures repositories have proper:
         - Community health files (CODE_OF_CONDUCT, CONTRIBUTING, etc.)
         - Issue and PR templates

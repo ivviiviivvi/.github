@@ -3,13 +3,13 @@ description: Report documentation issues or suggest improvements
 title: "[Docs] "
 labels: ["documentation"]
 assignees:
-  - 
+  -
 body:
   - type: markdown
     attributes:
       value: |
         Help us improve our documentation! Report issues or suggest improvements.
-  
+
   - type: textarea
     id: description
     attributes:
@@ -18,7 +18,7 @@ body:
       placeholder: What needs to be documented or improved?
     validations:
       required: true
-  
+
   - type: dropdown
     id: doc-type
     attributes:
@@ -35,7 +35,7 @@ body:
         - Other
     validations:
       required: true
-  
+
   - type: textarea
     id: affected-docs
     attributes:
@@ -47,7 +47,7 @@ body:
         - File: src/components/Button.tsx (code comments)
     validations:
       required: true
-  
+
   - type: dropdown
     id: issue-type
     attributes:
@@ -64,7 +64,7 @@ body:
         - Improvement Suggestion
     validations:
       required: true
-  
+
   - type: textarea
     id: current-content
     attributes:
@@ -73,7 +73,7 @@ body:
       placeholder: Current documentation text
     validations:
       required: false
-  
+
   - type: textarea
     id: suggested-content
     attributes:
@@ -82,7 +82,7 @@ body:
       placeholder: Your suggested documentation text
     validations:
       required: false
-  
+
   - type: textarea
     id: additional-context
     attributes:
@@ -90,7 +90,7 @@ body:
       description: Any additional information that would help improve the documentation
     validations:
       required: false
-  
+
   - type: checkboxes
     id: contribution
     attributes:
@@ -99,7 +99,7 @@ body:
       options:
         - label: I am willing to submit a PR to fix this documentation issue
           required: false
-  
+
   - type: checkboxes
     id: terms
     attributes:

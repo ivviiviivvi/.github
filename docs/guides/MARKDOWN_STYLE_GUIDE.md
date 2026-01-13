@@ -1,6 +1,7 @@
 # Markdown Style Guide
 
-Living style bible for English language patterns, best practices, and markdown formatting standards.
+Living style bible for English language patterns, best practices, and markdown
+formatting standards.
 
 ## Table of Contents
 
@@ -19,7 +20,8 @@ Living style bible for English language patterns, best practices, and markdown f
 
 ## Purpose
 
-This document serves as the **authoritative style bible** for all markdown documentation in this organization. It defines:
+This document serves as the **authoritative style bible** for all markdown
+documentation in this organization. It defines:
 
 - English language usage patterns
 - Markdown formatting standards
@@ -27,7 +29,8 @@ This document serves as the **authoritative style bible** for all markdown docum
 - Best practices for technical documentation
 - Consistency rules across all repositories
 
-This is a **living document** that evolves with our needs while maintaining backward compatibility.
+This is a **living document** that evolves with our needs while maintaining
+backward compatibility.
 
 ---
 
@@ -38,11 +41,13 @@ This is a **living document** that evolves with our needs while maintaining back
 Write to be understood, not to impress.
 
 **Good**:
+
 ```markdown
 Use semantic versioning for all releases.
 ```
 
 **Bad**:
+
 ```markdown
 Leverage semver paradigms to facilitate release management synergies.
 ```
@@ -64,16 +69,20 @@ Write documentation that is easy to update and refactor.
 **DO NOT use emoji or decorative Unicode characters** in documentation.
 
 **Prohibited**:
+
 ```markdown
 ## Key Features
+
 - Feature A
 - Feature B
 - Feature C
 ```
 
 **Correct**:
+
 ```markdown
 ## Key Features
+
 - Feature A
 - Feature B
 - Feature C
@@ -88,6 +97,7 @@ Write documentation that is easy to update and refactor.
 Use **American English** spelling and conventions throughout.
 
 **Examples**:
+
 - color (not colour)
 - organize (not organise)
 - analyze (not analyse)
@@ -97,36 +107,34 @@ Use **American English** spelling and conventions throughout.
 
 #### 1. Active Voice Preferred
 
-**Good**: "The system processes requests"
-**Avoid**: "Requests are processed by the system"
+**Good**: "The system processes requests" **Avoid**: "Requests are processed by
+the system"
 
 Exception: Use passive voice when the actor is unknown or irrelevant.
 
 #### 2. Present Tense for Documentation
 
-**Good**: "The function returns a value"
-**Avoid**: "The function will return a value"
+**Good**: "The function returns a value" **Avoid**: "The function will return a
+value"
 
 Exception: Use future tense for roadmap items.
 
 #### 3. Second Person for Instructions
 
-**Good**: "Configure your environment"
-**Avoid**: "One should configure the environment"
+**Good**: "Configure your environment" **Avoid**: "One should configure the
+environment"
 
 #### 4. Oxford Comma
 
 Always use the serial comma.
 
-**Good**: "Configure, build, and test"
-**Avoid**: "Configure, build and test"
+**Good**: "Configure, build, and test" **Avoid**: "Configure, build and test"
 
 #### 5. Sentence Case for Headings
 
 Use sentence case, not title case.
 
-**Good**: "Installing the application"
-**Avoid**: "Installing The Application"
+**Good**: "Installing the application" **Avoid**: "Installing The Application"
 
 ### Terminology
 
@@ -134,17 +142,17 @@ Use sentence case, not title case.
 
 Use the same term throughout documentation:
 
-| Preferred | Avoid |
-|-----------|-------|
-| repository | repo (in formal docs) |
-| pull request | PR (in formal docs) |
-| commit message | commit msg |
-| command line | terminal, console, shell (use specific term when needed) |
-| filename | file name |
-| codebase | code base |
-| email | e-mail |
-| setup (noun) | set-up |
-| set up (verb) | setup |
+| Preferred      | Avoid                                                    |
+| -------------- | -------------------------------------------------------- |
+| repository     | repo (in formal docs)                                    |
+| pull request   | PR (in formal docs)                                      |
+| commit message | commit msg                                               |
+| command line   | terminal, console, shell (use specific term when needed) |
+| filename       | file name                                                |
+| codebase       | code base                                                |
+| email          | e-mail                                                   |
+| setup (noun)   | set-up                                                   |
+| set up (verb)  | setup                                                    |
 
 #### Technical Terms
 
@@ -171,6 +179,7 @@ Use Continuous Integration/Continuous Deployment (CI/CD) for automated testing.
 #### Common Exceptions
 
 These can be used without spelling out:
+
 - API
 - URL
 - HTTP/HTTPS
@@ -183,12 +192,12 @@ These can be used without spelling out:
 
 Avoid Latin abbreviations; use English equivalents:
 
-| Avoid | Use |
-|-------|-----|
-| i.e. | that is |
-| e.g. | for example |
-| etc. | and so on |
-| via | through, by way of |
+| Avoid | Use                |
+| ----- | ------------------ |
+| i.e.  | that is            |
+| e.g.  | for example        |
+| etc.  | and so on          |
+| via   | through, by way of |
 
 ---
 
@@ -209,13 +218,15 @@ Avoid Latin abbreviations; use English equivalents:
 ```
 
 **Rules**:
+
 1. Only one H1 per document (the title)
-2. Do not skip heading levels
-3. Use sentence case
-4. No punctuation at end of headings
-5. Add blank line before and after headings
+1. Do not skip heading levels
+1. Use sentence case
+1. No punctuation at end of headings
+1. Add blank line before and after headings
 
 **Good**:
+
 ```markdown
 ## Installation instructions
 
@@ -223,8 +234,10 @@ Follow these steps to install.
 ```
 
 **Bad**:
+
 ```markdown
 ## Installation Instructions:
+
 Follow these steps to install.
 ```
 
@@ -249,11 +262,13 @@ This is the second paragraph. It introduces a new idea.
 
 ```markdown
 # One sentence per line (recommended for version control)
+
 This is the first sentence.
 This is the second sentence.
 This is the third sentence.
 
 # Or wrapped at ~80 characters
+
 This is a longer paragraph that wraps at approximately eighty characters
 to maintain readability while also working well with version control systems.
 ```
@@ -273,10 +288,11 @@ Use hyphens for consistency:
 ```
 
 **Rules**:
-1. Use hyphens (-), not asterisks (*) or plus signs (+)
-2. Indent nested items with 2 spaces
-3. Add blank line before and after list
-4. Add blank line between list items if any item is multi-paragraph
+
+1. Use hyphens (-), not asterisks (\*) or plus signs (+)
+1. Indent nested items with 2 spaces
+1. Add blank line before and after list
+1. Add blank line between list items if any item is multi-paragraph
 
 ```markdown
 Text before list.
@@ -298,12 +314,14 @@ Text after list.
 ```
 
 **Rules**:
+
 1. Use sequential numbers (not all "1.")
-2. Use actual numbers for better readability in raw markdown
-3. End each item with period if items are complete sentences
-4. No period if items are fragments
+1. Use actual numbers for better readability in raw markdown
+1. End each item with period if items are complete sentences
+1. No period if items are fragments
 
 **Complete sentences**:
+
 ```markdown
 1. Install the dependencies.
 2. Configure the environment.
@@ -311,6 +329,7 @@ Text after list.
 ```
 
 **Fragments**:
+
 ```markdown
 1. Install dependencies
 2. Configure environment
@@ -336,6 +355,7 @@ Use double asterisks:
 ```
 
 Use for:
+
 - Important terms on first mention
 - Warnings and cautions
 - Strong emphasis
@@ -345,10 +365,11 @@ Use for:
 Use single asterisks:
 
 ```markdown
-*This is italic text*
+_This is italic text_
 ```
 
 Use for:
+
 - Emphasis
 - Variable names in prose
 - Book titles
@@ -356,7 +377,7 @@ Use for:
 #### Combined
 
 ```markdown
-***This is bold and italic***
+**_This is bold and italic_**
 ```
 
 Use sparingly.
@@ -370,6 +391,7 @@ Use the `git commit` command to commit changes.
 ```
 
 Use for:
+
 - Command names
 - Function names
 - Variable names
@@ -406,17 +428,20 @@ See [Contributing Guide](CONTRIBUTING.md).
 ```
 
 **Rules**:
+
 1. Use descriptive link text (not "click here")
-2. Ensure links work (test them)
-3. Use relative paths for internal links
-4. Use reference links for repeated URLs
+1. Ensure links work (test them)
+1. Use relative paths for internal links
+1. Use reference links for repeated URLs
 
 **Good**:
+
 ```markdown
 Read the [installation guide](INSTALL.md) for setup instructions.
 ```
 
 **Bad**:
+
 ```markdown
 Click [here](INSTALL.md) to install.
 ```
@@ -483,7 +508,7 @@ output without syntax highlighting
 
 ```markdown
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1   | Cell 2   | Cell 3   |
 | Cell 4   | Cell 5   | Cell 6   |
 ```
@@ -492,15 +517,16 @@ output without syntax highlighting
 
 ```markdown
 | Left Aligned | Center Aligned | Right Aligned |
-|:-------------|:--------------:|--------------:|
-| Left         | Center         | Right         |
+| :----------- | :------------: | ------------: |
+| Left         |     Center     |         Right |
 ```
 
 **Rules**:
+
 1. Use pipes to align columns visually in raw markdown
-2. Add blank line before and after table
-3. Keep headers simple
-4. Use sentence case for headers
+1. Add blank line before and after table
+1. Keep headers simple
+1. Use sentence case for headers
 
 ### Blockquotes
 
@@ -512,6 +538,7 @@ output without syntax highlighting
 ```
 
 Use for:
+
 - Important notes
 - Quotes from external sources
 - Callouts
@@ -648,18 +675,18 @@ Include at end of long-lived documents:
 
 #### Professional but Approachable
 
-**Good**: "Configure the environment before running tests."
-**Avoid**: "You better configure the environment first!"
+**Good**: "Configure the environment before running tests." **Avoid**: "You
+better configure the environment first!"
 
 #### Direct and Clear
 
-**Good**: "Delete the file."
-**Avoid**: "You might want to consider possibly deleting the file."
+**Good**: "Delete the file." **Avoid**: "You might want to consider possibly
+deleting the file."
 
 #### Respectful
 
-**Good**: "Ensure you have admin permissions."
-**Avoid**: "Obviously, you need admin permissions."
+**Good**: "Ensure you have admin permissions." **Avoid**: "Obviously, you need
+admin permissions."
 
 ### Instructions
 
@@ -672,6 +699,7 @@ Include at end of long-lived documents:
 ```
 
 Not:
+
 ```markdown
 1. You should install dependencies
 2. Please configure environment
@@ -690,7 +718,7 @@ Not:
 
 Explain why, not just what:
 
-```markdown
+````markdown
 ## Set environment variables
 
 Configure environment variables to customize application behavior:
@@ -698,9 +726,11 @@ Configure environment variables to customize application behavior:
 ```bash
 export API_KEY=your_key_here
 ```
+````
 
 This allows the application to authenticate with external services.
-```
+
+````
 
 ### Examples
 
@@ -713,15 +743,17 @@ Use descriptive branch names following this pattern:
 
 ```bash
 develop/feature/component-name
-```
+````
 
 For example:
+
 ```bash
 develop/feature/user-authentication
 develop/feature/payment-gateway
 production/hotfix/security-patch
 ```
-```
+
+````
 
 ---
 
@@ -736,8 +768,9 @@ Run the following command:
 
 ```bash
 git commit -m "feat: add feature"
-```
-```
+````
+
+````
 
 For multiple commands:
 
@@ -751,8 +784,9 @@ npm test
 
 # Build application
 npm run build
-```
-```
+````
+
+````
 
 ### File Paths
 
@@ -762,7 +796,7 @@ Use backticks for file paths:
 Edit the `config/settings.yaml` file.
 
 Add the following to `src/main.js`:
-```
+````
 
 Use forward slashes even for Windows:
 
@@ -774,12 +808,14 @@ Use forward slashes even for Windows:
 
 Use clear placeholders:
 
-```markdown
+````markdown
 ```bash
 git clone https://github.com/<username>/<repository>
 cd <repository>
 ```
-```
+````
+
+````
 
 Or with more description:
 
@@ -788,8 +824,9 @@ Replace `<your-api-key>` with your actual API key:
 
 ```javascript
 const apiKey = '<your-api-key>';
-```
-```
+````
+
+````
 
 ### Prerequisites
 
@@ -804,7 +841,7 @@ Before starting, ensure you have:
 - npm 9 or later
 - Git 2.30 or later
 - Admin permissions on your system
-```
+````
 
 ---
 
@@ -815,22 +852,25 @@ Before starting, ensure you have:
 Provide complete, working examples:
 
 **Good**:
-```markdown
+
+````markdown
 ```javascript
 // server.js
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 ```
-```
+````
+
+````
 
 **Avoid fragments without context**.
 
@@ -848,8 +888,9 @@ app.use(express.json());
 
 // Define routes
 app.get('/users', getUsers);
-```
-```
+````
+
+`````
 
 ### Syntax Highlighting
 
@@ -858,7 +899,7 @@ Always specify language:
 ````markdown
 ```javascript
 // JavaScript code
-```
+`````
 
 ```python
 # Python code
@@ -867,7 +908,8 @@ Always specify language:
 ```bash
 # Shell commands
 ```
-````
+
+`````
 
 ---
 
@@ -959,9 +1001,10 @@ Follow these steps to install.
 ```
 git commit -m "message"
 ```
-````
+`````
 
 **Right**:
+
 ````markdown
 ```bash
 git commit -m "message"
@@ -1007,17 +1050,18 @@ Before publishing documentation:
 This is a **living document**. To propose changes:
 
 1. Open an issue describing the proposed change
-2. Discuss rationale and impact
-3. Submit PR updating this guide
-4. Get approval from documentation team
-5. Update existing docs to conform (if needed)
+1. Discuss rationale and impact
+1. Submit PR updating this guide
+1. Get approval from documentation team
+1. Update existing docs to conform (if needed)
 
 ---
 
 ## Related Documentation
 
 - [CONTRIBUTING.md](docs/CONTRIBUTING.md) - Contributing guidelines
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control standards
+- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control
+  standards
 - [README.md](README.md) - Repository overview
 
 ---

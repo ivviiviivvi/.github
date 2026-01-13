@@ -2,16 +2,16 @@ name: SBOM Generation
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [main, master]
     paths:
-      - 'requirements*.txt'
-      - 'package*.json'
-      - 'go.mod'
-      - 'Cargo.toml'
-      - 'pom.xml'
-      - 'build.gradle'
+      - requirements*.txt
+      - package*.json
+      - go.mod
+      - Cargo.toml
+      - pom.xml
+      - build.gradle
   release:
-    types: [ published ]
+    types: [published]
   workflow_dispatch:
 
 concurrency:

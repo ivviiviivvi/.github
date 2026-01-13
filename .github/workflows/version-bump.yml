@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       bump_type:
-        description: 'Type of version bump'
+        description: Type of version bump
         required: true
         type: choice
         options:
           - patch
           - minor
           - major
-        default: 'patch'
+        default: patch
 
 concurrency:
   group: ${{ github.workflow }}
@@ -117,8 +117,8 @@ jobs:
         uses: peter-evans/create-pull-request@8867c4aba1b742c39f8d0ba387c70f678c12193f # ratchet:peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: bump version to ${{ steps.bump.outputs.new_version }}'
-          title: 'chore: bump version to ${{ steps.bump.outputs.new_version }}'
+          commit-message: "chore: bump version to ${{ steps.bump.outputs.new_version }}"
+          title: "chore: bump version to ${{ steps.bump.outputs.new_version }}"
           body: |
             ## Version Bump
 

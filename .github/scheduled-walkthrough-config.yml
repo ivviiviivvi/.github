@@ -8,10 +8,10 @@ schedule:
   frequency: weekly
 
   # Day of week for weekly/biweekly (Monday = 1, Sunday = 7)
-  day_of_week: 1  # Monday
+  day_of_week: 1 # Monday
 
   # Time of day in UTC (24-hour format)
-  time: "09:00"
+  time: 09:00
 
   # For biweekly, start date (YYYY-MM-DD)
   biweekly_start: "2025-01-06"
@@ -41,7 +41,7 @@ repository_discovery:
   always_include:
     - example-react-app
     - example-vue-dashboard
-    # Add more repository names as needed
+      # Add more repository names as needed
 
   # Repositories to always exclude
   always_exclude:
@@ -49,7 +49,7 @@ repository_discovery:
     - .github-private
     - test-repo
     - archived-project
-    # Add more repository names as needed
+      # Add more repository names as needed
 
   # Filter by language (empty = all languages)
   languages:
@@ -58,7 +58,7 @@ repository_discovery:
     - Python
     - Ruby
     - Go
-    # Add more languages as needed (leave empty for all)
+      # Add more languages as needed (leave empty for all)
 
 # Change Detection
 change_detection:
@@ -106,22 +106,22 @@ generation_settings:
       voiceover_style: casual
       duration: 90
       focus_areas:
-        - "Todo list management"
-        - "User authentication"
+        - Todo list management
+        - User authentication
 
     example-flask-api:
       voiceover_style: technical
       duration: 45
       focus_areas:
-        - "REST API endpoints"
-        - "Database operations"
+        - REST API endpoints
+        - Database operations
 
     example-vue-dashboard:
       voiceover_style: professional
       duration: 75
       focus_areas:
-        - "Data visualization"
-        - "Real-time updates"
+        - Data visualization
+        - Real-time updates
 
 # Batch Processing
 batch_processing:
@@ -146,7 +146,7 @@ batch_processing:
     - high-priority-app
     - main-product
     - customer-facing-app
-    # Add more repository names in priority order
+      # Add more repository names in priority order
 
 # Rate Limiting
 rate_limiting:
@@ -168,7 +168,7 @@ pull_request:
   target_branch: main
 
   # PR title template
-  title_template: "🎥 Automated Walkthrough - {date}"
+  title_template: 🎥 Automated Walkthrough - {date}
 
   # PR labels
   labels:
@@ -239,7 +239,7 @@ notifications:
     # GitHub Discussions
     github_discussions:
       enabled: false
-      category: "Announcements"
+      category: Announcements
 
     # Email (requires additional setup)
     email:
@@ -271,7 +271,7 @@ artifacts:
   retention_days: 90
 
   # Artifact naming pattern
-  name_pattern: "walkthrough-{repo_name}-{date}"
+  name_pattern: walkthrough-{repo_name}-{date}
 
   # Include metadata file with artifact
   include_metadata: true
@@ -346,7 +346,6 @@ advanced:
   global_environment_variables:
     CI: true
     AUTOMATED_WALKTHROUGH: true
-
 # ---
 
 # Usage Notes

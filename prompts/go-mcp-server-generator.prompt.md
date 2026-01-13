@@ -1,23 +1,23 @@
 ---
-mode: agent
-description: 'Generate a complete Go MCP server project with proper structure, dependencies, and implementation using the official github.com/modelcontextprotocol/go-sdk.'
----
+
+## mode: agent description: 'Generate a complete Go MCP server project with proper structure, dependencies, and implementation using the official github.com/modelcontextprotocol/go-sdk.'
 
 # Go MCP Server Project Generator
 
-Generate a complete, production-ready Model Context Protocol (MCP) server project in Go.
+Generate a complete, production-ready Model Context Protocol (MCP) server
+project in Go.
 
 ## Project Requirements
 
 You will create a Go MCP server with:
 
 1. **Project Structure**: Proper Go module layout
-2. **Dependencies**: Official MCP SDK and necessary packages
-3. **Server Setup**: Configured MCP server with transports
-4. **Tools**: At least 2-3 useful tools with typed inputs/outputs
-5. **Error Handling**: Proper error handling and context usage
-6. **Documentation**: README with setup and usage instructions
-7. **Testing**: Basic test structure
+1. **Dependencies**: Official MCP SDK and necessary packages
+1. **Server Setup**: Configured MCP server with transports
+1. **Tools**: At least 2-3 useful tools with typed inputs/outputs
+1. **Error Handling**: Proper error handling and context usage
+1. **Documentation**: README with setup and usage instructions
+1. **Testing**: Basic test structure
 
 ## Template Structure
 
@@ -68,7 +68,7 @@ import (
 
 func main() {
     cfg := config.Load()
-    
+
     ctx, cancel := context.WithCancel(context.Background())
     defer cancel()
 
@@ -278,13 +278,16 @@ Configure via environment variables:
 ## Available Tools
 
 ### tool1
+
 {{TOOL1_DESCRIPTION}}
 
 **Input:**
+
 - `param1` (string, required): First parameter
 - `param2` (int, optional): Second parameter
 
 **Output:**
+
 - `result` (string): Operation result
 - `status` (string): Status of the operation
 
@@ -312,15 +315,15 @@ MIT
 When generating a Go MCP server:
 
 1. **Initialize Module**: Create `go.mod` with proper module path
-2. **Structure**: Follow the template directory structure
-3. **Type Safety**: Use structs with JSON schema tags for all inputs/outputs
-4. **Error Handling**: Validate inputs, check context, wrap errors
-5. **Documentation**: Add clear descriptions and examples
-6. **Testing**: Include at least one test per tool
-7. **Configuration**: Use environment variables for config
-8. **Logging**: Use structured logging (log/slog)
-9. **Graceful Shutdown**: Handle signals properly
-10. **Transport**: Default to stdio, document alternatives
+1. **Structure**: Follow the template directory structure
+1. **Type Safety**: Use structs with JSON schema tags for all inputs/outputs
+1. **Error Handling**: Validate inputs, check context, wrap errors
+1. **Documentation**: Add clear descriptions and examples
+1. **Testing**: Include at least one test per tool
+1. **Configuration**: Use environment variables for config
+1. **Logging**: Use structured logging (log/slog)
+1. **Graceful Shutdown**: Handle signals properly
+1. **Transport**: Default to stdio, document alternatives
 
 ## Best Practices
 

@@ -3,11 +3,11 @@ name: Video Quality Validation
 on:
   push:
     paths:
-      - 'videos/**'
-      - '.github/workflows/validate-quality.yml'
+      - "videos/**"
+      - ".github/workflows/validate-quality.yml"
   pull_request:
     paths:
-      - 'videos/**'
+      - "videos/**"
   workflow_dispatch:
 
 concurrency:
@@ -22,7 +22,7 @@ jobs:
       contents: read
       pull-requests: write
       checks: write
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
@@ -48,12 +48,12 @@ jobs:
           echo "Checking video duration validation..."
           duration_check_passed=true
           invalid_videos=""
-          
+
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             if [ -f "$video" ]; then
               duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1:noinvert=1 "$video" 2>/dev/null || echo "0")
               duration_int=${duration%.*}
-              
+
               # Check if duration is within acceptable range (60s - 3600s for walkthrough videos)
               if [ "$duration_int" -lt 60 ] || [ "$duration_int" -gt 3600 ]; then
                 echo "❌ Invalid duration for $video: ${duration_int}s (must be between 60s and 3600s)"
@@ -64,7 +64,7 @@ jobs:
               fi
             fi
           done
-          
+
           if [ "$duration_check_passed" = false ]; then
             echo "duration_failed=true" >> $GITHUB_OUTPUT
             echo "invalid_durations<<EOF" >> $GITHUB_OUTPUT
@@ -82,16 +82,16 @@ jobs:
           echo "Checking video bitrate validation..."
           bitrate_check_passed=true
           invalid_bitrates=""
-          
+
           # Acceptable bitrate range: 1000k - 8000k (1Mbps - 8Mbps)
           min_bitrate=1000
           max_bitrate=8000
-          
+
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             if [ -f "$video" ]; then
               bitrate=$(ffprobe -v error -select_streams v:0 -show_entries stream=bit_rate -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null || echo "0")
               bitrate_kbps=$((bitrate / 1000))
-              
+
               if [ "$bitrate_kbps" -lt "$min_bitrate" ] || [ "$bitrate_kbps" -gt "$max_bitrate" ]; then
                 echo "⚠️  Non-optimal bitrate for $video: ${bitrate_kbps}kbps (recommended: ${min_bitrate}k-${max_bitrate}k)"
                 invalid_bitrates="$invalid_bitrates\n- $video (${bitrate_kbps}kbps)"
@@ -101,7 +101,7 @@ jobs:
               fi
             fi
           done
-          
+
           if [ "$bitrate_check_passed" = false ]; then
             echo "bitrate_failed=true" >> $GITHUB_OUTPUT
             echo "invalid_bitrates<<EOF" >> $GITHUB_OUTPUT
@@ -117,15 +117,15 @@ jobs:
           echo "Checking video resolution validation..."
           resolution_check_passed=true
           invalid_resolutions=""
-          
+
           # Acceptable resolutions: 1280x720 (720p) or higher
           min_height=720
-          
+
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             if [ -f "$video" ]; then
               width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
               height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
-              
+
               if [ -z "$width" ] || [ -z "$height" ]; then
                 echo "❌ Could not determine resolution for $video"
                 invalid_resolutions="$invalid_resolutions\n- $video (unknown resolution)"
@@ -139,7 +139,7 @@ jobs:
               fi
             fi
           done
-          
+
           if [ "$resolution_check_passed" = false ]; then
             echo "resolution_failed=true" >> $GITHUB_OUTPUT
             echo "invalid_resolutions<<EOF" >> $GITHUB_OUTPUT
@@ -156,7 +156,7 @@ jobs:
         run: |
           echo "Scanning for secrets in videos and related files..."
           secrets_found=false
-          
+
           # Scan video files
           for video in $(find videos -type f 2>/dev/null); do
             if [ -f "$video" ]; then
@@ -168,7 +168,7 @@ jobs:
               }
             fi
           done
-          
+
           # Scan subtitle files for secrets
           for subtitle in $(find videos -type f \( -name "*.srt" -o -name "*.vtt" -o -name "*.ass" \) 2>/dev/null); do
             if [ -f "$subtitle" ]; then
@@ -178,7 +178,7 @@ jobs:
               }
             fi
           done
-          
+
           if [ "$secrets_found" = true ]; then
             echo "secrets_found=true" >> $GITHUB_OUTPUT
           else
@@ -193,11 +193,11 @@ jobs:
           echo "Validating subtitle files..."
           subtitle_check_passed=true
           validation_issues=""
-          
+
           for subtitle in $(find videos -type f \( -name "*.srt" -o -name "*.vtt" -o -name "*.ass" \) 2>/dev/null); do
             if [ -f "$subtitle" ]; then
               echo "Checking subtitle: $subtitle"
-              
+
               # Check file size (should not exceed 5MB)
               size=$(stat -f%z "$subtitle" 2>/dev/null || stat -c%s "$subtitle" 2>/dev/null)
               if [ "$size" -gt 5242880 ]; then
@@ -205,7 +205,7 @@ jobs:
                 validation_issues="$validation_issues\n- $subtitle (file too large: $(($size / 1048576))MB)"
                 subtitle_check_passed=false
               fi
-              
+
               # Validate SRT format
               if [[ "$subtitle" == *.srt ]]; then
                 if grep -qE '^[0-9]+$' "$subtitle" && grep -qE '^[0-9]{2}:[0-9]{2}:[0-9]{2}' "$subtitle"; then
@@ -216,7 +216,7 @@ jobs:
                   subtitle_check_passed=false
                 fi
               fi
-              
+
               # Check for invalid characters
               if grep -q $'[\x80-\xFF]' "$subtitle"; then
                 # This might be valid UTF-8, just warn
@@ -224,7 +224,7 @@ jobs:
               fi
             fi
           done
-          
+
           # Check if video files have associated subtitle files
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             base_name="${video%.*}"
@@ -234,7 +234,7 @@ jobs:
               subtitle_check_passed=false
             fi
           done
-          
+
           if [ "$subtitle_check_passed" = false ]; then
             echo "subtitle_failed=true" >> $GITHUB_OUTPUT
             echo "subtitle_issues<<EOF" >> $GITHUB_OUTPUT
@@ -250,7 +250,7 @@ jobs:
         run: |
           echo "## 📋 Video Quality Validation Report" > validation_report.md
           echo "" >> validation_report.md
-          
+
           echo "### Duration Check" >> validation_report.md
           if [ "${{ steps.duration-check.outcome }}" = "failure" ]; then
             echo "❌ FAILED" >> validation_report.md
@@ -261,7 +261,7 @@ jobs:
             echo "✅ PASSED" >> validation_report.md
           fi
           echo "" >> validation_report.md
-          
+
           echo "### Bitrate Check" >> validation_report.md
           if [ "${{ steps.bitrate-check.outputs.bitrate_failed }}" = "true" ]; then
             echo "⚠️  WARNING" >> validation_report.md
@@ -272,7 +272,7 @@ jobs:
             echo "✅ PASSED" >> validation_report.md
           fi
           echo "" >> validation_report.md
-          
+
           echo "### Resolution Check" >> validation_report.md
           if [ "${{ steps.resolution-check.outcome }}" = "failure" ]; then
             echo "❌ FAILED" >> validation_report.md
@@ -283,7 +283,7 @@ jobs:
             echo "✅ PASSED" >> validation_report.md
           fi
           echo "" >> validation_report.md
-          
+
           echo "### Secret Scan" >> validation_report.md
           if [ "${{ steps.secret-scan.outputs.secrets_found }}" = "true" ]; then
             echo "⚠️  POTENTIAL SECRETS DETECTED - Review Required" >> validation_report.md
@@ -291,7 +291,7 @@ jobs:
             echo "✅ PASSED" >> validation_report.md
           fi
           echo "" >> validation_report.md
-          
+
           echo "### Subtitle Validation" >> validation_report.md
           if [ "${{ steps.subtitle-check.outputs.subtitle_failed }}" = "true" ]; then
             echo "⚠️  WARNING" >> validation_report.md
@@ -302,10 +302,10 @@ jobs:
             echo "✅ PASSED" >> validation_report.md
           fi
           echo "" >> validation_report.md
-          
+
           echo "---" >> validation_report.md
           echo "_Report generated on: $(date -u +'%Y-%m-%d %H:%M:%S UTC')_" >> validation_report.md
-          
+
           cat validation_report.md
 
       - name: Comment validation report on PR
@@ -334,7 +334,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
@@ -348,23 +348,23 @@ jobs:
         run: |
           echo "Validating video codecs and formats..."
           codec_check_passed=true
-          
+
           # Acceptable video codecs: H.264, H.265/HEVC, VP9
           acceptable_codecs="h264|hevc|vp9|h265"
           # Acceptable audio codecs: AAC, MP3, Opus
           acceptable_audio="aac|mp3|opus"
-          
+
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             if [ -f "$video" ]; then
               video_codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
               audio_codec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$video" 2>/dev/null)
-              
+
               if echo "$video_codec" | grep -iqE "$acceptable_codecs"; then
                 echo "✅ Valid video codec for $video: $video_codec"
               else
                 echo "⚠️  Non-standard video codec for $video: $video_codec"
               fi
-              
+
               if echo "$audio_codec" | grep -iqE "$acceptable_audio"; then
                 echo "✅ Valid audio codec for $video: $audio_codec"
               else
@@ -377,7 +377,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
@@ -391,11 +391,11 @@ jobs:
         continue-on-error: true
         run: |
           echo "Checking video file integrity..."
-          
+
           for video in $(find videos -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.mov" \) 2>/dev/null); do
             if [ -f "$video" ]; then
               echo "Checking integrity of: $video"
-              
+
               # Use ffmpeg to validate file structure
               if ffmpeg -v error -i "$video" -f null - 2>&1 | grep -q "error\|corrupt"; then
                 echo "⚠️  Potential corruption detected in: $video"

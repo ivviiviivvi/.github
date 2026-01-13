@@ -1,6 +1,7 @@
 # PR Compliance Guide 🔍
 
-A comprehensive guide to understanding and addressing pull request compliance checks for the ivi374forivi organization.
+A comprehensive guide to understanding and addressing pull request compliance
+checks for the ivi374forivi organization.
 
 ## Table of Contents
 
@@ -15,7 +16,10 @@ A comprehensive guide to understanding and addressing pull request compliance ch
 
 ## Overview
 
-All pull requests in the ivi374forivi organization are subject to automated compliance checks. These checks ensure code quality, security, maintainability, and adherence to organizational standards. This guide explains common compliance issues and how to address them.
+All pull requests in the ivi374forivi organization are subject to automated
+compliance checks. These checks ensure code quality, security, maintainability,
+and adherence to organizational standards. This guide explains common compliance
+issues and how to address them.
 
 ## Security Compliance
 
@@ -25,9 +29,13 @@ All pull requests in the ivi374forivi organization are subject to automated comp
 
 **Risk Level**: ⚪ Requires Human Verification → 🔴 High Priority
 
-**Description**: When processing multiple async tasks with `asyncio.gather()`, if any single task raises an exception, the entire batch fails and no results are returned. This can cause data loss or service disruption in production environments.
+**Description**: When processing multiple async tasks with `asyncio.gather()`,
+if any single task raises an exception, the entire batch fails and no results
+are returned. This can cause data loss or service disruption in production
+environments.
 
 **Example of Non-Compliant Code**:
+
 ```python
 tasks = [self.process_event(event, enrichments) for event in events]
 return await asyncio.gather(*tasks)
@@ -36,6 +44,7 @@ return await asyncio.gather(*tasks)
 **Remediation**:
 
 **Option 1: Use `return_exceptions=True`**
+
 ```python
 tasks = [self.process_event(event, enrichments) for event in events]
 results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -52,6 +61,7 @@ return processed
 ```
 
 **Option 2: Individual Try-Catch Wrappers**
+
 ```python
 async def safe_process_event(event, enrichments):
     try:
@@ -66,10 +76,11 @@ return [r for r in results if r is not None]
 ```
 
 **Option 3: Use `asyncio.TaskGroup` with exception handling (Python 3.11+)**
+
 ```python
 try:
     async with asyncio.TaskGroup() as tg:
-        tasks = [tg.create_task(self.process_event(event, enrichments)) 
+        tasks = [tg.create_task(self.process_event(event, enrichments))
                  for event in events]
     # All tasks completed successfully
     results = [task.result() for task in tasks]
@@ -93,9 +104,11 @@ except* Exception as eg:
 
 **Risk Level**: ⚪ Requires Human Verification → 🟡 Medium Priority
 
-**Description**: Environment variables and external inputs should always be validated and sanitized before use to prevent security vulnerabilities.
+**Description**: Environment variables and external inputs should always be
+validated and sanitized before use to prevent security vulnerabilities.
 
 **Example of Non-Compliant Code**:
+
 ```python
 origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
@@ -106,6 +119,7 @@ app.add_middleware(
 ```
 
 **Remediation**:
+
 ```python
 import re
 from urllib.parse import urlparse
@@ -137,8 +151,8 @@ def validate_origin(origin: str) -> bool:
 # Validate and sanitize CORS origins
 raw_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000")
 origins = [
-    origin.strip() 
-    for origin in raw_origins.split(",") 
+    origin.strip()
+    for origin in raw_origins.split(",")
     if validate_origin(origin)
 ]
 
@@ -161,23 +175,29 @@ app.add_middleware(
 
 **Risk Level**: ⚪ Requires Human Verification → 🟢 Low Priority
 
-**Objective**: Ensure all identifiers clearly express their purpose and intent, making code self-documenting.
+**Objective**: Ensure all identifiers clearly express their purpose and intent,
+making code self-documenting.
 
 **Example of Non-Compliant Code**:
+
 ```python
 events = [e for e in events if e.source == source]
 ```
 
 **Remediation**:
+
 ```python
 events = [event for event in events if event.source == source]
 ```
 
 **Guidelines**:
+
 - Use descriptive names that clearly indicate purpose
-- Avoid single-letter variables except in very limited scopes (e.g., `i` in simple loops)
+- Avoid single-letter variables except in very limited scopes (e.g., `i` in
+  simple loops)
 - For list comprehensions, use the singular form of the collection name
-- Exception: Mathematical code where single letters are conventional (e.g., `x`, `y` for coordinates)
+- Exception: Mathematical code where single letters are conventional (e.g., `x`,
+  `y` for coordinates)
 
 ### Robust Error Handling and Edge Case Management
 
@@ -185,9 +205,11 @@ events = [event for event in events if event.source == source]
 
 **Risk Level**: ⚪ Requires Human Verification → 🟡 Medium Priority
 
-**Objective**: Ensure comprehensive error handling that provides meaningful context and graceful degradation.
+**Objective**: Ensure comprehensive error handling that provides meaningful
+context and graceful degradation.
 
 **Example of Non-Compliant Code**:
+
 ```python
 def get_recent_events(
     self,
@@ -204,11 +226,13 @@ def get_recent_events(
 ```
 
 **Issues**:
+
 - No validation for negative or zero `limit`
 - No handling of empty `events` list
 - Generic variable name `e`
 
 **Remediation**:
+
 ```python
 def get_recent_events(
     self,
@@ -216,23 +240,23 @@ def get_recent_events(
     source: Optional[EventSource] = None
 ) -> List[NormalizedEvent]:
     """Get recent normalized events in reverse chronological order
-    
+
     Args:
         limit: Maximum number of events to return (must be positive)
         source: Optional filter by event source
-        
+
     Returns:
         List of recent normalized events in reverse chronological order
-        
+
     Raises:
         ValueError: If limit is less than or equal to 0
     """
     # Validate inputs
     if limit <= 0:
         raise ValueError(f"limit must be positive, got {limit}")
-    
+
     events = self.normalized_events
-    
+
     # Handle empty events list
     if not events:
         return []
@@ -240,7 +264,7 @@ def get_recent_events(
     # Filter by source if specified
     if source:
         events = [event for event in events if event.source == source]
-        
+
     # Handle case where filtering resulted in no events
     if not events:
         return []
@@ -250,11 +274,12 @@ def get_recent_events(
 ```
 
 **Key Principles**:
+
 1. **Validate all inputs** - Check for invalid values at function boundaries
-2. **Handle empty collections** - Check before operations that assume non-empty
-3. **Provide meaningful error messages** - Include context about what went wrong
-4. **Document edge case behavior** - Use docstrings to clarify expectations
-5. **Use type hints** - Make expected types explicit
+1. **Handle empty collections** - Check before operations that assume non-empty
+1. **Provide meaningful error messages** - Include context about what went wrong
+1. **Document edge case behavior** - Use docstrings to clarify expectations
+1. **Use type hints** - Make expected types explicit
 
 ## Ticket Compliance
 
@@ -262,27 +287,36 @@ def get_recent_events(
 
 **Risk Level**: ⚪ Requires Human Verification
 
-**Requirement**: All pull requests should reference an associated issue or ticket for traceability.
+**Requirement**: All pull requests should reference an associated issue or
+ticket for traceability.
 
 **How to Comply**:
 
-1. **Create an issue first**: Before starting work, create an issue describing the problem or feature
-2. **Reference in PR**: Link the issue in your PR description using GitHub keywords:
+1. **Create an issue first**: Before starting work, create an issue describing
+   the problem or feature
+
+1. **Reference in PR**: Link the issue in your PR description using GitHub
+   keywords:
+
    - `Fixes #123`
    - `Closes #123`
    - `Resolves #123`
    - `Relates to #123`
 
-3. **PR Description Template**: Use the organization's PR template which includes a section for issue references
+1. **PR Description Template**: Use the organization's PR template which
+   includes a section for issue references
 
 **Example PR Description**:
+
 ```markdown
 ## Description
+
 Fixes #123
 
 This PR adds error handling to the batch processing logic to prevent data loss.
 
 ## Changes
+
 - Added `return_exceptions=True` to asyncio.gather
 - Implemented exception logging and filtering
 - Added unit tests for error scenarios
@@ -290,32 +324,41 @@ This PR adds error handling to the batch processing logic to prevent data loss.
 
 ## Codebase Context Compliance
 
-**Purpose**: Enable AI-powered code review tools to understand your codebase better
+**Purpose**: Enable AI-powered code review tools to understand your codebase
+better
 
-**Status**: This is an optional enhancement that improves automated code review quality
+**Status**: This is an optional enhancement that improves automated code review
+quality
 
-**How to Enable**: Follow the [RAG Context Enrichment Guide](https://qodo-merge-docs.qodo.ai/core-abilities/rag_context_enrichment/) to configure codebase context for your repository.
+**How to Enable**: Follow the
+[RAG Context Enrichment Guide](https://qodo-merge-docs.qodo.ai/core-abilities/rag_context_enrichment/)
+to configure codebase context for your repository.
 
 **Benefits**:
+
 - More accurate duplicate code detection
 - Better understanding of project-specific patterns
 - Improved suggestions based on existing code
 
 ## Custom Compliance Rules
 
-The organization enforces several custom compliance rules. Here are the key ones:
+The organization enforces several custom compliance rules. Here are the key
+ones:
 
 ### ✅ Comprehensive Audit Trails
 
-**Objective**: Create detailed and reliable records of critical system actions for security analysis and compliance.
+**Objective**: Create detailed and reliable records of critical system actions
+for security analysis and compliance.
 
 **Requirements**:
+
 - Log all authentication attempts (success and failure)
 - Log all data access and modifications
 - Include timestamps, user identifiers, and action context
 - Use structured logging for easy parsing
 
 **Example**:
+
 ```python
 import logging
 import json
@@ -335,21 +378,25 @@ def audit_log(action: str, user_id: str, resource: str, **kwargs):
     logger.info(f"AUDIT: {json.dumps(entry)}")
 
 # Usage
-audit_log("data_access", user_id="user123", resource="customer_records", 
+audit_log("data_access", user_id="user123", resource="customer_records",
           record_count=5, query="SELECT * FROM customers LIMIT 5")
 ```
 
 ### ✅ Secure Error Handling
 
-**Objective**: Prevent leakage of sensitive system information through error messages while providing sufficient detail for internal debugging.
+**Objective**: Prevent leakage of sensitive system information through error
+messages while providing sufficient detail for internal debugging.
 
 **Requirements**:
+
 - Never expose stack traces to end users
-- Don't include sensitive data in error messages (passwords, tokens, internal paths)
+- Don't include sensitive data in error messages (passwords, tokens, internal
+  paths)
 - Log detailed errors internally
 - Return generic messages to users
 
 **Example**:
+
 ```python
 from fastapi import HTTPException
 import logging
@@ -388,15 +435,18 @@ async def process_payment(payment_data: dict):
 
 ### ✅ Secure Logging Practices
 
-**Objective**: Ensure logs are useful for debugging and auditing without exposing sensitive information like PII, PHI, or cardholder data.
+**Objective**: Ensure logs are useful for debugging and auditing without
+exposing sensitive information like PII, PHI, or cardholder data.
 
 **Requirements**:
+
 - Never log passwords, tokens, API keys, or credentials
 - Redact or mask sensitive data (credit cards, SSNs, etc.)
 - Don't log full user records containing PII
 - Use log levels appropriately (DEBUG, INFO, WARNING, ERROR)
 
 **Example**:
+
 ```python
 import logging
 import re
@@ -429,45 +479,52 @@ def safe_log_user_action(user_id: str, action: str, details: dict):
 
 Understanding compliance check results:
 
-| Symbol | Status | Meaning |
-|--------|--------|---------|
-| 🟢 | Fully Compliant | All checks passed, no action needed |
-| 🟡 | Partially Compliant | Some issues found, improvements recommended |
-| 🔴 | Not Compliant | Critical issues found, must be addressed |
-| ⚪ | Requires Human Verification | Automated check needs manual review |
-| 🏷️ | Compliance Label | Compliance category marker |
+| Symbol | Status                      | Meaning                                     |
+| ------ | --------------------------- | ------------------------------------------- |
+| 🟢     | Fully Compliant             | All checks passed, no action needed         |
+| 🟡     | Partially Compliant         | Some issues found, improvements recommended |
+| 🔴     | Not Compliant               | Critical issues found, must be addressed    |
+| ⚪     | Requires Human Verification | Automated check needs manual review         |
+| 🏷️     | Compliance Label            | Compliance category marker                  |
 
 ## Best Practices
 
 ### Before Submitting a PR
 
 1. **Run Local Tests**: Ensure all tests pass locally
-2. **Run Linters**: Fix any linting errors
-3. **Self-Review**: Read through your changes as if you're reviewing someone else's code
-4. **Check Compliance**: Review common compliance issues and ensure your code addresses them
-5. **Update Documentation**: Update relevant docs for your changes
-6. **Create/Reference Issue**: Ensure there's an issue tracking this work
+1. **Run Linters**: Fix any linting errors
+1. **Self-Review**: Read through your changes as if you're reviewing someone
+   else's code
+1. **Check Compliance**: Review common compliance issues and ensure your code
+   addresses them
+1. **Update Documentation**: Update relevant docs for your changes
+1. **Create/Reference Issue**: Ensure there's an issue tracking this work
 
 ### Responding to Compliance Checks
 
-1. **Don't Ignore Warnings**: Even if marked as "Requires Human Verification", review carefully
-2. **Understand the Issue**: Read the description and understand why it's flagged
-3. **Apply Remediation**: Use the examples in this guide to fix issues
-4. **Ask for Help**: If you're unsure, ask in PR comments or team chat
-5. **Document Decisions**: If you decide a compliance check is a false positive, explain why in comments
+1. **Don't Ignore Warnings**: Even if marked as "Requires Human Verification",
+   review carefully
+1. **Understand the Issue**: Read the description and understand why it's
+   flagged
+1. **Apply Remediation**: Use the examples in this guide to fix issues
+1. **Ask for Help**: If you're unsure, ask in PR comments or team chat
+1. **Document Decisions**: If you decide a compliance check is a false positive,
+   explain why in comments
 
 ### Writing Compliance-Friendly Code
 
 1. **Defensive Programming**: Validate inputs, handle errors, check boundaries
-2. **Clear Naming**: Use descriptive variable and function names
-3. **Error Context**: Provide helpful error messages for debugging
-4. **Security First**: Assume all external input is potentially malicious
-5. **Document Assumptions**: Use docstrings and comments to explain non-obvious logic
-6. **Test Edge Cases**: Write tests for boundary conditions and error scenarios
+1. **Clear Naming**: Use descriptive variable and function names
+1. **Error Context**: Provide helpful error messages for debugging
+1. **Security First**: Assume all external input is potentially malicious
+1. **Document Assumptions**: Use docstrings and comments to explain non-obvious
+   logic
+1. **Test Edge Cases**: Write tests for boundary conditions and error scenarios
 
 ### Common Patterns to Avoid
 
 ❌ **Bare except clauses**:
+
 ```python
 try:
     risky_operation()
@@ -476,6 +533,7 @@ except:  # Too broad!
 ```
 
 ✅ **Specific exception handling**:
+
 ```python
 try:
     risky_operation()
@@ -490,12 +548,14 @@ except IOError as e:
 ---
 
 ❌ **Unvalidated environment variables**:
+
 ```python
 database_url = os.getenv("DATABASE_URL")
 connect(database_url)  # What if it's not set?
 ```
 
 ✅ **Validated configuration**:
+
 ```python
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
@@ -508,12 +568,14 @@ connect(database_url)
 ---
 
 ❌ **No input validation**:
+
 ```python
 def get_items(count: int):
     return items[-count:]  # What if count is negative? Or zero?
 ```
 
 ✅ **Validated inputs**:
+
 ```python
 def get_items(count: int):
     if count <= 0:
@@ -526,11 +588,13 @@ def get_items(count: int):
 ---
 
 ❌ **Logging sensitive data**:
+
 ```python
 logger.info(f"User login: {username} with password {password}")
 ```
 
 ✅ **Safe logging**:
+
 ```python
 logger.info(f"User login attempt: {username}")
 ```
@@ -546,13 +610,14 @@ logger.info(f"User login attempt: {username}")
 
 ## Questions or Feedback
 
-If you have questions about compliance checks or suggestions for improving this guide:
+If you have questions about compliance checks or suggestions for improving this
+guide:
 
 1. Open an issue in this repository
-2. Tag with `documentation` and `compliance` labels
-3. Reach out in the organization's communication channels
+1. Tag with `documentation` and `compliance` labels
+1. Reach out in the organization's communication channels
 
 ---
 
-**Last Updated**: December 2025  
+**Last Updated**: December 2025\
 **Maintained by**: ivi374forivi Organization

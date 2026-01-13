@@ -1,14 +1,18 @@
 # Claude Integration Security Guide
 
-This document outlines the security measures implemented for Claude AI integration in GitHub Actions workflows.
+This document outlines the security measures implemented for Claude AI
+integration in GitHub Actions workflows.
 
 ## Security Measures Implemented
 
 ### 1. User Permission Validation
 
-Both Claude workflows (`claude.yml` and `claude-code-review.yml`) now include permission checks to ensure only authorized users can trigger Claude operations:
+Both Claude workflows (`claude.yml` and `claude-code-review.yml`) now include
+permission checks to ensure only authorized users can trigger Claude operations:
 
-**claude-code-review.yml**: Uses GitHub Actions conditional to check `author_association` at workflow trigger time:
+**claude-code-review.yml**: Uses GitHub Actions conditional to check
+`author_association` at workflow trigger time:
+
 ```yaml
 if: |
   github.event.pull_request.author_association == 'OWNER' ||
@@ -17,15 +21,18 @@ if: |
 ```
 
 **claude.yml**: Uses GitHub API to validate user permissions at runtime:
+
 ```bash
 PERMISSION=$(gh api /repos/$REPO/collaborators/$ACTOR/permission -q .permission)
 # Allows: admin, write, maintain
 ```
 
-- **Allowed permission levels**: admin, write, maintain (maps to OWNER, MEMBER, COLLABORATOR)
+- **Allowed permission levels**: admin, write, maintain (maps to OWNER, MEMBER,
+  COLLABORATOR)
 - **Blocked**: read, none (external users, first-time contributors)
 
 This prevents unauthorized users from:
+
 - Exhausting API quotas
 - Triggering expensive AI operations
 - Potentially abusing the system
@@ -46,12 +53,15 @@ The `CLAUDE_CODE_OAUTH_TOKEN` secret is now validated before use:
 
 ### 3. Third-Party Action Integrity
 
-All third-party GitHub Actions are now pinned to specific commit SHAs to prevent supply chain attacks:
+All third-party GitHub Actions are now pinned to specific commit SHAs to prevent
+supply chain attacks:
 
 - `actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955` (v4)
-- `anthropics/claude-code-action@06e550b8ff71349db253443c6ca8a4b120e7f89d` (v1.0.16)
+- `anthropics/claude-code-action@06e550b8ff71349db253443c6ca8a4b120e7f89d`
+  (v1.0.16)
 
 This ensures:
+
 - Action code cannot be changed without updating the SHA
 - Protection against compromised action repositories
 - Verifiable action integrity
@@ -66,7 +76,7 @@ permissions:
   pull-requests: read
   issues: read
   id-token: write
-  actions: read  # Only in claude.yml for CI results
+  actions: read # Only in claude.yml for CI results
 ```
 
 ## Token Configuration Requirements
@@ -74,15 +84,17 @@ permissions:
 The `CLAUDE_CODE_OAUTH_TOKEN` must be configured with:
 
 1. **Minimal required scopes** - Only grant permissions needed for:
+
    - Reading repository content
    - Commenting on PRs and issues
    - Viewing CI results
 
-2. **Regular rotation** - Rotate the token periodically (recommended: every 90 days)
+1. **Regular rotation** - Rotate the token periodically (recommended: every 90
+   days)
 
-3. **Access logging** - Monitor token usage for unusual patterns
+1. **Access logging** - Monitor token usage for unusual patterns
 
-4. **Secure storage** - Store only as a GitHub secret, never in code or logs
+1. **Secure storage** - Store only as a GitHub secret, never in code or logs
 
 ## Bash Command Restrictions
 
@@ -99,6 +111,7 @@ Bash(gh pr list:*)
 ```
 
 These commands are:
+
 - **Read-only operations** - Cannot modify repository state directly
 - **Rate-limited by GitHub** - GitHub API rate limits apply
 - **Scoped to GitHub CLI** - Cannot execute arbitrary system commands
@@ -108,26 +121,27 @@ These commands are:
 User inputs (PR content, comments, issue bodies) are:
 
 1. **Processed by GitHub Actions** - GitHub sanitizes event data
-2. **Scoped by permissions** - Only trusted users can trigger workflows
-3. **Validated by Claude AI** - Claude includes built-in prompt injection protections
+1. **Scoped by permissions** - Only trusted users can trigger workflows
+1. **Validated by Claude AI** - Claude includes built-in prompt injection
+   protections
 
 ## Monitoring and Auditing
 
 To monitor Claude integration security:
 
 1. **Review workflow runs** in the Actions tab
-2. **Check API usage** in Claude dashboard
-3. **Monitor token access** via GitHub audit logs
-4. **Review PR comments** for unusual activity
+1. **Check API usage** in Claude dashboard
+1. **Monitor token access** via GitHub audit logs
+1. **Review PR comments** for unusual activity
 
 ## Incident Response
 
 If you suspect a security issue:
 
 1. **Immediately disable** the workflow
-2. **Rotate** the `CLAUDE_CODE_OAUTH_TOKEN`
-3. **Review** recent workflow runs for suspicious activity
-4. **Report** to repository maintainers following SECURITY.md
+1. **Rotate** the `CLAUDE_CODE_OAUTH_TOKEN`
+1. **Review** recent workflow runs for suspicious activity
+1. **Report** to repository maintainers following SECURITY.md
 
 ## Compliance Status
 

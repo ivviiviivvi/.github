@@ -34,7 +34,7 @@ NEW CONFIGURATION FILES:
      - Configures Gitleaks scanner
      - Allowlists documentation, examples, workflows
      - Defines patterns for placeholders
-     
+
   📄 .secrets.baseline (9.5KB)
      - Baseline for detect-secrets
      - 26 verified false positives across 20 files
@@ -45,7 +45,7 @@ WORKFLOW FIXES:
      - Removed "cache: 'pip'" causing failures
      - Added .gitleaks.toml usage
      - Added .secrets.baseline usage
-     
+
   �� .github/workflows/safeguard-5-secret-scanning.yml
      - Fixed Python setup (2 occurrences)
      - Added configuration file usage
@@ -57,12 +57,12 @@ NEW DOCUMENTATION:
      - Explains all 3 scanning tools
      - How to manage false positives
      - Best practices & troubleshooting
-     
+
   📄 docs/SECRET_SCANNING_RESOLUTION.md (6.4KB)
      - Analysis of this issue
      - List of all 26 false positives
      - Resolution steps taken
-     
+
   📄 README.md (Updated)
      - Enhanced "Automated Security" section
      - Lists all scanning tools

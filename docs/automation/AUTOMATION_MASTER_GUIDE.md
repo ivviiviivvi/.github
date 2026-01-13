@@ -1,6 +1,7 @@
 # Automation Master Guide
 
-Complete reference for all automation, tooling, and integrations in this gold standard repository.
+Complete reference for all automation, tooling, and integrations in this gold
+standard repository.
 
 ## Table of Contents
 
@@ -26,7 +27,10 @@ Complete reference for all automation, tooling, and integrations in this gold st
 | **Scheduled Jobs**    | Dependency updates, stale cleanup, metrics, governance      | 20             |
 | **Manual Dispatch**   | On-demand governance utilities and recovery scripts         | 35             |
 
-> Counts reflect distinct workflow files containing the listed triggers (overlap expected because many workflows listen to multiple events). Issue Events aggregates workflows listening to `issues`, `issue_comment`, `pull_request_review`, or `pull_request_review_comment`.
+> Counts reflect distinct workflow files containing the listed triggers (overlap
+> expected because many workflows listen to multiple events). Issue Events
+> aggregates workflows listening to `issues`, `issue_comment`,
+> `pull_request_review`, or `pull_request_review_comment`.
 
 ### Automation Coverage
 
@@ -73,9 +77,9 @@ git commit --no-verify -m "WIP: quick fix"
 **Categories**:
 
 1. **Security**: CodeQL, Semgrep, Dependency review, Secret scanning
-2. **Quality**: Linting, testing, coverage, code review
-3. **Performance**: Benchmarks, bundle size, load testing
-4. **Documentation**: Link checking, spell checking
+1. **Quality**: Linting, testing, coverage, code review
+1. **Performance**: Benchmarks, bundle size, load testing
+1. **Documentation**: Link checking, spell checking
 
 ### Layer 3: Scheduled Automation
 
@@ -552,10 +556,10 @@ repos:
 **Solutions**:
 
 1. Check workflow syntax: `gh workflow view workflow-name`
-2. Verify triggers match event
-3. Check branch name matches trigger
-4. Ensure workflow file is in `.github/workflows/`
-5. Look for syntax errors: `yamllint .github/workflows/*.yml`
+1. Verify triggers match event
+1. Check branch name matches trigger
+1. Ensure workflow file is in `.github/workflows/`
+1. Look for syntax errors: `yamllint .github/workflows/*.yml`
 
 #### Pre-commit Hooks Failing
 
@@ -584,9 +588,9 @@ pre-commit run hook-id --all-files
 **Solutions**:
 
 1. Add tests for uncovered code
-2. Adjust threshold temporarily
-3. Exclude test files from coverage
-4. Check coverage report: `open htmlcov/index.html`
+1. Adjust threshold temporarily
+1. Exclude test files from coverage
+1. Check coverage report: `open htmlcov/index.html`
 
 #### Semantic Release Not Working
 
@@ -595,10 +599,10 @@ pre-commit run hook-id --all-files
 **Solutions**:
 
 1. Verify commit message format
-2. Check branch is main/master
-3. Ensure commits since last release
-4. Verify GitHub token permissions
-5. Run locally: `npx semantic-release --dry-run`
+1. Check branch is main/master
+1. Ensure commits since last release
+1. Verify GitHub token permissions
+1. Run locally: `npx semantic-release --dry-run`
 
 ### Debug Workflows
 
@@ -722,7 +726,8 @@ gh secret remove SECRET_NAME
 
 ## Conclusion
 
-This repository includes **59 automated workflows**, **30+ pre-commit hooks**, and **10+ integrations** providing:
+This repository includes **59 automated workflows**, **30+ pre-commit hooks**,
+and **10+ integrations** providing:
 
 - 🔒 **Security**: 6 layers of security scanning
 - ✅ **Quality**: Automated testing and coverage

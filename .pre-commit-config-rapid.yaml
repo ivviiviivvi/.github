@@ -14,7 +14,7 @@ default_language_version:
   node: 18.17.0
 
 # Global settings for rapid development
-fail_fast: false  # Run all hooks even if one fails
+fail_fast: false # Run all hooks even if one fails
 default_stages: [commit]
 
 repos:
@@ -54,7 +54,7 @@ repos:
 
       # Safety checks (still run but don't block in rapid mode)
       - id: check-added-large-files
-        args: [--maxkb=2000]  # Increased limit for rapid dev
+        args: [--maxkb=2000] # Increased limit for rapid dev
         stages: [commit]
 
       - id: check-merge-conflict
@@ -108,7 +108,7 @@ repos:
           - --max-line-length=88
           - --extend-ignore=E203,W503,E501
           - --max-complexity=15
-          - --exit-zero  # Don't fail on errors
+          - --exit-zero # Don't fail on errors
         stages: [commit]
         verbose: true
 
@@ -121,7 +121,7 @@ repos:
           - --ignore-missing-imports
           - --no-strict-optional
           - --warn-unused-ignores
-        stages: [manual]  # Run manually only: pre-commit run mypy --all-files
+        stages: [manual] # Run manually only: pre-commit run mypy --all-files
         additional_dependencies: [types-all]
 
   # ============================================================================
@@ -136,7 +136,7 @@ repos:
         args:
           - -c
           - .bandit
-          - -ll  # Only HIGH and MEDIUM severity
+          - -ll # Only HIGH and MEDIUM severity
           - -r
           - .
         exclude: ^(tests?/|\.git/)
@@ -185,7 +185,7 @@ repos:
         args:
           - --autofix
           - --indent
-          - '2'
+          - "2"
           - --preserve-quotes
         stages: [commit]
 
@@ -198,7 +198,7 @@ repos:
     hooks:
       - id: shellcheck
         args:
-          - --severity=error  # Only error level in rapid mode
+          - --severity=error # Only error level in rapid mode
           - --format=tty
         stages: [commit]
         verbose: true
@@ -231,7 +231,7 @@ repos:
           - eslint@8.56.0
           - eslint-config-prettier@9.1.0
         args: [--fix, --max-warnings=-1]
-        stages: [manual]  # Run manually in rapid mode
+        stages: [manual] # Run manually in rapid mode
 
   # ============================================================================
   # Docker - Validate but don't block
@@ -243,12 +243,12 @@ repos:
       - id: hadolint-docker
         args:
           - --ignore
-          - DL3008  # Pin versions (relaxed in rapid mode)
+          - DL3008 # Pin versions (relaxed in rapid mode)
           - --ignore
-          - DL3009  # Clean apt cache (relaxed in rapid mode)
+          - DL3009 # Clean apt cache (relaxed in rapid mode)
           - --ignore
-          - DL3018  # Pin versions for apk (relaxed in rapid mode)
-        stages: [manual]  # Run manually in rapid mode
+          - DL3018 # Pin versions for apk (relaxed in rapid mode)
+        stages: [manual] # Run manually in rapid mode
 
   # ============================================================================
   # Commit Message - Validate format (but AI generates these)
@@ -270,21 +270,20 @@ repos:
 
 ci:
   # Auto-fix PRs when hooks fail
-  autofix_commit_msg: 'style: auto fixes from pre-commit.ci [skip ci]'
+  autofix_commit_msg: "style: auto fixes from pre-commit.ci [skip ci]"
   autofix_prs: true
-  autoupdate_commit_msg: 'chore(deps): pre-commit autoupdate [skip ci]'
+  autoupdate_commit_msg: "chore(deps): pre-commit autoupdate [skip ci]"
   autoupdate_schedule: weekly
 
   # Run these hooks in CI (skip slow ones)
   skip:
-    - mypy  # Too slow, run separately
-    - eslint  # Run in separate lint job
-    - hadolint-docker  # Run in separate docker job
-    - conventional-pre-commit  # Handled by AI commit script
+    - mypy # Too slow, run separately
+    - eslint # Run in separate lint job
+    - hadolint-docker # Run in separate docker job
+    - conventional-pre-commit # Handled by AI commit script
 
   # Don't check out submodules (faster)
   submodules: false
-
 # ============================================================================
 # Usage Notes
 # ============================================================================

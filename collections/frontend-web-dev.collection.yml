@@ -9,7 +9,7 @@ items:
   - path: chatmodes/electron-angular-native.chatmode.md
     kind: chat-mode
 
-  # Development Instructions
+    # Development Instructions
   - path: instructions/reactjs.instructions.md
     kind: instruction
   - path: instructions/angular.instructions.md
@@ -25,7 +25,7 @@ items:
   - path: instructions/nodejs-javascript-vitest.instructions.md
     kind: instruction
 
-  # Prompts
+    # Prompts
   - path: prompts/playwright-explore-website.prompt.md
     kind: prompt
   - path: prompts/playwright-generate-test.prompt.md

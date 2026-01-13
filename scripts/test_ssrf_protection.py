@@ -1,25 +1,26 @@
-import unittest
-import sys
 import os
 import socket
-from unittest.mock import patch, MagicMock
+import sys
+import unittest
+from unittest.mock import MagicMock, patch
 
 # Add scripts directory to path to import web_crawler
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from web_crawler import OrganizationCrawler
 
+
 class TestSSRFProtection(unittest.TestCase):
     def setUp(self):
         self.crawler = OrganizationCrawler()
 
-    @patch('socket.getaddrinfo')
-    @patch('urllib3.PoolManager.request')
+    @patch("socket.getaddrinfo")
+    @patch("urllib3.PoolManager.request")
     def test_blocks_private_ips(self, mock_request, mock_getaddrinfo):
         # Mock DNS resolution to return a private IP
         # Format: list of (family, type, proto, canonname, sockaddr)
         mock_getaddrinfo.return_value = [
-            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.168.1.1', 80))
+            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.168.1.1", 80))
         ]
 
         # Mock response
@@ -41,14 +42,14 @@ class TestSSRFProtection(unittest.TestCase):
         else:
             print("✅ SECURE: Request was blocked.")
 
-    @patch('socket.getaddrinfo')
-    @patch('urllib3.PoolManager.request')
+    @patch("socket.getaddrinfo")
+    @patch("urllib3.PoolManager.request")
     def test_blocks_mixed_ips(self, mock_request, mock_getaddrinfo):
         """Test that if a domain resolves to multiple IPs (safe and unsafe), it is blocked."""
         # Mock DNS resolution to return one public and one private IP
         mock_getaddrinfo.return_value = [
-            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 80)),
-            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.168.1.1', 80))
+            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 80)),
+            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.168.1.1", 80)),
         ]
 
         mock_response = MagicMock()
@@ -66,12 +67,12 @@ class TestSSRFProtection(unittest.TestCase):
         else:
             print("✅ SECURE: Mixed IP request was blocked.")
 
-    @patch('socket.getaddrinfo')
-    @patch('urllib3.HTTPConnectionPool.request')
+    @patch("socket.getaddrinfo")
+    @patch("urllib3.HTTPConnectionPool.request")
     def test_allows_public_ips(self, mock_request, mock_getaddrinfo):
         # Mock DNS resolution to return a public IP
         mock_getaddrinfo.return_value = [
-            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 80))
+            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 80))
         ]
 
         mock_response = MagicMock()
@@ -89,5 +90,6 @@ class TestSSRFProtection(unittest.TestCase):
             print("❌ BROKEN: Public IP request was blocked!")
             self.fail("Public IP request was blocked")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

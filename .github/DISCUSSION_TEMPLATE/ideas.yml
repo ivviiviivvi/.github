@@ -5,9 +5,9 @@ body:
     attributes:
       value: |
         ## 💡 Ideas & Feature Proposals
-        
+
         Share your ideas for new features, improvements, or enhancements!
-        
+
         **Note:** For detailed feature requests, consider opening a [Feature Request Issue](../../ISSUE_TEMPLATE/feature_request_form.yml) instead.
 
   - type: input

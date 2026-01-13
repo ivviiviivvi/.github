@@ -1,6 +1,7 @@
 # Community Agents
 
-Specifications for community engagement, coordination, and monitoring agents/subagents.
+Specifications for community engagement, coordination, and monitoring
+agents/subagents.
 
 ## Table of Contents
 
@@ -17,24 +18,26 @@ Specifications for community engagement, coordination, and monitoring agents/sub
 
 ## Overview
 
-This document defines the agent system for community engagement, coordination, and monitoring across the organization.
+This document defines the agent system for community engagement, coordination,
+and monitoring across the organization.
 
 ### Purpose
 
 Community agents serve to:
+
 1. **Network**: Build and maintain connections
-2. **Activate**: Engage community members
-3. **Coordinate**: Organize collaborative efforts
-4. **Monitor**: Watch for issues and opportunities
-5. **Respond**: Take appropriate actions
+1. **Activate**: Engage community members
+1. **Coordinate**: Organize collaborative efforts
+1. **Monitor**: Watch for issues and opportunities
+1. **Respond**: Take appropriate actions
 
 ### Core Principles
 
 1. **Proactive Engagement**: Seek opportunities to connect
-2. **Continuous Monitoring**: Watch for signals and patterns
-3. **Responsive Action**: React appropriately to events
-4. **Coordinated Effort**: Work together effectively
-5. **Community Focus**: Prioritize community health
+1. **Continuous Monitoring**: Watch for signals and patterns
+1. **Responsive Action**: React appropriately to events
+1. **Coordinated Effort**: Work together effectively
+1. **Community Focus**: Prioritize community health
 
 ---
 
@@ -65,6 +68,7 @@ Community Agent System
 ### Agent Communication
 
 Agents communicate through:
+
 - **Shared State**: GitHub Projects, Issues, Discussions
 - **Events**: GitHub Actions workflows triggered by events
 - **Notifications**: Issue comments, mentions, labels
@@ -81,18 +85,21 @@ Actively seeks and builds connections within and beyond the organization.
 ### Responsibilities
 
 **Internal Networking**:
+
 - Monitor cross-project collaboration opportunities
 - Identify potential synergies between repositories
 - Connect contributors with similar interests
 - Facilitate knowledge sharing
 
 **External Networking**:
+
 - Monitor relevant open source projects
 - Track industry trends and innovations
 - Identify potential partnerships
 - Scout for talent and contributors
 
 **Relationship Building**:
+
 - Welcome new contributors
 - Maintain connections with inactive contributors
 - Recognize valuable contributions
@@ -110,6 +117,7 @@ Actively seeks and builds connections within and beyond the organization.
 ### Actions
 
 **Connection Discovery**:
+
 ```yaml
 - Search GitHub for related projects
 - Monitor social media for mentions
@@ -119,6 +127,7 @@ Actively seeks and builds connections within and beyond the organization.
 ```
 
 **Outreach**:
+
 ```yaml
 - Welcome new contributors
 - Comment on related projects
@@ -128,6 +137,7 @@ Actively seeks and builds connections within and beyond the organization.
 ```
 
 **Relationship Management**:
+
 ```yaml
 - Track interaction history
 - Monitor engagement levels
@@ -139,6 +149,7 @@ Actively seeks and builds connections within and beyond the organization.
 ### Implementation
 
 **GitHub Actions Workflow** (`networker-agent.yml`):
+
 ```yaml
 name: Ever-Seeking Networker Agent
 
@@ -150,7 +161,7 @@ on:
   discussion:
     types: [created]
   schedule:
-    - cron: '0 9 * * MON'  # Weekly scan
+    - cron: "0 9 * * MON" # Weekly scan
 
 jobs:
   network:
@@ -176,6 +187,7 @@ jobs:
 ### Metrics
 
 Track:
+
 - New connections made
 - Collaboration opportunities identified
 - Contributors welcomed
@@ -193,18 +205,21 @@ Activates and engages community members to participate in projects.
 ### Responsibilities
 
 **Engagement**:
+
 - Encourage participation in discussions
 - Prompt responses to issues and PRs
 - Facilitate community events
 - Create engagement opportunities
 
 **Onboarding**:
+
 - Guide new contributors
 - Provide clear contribution paths
 - Share resources and documentation
 - Assign good first issues
 
 **Recognition**:
+
 - Acknowledge contributions
 - Celebrate milestones
 - Highlight community members
@@ -222,6 +237,7 @@ Activates and engages community members to participate in projects.
 ### Actions
 
 **Engagement Activities**:
+
 ```yaml
 - Comment on stale issues to revive discussion
 - Tag relevant people for input
@@ -232,6 +248,7 @@ Activates and engages community members to participate in projects.
 ```
 
 **Onboarding Support**:
+
 ```yaml
 - Welcome new contributors with guide
 - Assign mentor to new contributor
@@ -241,6 +258,7 @@ Activates and engages community members to participate in projects.
 ```
 
 **Recognition Activities**:
+
 ```yaml
 - Thank contributors for PRs
 - Highlight contributions in newsletters
@@ -252,6 +270,7 @@ Activates and engages community members to participate in projects.
 ### Implementation
 
 **GitHub Actions Workflow** (`activator-agent.yml`):
+
 ```yaml
 name: Community Activator Agent
 
@@ -261,7 +280,7 @@ on:
   pull_request:
     types: [opened, review_requested]
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: "0 */6 * * *" # Every 6 hours
 
 jobs:
   activate:
@@ -289,6 +308,7 @@ jobs:
 ### Metrics
 
 Track:
+
 - New contributors onboarded
 - Issues/PRs revived
 - Response times improved
@@ -301,23 +321,27 @@ Track:
 
 ### Purpose
 
-Coordinates efforts across projects, teams, and initiatives for organizational growth.
+Coordinates efforts across projects, teams, and initiatives for organizational
+growth.
 
 ### Responsibilities
 
 **Project Coordination**:
+
 - Track project progress
 - Identify dependencies
 - Coordinate releases
 - Manage cross-project initiatives
 
 **Resource Allocation**:
+
 - Balance workload across contributors
 - Identify resource needs
 - Allocate reviewer capacity
 - Optimize team assignments
 
 **Timeline Management**:
+
 - Track milestones
 - Monitor deadlines
 - Coordinate schedules
@@ -335,6 +359,7 @@ Coordinates efforts across projects, teams, and initiatives for organizational g
 ### Actions
 
 **Coordination Activities**:
+
 ```yaml
 - Create coordination issues
 - Update project boards
@@ -344,6 +369,7 @@ Coordinates efforts across projects, teams, and initiatives for organizational g
 ```
 
 **Resource Management**:
+
 ```yaml
 - Assign reviewers based on capacity
 - Balance issue assignments
@@ -353,6 +379,7 @@ Coordinates efforts across projects, teams, and initiatives for organizational g
 ```
 
 **Timeline Activities**:
+
 ```yaml
 - Send milestone reminders
 - Update project timelines
@@ -364,6 +391,7 @@ Coordinates efforts across projects, teams, and initiatives for organizational g
 ### Implementation
 
 **GitHub Actions Workflow** (`coordinator-agent.yml`):
+
 ```yaml
 name: Expanding Coordinator Agent
 
@@ -373,7 +401,7 @@ on:
   milestone:
     types: [created, edited]
   schedule:
-    - cron: '0 8 * * *'  # Daily coordination
+    - cron: "0 8 * * *" # Daily coordination
 
 jobs:
   coordinate:
@@ -401,6 +429,7 @@ jobs:
 ### Metrics
 
 Track:
+
 - Projects coordinated
 - Resources allocated
 - Milestones met on time
@@ -413,23 +442,27 @@ Track:
 
 ### Purpose
 
-Continuously monitors for issues, anomalies, and potential problems requiring attention.
+Continuously monitors for issues, anomalies, and potential problems requiring
+attention.
 
 ### Responsibilities
 
 **Health Monitoring**:
+
 - Track repository health metrics
 - Monitor community engagement
 - Watch for quality degradation
 - Check workflow success rates
 
 **Issue Detection**:
+
 - Identify security vulnerabilities
 - Detect code quality issues
 - Find stale issues/PRs
 - Spot unusual activity patterns
 
 **Emergency Response**:
+
 - Alert on critical issues
 - Trigger incident response
 - Escalate urgent problems
@@ -448,6 +481,7 @@ Continuously monitors for issues, anomalies, and potential problems requiring at
 ### Actions
 
 **Monitoring Activities**:
+
 ```yaml
 - Check build status
 - Scan for vulnerabilities
@@ -457,6 +491,7 @@ Continuously monitors for issues, anomalies, and potential problems requiring at
 ```
 
 **Detection Activities**:
+
 ```yaml
 - Analyze security alerts
 - Identify stale content
@@ -466,6 +501,7 @@ Continuously monitors for issues, anomalies, and potential problems requiring at
 ```
 
 **Response Activities**:
+
 ```yaml
 - Create incident issues
 - Alert maintainers
@@ -477,6 +513,7 @@ Continuously monitors for issues, anomalies, and potential problems requiring at
 ### Implementation
 
 **GitHub Actions Workflow** (`watcher-agent.yml`):
+
 ```yaml
 name: Lifeguard Watcher Agent
 
@@ -485,7 +522,7 @@ on:
     workflows: ["*"]
     types: [completed]
   schedule:
-    - cron: '0 */4 * * *'  # Every 4 hours
+    - cron: "0 */4 * * *" # Every 4 hours
   security_advisory:
     types: [published]
 
@@ -515,6 +552,7 @@ jobs:
 ### Metrics
 
 Track:
+
 - Issues detected
 - Alerts triggered
 - Response times
@@ -532,12 +570,14 @@ Subagents handle specialized tasks within each main agent.
 ### Subagent Types
 
 **Autonomous Subagents**:
+
 - Operate independently
 - Make decisions within scope
 - Report to main agent
 - Handle routine tasks
 
 **Coordinated Subagents**:
+
 - Require main agent approval
 - Handle complex tasks
 - Collaborate with other subagents
@@ -546,6 +586,7 @@ Subagents handle specialized tasks within each main agent.
 ### Communication Protocol
 
 **Subagent to Agent**:
+
 ```yaml
 type: report
 from: connection-discovery-subagent
@@ -558,6 +599,7 @@ data:
 ```
 
 **Agent to Subagent**:
+
 ```yaml
 type: task
 from: networker-agent
@@ -572,11 +614,13 @@ context:
 ### Subagent Implementation
 
 Each subagent is implemented as:
+
 - Reusable workflow
 - Composite action
 - Dedicated script
 
 Example:
+
 ```yaml
 # .github/workflows/subagent-connection-discovery.yml
 name: Connection Discovery Subagent
@@ -606,12 +650,14 @@ jobs:
 Agents work together through:
 
 **Shared State**:
+
 - GitHub Projects for coordination
 - Issues for tracking tasks
 - Discussions for communication
 - Labels for signaling
 
 **Workflow Chaining**:
+
 ```yaml
 # Networker finds opportunity
 networker-agent → creates issue
@@ -643,33 +689,34 @@ watcher-agent → tracks progress
 ### Configuration
 
 **Agent Configuration** (`.github/agents-config.yml`):
+
 ```yaml
 agents:
   networker:
     enabled: true
-    schedule: '0 9 * * MON'
+    schedule: "0 9 * * MON"
     scope: organization
-    
+
   activator:
     enabled: true
-    schedule: '0 */6 * * *'
+    schedule: "0 */6 * * *"
     scope: repository
-    
+
   coordinator:
     enabled: true
-    schedule: '0 8 * * *'
+    schedule: "0 8 * * *"
     scope: organization
-    
+
   watcher:
     enabled: true
-    schedule: '0 */4 * * *'
+    schedule: "0 */4 * * *"
     scope: repository
 
 subagents:
   connection-discovery:
     parent: networker
     autonomous: true
-    
+
   engagement:
     parent: activator
     autonomous: false
@@ -682,31 +729,34 @@ subagents:
 ### Agent Design
 
 **Requirements**:
+
 1. Clear purpose and scope
-2. Well-defined triggers
-3. Appropriate autonomy level
-4. Human oversight for critical actions
-5. Graceful failure handling
-6. Comprehensive logging
+1. Well-defined triggers
+1. Appropriate autonomy level
+1. Human oversight for critical actions
+1. Graceful failure handling
+1. Comprehensive logging
 
 ### Subagent Design
 
 **Requirements**:
+
 1. Focused responsibility
-2. Reusable implementation
-3. Clear communication protocol
-4. Error reporting
-5. Status updates
+1. Reusable implementation
+1. Clear communication protocol
+1. Error reporting
+1. Status updates
 
 ### Implementation
 
 **Checklist**:
+
 1. Test thoroughly before deployment
-2. Monitor performance
-3. Gather feedback
-4. Iterate and improve
-5. Document behavior
-6. Provide override mechanisms
+1. Monitor performance
+1. Gather feedback
+1. Iterate and improve
+1. Document behavior
+1. Provide override mechanisms
 
 ---
 
@@ -715,6 +765,7 @@ subagents:
 ### Performance Metrics
 
 Track for each agent:
+
 - Tasks completed
 - Success rate
 - Response time
@@ -724,6 +775,7 @@ Track for each agent:
 ### Continuous Improvement
 
 Regular review:
+
 - Agent effectiveness
 - False positive rate
 - Missed opportunities

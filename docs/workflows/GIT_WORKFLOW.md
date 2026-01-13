@@ -32,6 +32,7 @@ main (production)
 ### Branch Types
 
 #### 1. Main Branch (`main` or `master`)
+
 - **Purpose**: Production-ready code
 - **Protection**: Highest level
 - **Deployment**: Automatically deploys to production
@@ -42,12 +43,14 @@ main (production)
   - Signed commits required
 
 #### 2. Develop Branch (`develop`)
+
 - **Purpose**: Integration branch for features
 - **Protection**: High level
 - **Deployment**: Automatically deploys to staging
 - **Merging**: From feature branches
 
 #### 3. Feature Branches (`feature/*`)
+
 - **Naming**: `feature/short-description` or `feature/TICKET-123-description`
 - **Purpose**: New features or enhancements
 - **Base**: Created from `develop`
@@ -55,6 +58,7 @@ main (production)
 - **Lifetime**: Delete after merging
 
 Examples:
+
 ```bash
 feature/user-authentication
 feature/JIRA-456-payment-gateway
@@ -62,6 +66,7 @@ feature/add-dark-mode
 ```
 
 #### 4. Release Branches (`release/*`)
+
 - **Naming**: `release/v1.2.0`
 - **Purpose**: Prepare for production release
 - **Base**: Created from `develop`
@@ -73,6 +78,7 @@ feature/add-dark-mode
   - Documentation updates
 
 #### 5. Hotfix Branches (`hotfix/*`)
+
 - **Naming**: `hotfix/critical-fix-description`
 - **Purpose**: Urgent production fixes
 - **Base**: Created from `main`
@@ -80,6 +86,7 @@ feature/add-dark-mode
 - **Priority**: Highest
 
 #### 6. Bugfix Branches (`bugfix/*`)
+
 - **Naming**: `bugfix/fix-login-error`
 - **Purpose**: Non-critical bug fixes
 - **Base**: Created from `develop`
@@ -91,7 +98,8 @@ feature/add-dark-mode
 
 ### Conventional Commits
 
-Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+Follow the [Conventional Commits](https://www.conventionalcommits.org/)
+specification.
 
 ### Format
 
@@ -149,17 +157,20 @@ Performance improvement: 10x faster for large datasets
 ### Commit Message Guidelines
 
 1. **Subject line**:
+
    - Max 50 characters
    - Imperative mood ("add" not "added")
    - No period at the end
    - Capitalize first letter
 
-2. **Body** (optional):
+1. **Body** (optional):
+
    - Wrap at 72 characters
    - Explain what and why, not how
    - Separate from subject with blank line
 
-3. **Footer** (optional):
+1. **Footer** (optional):
+
    - Reference issues: `Closes #123`, `Fixes #456`
    - Breaking changes: `BREAKING CHANGE: description`
 
@@ -202,6 +213,7 @@ git merge develop
 ### 3. Create Pull Request
 
 **PR Title**: Should follow conventional commit format
+
 ```
 feat: add user authentication
 fix(api): resolve timeout issue
@@ -212,28 +224,34 @@ docs: update installation guide
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [x] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Changes Made
+
 - Added authentication middleware
 - Implemented JWT token generation
 - Added login/logout endpoints
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing completed
 
 ## Screenshots (if applicable)
+
 [Add screenshots here]
 
 ## Checklist
+
 - [x] Code follows project style guidelines
 - [x] Self-review completed
 - [x] Comments added for complex code
@@ -242,6 +260,7 @@ Brief description of changes
 - [x] Tests pass locally
 
 ## Related Issues
+
 Closes #123
 Relates to #456
 ```
@@ -249,18 +268,21 @@ Relates to #456
 ### 4. Code Review Process
 
 1. **Automated Checks**: Must pass before review
+
    - Linting
    - Tests
    - Security scans
    - Coverage thresholds
 
-2. **Peer Review**: At least one approval required
+1. **Peer Review**: At least one approval required
+
    - Review code quality
    - Check for bugs
    - Verify tests
    - Validate documentation
 
-3. **Address Feedback**:
+1. **Address Feedback**:
+
 ```bash
 # Make requested changes
 git add .
@@ -272,34 +294,57 @@ git push
 
 ### Merge Strategy Selection (Critique & Guidance)
 
-Choosing the right merge strategy is critical for preserving context and functionality when changes land on `main`.
+Choosing the right merge strategy is critical for preserving context and
+functionality when changes land on `main`.
 
 - **Merge commit (`--no-ff`)**
-  - ✅ **Use when** you want to preserve branch history, keep feature commits grouped, or when the branch includes coordinated work (multi-service changes, release branches).
-  - 🔍 **Critique**: Can increase history noise if used for trivial fixes; avoid for one-line changes unless they are production-impacting hotfixes.
+  - ✅ **Use when** you want to preserve branch history, keep feature commits
+    grouped, or when the branch includes coordinated work (multi-service
+    changes, release branches).
+  - 🔍 **Critique**: Can increase history noise if used for trivial fixes; avoid
+    for one-line changes unless they are production-impacting hotfixes.
 - **Squash merge**
-  - ✅ **Use when** the branch contains many small or iterative commits that should be represented as a single logical change.
-  - 🔍 **Critique**: Loses granular commit messages and can hide the sequence of decisions; avoid for long-running feature or release branches.
+  - ✅ **Use when** the branch contains many small or iterative commits that
+    should be represented as a single logical change.
+  - 🔍 **Critique**: Loses granular commit messages and can hide the sequence of
+    decisions; avoid for long-running feature or release branches.
 - **Rebase and merge**
   - ✅ **Use when** you need a linear history for small, isolated branches.
-  - 🔍 **Critique**: Rewriting history can obscure when changes occurred and may introduce broken intermediate commits if not done carefully. This complicates debugging (e.g., `git bisect`). To mitigate this, use interactive rebase (`git rebase -i`) to ensure each commit is a self-contained, working change. Avoid for shared branches or when strict auditability is required.
+  - 🔍 **Critique**: Rewriting history can obscure when changes occurred and may
+    introduce broken intermediate commits if not done carefully. This
+    complicates debugging (e.g., `git bisect`). To mitigate this, use
+    interactive rebase (`git rebase -i`) to ensure each commit is a
+    self-contained, working change. Avoid for shared branches or when strict
+    auditability is required.
 
 **Default Merge Strategies:**
-- **When merging to `main`:** Favor `--no-ff` merge commits for `release/*` and `hotfix/*` branches to preserve history and auditability.
-- **When merging to `develop`:** Use squash merges for `feature/*` branches to keep the integration history clean.
+
+- **When merging to `main`:** Favor `--no-ff` merge commits for `release/*` and
+  `hotfix/*` branches to preserve history and auditability.
+- **When merging to `develop`:** Use squash merges for `feature/*` branches to
+  keep the integration history clean.
 
 ### Functional Preservation Checklist for Merging to Main
 
 Before merging anything into `main`, validate that functionality remains intact:
 
-1. **Test signals**: All required CI checks are green (unit, integration, security scans). Re-run failed flaky tests before merging.
-2. **Backward compatibility**: Review public APIs, data migrations, and config changes for compatibility. Provide migration notes or feature flags when behavior changes.
-3. **Runtime safety**: Confirm feature flags, fallbacks, and rollbacks exist for risky changes. For release branches, ensure staged rollout plans are documented.
-4. **Documentation alignment**: Update README/CHANGELOG and operational runbooks so deployers understand expected behavior.
-5. **Dependency impacts**: Validate dependency updates against lockfiles and downstream consumers; note any manual steps in the PR description.
-6. **Post-merge verification plan**: Define a smoke test or monitoring check to run immediately after the merge to catch regressions early.
+1. **Test signals**: All required CI checks are green (unit, integration,
+   security scans). Re-run failed flaky tests before merging.
+1. **Backward compatibility**: Review public APIs, data migrations, and config
+   changes for compatibility. Provide migration notes or feature flags when
+   behavior changes.
+1. **Runtime safety**: Confirm feature flags, fallbacks, and rollbacks exist for
+   risky changes. For release branches, ensure staged rollout plans are
+   documented.
+1. **Documentation alignment**: Update README/CHANGELOG and operational runbooks
+   so deployers understand expected behavior.
+1. **Dependency impacts**: Validate dependency updates against lockfiles and
+   downstream consumers; note any manual steps in the PR description.
+1. **Post-merge verification plan**: Define a smoke test or monitoring check to
+   run immediately after the merge to catch regressions early.
 
-> Tip: Treat the merge as a deployment gate—if you would not deploy it, do not merge it into `main`.
+> Tip: Treat the merge as a deployment gate—if you would not deploy it, do not
+> merge it into `main`.
 
 ---
 
@@ -399,6 +444,7 @@ git push origin --delete hotfix/critical-security-fix
 ### Branching
 
 **Do**:
+
 - Keep branches short-lived
 - Sync with base branch regularly
 - Use descriptive branch names
@@ -406,6 +452,7 @@ git push origin --delete hotfix/critical-security-fix
 - One feature per branch
 
 **Don't**:
+
 - Commit directly to main/develop
 - Let branches become stale
 - Mix multiple features in one branch
@@ -415,6 +462,7 @@ git push origin --delete hotfix/critical-security-fix
 ### Commits
 
 **Do**:
+
 - Write clear commit messages
 - Make atomic commits
 - Commit frequently
@@ -422,6 +470,7 @@ git push origin --delete hotfix/critical-security-fix
 - Reference issues
 
 **Don't**:
+
 - Commit generated files
 - Make huge commits
 - Use vague messages like "fix stuff"
@@ -431,6 +480,7 @@ git push origin --delete hotfix/critical-security-fix
 ### Pull Requests
 
 **Do**:
+
 - Keep PRs small and focused
 - Write detailed descriptions
 - Link related issues
@@ -439,6 +489,7 @@ git push origin --delete hotfix/critical-security-fix
 - Update documentation
 
 **Don't**:
+
 - Create massive PRs
 - Ignore review feedback
 - Force push after review starts

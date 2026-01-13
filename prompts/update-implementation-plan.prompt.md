@@ -1,41 +1,52 @@
 ---
-mode: 'agent'
-description: 'Update an existing implementation plan file with new or update requirements to provide new features, refactoring existing code or upgrading packages, design, architecture or infrastructure.'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
----
+
+## mode: 'agent' description: 'Update an existing implementation plan file with new or update requirements to provide new features, refactoring existing code or upgrading packages, design, architecture or infrastructure.' tools: \['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI'\]
+
 # Update Implementation Plan
 
 ## Primary Directive
 
-You are an AI agent tasked with updating the implementation plan file `${file}` based on new or updated requirements. Your output must be machine-readable, deterministic, and structured for autonomous execution by other AI systems or humans.
+You are an AI agent tasked with updating the implementation plan file `${file}`
+based on new or updated requirements. Your output must be machine-readable,
+deterministic, and structured for autonomous execution by other AI systems or
+humans.
 
 ## Execution Context
 
-This prompt is designed for AI-to-AI communication and automated processing. All instructions must be interpreted literally and executed systematically without human interpretation or clarification.
+This prompt is designed for AI-to-AI communication and automated processing. All
+instructions must be interpreted literally and executed systematically without
+human interpretation or clarification.
 
 ## Core Requirements
 
 - Generate implementation plans that are fully executable by AI agents or humans
 - Use deterministic language with zero ambiguity
 - Structure all content for automated parsing and execution
-- Ensure complete self-containment with no external dependencies for understanding
+- Ensure complete self-containment with no external dependencies for
+  understanding
 
 ## Plan Structure Requirements
 
-Plans must consist of discrete, atomic phases containing executable tasks. Each phase must be independently processable by AI agents or humans without cross-phase dependencies unless explicitly declared.
+Plans must consist of discrete, atomic phases containing executable tasks. Each
+phase must be independently processable by AI agents or humans without
+cross-phase dependencies unless explicitly declared.
 
 ## Phase Architecture
 
 - Each phase must have measurable completion criteria
-- Tasks within phases must be executable in parallel unless dependencies are specified
-- All task descriptions must include specific file paths, function names, and exact implementation details
+- Tasks within phases must be executable in parallel unless dependencies are
+  specified
+- All task descriptions must include specific file paths, function names, and
+  exact implementation details
 - No task should require human interpretation or decision-making
 
 ## AI-Optimized Implementation Standards
 
 - Use explicit, unambiguous language with zero interpretation required
-- Structure all content as machine-parseable formats (tables, lists, structured data)
-- Include specific file paths, line numbers, and exact code references where applicable
+- Structure all content as machine-parseable formats (tables, lists, structured
+  data)
+- Include specific file paths, line numbers, and exact code references where
+  applicable
 - Define all variables, constants, and configuration values explicitly
 - Provide complete context within each task description
 - Use standardized prefixes for all identifiers (REQ-, TASK-, etc.)
@@ -45,13 +56,16 @@ Plans must consist of discrete, atomic phases containing executable tasks. Each 
 
 - Save implementation plan files in `/plan/` directory
 - Use naming convention: `[purpose]-[component]-[version].md`
-- Purpose prefixes: `upgrade|refactor|feature|data|infrastructure|process|architecture|design`
+- Purpose prefixes:
+  `upgrade|refactor|feature|data|infrastructure|process|architecture|design`
 - Example: `upgrade-system-command-4.md`, `feature-auth-module-1.md`
 - File must be valid Markdown with proper front matter structure
 
 ## Mandatory Template Structure
 
-All implementation plans must strictly adhere to the following template. Each section is required and must be populated with specific, actionable content. AI agents must validate template compliance before execution.
+All implementation plans must strictly adhere to the following template. Each
+section is required and must be populated with specific, actionable content. AI
+agents must validate template compliance before execution.
 
 ## Template Validation Rules
 
@@ -63,7 +77,12 @@ All implementation plans must strictly adhere to the following template. Each se
 
 ## Status
 
-The status of the implementation plan must be clearly defined in the front matter and must reflect the current state of the plan. The status can be one of the following (status_color in brackets): `Completed` (bright green badge), `In progress` (yellow badge), `Planned` (blue badge), `Deprecated` (red badge), or `On Hold` (orange badge). It should also be displayed as a badge in the introduction section.
+The status of the implementation plan must be clearly defined in the front
+matter and must reflect the current state of the plan. The status can be one of
+the following (status_color in brackets): `Completed` (bright green badge),
+`In progress` (yellow badge), `Planned` (blue badge), `Deprecated` (red badge),
+or `On Hold` (orange badge). It should also be displayed as a badge in the
+introduction section.
 
 ```md
 ---
@@ -99,21 +118,21 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 
 - GOAL-001: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y", etc.]
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-001 | Description of task 1 | ✅ | 2025-04-25 |
-| TASK-002 | Description of task 2 | |  |
-| TASK-003 | Description of task 3 | |  |
+| Task     | Description           | Completed | Date       |
+| -------- | --------------------- | --------- | ---------- |
+| TASK-001 | Description of task 1 | ✅        | 2025-04-25 |
+| TASK-002 | Description of task 2 |           |            |
+| TASK-003 | Description of task 3 |           |            |
 
 ### Implementation Phase 2
 
 - GOAL-002: [Describe the goal of this phase, e.g., "Implement feature X", "Refactor module Y", etc.]
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-004 | Description of task 4 | |  |
-| TASK-005 | Description of task 5 | |  |
-| TASK-006 | Description of task 6 | |  |
+| Task     | Description           | Completed | Date |
+| -------- | --------------------- | --------- | ---- |
+| TASK-004 | Description of task 4 |           |      |
+| TASK-005 | Description of task 5 |           |      |
+| TASK-006 | Description of task 6 |           |      |
 
 ## 3. Alternatives
 

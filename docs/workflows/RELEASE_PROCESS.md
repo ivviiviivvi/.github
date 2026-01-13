@@ -1,6 +1,7 @@
 # Release Process
 
-Comprehensive guide for creating, managing, and distributing releases with automated workflows.
+Comprehensive guide for creating, managing, and distributing releases with
+automated workflows.
 
 ## Table of Contents
 
@@ -21,10 +22,10 @@ Comprehensive guide for creating, managing, and distributing releases with autom
 This organization uses an automated release management system that:
 
 1. **Generates releases** automatically based on conventional commits
-2. **Creates downloadable artifacts** for each release
-3. **Updates documentation** with current version information
-4. **Notifies stakeholders** of new releases
-5. **Maintains comprehensive changelog** with full history
+1. **Creates downloadable artifacts** for each release
+1. **Updates documentation** with current version information
+1. **Notifies stakeholders** of new releases
+1. **Maintains comprehensive changelog** with full history
 
 ---
 
@@ -52,18 +53,21 @@ v2.0.0
 ### Pre-release Versions
 
 **Alpha Releases** - Early development, unstable
+
 ```
 v1.0.0-alpha.1
 v1.0.0-alpha.2
 ```
 
 **Beta Releases** - Feature complete, testing phase
+
 ```
 v1.0.0-beta.1
 v1.0.0-beta.2
 ```
 
 **Release Candidates** - Final testing before production
+
 ```
 v1.0.0-rc.1
 v1.0.0-rc.2
@@ -129,22 +133,24 @@ v1.9.0 → v2.0.0
 
 ### semantic-release Configuration
 
-Our automated release system uses `semantic-release` configured in `.releaserc.json`.
+Our automated release system uses `semantic-release` configured in
+`.releaserc.json`.
 
 **Automatic Actions**:
 
 1. **Analyzes commits** since last release
-2. **Determines version bump** (MAJOR, MINOR, PATCH)
-3. **Generates changelog** entries
-4. **Updates version** in package files
-5. **Creates git tag** with version number
-6. **Generates GitHub Release** with notes
-7. **Publishes packages** to registries (if configured)
-8. **Commits changes** back to repository
+1. **Determines version bump** (MAJOR, MINOR, PATCH)
+1. **Generates changelog** entries
+1. **Updates version** in package files
+1. **Creates git tag** with version number
+1. **Generates GitHub Release** with notes
+1. **Publishes packages** to registries (if configured)
+1. **Commits changes** back to repository
 
 ### Trigger Conditions
 
 Releases are triggered when:
+
 - Commits are pushed to `main` or `master` branch
 - Commits follow conventional commit format
 - CI checks pass successfully
@@ -188,7 +194,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
 
       - name: Install dependencies
         run: npm ci
@@ -213,6 +219,7 @@ jobs:
 ### Creating GitHub Releases
 
 **Automatically Created** by semantic-release with:
+
 - Release title (e.g., "v1.2.0")
 - Comprehensive release notes
 - Downloadable source code archives
@@ -226,25 +233,30 @@ Automatically generated release notes include:
 ```markdown
 ## [1.2.0] - 2025-11-25
 
-###  Features
+### Features
+
 - Add user authentication with OAuth2 (#123)
 - Implement dashboard analytics widget (#124)
 - Add export functionality for reports (#125)
 
-###  Bug Fixes
+### Bug Fixes
+
 - Fix memory leak in data processor (#126)
 - Resolve login timeout issue (#127)
 
-###  Documentation
+### Documentation
+
 - Update API documentation (#128)
 - Add migration guide for v1 to v2 (#129)
 
-###  BREAKING CHANGES
+### BREAKING CHANGES
+
 - Authentication API redesigned to use OAuth2 tokens
   - Migration guide: docs/migration-v2.md
   - Old API keys deprecated, support ends 2026-01-31
 
 ### Contributors
+
 @user1, @user2, @user3
 
 **Full Changelog**: https://github.com/org/repo/compare/v1.1.0...v1.2.0
@@ -273,10 +285,12 @@ While automatic generation is primary, you can enhance release notes:
 ### Artifact Types
 
 **Source Archives** (automatic)
+
 - `source.tar.gz` - Complete source code
 - `source.zip` - Complete source code
 
 **Distribution Packages**
+
 - `package.tgz` - npm package
 - `dist.zip` - Built distribution
 - `binary-linux-amd64` - Linux binary
@@ -284,6 +298,7 @@ While automatic generation is primary, you can enhance release notes:
 - `binary-windows-amd64.exe` - Windows binary
 
 **Documentation**
+
 - `documentation.pdf` - Complete documentation
 - `CHANGELOG.md` - Version changelog
 - `API-docs.zip` - API documentation
@@ -427,26 +442,31 @@ For applications, expose version via API:
 **Status**: Stable
 
 ## What's New
+
 - User authentication with OAuth2
 - Dashboard analytics
 - Export functionality
 
 ## Installation
+
 \`\`\`bash
 npm install @org/package@1.2.0
 \`\`\`
 
 ## Documentation
+
 - [API Reference](/docs/api/v1.2.0)
 - [Migration Guide](/docs/migration/v1-to-v1.2)
 - [Changelog](/CHANGELOG.md)
 
 ## Support
+
 - v1.2.x: Full support until 2026-11-25
 - v1.1.x: Security fixes only until 2025-12-31
 - v1.0.x: End of life
 
 ## Download
+
 - [GitHub Release](https://github.com/org/repo/releases/tag/v1.2.0)
 - [NPM Package](https://www.npmjs.com/package/@org/package/v/1.2.0)
 ```
@@ -467,21 +487,25 @@ Team,
 Version 1.2.0 of [Project Name] has been released to production.
 
 **Key Changes:**
+
 - New authentication system
 - Performance improvements
 - Bug fixes
 
 **Impact:**
+
 - Users will see OAuth2 login options
 - API response times improved by 40%
 - Previous login issues resolved
 
 **Action Required:**
+
 - Update documentation links
 - Test integration points
 - Monitor for issues
 
 **Resources:**
+
 - Release Notes: [link]
 - Documentation: [link]
 - Support: [link]
@@ -501,6 +525,7 @@ Hello,
 We're excited to announce version 1.2.0 of [Project Name]!
 
 **What's New:**
+
 - OAuth2 authentication (Google, GitHub)
 - Enhanced dashboard with analytics
 - Export data to PDF/CSV
@@ -510,15 +535,17 @@ We're excited to announce version 1.2.0 of [Project Name]!
 [Link to upgrade instructions]
 
 **Breaking Changes:**
- API authentication now requires OAuth2 tokens. See our
+API authentication now requires OAuth2 tokens. See our
 migration guide: [link]
 
 **Download:**
+
 - GitHub: [link]
 - NPM: npm install @org/package@1.2.0
 - Docker: docker pull org/package:1.2.0
 
 **Support:**
+
 - Documentation: [link]
 - Issues: [link]
 - Discussions: [link]
@@ -647,7 +674,8 @@ git push origin production/hotfix/revert-feature-x
 
 ## Related Documentation
 
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control standards
+- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control
+  standards
 - [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) - Version numbering rules
 - [BRANCH_STRATEGY.md](BRANCH_STRATEGY.md) - Branching strategies
 - [CHANGELOG.md](CHANGELOG.md) - Changelog format

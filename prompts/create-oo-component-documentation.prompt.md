@@ -1,25 +1,30 @@
 ---
-mode: 'agent'
-description: 'Create comprehensive, standardized documentation for object-oriented components following industry best practices and architectural documentation standards.'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
----
+
+## mode: 'agent' description: 'Create comprehensive, standardized documentation for object-oriented components following industry best practices and architectural documentation standards.' tools: \['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI'\]
+
 # Generate Standard OO Component Documentation
 
-Create comprehensive documentation for the object-oriented component(s) at: `${input:ComponentPath}`.
+Create comprehensive documentation for the object-oriented component(s) at:
+`${input:ComponentPath}`.
 
-Analyze the component by examining code in the provided path. If folder, analyze all source files. If single file, treat as main component and analyze related files in same directory.
+Analyze the component by examining code in the provided path. If folder, analyze
+all source files. If single file, treat as main component and analyze related
+files in same directory.
 
 ## Documentation Standards
 
-- DOC-001: Follow C4 Model documentation levels (Context, Containers, Components, Code)
+- DOC-001: Follow C4 Model documentation levels (Context, Containers,
+  Components, Code)
 - DOC-002: Align with Arc42 software architecture documentation template
 - DOC-003: Comply with IEEE 1016 Software Design Description standard
-- DOC-004: Use Agile Documentation principles (just enough documentation that adds value)
+- DOC-004: Use Agile Documentation principles (just enough documentation that
+  adds value)
 - DOC-005: Target developers and maintainers as primary audience
 
 ## Analysis Instructions
 
-- ANA-001: Determine path type (folder vs single file) and identify primary component
+- ANA-001: Determine path type (folder vs single file) and identify primary
+  component
 - ANA-002: Examine source code files for class structures and inheritance
 - ANA-003: Identify design patterns and architectural decisions
 - ANA-004: Document public APIs, interfaces, and dependencies
@@ -30,8 +35,10 @@ Analyze the component by examining code in the provided path. If folder, analyze
 
 ## Language-Specific Optimizations
 
-- LNG-001: **C#/.NET** - async/await, dependency injection, configuration, disposal
-- LNG-002: **Java** - Spring framework, annotations, exception handling, packaging
+- LNG-001: **C#/.NET** - async/await, dependency injection, configuration,
+  disposal
+- LNG-002: **Java** - Spring framework, annotations, exception handling,
+  packaging
 - LNG-003: **TypeScript/JavaScript** - modules, async patterns, types, npm
 - LNG-004: **Python** - packages, virtual environments, type hints, testing
 
@@ -45,17 +52,22 @@ Analyze the component by examining code in the provided path. If folder, analyze
 
 ## Output Format
 
-Generate well-structured Markdown with clear heading hierarchy, code blocks, tables, bullet points, and proper formatting for readability and maintainability.
+Generate well-structured Markdown with clear heading hierarchy, code blocks,
+tables, bullet points, and proper formatting for readability and
+maintainability.
 
 ## File Location
 
-The documentation should be saved in the `/docs/components/` directory and named according to the convention: `[component-name]-documentation.md`.
+The documentation should be saved in the `/docs/components/` directory and named
+according to the convention: `[component-name]-documentation.md`.
 
 ## Required Documentation Structure
 
-The documentation file must follow the template below, ensuring that all sections are filled out appropriately. The front matter for the markdown should be structured correctly as per the example following:
+The documentation file must follow the template below, ensuring that all
+sections are filled out appropriately. The front matter for the markdown should
+be structured correctly as per the example following:
 
-```md
+````md
 ---
 title: [Component Name] - Technical Documentation
 component_path: `${input:ComponentPath}`
@@ -73,6 +85,7 @@ tags: [Optional: List of relevant tags or categories, e.g., `component`,`service
 ## 1. Component Overview
 
 ### Purpose/Responsibility
+
 - OVR-001: State component's primary responsibility
 - OVR-002: Define scope (included/excluded functionality)
 - OVR-003: Describe system context and relationships
@@ -88,6 +101,7 @@ tags: [Optional: List of relevant tags or categories, e.g., `component`,`service
 ### Component Structure and Dependencies Diagram
 
 Include a comprehensive mermaid diagram that shows:
+
 - **Component structure** - Main classes, interfaces, and their relationships
 - **Internal dependencies** - How components interact within the system
 - **External dependencies** - External libraries, services, databases, APIs
@@ -132,6 +146,7 @@ graph TD
         MainComponent --> InternalService
         MainComponent --> ExternalAPI
 ```
+````
 
 ## 3. Interface Documentation
 
@@ -139,9 +154,9 @@ graph TD
 - INT-002: Create method/property reference table
 - INT-003: Document events/callbacks/notification mechanisms
 
-| Method/Property | Purpose | Parameters | Return Type | Usage Notes |
-|-----------------|---------|------------|-------------|-------------|
-| [Name] | [Purpose] | [Parameters] | [Type] | [Notes] |
+| Method/Property | Purpose     | Parameters     | Return Type | Usage Notes |
+| --------------- | ----------- | -------------- | ----------- | ----------- |
+| \[Name\]        | \[Purpose\] | \[Parameters\] | \[Type\]    | \[Notes\]   |
 
 ## 4. Implementation Details
 
@@ -189,5 +204,7 @@ await component.ProcessAsync(data);
 - REF-004: Troubleshooting (common issues, error messages)
 - REF-005: Related documentation links
 - REF-006: Change history and migration notes
+
+```
 
 ```

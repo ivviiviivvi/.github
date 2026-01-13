@@ -1,6 +1,28 @@
 #!/bin/bash
+set -euo pipefail
 
 echo "🚀 Setting up development environment..."
+
+# Install 1Password CLI (op) for consistent secret sourcing (local + Codespaces).
+# In Codespaces/devcontainers, desktop app integration is usually unavailable,
+# so Secrets Automation (OP_SERVICE_ACCOUNT_TOKEN) is the recommended auth method.
+echo "🔐 Ensuring 1Password CLI (op) is installed..."
+if ! command -v op >/dev/null 2>&1; then
+  sudo apt-get update
+  sudo apt-get install -y curl gpg
+
+  sudo install -d -m 0755 /usr/share/keyrings
+  curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor | sudo tee /usr/share/keyrings/1password-archive-keyring.gpg >/dev/null
+
+  arch="$(dpkg --print-architecture)"
+  echo "deb [arch=${arch} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/${arch} stable main" \
+    | sudo tee /etc/apt/sources.list.d/1password.list >/dev/null
+
+  sudo apt-get update
+  sudo apt-get install -y 1password-cli
+else
+  echo "✅ 1Password CLI already installed: $(op --version)"
+fi
 
 # Install global npm packages
 echo "📦 Installing global npm packages..."

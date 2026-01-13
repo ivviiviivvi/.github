@@ -35,71 +35,71 @@ detection_rules:
         - file: package.json
           contains: '"react"'
       default_port: 3000
-      start_command: "npm start"
-      install_command: "npm ci || npm install"
+      start_command: npm start
+      install_command: npm ci || npm install
 
     - framework: vue
       indicators:
         - file: package.json
           contains: '"vue"'
       default_port: 8080
-      start_command: "npm run serve"
-      install_command: "npm ci || npm install"
+      start_command: npm run serve
+      install_command: npm ci || npm install
 
     - framework: angular
       indicators:
         - file: package.json
           contains: '"@angular/core"'
       default_port: 4200
-      start_command: "npm start"
-      install_command: "npm ci || npm install"
+      start_command: npm start
+      install_command: npm ci || npm install
 
     - framework: nextjs
       indicators:
         - file: package.json
           contains: '"next"'
       default_port: 3000
-      start_command: "npm run dev"
-      install_command: "npm ci || npm install"
+      start_command: npm run dev
+      install_command: npm ci || npm install
 
     - framework: nodejs
       indicators:
         - file: package.json
       default_port: 3000
-      start_command: "npm start"
-      install_command: "npm ci || npm install"
+      start_command: npm start
+      install_command: npm ci || npm install
 
   # Python frameworks
   python:
     - framework: flask
       indicators:
         - file: requirements.txt
-          contains: "flask"
+          contains: flask
         - file: setup.py
-          contains: "flask"
+          contains: flask
       default_port: 5000
-      start_command: "python app.py"
-      install_command: "pip install -r requirements.txt"
+      start_command: python app.py
+      install_command: pip install -r requirements.txt
 
     - framework: fastapi
       indicators:
         - file: requirements.txt
-          contains: "fastapi"
+          contains: fastapi
         - file: setup.py
-          contains: "fastapi"
+          contains: fastapi
       default_port: 8000
-      start_command: "uvicorn main:app --host 0.0.0.0"
-      install_command: "pip install -r requirements.txt && pip install uvicorn"
+      start_command: uvicorn main:app --host 0.0.0.0
+      install_command: pip install -r requirements.txt && pip install uvicorn
 
     - framework: django
       indicators:
         - file: requirements.txt
-          contains: "django"
+          contains: django
         - file: setup.py
-          contains: "django"
+          contains: django
       default_port: 8000
-      start_command: "python manage.py runserver"
-      install_command: "pip install -r requirements.txt"
+      start_command: python manage.py runserver
+      install_command: pip install -r requirements.txt
 
     - framework: python
       indicators:
@@ -107,8 +107,8 @@ detection_rules:
         - file: setup.py
         - file: pyproject.toml
       default_port: 8000
-      start_command: "python main.py"
-      install_command: "pip install -r requirements.txt"
+      start_command: python main.py
+      install_command: pip install -r requirements.txt
 
   # Java frameworks
   java:
@@ -116,15 +116,15 @@ detection_rules:
       indicators:
         - file: pom.xml
       default_port: 8080
-      start_command: "mvn spring-boot:run"
-      install_command: "mvn clean install -DskipTests"
+      start_command: mvn spring-boot:run
+      install_command: mvn clean install -DskipTests
 
     - framework: gradle
       indicators:
         - file: build.gradle
       default_port: 8080
-      start_command: "./gradlew bootRun"
-      install_command: "./gradlew build -x test"
+      start_command: ./gradlew bootRun
+      install_command: ./gradlew build -x test
 
   # Static sites
   static:
@@ -132,13 +132,13 @@ detection_rules:
       indicators:
         - file: index.html
       default_port: 8000
-      start_command: "python3 -m http.server 8000"
-      install_command: "echo 'No dependencies to install'"
+      start_command: python3 -m http.server 8000
+      install_command: echo 'No dependencies to install'
 
 # Output Configuration
 output:
   # Directory for generated walkthroughs
-  directory: "walkthroughs"
+  directory: walkthroughs
 
   # Naming pattern for video files
   # Available variables: {app_name}, {date}, {timestamp}, {type}
@@ -154,48 +154,48 @@ output:
   commit_message_template: "feat: add video walkthrough generated on {date}"
 
   # PR title template
-  pr_title_template: "Add video walkthrough - {date}"
+  pr_title_template: Add video walkthrough - {date}
 
 # Voiceover Styles
 voiceover_styles:
   professional:
-    description: "Clear, formal narration suitable for business presentations"
-    tone: "formal"
-    pace: "moderate"
+    description: Clear, formal narration suitable for business presentations
+    tone: formal
+    pace: moderate
 
   casual:
-    description: "Friendly, conversational narration for informal settings"
-    tone: "informal"
-    pace: "relaxed"
+    description: Friendly, conversational narration for informal settings
+    tone: informal
+    pace: relaxed
 
   technical:
-    description: "Detailed, technical narration for developer audiences"
-    tone: "technical"
-    pace: "measured"
+    description: Detailed, technical narration for developer audiences
+    tone: technical
+    pace: measured
 
 # Repository Exclusion List
 # Repositories matching these patterns will be skipped
 exclusions:
   # Exact repository names
   exact:
-    - ".github"
-    - "docs"
-    - "documentation"
-    - "wiki"
+    - .github
+    - docs
+    - documentation
+    - wiki
 
   # Pattern-based exclusions (regex)
   patterns:
-    - "^test-.*"
-    - "^demo-.*"
-    - ".*-archive$"
-    - ".*-deprecated$"
+    - ^test-.*
+    - ^demo-.*
+    - .*-archive$
+    - .*-deprecated$
 
   # Topic-based exclusions
   topics:
-    - "archived"
-    - "deprecated"
-    - "template"
-    - "fork"
+    - archived
+    - deprecated
+    - template
+    - fork
 
 # Automation Settings
 automation:
@@ -218,10 +218,10 @@ automation:
       - "**.json"
       - "**.html"
       - "**.css"
-      - "package.json"
-      - "requirements.txt"
-      - "pom.xml"
-      - "build.gradle"
+      - package.json
+      - requirements.txt
+      - pom.xml
+      - build.gradle
 
   # Batch processing settings
   batch_mode:
@@ -264,18 +264,18 @@ advanced:
   capture_app_logs: true
 
   # Maximum log size to include in PR (bytes)
-  max_log_size: 10485760  # 10 MB
+  max_log_size: 10485760 # 10 MB
 
 # Organization Context
 organization:
-  name: "Ivviiviivvi"
-  owner: "4444JPP"
+  name: Ivviiviivvi
+  owner: 4444JPP
 
   # Default labels for PRs
   pr_labels:
-    - "automated"
-    - "walkthrough"
-    - "documentation"
+    - automated
+    - walkthrough
+    - documentation
 
   # Default reviewers (optional)
   pr_reviewers: []
@@ -295,19 +295,19 @@ quality:
   max_duration: 300
 
   # Video quality preset
-  quality_preset: "high"  # low, medium, high, ultra
+  quality_preset: high # low, medium, high, ultra
 
   # Audio settings (for voiceover)
   audio:
     enabled: true
     sample_rate: 44100
-    bitrate: "128k"
+    bitrate: 128k
 
   # Subtitle settings
   subtitles:
     enabled: true
-    language: "en"
-    format: "srt"
+    language: en
+    format: srt
 
 # Notification Settings
 notifications:
@@ -325,7 +325,7 @@ notifications:
     # GitHub Discussions
     github_discussions:
       enabled: false
-      category: "Announcements"
+      category: Announcements
 
     # PR comments
     pr_comments:
@@ -346,4 +346,4 @@ monitoring:
 
   # Store metrics in repository
   store_metrics: true
-  metrics_file: "reports/walkthrough-metrics.json"
+  metrics_file: reports/walkthrough-metrics.json

@@ -1,10 +1,13 @@
 # Team Structure
 
-This document outlines the recommended team structure, responsibilities, and access management for the organization.
+This document outlines the recommended team structure, responsibilities, and
+access management for the organization.
 
 ## Overview
 
-A well-defined team structure ensures proper access control, efficient code review, and clear ownership of different parts of the codebase. This document describes the recommended team hierarchy and how to manage it.
+A well-defined team structure ensures proper access control, efficient code
+review, and clear ownership of different parts of the codebase. This document
+describes the recommended team hierarchy and how to manage it.
 
 ## Recommended Team Hierarchy
 
@@ -13,6 +16,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 **Purpose**: Executive oversight and strategic decisions
 
 **Responsibilities**:
+
 - Final approval on major changes
 - Strategic direction and roadmap
 - Policy and governance decisions
@@ -20,6 +24,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 - Budget and resource allocation
 
 **Members**:
+
 - Organization owners
 - Project leads
 - Product managers
@@ -27,6 +32,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 **Repository Access**: Admin on all repositories
 
 **CODEOWNERS Patterns**:
+
 ```
 * @ivviiviivvi/leadership
 *.md @ivviiviivvi/leadership
@@ -40,6 +46,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 **Purpose**: Code development and technical implementation
 
 **Responsibilities**:
+
 - Writing and reviewing code
 - Technical architecture decisions
 - Code quality and best practices
@@ -47,6 +54,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 - Technical documentation
 
 **Members**:
+
 - Software engineers
 - Senior developers
 - Technical leads
@@ -54,6 +62,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 **Repository Access**: Write on engineering repositories
 
 **CODEOWNERS Patterns**:
+
 ```
 /src/ @ivviiviivvi/engineering
 *.py @ivviiviivvi/engineering
@@ -71,6 +80,7 @@ A well-defined team structure ensures proper access control, efficient code revi
 **Purpose**: Infrastructure, CI/CD, and deployment automation
 
 **Responsibilities**:
+
 - GitHub Actions workflows
 - Infrastructure as code
 - CI/CD pipeline management
@@ -80,13 +90,16 @@ A well-defined team structure ensures proper access control, efficient code revi
 - Cloud infrastructure
 
 **Members**:
+
 - DevOps engineers
 - Site reliability engineers
 - Platform engineers
 
-**Repository Access**: Write on infrastructure repositories, Admin on workflow configurations
+**Repository Access**: Write on infrastructure repositories, Admin on workflow
+configurations
 
 **CODEOWNERS Patterns**:
+
 ```
 /.github/workflows/ @ivviiviivvi/devops
 /infrastructure/ @ivviiviivvi/devops
@@ -104,6 +117,7 @@ docker-compose.yml @ivviiviivvi/devops
 **Purpose**: Security oversight and vulnerability management
 
 **Responsibilities**:
+
 - Security policy enforcement
 - Vulnerability assessment and remediation
 - Security code reviews
@@ -112,13 +126,16 @@ docker-compose.yml @ivviiviivvi/devops
 - Security training and awareness
 
 **Members**:
+
 - Security engineers
 - Security analysts
 - Compliance specialists
 
-**Repository Access**: Write on all repositories (for security patches), Admin on security policies
+**Repository Access**: Write on all repositories (for security patches), Admin
+on security policies
 
 **CODEOWNERS Patterns**:
+
 ```
 /SECURITY.md @ivviiviivvi/security
 /.github/SECURITY.md @ivviiviivvi/security
@@ -129,11 +146,12 @@ docker-compose.yml @ivviiviivvi/devops
 
 ---
 
-### QA Team (@ivviiviivvi/qa) [Optional]
+### QA Team (@ivviiviivvi/qa) \[Optional\]
 
 **Purpose**: Quality assurance and testing
 
 **Responsibilities**:
+
 - Test planning and execution
 - Test automation
 - Quality metrics tracking
@@ -141,6 +159,7 @@ docker-compose.yml @ivviiviivvi/devops
 - Performance testing
 
 **Members**:
+
 - QA engineers
 - Test automation engineers
 - Performance testers
@@ -148,6 +167,7 @@ docker-compose.yml @ivviiviivvi/devops
 **Repository Access**: Read on all repositories, Write on test repositories
 
 **CODEOWNERS Patterns**:
+
 ```
 /tests/ @ivviiviivvi/qa
 /e2e/ @ivviiviivvi/qa
@@ -156,11 +176,12 @@ docker-compose.yml @ivviiviivvi/devops
 
 ---
 
-### Frontend Team (@ivviiviivvi/frontend) [Optional]
+### Frontend Team (@ivviiviivvi/frontend) \[Optional\]
 
 **Purpose**: Frontend development and UI/UX implementation
 
 **Responsibilities**:
+
 - Frontend code development
 - UI component library
 - User interface implementation
@@ -168,12 +189,14 @@ docker-compose.yml @ivviiviivvi/devops
 - Accessibility
 
 **Members**:
+
 - Frontend developers
 - UI engineers
 
 **Repository Access**: Write on frontend repositories
 
 **CODEOWNERS Patterns**:
+
 ```
 /frontend/ @ivviiviivvi/frontend
 /ui/ @ivviiviivvi/frontend
@@ -185,11 +208,12 @@ docker-compose.yml @ivviiviivvi/devops
 
 ---
 
-### Backend Team (@ivviiviivvi/backend) [Optional]
+### Backend Team (@ivviiviivvi/backend) \[Optional\]
 
 **Purpose**: Backend development and API implementation
 
 **Responsibilities**:
+
 - Backend code development
 - API design and implementation
 - Database schema design
@@ -197,12 +221,14 @@ docker-compose.yml @ivviiviivvi/devops
 - Backend performance
 
 **Members**:
+
 - Backend developers
 - API engineers
 
 **Repository Access**: Write on backend repositories
 
 **CODEOWNERS Patterns**:
+
 ```
 /backend/ @ivviiviivvi/backend
 /api/ @ivviiviivvi/backend
@@ -214,30 +240,35 @@ docker-compose.yml @ivviiviivvi/devops
 ## Permission Levels
 
 ### Read
+
 - View code and discussions
 - Clone repositories
 - Create issues
 - Comment on issues and PRs
 
 ### Triage
+
 - Read access plus:
 - Manage issues and PRs
 - Apply labels
 - Assign issues
 
 ### Write
+
 - Triage access plus:
 - Push to branches
 - Create pull requests
 - Merge PRs (if not protected)
 
 ### Maintain
+
 - Write access plus:
 - Manage repository settings
 - Manage webhooks
 - Manage releases
 
 ### Admin
+
 - Full access including:
 - Delete repository
 - Manage teams and permissions
@@ -249,12 +280,12 @@ docker-compose.yml @ivviiviivvi/devops
 ### Via GitHub Web Interface
 
 1. Go to **Organization Settings** → **Teams**
-2. Click **New team**
-3. Enter team name (e.g., `engineering`)
-4. Set team description
-5. Choose parent team (if applicable)
-6. Set team visibility (Visible or Secret)
-7. Click **Create team**
+1. Click **New team**
+1. Enter team name (e.g., `engineering`)
+1. Set team description
+1. Choose parent team (if applicable)
+1. Set team visibility (Visible or Secret)
+1. Click **Create team**
 
 ### Via GitHub CLI
 
@@ -271,7 +302,8 @@ gh api orgs/{org}/teams/engineering/memberships/{username} \
   -f role="member"
 ```
 
-**Note**: Replace `{org}` with your organization name and `{username}` with the GitHub username.
+**Note**: Replace `{org}` with your organization name and `{username}` with the
+GitHub username.
 
 ### Via Terraform
 
@@ -294,10 +326,10 @@ resource "github_team_membership" "engineering_member" {
 ### Via GitHub Web Interface
 
 1. Go to **Repository Settings** → **Collaborators and teams**
-2. Click **Add teams**
-3. Select team
-4. Choose permission level
-5. Click **Add {team} to this repository**
+1. Click **Add teams**
+1. Select team
+1. Choose permission level
+1. Click **Add {team} to this repository**
 
 ### Via GitHub CLI
 
@@ -309,7 +341,8 @@ gh api repos/{owner}/{repo}/teams/engineering \
   -f permission="push"
 ```
 
-**Note**: Replace `{owner}` and `{repo}` with your actual organization and repository names.
+**Note**: Replace `{owner}` and `{repo}` with your actual organization and
+repository names.
 
 ## Review Assignment
 
@@ -318,10 +351,10 @@ gh api repos/{owner}/{repo}/teams/engineering \
 Configure automatic reviewer assignment based on team membership:
 
 1. Go to **Repository Settings** → **Code review assignment**
-2. Enable **Auto assignment**
-3. Choose **Round robin** or **Load balance**
-4. Select teams for assignment
-5. Set number of reviewers
+1. Enable **Auto assignment**
+1. Choose **Round robin** or **Load balance**
+1. Select teams for assignment
+1. Set number of reviewers
 
 ### Via .github/auto_assign.yml
 
@@ -339,25 +372,28 @@ numberOfReviewers: 2
 For organizations using external identity providers (e.g., Azure AD, Okta):
 
 1. Go to **Organization Settings** → **Teams**
-2. Select team
-3. Click **Settings**
-4. Configure **Identity Provider Groups**
-5. Map external groups to GitHub teams
+1. Select team
+1. Click **Settings**
+1. Configure **Identity Provider Groups**
+1. Map external groups to GitHub teams
 
 ## Access Request Process
 
 ### For Team Members
 
 1. **Identify Required Access**
+
    - Determine which team you need to join
    - Understand the access level needed
 
-2. **Submit Request**
+1. **Submit Request**
+
    - Open an issue using the appropriate template
    - Tag team lead or organization admin
    - Provide justification for access
 
-3. **Wait for Approval**
+1. **Wait for Approval**
+
    - Team lead reviews request
    - Access granted if approved
    - You'll receive notification via GitHub
@@ -365,16 +401,19 @@ For organizations using external identity providers (e.g., Azure AD, Okta):
 ### For Team Leads
 
 1. **Review Access Requests**
+
    - Verify requestor's identity
    - Confirm access is appropriate
    - Check with other team leads if needed
 
-2. **Grant or Deny Access**
+1. **Grant or Deny Access**
+
    - Add member to team if approved
    - Document reason for denial if rejected
    - Notify requestor of decision
 
-3. **Set Appropriate Permissions**
+1. **Set Appropriate Permissions**
+
    - Assign correct permission level
    - Add to specific repositories if needed
    - Review access periodically
@@ -386,10 +425,10 @@ For organizations using external identity providers (e.g., Azure AD, Okta):
 Every quarter, team leads should:
 
 1. Review current team membership
-2. Verify all members still require access
-3. Remove inactive or departed members
-4. Update permission levels as needed
-5. Document changes in audit log
+1. Verify all members still require access
+1. Remove inactive or departed members
+1. Update permission levels as needed
+1. Document changes in audit log
 
 ### Automated Review Reminders
 
@@ -401,7 +440,7 @@ name: Quarterly Access Review Reminder
 
 on:
   schedule:
-    - cron: '0 0 1 */3 *'  # First day of every quarter
+    - cron: "0 0 1 */3 *" # First day of every quarter
 
 jobs:
   remind:
@@ -424,33 +463,35 @@ jobs:
 
 ### Team Management
 
-1. **Clear Responsibilities**: Define clear roles and responsibilities for each team
-2. **Least Privilege**: Grant minimum necessary access
-3. **Regular Reviews**: Audit team membership quarterly
-4. **Documentation**: Keep team documentation up to date
-5. **Offboarding**: Remove access immediately when members leave
+1. **Clear Responsibilities**: Define clear roles and responsibilities for each
+   team
+1. **Least Privilege**: Grant minimum necessary access
+1. **Regular Reviews**: Audit team membership quarterly
+1. **Documentation**: Keep team documentation up to date
+1. **Offboarding**: Remove access immediately when members leave
 
 ### CODEOWNERS
 
 1. **Specific Patterns**: Use specific patterns for better coverage
-2. **Multiple Owners**: Assign backup owners for critical paths
-3. **Team-Based**: Use teams rather than individuals
-4. **Regular Updates**: Review CODEOWNERS file regularly
-5. **Test Coverage**: Ensure all important paths have owners
+1. **Multiple Owners**: Assign backup owners for critical paths
+1. **Team-Based**: Use teams rather than individuals
+1. **Regular Updates**: Review CODEOWNERS file regularly
+1. **Test Coverage**: Ensure all important paths have owners
 
 ### Review Process
 
 1. **Balanced Workload**: Distribute reviews evenly across team
-2. **Expertise Matching**: Assign reviewers based on expertise
-3. **Response Time**: Set SLAs for code reviews
-4. **Multiple Reviewers**: Require multiple reviewers for critical changes
-5. **Continuous Improvement**: Gather feedback on review process
+1. **Expertise Matching**: Assign reviewers based on expertise
+1. **Response Time**: Set SLAs for code reviews
+1. **Multiple Reviewers**: Require multiple reviewers for critical changes
+1. **Continuous Improvement**: Gather feedback on review process
 
 ## Troubleshooting
 
 ### Issue: Team members can't push to repository
 
 **Solution**:
+
 - Verify team has Write permission on repository
 - Check branch protection rules
 - Ensure member is in correct team
@@ -458,6 +499,7 @@ jobs:
 ### Issue: CODEOWNERS not working
 
 **Solution**:
+
 - Verify file is in repository root or .github/
 - Check file syntax
 - Ensure teams exist and members are added
@@ -466,6 +508,7 @@ jobs:
 ### Issue: Too many review requests
 
 **Solution**:
+
 - Adjust number of required reviewers
 - Use load balancing for review assignment
 - Split responsibilities across more teams

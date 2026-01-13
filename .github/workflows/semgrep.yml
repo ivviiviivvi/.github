@@ -2,26 +2,26 @@ name: Semgrep Security Analysis
 
 on:
   push:
-    branches: [ "main", "master", "develop" ]
+    branches: [main, master, develop]
     paths:
-      - 'src/**'
-      - '**.py'
-      - '**.js'
-      - '**.ts'
-      - '**.go'
-      - '**.java'
+      - src/**
+      - "**.py"
+      - "**.js"
+      - "**.ts"
+      - "**.go"
+      - "**.java"
   pull_request:
-    branches: [ "main", "master", "develop" ]
+    branches: [main, master, develop]
     paths:
-      - 'src/**'
-      - '**.py'
-      - '**.js'
-      - '**.ts'
-      - '**.go'
-      - '**.java'
+      - src/**
+      - "**.py"
+      - "**.js"
+      - "**.ts"
+      - "**.go"
+      - "**.java"
   schedule:
     # Run daily at 3 AM UTC
-    - cron: '0 3 * * *'
+    - cron: 0 3 * * *
   workflow_dispatch:
 
 concurrency:
@@ -58,7 +58,7 @@ jobs:
             p/cwe-top-25
             p/default
 
-      # Alternative: Run without Semgrep Cloud (free tier)
+          # Alternative: Run without Semgrep Cloud (free tier)
       - name: Run Semgrep (Local)
         if: env.SEMGREP_APP_TOKEN == ''
         run: |

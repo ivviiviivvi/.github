@@ -78,24 +78,24 @@ if [ -z "$NOTIFICATION_COMMENT" ]; then
 else
   echo "✅ AI assistant notification comment found"
   NOTIFICATION_FAIL=0
-  
+
   # Check if notification mentions all key assistants
   if echo "$NOTIFICATION_COMMENT" | grep -q "@copilot"; then
     echo "  ✅ Mentions @copilot"
   fi
-  
+
   if echo "$NOTIFICATION_COMMENT" | grep -q "@claude"; then
     echo "  ✅ Mentions @claude"
   fi
-  
+
   if echo "$NOTIFICATION_COMMENT" | grep -q "@jules"; then
     echo "  ✅ Mentions @jules"
   fi
-  
+
   if echo "$NOTIFICATION_COMMENT" | grep -q "@gemini-cli"; then
     echo "  ✅ Mentions @gemini-cli"
   fi
-  
+
   if echo "$NOTIFICATION_COMMENT" | grep -q "GitHub Apps"; then
     echo "  ✅ Mentions GitHub Apps"
   fi

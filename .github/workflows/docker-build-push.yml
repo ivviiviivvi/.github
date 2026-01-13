@@ -333,7 +333,7 @@ jobs:
 
           **Repository:** \`${{ github.repository }}\`
           **Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\`
-          **Tags:** 
+          **Tags:**
           $(echo "${{ steps.meta.outputs.tags }}" | sed 's/^/- `/' | sed 's/$/`/')
 
           **Platforms:** ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
@@ -375,7 +375,7 @@ jobs:
           if ! grep -q "Docker Image" README.md; then
             # Add badge at the top of README
             echo "$BADGE" | cat - README.md > temp && mv temp README.md
-            
+
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add README.md

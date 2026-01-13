@@ -130,7 +130,7 @@ docs/_layouts/default.html
 docs/_includes/walkthrough_gallery.html
     ├─ docs/_data/walkthroughs.yml
     └─ docs/_data/app-deployments.yml
-    
+
 docs/_layouts/app-demo.html
     ↓
 docs/_includes/live-app-embed.html
@@ -138,13 +138,13 @@ docs/_includes/live-app-embed.html
 
 ## Workflow Triggers
 
-| Workflow | Event | Frequency |
-|----------|-------|-----------|
-| agentsphere-deployment.yml | push to main | On every push |
-| deploy-to-pages-live.yml | push to main | On every push |
-| docker-build-push.yml | push to main + Dockerfile | On push with Dockerfile |
-| generate-pages-index.yml | schedule | Every 6 hours |
-| build-pages-site.yml | workflow_run | After walkthrough |
+| Workflow                   | Event                     | Frequency               |
+| -------------------------- | ------------------------- | ----------------------- |
+| agentsphere-deployment.yml | push to main              | On every push           |
+| deploy-to-pages-live.yml   | push to main              | On every push           |
+| docker-build-push.yml      | push to main + Dockerfile | On push with Dockerfile |
+| generate-pages-index.yml   | schedule                  | Every 6 hours           |
+| build-pages-site.yml       | workflow_run              | After walkthrough       |
 
 ## Strategy Selection Logic
 
@@ -188,9 +188,9 @@ Live Outputs:
 ---
 
 **Legend:**
+
 - ✅ = Completed
 - → = Data flow
 - ├─ = Dependency
 - ▼ = Sequential flow
 - 1️⃣ 2️⃣ 3️⃣ = Workflow number
-

@@ -1,7 +1,6 @@
 ---
-mode: 'agent'
-description: 'Create Spring Boot Kotlin Project Skeleton'
----
+
+## mode: 'agent' description: 'Create Spring Boot Kotlin Project Skeleton'
 
 # Create Spring Boot Kotlin project prompt
 
@@ -11,9 +10,13 @@ description: 'Create Spring Boot Kotlin Project Skeleton'
   - Docker
   - Docker Compose
 
-- If you need to custom the project name, please change the `artifactId` and the `packageName` in [download-spring-boot-project-template](./create-spring-boot-kotlin-project.prompt.md#download-spring-boot-project-template)
+- If you need to custom the project name, please change the `artifactId` and the
+  `packageName` in
+  [download-spring-boot-project-template](./create-spring-boot-kotlin-project.prompt.md#download-spring-boot-project-template)
 
-- If you need to update the Spring Boot version, please change the `bootVersion` in [download-spring-boot-project-template](./create-spring-boot-kotlin-project.prompt.md#download-spring-boot-project-template)
+- If you need to update the Spring Boot version, please change the `bootVersion`
+  in
+  [download-spring-boot-project-template](./create-spring-boot-kotlin-project.prompt.md#download-spring-boot-project-template)
 
 ## Check Java version
 
@@ -66,7 +69,8 @@ unzip starter.zip -d ./${input:projectName:demo-kotlin}
 
 ## Add additional dependencies
 
-- Insert `springdoc-openapi-starter-webmvc-ui` and `archunit-junit5` dependency into `build.gradle.kts` file
+- Insert `springdoc-openapi-starter-webmvc-ui` and `archunit-junit5` dependency
+  into `build.gradle.kts` file
 
 ```gradle.kts
 dependencies {
@@ -118,7 +122,8 @@ spring.data.mongodb.password=rootroot
 spring.data.mongodb.database=test
 ```
 
-- Create `docker-compose.yaml` at project root and add following services: `redis:6`, `postgresql:17` and `mongo:8`.
+- Create `docker-compose.yaml` at project root and add following services:
+  `redis:6`, `postgresql:17` and `mongo:8`.
 
   - redis service should have
     - password `rootroot`
@@ -134,7 +139,8 @@ spring.data.mongodb.database=test
     - mapping port 27017 to 27017
     - mounting volume `./mongo_data` to `/data/db`
 
-- Insert `redis_data`, `postgres_data` and `mongo_data` directories in `.gitignore` file
+- Insert `redis_data`, `postgres_data` and `mongo_data` directories in
+  `.gitignore` file
 
 - Run gradle clean test command to check if the project is working
 
@@ -142,6 +148,8 @@ spring.data.mongodb.database=test
 ./gradlew clean test
 ```
 
-- (Optional) `docker-compose up -d` to start the services, `./gradlew spring-boot:run` to run the Spring Boot project, `docker-compose rm -sf` to stop the services.
+- (Optional) `docker-compose up -d` to start the services,
+  `./gradlew spring-boot:run` to run the Spring Boot project,
+  `docker-compose rm -sf` to stop the services.
 
 Let's do this step by step.

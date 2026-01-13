@@ -1,15 +1,16 @@
 ---
-description: 'Generate a complete Model Context Protocol server project in Ruby using the official MCP Ruby SDK gem.'
-mode: agent
----
+
+## description: 'Generate a complete Model Context Protocol server project in Ruby using the official MCP Ruby SDK gem.' mode: agent
 
 # Ruby MCP Server Generator
 
-Generate a complete, production-ready MCP server in Ruby using the official Ruby SDK.
+Generate a complete, production-ready MCP server in Ruby using the official Ruby
+SDK.
 
 ## Project Generation
 
-When asked to create a Ruby MCP server, generate a complete project with this structure:
+When asked to create a Ruby MCP server, generate a complete project with this
+structure:
 
 ```
 my-mcp-server/
@@ -92,7 +93,7 @@ end
 module MyMcpServer
   class Server
     attr_reader :mcp_server
-    
+
     def initialize(server_context: {})
       @mcp_server = MCP::Server.new(
         name: 'my_mcp_server',
@@ -109,21 +110,21 @@ module MyMcpServer
         ],
         server_context: server_context
       )
-      
+
       setup_resource_handler
     end
-    
+
     def handle_json(json_string)
       mcp_server.handle_json(json_string)
     end
-    
+
     def start_stdio
       transport = MCP::Server::Transports::StdioTransport.new(mcp_server)
       transport.open
     end
-    
+
     private
-    
+
     def setup_resource_handler
       mcp_server.resources_read_handler do |params|
         Resources::ExampleResource.read(params[:uri])
@@ -143,7 +144,7 @@ module MyMcpServer
     class GreetTool < MCP::Tool
       tool_name 'greet'
       description 'Generate a greeting message'
-      
+
       input_schema(
         properties: {
           name: {
@@ -153,7 +154,7 @@ module MyMcpServer
         },
         required: ['name']
       )
-      
+
       output_schema(
         properties: {
           message: { type: 'string' },
@@ -161,21 +162,21 @@ module MyMcpServer
         },
         required: ['message', 'timestamp']
       )
-      
+
       annotations(
         read_only_hint: true,
         idempotent_hint: true
       )
-      
+
       def self.call(name:, server_context:)
         timestamp = Time.now.iso8601
         message = "Hello, #{name}! Welcome to MCP."
-        
+
         structured_data = {
           message: message,
           timestamp: timestamp
         }
-        
+
         MCP::Tool::Response.new(
           [{ type: 'text', text: message }],
           structured_content: structured_data
@@ -196,7 +197,7 @@ module MyMcpServer
     class CalculateTool < MCP::Tool
       tool_name 'calculate'
       description 'Perform mathematical calculations'
-      
+
       input_schema(
         properties: {
           operation: {
@@ -215,7 +216,7 @@ module MyMcpServer
         },
         required: ['operation', 'a', 'b']
       )
-      
+
       output_schema(
         properties: {
           result: { type: 'number' },
@@ -223,12 +224,12 @@ module MyMcpServer
         },
         required: ['result', 'operation']
       )
-      
+
       annotations(
         read_only_hint: true,
         idempotent_hint: true
       )
-      
+
       def self.call(operation:, a:, b:, server_context:)
         result = case operation
                  when 'add' then a + b
@@ -240,18 +241,18 @@ module MyMcpServer
                  else
                    return error_response("Unknown operation: #{operation}")
                  end
-        
+
         structured_data = {
           result: result,
           operation: operation
         }
-        
+
         MCP::Tool::Response.new(
           [{ type: 'text', text: "Result: #{result}" }],
           structured_content: structured_data
         )
       end
-      
+
       def self.error_response(message)
         MCP::Tool::Response.new(
           [{ type: 'text', text: message }],
@@ -273,7 +274,7 @@ module MyMcpServer
     class CodeReviewPrompt < MCP::Prompt
       prompt_name 'code_review'
       description 'Generate a code review prompt'
-      
+
       arguments [
         MCP::Prompt::Argument.new(
           name: 'language',
@@ -286,16 +287,16 @@ module MyMcpServer
           required: false
         )
       ]
-      
+
       meta(
         version: '1.0',
         category: 'development'
       )
-      
+
       def self.template(args, server_context:)
         language = args['language'] || 'Ruby'
         focus = args['focus'] || 'general quality'
-        
+
         MCP::Prompt::Result.new(
           description: "Code review for #{language} with focus on #{focus}",
           messages: [
@@ -334,7 +335,7 @@ module MyMcpServer
   module Resources
     class ExampleResource
       RESOURCE_URI = 'resource://data/example'
-      
+
       def self.resource
         MCP::Resource.new(
           uri: RESOURCE_URI,
@@ -343,16 +344,16 @@ module MyMcpServer
           mime_type: 'application/json'
         )
       end
-      
+
       def self.read(uri)
         return [] unless uri == RESOURCE_URI
-        
+
         data = {
           message: 'Example resource data',
           timestamp: Time.now.iso8601,
           version: MyMcpServer::VERSION
         }
-        
+
         [{
           uri: uri,
           mimeType: 'application/json',
@@ -386,6 +387,7 @@ end
 ```
 
 Make the file executable:
+
 ```bash
 chmod +x bin/mcp-server
 ```
@@ -415,21 +417,21 @@ module MyMcpServer
           name: 'Ruby',
           server_context: {}
         )
-        
+
         refute response.is_error
         assert_equal 1, response.content.length
         assert_match(/Ruby/, response.content.first[:text])
-        
+
         assert response.structured_content
         assert_equal 'Hello, Ruby! Welcome to MCP.', response.structured_content[:message]
       end
-      
+
       def test_output_schema_validation
         response = GreetTool.call(
           name: 'Test',
           server_context: {}
         )
-        
+
         assert response.structured_content.key?(:message)
         assert response.structured_content.key?(:timestamp)
       end
@@ -455,11 +457,11 @@ module MyMcpServer
           b: 3,
           server_context: {}
         )
-        
+
         refute response.is_error
         assert_equal 8, response.structured_content[:result]
       end
-      
+
       def test_subtraction
         response = CalculateTool.call(
           operation: 'subtract',
@@ -467,11 +469,11 @@ module MyMcpServer
           b: 4,
           server_context: {}
         )
-        
+
         refute response.is_error
         assert_equal 6, response.structured_content[:result]
       end
-      
+
       def test_multiplication
         response = CalculateTool.call(
           operation: 'multiply',
@@ -479,11 +481,11 @@ module MyMcpServer
           b: 7,
           server_context: {}
         )
-        
+
         refute response.is_error
         assert_equal 42, response.structured_content[:result]
       end
-      
+
       def test_division
         response = CalculateTool.call(
           operation: 'divide',
@@ -491,11 +493,11 @@ module MyMcpServer
           b: 3,
           server_context: {}
         )
-        
+
         refute response.is_error
         assert_equal 5.0, response.structured_content[:result]
       end
-      
+
       def test_division_by_zero
         response = CalculateTool.call(
           operation: 'divide',
@@ -503,11 +505,11 @@ module MyMcpServer
           b: 0,
           server_context: {}
         )
-        
+
         assert response.is_error
         assert_match(/Division by zero/, response.content.first[:text])
       end
-      
+
       def test_unknown_operation
         response = CalculateTool.call(
           operation: 'modulo',
@@ -515,7 +517,7 @@ module MyMcpServer
           b: 3,
           server_context: {}
         )
-        
+
         assert response.is_error
         assert_match(/Unknown operation/, response.content.first[:text])
       end
@@ -526,7 +528,7 @@ end
 
 ## README.md Template
 
-```markdown
+````markdown
 # My MCP Server
 
 A Model Context Protocol server built with Ruby and the official MCP Ruby SDK.
@@ -550,6 +552,7 @@ A Model Context Protocol server built with Ruby and the official MCP Ruby SDK.
 ```bash
 bundle install
 ```
+````
 
 ## Usage
 
@@ -644,6 +647,7 @@ my-mcp-server/
 ## License
 
 MIT
+
 ```
 
 ## Generation Instructions
@@ -658,3 +662,4 @@ MIT
 8. **Follow Ruby conventions** (snake_case, modules, frozen_string_literal)
 9. **Add proper error handling** with is_error flag
 10. **Provide both stdio and HTTP** usage examples
+```

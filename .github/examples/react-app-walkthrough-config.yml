@@ -10,8 +10,8 @@ port: 3000
 install_command: "npm install"
 
 # Walkthrough Settings
-duration: 60  # seconds
-voiceover_style: "professional"  # Options: professional, casual, technical
+duration: 60 # seconds
+voiceover_style: "professional" # Options: professional, casual, technical
 
 # Focus Areas
 # List the key features and components you want to highlight in the walkthrough
@@ -44,8 +44,8 @@ environment_variables:
   REACT_APP_DEBUG: "true"
 
 # Additional Settings
-startup_wait: 15  # seconds to wait for app to be ready after starting
-browser: chrome  # Browser to use for recording: chrome, firefox, edge
+startup_wait: 15 # seconds to wait for app to be ready after starting
+browser: chrome # Browser to use for recording: chrome, firefox, edge
 viewport:
   width: 1920
   height: 1080
@@ -55,7 +55,7 @@ viewport:
 feature_highlights:
   - element: "#login-button"
     description: "User authentication entry point"
-    duration: 3  # seconds to focus on this element
+    duration: 3 # seconds to focus on this element
 
   - element: ".dashboard-widgets"
     description: "Interactive dashboard components"
@@ -88,13 +88,13 @@ customization:
   show_network_requests: false
   highlight_clicks: true
   mouse_cursor_visible: true
-  include_mobile_view: false  # Set to true for responsive demo
+  include_mobile_view: false # Set to true for responsive demo
 
 # Performance Considerations
 performance:
   enable_animations: true
   reduce_motion: false
-  throttle_network: false  # Simulate slower connections
+  throttle_network: false # Simulate slower connections
 
 # Accessibility Features
 accessibility:

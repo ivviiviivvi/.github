@@ -3,9 +3,10 @@ PR Automation Metadata
 type: feature
 labels: enhancement, feature
 size: <!-- small | medium | large -->
-breaking-changes: <!-- yes | no -->
-requires-review-from: <!-- @team or @username -->
--->
+
+breaking-changes: <!-- yes | no --> requires-review-from:
+
+<!-- @team or @username --> -->
 
 ## Pull Request - New Feature
 
@@ -22,8 +23,7 @@ requires-review-from: <!-- @team or @username -->
 
 What new feature does this PR add?
 
-Closes #(issue)
-Related to #(related issues)
+Closes #(issue) Related to #(related issues)
 
 ### Motivation
 
@@ -33,14 +33,14 @@ Why is this feature needed? What problem does it solve?
 
 How did you implement this feature?
 
-- 
-- 
+-
+-
 
 ### API Changes (if applicable)
 
 List any new APIs, changed APIs, or breaking changes:
 
-- 
+-
 
 ### Testing
 
@@ -79,6 +79,7 @@ Breaking changes (if any):
 <!-- ✅ These checkboxes can trigger automation workflows -->
 
 #### Code Quality
+
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -86,6 +87,7 @@ Breaking changes (if any):
 - [ ] Code passes linting and formatting checks
 
 #### Testing
+
 - [ ] I have added tests that prove my feature works
 - [ ] New and existing unit tests pass locally
 - [ ] Integration tests added (if applicable)
@@ -93,6 +95,7 @@ Breaking changes (if any):
 - [ ] Edge cases covered
 
 #### Documentation
+
 - [ ] I have made corresponding changes to the documentation
 - [ ] README updated (if needed)
 - [ ] API documentation added/updated
@@ -101,12 +104,14 @@ Breaking changes (if any):
 - [ ] CHANGELOG.md updated
 
 #### Security & Performance
+
 - [ ] I have checked for potential security issues (XSS, SQL injection, etc.)
 - [ ] No sensitive data (passwords, keys, tokens) committed
 - [ ] Performance impact assessed
 - [ ] No performance regressions introduced
 
 #### Dependencies & Breaking Changes
+
 - [ ] No new dependencies added OR dependencies are justified and documented
 - [ ] Backward compatibility maintained OR breaking changes documented
 - [ ] Migration guide provided (if breaking changes)

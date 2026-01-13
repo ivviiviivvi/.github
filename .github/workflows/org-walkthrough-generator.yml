@@ -4,29 +4,29 @@ on:
   workflow_call:
     inputs:
       duration:
-        description: 'Video duration in seconds'
+        description: "Video duration in seconds"
         required: false
-        default: '60'
+        default: "60"
         type: string
       voiceover_style:
-        description: 'Voiceover style (professional/casual/technical)'
+        description: "Voiceover style (professional/casual/technical)"
         required: false
-        default: 'professional'
+        default: "professional"
         type: string
       focus_areas:
-        description: 'Key features to highlight (comma-separated)'
+        description: "Key features to highlight (comma-separated)"
         required: false
-        default: ''
+        default: ""
         type: string
       target_branch:
-        description: 'Target branch for the walkthrough'
+        description: "Target branch for the walkthrough"
         required: false
-        default: 'main'
+        default: "main"
         type: string
     secrets:
       GH_TOKEN:
         required: false
-        description: 'GitHub token for creating PRs'
+        description: "GitHub token for creating PRs"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.run_id }}
@@ -137,13 +137,13 @@ jobs:
         if: contains(fromJSON('["react", "vue", "angular", "nextjs", "nodejs"]'), steps.detect.outputs.app_type)
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install application dependencies
         run: |

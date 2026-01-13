@@ -1,6 +1,7 @@
 # Archival Strategy
 
-Organization-wide strategy for version archival, maintenance branches, and long-term code preservation.
+Organization-wide strategy for version archival, maintenance branches, and
+long-term code preservation.
 
 ## Table of Contents
 
@@ -16,24 +17,26 @@ Organization-wide strategy for version archival, maintenance branches, and long-
 
 ## Overview
 
-This document establishes standards for archiving code, maintaining legacy versions, and ensuring long-term accessibility of historical code.
+This document establishes standards for archiving code, maintaining legacy
+versions, and ensuring long-term accessibility of historical code.
 
 ### Purpose
 
 Archival serves multiple purposes:
+
 1. **Historical Reference**: Preserve code for future reference
-2. **Compliance**: Meet regulatory and audit requirements
-3. **Recovery**: Enable recovery of old implementations if needed
-4. **Learning**: Provide examples of past approaches
-5. **Documentation**: Maintain record of project evolution
+1. **Compliance**: Meet regulatory and audit requirements
+1. **Recovery**: Enable recovery of old implementations if needed
+1. **Learning**: Provide examples of past approaches
+1. **Documentation**: Maintain record of project evolution
 
 ### Core Principles
 
 1. **Permanent Tags**: Git tags provide immutable version markers
-2. **Long-lived Branches**: Maintenance branches for active support
-3. **Archive Branches**: Dedicated branches for obsolete code
-4. **GitHub Releases**: Formal releases with downloadable artifacts
-5. **Clear Naming**: Descriptive names indicate purpose and version
+1. **Long-lived Branches**: Maintenance branches for active support
+1. **Archive Branches**: Dedicated branches for obsolete code
+1. **GitHub Releases**: Formal releases with downloadable artifacts
+1. **Clear Naming**: Descriptive names indicate purpose and version
 
 ---
 
@@ -42,6 +45,7 @@ Archival serves multiple purposes:
 ### When to Create Archive Branches
 
 Create archive branches when:
+
 - Version is no longer actively supported
 - Major rewrite makes old code obsolete
 - Project direction changes significantly
@@ -68,6 +72,7 @@ archive/monolith-version
 ### Creating Archive Branches
 
 **From Maintenance Branch**:
+
 ```bash
 # Create archive from maintenance branch
 git checkout maintenance/v1-maintenance
@@ -87,6 +92,7 @@ git push origin archive/v1-archive
 ```
 
 **From Specific Tag**:
+
 ```bash
 # Create archive from specific release
 git checkout v1.9.5
@@ -95,6 +101,7 @@ git push origin archive/v1-archive
 ```
 
 **From Develop or Main**:
+
 ```bash
 # Archive current state before major change
 git checkout main
@@ -107,12 +114,13 @@ git push origin archive/pre-rewrite-archive
 Archive branches should include:
 
 1. **ARCHIVE_NOTICE.md**: Clear indication of archive status
-2. **README.md**: Updated with archive information
-3. **Original Code**: Complete code as it was
-4. **Documentation**: All relevant documentation
-5. **Build Instructions**: How to build archived version
+1. **README.md**: Updated with archive information
+1. **Original Code**: Complete code as it was
+1. **Documentation**: All relevant documentation
+1. **Build Instructions**: How to build archived version
 
 **ARCHIVE_NOTICE.md Template**:
+
 ```markdown
 # ARCHIVED PROJECT
 
@@ -128,12 +136,14 @@ This branch is archived and is no longer maintained. It is kept for historical r
 ## Migration Information
 
 To migrate to the current version, see:
+
 - [Migration Guide](docs/migration-v2.md)
 - [Current Version](https://github.com/org/repo)
 
 ## Getting Help
 
 For support with archived versions:
+
 - Check archived documentation
 - Review closed issues
 - Contact: support@example.com
@@ -148,12 +158,14 @@ For support with archived versions:
 ### Archive Branch Protection
 
 **Protection Rules**:
+
 - Read-only (no new commits)
 - Cannot be deleted
 - No force push allowed
 - Documented archive status
 
 **GitHub Settings**:
+
 ```yaml
 Branch Protection:
   - Require pull request reviews: No
@@ -170,11 +182,13 @@ Branch Protection:
 
 ### Purpose
 
-Maintenance branches provide ongoing support for previous major versions while development continues on newer versions.
+Maintenance branches provide ongoing support for previous major versions while
+development continues on newer versions.
 
 ### When to Create Maintenance Branches
 
 Create maintenance branches when:
+
 - Releasing a new major version
 - Customers require continued support for older versions
 - Critical bugs need fixes in production versions
@@ -194,6 +208,7 @@ maintenance/lts-maintenance
 ### Creating Maintenance Branches
 
 **At Major Release**:
+
 ```bash
 # Just before releasing v2.0.0
 git checkout main
@@ -204,6 +219,7 @@ git push origin maintenance/v1-maintenance
 ```
 
 **From Specific Version**:
+
 ```bash
 # Create maintenance branch from last v1 release
 git checkout v1.9.5
@@ -214,6 +230,7 @@ git push origin maintenance/v1-maintenance
 ### Maintenance Workflow
 
 **Applying Fixes**:
+
 ```bash
 # Create fix branch
 git checkout maintenance/v1-maintenance
@@ -230,6 +247,7 @@ git push origin production/hotfix/security-fix
 ```
 
 **Release from Maintenance**:
+
 ```bash
 # After PR merged
 git checkout maintenance/v1-maintenance
@@ -244,6 +262,7 @@ gh release create v1.9.6 --notes "Security fix for CVE-2024-XXXX"
 ```
 
 **Backporting from Main**:
+
 ```bash
 # Cherry-pick commit from main
 git checkout maintenance/v1-maintenance
@@ -254,17 +273,20 @@ git push origin maintenance/v1-maintenance
 ### Maintenance Support Levels
 
 **Active Support**:
+
 - Bug fixes
 - Security patches
 - Documentation updates
 - Customer support
 
 **Limited Support**:
+
 - Critical security patches only
 - No feature development
 - Limited customer support
 
 **End of Life**:
+
 - No updates
 - Archive branch created
 - Documentation remains available
@@ -293,21 +315,25 @@ v1 End of Life: 2024-07-01
 
 ### Purpose
 
-Git tags provide immutable markers for specific versions, enabling easy retrieval.
+Git tags provide immutable markers for specific versions, enabling easy
+retrieval.
 
 ### Tag Types
 
 **Release Tags**:
+
 ```
 v1.0.0, v1.0.1, v1.1.0, v2.0.0
 ```
 
 **Pre-release Tags**:
+
 ```
 v1.0.0-alpha.1, v1.0.0-beta.1, v1.0.0-rc.1
 ```
 
 **Archive Tags**:
+
 ```
 archive/v1-final
 archive/pre-migration
@@ -316,6 +342,7 @@ archive/pre-migration
 ### Creating Archive Tags
 
 **Mark Final Version Before Archive**:
+
 ```bash
 git checkout maintenance/v1-maintenance
 git tag -a archive/v1-final -m "Final v1 release before archival"
@@ -323,6 +350,7 @@ git push origin archive/v1-final
 ```
 
 **Mark Pre-Migration State**:
+
 ```bash
 git checkout main
 git tag -a archive/pre-migration -m "State before v2 migration"
@@ -332,17 +360,20 @@ git push origin archive/pre-migration
 ### Retrieving Tagged Versions
 
 **Checkout Tagged Version**:
+
 ```bash
 git checkout v1.9.5
 ```
 
 **Create Branch from Tag**:
+
 ```bash
 git checkout v1.9.5
 git checkout -b hotfix-from-v1.9.5
 ```
 
 **View Tag Information**:
+
 ```bash
 git show v1.9.5
 git tag -l "v1.*"
@@ -355,6 +386,7 @@ git tag -l "v1.*"
 ### Purpose
 
 GitHub Releases provide:
+
 - Clean version downloads
 - Release notes
 - Compiled artifacts
@@ -364,6 +396,7 @@ GitHub Releases provide:
 ### Creating Releases
 
 **For Current Version**:
+
 ```bash
 # Via GitHub CLI
 gh release create v1.2.3 \
@@ -380,6 +413,7 @@ gh release create v1.2.3 \
 ```
 
 **For Archived Version**:
+
 ```bash
 gh release create v1.9.5 \
   --title "Final Release v1.9.5 (Archived)" \
@@ -390,16 +424,17 @@ gh release create v1.9.5 \
 ### Release Assets
 
 Include these assets in releases:
+
 1. Source code (automatic)
-2. Compiled binaries
-3. Documentation (PDF or HTML)
-4. CHANGELOG.md
-5. Migration guides
-6. License file
+1. Compiled binaries
+1. Documentation (PDF or HTML)
+1. CHANGELOG.md
+1. Migration guides
+1. License file
 
 ### Release Notes Template
 
-```markdown
+````markdown
 ## Release v1.2.3
 
 **Release Date**: 2024-11-25
@@ -424,6 +459,7 @@ git pull origin main
 git checkout v1.2.3
 npm install
 ```
+````
 
 ### Documentation
 
@@ -432,8 +468,10 @@ npm install
 
 ### Support
 
-This release is actively supported. Report issues at: https://github.com/org/repo/issues
-```
+This release is actively supported. Report issues at:
+https://github.com/org/repo/issues
+
+````
 
 **Archived Version Template**:
 ```markdown
@@ -468,7 +506,7 @@ For archived version support:
 - Review archived documentation
 - Check closed issues
 - Contact: legacy-support@example.com
-```
+````
 
 ---
 
@@ -476,41 +514,41 @@ For archived version support:
 
 ### Branch Retention
 
-| Branch Type | Retention Period | Deletion Policy |
-|-------------|------------------|-----------------|
-| main/master | Permanent | Never delete |
-| develop | Permanent | Never delete |
-| feature/* | 30 days after merge | Auto-delete after merge |
-| hotfix/* | 30 days after merge | Auto-delete after merge |
-| release/* | 30 days after merge | Auto-delete after merge |
-| maintenance/* | Support period + 6 months | Delete after archival |
-| archive/* | Permanent | Never delete |
+| Branch Type    | Retention Period          | Deletion Policy         |
+| -------------- | ------------------------- | ----------------------- |
+| main/master    | Permanent                 | Never delete            |
+| develop        | Permanent                 | Never delete            |
+| feature/\*     | 30 days after merge       | Auto-delete after merge |
+| hotfix/\*      | 30 days after merge       | Auto-delete after merge |
+| release/\*     | 30 days after merge       | Auto-delete after merge |
+| maintenance/\* | Support period + 6 months | Delete after archival   |
+| archive/\*     | Permanent                 | Never delete            |
 
 ### Tag Retention
 
-| Tag Type | Retention Period |
-|----------|------------------|
-| Release tags (v*) | Permanent |
-| Pre-release tags | Permanent |
-| Archive tags | Permanent |
+| Tag Type           | Retention Period |
+| ------------------ | ---------------- |
+| Release tags (v\*) | Permanent        |
+| Pre-release tags   | Permanent        |
+| Archive tags       | Permanent        |
 
 ### Release Retention
 
-| Release Type | Retention Period |
-|--------------|------------------|
-| Current major version | Permanent |
-| Previous major version | 2 years after EOL |
-| Older versions | Permanent (marked as archived) |
+| Release Type           | Retention Period               |
+| ---------------------- | ------------------------------ |
+| Current major version  | Permanent                      |
+| Previous major version | 2 years after EOL              |
+| Older versions         | Permanent (marked as archived) |
 
 ### Artifact Retention
 
-| Artifact Type | Retention Period |
-|---------------|------------------|
-| Source code | Permanent (in Git) |
+| Artifact Type     | Retention Period          |
+| ----------------- | ------------------------- |
+| Source code       | Permanent (in Git)        |
 | Compiled binaries | 2 years after version EOL |
-| Documentation | Permanent |
-| Build logs | 90 days |
-| Test reports | 1 year |
+| Documentation     | Permanent                 |
+| Build logs        | 90 days                   |
+| Test reports      | 1 year                    |
 
 ---
 
@@ -519,6 +557,7 @@ For archived version support:
 ### Retrieving Archived Code
 
 **By Tag**:
+
 ```bash
 # List all tags
 git tag -l
@@ -532,6 +571,7 @@ git checkout -b restore-v1.9.5
 ```
 
 **By Archive Branch**:
+
 ```bash
 # List archive branches
 git branch -r | grep archive
@@ -545,6 +585,7 @@ git checkout -b restore-from-archive
 ```
 
 **By Release**:
+
 ```bash
 # Download from GitHub Releases
 gh release download v1.9.5
@@ -556,21 +597,25 @@ gh release download v1.9.5
 ### Searching Historical Code
 
 **Find When File Was Deleted**:
+
 ```bash
 git log --all --full-history -- path/to/file
 ```
 
 **Find Specific Code in History**:
+
 ```bash
 git log -S "search term" --all
 ```
 
 **View File at Specific Version**:
+
 ```bash
 git show v1.9.5:path/to/file
 ```
 
 **Compare Versions**:
+
 ```bash
 git diff v1.9.5 v2.0.0
 git diff v1.9.5 v2.0.0 -- specific/file
@@ -579,11 +624,13 @@ git diff v1.9.5 v2.0.0 -- specific/file
 ### Building Archived Versions
 
 **Prerequisites**:
+
 1. Check ARCHIVE_NOTICE.md for requirements
-2. Review archived documentation
-3. Ensure compatible build environment
+1. Review archived documentation
+1. Ensure compatible build environment
 
 **Build Process**:
+
 ```bash
 # Checkout archived version
 git checkout archive/v1-archive
@@ -605,6 +652,7 @@ npm test  # or pytest
 ### Audit Trail
 
 Git provides complete audit trail:
+
 - Every change is tracked
 - Author and timestamp recorded
 - Commit messages explain changes
@@ -613,6 +661,7 @@ Git provides complete audit trail:
 ### Compliance Requirements
 
 Ensure archived code meets:
+
 - Regulatory retention periods
 - Industry standards
 - Company policies
@@ -621,6 +670,7 @@ Ensure archived code meets:
 ### Documentation Requirements
 
 Maintain for archived versions:
+
 - Source code
 - Build instructions
 - Deployment procedures

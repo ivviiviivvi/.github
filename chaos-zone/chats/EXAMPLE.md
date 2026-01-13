@@ -1,14 +1,13 @@
 # Example Chat File
 
-**Date:** 2025-11-18
-**Topic:** Feature Discussion
-**Participants:** User, AI Assistant
+**Date:** 2025-11-18 **Topic:** Feature Discussion **Participants:** User, AI
+Assistant
 
 ---
 
 ## Conversation
 
-[Paste your chat transcripts here]
+\[Paste your chat transcripts here\]
 
 Example format:
 
@@ -20,11 +19,11 @@ Example format:
 
 ## Key Takeaways
 
-- [Extract important points here]
-- [Action items]
-- [Decisions made]
+- \[Extract important points here\]
+- \[Action items\]
+- \[Decisions made\]
 
 ---
 
-**Status:** 🟡 Needs Review
-**Next Steps:** Review and extract insights into proper documentation
+**Status:** 🟡 Needs Review **Next Steps:** Review and extract insights into
+proper documentation

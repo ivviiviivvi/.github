@@ -5,18 +5,23 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 0 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
 
 ```
 
 ### Recent Commits
+
 ```
 
 ```

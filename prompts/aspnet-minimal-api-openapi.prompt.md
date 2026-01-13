@@ -1,12 +1,11 @@
 ---
-mode: 'agent'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'problems']
-description: 'Create ASP.NET Minimal API endpoints with proper OpenAPI documentation'
----
+
+## mode: 'agent' tools: \['changes', 'search/codebase', 'edit/editFiles', 'problems'\] description: 'Create ASP.NET Minimal API endpoints with proper OpenAPI documentation'
 
 # ASP.NET Minimal API with OpenAPI
 
-Your goal is to help me create well-structured ASP.NET Minimal API endpoints with correct types and comprehensive OpenAPI/Swagger documentation.
+Your goal is to help me create well-structured ASP.NET Minimal API endpoints
+with correct types and comprehensive OpenAPI/Swagger documentation.
 
 ## API Organization
 
@@ -22,7 +21,8 @@ Your goal is to help me create well-structured ASP.NET Minimal API endpoints wit
 - Use record types for immutable request/response objects
 - Use meaningful property names that align with API design standards
 - Apply `[Required]` and other validation attributes to enforce constraints
-- Use the ProblemDetailsService and StatusCodePages to get standard error responses
+- Use the ProblemDetailsService and StatusCodePages to get standard error
+  responses
 
 ## Type Handling
 
@@ -38,5 +38,6 @@ Your goal is to help me create well-structured ASP.NET Minimal API endpoints wit
 - Add operationIds using the `WithName` extension method
 - Add descriptions to properties and parameters with `[Description()]`
 - Set proper content types for requests and responses
-- Use document transformers to add elements like servers, tags, and security schemes
+- Use document transformers to add elements like servers, tags, and security
+  schemes
 - Use schema transformers to apply customizations to OpenAPI schemas

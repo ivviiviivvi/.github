@@ -1,8 +1,6 @@
 ---
-description: 'Intelligent Git Flow branch creator that analyzes git status/diff and creates appropriate branches following the nvie Git Flow branching model.'
-tools: ['run_in_terminal', 'get_terminal_output']
-mode: 'agent'
----
+
+## description: 'Intelligent Git Flow branch creator that analyzes git status/diff and creates appropriate branches following the nvie Git Flow branching model.' tools: \['run_in_terminal', 'get_terminal_output'\] mode: 'agent'
 
 ### Instructions
 
@@ -21,12 +19,13 @@ mode: 'agent'
 **Follow these steps:**
 
 1. Run `git status` to review the current repository state and changed files.
-2. Run `git diff` (for unstaged changes) or `git diff --cached` (for staged changes) to analyze the nature of changes.
-3. Analyze the changes using the Git Flow Branch Analysis Framework below.
-4. Determine the appropriate branch type based on the analysis.
-5. Generate a semantic branch name following Git Flow conventions.
-6. Create the branch and switch to it automatically.
-7. Provide a summary of the analysis and next steps.
+1. Run `git diff` (for unstaged changes) or `git diff --cached` (for staged
+   changes) to analyze the nature of changes.
+1. Analyze the changes using the Git Flow Branch Analysis Framework below.
+1. Determine the appropriate branch type based on the analysis.
+1. Generate a semantic branch name following Git Flow conventions.
+1. Create the branch and switch to it automatically.
+1. Provide a summary of the analysis and next steps.
 
 ### Git Flow Branch Analysis Framework
 

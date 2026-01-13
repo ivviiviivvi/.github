@@ -34,7 +34,7 @@ jobs:
       pr-list: ${{ steps.get-prs.outputs.pr-list }}
       pr-count: ${{ steps.get-prs.outputs.pr-count }}
       consolidation-branch: ${{ steps.setup.outputs.consolidation-branch }}
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
@@ -59,13 +59,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           EXCLUDE_PRS="${{ github.event.inputs.exclude_prs }}"
-          
+
           echo "🔍 Fetching all open PRs..."
-          
+
           # Get all open PRs except this workflow's PR
           gh pr list --state open --json number,title,headRefName,author,body,labels,createdAt,updatedAt \
             --limit 100 > all_prs.json
-          
+
           # Filter out excluded PRs
           if [ -n "$EXCLUDE_PRS" ]; then
             echo "Excluding PRs: $EXCLUDE_PRS"
@@ -76,20 +76,20 @@ jobs:
           else
             cp all_prs.json filtered_prs.json
           fi
-          
+
           PR_COUNT=$(jq 'length' filtered_prs.json)
-          
+
           echo "Found $PR_COUNT open PRs to consolidate"
-          
+
           if [ "$PR_COUNT" -eq 0 ]; then
             echo "❌ No PRs found to consolidate"
             exit 1
           fi
-          
+
           # Display PR summary
           echo "📋 PRs to consolidate:"
           jq -r '.[] | "  - PR #\(.number): \(.title) by @\(.author.login)"' filtered_prs.json
-          
+
           echo "pr-count=$PR_COUNT" >> $GITHUB_OUTPUT
           echo "pr-list<<EOF" >> $GITHUB_OUTPUT
           cat filtered_prs.json >> $GITHUB_OUTPUT
@@ -109,7 +109,7 @@ jobs:
     outputs:
       merge-report: ${{ steps.merge.outputs.report }}
       conflicts-summary: ${{ steps.merge.outputs.conflicts }}
-      
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
@@ -134,13 +134,13 @@ jobs:
         run: |
           BRANCH_NAME="${{ needs.analyze-prs.outputs.consolidation-branch }}"
           DRY_RUN="${{ github.event.inputs.dry_run }}"
-          
+
           echo "📦 Creating consolidation branch: $BRANCH_NAME"
-          
+
           # Ensure we're on main and up to date
           git checkout main
           git pull origin main
-          
+
           if [ "$DRY_RUN" != "true" ]; then
             # Create new consolidation branch
             git checkout -b "$BRANCH_NAME"
@@ -157,29 +157,29 @@ jobs:
         run: |
           DRY_RUN="${{ github.event.inputs.dry_run }}"
           BRANCH_NAME="${{ needs.analyze-prs.outputs.consolidation-branch }}"
-          
+
           echo "🔀 Starting PR consolidation process..."
-          
+
           # Initialize tracking files
           echo "0" > /tmp/merged_count.txt
           echo "0" > /tmp/conflict_count.txt
           echo "" > /tmp/merged_prs.txt
           echo "" > /tmp/conflict_prs.txt
           echo "" > /tmp/merge_details.txt
-          
+
           # Process each PR
           jq -c '.[]' filtered_prs.json | while IFS= read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r '.number')
             PR_TITLE=$(echo "$pr" | jq -r '.title')
             PR_BRANCH=$(echo "$pr" | jq -r '.headRefName')
             PR_AUTHOR=$(echo "$pr" | jq -r '.author.login')
-            
+
             echo ""
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "Processing PR #$PR_NUMBER: $PR_TITLE"
             echo "Branch: $PR_BRANCH | Author: @$PR_AUTHOR"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            
+
             if [ "$DRY_RUN" = "true" ]; then
               echo "[DRY RUN] Would merge PR #$PR_NUMBER"
               MERGED_COUNT=$(cat /tmp/merged_count.txt)
@@ -187,14 +187,14 @@ jobs:
               echo "$PR_NUMBER " >> /tmp/merged_prs.txt
               continue
             fi
-            
+
             # Fetch the PR branch
             echo "📥 Fetching branch: $PR_BRANCH"
             git fetch origin "$PR_BRANCH:$PR_BRANCH" || {
               echo "⚠️ Could not fetch branch $PR_BRANCH"
               continue
             }
-            
+
             # Attempt merge
             echo "🔀 Attempting to merge..."
             if git merge --no-ff --no-edit "$PR_BRANCH" -m "Merge PR #$PR_NUMBER: $PR_TITLE"; then
@@ -202,7 +202,7 @@ jobs:
               MERGED_COUNT=$(cat /tmp/merged_count.txt)
               echo "$((MERGED_COUNT + 1))" > /tmp/merged_count.txt
               echo "$PR_NUMBER " >> /tmp/merged_prs.txt
-              
+
               # Record merge details
               {
                 echo ""
@@ -218,10 +218,10 @@ jobs:
               CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
               echo "$((CONFLICT_COUNT + 1))" > /tmp/conflict_count.txt
               echo "$PR_NUMBER " >> /tmp/conflict_prs.txt
-              
+
               # Get conflict details
               CONFLICTED_FILES=$(git diff --name-only --diff-filter=U | tr '\n' ', ')
-              
+
               # Record conflict details
               {
                 echo ""
@@ -238,10 +238,10 @@ jobs:
                 echo "\`\`\`"
                 echo ""
               } >> /tmp/merge_details.txt
-              
+
               # Abort the merge
               git merge --abort
-              
+
               # Try to resolve automatically (prefer incoming changes with warning)
               echo "🔧 Attempting automatic conflict resolution..."
               echo "⚠️  Note: Using -X theirs strategy (accepting incoming changes)"
@@ -252,7 +252,7 @@ jobs:
                 echo "" >> /tmp/merge_details.txt
                 continue
               }
-              
+
               echo "✅ Conflicts auto-resolved (accepted incoming changes)"
               echo "**Resolution:** Auto-resolved (accepted incoming changes - review recommended)" >> /tmp/merge_details.txt
               echo "" >> /tmp/merge_details.txt
@@ -261,11 +261,11 @@ jobs:
               echo "$PR_NUMBER " >> /tmp/merged_prs.txt
             fi
           done
-          
+
           # Read final counts from files
           MERGED_COUNT=$(cat /tmp/merged_count.txt)
           CONFLICT_COUNT=$(cat /tmp/conflict_count.txt)
-          
+
           # Save merge report
           {
             echo "# PR Consolidation Merge Report"
@@ -277,19 +277,19 @@ jobs:
             echo "## Merge Details"
             cat /tmp/merge_details.txt
           } > merge_report.md
-          
+
           cat merge_report.md
-          
+
           # Push consolidation branch
           if [ "$DRY_RUN" != "true" ]; then
             git push origin "$BRANCH_NAME"
           fi
-          
+
           # Save outputs
           echo "report<<EOF" >> $GITHUB_OUTPUT
           cat merge_report.md >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          
+
           echo "conflicts=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
           echo "merged=$MERGED_COUNT" >> $GITHUB_OUTPUT
 
@@ -305,7 +305,7 @@ jobs:
     needs: [analyze-prs, consolidate-prs]
     outputs:
       tasks-summary: ${{ steps.extract.outputs.summary }}
-      
+
     steps:
       - name: Download PR Data
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # ratchet:actions/download-artifact@v4
@@ -318,7 +318,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "📝 Extracting tasks and suggestions from PRs..."
-          
+
           {
             echo "# Extracted Tasks and Suggestions"
             echo ""
@@ -327,14 +327,14 @@ jobs:
             echo "This section contains all suggestions, tasks, and action items extracted from the consolidated PRs."
             echo ""
           } > tasks_summary.md
-          
+
           # Process each PR
           jq -c '.[]' filtered_prs.json | while IFS= read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r '.number')
             PR_TITLE=$(echo "$pr" | jq -r '.title')
             PR_BODY=$(echo "$pr" | jq -r '.body // ""')
             PR_AUTHOR=$(echo "$pr" | jq -r '.author.login')
-            
+
             {
               echo "## PR #$PR_NUMBER: $PR_TITLE"
               echo ""
@@ -344,19 +344,19 @@ jobs:
               echo ""
               echo "$PR_BODY"
               echo ""
-              
+
               # Get PR comments
               echo "### Comments and Discussions"
               echo ""
             } >> tasks_summary.md
-            
+
             gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | "**@\(.author.login)** (comment):\n\n\(.body)\n"' 2>/dev/null >> tasks_summary.md || echo "No comments found" >> tasks_summary.md
-            
+
             echo "" >> tasks_summary.md
             echo "---" >> tasks_summary.md
             echo "" >> tasks_summary.md
           done
-          
+
           # Check for common patterns and extract TODO/FIXME/NOTE
           {
             echo "## Extracted Action Items"
@@ -364,15 +364,15 @@ jobs:
             echo "### Code Comments (TODO, FIXME, NOTE)"
             echo ""
           } >> tasks_summary.md
-          
+
           # Search for TODO/FIXME/NOTE in PR descriptions and comments
           {
             jq -r '.[] | "PR #\(.number): \(.body // "")"' filtered_prs.json | \
               grep -iE "(TODO|FIXME|NOTE|ACTION ITEM|TASK):" || echo "- No explicit action items found in PR descriptions"
           } >> tasks_summary.md
-          
+
           cat tasks_summary.md
-          
+
           echo "summary<<EOF" >> $GITHUB_OUTPUT
           cat tasks_summary.md >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -388,7 +388,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [analyze-prs, consolidate-prs, extract-tasks]
     if: github.event.inputs.dry_run != 'true'
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
@@ -400,7 +400,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           BRANCH_NAME="${{ needs.analyze-prs.outputs.consolidation-branch }}"
-          
+
           # Create PR body
           {
             echo "# 🔄 PR Consolidation - $(date +'%Y-%m-%d')"
@@ -416,19 +416,19 @@ jobs:
             echo ""
             echo "## 📋 Consolidated PRs"
             echo ""
-            
+
             jq -r '.[] | "- [ ] #\(.number): \(.title) by @\(.author.login)"' pr-data/filtered_prs.json
-            
+
             echo ""
             echo "## 🔀 Merge Report"
             echo ""
             cat merge-report/merge_report.md || echo "No merge report available"
-            
+
             echo ""
             echo "## 📝 Extracted Tasks and Suggestions"
             echo ""
             cat tasks-summary/tasks_summary.md || echo "No tasks extracted"
-            
+
             echo ""
             echo "## ⚠️ Issues Requiring Decision"
             echo ""
@@ -440,7 +440,7 @@ jobs:
             else
               echo "✅ No merge conflicts encountered"
             fi
-            
+
             echo ""
             echo "### Functionality Preservation"
             echo ""
@@ -463,7 +463,7 @@ jobs:
             echo ""
             echo "_Automated by [pr-consolidation.yml](../.github/workflows/pr-consolidation.yml)_"
           } > pr_body.md
-          
+
           # Create the PR
           gh pr create \
             --base main \
@@ -477,7 +477,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [analyze-prs, consolidate-prs, create-consolidation-pr]
     if: github.event.inputs.dry_run != 'true' && needs.consolidate-prs.outputs.merged > 0
-    
+
     steps:
       - name: Download PR Data
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # ratchet:actions/download-artifact@v4
@@ -489,12 +489,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           BRANCH_NAME="${{ needs.analyze-prs.outputs.consolidation-branch }}"
-          
+
           echo "🔒 Closing consolidated PRs..."
-          
+
           jq -c '.[]' filtered_prs.json | while IFS= read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r '.number')
-            
+
             # Add comment explaining consolidation
             gh pr comment "$PR_NUMBER" --body "**Consolidated**
 
@@ -509,13 +509,13 @@ All changes from this PR have been included in the consolidation. The consolidat
 This PR will now be closed as its changes are preserved in the consolidation.
 
 _Automated by [pr-consolidation.yml](../.github/workflows/pr-consolidation.yml)_"
-            
+
             # Close the PR
             gh pr close "$PR_NUMBER"
-            
+
             echo "✅ Closed PR #$PR_NUMBER"
           done
-          
+
           echo ""
           echo "🎉 Consolidation complete!"
           echo "All original PRs have been closed."
@@ -526,7 +526,7 @@ _Automated by [pr-consolidation.yml](../.github/workflows/pr-consolidation.yml)_
     runs-on: ubuntu-latest
     needs: [analyze-prs, consolidate-prs, extract-tasks, create-consolidation-pr, close-original-prs]
     if: always()
-    
+
     steps:
       - name: Generate Summary
         run: |

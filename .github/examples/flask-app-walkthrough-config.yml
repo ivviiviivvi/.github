@@ -5,49 +5,49 @@
 app_type: flask
 
 # Core Configuration
-start_command: "python app.py"
+start_command: python app.py
 port: 5000
-install_command: "pip install -r requirements.txt"
+install_command: pip install -r requirements.txt
 
 # Walkthrough Settings
-duration: 45  # seconds (APIs typically need less time)
-voiceover_style: "technical"  # Options: professional, casual, technical
+duration: 45 # seconds (APIs typically need less time)
+voiceover_style: technical # Options: professional, casual, technical
 
 # Focus Areas
 # List the key API endpoints and functionality you want to highlight
 focus_areas:
-  - "REST API endpoints and routing"
-  - "Request/response handling"
-  - "Database operations and ORM"
-  - "Authentication and authorization"
-  - "Error handling and validation"
+  - REST API endpoints and routing
+  - Request/response handling
+  - Database operations and ORM
+  - Authentication and authorization
+  - Error handling and validation
 
 # Demo Flow
 # Define the step-by-step demonstration of your API
 demo_flow:
-  - "Show API documentation or landing page"
-  - "Demonstrate GET requests to list resources"
-  - "Show POST request to create new resource"
-  - "Demonstrate authentication flow"
-  - "Show PUT/PATCH request to update resource"
-  - "Demonstrate DELETE request"
-  - "Display error handling (404, 401, etc.)"
-  - "Show response format and status codes"
-  - "Demonstrate query parameters and filtering"
-  - "Show database queries and data persistence"
+  - Show API documentation or landing page
+  - Demonstrate GET requests to list resources
+  - Show POST request to create new resource
+  - Demonstrate authentication flow
+  - Show PUT/PATCH request to update resource
+  - Demonstrate DELETE request
+  - Display error handling (404, 401, etc.)
+  - Show response format and status codes
+  - Demonstrate query parameters and filtering
+  - Show database queries and data persistence
 
 # Environment Variables (optional)
 # Add any required environment variables for development
 environment_variables:
-  FLASK_APP: "app.py"
-  FLASK_ENV: "development"
+  FLASK_APP: app.py
+  FLASK_ENV: development
   FLASK_DEBUG: "1"
-  DATABASE_URL: "sqlite:///dev.db"
-  SECRET_KEY: "dev-secret-key-not-for-production"
+  DATABASE_URL: sqlite:///dev.db
+  SECRET_KEY: dev-secret-key-not-for-production
 
 # Additional Settings
-startup_wait: 10  # seconds to wait for Flask server to be ready
-browser: chrome  # Browser to use for API testing visualization
+startup_wait: 10 # seconds to wait for Flask server to be ready
+browser: chrome # Browser to use for API testing visualization
 viewport:
   width: 1920
   height: 1080
@@ -56,45 +56,45 @@ viewport:
 # Specific endpoints to showcase in the walkthrough
 api_endpoints:
   - method: GET
-    path: "/api/health"
-    description: "Health check endpoint"
-    demo_action: "Show successful response"
+    path: /api/health
+    description: Health check endpoint
+    demo_action: Show successful response
 
   - method: GET
-    path: "/api/users"
-    description: "List all users"
-    demo_action: "Display paginated user list"
+    path: /api/users
+    description: List all users
+    demo_action: Display paginated user list
 
   - method: POST
-    path: "/api/users"
-    description: "Create new user"
-    demo_action: "Submit user creation form"
+    path: /api/users
+    description: Create new user
+    demo_action: Submit user creation form
     sample_data:
-      name: "Demo User"
-      email: "demo@example.com"
+      name: Demo User
+      email: demo@example.com
 
   - method: GET
-    path: "/api/users/1"
-    description: "Get specific user"
-    demo_action: "Show user details"
+    path: /api/users/1
+    description: Get specific user
+    demo_action: Show user details
 
   - method: PUT
-    path: "/api/users/1"
-    description: "Update user"
-    demo_action: "Update user information"
+    path: /api/users/1
+    description: Update user
+    demo_action: Update user information
 
   - method: DELETE
-    path: "/api/users/1"
-    description: "Delete user"
-    demo_action: "Confirm deletion"
+    path: /api/users/1
+    description: Delete user
+    demo_action: Confirm deletion
 
 # Database Setup (optional)
 # Scripts to prepare database for demo
 database_setup:
-  - "flask db init"
-  - "flask db migrate"
-  - "flask db upgrade"
-  - "python seed_demo_data.py"
+  - flask db init
+  - flask db migrate
+  - flask db upgrade
+  - python seed_demo_data.py
 
 # Custom Scripts (optional)
 pre_demo_script: |
@@ -115,14 +115,14 @@ narration_notes: |
 
 # API Documentation Tool
 # Which tool to use for visualizing API calls
-api_demo_tool: "postman"  # Options: postman, swagger-ui, curl, httpie, browser-devtools
+api_demo_tool: postman # Options: postman, swagger-ui, curl, httpie, browser-devtools
 
 # Postman Collection (if applicable)
-postman_collection: "./postman/flask-api-collection.json"
+postman_collection: ./postman/flask-api-collection.json
 
 # Swagger/OpenAPI (if applicable)
 swagger_ui_enabled: true
-swagger_ui_path: "/api/docs"
+swagger_ui_path: /api/docs
 
 # Customization Options
 customization:
@@ -132,7 +132,7 @@ customization:
   show_response_body: true
   show_status_codes: true
   highlight_authentication: true
-  show_database_queries: false  # For debugging/teaching purposes
+  show_database_queries: false # For debugging/teaching purposes
 
 # Performance Considerations
 performance:

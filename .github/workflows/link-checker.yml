@@ -2,17 +2,17 @@ name: Link Checker
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [main, master]
     paths:
-      - '**.md'
-      - '**.html'
+      - "**.md"
+      - "**.html"
   pull_request:
     paths:
-      - '**.md'
-      - '**.html'
+      - "**.md"
+      - "**.html"
   schedule:
     # Run weekly on Mondays at 8:00 AM UTC
-    - cron: '0 8 * * 1'
+    - cron: 0 8 * * 1
   workflow_dispatch:
 
 concurrency:
@@ -49,10 +49,12 @@ jobs:
             '**/*.md'
             '**/*.html'
           # Fail action on broken links
-          fail: true
-          # Output format
-          format: markdown
-          # Output file
+          fail:
+            true
+            # Output format
+          format:
+            markdown
+            # Output file
           output: link-checker-report.md
 
       - name: Upload Report
@@ -122,13 +124,13 @@ jobs:
       - name: Check Markdown Links
         uses: gaurav-nelson/github-action-markdown-link-check@5c5dfc0ac2e225883c0e5f03a85311ec2830d368 # ratchet:gaurav-nelson/github-action-markdown-link-check@v1
         with:
-          use-quiet-mode: 'no'
-          use-verbose-mode: 'yes'
-          config-file: '.github/markdown-link-check-config.json'
-          folder-path: '.'
-          file-path: './README.md'
+          use-quiet-mode: no
+          use-verbose-mode: yes
+          config-file: .github/markdown-link-check-config.json
+          folder-path: .
+          file-path: ./README.md
           max-depth: -1
-          check-modified-files-only: 'no'
+          check-modified-files-only: no
 
   spell-check:
     name: Spell Check Documentation

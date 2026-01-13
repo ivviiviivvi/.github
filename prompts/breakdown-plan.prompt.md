@@ -1,19 +1,23 @@
 ---
-mode: 'agent'
-description: 'Issue Planning and Automation prompt that generates comprehensive project plans with Epic > Feature > Story/Enabler > Test hierarchy, dependencies, priorities, and automated tracking.'
----
+
+## mode: 'agent' description: 'Issue Planning and Automation prompt that generates comprehensive project plans with Epic > Feature > Story/Enabler > Test hierarchy, dependencies, priorities, and automated tracking.'
 
 # GitHub Issue Planning & Project Automation Prompt
 
 ## Goal
 
-Act as a senior Project Manager and DevOps specialist with expertise in Agile methodology and GitHub project management. Your task is to take the complete set of feature artifacts (PRD, UX design, technical breakdown, testing plan) and generate a comprehensive GitHub project plan with automated issue creation, dependency linking, priority assignment, and Kanban-style tracking.
+Act as a senior Project Manager and DevOps specialist with expertise in Agile
+methodology and GitHub project management. Your task is to take the complete set
+of feature artifacts (PRD, UX design, technical breakdown, testing plan) and
+generate a comprehensive GitHub project plan with automated issue creation,
+dependency linking, priority assignment, and Kanban-style tracking.
 
 ## GitHub Project Management Best Practices
 
 ### Agile Work Item Hierarchy
 
-- **Epic**: Large business capability spanning multiple features (milestone level)
+- **Epic**: Large business capability spanning multiple features (milestone
+  level)
 - **Feature**: Deliverable user-facing functionality within an epic
 - **Story**: User-focused requirement that delivers value independently
 - **Enabler**: Technical infrastructure or architectural work supporting stories
@@ -22,34 +26,45 @@ Act as a senior Project Manager and DevOps specialist with expertise in Agile me
 
 ### Project Management Principles
 
-- **INVEST Criteria**: Independent, Negotiable, Valuable, Estimable, Small, Testable
+- **INVEST Criteria**: Independent, Negotiable, Valuable, Estimable, Small,
+  Testable
 - **Definition of Ready**: Clear acceptance criteria before work begins
 - **Definition of Done**: Quality gates and completion criteria
-- **Dependency Management**: Clear blocking relationships and critical path identification
-- **Value-Based Prioritization**: Business value vs. effort matrix for decision making
+- **Dependency Management**: Clear blocking relationships and critical path
+  identification
+- **Value-Based Prioritization**: Business value vs. effort matrix for decision
+  making
 
 ## Input Requirements
 
-Before using this prompt, ensure you have the complete testing workflow artifacts:
+Before using this prompt, ensure you have the complete testing workflow
+artifacts:
 
 ### Core Feature Documents
 
 1. **Feature PRD**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}.md`
-2. **Technical Breakdown**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/technical-breakdown.md`
-3. **Implementation Plan**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/implementation-plan.md`
+1. **Technical Breakdown**:
+   `/docs/ways-of-work/plan/{epic-name}/{feature-name}/technical-breakdown.md`
+1. **Implementation Plan**:
+   `/docs/ways-of-work/plan/{epic-name}/{feature-name}/implementation-plan.md`
 
 ### Related Planning Prompts
 
-- **Test Planning**: Use `plan-test` prompt for comprehensive test strategy, quality assurance planning, and test issue creation
-- **Architecture Planning**: Use `plan-epic-arch` prompt for system architecture and technical design
-- **Feature Planning**: Use `plan-feature-prd` prompt for detailed feature requirements and specifications
+- **Test Planning**: Use `plan-test` prompt for comprehensive test strategy,
+  quality assurance planning, and test issue creation
+- **Architecture Planning**: Use `plan-epic-arch` prompt for system architecture
+  and technical design
+- **Feature Planning**: Use `plan-feature-prd` prompt for detailed feature
+  requirements and specifications
 
 ## Output Format
 
 Create two primary deliverables:
 
-1. **Project Plan**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/project-plan.md`
-2. **Issue Creation Checklist**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/issues-checklist.md`
+1. **Project Plan**:
+   `/docs/ways-of-work/plan/{epic-name}/{feature-name}/project-plan.md`
+1. **Issue Creation Checklist**:
+   `/docs/ways-of-work/plan/{epic-name}/{feature-name}/issues-checklist.md`
 
 ### Project Plan Structure
 
@@ -300,8 +315,8 @@ This enabler supports:
 
 ##### Story Point Scale (Fibonacci)
 
-- **1 point**: Simple change, <4 hours
-- **2 points**: Small feature, <1 day
+- **1 point**: Simple change, \<4 hours
+- **2 points**: Small feature, \<1 day
 - **3 points**: Medium feature, 1-2 days
 - **5 points**: Large feature, 3-5 days
 - **8 points**: Complex feature, 1-2 weeks
@@ -368,11 +383,11 @@ graph LR
 ##### Column Structure (Kanban)
 
 1. **Backlog**: Prioritized and ready for planning
-2. **Sprint Ready**: Detailed and estimated, ready for development
-3. **In Progress**: Currently being worked on
-4. **In Review**: Code review, testing, or stakeholder review
-5. **Testing**: QA validation and acceptance testing
-6. **Done**: Completed and accepted
+1. **Sprint Ready**: Detailed and estimated, ready for development
+1. **In Progress**: Currently being worked on
+1. **In Review**: Code review, testing, or stakeholder review
+1. **Testing**: QA validation and acceptance testing
+1. **Done**: Completed and accepted
 
 ##### Custom Fields Configuration
 
@@ -395,10 +410,10 @@ on:
   workflow_dispatch:
     inputs:
       feature_name:
-        description: 'Feature name'
+        description: "Feature name"
         required: true
       epic_issue:
-        description: 'Epic issue number'
+        description: "Epic issue number"
         required: true
 
 jobs:
@@ -453,14 +468,19 @@ jobs:
 
 #### Pre-Creation Preparation
 
-- [ ] **Feature artifacts complete**: PRD, UX design, technical breakdown, testing plan
-- [ ] **Epic exists**: Parent epic issue created with proper labels and milestone
-- [ ] **Project board configured**: Columns, custom fields, and automation rules set up
-- [ ] **Team capacity assessed**: Sprint planning and resource allocation completed
+- [ ] **Feature artifacts complete**: PRD, UX design, technical breakdown,
+      testing plan
+- [ ] **Epic exists**: Parent epic issue created with proper labels and
+      milestone
+- [ ] **Project board configured**: Columns, custom fields, and automation rules
+      set up
+- [ ] **Team capacity assessed**: Sprint planning and resource allocation
+      completed
 
 #### Epic Level Issues
 
-- [ ] **Epic issue created** with comprehensive description and acceptance criteria
+- [ ] **Epic issue created** with comprehensive description and acceptance
+      criteria
 - [ ] **Epic milestone created** with target release date
 - [ ] **Epic labels applied**: `epic`, priority, value, and team labels
 - [ ] **Epic added to project board** in appropriate column
@@ -485,18 +505,20 @@ jobs:
 ### Project Management KPIs
 
 - **Sprint Predictability**: >80% of committed work completed per sprint
-- **Cycle Time**: Average time from "In Progress" to "Done" <5 business days
-- **Lead Time**: Average time from "Backlog" to "Done" <2 weeks
-- **Defect Escape Rate**: <5% of stories require post-release fixes
+- **Cycle Time**: Average time from "In Progress" to "Done" \<5 business days
+- **Lead Time**: Average time from "Backlog" to "Done" \<2 weeks
+- **Defect Escape Rate**: \<5% of stories require post-release fixes
 - **Team Velocity**: Consistent story point delivery across sprints
 
 ### Process Efficiency Metrics
 
-- **Issue Creation Time**: <1 hour to create full feature breakdown
-- **Dependency Resolution**: <24 hours to resolve blocking dependencies
-- **Status Update Accuracy**: >95% automated status transitions working correctly
+- **Issue Creation Time**: \<1 hour to create full feature breakdown
+- **Dependency Resolution**: \<24 hours to resolve blocking dependencies
+- **Status Update Accuracy**: >95% automated status transitions working
+  correctly
 - **Documentation Completeness**: 100% of issues have required template fields
-- **Cross-Team Collaboration**: <2 business days for external dependency resolution
+- **Cross-Team Collaboration**: \<2 business days for external dependency
+  resolution
 
 ### Project Delivery Metrics
 
@@ -504,6 +526,9 @@ jobs:
 - **Acceptance Criteria Coverage**: 100% of acceptance criteria validated
 - **Sprint Goal Achievement**: >90% of sprint goals successfully delivered
 - **Stakeholder Satisfaction**: >90% stakeholder approval for completed features
-- **Planning Accuracy**: <10% variance between estimated and actual delivery time
+- **Planning Accuracy**: \<10% variance between estimated and actual delivery
+  time
 
-This comprehensive GitHub project management approach ensures complete traceability from epic-level planning down to individual implementation tasks, with automated tracking and clear accountability for all team members.
+This comprehensive GitHub project management approach ensures complete
+traceability from epic-level planning down to individual implementation tasks,
+with automated tracking and clear accountability for all team members.

@@ -35,7 +35,7 @@ jobs:
   plan-staggered-schedule:
     name: 'Plan Staggered Walkthrough Schedule'
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
 
           github_token = os.getenv('GITHUB_TOKEN')
           org = os.getenv('GITHUB_ORG')
-          
+
           headers = {
               'Authorization': f'token {github_token}',
               'Accept': 'application/vnd.github.v3+json'
@@ -85,19 +85,19 @@ jobs:
                   'per_page': per_page,
                   'page': page
               }
-              
+
               response = requests.get(url, headers=headers, params=params)
               if response.status_code != 200:
                   print(f"Error fetching repos: {response.status_code}")
                   break
-              
+
               batch = response.json()
               if not batch:
                   break
-              
+
               repos.extend(batch)
               page += 1
-              
+
               if len(batch) < per_page:
                   break
 
@@ -112,7 +112,7 @@ jobs:
                       repo['language'] is not None or
                       repo['size'] > 100  # Has some content
                   )
-                  
+
                   if has_code:
                       eligible_repos.append({
                           'name': repo['name'],
@@ -149,7 +149,7 @@ jobs:
           # Load existing priority configuration if it exists
           config_file = Path('.github/walkthrough-priority-config.yml')
           priority_overrides = {}
-          
+
           if config_file.exists():
               import yaml
               with open(config_file, 'r') as f:
@@ -165,7 +165,7 @@ jobs:
                   # Auto-assign based on heuristics
                   updated = datetime.fromisoformat(repo['updated_at'].replace('Z', '+00:00'))
                   days_since_update = (datetime.now(updated.tzinfo) - updated).days
-                  
+
                   # Tier 1 (Critical): Recently updated, larger projects
                   if days_since_update < 7 and repo['size'] > 1000:
                       repo['priority_tier'] = 1
@@ -228,11 +228,11 @@ jobs:
           schedule = []
           start_date = datetime.now()
           current_day = 0
-          
+
           for i, repo in enumerate(repos):
               day_offset = i // repos_per_day
               scheduled_date = start_date + timedelta(days=day_offset)
-              
+
               schedule.append({
                   'repo': repo['full_name'],
                   'name': repo['name'],
@@ -248,10 +248,10 @@ jobs:
 
           # Calculate totals
           total_days = (len(repos) + repos_per_day - 1) // repos_per_day
-          
+
           print(f"Scheduled {len(repos)} repositories over {total_days} days")
           print(f"Schedule: {repos_per_day} repos/day")
-          
+
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"scheduled_repos={len(repos)}\n")
               f.write(f"total_days={total_days}\n")
@@ -276,8 +276,8 @@ jobs:
           # Generate markdown report
           report = f"""# Staggered Walkthrough Schedule
 
-**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}  
-**Total Repositories:** {len(schedule)}  
+**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
+**Total Repositories:** {len(schedule)}
 **Total Days:** {len(by_date)}
 
 ## Schedule Overview
@@ -285,13 +285,13 @@ jobs:
 | Date | Batch | Repos | Priority Distribution |
 |------|-------|-------|----------------------|
 """
-          
+
           for date in sorted(by_date.keys()):
               items = by_date[date]
               tier_dist = defaultdict(int)
               for item in items:
                   tier_dist[item['priority_tier']] += 1
-              
+
               batch_num = items[0]['batch']
               priority_str = f"T1:{tier_dist[1]} T2:{tier_dist[2]} T3:{tier_dist[3]}"
               report += f"| {date} | {batch_num} | {len(items)} | {priority_str} |\n"
@@ -316,20 +316,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           mkdir -p .github/schedules
-          
+
           # Move schedule files
           mv staggered_schedule.json .github/schedules/
           mv schedule_report.md .github/schedules/
           mv prioritized_repos.json .github/schedules/
           mv eligible_repos.json .github/schedules/
-          
+
           # Add timestamp file
           echo "$(date -u +'%Y-%m-%d %H:%M:%S UTC')" > .github/schedules/last_updated.txt
-          
+
           git add .github/schedules/
-          
+
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -371,7 +371,7 @@ jobs:
       - name: 'Commit batch files'
         run: |
           git add .github/schedules/batches/
-          
+
           if git diff --staged --quiet; then
             echo "No batch changes to commit"
           else
@@ -385,57 +385,57 @@ jobs:
           script: |
             const fs = require('fs');
             const report = fs.readFileSync('.github/schedules/schedule_report.md', 'utf8');
-            
+
             const title = `📅 Staggered Walkthrough Schedule - Week of ${new Date().toISOString().split('T')[0]}`;
             const body = `
             ## Staggered Walkthrough Schedule Generated
-            
+
             A new staggered schedule has been generated to distribute walkthrough generation across multiple days.
-            
+
             ### Summary
-            
+
             - **Scheduled Repositories:** ${{ steps.schedule.outputs.scheduled_repos }}
             - **Total Days:** ${{ steps.schedule.outputs.total_days }}
             - **Repos per Day:** ${{ steps.schedule.outputs.repos_per_day }}
-            
+
             ### Priority Distribution
-            
+
             - **Tier 1 (Critical):** ${{ steps.prioritize.outputs.tier1_count }}
             - **Tier 2 (Important):** ${{ steps.prioritize.outputs.tier2_count }}
             - **Tier 3 (Normal):** ${{ steps.prioritize.outputs.tier3_count }}
-            
+
             ### Why Staggered Scheduling?
-            
+
             Staggered scheduling prevents:
             - ✅ GitHub Actions quota exhaustion
             - ✅ API rate limit violations
             - ✅ Resource contention
             - ✅ Service degradation
-            
+
             ### Schedule Details
-            
+
             ${report}
-            
+
             ### How to Execute
-            
+
             The schedule is now saved in \`.github/schedules/\`. To execute:
-            
+
             1. **Automatic:** Enable scheduled workflow runs (coming soon)
             2. **Manual:** Trigger \`generate-walkthrough\` for each batch
             3. **API:** Use GitHub API to dispatch workflows per schedule
-            
+
             ### Files Generated
-            
+
             - \`staggered_schedule.json\` - Complete schedule
             - \`schedule_report.md\` - Human-readable report
             - \`prioritized_repos.json\` - Repositories with priority tiers
             - \`batches/batch-*.json\` - Per-batch repository lists
-            
+
             ---
-            
+
             **This schedule was generated by Safeguard 7: Staggered Scheduling**
             `;
-            
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,

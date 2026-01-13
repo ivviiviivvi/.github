@@ -52,7 +52,7 @@ items:
 
       Continue to use `task-planner` to iterate on the plan until you have exactly what you want done to your codebase.
 
-  # Planning Instructions
+      # Planning Instructions
   - path: instructions/task-implementation.instructions.md
     kind: instruction
     usage: |

@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
+
 from web_crawler import OrganizationCrawler
+
 
 class TestLinkExtraction(unittest.TestCase):
     def setUp(self):
@@ -94,6 +96,7 @@ class TestLinkExtraction(unittest.TestCase):
         self.assertEqual(len(urls), 1)
         self.assertIn("wikipedia.org", urls[0])
 
+
 class TestWebCrawlerSecurity(unittest.TestCase):
     def setUp(self):
         self.crawler = OrganizationCrawler()
@@ -123,7 +126,9 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         # Let's rely on the fact that if we pass an IP as host, it resolves to itself?
         # No, _resolve_hostname uses socket.getaddrinfo.
 
-        with patch.object(self.crawler, '_resolve_hostname', return_value=['224.0.0.1']):
+        with patch.object(
+            self.crawler, "_resolve_hostname", return_value=["224.0.0.1"]
+        ):
             url = "http://224.0.0.1/stream"
             status = self.crawler._check_link(url)
             self.assertEqual(status, 403)
@@ -132,20 +137,22 @@ class TestWebCrawlerSecurity(unittest.TestCase):
     def test_ssrf_protection_reserved(self):
         """Verify that reserved IPs are blocked."""
         # 240.0.0.1 is Reserved for future use
-        with patch.object(self.crawler, '_resolve_hostname', return_value=['240.0.0.1']):
+        with patch.object(
+            self.crawler, "_resolve_hostname", return_value=["240.0.0.1"]
+        ):
             url = "http://240.0.0.1/secret"
             status = self.crawler._check_link(url)
             self.assertEqual(status, 403)
             self.crawler.http.request.assert_not_called()
 
-    @patch('socket.getaddrinfo')
-    @patch('urllib3.HTTPConnectionPool.request')
+    @patch("socket.getaddrinfo")
+    @patch("urllib3.HTTPConnectionPool.request")
     def test_ssrf_protection_public_ip(self, mock_request, mock_getaddrinfo):
         """Verify that public IPs are allowed."""
         url = "http://example.com"
 
         # Mock getaddrinfo to return a public IP (e.g., 93.184.216.34)
-        mock_getaddrinfo.return_value = [(2, 1, 6, '', ('93.184.216.34', 80))]
+        mock_getaddrinfo.return_value = [(2, 1, 6, "", ("93.184.216.34", 80))]
 
         # Mock http.request to return 200
         mock_response = MagicMock()
@@ -157,5 +164,5 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         mock_request.assert_called()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

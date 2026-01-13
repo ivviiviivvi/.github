@@ -2,13 +2,18 @@
 
 ## Overview
 
-This guide provides a comprehensive, eternal solution to the problem: "Cannot programmatically merge PRs without GitHub API credentials."
+This guide provides a comprehensive, eternal solution to the problem: "Cannot
+programmatically merge PRs without GitHub API credentials."
 
-**The Solution**: GitHub Actions workflows with built-in `GITHUB_TOKEN` provide automated PR merging capabilities without requiring custom API tokens or credentials.
+**The Solution**: GitHub Actions workflows with built-in `GITHUB_TOKEN` provide
+automated PR merging capabilities without requiring custom API tokens or
+credentials.
 
 ## How It Works
 
-GitHub provides every workflow run with an automatic `GITHUB_TOKEN` that has permissions to:
+GitHub provides every workflow run with an automatic `GITHUB_TOKEN` that has
+permissions to:
+
 - Read repository contents
 - Write to pull requests
 - Merge pull requests (when properly configured)
@@ -18,10 +23,10 @@ GitHub provides every workflow run with an automatic `GITHUB_TOKEN` that has per
 ### Key Advantages
 
 1. **No Manual Token Management**: `GITHUB_TOKEN` is automatically provided
-2. **Secure by Default**: Token permissions are scoped to the workflow run
-3. **No Expiration Issues**: Token is regenerated for each workflow run
-4. **Audit Trail**: All actions are logged in GitHub Actions
-5. **Works Forever**: No maintenance required for token rotation
+1. **Secure by Default**: Token permissions are scoped to the workflow run
+1. **No Expiration Issues**: Token is regenerated for each workflow run
+1. **Audit Trail**: All actions are logged in GitHub Actions
+1. **Works Forever**: No maintenance required for token rotation
 
 ## Quick Start
 
@@ -48,21 +53,25 @@ gh api repos/{owner}/{repo}/branches/{branch}/protection \
 
 ### 3. Use the Auto-Merge Workflow
 
-Our repository includes a pre-configured auto-merge workflow at `.github/workflows/auto-merge.yml`.
+Our repository includes a pre-configured auto-merge workflow at
+`.github/workflows/auto-merge.yml`.
 
 **To trigger auto-merge on a PR:**
 
 Option A: Add a label
+
 ```bash
 gh pr edit <pr-number> --add-label "auto-merge"
 ```
 
 Option B: Include `[auto-merge]` in PR title
+
 ```bash
 gh pr create --title "[auto-merge] My feature" --body "..."
 ```
 
 Option C: Manual workflow dispatch
+
 ```bash
 gh workflow run auto-merge.yml -f pr_number=123
 ```
@@ -72,24 +81,26 @@ gh workflow run auto-merge.yml -f pr_number=123
 ### Built-in Workflow: `.github/workflows/auto-merge.yml`
 
 This workflow:
+
 1. Triggers on PR events (open, sync, review)
-2. Checks eligibility (labels, title, draft status)
-3. Verifies all status checks pass
-4. Ensures required approvals are met
-5. Automatically merges when conditions are satisfied
-6. Cleans up merged branches
+1. Checks eligibility (labels, title, draft status)
+1. Verifies all status checks pass
+1. Ensures required approvals are met
+1. Automatically merges when conditions are satisfied
+1. Cleans up merged branches
 
 ### Permissions Required
 
 ```yaml
 permissions:
-  contents: write       # To merge PRs and delete branches
-  pull-requests: write  # To update PR status
-  issues: write         # To add comments
-  checks: read          # To verify status checks
+  contents: write # To merge PRs and delete branches
+  pull-requests: write # To update PR status
+  issues: write # To add comments
+  checks: read # To verify status checks
 ```
 
-These permissions are automatically available to `GITHUB_TOKEN` when specified in the workflow.
+These permissions are automatically available to `GITHUB_TOKEN` when specified
+in the workflow.
 
 ## Advanced Configuration
 
@@ -128,7 +139,7 @@ The auto-merge workflow waits for all required checks to pass:
   uses: lewagon/wait-on-check-action@v1
   with:
     ref: ${{ github.event.pull_request.head.sha }}
-    check-regexp: '^(ci|test|lint).*$'
+    check-regexp: "^(ci|test|lint).*$"
     wait-interval: 30
 ```
 
@@ -143,12 +154,12 @@ on:
   workflow_call:
     inputs:
       merge_method:
-        description: 'Merge method (merge, squash, rebase)'
+        description: "Merge method (merge, squash, rebase)"
         required: false
-        default: 'squash'
+        default: "squash"
         type: string
       require_approvals:
-        description: 'Number of required approvals'
+        description: "Number of required approvals"
         required: false
         default: 1
         type: number
@@ -164,7 +175,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Auto-merge PR
         uses: pascalgn/automerge-action@v0.15.6
         env:
@@ -180,6 +191,7 @@ jobs:
 **Cause**: Insufficient workflow permissions
 
 **Solution**: Add required permissions to workflow:
+
 ```yaml
 permissions:
   contents: write
@@ -190,17 +202,20 @@ permissions:
 
 **Cause**: Required checks haven't passed yet
 
-**Solution**: The workflow automatically waits. Ensure all required checks are configured correctly.
+**Solution**: The workflow automatically waits. Ensure all required checks are
+configured correctly.
 
 ### Issue: "Pull request is not in a mergeable state"
 
 **Cause**: Merge conflicts exist
 
-**Solution**: The workflow includes conflict detection. Resolve conflicts manually or use our conflict resolution workflow.
+**Solution**: The workflow includes conflict detection. Resolve conflicts
+manually or use our conflict resolution workflow.
 
 ### Issue: Auto-merge not triggering
 
 **Checklist**:
+
 - [ ] Repository has auto-merge enabled
 - [ ] PR has `auto-merge` label or `[auto-merge]` in title
 - [ ] PR is not in draft mode
@@ -214,8 +229,8 @@ permissions:
 
 ```yaml
 labels:
-  - auto-merge      # Enable auto-merge
-  - hotfix          # Bypass approval requirement
+  - auto-merge # Enable auto-merge
+  - hotfix # Bypass approval requirement
   - skip-auto-merge # Prevent auto-merge
 ```
 
@@ -268,7 +283,7 @@ Set up notifications:
 name: Dependabot Auto-Merge
 on:
   pull_request:
-    
+
 jobs:
   auto-merge:
     if: github.actor == 'dependabot[bot]'
@@ -291,8 +306,8 @@ name: Docs Auto-Merge
 on:
   pull_request:
     paths:
-      - 'docs/**'
-      - '**.md'
+      - "docs/**"
+      - "**.md"
 
 jobs:
   auto-merge:
@@ -336,7 +351,7 @@ jobs:
             echo "::error::Hotfix too large ($CHANGES lines)"
             exit 1
           fi
-      
+
       - name: Fast-track merge
         run: gh pr merge --auto --merge "$PR_URL"
         env:
@@ -348,7 +363,9 @@ jobs:
 
 ### Q: Do I need to create a Personal Access Token (PAT)?
 
-**A: No!** The built-in `GITHUB_TOKEN` is sufficient for auto-merging PRs. PATs are only needed for:
+**A: No!** The built-in `GITHUB_TOKEN` is sufficient for auto-merging PRs. PATs
+are only needed for:
+
 - Triggering workflows from other workflows
 - Accessing private repositories outside your organization
 - Performing actions on behalf of a specific user
@@ -356,13 +373,15 @@ jobs:
 ### Q: Will this work in other repositories?
 
 **A: Yes!** You can:
+
 1. Copy the workflow file to any repository
-2. Use the reusable workflow template
-3. Fork this repository and customize
+1. Use the reusable workflow template
+1. Fork this repository and customize
 
 ### Q: What about security?
 
 **A: Very secure!** The `GITHUB_TOKEN`:
+
 - Is automatically generated per workflow run
 - Has limited scope (only this repository)
 - Expires when the workflow completes
@@ -370,14 +389,17 @@ jobs:
 
 ### Q: Can I merge PRs from forks?
 
-**A: With restrictions.** For security, `GITHUB_TOKEN` from forked PRs has read-only permissions. Options:
+**A: With restrictions.** For security, `GITHUB_TOKEN` from forked PRs has
+read-only permissions. Options:
+
 1. Use `pull_request_target` trigger (with caution)
-2. Require maintainer approval first
-3. Use a bot account with appropriate permissions
+1. Require maintainer approval first
+1. Use a bot account with appropriate permissions
 
 ### Q: How do I prevent auto-merge for specific PRs?
 
-**A:** Add `[skip-auto-merge]` to the PR title or body, or add a `needs-review` label.
+**A:** Add `[skip-auto-merge]` to the PR title or body, or add a `needs-review`
+label.
 
 ## Maintenance
 
@@ -412,9 +434,11 @@ gh pr list --state merged --label auto-merged --limit 10
 
 ## Related Workflows
 
-- **`.github/workflows/auto-approve.yml`** - Auto-approve PRs from trusted sources
+- **`.github/workflows/auto-approve.yml`** - Auto-approve PRs from trusted
+  sources
 - **`.github/workflows/pr-labels.yml`** - Automatically label PRs
-- **`.github/workflows/conflict-detection.yml`** - Detect and notify about conflicts
+- **`.github/workflows/conflict-detection.yml`** - Detect and notify about
+  conflicts
 - **`.github/workflows/merge-queue.yml`** - Manage merge queue
 
 ## References
@@ -427,6 +451,7 @@ gh pr list --state merged --label auto-merged --limit 10
 ## Support
 
 For issues or questions:
+
 - Open an issue in this repository
 - Check existing discussions
 - Review GitHub Actions logs for errors
@@ -434,4 +459,6 @@ For issues or questions:
 
 ---
 
-**This is the eternal solution.** The workflow uses GitHub's native features and requires no external dependencies, API tokens, or ongoing maintenance. It will continue to work as long as GitHub Actions exists.
+**This is the eternal solution.** The workflow uses GitHub's native features and
+requires no external dependencies, API tokens, or ongoing maintenance. It will
+continue to work as long as GitHub Actions exists.

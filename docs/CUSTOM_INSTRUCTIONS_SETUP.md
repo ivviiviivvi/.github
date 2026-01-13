@@ -1,6 +1,7 @@
 # Custom Instructions Setup Guide
 
-> **Complete guide to configuring and using GitHub Copilot custom instructions for consistent, high-quality code**
+> **Complete guide to configuring and using GitHub Copilot custom instructions
+> for consistent, high-quality code**
 
 ## Table of Contents
 
@@ -24,9 +25,13 @@
 
 ## Overview
 
-Custom instructions enable GitHub Copilot to follow your organization's coding standards, best practices, and architectural patterns automatically. When you work on files that match specified patterns, Copilot applies the relevant instructions to generate code that aligns with your team's conventions.
+Custom instructions enable GitHub Copilot to follow your organization's coding
+standards, best practices, and architectural patterns automatically. When you
+work on files that match specified patterns, Copilot applies the relevant
+instructions to generate code that aligns with your team's conventions.
 
 This guide covers:
+
 - Understanding how custom instructions enhance Copilot
 - Installing and configuring instructions for your projects
 - Leveraging the 100+ instructions available in this organization
@@ -39,14 +44,18 @@ This guide covers:
 **Custom Instructions** are files that tell GitHub Copilot about:
 
 - **Coding standards**: Style guidelines, naming conventions, formatting rules
-- **Best practices**: Security patterns, performance optimizations, error handling
+- **Best practices**: Security patterns, performance optimizations, error
+  handling
 - **Framework conventions**: How to use specific libraries and frameworks
-- **Architectural patterns**: Project structure, design patterns, module organization
-- **Technology-specific rules**: Language idioms, ecosystem tools, testing approaches
+- **Architectural patterns**: Project structure, design patterns, module
+  organization
+- **Technology-specific rules**: Language idioms, ecosystem tools, testing
+  approaches
 
 ### Key Features
 
-- **Automatic Application**: Instructions apply based on file patterns (e.g., all `.py` files get Python instructions)
+- **Automatic Application**: Instructions apply based on file patterns (e.g.,
+  all `.py` files get Python instructions)
 - **Context-Aware**: Different instructions for different parts of your codebase
 - **Cumulative**: Multiple instructions can apply to the same file
 - **Organization-Wide**: Share standards across all repositories
@@ -86,22 +95,24 @@ This guide covers:
 Before setting up custom instructions, ensure you have:
 
 1. **GitHub Copilot** subscription (Individual, Business, or Enterprise)
-2. **VS Code** or **VS Code Insiders** (version 1.80 or later)
-3. **GitHub Copilot Extension** installed and activated
-4. **Repository access** to this `.github` organization repository
+1. **VS Code** or **VS Code Insiders** (version 1.80 or later)
+1. **GitHub Copilot Extension** installed and activated
+1. **Repository access** to this `.github` organization repository
 
 ### Installation Methods
 
 #### Option 1: Quick Install via URL (Recommended)
 
-Each instruction file has an "Install in VS Code" badge that automatically installs it:
+Each instruction file has an "Install in VS Code" badge that automatically
+installs it:
 
 1. Browse the [`instructions/`](../instructions/) directory
-2. Open an instruction file (e.g., `python.instructions.md`)
-3. Click the **"Install in VS Code"** badge at the top
-4. Follow the VS Code prompts to complete installation
+1. Open an instruction file (e.g., `python.instructions.md`)
+1. Click the **"Install in VS Code"** badge at the top
+1. Follow the VS Code prompts to complete installation
 
 **Example badges:**
+
 - [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)](install-link)
 - [![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square)](install-link)
 
@@ -110,11 +121,13 @@ Each instruction file has an "Install in VS Code" badge that automatically insta
 To apply instructions to a specific repository:
 
 1. **Create instructions directory** in your repository:
+
    ```bash
    mkdir -p .github/copilot-instructions
    ```
 
-2. **Copy instruction files**:
+1. **Copy instruction files**:
+
    ```bash
    # Copy all instructions
    cp /path/to/.github/instructions/*.instructions.md .github/copilot-instructions/
@@ -124,7 +137,8 @@ To apply instructions to a specific repository:
    cp /path/to/.github/instructions/react.instructions.md .github/copilot-instructions/
    ```
 
-3. **Commit and push**:
+1. **Commit and push**:
+
    ```bash
    git add .github/copilot-instructions/
    git commit -m "chore: add GitHub Copilot custom instructions"
@@ -133,22 +147,24 @@ To apply instructions to a specific repository:
 
 #### Option 3: Organization-Wide Installation
 
-For GitHub Enterprise, instructions in this `.github` repository automatically apply to all organization repositories that don't have their own instructions.
+For GitHub Enterprise, instructions in this `.github` repository automatically
+apply to all organization repositories that don't have their own instructions.
 
 **Setup:**
+
 1. Ensure this repository is the organization's `.github` repository
-2. Place instructions in the `instructions/` directory
-3. All organization repositories inherit these instructions
-4. Repositories can override by providing their own instructions
+1. Place instructions in the `instructions/` directory
+1. All organization repositories inherit these instructions
+1. Repositories can override by providing their own instructions
 
 #### Option 4: User-Level Installation
 
 To apply instructions globally for your user account:
 
 1. **Open VS Code Settings** (`Cmd/Ctrl + ,`)
-2. Search for **"Copilot Instructions"**
-3. Click **"Edit in settings.json"**
-4. Add instruction file paths:
+1. Search for **"Copilot Instructions"**
+1. Click **"Edit in settings.json"**
+1. Add instruction file paths:
 
 ```json
 {
@@ -167,11 +183,13 @@ To apply instructions globally for your user account:
 
 ## Available Instructions
 
-This organization provides **100+ custom instructions** covering frameworks, languages, tools, and platforms.
+This organization provides **100+ custom instructions** covering frameworks,
+languages, tools, and platforms.
 
 ### By Category
 
 #### Frontend Development
+
 - **Angular**: Component architecture, RxJS patterns, testing
 - **React**: Hooks, state management, component patterns
 - **Vue**: Composition API, Pinia, TypeScript integration
@@ -180,6 +198,7 @@ This organization provides **100+ custom instructions** covering frameworks, lan
 - **Next.js**: App Router, Server Components, data fetching
 
 #### Backend Development
+
 - **ASP.NET**: REST APIs, Entity Framework, dependency injection
 - **Express.js**: Middleware patterns, error handling, routing
 - **FastAPI**: Type hints, async patterns, dependency injection
@@ -187,29 +206,34 @@ This organization provides **100+ custom instructions** covering frameworks, lan
 - **Rails**: ActiveRecord, conventions, testing
 
 #### Mobile Development
+
 - **React Native**: Navigation, native modules, performance
 - **Flutter**: Widget composition, state management, platform channels
 - **SwiftUI**: View composition, data flow, async patterns
 - **Kotlin Android**: Jetpack Compose, coroutines, architecture components
 
 #### Cloud Platforms
+
 - **Azure**: ARM templates, Bicep, Azure Functions, Logic Apps
 - **AWS**: CloudFormation, Lambda, CDK
 - **Google Cloud**: Terraform, Cloud Functions, GKE
 
 #### DevOps & Infrastructure
+
 - **Terraform**: Module structure, state management, best practices
 - **Ansible**: Playbook organization, role structure, idempotency
 - **GitHub Actions**: Workflow patterns, security, reusable workflows
 - **Azure DevOps**: Pipeline YAML, artifact management
 
 #### Databases
+
 - **PostgreSQL**: Query optimization, indexing, migrations
 - **MongoDB**: Schema design, aggregation pipelines
 - **SQL Server**: T-SQL patterns, stored procedures
 - **Redis**: Caching strategies, data structures
 
 #### Languages
+
 - **Python**: PEP 8, type hints, async patterns, testing
 - **TypeScript**: Strict typing, utility types, decorators
 - **Java**: Naming conventions, streams, Optional usage
@@ -218,6 +242,7 @@ This organization provides **100+ custom instructions** covering frameworks, lan
 - **Rust**: Ownership, lifetimes, error handling
 
 #### Testing
+
 - **Jest**: Test organization, mocking, coverage
 - **pytest**: Fixtures, parametrization, plugins
 - **JUnit**: Assertions, test lifecycle, extensions
@@ -225,6 +250,7 @@ This organization provides **100+ custom instructions** covering frameworks, lan
 - **Playwright**: Page objects, fixtures, screenshots
 
 #### Security
+
 - **OWASP**: SQL injection prevention, XSS protection
 - **Secrets Management**: Environment variables, vault usage
 - **Authentication**: JWT, OAuth2, session management
@@ -235,8 +261,10 @@ This organization provides **100+ custom instructions** covering frameworks, lan
 The [`instructions/`](../instructions/) directory contains instructions for:
 
 - **109 technologies** across multiple domains
-- **Languages**: Python, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Swift, Kotlin, Scala, Elixir, Clojure
-- **Frameworks**: React, Angular, Vue, Express, FastAPI, Spring Boot, Django, Rails, Laravel
+- **Languages**: Python, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Swift,
+  Kotlin, Scala, Elixir, Clojure
+- **Frameworks**: React, Angular, Vue, Express, FastAPI, Spring Boot, Django,
+  Rails, Laravel
 - **Platforms**: Azure, AWS, Google Cloud, Vercel, Netlify
 - **Tools**: Docker, Kubernetes, Terraform, Ansible, GitHub Actions
 - **Databases**: PostgreSQL, MongoDB, MySQL, Redis, Elasticsearch
@@ -253,12 +281,13 @@ Instructions use **glob patterns** to specify which files they apply to:
 
 ```yaml
 ---
-description: 'Python best practices and conventions'
-applyTo: '**.py'
+description: "Python best practices and conventions"
+applyTo: "**.py"
 ---
 ```
 
 **Common patterns:**
+
 - `**.py` - All Python files
 - `**.ts, **.tsx` - TypeScript and TSX files
 - `**/tests/**.js` - JavaScript test files
@@ -269,8 +298,8 @@ applyTo: '**.py'
 When multiple instructions apply to a file:
 
 1. **Repository instructions** (most specific) - `.github/copilot-instructions/`
-2. **Organization instructions** - From organization's `.github` repository
-3. **User instructions** (least specific) - From VS Code settings
+1. **Organization instructions** - From organization's `.github` repository
+1. **User instructions** (least specific) - From VS Code settings
 
 ### Instruction Format
 
@@ -278,8 +307,8 @@ Instructions use Markdown with YAML frontmatter:
 
 ```markdown
 ---
-description: 'Brief description of what these instructions cover'
-applyTo: '**.py, **/python/**'
+description: "Brief description of what these instructions cover"
+applyTo: "**.py, **/python/**"
 ---
 
 # Instruction Title
@@ -297,9 +326,11 @@ applyTo: '**.py, **/python/**'
 ## Code Examples
 
 \`\`\`python
+
 # Good example
+
 def example():
-    pass
+pass
 \`\`\`
 ```
 
@@ -312,17 +343,17 @@ def example():
 Once installed, instructions automatically enhance Copilot suggestions:
 
 1. **Open a file** that matches an instruction's pattern
-2. **Start typing** or use Copilot Chat
-3. **Copilot applies** relevant instructions automatically
-4. **Generated code** follows your standards
+1. **Start typing** or use Copilot Chat
+1. **Copilot applies** relevant instructions automatically
+1. **Generated code** follows your standards
 
 ### Verifying Instructions
 
 To check which instructions apply to a file:
 
 1. Open the file in VS Code
-2. Open Copilot Chat
-3. Ask: "What custom instructions apply to this file?"
+1. Open Copilot Chat
+1. Ask: "What custom instructions apply to this file?"
 
 ### Manual Override
 
@@ -333,6 +364,7 @@ To temporarily ignore instructions:
 ```
 
 Or specify different conventions:
+
 ```
 @workspace Generate code following Google's style guide instead
 ```
@@ -366,8 +398,8 @@ Follow the standard format:
 
 ```markdown
 ---
-description: 'Custom instructions for MyProject'
-applyTo: 'src/myproject/**.py'
+description: "Custom instructions for MyProject"
+applyTo: "src/myproject/**.py"
 ---
 
 # MyProject Python Standards
@@ -393,34 +425,37 @@ applyTo: 'src/myproject/**.py'
 ## Code Examples
 
 \`\`\`python
+
 # Good: Clear naming and error handling
+
 class DataProcessor:
-    def process_data(self, data: dict) -> dict:
-        try:
-            return self._transform_data(data)
-        except ValueError as e:
-            logger.error(f"Data processing failed: {e}")
-            raise ProcessingError(f"Invalid data format: {e}")
-    
+def process_data(self, data: dict) -> dict:
+try:
+return self.\_transform_data(data)
+except ValueError as e:
+logger.error(f"Data processing failed: {e}")
+raise ProcessingError(f"Invalid data format: {e}")
+
     def _transform_data(self, data: dict) -> dict:
         # Private implementation
         pass
+
 \`\`\`
 ```
 
 ### Step 4: Test Instructions
 
 1. Create a test file matching the pattern
-2. Ask Copilot to generate code
-3. Verify the code follows your instructions
-4. Iterate on the instructions based on results
+1. Ask Copilot to generate code
+1. Verify the code follows your instructions
+1. Iterate on the instructions based on results
 
 ### Step 5: Share with Team
 
 1. Commit the instruction file
-2. Document in your team's onboarding materials
-3. Add to repository's CONTRIBUTING.md
-4. Share installation instructions with team members
+1. Document in your team's onboarding materials
+1. Add to repository's CONTRIBUTING.md
+1. Share installation instructions with team members
 
 ---
 
@@ -436,7 +471,8 @@ class DataProcessor:
 
 ### Organization
 
-- **Consistent naming**: Use descriptive file names (e.g., `python-web-api.instructions.md`)
+- **Consistent naming**: Use descriptive file names (e.g.,
+  `python-web-api.instructions.md`)
 - **Logical grouping**: Group related instructions together
 - **Clear patterns**: Use specific file patterns to avoid conflicts
 - **Documentation**: Maintain a README listing all instructions
@@ -466,44 +502,48 @@ class DataProcessor:
 **Problem**: Copilot doesn't seem to follow your instructions
 
 **Solutions**:
+
 1. Verify file pattern matches your files
-2. Check instruction file has correct YAML frontmatter
-3. Ensure file is in correct location (`.github/copilot-instructions/`)
-4. Restart VS Code to reload instructions
-5. Check for syntax errors in the instruction file
-6. Verify GitHub Copilot is enabled for the file type
+1. Check instruction file has correct YAML frontmatter
+1. Ensure file is in correct location (`.github/copilot-instructions/`)
+1. Restart VS Code to reload instructions
+1. Check for syntax errors in the instruction file
+1. Verify GitHub Copilot is enabled for the file type
 
 ### Conflicting Instructions
 
 **Problem**: Multiple instructions provide conflicting guidance
 
 **Solutions**:
+
 1. Make file patterns more specific to reduce overlap
-2. Merge related instructions into a single file
-3. Use repository-level instructions to override organization-level ones
-4. Clearly document precedence in your team guide
+1. Merge related instructions into a single file
+1. Use repository-level instructions to override organization-level ones
+1. Clearly document precedence in your team guide
 
 ### Instructions Too Strict
 
 **Problem**: Instructions limit Copilot's creativity
 
 **Solutions**:
+
 1. Focus on essential standards, not every detail
-2. Provide guidelines rather than strict rules
-3. Allow flexibility for edge cases
-4. Include "prefer X but Y is acceptable" language
-5. Periodically review and relax overly restrictive rules
+1. Provide guidelines rather than strict rules
+1. Allow flexibility for edge cases
+1. Include "prefer X but Y is acceptable" language
+1. Periodically review and relax overly restrictive rules
 
 ### Performance Issues
 
 **Problem**: Copilot seems slower with instructions
 
 **Solutions**:
+
 1. Reduce instruction file size (keep under 1000 lines)
-2. Remove redundant or obvious guidelines
-3. Use multiple smaller files instead of one large file
-4. Focus on high-impact conventions
-5. Profile to identify specific slow instructions
+1. Remove redundant or obvious guidelines
+1. Use multiple smaller files instead of one large file
+1. Focus on high-impact conventions
+1. Profile to identify specific slow instructions
 
 ---
 
@@ -518,41 +558,51 @@ class DataProcessor:
 ### Organization Resources
 
 - [Instructions Directory](../instructions/) - Browse all 100+ instructions
-- [Instructions Documentation](README.instructions.md) - Detailed guide to instructions
-- [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Using instructions with agents
+- [Instructions Documentation](README.instructions.md) - Detailed guide to
+  instructions
+- [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Using instructions
+  with agents
 - [Collections](../collections/) - Bundled instructions by theme
 
 ### Templates
 
-- [Instruction Template](../instructions/TEMPLATE.instructions.md) - Blank template for new instructions
-- [Python Template](../instructions/python.instructions.md) - Example Python instructions
-- [TypeScript Template](../instructions/typescript.instructions.md) - Example TypeScript instructions
+- [Instruction Template](../instructions/TEMPLATE.instructions.md) - Blank
+  template for new instructions
+- [Python Template](../instructions/python.instructions.md) - Example Python
+  instructions
+- [TypeScript Template](../instructions/typescript.instructions.md) - Example
+  TypeScript instructions
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Share instruction ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report issues or request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Share
+  instruction ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report issues
+  or request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute new instructions
 
 ---
 
 ## Next Steps
 
-1. **Browse available instructions** in the [`instructions/`](../instructions/) directory
-2. **Install instructions** for your primary technologies
-3. **Test with Copilot** on a sample project
-4. **Create custom instructions** for your team's specific needs
-5. **Share with your team** and gather feedback
-6. **Iterate and improve** based on real-world usage
+1. **Browse available instructions** in the [`instructions/`](../instructions/)
+   directory
+1. **Install instructions** for your primary technologies
+1. **Test with Copilot** on a sample project
+1. **Create custom instructions** for your team's specific needs
+1. **Share with your team** and gather feedback
+1. **Iterate and improve** based on real-world usage
 
 ---
 
 **Questions or Feedback?**
+
 - Check the [Troubleshooting](#troubleshooting) section
-- Review related guides: [MCP Server Setup](MCP_SERVER_SETUP.md) | [Development Environment Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md)
+- Review related guides: [MCP Server Setup](MCP_SERVER_SETUP.md) |
+  [Development Environment Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md)
 - Open an issue or discussion in this repository
 - Reach out to your GitHub Copilot administrator
 
 ---
 
-*Last Updated: 2025-12-31*
+_Last Updated: 2025-12-31_

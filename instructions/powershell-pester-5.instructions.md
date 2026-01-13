@@ -1,18 +1,23 @@
 ---
-applyTo: '**/*.Tests.ps1'
-description: 'PowerShell Pester testing best practices based on Pester v5 conventions'
----
+
+## applyTo: '\*\*/\*.Tests.ps1' description: 'PowerShell Pester testing best practices based on Pester v5 conventions'
 
 # PowerShell Pester v5 Testing Guidelines
 
-This guide provides PowerShell-specific instructions for creating automated tests using PowerShell Pester v5 module. Follow PowerShell cmdlet development guidelines in [powershell.instructions.md](./powershell.instructions.md) for general PowerShell scripting best practices.
+This guide provides PowerShell-specific instructions for creating automated
+tests using PowerShell Pester v5 module. Follow PowerShell cmdlet development
+guidelines in [powershell.instructions.md](./powershell.instructions.md) for
+general PowerShell scripting best practices.
 
 ## File Naming and Structure
 
 - **File Convention:** Use `*.Tests.ps1` naming pattern
-- **Placement:** Place test files next to tested code or in dedicated test directories
-- **Import Pattern:** Use `BeforeAll { . $PSScriptRoot/FunctionName.ps1 }` to import tested functions
-- **No Direct Code:** Put ALL code inside Pester blocks (`BeforeAll`, `Describe`, `Context`, `It`, etc.)
+- **Placement:** Place test files next to tested code or in dedicated test
+  directories
+- **Import Pattern:** Use `BeforeAll { . $PSScriptRoot/FunctionName.ps1 }` to
+  import tested functions
+- **No Direct Code:** Put ALL code inside Pester blocks (`BeforeAll`,
+  `Describe`, `Context`, `It`, etc.)
 
 ## Test Structure Hierarchy
 
@@ -29,7 +34,8 @@ Describe 'FunctionName' {
 
 ## Core Keywords
 
-- **`Describe`**: Top-level grouping, typically named after function being tested
+- **`Describe`**: Top-level grouping, typically named after function being
+  tested
 - **`Context`**: Sub-grouping within Describe for specific scenarios
 - **`It`**: Individual test cases, use descriptive names
 - **`Should`**: Assertion keyword for test validation
@@ -38,11 +44,13 @@ Describe 'FunctionName' {
 
 ## Setup and Teardown
 
-- **`BeforeAll`**: Runs once at start of containing block, use for expensive operations
+- **`BeforeAll`**: Runs once at start of containing block, use for expensive
+  operations
 - **`BeforeEach`**: Runs before every `It` in block, use for test-specific setup
 - **`AfterEach`**: Runs after every `It`, guaranteed even if test fails
 - **`AfterAll`**: Runs once at end of block, use for cleanup
-- **Variable Scoping**: `BeforeAll` variables available to child blocks (read-only), `BeforeEach/It/AfterEach` share same scope
+- **Variable Scoping**: `BeforeAll` variables available to child blocks
+  (read-only), `BeforeEach/It/AfterEach` share same scope
 
 ## Assertions (Should)
 
@@ -83,9 +91,12 @@ It 'Should return <Expected> for <Input>' -TestCases @(
 
 ## Data-Driven Tests
 
-- **`-ForEach`**: Available on `Describe`, `Context`, and `It` for generating multiple tests from data
-- **`-TestCases`**: Alias for `-ForEach` on `It` blocks (backwards compatibility)
-- **Hashtable Data**: Each item defines variables available in test (e.g., `@{ Name = 'value'; Expected = 'result' }`)
+- **`-ForEach`**: Available on `Describe`, `Context`, and `It` for generating
+  multiple tests from data
+- **`-TestCases`**: Alias for `-ForEach` on `It` blocks (backwards
+  compatibility)
+- **Hashtable Data**: Each item defines variables available in test (e.g.,
+  `@{ Name = 'value'; Expected = 'result' }`)
 - **Array Data**: Uses `$_` variable for current item
 - **Templates**: Use `<variablename>` in test names for dynamic expansion
 
@@ -120,7 +131,8 @@ Invoke-Pester -TagFilter 'Unit' -ExcludeTagFilter 'Slow'
 
 - **`-Skip`**: Available on `Describe`, `Context`, and `It` to skip tests
 - **Conditional**: Use `-Skip:$condition` for dynamic skipping
-- **Runtime Skip**: Use `Set-ItResult -Skipped` during test execution (setup/teardown still run)
+- **Runtime Skip**: Use `Set-ItResult -Skipped` during test execution
+  (setup/teardown still run)
 
 ```powershell
 It 'Should work on Windows' -Skip:(-not $IsWindows) { }
@@ -129,7 +141,8 @@ Context 'Integration tests' -Skip { }
 
 ## Error Handling
 
-- **Continue on Failure**: Use `Should.ErrorAction = 'Continue'` to collect multiple failures
+- **Continue on Failure**: Use `Should.ErrorAction = 'Continue'` to collect
+  multiple failures
 - **Stop on Critical**: Use `-ErrorAction Stop` for pre-conditions
 - **Test Exceptions**: Use `{ Code } | Should -Throw` for exception testing
 
@@ -140,7 +153,8 @@ Context 'Integration tests' -Skip { }
 - **Isolated Tests**: Each test should be independent
 - **Avoid Aliases**: Use full cmdlet names (`Where-Object` not `?`)
 - **Single Responsibility**: One assertion per test when possible
-- **Test File Organization**: Group related tests in Context blocks. Context blocks can be nested.
+- **Test File Organization**: Group related tests in Context blocks. Context
+  blocks can be nested.
 
 ## Example Test Pattern
 
@@ -181,7 +195,8 @@ Describe 'Get-UserInfo' {
 
 ## Configuration
 
-Configuration is defined **outside** test files when calling `Invoke-Pester` to control execution behavior.
+Configuration is defined **outside** test files when calling `Invoke-Pester` to
+control execution behavior.
 
 ```powershell
 # Create configuration (Pester 5.2+)
@@ -194,4 +209,6 @@ $config.Should.ErrorAction = 'Continue'
 Invoke-Pester -Configuration $config
 ```
 
-**Key Sections**: Run (Path, Exit), Filter (Tag, ExcludeTag), Output (Verbosity), TestResult (Enabled, OutputFormat), CodeCoverage (Enabled, Path), Should (ErrorAction), Debug
+**Key Sections**: Run (Path, Exit), Filter (Tag, ExcludeTag), Output
+(Verbosity), TestResult (Enabled, OutputFormat), CodeCoverage (Enabled, Path),
+Should (ErrorAction), Debug

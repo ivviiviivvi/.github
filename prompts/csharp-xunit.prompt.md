@@ -1,18 +1,19 @@
 ---
-mode: 'agent'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search']
-description: 'Get best practices for XUnit unit testing, including data-driven tests'
----
+
+## mode: 'agent' tools: \['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search'\] description: 'Get best practices for XUnit unit testing, including data-driven tests'
 
 # XUnit Best Practices
 
-Your goal is to help me write effective unit tests with XUnit, covering both standard and data-driven testing approaches.
+Your goal is to help me write effective unit tests with XUnit, covering both
+standard and data-driven testing approaches.
 
 ## Project Setup
 
 - Use a separate test project with naming convention `[ProjectName].Tests`
-- Reference Microsoft.NET.Test.Sdk, xunit, and xunit.runner.visualstudio packages
-- Create test classes that match the classes being tested (e.g., `CalculatorTests` for `Calculator`)
+- Reference Microsoft.NET.Test.Sdk, xunit, and xunit.runner.visualstudio
+  packages
+- Create test classes that match the classes being tested (e.g.,
+  `CalculatorTests` for `Calculator`)
 - Use .NET SDK test commands: `dotnet test` for running tests
 
 ## Test Structure

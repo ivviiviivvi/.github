@@ -21,11 +21,12 @@ Comprehensive guide for the automated PR creation, push, and merge system.
 The PR Automation System streamlines your development workflow by:
 
 1. **Automatically creating pull requests** when you push feature branches
-2. **Auto-merging PRs** when all requirements are met
-3. **Resolving merge conflicts** automatically when possible
-4. **Cleaning up merged branches** to keep the repository tidy
+1. **Auto-merging PRs** when all requirements are met
+1. **Resolving merge conflicts** automatically when possible
+1. **Cleaning up merged branches** to keep the repository tidy
 
-This system integrates seamlessly with your existing Git workflow and follows the organization's branching strategy.
+This system integrates seamlessly with your existing Git workflow and follows
+the organization's branching strategy.
 
 ---
 
@@ -96,8 +97,8 @@ gh pr edit <PR_NUMBER> --add-label "auto-merge"
 feat: user authentication [auto-merge]
 ```
 
-**Method 3: Auto-created PRs**
-Auto-created PRs are automatically eligible for auto-merge.
+**Method 3: Auto-created PRs** Auto-created PRs are automatically eligible for
+auto-merge.
 
 ### 3. Skip Automation
 
@@ -109,8 +110,7 @@ To skip automation for specific commits or PRs:
 git commit -m "feat: work in progress [skip-auto-pr]"
 ```
 
-**Skip Auto Merge:**
-Include `[skip-auto-merge]` in PR title or description.
+**Skip Auto Merge:** Include `[skip-auto-merge]` in PR title or description.
 
 ---
 
@@ -141,14 +141,14 @@ The system automatically selects the appropriate base branch:
 Each auto-created PR includes:
 
 1. **Conventional commit title** - e.g., `feat: user authentication`
-2. **Detailed description** with:
+1. **Detailed description** with:
    - Type of change checklist
    - List of commits included
    - Testing checklist
    - Code quality checklist
-3. **Automatic labels** based on branch type
-4. **Author assignment** for accountability
-5. **Initial comment** with next steps
+1. **Automatic labels** based on branch type
+1. **Author assignment** for accountability
+1. **Initial comment** with next steps
 
 ### Example Auto-Created PR
 
@@ -247,10 +247,10 @@ PR must NOT have these labels:
 When all conditions are met:
 
 1. **Final verification** of all requirements
-2. **Merge using configured method** (default: squash)
-3. **Post-merge comment** with details
-4. **Branch cleanup** (delete source branch)
-5. **Notification** to PR participants
+1. **Merge using configured method** (default: squash)
+1. **Post-merge comment** with details
+1. **Branch cleanup** (delete source branch)
+1. **Notification** to PR participants
 
 ### Conflict Resolution
 
@@ -261,17 +261,17 @@ When merge conflicts are detected:
 The system attempts to auto-resolve by:
 
 1. **Updating the branch** - Merges base branch into PR branch
-2. **Re-running checks** - Validates the updated code
-3. **Notifying participants** - Comments on successful update
-4. **Proceeding to merge** - If checks pass
+1. **Re-running checks** - Validates the updated code
+1. **Notifying participants** - Comments on successful update
+1. **Proceeding to merge** - If checks pass
 
 #### Manual Resolution Required
 
 If auto-resolution fails:
 
 1. **Notification comment** posted with instructions
-2. **`conflicts` label** added to PR
-3. **Detailed steps** provided for manual resolution
+1. **`conflicts` label** added to PR
+1. **Detailed steps** provided for manual resolution
 
 ```markdown
 ⚠️ **Auto-Merge: Conflicts Detected**
@@ -345,8 +345,8 @@ notifications:
 ### Customizing Configuration
 
 1. Edit `.github/pr-automation.yml`
-2. Commit and push changes
-3. New settings take effect immediately
+1. Commit and push changes
+1. New settings take effect immediately
 
 ---
 
@@ -531,7 +531,7 @@ git push origin --delete feature/my-feature
    ✅ hotfix/critical-security-patch
    ```
 
-2. **Follow conventional commits**
+1. **Follow conventional commits**
 
    ```bash
    ✅ feat: add user authentication
@@ -539,19 +539,20 @@ git push origin --delete feature/my-feature
    ✅ docs: update API documentation
    ```
 
-3. **Keep PRs focused and small**
+1. **Keep PRs focused and small**
 
    - One feature/fix per PR
    - Easier to review and merge
    - Reduces conflict likelihood
 
-4. **Update PR descriptions**
+1. **Update PR descriptions**
 
    - Auto-generated descriptions are starting points
    - Add context and testing details
    - Link related issues
 
-5. **Monitor auto-merge status**
+1. **Monitor auto-merge status**
+
    - Check workflow summaries
    - Address failed checks promptly
    - Respond to review feedback
@@ -565,7 +566,7 @@ git push origin --delete feature/my-feature
    ❌ Forcing merge with failing checks
    ```
 
-2. **Don't create massive PRs**
+1. **Don't create massive PRs**
 
    ```bash
    ❌ feature/everything - 50 files changed
@@ -573,19 +574,20 @@ git push origin --delete feature/my-feature
    ✅ feature/user-profile - 4 files changed
    ```
 
-3. **Don't ignore merge conflicts**
+1. **Don't ignore merge conflicts**
 
    - Address conflicts promptly
    - Test after resolving
    - Don't just accept all changes
 
-4. **Don't disable safety features**
+1. **Don't disable safety features**
 
    - Keep required approvals
    - Maintain status checks
    - Use branch protection
 
-5. **Don't use auto-merge for breaking changes**
+1. **Don't use auto-merge for breaking changes**
+
    - Breaking changes need careful review
    - Add `do-not-merge` label
    - Coordinate with team
@@ -606,11 +608,11 @@ The PR automation system works alongside:
 ### Workflow Execution Order
 
 1. **Push to branch** → Auto PR Creation
-2. **PR created** → PR Quality Checks run
-3. **CI/CD triggered** → Tests, linting, scans
-4. **Reviews submitted** → Approval tracking
-5. **All conditions met** → Auto Merge
-6. **Merge successful** → Branch cleanup
+1. **PR created** → PR Quality Checks run
+1. **CI/CD triggered** → Tests, linting, scans
+1. **Reviews submitted** → Approval tracking
+1. **All conditions met** → Auto Merge
+1. **Merge successful** → Branch cleanup
 
 ---
 
@@ -626,9 +628,8 @@ auto_merge:
   merge_method: squash # or 'merge' or 'rebase'
 ```
 
-**Squash (default):** Combines all commits into one
-**Merge:** Preserves all commits with merge commit
-**Rebase:** Replays commits on base branch
+**Squash (default):** Combines all commits into one **Merge:** Preserves all
+commits with merge commit **Rebase:** Replays commits on base branch
 
 ### Branch-Specific Rules
 
@@ -693,9 +694,9 @@ permissions:
 ### Getting Help
 
 1. **Check this documentation** - Most questions answered here
-2. **Review workflow logs** - Detailed execution information
-3. **Check PR comments** - Automated feedback and guidance
-4. **Open an issue** - For bugs or feature requests
+1. **Review workflow logs** - Detailed execution information
+1. **Check PR comments** - Automated feedback and guidance
+1. **Open an issue** - For bugs or feature requests
 
 ### Reporting Issues
 
@@ -726,13 +727,15 @@ Initial release:
 
 ## Related Documentation
 
-- [Git Workflow Guide](GIT_WORKFLOW.md) - Branching strategy and commit conventions
-- [Automation Master Guide](AUTOMATION_MASTER_GUIDE.md) - Overall automation architecture
-- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to the organization
+- [Git Workflow Guide](GIT_WORKFLOW.md) - Branching strategy and commit
+  conventions
+- [Automation Master Guide](AUTOMATION_MASTER_GUIDE.md) - Overall automation
+  architecture
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to the
+  organization
 - [Branch Protection](BRANCH_PROTECTION.md) - Branch protection configuration
 
 ---
 
-**Last Updated:** 2024-11-18
-**Maintainer:** ivi374forivi organization
+**Last Updated:** 2024-11-18 **Maintainer:** ivi374forivi organization
 **License:** MIT

@@ -54,6 +54,7 @@ sed -i 's/@ivi374forivi/@your-username/g' CODEOWNERS
 ### 3. Enable GitHub Features
 
 Navigate to **Settings** → **Security & analysis**:
+
 - ✅ Dependency graph
 - ✅ Dependabot alerts
 - ✅ Dependabot security updates
@@ -66,6 +67,7 @@ Navigate to **Settings** → **Security & analysis**:
 Go to **Settings** → **Branches** → **Add rule**:
 
 **For `main` branch**:
+
 ```
 ✅ Require a pull request before merging
   ✅ Require approvals: 1
@@ -149,6 +151,7 @@ cp /path/to/template/DOCKER_BEST_PRACTICES.md .
 If you already have these files, merge carefully:
 
 **package.json**: Add scripts
+
 ```json
 {
   "scripts": {
@@ -219,7 +222,7 @@ Edit `.github/workflows/codeql-analysis.yml`:
 
 ```yaml
 matrix:
-  language: [ 'javascript', 'python' ]  # Add your languages
+  language: ["javascript", "python"] # Add your languages
 ```
 
 ### 3. Customize Dependabot
@@ -281,6 +284,7 @@ pre-commit run --all-files
 ### Add Code Coverage
 
 **For JavaScript:**
+
 ```json
 // package.json
 {
@@ -301,6 +305,7 @@ pre-commit run --all-files
 ```
 
 **For Python:**
+
 ```ini
 # .coveragerc
 [run]
@@ -316,8 +321,8 @@ fail_under = 70
 **Slack Integration:**
 
 1. Create Slack webhook
-2. Add to repository secrets: `SLACK_WEBHOOK`
-3. Workflows will automatically notify on failures
+1. Add to repository secrets: `SLACK_WEBHOOK`
+1. Workflows will automatically notify on failures
 
 **Email Notifications:**
 
@@ -328,8 +333,9 @@ Go to **Settings** → **Notifications** → Configure email preferences
 See `GITHUB_APPS_INTEGRATIONS.md` for full list:
 
 1. [Codecov](https://github.com/marketplace/codecov) - Code coverage
-2. [Snyk](https://github.com/marketplace/snyk) - Security scanning
-3. [All Contributors](https://github.com/marketplace/all-contributors) - Contributor recognition
+1. [Snyk](https://github.com/marketplace/snyk) - Security scanning
+1. [All Contributors](https://github.com/marketplace/all-contributors) -
+   Contributor recognition
 
 ---
 
@@ -367,24 +373,28 @@ gh workflow run ci-advanced.yml
 After setup, you should have:
 
 ✅ **Security**
+
 - CodeQL scanning running on schedule
 - Dependabot opening PRs for updates
 - Secret scanning enabled
 - SBOM generated on releases
 
 ✅ **Automation**
+
 - PRs auto-labeled based on content
 - New contributors welcomed
 - Stale issues managed
 - Release notes auto-generated
 
 ✅ **Quality**
+
 - Code coverage tracked
 - PR checks enforced
 - Commit messages validated
 - Links checked in docs
 
 ✅ **Documentation**
+
 - Comprehensive guides available
 - Templates for issues/PRs
 - Changelog maintained
@@ -397,6 +407,7 @@ After setup, you should have:
 ### Issue: Workflows Not Running
 
 **Solution**:
+
 ```bash
 # Check workflow permissions
 # Settings → Actions → General → Workflow permissions
@@ -406,25 +417,28 @@ After setup, you should have:
 ### Issue: CodeQL Failing
 
 **Solution**:
+
 ```yaml
 # Reduce languages being scanned
 matrix:
-  language: [ 'javascript' ]  # Start with one language
+  language: ["javascript"] # Start with one language
 ```
 
 ### Issue: Too Many Dependabot PRs
 
 **Solution**:
+
 ```yaml
 # In dependabot.yml, reduce frequency and limit PRs
 open-pull-requests-limit: 3
 schedule:
-  interval: "monthly"  # Instead of weekly
+  interval: "monthly" # Instead of weekly
 ```
 
 ### Issue: Pre-commit Too Slow
 
 **Solution**:
+
 ```bash
 # Skip slow hooks during development
 SKIP=mypy,eslint git commit -m "message"
@@ -440,10 +454,10 @@ git commit --no-verify -m "WIP: quick fix"
 After initial setup:
 
 1. **Week 1**: Monitor workflows, fix any failures
-2. **Week 2**: Customize workflows for your needs
-3. **Week 3**: Enable optional features
-4. **Week 4**: Train team on new processes
-5. **Monthly**: Review metrics and optimize
+1. **Week 2**: Customize workflows for your needs
+1. **Week 3**: Enable optional features
+1. **Week 4**: Train team on new processes
+1. **Monthly**: Review metrics and optimize
 
 ### Learn More
 

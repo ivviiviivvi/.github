@@ -1,7 +1,6 @@
 ---
-description: 'Guidelines for creating and managing awesome-copilot collections'
-applyTo: 'collections/*.collection.yml'
----
+
+## description: 'Guidelines for creating and managing awesome-copilot collections' applyTo: 'collections/\*.collection.yml'
 
 # Collections Development
 
@@ -9,7 +8,8 @@ applyTo: 'collections/*.collection.yml'
 
 When working with collections in the awesome-copilot repository:
 
-- Always validate collections using `node validate-collections.js` before committing
+- Always validate collections using `node validate-collections.js` before
+  committing
 - Follow the established YAML schema for collection manifests
 - Reference only existing files in the repository
 - Use descriptive collection IDs with lowercase letters, numbers, and hyphens
@@ -33,7 +33,7 @@ When working with collections in the awesome-copilot repository:
 
 ## Best Practices
 
-- Group 3-10 related items for optimal usability  
+- Group 3-10 related items for optimal usability
 - Use clear, descriptive names and descriptions
 - Add relevant tags for discoverability
 - Test the complete workflow the collection enables

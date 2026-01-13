@@ -5,13 +5,17 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 64 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
       1 2025-11-17
       9 2025-11-18
@@ -24,6 +28,7 @@
 ```
 
 ### Recent Commits
+
 ```
 7c49604 - --4444-j--PP----, 69 minutes ago : feat: add nervous-archaeologist agent for exhaustive repository analysis (#36)
 db782f9 - --4444-j--PP----, 70 minutes ago : Merge branch 'main' into copilot/create-nervous-archaeologist-agent

@@ -1,35 +1,47 @@
 ---
-description: 'Instructions for building Model Context Protocol (MCP) servers using the Python SDK'
-applyTo: '**/*.py, **/pyproject.toml, **/requirements.txt'
----
+
+## description: 'Instructions for building Model Context Protocol (MCP) servers using the Python SDK' applyTo: '\*\*/\*.py, \*\*/pyproject.toml, \*\*/requirements.txt'
 
 # Python MCP Server Development
 
 ## Instructions
 
-- Use **uv** for project management: `uv init mcp-server-demo` and `uv add "mcp[cli]"`
-- Import FastMCP from `mcp.server.fastmcp`: `from mcp.server.fastmcp import FastMCP`
-- Use `@mcp.tool()`, `@mcp.resource()`, and `@mcp.prompt()` decorators for registration
+- Use **uv** for project management: `uv init mcp-server-demo` and
+  `uv add "mcp[cli]"`
+- Import FastMCP from `mcp.server.fastmcp`:
+  `from mcp.server.fastmcp import FastMCP`
+- Use `@mcp.tool()`, `@mcp.resource()`, and `@mcp.prompt()` decorators for
+  registration
 - Type hints are mandatory - they're used for schema generation and validation
 - Use Pydantic models, TypedDicts, or dataclasses for structured output
 - Tools automatically return structured output when return types are compatible
 - For stdio transport, use `mcp.run()` or `mcp.run(transport="stdio")`
-- For HTTP servers, use `mcp.run(transport="streamable-http")` or mount to Starlette/FastAPI
-- Use `Context` parameter in tools/resources to access MCP capabilities: `ctx: Context`
-- Send logs with `await ctx.debug()`, `await ctx.info()`, `await ctx.warning()`, `await ctx.error()`
+- For HTTP servers, use `mcp.run(transport="streamable-http")` or mount to
+  Starlette/FastAPI
+- Use `Context` parameter in tools/resources to access MCP capabilities:
+  `ctx: Context`
+- Send logs with `await ctx.debug()`, `await ctx.info()`, `await ctx.warning()`,
+  `await ctx.error()`
 - Report progress with `await ctx.report_progress(progress, total, message)`
 - Request user input with `await ctx.elicit(message, schema)`
 - Use LLM sampling with `await ctx.session.create_message(messages, max_tokens)`
-- Configure icons with `Icon(src="path", mimeType="image/png")` for server, tools, resources, prompts
-- Use `Image` class for automatic image handling: `return Image(data=bytes, format="png")`
-- Define resource templates with URI patterns: `@mcp.resource("greeting://{name}")`
-- Implement completion support by accepting partial values and returning suggestions
+- Configure icons with `Icon(src="path", mimeType="image/png")` for server,
+  tools, resources, prompts
+- Use `Image` class for automatic image handling:
+  `return Image(data=bytes, format="png")`
+- Define resource templates with URI patterns:
+  `@mcp.resource("greeting://{name}")`
+- Implement completion support by accepting partial values and returning
+  suggestions
 - Use lifespan context managers for startup/shutdown with shared resources
 - Access lifespan context in tools via `ctx.request_context.lifespan_context`
-- For stateless HTTP servers, set `stateless_http=True` in FastMCP initialization
+- For stateless HTTP servers, set `stateless_http=True` in FastMCP
+  initialization
 - Enable JSON responses for modern clients: `json_response=True`
-- Test servers with: `uv run mcp dev server.py` (Inspector) or `uv run mcp install server.py` (Claude Desktop)
-- Mount multiple servers in Starlette with different paths: `Mount("/path", mcp.streamable_http_app())`
+- Test servers with: `uv run mcp dev server.py` (Inspector) or
+  `uv run mcp install server.py` (Claude Desktop)
+- Mount multiple servers in Starlette with different paths:
+  `Mount("/path", mcp.streamable_http_app())`
 - Configure CORS for browser clients: expose `Mcp-Session-Id` header
 - Use low-level Server class for maximum control when FastMCP isn't sufficient
 
@@ -54,6 +66,7 @@ applyTo: '**/*.py, **/pyproject.toml, **/requirements.txt'
 ## Common Patterns
 
 ### Basic Server Setup (stdio)
+
 ```python
 from mcp.server.fastmcp import FastMCP
 
@@ -71,6 +84,7 @@ if __name__ == "__main__":
 ```
 
 ### HTTP Server
+
 ```python
 from mcp.server.fastmcp import FastMCP
 
@@ -86,6 +100,7 @@ if __name__ == "__main__":
 ```
 
 ### Tool with Structured Output
+
 ```python
 from pydantic import BaseModel, Field
 
@@ -105,6 +120,7 @@ def get_weather(city: str) -> WeatherData:
 ```
 
 ### Dynamic Resource
+
 ```python
 @mcp.resource("users://{user_id}")
 def get_user(user_id: str) -> str:
@@ -113,13 +129,14 @@ def get_user(user_id: str) -> str:
 ```
 
 ### Tool with Context
+
 ```python
 from mcp.server.fastmcp import Context
 from mcp.server.session import ServerSession
 
 @mcp.tool()
 async def process_data(
-    data: str, 
+    data: str,
     ctx: Context[ServerSession, None]
 ) -> str:
     """Process data with logging"""
@@ -129,6 +146,7 @@ async def process_data(
 ```
 
 ### Tool with Sampling
+
 ```python
 from mcp.server.fastmcp import Context
 from mcp.server.session import ServerSession
@@ -151,6 +169,7 @@ async def summarize(
 ```
 
 ### Lifespan Management
+
 ```python
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -178,6 +197,7 @@ def query(sql: str, ctx: Context) -> str:
 ```
 
 ### Prompt with Messages
+
 ```python
 from mcp.server.fastmcp.prompts import base
 
@@ -192,6 +212,7 @@ def review_code(code: str) -> list[base.Message]:
 ```
 
 ### Error Handling
+
 ```python
 @mcp.tool()
 async def risky_operation(input: str) -> str:

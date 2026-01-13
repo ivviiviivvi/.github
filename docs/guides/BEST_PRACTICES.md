@@ -1,6 +1,7 @@
 # Gold Standard Repository Best Practices
 
-This document outlines the comprehensive best practices implemented in this repository to achieve gold standard status for GitHub organization management.
+This document outlines the comprehensive best practices implemented in this
+repository to achieve gold standard status for GitHub organization management.
 
 ## Table of Contents
 
@@ -91,6 +92,7 @@ This repository implements industry-leading best practices for:
   - Customizable query packs
 
 **Best Practices**:
+
 - Enable for all supported languages in your project
 - Review and act on security alerts promptly
 - Customize queries based on your tech stack
@@ -108,6 +110,7 @@ This repository implements industry-leading best practices for:
   - Deprecated package warnings
 
 **Configuration**:
+
 ```yaml
 fail-on-severity: moderate
 allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC
@@ -138,6 +141,7 @@ deny-licenses: GPL-3.0, AGPL-3.0
   - Hierarchical ownership rules
 
 **Example**:
+
 ```
 # Security files require security team review
 /SECURITY.md @security-team
@@ -154,16 +158,19 @@ deny-licenses: GPL-3.0, AGPL-3.0
 ### 1. Auto-Labeling
 
 **Files**:
+
 - `.github/workflows/auto-labeler.yml`
 - `.github/labeler.yml`
 
 **Features**:
+
 - Path-based labeling (e.g., `frontend`, `backend`, `docs`)
 - Language detection (e.g., `javascript`, `python`)
 - PR size labeling (`size/xs` to `size/xl`)
 - Keyword-based issue labeling
 
 **Benefits**:
+
 - Faster issue/PR triage
 - Better organization
 - Easier filtering and search
@@ -192,6 +199,7 @@ deny-licenses: GPL-3.0, AGPL-3.0
 **File**: `.github/workflows/pr-quality-checks.yml`
 
 **Enforces**:
+
 - Semantic PR titles (conventional commits)
 - Minimum description length
 - Linked issues
@@ -200,6 +208,7 @@ deny-licenses: GPL-3.0, AGPL-3.0
 - Merge conflict detection
 
 **Example Quality Gates**:
+
 ```
 ✓ PR title follows convention (feat|fix|docs|...)
 ✓ Description > 50 characters
@@ -245,39 +254,48 @@ deny-licenses: GPL-3.0, AGPL-3.0
 
 ### 5. Best Practices Sessions
 
-**Guide**: [GITHUB_BEST_PRACTICES_SESSIONS.md](./GITHUB_BEST_PRACTICES_SESSIONS.md)
+**Guide**:
+[GITHUB_BEST_PRACTICES_SESSIONS.md](./GITHUB_BEST_PRACTICES_SESSIONS.md)
 
-Regular, structured sessions to educate teams, review implementations, and continuously improve development practices:
+Regular, structured sessions to educate teams, review implementations, and
+continuously improve development practices:
 
 **Session Types**:
+
 - **Knowledge Share Sessions** (30-60 min) - Quick education on specific topics
-- **Repository Health Reviews** (60-90 min) - Comprehensive repository evaluation
-- **Workflow Optimization Workshops** (2-4 hours) - Deep dive into CI/CD improvements
+- **Repository Health Reviews** (60-90 min) - Comprehensive repository
+  evaluation
+- **Workflow Optimization Workshops** (2-4 hours) - Deep dive into CI/CD
+  improvements
 - **Security & Compliance Sessions** (60-90 min) - Security posture review
 - **Onboarding & Training** (60-120 min) - New team member training
 - **Retrospectives** (60 min) - Regular improvement sessions
 
 **Templates & Resources**:
+
 - Discussion templates for community engagement (`.github/DISCUSSION_TEMPLATE/`)
 - Enhanced issue templates for reviews and health checks (`ISSUE_TEMPLATE/`)
 - Complete facilitation guides with agendas, workbooks, and checklists
 - Pre/post session templates and follow-up tracking
 
 **Getting Started**:
+
 1. Review the [sessions guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
-2. Choose an appropriate session type for your needs
-3. Use provided templates to plan and facilitate
-4. Track action items and measure impact
-5. Iterate based on feedback
+1. Choose an appropriate session type for your needs
+1. Use provided templates to plan and facilitate
+1. Track action items and measure impact
+1. Iterate based on feedback
 
 **Benefits**:
+
 - Spreads expertise across teams
 - Identifies and addresses issues proactively
 - Standardizes practices organization-wide
 - Fosters culture of continuous improvement
 - Improves developer experience and productivity
 
-See the complete guide for detailed templates, facilitation tips, and session planning resources.
+See the complete guide for detailed templates, facilitation tips, and session
+planning resources.
 
 ---
 
@@ -290,6 +308,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 **Format**: `type(scope): description`
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -312,6 +331,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 ### 3. Branch Protection
 
 **Recommended Settings** (see `BRANCH_PROTECTION.md`):
+
 - Require pull request reviews
 - Require status checks to pass
 - Require branches to be up to date
@@ -360,6 +380,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 **File**: `dependabot.yml`
 
 **Ecosystems**:
+
 - npm (JavaScript/TypeScript)
 - pip (Python)
 - GitHub Actions
@@ -368,6 +389,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 - Composer (PHP)
 
 **Configuration**:
+
 - Weekly updates
 - Maximum 5 open PRs per ecosystem
 - Automatic grouping
@@ -378,6 +400,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 **File**: `renovate.json`
 
 **Features**:
+
 - Dependency dashboard
 - Smart grouping
 - Vulnerability alerts
@@ -386,6 +409,7 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 - Semantic commits
 
 **Advantages over Dependabot**:
+
 - More configuration options
 - Better grouping strategies
 - Dependency dashboard
@@ -400,10 +424,12 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 **File**: `.github/workflows/release.yml`
 
 **Triggers**:
+
 - Version tags (`v*.*.*`)
 - Manual workflow dispatch
 
 **Features**:
+
 - Automatic changelog generation
 - Release notes from commits
 - Asset upload support
@@ -415,12 +441,14 @@ See the complete guide for detailed templates, facilitation tips, and session pl
 **File**: `.github/workflows/version-bump.yml`
 
 **Supports**:
+
 - Semantic versioning (major.minor.patch)
 - Multiple package formats (npm, Python, Rust, etc.)
 - Automated PR creation
 - Consistent version updates
 
 **Usage**:
+
 ```
 Workflow Dispatch → Select bump type → PR created → Review → Merge → Tag release
 ```
@@ -434,6 +462,7 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 **File**: `.github/workflows/repo-metrics.yml`
 
 **Generates**:
+
 - Issue metrics (time to close, response time)
 - PR metrics (merge time, review time)
 - Contributor statistics
@@ -445,6 +474,7 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 ### 2. Repository Statistics
 
 **Tracks**:
+
 - Stars and forks
 - Open issues
 - Contributor count
@@ -535,22 +565,26 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 ## Maintenance
 
 ### Daily
+
 - Review security alerts
 - Respond to new issues/PRs
 - Monitor workflow failures
 
 ### Weekly
+
 - Review dependency updates
 - Check stale items
 - Update documentation
 
 ### Monthly
+
 - Review metrics
 - Update contributors list
 - Audit access permissions
 - Review and update workflows
 
 ### Quarterly
+
 - Security audit
 - Dependency audit
 - Workflow optimization
@@ -561,17 +595,20 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 ## Resources
 
 ### GitHub Documentation
+
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [Security Features](https://docs.github.com/en/code-security)
 - [Community Health](https://docs.github.com/en/communities)
 
 ### Tools & Actions
+
 - [CodeQL](https://codeql.github.com/)
 - [Dependabot](https://github.com/dependabot)
 - [Renovate](https://www.mend.io/renovate/)
 - [All Contributors](https://allcontributors.org/)
 
 ### Standards
+
 - [Keep a Changelog](https://keepachangelog.com/)
 - [Semantic Versioning](https://semver.org/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
@@ -583,9 +620,9 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 For questions or issues with these best practices:
 
 1. Review the documentation in this repository
-2. Check the [GitHub Community Forum](https://github.community/)
-3. Open an issue in this repository
-4. Consult the [GitHub Docs](https://docs.github.com/)
+1. Check the [GitHub Community Forum](https://github.community/)
+1. Open an issue in this repository
+1. Consult the [GitHub Docs](https://docs.github.com/)
 
 ---
 

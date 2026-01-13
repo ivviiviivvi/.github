@@ -10,8 +10,8 @@ port: 8080
 install_command: "npm install"
 
 # Walkthrough Settings
-duration: 60  # seconds
-voiceover_style: "casual"  # Options: professional, casual, technical
+duration: 60 # seconds
+voiceover_style: "casual" # Options: professional, casual, technical
 
 # Focus Areas
 # List the key features and components you want to highlight
@@ -43,7 +43,7 @@ environment_variables:
   VUE_APP_DEBUG: "true"
 
 # Additional Settings
-startup_wait: 20  # seconds to wait for Vue dev server to be ready
+startup_wait: 20 # seconds to wait for Vue dev server to be ready
 browser: chrome
 viewport:
   width: 1920
@@ -105,11 +105,11 @@ narration_notes: |
 # Customization Options
 customization:
   show_console_logs: false
-  show_vue_devtools: false  # For production demos
+  show_vue_devtools: false # For production demos
   highlight_clicks: true
   mouse_cursor_visible: true
   include_mobile_view: false
-  show_hot_reload: false  # Don't show HMR in demo
+  show_hot_reload: false # Don't show HMR in demo
 
 # Performance Considerations
 performance:
@@ -120,7 +120,7 @@ performance:
 
 # State Management
 state_management:
-  tool: "vuex"  # Options: vuex, pinia, none
+  tool: "vuex" # Options: vuex, pinia, none
   demonstrate_state_changes: true
   show_state_devtools: false
 

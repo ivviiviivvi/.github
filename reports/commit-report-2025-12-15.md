@@ -5,13 +5,17 @@
 ## Summary (Last 7 Days)
 
 ### Total Commits
+
 - **Total**: 28 commits
 
 ### Commits by Author
+
 ```
+
 ```
 
 ### Commits by Day
+
 ```
      16 2025-12-09
      12 2025-12-10
@@ -19,6 +23,7 @@
 ```
 
 ### Recent Commits
+
 ```
 cb9558b - --4444-j--PP----, 4 days ago : Consolidate all open PRs and feature branches into main (#54)
 1459fbc - copilot-swe-agent[bot], 4 days ago : fix: update agent count and add missing data management agents to registry

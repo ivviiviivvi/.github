@@ -1,19 +1,23 @@
 ---
-description: 'Guidelines for creating high-quality custom instruction files for GitHub Copilot'
-applyTo: '**/*.instructions.md'
----
+
+## description: 'Guidelines for creating high-quality custom instruction files for GitHub Copilot' applyTo: '\*\*/\*.instructions.md'
 
 # Custom Instructions File Guidelines
 
-Instructions for creating effective and maintainable custom instruction files that guide GitHub Copilot in generating domain-specific code and following project conventions.
+Instructions for creating effective and maintainable custom instruction files
+that guide GitHub Copilot in generating domain-specific code and following
+project conventions.
 
 ## Project Context
 
-- Target audience: Developers and GitHub Copilot working with domain-specific code
+- Target audience: Developers and GitHub Copilot working with domain-specific
+  code
 - File format: Markdown with YAML frontmatter
-- File naming convention: lowercase with hyphens (e.g., `react-best-practices.instructions.md`)
+- File naming convention: lowercase with hyphens (e.g.,
+  `react-best-practices.instructions.md`)
 - Location: `.github/instructions/` directory
-- Purpose: Provide context-aware guidance for code generation, review, and documentation
+- Purpose: Provide context-aware guidance for code generation, review, and
+  documentation
 
 ## Required Frontmatter
 
@@ -21,15 +25,17 @@ Every instruction file must include YAML frontmatter with the following fields:
 
 ```yaml
 ---
-description: 'Brief description of the instruction purpose and scope'
-applyTo: 'glob pattern for target files (e.g., **/*.ts, **/*.py)'
+description: "Brief description of the instruction purpose and scope"
+applyTo: "glob pattern for target files (e.g., **/*.ts, **/*.py)"
 ---
 ```
 
 ### Frontmatter Guidelines
 
-- **description**: Single-quoted string, 1-500 characters, clearly stating the purpose
-- **applyTo**: Glob pattern(s) specifying which files these instructions apply to
+- **description**: Single-quoted string, 1-500 characters, clearly stating the
+  purpose
+- **applyTo**: Glob pattern(s) specifying which files these instructions apply
+  to
   - Single pattern: `'**/*.ts'`
   - Multiple patterns: `'**/*.ts, **/*.tsx, **/*.js'`
   - Specific files: `'src/**/*.py'`
@@ -64,12 +70,14 @@ Provide concrete examples with clear labels:
 
 ```markdown
 ### Good Example
+
 \`\`\`language
 // Recommended approach
 code example here
 \`\`\`
 
 ### Bad Example
+
 \`\`\`language
 // Avoid this pattern
 code example here
@@ -106,11 +114,11 @@ code example here
 ### Common Patterns to Include
 
 1. **Naming Conventions**: How to name variables, functions, classes, files
-2. **Code Organization**: File structure, module organization, import order
-3. **Error Handling**: Preferred error handling patterns
-4. **Dependencies**: How to manage and document dependencies
-5. **Comments and Documentation**: When and how to document code
-6. **Version Information**: Target language/framework versions
+1. **Code Organization**: File structure, module organization, import order
+1. **Error Handling**: Preferred error handling patterns
+1. **Dependencies**: How to manage and document dependencies
+1. **Comments and Documentation**: When and how to document code
+1. **Version Information**: Target language/framework versions
 
 ## Patterns to Follow
 
@@ -142,22 +150,24 @@ code example here
 
 ```markdown
 ### Good Example - Using TypeScript interfaces
+
 \`\`\`typescript
 interface User {
-  id: string;
-  name: string;
-  email: string;
+id: string;
+name: string;
+email: string;
 }
 
 function getUser(id: string): User {
-  // Implementation
+// Implementation
 }
 \`\`\`
 
 ### Bad Example - Using any type
+
 \`\`\`typescript
 function getUser(id: any): any {
-  // Loses type safety
+// Loses type safety
 }
 \`\`\`
 ```
@@ -186,8 +196,8 @@ function getUser(id: any): any {
 Before finalizing instruction files:
 
 1. **Test with Copilot**: Try the instructions with actual prompts in VS Code
-2. **Verify Examples**: Ensure code examples are correct and run without errors
-3. **Check Glob Patterns**: Confirm `applyTo` patterns match intended files
+1. **Verify Examples**: Ensure code examples are correct and run without errors
+1. **Check Glob Patterns**: Confirm `applyTo` patterns match intended files
 
 ## Example Structure
 
@@ -195,8 +205,8 @@ Here's a minimal example structure for a new instruction file:
 
 ```markdown
 ---
-description: 'Brief description of purpose'
-applyTo: '**/*.ext'
+description: "Brief description of purpose"
+applyTo: "**/*.ext"
 ---
 
 # Technology Name Development
@@ -216,16 +226,19 @@ Brief introduction and context.
 ## Code Standards
 
 ### Naming Conventions
+
 - Rule 1
 - Rule 2
 
 ### File Organization
+
 - Structure 1
 - Structure 2
 
 ## Common Patterns
 
 ### Pattern 1
+
 Description and example
 
 \`\`\`language
@@ -233,6 +246,7 @@ code example
 \`\`\`
 
 ### Pattern 2
+
 Description and example
 
 ## Validation

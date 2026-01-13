@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       content_type:
-        description: 'Type of content to create'
+        description: "Type of content to create"
         required: true
         type: choice
         options:
@@ -13,11 +13,11 @@ on:
           - projects
           - wiki
       target_repo:
-        description: 'Target repository (leave empty for organization-wide)'
+        description: "Target repository (leave empty for organization-wide)"
         required: false
         type: string
       dry_run:
-        description: 'Dry run (preview only, no creation)'
+        description: "Dry run (preview only, no creation)"
         required: false
         type: boolean
         default: true
@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "Creating issues in: $TARGET_REPO"
           echo "Dry run: $DRY_RUN"
-          
+
           # Define comprehensive issue set
           declare -a issues=(
             "Workflow Optimization::Review and optimize all GitHub Actions workflows for performance, security, and cost::enhancement,workflows"
@@ -68,15 +68,15 @@ jobs:
             "CI/CD Pipeline Optimization::Optimize CI/CD pipelines for speed and reliability::ci-cd"
             "Technical Debt::Track and address technical debt across projects::technical-debt"
           )
-          
+
           for issue_spec in "${issues[@]}"; do
             IFS='::' read -r title body labels <<< "$issue_spec"
-            
+
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "Issue: $title"
             echo "Labels: $labels"
             echo ""
-            
+
             if [ "$DRY_RUN" = "false" ]; then
               gh issue create \
                 --repo "$TARGET_REPO" \
@@ -85,11 +85,11 @@ jobs:
 
               ## Context
               This issue was created as part of comprehensive organizational content creation.
-              
+
               ## Related Documentation
               - [Issue Taxonomy](docs/ISSUE_TAXONOMY.md)
               - [Project Planning](docs/PROJECTS_GUIDE.md)
-              
+
               ## Acceptance Criteria
               - [ ] Requirements defined
               - [ ] Implementation planned
@@ -117,10 +117,10 @@ jobs:
             "Developer Experience Epic::Improve contributor and developer experience::epic,dx"
             "Community Growth Epic::Initiatives to grow and engage community::epic,community"
           )
-          
+
           for epic_spec in "${epics[@]}"; do
             IFS='::' read -r title body labels <<< "$epic_spec"
-            
+
             if [ "$DRY_RUN" = "false" ]; then
               gh issue create \
                 --repo "$TARGET_REPO" \
@@ -129,13 +129,13 @@ jobs:
 
               ## Epic Overview
               This epic tracks a large initiative spanning multiple sub-issues.
-              
+
               ## Related Issues
               Sub-issues will be linked here as they are created.
-              
+
               ## Timeline
               To be determined based on capacity and priorities.
-              
+
               ## Success Metrics
               - Metric 1: TBD
               - Metric 2: TBD
@@ -157,9 +157,9 @@ jobs:
       - name: Create discussion starter files
         run: |
           echo "Creating discussion starter templates..."
-          
+
           mkdir -p .github/discussion-starters
-          
+
           # Welcome discussion
           cat > .github/discussion-starters/welcome.md << 'EOF'
           # 👋 Welcome to Our Community!
@@ -181,7 +181,7 @@ jobs:
 
           We're happy to have you in our community! 🎉
           EOF
-          
+
           # Monthly showcase discussion
           cat > .github/discussion-starters/monthly-showcase.md << 'EOF'
           # 🏆 Monthly Showcase - {{MONTH}} {{YEAR}}
@@ -197,15 +197,15 @@ jobs:
 
           ## Template
 
-          **Project Name**: 
-          **Description**: 
-          **Demo**: 
-          **Code**: 
-          **What you learned**: 
+          **Project Name**:
+          **Description**:
+          **Demo**:
+          **Code**:
+          **What you learned**:
 
           Let's celebrate our community's creativity! 🎨
           EOF
-          
+
           # Best practices discussion
           cat > .github/discussion-starters/best-practices.md << 'EOF'
           # 🎯 Best Practices Discussion
@@ -224,7 +224,7 @@ jobs:
 
           Share your experience and help us improve our standards!
           EOF
-          
+
           echo "✓ Discussion starter templates created"
 
       - name: Document discussion strategy
@@ -243,9 +243,9 @@ jobs:
       - name: Create project configuration files
         run: |
           echo "Creating project template configurations..."
-          
+
           mkdir -p .github/project-templates
-          
+
           # Product roadmap project
           cat > .github/project-templates/product-roadmap.json << 'EOF'
           {
@@ -298,7 +298,7 @@ jobs:
             ]
           }
           EOF
-          
+
           # Bug triage project
           cat > .github/project-templates/bug-triage.json << 'EOF'
           {
@@ -351,7 +351,7 @@ jobs:
             ]
           }
           EOF
-          
+
           # Sprint planning project
           cat > .github/project-templates/sprint-planning.json << 'EOF'
           {
@@ -403,7 +403,7 @@ jobs:
             ]
           }
           EOF
-          
+
           echo "✓ Project template configurations created"
 
       - name: Document project setup
@@ -422,9 +422,9 @@ jobs:
       - name: Create wiki page templates
         run: |
           echo "Creating wiki page templates..."
-          
+
           mkdir -p .github/wiki-templates
-          
+
           # Home page template
           cat > .github/wiki-templates/Home.md << 'EOF'
           # {{PROJECT_NAME}} Wiki
@@ -465,7 +465,7 @@ jobs:
           - 🐛 [Issues]({{ISSUES_URL}})
           - 📧 [Contact]({{CONTACT_URL}})
           EOF
-          
+
           # Installation template
           cat > .github/wiki-templates/Installation.md << 'EOF'
           # Installation
@@ -511,7 +511,7 @@ jobs:
           - [[Quick Start]]
           - [[Configuration]]
           EOF
-          
+
           # FAQ template
           cat > .github/wiki-templates/FAQ.md << 'EOF'
           # Frequently Asked Questions
@@ -545,7 +545,7 @@ jobs:
           - 💬 [Ask in Discussions]({{DISCUSSIONS_URL}})
           - 📧 [Contact us]({{CONTACT_URL}})
           EOF
-          
+
           # Sidebar template
           cat > .github/wiki-templates/_Sidebar.md << 'EOF'
           ## Navigation
@@ -571,7 +571,7 @@ jobs:
 
           📝 [[Edit|_Sidebar]]
           EOF
-          
+
           echo "✓ Wiki templates created"
 
       - name: Document wiki strategy
@@ -580,7 +580,13 @@ jobs:
           ls -la docs/WIKI_GUIDE.md
 
   generate-summary:
-    needs: [create-issues, create-discussion-content, create-project-templates, create-wiki-structure]
+    needs:
+      [
+        create-issues,
+        create-discussion-content,
+        create-project-templates,
+        create-wiki-structure,
+      ]
     if: always()
     runs-on: ubuntu-latest
     name: Generate Summary
@@ -670,13 +676,13 @@ jobs:
              ```bash
              # Enable Issues (if not enabled)
              gh repo edit --enable-issues
-             
+
              # Enable Discussions
              gh repo edit --enable-discussions
-             
+
              # Enable Wiki
              gh repo edit --enable-wiki
-             
+
              # Enable Projects
              gh repo edit --enable-projects
              ```
@@ -748,10 +754,10 @@ jobs:
           ```bash
           # Clone wiki repository
           git clone https://github.com/org/repo.wiki.git
-          
+
           # Copy templates
           cp .github/wiki-templates/*.md repo.wiki/
-          
+
           # Customize and push
           cd repo.wiki
           # Edit files
@@ -810,15 +816,15 @@ jobs:
 
           ---
 
-          **Status**: Content creation framework ready for deployment  
-          **Maintained By**: @ivviiviivvi organization  
+          **Status**: Content creation framework ready for deployment
+          **Maintained By**: @ivviiviivvi organization
           **Last Updated**: $(date -u +"%Y-%m-%d")
           EOF
-          
+
           cat ORGANIZATIONAL_CONTENT_SUMMARY.md
 
       - name: Commit summary
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'docs: add organizational content creation summary'
-          file_pattern: 'ORGANIZATIONAL_CONTENT_SUMMARY.md .github/discussion-starters/* .github/project-templates/* .github/wiki-templates/*'
+          commit_message: "docs: add organizational content creation summary"
+          file_pattern: "ORGANIZATIONAL_CONTENT_SUMMARY.md .github/discussion-starters/* .github/project-templates/* .github/wiki-templates/*"

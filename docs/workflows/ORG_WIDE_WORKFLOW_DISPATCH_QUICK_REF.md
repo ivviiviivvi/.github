@@ -3,6 +3,7 @@
 ## Basic Usage
 
 ### Dry Run (Preview)
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="ci.yml" \
@@ -10,6 +11,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Trigger All Active Repos
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="ci.yml" \
@@ -17,6 +19,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Target Specific Repos
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="security-scan.yml" \
@@ -25,6 +28,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Exclude Specific Repos
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="build.yml" \
@@ -33,6 +37,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### With Custom Inputs
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="deploy.yml" \
@@ -41,6 +46,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Limit Number of Repos
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="update-deps.yml" \
@@ -51,6 +57,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ## Common Scenarios
 
 ### Weekly Security Scan
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="security-scan.yml" \
@@ -60,6 +67,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Health Check All Repos
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="org-health-check.yml" \
@@ -68,6 +76,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Update Dependencies in Batches
+
 ```bash
 # Batch 1
 gh workflow run org-wide-workflow-dispatch.yml \
@@ -80,6 +89,7 @@ gh workflow run org-wide-workflow-dispatch.yml \
 ```
 
 ### Production Deployment
+
 ```bash
 gh workflow run org-wide-workflow-dispatch.yml \
   -f workflow_file="deploy.yml" \
@@ -100,7 +110,7 @@ on:
     inputs:
       # Define your inputs here
       example_input:
-        description: 'Example input'
+        description: "Example input"
         required: false
         type: string
 
@@ -115,16 +125,19 @@ jobs:
 ## Monitoring Results
 
 ### Check Workflow Summary
+
 - Navigate to Actions → Organization-Wide Workflow Dispatch
 - View the latest run
 - Check the summary for success/failure counts
 
 ### Download Results Artifact
+
 ```bash
 gh run download <run-id> -n dispatch-results-<run-number>
 ```
 
 ### View Results JSON
+
 ```bash
 cat dispatch_results.json | jq '.'
 ```
@@ -132,16 +145,19 @@ cat dispatch_results.json | jq '.'
 ## Troubleshooting
 
 ### "Workflow file not found" errors
+
 - Verify the workflow file exists in target repos
 - Check the file name matches exactly
 - Use dry-run to preview which repos have the workflow
 
 ### "Resource not accessible" errors
+
 - Ensure workflow has `actions: write` permission
 - Check repository access settings
 - May need PAT for cross-organization operations
 
 ### "Rate limit exceeded"
+
 - Reduce `max_repos` to process smaller batches
 - Wait for rate limit reset
 - Use off-peak hours for large operations
@@ -149,27 +165,27 @@ cat dispatch_results.json | jq '.'
 ## Best Practices
 
 1. **Always test with dry-run first**
-2. **Start with small batches** (`max_repos=5`)
-3. **Exclude production repos during testing**
-4. **Monitor results immediately after dispatch**
-5. **Document custom workflow inputs**
-6. **Use specific targeting for critical operations**
+1. **Start with small batches** (`max_repos=5`)
+1. **Exclude production repos during testing**
+1. **Monitor results immediately after dispatch**
+1. **Document custom workflow inputs**
+1. **Use specific targeting for critical operations**
 
 ## Input Reference
 
-| Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `workflow_file` | string | required | Workflow filename (e.g., `ci.yml`) |
-| `workflow_inputs` | string | `{}` | JSON object of inputs |
-| `target_repos` | string | `all` | Comma-separated repo list or "all" |
-| `exclude_repos` | string | `''` | Comma-separated repos to exclude |
-| `dry_run` | boolean | `false` | Preview without triggering |
-| `include_archived` | boolean | `false` | Include archived repos |
-| `include_private` | boolean | `true` | Include private repos |
-| `max_repos` | number | `0` | Max repos to process (0=unlimited) |
+| Input              | Type    | Default  | Description                        |
+| ------------------ | ------- | -------- | ---------------------------------- |
+| `workflow_file`    | string  | required | Workflow filename (e.g., `ci.yml`) |
+| `workflow_inputs`  | string  | `{}`     | JSON object of inputs              |
+| `target_repos`     | string  | `all`    | Comma-separated repo list or "all" |
+| `exclude_repos`    | string  | `''`     | Comma-separated repos to exclude   |
+| `dry_run`          | boolean | `false`  | Preview without triggering         |
+| `include_archived` | boolean | `false`  | Include archived repos             |
+| `include_private`  | boolean | `true`   | Include private repos              |
+| `max_repos`        | number  | `0`      | Max repos to process (0=unlimited) |
 
 ## More Information
 
-📖 [Complete Documentation](ORG_WIDE_WORKFLOW_DISPATCH.md)
-🔧 [Workflow Template](../../workflow-templates/org-health-check.yml)
-🎯 [Main Workflow](../../.github/workflows/org-wide-workflow-dispatch.yml)
+📖 [Complete Documentation](ORG_WIDE_WORKFLOW_DISPATCH.md) 🔧
+[Workflow Template](../../workflow-templates/org-health-check.yml) 🎯
+[Main Workflow](../../.github/workflows/org-wide-workflow-dispatch.yml)

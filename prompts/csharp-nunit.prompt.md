@@ -1,18 +1,18 @@
 ---
-mode: 'agent'
-tools: ['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search']
-description: 'Get best practices for NUnit unit testing, including data-driven tests'
----
+
+## mode: 'agent' tools: \['changes', 'search/codebase', 'edit/editFiles', 'problems', 'search'\] description: 'Get best practices for NUnit unit testing, including data-driven tests'
 
 # NUnit Best Practices
 
-Your goal is to help me write effective unit tests with NUnit, covering both standard and data-driven testing approaches.
+Your goal is to help me write effective unit tests with NUnit, covering both
+standard and data-driven testing approaches.
 
 ## Project Setup
 
 - Use a separate test project with naming convention `[ProjectName].Tests`
 - Reference Microsoft.NET.Test.Sdk, NUnit, and NUnit3TestAdapter packages
-- Create test classes that match the classes being tested (e.g., `CalculatorTests` for `Calculator`)
+- Create test classes that match the classes being tested (e.g.,
+  `CalculatorTests` for `Calculator`)
 - Use .NET SDK test commands: `dotnet test` for running tests
 
 ## Test Structure

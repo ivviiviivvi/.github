@@ -2,7 +2,10 @@
 
 ## What is AgentSphere?
 
-AgentSphere is an automatic live demo deployment platform that takes your GitHub repositories and makes them instantly accessible as live, running applications. It eliminates the need for manual deployment configuration and provides instant access to your applications through a web interface.
+AgentSphere is an automatic live demo deployment platform that takes your GitHub
+repositories and makes them instantly accessible as live, running applications.
+It eliminates the need for manual deployment configuration and provides instant
+access to your applications through a web interface.
 
 ### Key Features
 
@@ -20,13 +23,14 @@ AgentSphere is an automatic live demo deployment platform that takes your GitHub
 The AgentSphere deployment workflow is triggered automatically when:
 
 1. **Push to main branch**: Any code changes pushed to `main` trigger deployment
-2. **Manual dispatch**: You can manually trigger deployment from GitHub Actions
+1. **Manual dispatch**: You can manually trigger deployment from GitHub Actions
 
 ### Detection Process
 
 The workflow automatically detects your application type by examining:
 
 - **Node.js**: Presence of `package.json`
+
   - React: `"react"` dependency
   - Vue: `"vue"` dependency
   - Angular: `"@angular/core"` dependency
@@ -34,12 +38,14 @@ The workflow automatically detects your application type by examining:
   - Generic Node.js: Default to `npm start`
 
 - **Python**: Presence of `requirements.txt`, `setup.py`, or `pyproject.toml`
+
   - Flask: `app.py` file
   - FastAPI: `main.py` with `fastapi`/`uvicorn` in requirements
   - Django: `manage.py` file
   - Generic Python: Default to Python scripts
 
 - **Java**: Presence of `pom.xml` or `build.gradle`
+
   - Spring Boot with Maven: `mvn spring-boot:run`
   - Spring Boot with Gradle: `gradle bootRun`
 
@@ -48,11 +54,11 @@ The workflow automatically detects your application type by examining:
 ### Deployment Steps
 
 1. **Detect Application Type**: Analyzes repository structure
-2. **Load Configuration**: Reads `.github/agentsphere-config.yml`
-3. **Create `.agentsphere.yml`**: Generates deployment configuration
-4. **Register with API**: Sends configuration to AgentSphere
-5. **Update README**: Adds Live Demo badge
-6. **Create PR**: Opens a pull request with deployment details
+1. **Load Configuration**: Reads `.github/agentsphere-config.yml`
+1. **Create `.agentsphere.yml`**: Generates deployment configuration
+1. **Register with API**: Sends configuration to AgentSphere
+1. **Update README**: Adds Live Demo badge
+1. **Create PR**: Opens a pull request with deployment details
 
 ## How to Access Your Live Demo
 
@@ -67,6 +73,7 @@ Click the badge to access your live demo instantly.
 ### From the Pull Request
 
 The deployment workflow creates a pull request with:
+
 - Direct link to your live demo
 - Application type and configuration details
 - Health check status
@@ -75,6 +82,7 @@ The deployment workflow creates a pull request with:
 ### Direct URL Format
 
 Your live demo URL follows this pattern:
+
 ```
 https://agentsphere.dev/{org-name}/{repo-name}
 ```
@@ -94,7 +102,7 @@ auto_deploy: true
 startup_scripts:
   nodejs: npm run start:prod
   python: gunicorn app:app --bind 0.0.0.0:8000
-  
+
 # Resource limits
 resources:
   cpu_limit: 2.0
@@ -158,11 +166,12 @@ Users will need to authenticate with GitHub to access the demo.
 Embed your demo in other websites using an iframe:
 
 ```html
-<iframe 
-  src="https://agentsphere.dev/ivviiviivvi/my-app" 
-  width="100%" 
-  height="600px" 
-  frameborder="0">
+<iframe
+  src="https://agentsphere.dev/ivviiviivvi/my-app"
+  width="100%"
+  height="600px"
+  frameborder="0"
+>
 </iframe>
 ```
 
@@ -173,18 +182,20 @@ Embed your demo in other websites using an iframe:
 **Problem**: The application fails to start after deployment.
 
 **Solutions**:
+
 1. Check the startup command in `.agentsphere.yml`
-2. Verify all dependencies are listed in `package.json` or `requirements.txt`
-3. Check application logs in the AgentSphere dashboard
-4. Ensure the app listens on `0.0.0.0` (not just `localhost`)
+1. Verify all dependencies are listed in `package.json` or `requirements.txt`
+1. Check application logs in the AgentSphere dashboard
+1. Ensure the app listens on `0.0.0.0` (not just `localhost`)
 
 **Example fix for Node.js**:
+
 ```javascript
 // Instead of:
-app.listen(3000, 'localhost')
+app.listen(3000, "localhost");
 
 // Use:
-app.listen(3000, '0.0.0.0')
+app.listen(3000, "0.0.0.0");
 ```
 
 ### Port Conflicts
@@ -192,13 +203,16 @@ app.listen(3000, '0.0.0.0')
 **Problem**: Application won't bind to the specified port.
 
 **Solutions**:
+
 1. Use environment variable for port:
+
    ```javascript
    const PORT = process.env.PORT || 3000;
-   app.listen(PORT, '0.0.0.0');
+   app.listen(PORT, "0.0.0.0");
    ```
 
-2. Configure correct port in `.agentsphere.yml`:
+1. Configure correct port in `.agentsphere.yml`:
+
    ```yaml
    port: 8080
    ```
@@ -208,36 +222,43 @@ app.listen(3000, '0.0.0.0')
 **Problem**: Application is slow or unresponsive.
 
 **Solutions**:
+
 1. Increase resource limits:
+
    ```yaml
    resources:
      cpu_limit: 2.0
      memory_limit: 1G
    ```
 
-2. Enable caching:
+1. Enable caching:
+
    ```yaml
    advanced:
      cache_dependencies: true
      compression_enabled: true
    ```
 
-3. Optimize your application code
-4. Use production builds (not development mode)
+1. Optimize your application code
+
+1. Use production builds (not development mode)
 
 ### Health Check Failures
 
 **Problem**: AgentSphere reports the app as unhealthy.
 
 **Solutions**:
+
 1. Ensure your app has a health endpoint:
+
    ```javascript
-   app.get('/health', (req, res) => {
-     res.status(200).json({ status: 'ok' });
+   app.get("/health", (req, res) => {
+     res.status(200).json({ status: "ok" });
    });
    ```
 
-2. Configure health check endpoint:
+1. Configure health check endpoint:
+
    ```yaml
    monitoring:
      health_check_endpoint: /api/health
@@ -249,13 +270,16 @@ app.listen(3000, '0.0.0.0')
 **Problem**: Deployment times out before completing.
 
 **Solutions**:
+
 1. Increase deployment timeout:
+
    ```yaml
    deployment:
-     timeout: 300  # 5 minutes
+     timeout: 300 # 5 minutes
    ```
 
-2. Optimize build process:
+1. Optimize build process:
+
    - Use lighter dependencies
    - Pre-build assets
    - Enable dependency caching
@@ -265,6 +289,7 @@ app.listen(3000, '0.0.0.0')
 ### React Application
 
 **Detected Configuration**:
+
 ```yaml
 name: react-app
 type: react
@@ -275,6 +300,7 @@ environment:
 ```
 
 **Custom Configuration** (using production build):
+
 ```yaml
 name: react-app
 type: react
@@ -285,6 +311,7 @@ port: 3000
 ### Flask Application
 
 **Detected Configuration**:
+
 ```yaml
 name: flask-app
 type: flask
@@ -295,6 +322,7 @@ environment:
 ```
 
 **Custom Configuration** (using Gunicorn):
+
 ```yaml
 name: flask-app
 type: flask
@@ -305,6 +333,7 @@ port: 5000
 ### Express.js API
 
 **Detected Configuration**:
+
 ```yaml
 name: express-api
 type: nodejs
@@ -313,6 +342,7 @@ port: 3000
 ```
 
 **Custom Configuration**:
+
 ```yaml
 name: express-api
 type: nodejs
@@ -326,6 +356,7 @@ environment:
 ### Django Application
 
 **Detected Configuration**:
+
 ```yaml
 name: django-app
 type: django
@@ -334,6 +365,7 @@ port: 8000
 ```
 
 **Custom Configuration** (using Gunicorn):
+
 ```yaml
 name: django-app
 type: django
@@ -344,6 +376,7 @@ port: 8000
 ### Static Website
 
 **Detected Configuration**:
+
 ```yaml
 name: static-site
 type: static
@@ -382,7 +415,7 @@ Protect your demo from abuse:
 
 ```yaml
 access_control:
-  rate_limit: 100  # requests per minute per IP
+  rate_limit: 100 # requests per minute per IP
 ```
 
 ### Deployment Strategies
@@ -391,7 +424,7 @@ Choose how updates are deployed:
 
 ```yaml
 deployment:
-  strategy: rolling      # rolling, blue_green, or canary
+  strategy: rolling # rolling, blue_green, or canary
   rollback_on_failure: true
 ```
 

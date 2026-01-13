@@ -1,6 +1,7 @@
 # Semantic Versioning & Automated Releases
 
-Comprehensive guide to semantic versioning (semver) and automated release management.
+Comprehensive guide to semantic versioning (semver) and automated release
+management.
 
 ## Table of Contents
 
@@ -28,11 +29,11 @@ Comprehensive guide to semantic versioning (semver) and automated release manage
 
 ### Version Increment Rules
 
-| Change Type | Version | Example | When to Use |
-|-------------|---------|---------|-------------|
-| **Breaking Change** | MAJOR | 1.0.0 → 2.0.0 | API changes, removed features |
-| **New Feature** | MINOR | 1.0.0 → 1.1.0 | New functionality, backward compatible |
-| **Bug Fix** | PATCH | 1.0.0 → 1.0.1 | Bug fixes, security patches |
+| Change Type         | Version | Example       | When to Use                            |
+| ------------------- | ------- | ------------- | -------------------------------------- |
+| **Breaking Change** | MAJOR   | 1.0.0 → 2.0.0 | API changes, removed features          |
+| **New Feature**     | MINOR   | 1.0.0 → 1.1.0 | New functionality, backward compatible |
+| **Bug Fix**         | PATCH   | 1.0.0 → 1.0.1 | Bug fixes, security patches            |
 
 ### Examples
 
@@ -62,24 +63,25 @@ Comprehensive guide to semantic versioning (semver) and automated release manage
 
 ### Types and Version Impact
 
-| Type | Version Bump | Description |
-|------|--------------|-------------|
-| `feat` | MINOR | New feature |
-| `fix` | PATCH | Bug fix |
-| `perf` | PATCH | Performance improvement |
-| `docs` | PATCH | Documentation only |
-| `style` | PATCH | Code style (formatting) |
-| `refactor` | PATCH | Code refactoring |
-| `test` | PATCH | Adding tests |
-| `build` | PATCH | Build system changes |
-| `ci` | PATCH | CI configuration |
-| `chore` | No bump | Maintenance tasks |
-| `revert` | PATCH | Revert previous commit |
-| `BREAKING CHANGE` | MAJOR | Breaking change (any type) |
+| Type              | Version Bump | Description                |
+| ----------------- | ------------ | -------------------------- |
+| `feat`            | MINOR        | New feature                |
+| `fix`             | PATCH        | Bug fix                    |
+| `perf`            | PATCH        | Performance improvement    |
+| `docs`            | PATCH        | Documentation only         |
+| `style`           | PATCH        | Code style (formatting)    |
+| `refactor`        | PATCH        | Code refactoring           |
+| `test`            | PATCH        | Adding tests               |
+| `build`           | PATCH        | Build system changes       |
+| `ci`              | PATCH        | CI configuration           |
+| `chore`           | No bump      | Maintenance tasks          |
+| `revert`          | PATCH        | Revert previous commit     |
+| `BREAKING CHANGE` | MAJOR        | Breaking change (any type) |
 
 ### Examples
 
 **Patch Release (1.0.0 → 1.0.1)**
+
 ```bash
 git commit -m "fix: resolve memory leak in user service"
 git commit -m "docs: update API documentation"
@@ -87,12 +89,14 @@ git commit -m "perf: improve database query performance"
 ```
 
 **Minor Release (1.0.0 → 1.1.0)**
+
 ```bash
 git commit -m "feat: add user profile customization"
 git commit -m "feat(api): implement new REST endpoints"
 ```
 
 **Major Release (1.0.0 → 2.0.0)**
+
 ```bash
 # Method 1: Using ! suffix
 git commit -m "feat!: redesign authentication API"
@@ -123,13 +127,13 @@ BREAKING CHANGE: API endpoint /users now requires authentication"
 ### How It Works
 
 1. **Commit Analysis**: Analyzes commits since last release
-2. **Version Calculation**: Determines next version based on commit types
-3. **Changelog Generation**: Creates/updates CHANGELOG.md
-4. **Version Bump**: Updates version in package.json, pyproject.toml, etc.
-5. **Git Tag**: Creates git tag for the release
-6. **GitHub Release**: Creates GitHub release with notes
-7. **Package Publishing**: Publishes to npm, PyPI, etc. (optional)
-8. **Git Commit**: Commits changelog and version changes
+1. **Version Calculation**: Determines next version based on commit types
+1. **Changelog Generation**: Creates/updates CHANGELOG.md
+1. **Version Bump**: Updates version in package.json, pyproject.toml, etc.
+1. **Git Tag**: Creates git tag for the release
+1. **GitHub Release**: Creates GitHub release with notes
+1. **Package Publishing**: Publishes to npm, PyPI, etc. (optional)
+1. **Git Commit**: Commits changelog and version changes
 
 ### Workflow Trigger
 
@@ -158,12 +162,12 @@ gh workflow run semantic-release.yml
 ```json
 {
   "dependencies": {
-    "exact": "1.2.3",           // Exact version only
-    "patch": "~1.2.3",          // >=1.2.3 <1.3.0 (patch updates)
-    "minor": "^1.2.3",          // >=1.2.3 <2.0.0 (minor updates)
-    "latest": "*",              // Any version (avoid!)
-    "range": ">=1.2.0 <2.0.0",  // Specific range
-    "or": "1.2.x || 1.3.x"      // Multiple ranges
+    "exact": "1.2.3", // Exact version only
+    "patch": "~1.2.3", // >=1.2.3 <1.3.0 (patch updates)
+    "minor": "^1.2.3", // >=1.2.3 <2.0.0 (minor updates)
+    "latest": "*", // Any version (avoid!)
+    "range": ">=1.2.0 <2.0.0", // Specific range
+    "or": "1.2.x || 1.3.x" // Multiple ranges
   }
 }
 ```
@@ -208,6 +212,7 @@ package = "*"               # Latest (avoid!)
 ### What Constitutes a Breaking Change?
 
 **Breaking Changes (MAJOR bump)**:
+
 - Removing or renaming public API
 - Changing function signatures
 - Removing configuration options
@@ -217,6 +222,7 @@ package = "*"               # Latest (avoid!)
 - Changed error codes/messages that clients depend on
 
 **Not Breaking Changes**:
+
 - Adding new features
 - Adding new optional parameters
 - Fixing bugs
@@ -228,18 +234,20 @@ package = "*"               # Latest (avoid!)
 ### Breaking Change Examples
 
 **API Changes**
+
 ```javascript
 // Before (v1.x.x)
-function getUser(id) { }
+function getUser(id) {}
 
 // After (v2.0.0) - BREAKING
-function getUser(id, options) { }  // Added required parameter
+function getUser(id, options) {} // Added required parameter
 
 // After (v1.1.0) - NOT breaking
-function getUser(id, options = {}) { }  // Added optional parameter
+function getUser(id, options = {}) {} // Added optional parameter
 ```
 
 **Configuration Changes**
+
 ```yaml
 # Before (v1.x.x)
 config:
@@ -257,16 +265,18 @@ config:
 
 ### Communicating Breaking Changes
 
-```markdown
+````markdown
 ## [2.0.0] - 2024-11-08
 
 ### BREAKING CHANGES
 
 - **Authentication**: Switched from API keys to OAuth2
+
   - **Migration**: See [migration guide](docs/migration-v2.md)
   - **Timeline**: Support for API keys ends 2024-12-31
 
 - **Database**: User model restructured
+
   - `name` field split into `firstName` and `lastName`
   - **Migration**: Run `npm run migrate` to update database
 
@@ -277,27 +287,32 @@ config:
 ### Migration Guide
 
 1. Update authentication to OAuth2:
+
    ```javascript
    // Old
-   const client = new API({ apiKey: 'xxx' });
+   const client = new API({ apiKey: "xxx" });
 
    // New
-   const client = new API({ oauthToken: 'xxx' });
+   const client = new API({ oauthToken: "xxx" });
    ```
+````
 
 2. Update database schema:
+
    ```bash
    npm run migrate:v2
    ```
 
-3. Update API endpoints:
+1. Update API endpoints:
+
    ```javascript
    // Old
-   await fetch('/api/v1/users');
+   await fetch("/api/v1/users");
 
    // New
-   await fetch('/api/v2/users');
+   await fetch("/api/v2/users");
    ```
+
 ```
 
 ---
@@ -307,11 +322,11 @@ config:
 ### Format
 
 ```
-1.2.3-alpha.1
-1.2.3-beta.2
-1.2.3-rc.3
+
+1.2.3-alpha.1 1.2.3-beta.2 1.2.3-rc.3
 
 MAJOR.MINOR.PATCH-prerelease.number
+
 ```
 
 ### Pre-release Stages
@@ -325,11 +340,11 @@ MAJOR.MINOR.PATCH-prerelease.number
 ### Examples
 
 ```
-Development: 1.0.0-alpha.1 → 1.0.0-alpha.2 → 1.0.0-alpha.3
-Beta: 1.0.0-beta.1 → 1.0.0-beta.2
-RC: 1.0.0-rc.1 → 1.0.0-rc.2
-Release: 1.0.0
-```
+
+Development: 1.0.0-alpha.1 → 1.0.0-alpha.2 → 1.0.0-alpha.3 Beta: 1.0.0-beta.1 →
+1.0.0-beta.2 RC: 1.0.0-rc.1 → 1.0.0-rc.2 Release: 1.0.0
+
+````
 
 ### Creating Pre-releases
 
@@ -340,7 +355,7 @@ git commit -m "feat: add new feature"
 git push origin beta
 
 # semantic-release creates: 1.0.0-beta.1
-```
+````
 
 ### Branch Strategy for Pre-releases
 
@@ -425,6 +440,7 @@ cargo publish
 ## Version Files by Language
 
 ### JavaScript/TypeScript
+
 ```json
 // package.json
 {
@@ -434,6 +450,7 @@ cargo publish
 ```
 
 ### Python
+
 ```toml
 # pyproject.toml
 [project]
@@ -447,6 +464,7 @@ __version__ = "1.2.3"
 ```
 
 ### Go
+
 ```go
 // version.go
 package main
@@ -455,6 +473,7 @@ const Version = "1.2.3"
 ```
 
 ### Rust
+
 ```toml
 # Cargo.toml
 [package]
@@ -466,26 +485,26 @@ version = "1.2.3"
 
 ## Best Practices
 
-### DO [x]
+### DO \[x\]
 
 1. **Use Conventional Commits**: Enables automation
-2. **Document Breaking Changes**: Always include migration guides
-3. **Test Before Release**: Use pre-release versions
-4. **Keep CHANGELOG**: Auto-generated is fine, but review it
-5. **Pin Dependencies**: Use lock files
-6. **Communicate**: Announce major releases
-7. **Support Old Versions**: At least one major version back
-8. **Version Everything**: APIs, schemas, configs
+1. **Document Breaking Changes**: Always include migration guides
+1. **Test Before Release**: Use pre-release versions
+1. **Keep CHANGELOG**: Auto-generated is fine, but review it
+1. **Pin Dependencies**: Use lock files
+1. **Communicate**: Announce major releases
+1. **Support Old Versions**: At least one major version back
+1. **Version Everything**: APIs, schemas, configs
 
-### DON'T [ ]
+### DON'T \[ \]
 
 1. **Skip Versions**: Don't jump from 1.0 to 3.0
-2. **Rewrite History**: Don't change published versions
-3. **Break Minor/Patch**: Only MAJOR should break
-4. **Use 0.x Forever**: Release 1.0 when stable
-5. **Ignore Dependencies**: Update them regularly
-6. **Rush Major Versions**: Plan breaking changes
-7. **Forget Deprecation**: Warn before removing
+1. **Rewrite History**: Don't change published versions
+1. **Break Minor/Patch**: Only MAJOR should break
+1. **Use 0.x Forever**: Release 1.0 when stable
+1. **Ignore Dependencies**: Update them regularly
+1. **Rush Major Versions**: Plan breaking changes
+1. **Forget Deprecation**: Warn before removing
 
 ---
 
@@ -496,6 +515,7 @@ version = "1.2.3"
 **Problem**: Commits pushed but no release created
 
 **Solution**: Check commit messages follow conventional format
+
 ```bash
 # View commits
 git log --oneline
@@ -509,6 +529,7 @@ git log --oneline
 **Problem**: Expected MAJOR but got MINOR
 
 **Solution**: Ensure BREAKING CHANGE is in commit
+
 ```bash
 # Correct format
 git commit -m "feat!: major change"
@@ -524,6 +545,7 @@ BREAKING CHANGE: This breaks everything"
 **Problem**: semantic-release fails during publish
 
 **Solution**: Check tokens and permissions
+
 ```bash
 # Verify GITHUB_TOKEN has permissions
 # Settings → Actions → General → Workflow permissions

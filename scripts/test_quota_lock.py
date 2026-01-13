@@ -1,15 +1,18 @@
-import unittest
 import os
-import time
-import threading
 import sys
-from scripts.quota_manager import acquire_lock, LOCK_FILE, LOCK_DIR
+import threading
+import time
+import unittest
+
+from scripts.quota_manager import LOCK_DIR, LOCK_FILE, acquire_lock
 
 try:
     import fcntl
+
     HAS_FCNTL = True
 except ImportError:
     HAS_FCNTL = False
+
 
 class TestQuotaLock(unittest.TestCase):
     def setUp(self):
@@ -52,7 +55,7 @@ class TestQuotaLock(unittest.TestCase):
         t2 = threading.Thread(target=task)
 
         t1.start()
-        time.sleep(0.1) # Ensure t1 starts first
+        time.sleep(0.1)  # Ensure t1 starts first
         t2.start()
 
         t1.join()
@@ -69,7 +72,8 @@ class TestQuotaLock(unittest.TestCase):
     def test_fcntl_used_on_unix(self):
         """Test that fcntl mechanism is used when available"""
         with acquire_lock():
-             self.assertTrue(os.path.exists(LOCK_FILE))
+            self.assertTrue(os.path.exists(LOCK_FILE))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

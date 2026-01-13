@@ -9,8 +9,8 @@ We take security seriously. Please report security vulnerabilities responsibly.
 If you discover a security vulnerability, please follow these steps:
 
 1. **Do NOT** open a public issue
-2. **Email** the security concern to the repository maintainers
-3. **Include** as much information as possible:
+1. **Email** the security concern to the repository maintainers
+1. **Include** as much information as possible:
    - Type of vulnerability
    - Full paths of affected source files
    - Location of the affected source code (tag/branch/commit or direct URL)
@@ -23,19 +23,22 @@ If you discover a security vulnerability, please follow these steps:
 - We will acknowledge receipt of your vulnerability report within 48 hours
 - We will provide a detailed response within 7 days indicating next steps
 - We will work on a fix and keep you informed of progress
-- Once the vulnerability is fixed, we will publicly disclose the issue (crediting you if desired)
+- Once the vulnerability is fixed, we will publicly disclose the issue
+  (crediting you if desired)
 
 ## Automated Secret Scanning
 
-We use automated secret scanning to protect against accidental credential exposure in code and video walkthroughs.
+We use automated secret scanning to protect against accidental credential
+exposure in code and video walkthroughs.
 
 ### Scanning Tools
 
-Our repository is continuously monitored by three complementary secret detection tools:
+Our repository is continuously monitored by three complementary secret detection
+tools:
 
 1. **TruffleHog** - Entropy-based secret detection and regex pattern matching
-2. **Gitleaks** - High-speed secret scanning with customizable rules
-3. **detect-secrets** - Baseline-driven secret detection with plugin support
+1. **Gitleaks** - High-speed secret scanning with customizable rules
+1. **detect-secrets** - Baseline-driven secret detection with plugin support
 
 ### Scan Schedule
 
@@ -46,8 +49,10 @@ Our repository is continuously monitored by three complementary secret detection
 
 ### Workflows
 
-- **Code Scanning** (`.github/workflows/scan-for-secrets.yml`): Scans all code files for hardcoded secrets
-- **Video Scanning** (`.github/workflows/safeguard-5-secret-scanning.yml`): OCR analysis of video frames for visible credentials
+- **Code Scanning** (`.github/workflows/scan-for-secrets.yml`): Scans all code
+  files for hardcoded secrets
+- **Video Scanning** (`.github/workflows/safeguard-5-secret-scanning.yml`): OCR
+  analysis of video frames for visible credentials
 
 ### Configuration Files
 
@@ -58,31 +63,37 @@ Secret scanning can be customized using:
 
 ### What Happens When Secrets Are Detected
 
-1. **Automated Issue Creation**: A security alert issue is created with scan details
-2. **Workflow Failure**: The scan workflow fails to block merges
-3. **Artifact Upload**: Detailed scan results are uploaded for review
-4. **PR Blocking**: Pull requests are automatically blocked until secrets are removed
+1. **Automated Issue Creation**: A security alert issue is created with scan
+   details
+1. **Workflow Failure**: The scan workflow fails to block merges
+1. **Artifact Upload**: Detailed scan results are uploaded for review
+1. **PR Blocking**: Pull requests are automatically blocked until secrets are
+   removed
 
 ### Reviewing Scan Results
 
 1. Check the automated issue for high-level summary
-2. Download scan result artifacts from the workflow run
-3. Review each detection to determine if it's a true positive or false positive
-4. Update configuration files to suppress false positives if needed
+1. Download scan result artifacts from the workflow run
+1. Review each detection to determine if it's a true positive or false positive
+1. Update configuration files to suppress false positives if needed
 
 ### Responding to Secret Detections
 
 If real secrets are detected:
 
 1. **Immediately rotate** the exposed credentials
-2. **Remove secrets** from the current codebase
-3. **Clean git history** using tools like [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/) or git-filter-repo
-4. **Update documentation** and processes to prevent recurrence
-5. **Re-record videos** if secrets appeared in walkthrough recordings
+1. **Remove secrets** from the current codebase
+1. **Clean git history** using tools like
+   [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/) or
+   git-filter-repo
+1. **Update documentation** and processes to prevent recurrence
+1. **Re-record videos** if secrets appeared in walkthrough recordings
 
 ### Scan Results
 
-All scan results are tracked in security alert issues with the `security` and `secrets` labels. Regular clean scans indicate the repository is free from hardcoded credentials.
+All scan results are tracked in security alert issues with the `security` and
+`secrets` labels. Regular clean scans indicate the repository is free from
+hardcoded credentials.
 
 ## Security Best Practices
 
@@ -99,7 +110,8 @@ When contributing, please:
 We follow responsible disclosure practices:
 
 - Security issues are fixed before public disclosure
-- Contributors who report security issues are credited (unless they prefer anonymity)
+- Contributors who report security issues are credited (unless they prefer
+  anonymity)
 - We coordinate disclosure with affected parties when applicable
 
 Thank you for helping keep our projects secure!

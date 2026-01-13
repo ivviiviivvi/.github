@@ -16,14 +16,14 @@ Why is this refactoring needed?
 - [ ] Remove duplication
 - [ ] Update to modern patterns
 - [ ] Prepare for future changes
-- [ ] Other: ___________
+- [ ] Other: \_\_\_\_\_\_\_\_\_\_\_
 
 ### Changes Made
 
 Describe the refactoring changes:
 
-- 
-- 
+-
+-
 
 ### Behavior Changes
 
@@ -48,9 +48,10 @@ How did you verify the refactoring maintains correctness?
 ### Code Quality Metrics (if applicable)
 
 Before and after comparisons:
-- Cyclomatic complexity: 
-- Code coverage: 
-- Lines of code: 
+
+- Cyclomatic complexity:
+- Code coverage:
+- Lines of code:
 
 ### Migration Guide (if needed)
 
