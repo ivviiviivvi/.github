@@ -1,7 +1,4 @@
 ---
-description: AI rules derived by SpecStory from the project AI interaction history
-globs: *
----
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
@@ -295,27 +292,3 @@ When encountering a large number of stashed changes and ongoing issues:
     - Run `git status -sb` to get the current working tree status.
     - Summarize stashes using:
       `(git stash list | head -n 5; echo '---'; git stash list | tail -n 5; echo '---count---'; git stash list | wc -l)`.
-
-#### Phase 2: Documentation Consolidation (Priority: 🟡 HIGH)
-
-### 2.1 Consolidate Duplicate Documentation
-  - Compare content of three ROADMAP files
-  - Keep docs/ROADMAP.md as canonical
-  - Move workflow-specific content
-  - Add redirect/deprecation notices
-  - Update internal links
-  - Create docs/INDEX.md
-
-### 2.2 Restructure Documentation Hierarchy
-  - Create docs/INDEX.md master index
-  - Reorganize files into subdirectories (guides/, reference/, workflows/, audits/, architecture/)
-  - Update cross-references
-  - Add navigation breadcrumbs
-
-### 2.3 Update Root-Level Documentation
-  - Add badges to README.md
-  - Create visual architecture diagram
-  - Add quickstart section
-  - Update contact emails
-  - Add "Last Updated" footer
-  - Create CHANGELOG.md

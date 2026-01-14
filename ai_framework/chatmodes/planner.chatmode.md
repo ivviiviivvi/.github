@@ -1,19 +1,18 @@
 ---
-
-name: Planner description: Generate an implementation plan for new features or
-refactoring existing code. tools:
-
-- codebase
-- fetch
-- findTestFiles
-- githubRepo
-- search
-- usages tags:
-- planning
-- deprecated updated: 2026-01-13
-
+name: Planner
+description: Generate an implementation plan for new features or refactoring existing code.
+tools:
+  - codebase
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - search
+  - usages
+tags:
+  - planning
+  - deprecated
+updated: 2026-01-13
 ---
-
 # Planning mode instructions
 
 Deprecated for general planning; use `ai_framework/chatmodes/plan.chatmode.md`.

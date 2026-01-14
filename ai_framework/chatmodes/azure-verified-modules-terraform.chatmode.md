@@ -1,37 +1,36 @@
 ---
-
-name: Azure AVM Terraform description: Create, update, or review Azure IaC in
-Terraform using Azure Verified Modules (AVM). tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- microsoft.docs.mcp
-- azure_get_deployment_best_practices
-- azure_get_schema_for_Bicep tags:
-- terraform
-- azure
-- avm updated: 2026-01-13
-
+name: Azure AVM Terraform
+description: Create, update, or review Azure IaC in Terraform using Azure Verified Modules (AVM).
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - microsoft.docs.mcp
+  - azure_get_deployment_best_practices
+  - azure_get_schema_for_Bicep
+tags:
+  - terraform
+  - azure
+  - avm
+updated: 2026-01-13
 ---
-
 # Azure AVM Terraform mode
 
 Use Azure Verified Modules for Terraform to enforce Azure best practices via

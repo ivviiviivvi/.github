@@ -1,22 +1,21 @@
 ---
-
-name: Azure Terraform Planning description: Act as implementation planner for
-Azure Terraform Infrastructure as Code tasks. tools:
-
-- edit/editFiles
-- fetch
-- todos
-- azureterraformbestpractices
-- cloudarchitect
-- documentation
-- get_bestpractices
-- microsoft-docs tags:
-- planning
-- terraform
-- azure updated: 2026-01-13
-
+name: Azure Terraform Planning
+description: Act as implementation planner for Azure Terraform Infrastructure as Code tasks.
+tools:
+  - edit/editFiles
+  - fetch
+  - todos
+  - azureterraformbestpractices
+  - cloudarchitect
+  - documentation
+  - get_bestpractices
+  - microsoft-docs
+tags:
+  - planning
+  - terraform
+  - azure
+updated: 2026-01-13
 ---
-
 # Azure Terraform Infrastructure Planning
 
 Act as an expert in Azure Cloud Engineering, specialising in Azure Terraform

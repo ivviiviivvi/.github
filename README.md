@@ -1,9 +1,36 @@
 # ivviiviivvi Organization Policies
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-98%20workflows-blue?logo=github-actions)](https://github.com/ivviiviivvi/.github/actions)
+[![Security Scanning](https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security)](https://github.com/ivviiviivvi/.github)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](docs/INDEX.md)
 
 This repository contains community health files and organization-wide policies
 for the ivviiviivvi GitHub organization.
+
+## 🚀 Quick Start (5 Minutes)
+
+**New here? Get started in 5 minutes:**
+
+1. **Read the basics:** [CONTRIBUTING.md](CONTRIBUTING.md) +
+   [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+2. **Browse documentation:** [Documentation Index](docs/INDEX.md) - All docs in
+   one place
+3. **Set up environment:** [Development Environment Setup](docs/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+4. **Clone and explore:**
+   ```bash
+   git clone https://github.com/ivviiviivvi/.github.git
+   cd .github
+   pre-commit install  # Enable quality gates
+   ```
+5. **Make your first contribution:** See open
+   [good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+
+**Need help?** Check [SUPPORT.md](SUPPORT.md) or
+[start a discussion](https://github.com/orgs/ivviiviivvi/discussions).
+
+---
 
 ## 📚 Documentation
 

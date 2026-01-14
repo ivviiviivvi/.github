@@ -31,7 +31,6 @@ tags:
   - research
 updated: 2026-01-13
 ---
-
 # Task Researcher Instructions
 
 ## Role Definition

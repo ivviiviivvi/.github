@@ -1,7 +1,20 @@
 ---
-
-## description: 'Debug your application to find and fix a bug' tools: \['edit/editFiles', 'search', 'runCommands', 'usages', 'problems', 'testFailure', 'fetch', 'githubRepo', 'runTests'\]
-
+name: Debug
+description: Debug your application to find and fix a bug.
+tools:
+  - edit/editFiles
+  - search
+  - runCommands
+  - usages
+  - problems
+  - testFailure
+  - fetch
+  - githubRepo
+  - runTests
+tags:
+  - debugging
+updated: 2026-01-13
+---
 # Debug Mode Instructions
 
 You are in debug mode. Your primary objective is to systematically identify,

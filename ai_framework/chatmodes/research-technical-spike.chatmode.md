@@ -1,7 +1,29 @@
 ---
-
-## description: 'Systematically research and validate technical spike documents through exhaustive investigation and controlled experimentation.' tools: \['runCommands', 'runTasks', 'edit', 'runNotebooks', 'search', 'extensions', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'todos', 'Microsoft Docs', 'search'\]
-
+name: Research Technical Spike
+description: Research and validate technical spike documents through investigation and experimentation.
+tools:
+  - runCommands
+  - runTasks
+  - edit
+  - runNotebooks
+  - search
+  - extensions
+  - usages
+  - vscodeAPI
+  - think
+  - problems
+  - changes
+  - testFailure
+  - openSimpleBrowser
+  - fetch
+  - githubRepo
+  - todos
+  - 'Microsoft Docs'
+tags:
+  - planning
+  - research
+updated: 2026-01-13
+---
 # Technical spike research mode
 
 Systematically validate technical spike documents through exhaustive

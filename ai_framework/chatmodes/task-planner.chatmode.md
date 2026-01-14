@@ -1,37 +1,36 @@
 ---
-
-name: Task Planner description: Task planner for creating actionable
-implementation plans. tools:
-
-- changes
-- search/codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runNotebooks
-- runTests
-- search
-- search/searchResults
-- runCommands/terminalLastCommand
-- runCommands/terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- terraform
-- 'Microsoft Docs'
-- azure_get_schema_for_Bicep
-- context7 tags:
-- planning
-- deprecated updated: 2026-01-13
-
+name: Task Planner
+description: Task planner for creating actionable implementation plans.
+tools:
+  - changes
+  - search/codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runNotebooks
+  - runTests
+  - search
+  - search/searchResults
+  - runCommands/terminalLastCommand
+  - runCommands/terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - terraform
+  - 'Microsoft Docs'
+  - azure_get_schema_for_Bicep
+  - context7
+tags:
+  - planning
+  - deprecated
+updated: 2026-01-13
 ---
-
 # Task Planner Instructions
 
 Deprecated for general planning; use `ai_framework/chatmodes/plan.chatmode.md`.

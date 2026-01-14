@@ -1,34 +1,33 @@
 ---
-
-name: Implementation Plan description: Generate an implementation plan for new
-features or refactoring existing code. tools:
-
-- codebase
-- usages
-- vscodeAPI
-- think
-- problems
-- changes
-- testFailure
-- terminalSelection
-- terminalLastCommand
-- openSimpleBrowser
-- fetch
-- findTestFiles
-- searchResults
-- githubRepo
-- extensions
-- edit/editFiles
-- runNotebooks
-- search
-- new
-- runCommands
-- runTasks tags:
-- planning
-- deprecated updated: 2026-01-13
-
+name: Implementation Plan
+description: Generate an implementation plan for new features or refactoring existing code.
+tools:
+  - codebase
+  - usages
+  - vscodeAPI
+  - think
+  - problems
+  - changes
+  - testFailure
+  - terminalSelection
+  - terminalLastCommand
+  - openSimpleBrowser
+  - fetch
+  - findTestFiles
+  - searchResults
+  - githubRepo
+  - extensions
+  - edit/editFiles
+  - runNotebooks
+  - search
+  - new
+  - runCommands
+  - runTasks
+tags:
+  - planning
+  - deprecated
+updated: 2026-01-13
 ---
-
 # Implementation Plan Generation Mode
 
 Deprecated for general planning; use `ai_framework/chatmodes/plan.chatmode.md`.

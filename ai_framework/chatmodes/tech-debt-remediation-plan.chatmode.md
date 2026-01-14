@@ -1,34 +1,33 @@
 ---
-
-name: Tech Debt Remediation Plan description: Generate technical debt
-remediation plans for code, tests, and documentation. tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- github tags:
-- planning
-- tech-debt updated: 2026-01-13
-
+name: Tech Debt Remediation Plan
+description: Generate technical debt remediation plans for code, tests, and documentation.
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - github
+tags:
+  - planning
+  - tech-debt
+updated: 2026-01-13
 ---
-
 # Technical Debt Remediation Plan
 
 Generate comprehensive technical debt remediation plans. Analysis only - no code

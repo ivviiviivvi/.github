@@ -17,7 +17,6 @@ tags:
   - triage
 updated: 2026-01-13
 ---
-
 # Refine Requirement or Issue Chat Mode
 
 When activated, this mode allows GitHub Copilot to analyze an existing issue and
