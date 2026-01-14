@@ -1,3 +1,10 @@
+---
+name: Project Planning
+description: Collection for Project Planning.
+tags: []
+updated: 2026-01-13
+---
+
 # Project Planning & Management
 
 Tools and guidance for software project planning, feature breakdown, epic

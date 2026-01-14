@@ -1,12 +1,11 @@
 ---
-
-description: 'Greener Grass Workflow Benchmark Agent - Compares your GitHub
-Actions workflows against industry best practices and successful patterns to
-identify improvement opportunities' dependencies:
-
-- mcp: github
-
+name: Greener Grass Workflow Benchmark
+description: Greener Grass Workflow Benchmark Agent - Compares your GitHub
+tools: []
+tags: []
+updated: 2026-01-13
 ---
+
 
 # Greener Grass Workflow Benchmark Agent
 

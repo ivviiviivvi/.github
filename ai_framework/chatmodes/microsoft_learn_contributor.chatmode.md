@@ -1,22 +1,22 @@
 ---
-
-name: Microsoft Learn Contributor description: Edit and write Microsoft Learn
-documentation using Microsoft style guidance. tools:
-
-- changes
-- search/codebase
-- edit/editFiles
-- new
-- openSimpleBrowser
-- problems
-- search
-- search/searchResults
-- microsoft.docs.mcp tags:
-- documentation
-- microsoft updated: 2026-01-13
-
+name: Microsoft Learn Contributor
+description: Edit and write Microsoft Learn
+documentation using Microsoft style guidance.
+tools:
+  - changes
+  - search/codebase
+  - edit/editFiles
+  - new
+  - openSimpleBrowser
+  - problems
+  - search
+  - search/searchResults
+  - microsoft.docs.mcp
+tags:
+  - documentation
+  - microsoft
+updated: 2026-01-13
 ---
-
 # Microsoft Learn Contributor
 
 ## Persona Overview

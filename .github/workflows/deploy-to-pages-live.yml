@@ -1,4 +1,4 @@
-name: "Deploy Live App to GitHub Pages"
+name: Deploy Live App to GitHub Pages
 
 on:
   push:
@@ -6,16 +6,16 @@ on:
       - main
       - master
     paths:
-      - 'src/**'
-      - 'public/**'
-      - 'package*.json'
-      - 'requirements.txt'
-      - 'Dockerfile'
-      - '.github/workflows/deploy-to-pages-live.yml'
+      - src/**
+      - public/**
+      - package*.json
+      - requirements.txt
+      - Dockerfile
+      - .github/workflows/deploy-to-pages-live.yml
   workflow_dispatch:
     inputs:
       deployment_strategy:
-        description: "Deployment strategy to use"
+        description: Deployment strategy to use
         required: false
         type: choice
         options:
@@ -24,27 +24,27 @@ on:
           - docker
           - codespaces
           - documentation-only
-        default: "auto"
+        default: auto
       force_deploy:
-        description: "Force deployment even if no changes detected"
+        description: Force deployment even if no changes detected
         required: false
         type: boolean
         default: false
   workflow_call:
     inputs:
       deployment_strategy:
-        description: "Deployment strategy to use"
+        description: Deployment strategy to use
         required: false
         type: string
-        default: "auto"
+        default: auto
       force_deploy:
-        description: "Force deployment even if no changes detected"
+        description: Force deployment even if no changes detected
         required: false
         type: boolean
         default: false
 
 concurrency:
-  group: "pages-live-deploy-${{ github.ref }}"
+  group: pages-live-deploy-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -65,12 +65,12 @@ jobs:
       startup_command: ${{ steps.detect.outputs.startup_command }}
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 1
 
-      - name: "Load deployment configuration"
+      - name: Load deployment configuration
         id: load-config
         run: |
           CONFIG_FILE=".github/app-deployment-config.yml"
@@ -85,7 +85,7 @@ jobs:
             echo "startup_command=" >> $GITHUB_OUTPUT
           fi
 
-      - name: "Detect application type"
+      - name: Detect application type
         id: detect
         env:
           INPUT_DEPLOYMENT_STRATEGY: ${{ inputs.deployment_strategy }}
@@ -188,19 +188,19 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
 
-      - name: "Setup Node.js"
+      - name: Setup Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # ratchet:actions/setup-node@v4.1.0
         with:
           node-version: "18"
-          cache: "npm"
+          cache: npm
 
-      - name: "Install dependencies"
+      - name: Install dependencies
         run: npm ci
 
-      - name: "Build application"
+      - name: Build application
         run: |
           if [ -f "package.json" ] && grep -q '"build"' package.json; then
             npm run build
@@ -208,35 +208,35 @@ jobs:
             echo "No build script found, skipping build step"
           fi
 
-      - name: "Setup Pages"
+      - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # ratchet:actions/configure-pages@v5.0.0
 
-      - name: "Upload artifact"
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # ratchet:actions/upload-pages-artifact@v3.0.1
         with:
-          path: "./dist"
+          path: ./dist
 
-      - name: "Deploy to GitHub Pages"
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # ratchet:actions/deploy-pages@v4.0.5
 
-      - name: "Generate deployment metadata"
+      - name: Generate deployment metadata
         run: |
           DEPLOY_URL="${{ steps.deployment.outputs.page_url }}"
           TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          cat > deployment-metadata.json <<EOF
-{
-  "repository": "${{ github.repository }}",
-  "source_url": "https://github.com/${{ github.repository }}",
-  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
-  "deployment_strategy": "pages-direct",
-  "live_url": "$DEPLOY_URL",
-  "status": "deployed",
-  "last_updated": "$TIMESTAMP"
-}
-EOF
+          cat > deployment-metadata.json <<-EOF
+          {
+            "repository": "${{ github.repository }}",
+            "source_url": "https://github.com/${{ github.repository }}",
+            "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+            "deployment_strategy": "pages-direct",
+            "live_url": "$DEPLOY_URL",
+            "status": "deployed",
+            "last_updated": "$TIMESTAMP"
+          }
+          EOF
 
-      - name: "Upload deployment metadata"
+      - name: Upload deployment metadata
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
         with:
           name: app-deployment
@@ -250,26 +250,26 @@ EOF
     timeout-minutes: 30
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
 
-      - name: "Set up Docker Buildx"
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # ratchet:docker/setup-buildx-action@v3.7.1
 
-      - name: "Log in to Docker Hub"
+      - name: Log in to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # ratchet:docker/login-action@v3.3.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: "Extract metadata"
+      - name: Extract metadata
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # ratchet:docker/metadata-action@v5.5.1
         with:
           images: ${{ github.repository }}
 
-      - name: "Build and push Docker image"
+      - name: Build and push Docker image
         uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # ratchet:docker/build-push-action@v6.9.0
         with:
           context: .
@@ -279,10 +279,10 @@ EOF
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: "Create embed page"
+      - name: Create embed page
         run: |
           mkdir -p docs/live-apps
-          cat > docs/live-apps/${{ github.event.repository.name }}.md << EOF
+          cat > docs/live-apps/${{ github.event.repository.name }}.md <<- 'EOF'
           ---
           layout: app-demo
           title: "Live Demo: ${{ github.event.repository.name }}"
@@ -301,24 +301,24 @@ EOF
           git commit -m "chore: add live app embed page [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
 
-      - name: "Generate deployment metadata"
+      - name: Generate deployment metadata
         run: |
           TAGS="${{ steps.meta.outputs.tags }}"
           PRIMARY_TAG=$(echo "$TAGS" | head -n 1)
           TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          cat > deployment-metadata.json <<EOF
-{
-  "repository": "${{ github.repository }}",
-  "source_url": "https://github.com/${{ github.repository }}",
-  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
-  "deployment_strategy": "docker",
-  "docker_image": "$PRIMARY_TAG",
-  "status": "deployed",
-  "last_updated": "$TIMESTAMP"
-}
-EOF
+          cat > deployment-metadata.json <<-'EOF'
+          {
+            "repository": "${{ github.repository }}",
+            "source_url": "https://github.com/${{ github.repository }}",
+            "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+            "deployment_strategy": "docker",
+            "docker_image": "$PRIMARY_TAG",
+            "status": "deployed",
+            "last_updated": "$TIMESTAMP"
+          }
+          EOF
 
-      - name: "Upload deployment metadata"
+      - name: Upload deployment metadata
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
         with:
           name: app-deployment
@@ -332,27 +332,28 @@ EOF
     timeout-minutes: 10
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
 
-      - name: "Create Codespaces configuration"
+      - name: Create Codespaces configuration
         run: |
           mkdir -p .devcontainer
 
           if [ ! -f ".devcontainer/devcontainer.json" ]; then
-            cat > .devcontainer/devcontainer.json << EOF
-          {
-            "name": "${{ github.event.repository.name }} Development",
-            "image": "mcr.microsoft.com/devcontainers/universal:2",
-            "features": {
-              "ghcr.io/devcontainers/features/node:1": {},
-              "ghcr.io/devcontainers/features/python:1": {},
-              "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-            },
-            "postCreateCommand": "echo 'Environment ready!'",
-            "forwardPorts": [3000, 5000, 8000, 8080]
-          }
-          EOF
+            cat > .devcontainer/devcontainer.json <<- 'EOF'
+            {
+              "name": "${{ github.event.repository.name }} Development",
+              "image": "mcr.microsoft.com/devcontainers/universal:2",
+              "features": {
+                "ghcr.io/devcontainers/features/node:1": {},
+                "ghcr.io/devcontainers/features/python:1": {},
+                "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+              },
+              "postCreateCommand": "echo 'Environment ready!'",
+              "forwardPorts": [3000, 5000, 8000, 8080]
+            }
+            EOF
+          fi
           fi
 
           git config user.name "github-actions[bot]"
@@ -361,22 +362,22 @@ EOF
           git commit -m "chore: add Codespaces configuration [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
 
-      - name: "Generate deployment metadata"
+      - name: Generate deployment metadata
         run: |
           TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          cat > deployment-metadata.json <<EOF
-{
-  "repository": "${{ github.repository }}",
-  "source_url": "https://github.com/${{ github.repository }}",
-  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
-  "deployment_strategy": "codespaces",
-  "codespaces_url": "https://github.com/${{ github.repository }}/codespaces",
-  "status": "deployed",
-  "last_updated": "$TIMESTAMP"
-}
-EOF
+          cat > deployment-metadata.json <<-'EOF'
+          {
+            "repository": "${{ github.repository }}",
+            "source_url": "https://github.com/${{ github.repository }}",
+            "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+            "deployment_strategy": "codespaces",
+            "codespaces_url": "https://github.com/${{ github.repository }}/codespaces",
+            "status": "deployed",
+            "last_updated": "$TIMESTAMP"
+          }
+          EOF
 
-      - name: "Upload deployment metadata"
+      - name: Upload deployment metadata
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
         with:
           name: app-deployment
@@ -390,25 +391,25 @@ EOF
     timeout-minutes: 5
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
 
-      - name: "Generate deployment metadata"
+      - name: Generate deployment metadata
         run: |
           TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          cat > deployment-metadata.json <<EOF
-{
-  "repository": "${{ github.repository }}",
-  "source_url": "https://github.com/${{ github.repository }}",
-  "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
-  "deployment_strategy": "documentation-only",
-  "documentation_url": "${{ github.event.repository.html_url }}/blob/main/README.md",
-  "status": "documentation",
-  "last_updated": "$TIMESTAMP"
-}
-EOF
+          cat > deployment-metadata.json <<-'EOF'
+          {
+            "repository": "${{ github.repository }}",
+            "source_url": "https://github.com/${{ github.repository }}",
+            "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+            "deployment_strategy": "documentation-only",
+            "documentation_url": "${{ github.event.repository.html_url }}/blob/main/README.md",
+            "status": "documentation",
+            "last_updated": "$TIMESTAMP"
+          }
+          EOF
 
-      - name: "Upload deployment metadata"
+      - name: Upload deployment metadata
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4.5.0
         with:
           name: app-deployment

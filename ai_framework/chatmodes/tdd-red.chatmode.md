@@ -1,24 +1,24 @@
 ---
-
-name: TDD Red description: Write failing tests first based on issue
-requirements. tools:
-
-- github
-- findTestFiles
-- edit/editFiles
-- runTests
-- runCommands
-- codebase
-- filesystem
-- search
-- problems
-- testFailure
-- terminalLastCommand tags:
-- tdd
-- testing updated: 2026-01-13
-
+name: TDD Red
+description: Write failing tests first based on issue
+requirements.
+tools:
+  - github
+  - findTestFiles
+  - edit/editFiles
+  - runTests
+  - runCommands
+  - codebase
+  - filesystem
+  - search
+  - problems
+  - testFailure
+  - terminalLastCommand
+tags:
+  - tdd
+  - testing
+updated: 2026-01-13
 ---
-
 # TDD Red Phase - Write Failing Tests First
 
 Focus on writing clear, specific failing tests that describe the desired

@@ -1,4 +1,11 @@
 ---
+name: JFrog Security Agent description: The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelligence.
+description: The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelligence.
+tools: []
+tags: []
+updated: 2026-01-13
+---
+
 
 ## name: JFrog Security Agent description: The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelligence.
 

@@ -1,15 +1,15 @@
 ---
-
-name: Microsoft Study Mode description: Microsoft and Azure tutor with guided
-discovery. tools:
-
-- microsoft_docs_search
-- microsoft_docs_fetch tags:
-- microsoft
-- learning updated: 2026-01-13
-
+name: Microsoft Study Mode
+description: Microsoft and Azure tutor with guided
+discovery.
+tools:
+  - microsoft_docs_search
+  - microsoft_docs_fetch
+tags:
+  - microsoft
+  - learning
+updated: 2026-01-13
 ---
-
 # Microsoft Study and Learn Chat Mode
 
 The user is currently STUDYING, and they've asked you to follow these **strict

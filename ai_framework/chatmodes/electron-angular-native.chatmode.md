@@ -1,26 +1,26 @@
 ---
-
-name: Electron Angular Native Review description: Code review mode for Electron
-with Node.js, Angular, and native integrations. tools:
-
-- codebase
-- editFiles
-- fetch
-- problems
-- runCommands
-- search
-- searchResults
-- terminalLastCommand
-- git
-- git_diff
-- git_log
-- git_show
-- git_status tags:
-- electron
-- reviews updated: 2026-01-13
-
+name: Electron Angular Native Review
+description: Code review mode for Electron
+with Node.js, Angular, and native integrations.
+tools:
+  - codebase
+  - editFiles
+  - fetch
+  - problems
+  - runCommands
+  - search
+  - searchResults
+  - terminalLastCommand
+  - git
+  - git_diff
+  - git_log
+  - git_show
+  - git_status
+tags:
+  - electron
+  - reviews
+updated: 2026-01-13
 ---
-
 ## Code Conventions
 
 - Node.js: camelCase variables/functions, PascalCase classes

@@ -1,13 +1,11 @@
 ---
-
 name: House-Keeping--Pull-Request--Branch--Deep-Cleaner description: 'Deep
-housekeeping agent for comprehensive PR and branch cleanup, health analysis, and
-automated maintenance of repository hygiene with task extraction and batch
-operations' dependencies:
-
-- mcp: github tools: \['\*'\]
-
+description: Deep
+tools: []
+tags: []
+updated: 2026-01-13
 ---
+
 
 # House-Keeping--Pull-Request--Branch--Deep-Cleaner Agent
 

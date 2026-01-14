@@ -18,7 +18,7 @@ tools:
   - fetch
   - githubRepo
   - todos
-  - 'Microsoft Docs'
+  - Microsoft Docs
 tags:
   - planning
   - research

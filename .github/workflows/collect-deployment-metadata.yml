@@ -1,30 +1,30 @@
-name: "Collect Deployment Metadata"
+name: Collect Deployment Metadata
 
 on:
   workflow_run:
     workflows:
-      - "Deploy Live App to GitHub Pages"
+      - Deploy Live App to GitHub Pages
     types:
       - completed
   workflow_dispatch:
     inputs:
       run_id:
-        description: "Workflow run ID to ingest (from deploy-to-pages-live)"
+        description: Workflow run ID to ingest (from deploy-to-pages-live)
         required: false
         type: string
   workflow_call:
     inputs:
       run_id:
-        description: "Workflow run ID to ingest (from deploy-to-pages-live)"
+        description: Workflow run ID to ingest (from deploy-to-pages-live)
         required: false
         type: string
       repository:
-        description: "Repository name (for cross-repo calls)"
+        description: Repository name (for cross-repo calls)
         required: false
         type: string
 
 concurrency:
-  group: "collect-deployments-${{ github.run_id }}"
+  group: collect-deployments-${{ github.run_id }}
   cancel-in-progress: false
 
 permissions:
@@ -40,12 +40,12 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
 
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: "Resolve source run and repository"
+      - name: Resolve source run and repository
         id: resolve-run
         run: |
           # Determine the run_id
@@ -75,7 +75,7 @@ jobs:
           echo "Resolved run_id: $(cat $GITHUB_OUTPUT | grep run_id)"
           echo "Resolved repository: $(cat $GITHUB_OUTPUT | grep repository)"
 
-      - name: "Download deployment metadata artifact"
+      - name: Download deployment metadata artifact
         id: download-artifact
         continue-on-error: true
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # ratchet:actions/download-artifact@v4
@@ -85,7 +85,7 @@ jobs:
           run-id: ${{ steps.resolve-run.outputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Check artifact download"
+      - name: Check artifact download
         if: steps.download-artifact.outcome == 'failure'
         run: |
           echo "::warning::Failed to download artifact from run ${{ steps.resolve-run.outputs.run_id }}"
@@ -96,56 +96,55 @@ jobs:
           echo "Skipping metadata collection for this run."
           exit 0
 
-      - name: "Install Python dependencies"
+      - name: Install Python dependencies
         if: steps.download-artifact.outcome == 'success'
         run: pip install --disable-pip-version-check pyyaml
 
-      - name: "Validate deployment metadata"
+      - name: Validate deployment metadata
         id: validate
         if: steps.download-artifact.outcome == 'success'
         run: |
           set -euo pipefail
-          python <<'PY'
-import json
-import sys
-from pathlib import Path
-from datetime import datetime
+          python <<-'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from datetime import datetime
 
-artifact_path = Path("app-deployment/deployment-metadata.json")
-if not artifact_path.exists():
-    print("::error::deployment-metadata.json not found in artifact", file=sys.stderr)
-    sys.exit(1)
+          artifact_path = Path("app-deployment/deployment-metadata.json")
+          if not artifact_path.exists():
+              print("::error::deployment-metadata.json not found in artifact", file=sys.stderr)
+              sys.exit(1)
 
-# Load and validate the metadata
-with artifact_path.open() as f:
-    metadata = json.load(f)
+          # Load and validate the metadata
+          with artifact_path.open() as f:
+              metadata = json.load(f)
 
-# Required fields
-required_fields = ["repository", "deployment_strategy", "app_type", "status"]
-missing_fields = [field for field in required_fields if field not in metadata]
+          # Required fields
+          required_fields = ["repository", "deployment_strategy", "app_type", "status"]
+          missing_fields = [field for field in required_fields if field not in metadata]
 
-if missing_fields:
-    print(f"::error::Missing required fields: {', '.join(missing_fields)}", file=sys.stderr)
-    sys.exit(1)
+          if missing_fields:
+              print(f"::error::Missing required fields: {', '.join(missing_fields)}", file=sys.stderr)
+              sys.exit(1)
 
-# Normalize timestamp
-if "last_updated" not in metadata or not metadata["last_updated"]:
-    metadata["last_updated"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+          # Normalize timestamp
+          if "last_updated" not in metadata or not metadata["last_updated"]:
+              metadata["last_updated"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
-# Validation passed
-print("✅ Metadata validation passed")
-print(f"Repository: {metadata['repository']}")
-print(f"Strategy: {metadata['deployment_strategy']}")
-print(f"App Type: {metadata['app_type']}")
-print(f"Status: {metadata['status']}")
+          # Validation passed
+          print("✅ Metadata validation passed")
+          print(f"Repository: {metadata['repository']}")
+          print(f"Strategy: {metadata['deployment_strategy']}")
+          print(f"App Type: {metadata['app_type']}")
+          print(f"Status: {metadata['status']}")
 
-# Write validated metadata back
-with artifact_path.open('w') as f:
-    json.dump(metadata, f, indent=2)
+          # Write validated metadata back
+          with artifact_path.open('w') as f:
+              json.dump(metadata, f, indent=2)
+          PY
 
-PY
-
-      - name: "Trigger gallery index update"
+      - name: Trigger gallery index update
         if: steps.download-artifact.outcome == 'success' && steps.validate.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -164,7 +163,7 @@ PY
             exit 1
           fi
 
-      - name: "Summary"
+      - name: Summary
         if: always()
         run: |
           echo "## Deployment Metadata Collection" >> $GITHUB_STEP_SUMMARY

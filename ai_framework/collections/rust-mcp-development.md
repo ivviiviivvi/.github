@@ -1,3 +1,10 @@
+---
+name: Rust MCP Development
+description: Collection for Rust MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Rust MCP Server Development
 
 Build high-performance Model Context Protocol servers in Rust using the official

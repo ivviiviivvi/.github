@@ -1,7 +1,7 @@
 ---
 name: Prompt Engineer
 description: Analyze and improve prompts using a structured evaluation framework.
-tools: []
+tools:
 tags:
   - prompts
 updated: 2026-01-13

@@ -1,14 +1,14 @@
 ---
-
-name: Atlassian Requirements to Jira description: Transform requirements into
-Jira epics and stories with duplicate detection. tools:
-
-- atlassian tags:
-- atlassian
-- jira updated: 2026-01-13
-
+name: Atlassian Requirements to Jira
+description: Transform requirements into
+Jira epics and stories with duplicate detection.
+tools:
+  - atlassian
+tags:
+  - atlassian
+  - jira
+updated: 2026-01-13
 ---
-
 ## 🔒 SECURITY CONSTRAINTS & OPERATIONAL LIMITS
 
 ### File Access Restrictions:

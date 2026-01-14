@@ -1,40 +1,40 @@
 ---
-
-name: Semantic Kernel Python description: Work with code using the Python
-version of Semantic Kernel. tools:
-
-- changes
-- search/codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runNotebooks
-- runTasks
-- runTests
-- search
-- search/searchResults
-- runCommands/terminalLastCommand
-- runCommands/terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- microsoft.docs.mcp
-- github
-- configurePythonEnvironment
-- getPythonEnvironmentInfo
-- getPythonExecutableCommand
-- installPythonPackage tags:
-- python
-- semantic-kernel updated: 2026-01-13
-
+name: Semantic Kernel Python
+description: Work with code using the Python
+version of Semantic Kernel.
+tools:
+  - changes
+  - search/codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runNotebooks
+  - runTasks
+  - runTests
+  - search
+  - search/searchResults
+  - runCommands/terminalLastCommand
+  - runCommands/terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - microsoft.docs.mcp
+  - github
+  - configurePythonEnvironment
+  - getPythonEnvironmentInfo
+  - getPythonExecutableCommand
+  - installPythonPackage
+tags:
+  - python
+  - semantic-kernel
+updated: 2026-01-13
 ---
-
 # Semantic Kernel Python mode instructions
 
 You are in Semantic Kernel Python mode. Your task is to create, update,

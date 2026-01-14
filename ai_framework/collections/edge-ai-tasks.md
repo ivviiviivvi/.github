@@ -1,3 +1,10 @@
+---
+name: Edge AI Tasks
+description: Collection for Edge AI Tasks.
+tags: []
+updated: 2026-01-13
+---
+
 # Tasks by microsoft/edge-ai
 
 Task Researcher and Task Planner for intermediate to expert users and large

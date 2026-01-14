@@ -1,3 +1,10 @@
+---
+name: Azure Cloud Development
+description: Collection for Azure Cloud Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Azure & Cloud Development
 
 Comprehensive Azure cloud development tools including Infrastructure as Code,

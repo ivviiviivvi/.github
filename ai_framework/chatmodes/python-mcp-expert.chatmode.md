@@ -2,7 +2,7 @@
 name: Python MCP Expert
 description: Expert assistant for developing MCP servers in Python.
 model: GPT-4.1
-tools: []
+tools:
 tags:
   - python
   - mcp

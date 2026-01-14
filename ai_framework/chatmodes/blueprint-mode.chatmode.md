@@ -1,12 +1,14 @@
 ---
-
-name: Blueprint Mode description: Executes structured workflows with strict
-correctness and maintainability. model: GPT-5 (copilot) tools: \[\] tags:
-
-- workflow updated: 2026-01-13
-
+name: Blueprint Mode
+description: Executes structured workflows with strict
+correctness and maintainability.
+model: GPT-5 (copilot)
+tools:
+  - \
+tags:
+  - workflow
+updated: 2026-01-13
 ---
-
 ## model: GPT-5 (copilot) description: 'Executes structured workflows (Debug, Express, Main, Loop) with strict correctness and maintainability. Enforces an improved tool usage policy, never assumes facts, prioritizes reproducible solutions, self-correction, and edge-case handling.'
 
 # Blueprint Mode v39

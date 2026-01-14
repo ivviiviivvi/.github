@@ -1,3 +1,10 @@
+---
+name: Python MCP Development
+description: Collection for Python MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Python MCP Server Development
 
 Complete toolkit for building Model Context Protocol (MCP) servers in Python

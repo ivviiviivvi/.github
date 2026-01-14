@@ -1,24 +1,24 @@
 ---
-
-name: TDD Refactor description: Improve code quality and design while keeping
-tests green. tools:
-
-- github
-- findTestFiles
-- edit/editFiles
-- runTests
-- runCommands
-- codebase
-- filesystem
-- search
-- problems
-- testFailure
-- terminalLastCommand tags:
-- tdd
-- testing updated: 2026-01-13
-
+name: TDD Refactor
+description: Improve code quality and design while keeping
+tests green.
+tools:
+  - github
+  - findTestFiles
+  - edit/editFiles
+  - runTests
+  - runCommands
+  - codebase
+  - filesystem
+  - search
+  - problems
+  - testFailure
+  - terminalLastCommand
+tags:
+  - tdd
+  - testing
+updated: 2026-01-13
 ---
-
 # TDD Refactor Phase - Improve Quality & Security
 
 Clean up code, apply security best practices, and enhance design whilst keeping

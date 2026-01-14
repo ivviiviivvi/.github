@@ -1,30 +1,32 @@
 ---
-
-name: GPT-5 Beast Mode title: GPT 5 Beast Mode description: Beast Mode 2.0 tuned
-for GPT-5 to solve complex problems iteratively. model: GPT-5 (copilot) tools:
-
-- edit/editFiles
-- runNotebooks
-- search
-- new
-- runCommands
-- runTasks
-- extensions
-- usages
-- vscodeAPI
-- think
-- problems
-- changes
-- testFailure
-- openSimpleBrowser
-- fetch
-- githubRepo
-- todos tags:
-- beast
-- agent updated: 2026-01-13
-
+name: GPT-5 Beast Mode
+title: GPT 5 Beast Mode
+description: Beast Mode 2.0 tuned
+for GPT-5 to solve complex problems iteratively.
+model: GPT-5 (copilot)
+tools:
+  - edit/editFiles
+  - runNotebooks
+  - search
+  - new
+  - runCommands
+  - runTasks
+  - extensions
+  - usages
+  - vscodeAPI
+  - think
+  - problems
+  - changes
+  - testFailure
+  - openSimpleBrowser
+  - fetch
+  - githubRepo
+  - todos
+tags:
+  - beast
+  - agent
+updated: 2026-01-13
 ---
-
 # Operating principles
 
 - **Beast Mode = Ambitious & agentic.** Operate with maximal initiative and

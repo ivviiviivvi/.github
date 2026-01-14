@@ -2,7 +2,7 @@
 name: Java MCP Expert
 description: Expert assistance for building MCP servers in Java with reactive streams and Spring Boot.
 model: GPT-4.1
-tools: []
+tools:
 tags:
   - java
   - mcp

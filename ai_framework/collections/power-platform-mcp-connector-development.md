@@ -1,3 +1,10 @@
+---
+name: Power Platform MCP Connector Development
+description: Collection for Power Platform MCP Connector Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Power Platform MCP Connector Development
 
 Complete toolkit for developing Power Platform custom connectors with Model

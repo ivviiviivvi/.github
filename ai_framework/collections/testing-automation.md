@@ -1,3 +1,10 @@
+---
+name: Testing Automation
+description: Collection for Testing Automation.
+tags: []
+updated: 2026-01-13
+---
+
 # Testing & Test Automation
 
 Comprehensive collection for writing tests, test automation, and test-driven

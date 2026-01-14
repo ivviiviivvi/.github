@@ -1,3 +1,10 @@
+---
+name: Php MCP Development
+description: Collection for Php MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # PHP MCP Server Development
 
 Comprehensive resources for building Model Context Protocol servers using the

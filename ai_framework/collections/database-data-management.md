@@ -1,3 +1,10 @@
+---
+name: Database Data Management
+description: Collection for Database Data Management.
+tags: []
+updated: 2026-01-13
+---
+
 # Database & Data Management
 
 Database administration, SQL optimization, and data management tools for

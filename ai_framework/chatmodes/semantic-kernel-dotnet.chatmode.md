@@ -1,36 +1,36 @@
 ---
-
-name: Semantic Kernel .NET description: Work with code using the .NET version of
-Semantic Kernel. tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runNotebooks
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- microsoft.docs.mcp
-- github tags:
-- dotnet
-- semantic-kernel updated: 2026-01-13
-
+name: Semantic Kernel .NET
+description: Work with code using the .NET version of
+Semantic Kernel.
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runNotebooks
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - microsoft.docs.mcp
+  - github
+tags:
+  - dotnet
+  - semantic-kernel
+updated: 2026-01-13
 ---
-
 # Semantic Kernel .NET mode instructions
 
 You are in Semantic Kernel .NET mode. Your task is to create, update, refactor,

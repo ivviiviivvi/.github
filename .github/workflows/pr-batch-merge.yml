@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       batch_label:
-        description: 'Batch label to merge (e.g., batch:api-update)'
+        description: Batch label to merge (e.g., batch:api-update)
         required: true
         type: string
 
@@ -125,21 +125,24 @@ jobs:
 
           # Comment on all PRs in batch
           jq -r '.[].number' batch_prs.json | while read -r pr_num; do
-            gh pr comment $pr_num --body "⏸️ **Batch Merge Paused**
+            cat > /tmp/pr_comment.md <<- 'EOF_BATCH'
+            ⏸️ **Batch Merge Paused**
 
-Batch label: \`$BATCH_LABEL\`
+            Batch label: `$BATCH_LABEL`
 
-Not all PRs in this batch are ready to merge:
+            Not all PRs in this batch are ready to merge:
 
-$BLOCKING
+            $BLOCKING
 
-**To proceed:**
-- Fix blocking issues in each PR
-- Ensure all CI checks pass
-- Resolve any merge conflicts
-- Re-trigger batch merge with: \`/merge-batch $(echo $BATCH_LABEL | sed 's/batch://')\`
+            **To proceed:**
+            - Fix blocking issues in each PR
+            - Ensure all CI checks pass
+            - Resolve any merge conflicts
+            - Re-trigger batch merge with: `/merge-batch $(echo $BATCH_LABEL | sed 's/batch://')`
 
-See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details."
+            See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details.
+            EOF_BATCH
+            gh pr comment $pr_num --body-file /tmp/pr_comment.md
           done
 
           exit 1
@@ -198,36 +201,42 @@ See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflo
               MERGED_COUNT=$((MERGED_COUNT + 1))
 
               # Comment on successful merge
-              gh pr comment $PR_NUM --body "✅ **Batch Merged**
+              cat > /tmp/merge_success.md <<- 'EOF_SUCCESS'
+              ✅ **Batch Merged**
 
-This PR was successfully merged as part of batch: \`$BATCH_LABEL\`
+              This PR was successfully merged as part of batch: `$BATCH_LABEL`
 
-Merge order: $MERGE_ORDER
-PRs merged in this batch: ${{ steps.batch_prs.outputs.count }}
+              Merge order: $MERGE_ORDER
+              PRs merged in this batch: ${{ steps.batch_prs.outputs.count }}
 
-_Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_"
+              _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+              EOF_SUCCESS
+              gh pr comment $PR_NUM --body-file /tmp/merge_success.md
 
             else
               echo "❌ Failed to merge PR #$PR_NUM"
               FAILED_PRS="${FAILED_PRS}\n- PR #$PR_NUM: $PR_TITLE"
 
               # Comment on failure
-              gh pr comment $PR_NUM --body "❌ **Batch Merge Failed**
+              cat > /tmp/merge_failure.md <<- 'EOF_FAILURE'
+              ❌ **Batch Merge Failed**
 
-This PR could not be merged as part of batch: \`$BATCH_LABEL\`
+              This PR could not be merged as part of batch: `$BATCH_LABEL`
 
-**Possible reasons:**
-- Merge conflict after earlier PRs in batch were merged
-- CI checks failed after rebase
-- Branch protection rules
+              **Possible reasons:**
+              - Merge conflict after earlier PRs in batch were merged
+              - CI checks failed after rebase
+              - Branch protection rules
 
-**Next steps:**
-- Rebase on \`$BASE_BRANCH\`
-- Resolve conflicts
-- Ensure CI passes
-- Try merging individually or as part of new batch
+              **Next steps:**
+              - Rebase on `$BASE_BRANCH`
+              - Resolve conflicts
+              - Ensure CI passes
+              - Try merging individually or as part of new batch
 
-_Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_"
+              _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+              EOF_FAILURE
+              gh pr comment $PR_NUM --body-file /tmp/merge_failure.md
             fi
           done
 
@@ -254,32 +263,34 @@ _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_"
           # Get details of all PRs in batch
           PR_LIST=$(jq -r '.[] | "- #\(.number): \(.title)"' batch_prs.json)
 
-          SUMMARY_BODY="# Batch Merge Summary: $BATCH_NAME
+          cat > /tmp/batch_summary.md <<- 'EOF_SUMMARY'
+          # Batch Merge Summary: $BATCH_NAME
 
-**Batch Label:** \`$BATCH_LABEL\`
-**Date:** $(date +'%Y-%m-%d %H:%M UTC')
-**Total PRs:** ${{ steps.batch_prs.outputs.count }}
+          **Batch Label:** `$BATCH_LABEL`
+          **Date:** $(date +'%Y-%m-%d %H:%M UTC')
+          **Total PRs:** ${{ steps.batch_prs.outputs.count }}
 
-## PRs in Batch
+          ## PRs in Batch
 
-$PR_LIST
+          $PR_LIST
 
-## Outcome
+          ## Outcome
 
-All PRs in this batch have been processed. Check individual PRs for merge status.
+          All PRs in this batch have been processed. Check individual PRs for merge status.
 
-## Details
+          ## Details
 
-- Merge order: ${{ steps.merge_order.outputs.order }}
-- Base branch: $(jq -r '.[0].baseRefName' batch_prs.json)
-- Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - Merge order: ${{ steps.merge_order.outputs.order }}
+          - Base branch: $(jq -r '.[0].baseRefName' batch_prs.json)
+          - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
----
-_Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_"
+          ---
+          _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+          EOF_SUMMARY
 
           gh issue create \
             --title "Batch Merge Summary: $BATCH_NAME ($(date +'%Y-%m-%d'))" \
-            --body "$SUMMARY_BODY" \
+            --body-file /tmp/batch_summary.md \
             --label "batch-merge,automation"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -339,19 +350,22 @@ _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_"
 
               # Comment on all PRs in batch
               echo "$PR_DATA" | jq -r '.[].number' | while read -r pr_num; do
-                gh pr comment $pr_num --body "✅ **Batch Ready for Merge**
+                cat > /tmp/batch_ready.md <<- 'EOF_READY'
+                ✅ **Batch Ready for Merge**
 
-All PRs in batch \`$batch_label\` are ready to merge!
+                All PRs in batch `$batch_label` are ready to merge!
 
-**To merge this batch:**
-\`\`\`
-/merge-batch $(echo $batch_label | sed 's/batch://')
-\`\`\`
+                **To merge this batch:**
+                ```
+                /merge-batch $(echo $batch_label | sed 's/batch://')
+                ```
 
-Or manually trigger the workflow:
-Actions → Batch Merge Related PRs → Run workflow → Enter: \`$batch_label\`
+                Or manually trigger the workflow:
+                Actions → Batch Merge Related PRs → Run workflow → Enter: `$batch_label`
 
-See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details."
+                See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details.
+                EOF_READY
+                gh pr comment $pr_num --body-file /tmp/batch_ready.md
               done
             else
               echo "⏳ Batch not yet ready"

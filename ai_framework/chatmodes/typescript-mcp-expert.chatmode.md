@@ -2,7 +2,7 @@
 name: TypeScript MCP Expert
 description: Expert assistant for developing MCP servers in TypeScript.
 model: GPT-4.1
-tools: []
+tools:
 tags:
   - typescript
   - mcp

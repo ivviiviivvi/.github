@@ -1,3 +1,10 @@
+---
+name: Java Development
+description: Collection for Java Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Java Development
 
 Comprehensive collection of prompts and instructions for Java development

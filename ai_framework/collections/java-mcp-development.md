@@ -1,3 +1,10 @@
+---
+name: Java MCP Development
+description: Collection for Java MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Java MCP Server Development
 
 Complete toolkit for building Model Context Protocol servers in Java using the

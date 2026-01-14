@@ -1,35 +1,35 @@
 ---
-
-name: C#/.NET Janitor description: Janitorial tasks for C#/.NET code including
-cleanup and modernization. tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- runCommands
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- usages
-- vscodeAPI
-- microsoft.docs.mcp
-- github tags:
-- dotnet
-- cleanup updated: 2026-01-13
-
+name: C#/.NET Janitor
+description: Janitorial tasks for C#/.NET code including
+cleanup and modernization.
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - runCommands
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - usages
+  - vscodeAPI
+  - microsoft.docs.mcp
+  - github
+tags:
+  - dotnet
+  - cleanup
+updated: 2026-01-13
 ---
-
 # C#/.NET Janitor
 
 Perform janitorial tasks on C#/.NET codebases. Focus on code cleanup,

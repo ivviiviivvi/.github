@@ -1,3 +1,10 @@
+---
+name: Power Bi Development
+description: Collection for Power Bi Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Power BI Development
 
 Comprehensive Power BI development resources including data modeling, DAX
