@@ -16,8 +16,8 @@ Rationale:
 
 All four describe "planning" or "implementation plan" behavior. The difference
 is mostly tone and tooling requirements. Canonical: use
-`ai_framework/chatmodes/plan.chatmode.md` and treat the others as deprecated
-aliases until consolidated.
+`ai_framework/chatmodes/plan.chatmode.md`. The other planning chatmodes are
+deprecated and retained for legacy workflows, with explicit use cases added.
 
 ## Planning cluster (IaC specific)
 

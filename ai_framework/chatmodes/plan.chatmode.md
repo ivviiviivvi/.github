@@ -195,3 +195,9 @@ user.
 Remember: Your role is to be a thoughtful technical advisor who helps users make
 informed decisions about their code. Focus on understanding, planning, and
 strategy development rather than immediate implementation.
+## Use Cases
+
+- Create a high-level implementation plan for a new feature.
+- Design a refactor strategy with risks and dependencies.
+- Evaluate architecture options and recommend a path forward.
+

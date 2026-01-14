@@ -37,3 +37,7 @@ compliance and fix efficiency**:
 1. **Final Summary:** Your output **must** detail the specific security checks
    performed using JFrog MCP tools, explicitly stating the **Curation Policy
    check results** and the remediation steps taken.
+## Usage Example
+
+Example prompt: "Use the JFrog Security Agent description: The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelligence. agent to assess the task and propose next steps."
+

@@ -29,6 +29,7 @@ tools:
 tags:
   - planning
   - deprecated
+  - archived
 updated: 2026-01-13
 ---
 # Task Planner Instructions
@@ -475,3 +476,9 @@ When finished, you WILL provide:
 - **Planning Status**: \[New/Continued\]
 - **Files Created**: List of planning files created
 - **Ready for Implementation**: \[Yes/No\] with assessment
+## Use Cases
+
+- Research-driven planning that outputs tracking artifacts.
+- Multi-phase plans with detailed traceability requirements.
+
+Archived: use `ai_framework/chatmodes/plan.chatmode.md`.

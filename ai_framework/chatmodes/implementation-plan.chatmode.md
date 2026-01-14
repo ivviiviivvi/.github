@@ -26,6 +26,7 @@ tools:
 tags:
   - planning
   - deprecated
+  - archived
 updated: 2026-01-13
 ---
 # Implementation Plan Generation Mode
@@ -204,3 +205,9 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 [Link to related spec 1]
 [Link to relevant external documentation]
 ```
+## Use Cases
+
+- Deterministic implementation plans for AI-to-AI execution.
+- Large refactors requiring phase-based task definitions.
+
+Archived: use `ai_framework/chatmodes/plan.chatmode.md`.

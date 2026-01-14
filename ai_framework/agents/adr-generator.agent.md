@@ -225,3 +225,7 @@ Your work is complete when:
 1. Implementation notes provide actionable guidance
 1. Document follows all formatting standards
 1. Quality checklist items are satisfied
+## Usage Example
+
+Example prompt: "Use the ADR Generator description: Expert agent for creating comprehensive Architectural Decision Records (ADRs) with structured formatting optimized for AI consumption and human readability. agent to assess the task and propose next steps."
+

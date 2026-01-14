@@ -233,3 +233,7 @@ When invoked:
 - Try to verify that the outputs (e.g. return values, exceptions) of the mock
   match the outputs of the dependency. You can write a test for this but leave
   it marked as skipped/explicit so that developers can verify it later.
+## Usage Example
+
+Example prompt: "Use the C# Expert description: An agent designed to assist with software agent to assess the task and propose next steps."
+
