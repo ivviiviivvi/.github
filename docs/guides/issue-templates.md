@@ -5,18 +5,25 @@ current validation status, and follow-up items.
 
 ## Issue forms (YAML)
 
-- accessibility_issue.yml: Accessibility issues; labels: accessibility, needs-triage
-- best-practices-review.yml: Best practices review; labels: best-practices, review, enhancement
+- accessibility_issue.yml: Accessibility issues; labels: accessibility,
+  needs-triage
+- best-practices-review.yml: Best practices review; labels: best-practices,
+  review, enhancement
 - bug_report.yml: Bug reports; labels: bug, triage
-- community-health-check.yml: Community health checks; labels: community, health-check, documentation
+- community-health-check.yml: Community health checks; labels: community,
+  health-check, documentation
 - documentation.yml: Documentation updates; labels: documentation, triage
 - feature_request.yml: Feature requests; labels: enhancement, triage
-- infrastructure.yml: Infrastructure or DevOps requests; labels: infrastructure, devops, needs-triage
+- infrastructure.yml: Infrastructure or DevOps requests; labels: infrastructure,
+  devops, needs-triage
 - performance_issue.yml: Performance issues; labels: performance, needs-triage
-- security_vulnerability.yml: Low-severity security reports; labels: security, low-priority
+- security_vulnerability.yml: Low-severity security reports; labels: security,
+  low-priority
 - task.yml: Tasks; labels: task
-- tech_debt.yml: Technical debt or refactoring; labels: tech-debt, refactoring, needs-triage
-- walkthrough-request.yml: Walkthrough requests; labels: walkthrough, feature-request, documentation
+- tech_debt.yml: Technical debt or refactoring; labels: tech-debt, refactoring,
+  needs-triage
+- walkthrough-request.yml: Walkthrough requests; labels: walkthrough,
+  feature-request, documentation
 
 ## Legacy markdown templates
 
@@ -32,7 +39,8 @@ be fixed or removed to avoid confusion:
 ## Validation checklist
 
 - YAML issue forms parse cleanly and include name, description, and body.
-- Body items include type and id (non-markdown types) and attributes with labels.
+- Body items include type and id (non-markdown types) and attributes with
+  labels.
 - config.yml contains contact_links with valid URLs (no placeholders).
 - Labels are defined for each issue form.
 - Logs or attachment fields include a warning against sharing sensitive data.
@@ -42,9 +50,8 @@ be fixed or removed to avoid confusion:
 
 - YAML issue forms: OK (12 files).
 - config.yml: OK (3 contact links).
-- Markdown templates: invalid front matter in bug_report.md, custom.md,
-  documentation.md, feature_request.md, question.md.
-- Manual check: bug_report.yml logs field does not include a PII warning.
+- Markdown templates: OK (front matter validated).
+- Manual check: bug_report.yml logs field includes a PII warning.
 - Security template is public low-severity only; ensure private advisory contact
   link remains in config.yml.
 
