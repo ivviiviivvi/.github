@@ -21,15 +21,17 @@
 
 ## Overview
 
-This guide provides comprehensive security best practices for all repositories in the ivviiviivvi organization. All contributors must follow these guidelines to maintain the security posture of our projects.
+This guide provides comprehensive security best practices for all repositories
+in the ivviiviivvi organization. All contributors must follow these guidelines
+to maintain the security posture of our projects.
 
 ### Security Principles
 
 1. **Defense in Depth**: Multiple layers of security controls
-2. **Least Privilege**: Minimal necessary permissions
-3. **Fail Securely**: Security-first error handling
-4. **Privacy by Design**: PII protection built-in
-5. **Continuous Monitoring**: Ongoing security validation
+1. **Least Privilege**: Minimal necessary permissions
+1. **Fail Securely**: Security-first error handling
+1. **Privacy by Design**: PII protection built-in
+1. **Continuous Monitoring**: Ongoing security validation
 
 ---
 
@@ -42,13 +44,13 @@ This guide provides comprehensive security best practices for all repositories i
 1. **Navigate to Security Advisories**:
    - Go to: <https://github.com/ivviiviivvi/.github/security/advisories/new>
 
-2. **Fill Out the Advisory Form**:
+1. **Fill Out the Advisory Form**:
    - Provide detailed description of the vulnerability
    - Include steps to reproduce
    - Assess potential impact
    - Suggest mitigation if known
 
-3. **Wait for Response**:
+1. **Wait for Response**:
    - Security team will acknowledge within 48 hours
    - We will work with you to validate and fix the issue
    - Credit will be provided in security advisories
@@ -114,7 +116,7 @@ The `detect-secrets` pre-commit hook automatically scans staged files:
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ['--baseline', '.secrets.baseline']
+      args: ["--baseline", ".secrets.baseline"]
 ```
 
 #### GitHub Secret Scanning
@@ -146,11 +148,11 @@ git commit -m "chore: update secrets baseline"
 **Auditing Process:**
 
 1. Run: `detect-secrets audit .secrets.baseline`
-2. For each finding:
+1. For each finding:
    - Press `y` if it's a real secret (remove it!)
    - Press `n` if it's a false positive (keep in baseline)
    - Press `s` to skip decision
-3. Save changes when done
+1. Save changes when done
 
 ### Environment Variables
 
@@ -173,11 +175,11 @@ git commit -m "chore: update secrets baseline"
 If a secret is committed:
 
 1. **Immediately Rotate**: Change the secret in all systems
-2. **Remove from History**: Use `git filter-repo` or BFG Repo-Cleaner
-3. **Force Push**: Update remote repository
-4. **Notify Team**: Inform all contributors of the breach
-5. **Update Baseline**: Remove from `.secrets.baseline` if present
-6. **Audit Access**: Check for unauthorized access using the secret
+1. **Remove from History**: Use `git filter-repo` or BFG Repo-Cleaner
+1. **Force Push**: Update remote repository
+1. **Notify Team**: Inform all contributors of the breach
+1. **Update Baseline**: Remove from `.secrets.baseline` if present
+1. **Audit Access**: Check for unauthorized access using the secret
 
 ---
 
@@ -357,7 +359,7 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
-    
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -372,13 +374,13 @@ updates:
 ```yaml
 # Pin to specific versions
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.5.0  # ✅ Specific version
+  rev: v4.5.0 # ✅ Specific version
   hooks:
     - id: trailing-whitespace
 
 # Avoid floating versions
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: master  # ❌ Mutable reference
+  rev: master # ❌ Mutable reference
 ```
 
 **Python Dependencies:**
@@ -433,21 +435,21 @@ Security-focused hooks in `.pre-commit-config.yaml`:
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ['--baseline', '.secrets.baseline']
+      args: ["--baseline", ".secrets.baseline"]
 
 # Python security
 - repo: https://github.com/PyCQA/bandit
   rev: 1.7.5
   hooks:
     - id: bandit
-      args: ['-c', '.bandit']
+      args: ["-c", ".bandit"]
 
 # Dependency security
 - repo: https://github.com/pyupio/safety
   rev: 2.3.5
   hooks:
     - id: safety
-      args: ['--ignore', '51457']
+      args: ["--ignore", "51457"]
 ```
 
 ### GitHub Security Features
@@ -490,27 +492,27 @@ Enable these features for all repositories:
    - User reports
    - Internal discovery
 
-2. **Initial Assessment**
+1. **Initial Assessment**
    - Validate the issue
    - Assess severity and impact
    - Determine scope
 
-3. **Containment**
+1. **Containment**
    - Isolate affected systems
    - Rotate compromised credentials
    - Block malicious access
 
-4. **Eradication**
+1. **Eradication**
    - Remove vulnerabilities
    - Apply patches
    - Verify fix
 
-5. **Recovery**
+1. **Recovery**
    - Restore services
    - Monitor for recurrence
    - Verify normal operation
 
-6. **Post-Incident**
+1. **Post-Incident**
    - Document lessons learned
    - Update security measures
    - Notify affected parties
@@ -554,7 +556,8 @@ Enable these features for all repositories:
 
 - [SECURITY.md](../SECURITY.md) - Security disclosure policy
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
-- [Dependency Management Guide](dependency-management.md) - Dependency best practices
+- [Dependency Management Guide](dependency-management.md) - Dependency best
+  practices
 
 ### External Resources
 
@@ -574,8 +577,10 @@ Enable these features for all repositories:
 
 ## Questions or Concerns?
 
-- **Security Issues**: Use [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
-- **General Questions**: Open a [discussion](https://github.com/ivviiviivvi/.github/discussions)
+- **Security Issues**: Use
+  [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+- **General Questions**: Open a
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)
 - **Documentation Improvements**: Submit a [pull request](../CONTRIBUTING.md)
 
 ---

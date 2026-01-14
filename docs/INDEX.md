@@ -77,6 +77,24 @@ New to this repository? Start here:
 - [PR_AUTOMATION_GUIDE.md](guides/PR_AUTOMATION_GUIDE.md) - PR automation
 - [PR_AUTOMATION_QUICK_REF.md](guides/PR_AUTOMATION_QUICK_REF.md) - Quick ref
 
+### Monitoring & Operations ⭐ Phase 9
+
+- [monitoring.md](guides/monitoring.md) - ⭐ Complete monitoring guide (450+
+  lines)
+- [testing-best-practices.md](guides/testing-best-practices.md) - ⭐ Testing
+  standards (600+ lines)
+
+### Developer Onboarding ⭐ Phase 10
+
+- [NEW_CONTRIBUTOR_GUIDE.md](guides/NEW_CONTRIBUTOR_GUIDE.md) - ⭐ Complete
+  onboarding (600+ lines)
+- [common-tasks-runbook.md](guides/common-tasks-runbook.md) - ⭐ Daily operations
+  (550+ lines)
+- [best-practices.md](guides/best-practices.md) - ⭐ Consolidated standards (550+
+  lines)
+- [examples-and-anti-patterns.md](guides/examples-and-anti-patterns.md) - ⭐
+  Learn by example (700+ lines)
+
 ### Best Practices
 
 - [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) - General best practices

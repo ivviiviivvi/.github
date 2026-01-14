@@ -1,6 +1,7 @@
 # Dependency Management Guide
 
-> **Best practices for managing dependencies across the ivviiviivvi organization**
+> **Best practices for managing dependencies across the ivviiviivvi
+> organization**
 
 **Last Updated:** 2026-01-14
 
@@ -22,7 +23,8 @@
 
 ## Overview
 
-This guide establishes standards for dependency management across all projects in the ivviiviivvi organization. Proper dependency management ensures:
+This guide establishes standards for dependency management across all projects
+in the ivviiviivvi organization. Proper dependency management ensures:
 
 - **Security**: Known vulnerabilities are promptly addressed
 - **Stability**: Predictable builds and deployments
@@ -36,21 +38,21 @@ This guide establishes standards for dependency management across all projects i
 ### Core Principles
 
 1. **Pin Everything**: All dependencies should specify exact versions
-2. **Update Regularly**: Keep dependencies current with security patches
-3. **Minimize Dependencies**: Only add what's truly needed
-4. **Audit Dependencies**: Regularly review for security vulnerabilities
-5. **Document Reasons**: Explain why each dependency is needed
+1. **Update Regularly**: Keep dependencies current with security patches
+1. **Minimize Dependencies**: Only add what's truly needed
+1. **Audit Dependencies**: Regularly review for security vulnerabilities
+1. **Document Reasons**: Explain why each dependency is needed
 
 ### Dependency Decision Matrix
 
-| Factor | Add Dependency | Use Standard Library |
-|--------|---------------|----------------------|
-| Core functionality | ✅ | ✅ (preferred) |
-| Simple utility | ❌ | ✅ |
-| Complex algorithm | ✅ | ❌ |
-| One-time use | ❌ | ✅ |
-| Well-maintained | ✅ | N/A |
-| Security-critical | Evaluate carefully | ✅ (preferred) |
+| Factor             | Add Dependency     | Use Standard Library |
+| ------------------ | ------------------ | -------------------- |
+| Core functionality | ✅                 | ✅ (preferred)       |
+| Simple utility     | ❌                 | ✅                   |
+| Complex algorithm  | ✅                 | ❌                   |
+| One-time use       | ❌                 | ✅                   |
+| Well-maintained    | ✅                 | N/A                  |
+| Security-critical  | Evaluate carefully | ✅ (preferred)       |
 
 ---
 
@@ -141,7 +143,7 @@ updates:
       - "github-actions"
     reviewers:
       - "security-team"
-    
+
   # Python dependencies
   - package-ecosystem: "pip"
     directory: "/"
@@ -155,7 +157,7 @@ updates:
     allow:
       - dependency-type: "direct"
       - dependency-type: "indirect"
-    
+
   # Node.js dependencies
   - package-ecosystem: "npm"
     directory: "/"
@@ -178,16 +180,16 @@ When Dependabot creates a PR:
    - Security scan validates no new vulnerabilities
    - Pre-commit hooks validate code quality
 
-2. **Manual Review**:
+1. **Manual Review**:
    - Check CHANGELOG for breaking changes
    - Review security advisory (if present)
    - Validate test coverage
 
-3. **Approval**:
+1. **Approval**:
    - Minor/patch updates: Auto-merge if tests pass
    - Major updates: Manual review required
 
-4. **Merge Strategy**:
+1. **Merge Strategy**:
 
    ```
    # Batch similar updates
@@ -210,7 +212,7 @@ groups:
       - "pytest*"
       - "coverage*"
       - "mock*"
-  
+
   # Group GitHub Actions
   github-actions:
     patterns:
@@ -229,17 +231,17 @@ Pre-commit hooks have their own dependencies that must be managed:
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0  # ✅ Pin to specific tag
+    rev: v4.5.0 # ✅ Pin to specific tag
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-      
+
   - repo: https://github.com/psf/black
-    rev: 23.12.1  # ✅ Pin to specific tag
+    rev: 23.12.1 # ✅ Pin to specific tag
     hooks:
       - id: black
-        additional_dependencies:  # ⚠️ These need pinning too!
+        additional_dependencies: # ⚠️ These need pinning too!
           - click==8.1.7
 ```
 
@@ -267,8 +269,8 @@ Some hooks require `additional_dependencies`:
   hooks:
     - id: mypy
       additional_dependencies:
-        - types-requests  # No version!
-        - types-all       # Can pull yanked packages!
+        - types-requests # No version!
+        - types-all # Can pull yanked packages!
 ```
 
 ### Updating Pre-commit Hooks
@@ -299,7 +301,8 @@ git commit -m "chore: update pre-commit hooks"
 
 **Why SHA Pinning?**
 
-GitHub Action tags are mutable - they can be moved to point to different code. SHA pinning ensures immutability:
+GitHub Action tags are mutable - they can be moved to point to different code.
+SHA pinning ensures immutability:
 
 ```yaml
 # ❌ BAD - Tags can be moved
@@ -367,10 +370,10 @@ Be extra cautious with third-party actions:
 
 ```yaml
 # Verify publisher and stars
-- uses: octokit/request-action@v2.x  # ⚠️ Evaluate carefully
+- uses: octokit/request-action@v2.x # ⚠️ Evaluate carefully
 
 # Prefer official actions when available
-- uses: actions/github-script@v7  # ✅ Official action
+- uses: actions/github-script@v7 # ✅ Official action
 ```
 
 **Vetting Checklist:**
@@ -626,20 +629,20 @@ Document dependencies with known issues that can't be immediately fixed:
    ```bash
    # Python
    pip-audit
-   
+
    # Node.js
    npm audit
-   
+
    # Go
    go list -m all | nancy sleuth
    ```
 
-2. **Review Dependabot Alerts:**
+1. **Review Dependabot Alerts:**
    - Check GitHub Security tab
    - Verify no open critical issues
    - Document exceptions
 
-3. **Update Pinned Actions:**
+1. **Update Pinned Actions:**
 
    ```bash
    ratchet update .github/workflows/*.yml
@@ -647,7 +650,7 @@ Document dependencies with known issues that can't be immediately fixed:
    # Review and commit
    ```
 
-4. **Audit Pre-commit Hooks:**
+1. **Audit Pre-commit Hooks:**
 
    ```bash
    pre-commit autoupdate
@@ -655,7 +658,7 @@ Document dependencies with known issues that can't be immediately fixed:
    # Review and commit
    ```
 
-5. **Document Findings:**
+1. **Document Findings:**
    - Update SECURITY.md
    - Create issues for needed work
    - Update this guide
@@ -669,28 +672,28 @@ For critical security vulnerabilities:
    - Determine impact and exploitability
    - Create incident ticket
 
-2. **Quick Fix:**
+1. **Quick Fix:**
 
    ```bash
    # Update dependency
    pip install package-name==fixed.version
    pip freeze > requirements.txt
-   
+
    # Or for npm
    npm install package-name@fixed-version
    ```
 
-3. **Test:**
+1. **Test:**
    - Run full test suite
    - Manual smoke testing
    - Verify vulnerability is fixed
 
-4. **Deploy:**
+1. **Deploy:**
    - Emergency deployment
    - Monitor closely
    - Document in incident report
 
-5. **Follow-up:**
+1. **Follow-up:**
    - Update Dependabot config
    - Review similar dependencies
    - Improve detection
@@ -719,17 +722,25 @@ Before adding a new dependency, verify:
 ### Dependency Management Tools
 
 - **[Dependabot](https://github.com/dependabot)** - Automated dependency updates
-- **[Renovate](https://github.com/renovatebot/renovate)** - Alternative to Dependabot
-- **[pip-audit](https://github.com/pypa/pip-audit)** - Python vulnerability scanner
-- **[npm audit](https://docs.npmjs.com/cli/v8/commands/npm-audit)** - Node.js vulnerability scanner
-- **[Ratchet](https://github.com/sethvargo/ratchet)** - GitHub Actions SHA pinning
+- **[Renovate](https://github.com/renovatebot/renovate)** - Alternative to
+  Dependabot
+- **[pip-audit](https://github.com/pypa/pip-audit)** - Python vulnerability
+  scanner
+- **[npm audit](https://docs.npmjs.com/cli/v8/commands/npm-audit)** - Node.js
+  vulnerability scanner
+- **[Ratchet](https://github.com/sethvargo/ratchet)** - GitHub Actions SHA
+  pinning
 
 ### Security Resources
 
-- **[GitHub Advisory Database](https://github.com/advisories)** - Security advisories
-- **[Snyk Vulnerability Database](https://security.snyk.io/)** - Comprehensive vulnerability DB
-- **[National Vulnerability Database](https://nvd.nist.gov/)** - NIST CVE database
-- **[OWASP Dependency-Check](https://owasp.org/www-project-dependency-check/)** - Software composition analysis
+- **[GitHub Advisory Database](https://github.com/advisories)** - Security
+  advisories
+- **[Snyk Vulnerability Database](https://security.snyk.io/)** - Comprehensive
+  vulnerability DB
+- **[National Vulnerability Database](https://nvd.nist.gov/)** - NIST CVE
+  database
+- **[OWASP Dependency-Check](https://owasp.org/www-project-dependency-check/)**
+  \- Software composition analysis
 
 ### Related Documentation
 
@@ -741,8 +752,10 @@ Before adding a new dependency, verify:
 
 ## Questions or Feedback?
 
-- **Questions**: Open a [discussion](https://github.com/ivviiviivvi/.github/discussions)
-- **Issues**: Report in [issue tracker](https://github.com/ivviiviivvi/.github/issues)
+- **Questions**: Open a
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)
+- **Issues**: Report in
+  [issue tracker](https://github.com/ivviiviivvi/.github/issues)
 - **Improvements**: Submit a [pull request](../CONTRIBUTING.md)
 
 ---

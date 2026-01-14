@@ -56,8 +56,8 @@ front matter is valid; consider removing them if you want to use only forms:
 - Links updated to canonical docs and correct org URLs.
 - Labels synced in `.github/labels.yml` for all templates.
 - Repo labels synced to match `.github/labels.yml`.
-- Created and closed template validation issues #230-240; labels matched expected
-  template label sets.
+- Created and closed template validation issues #230-240; labels matched
+  expected template label sets.
 - Security template removed; config.yml directs reporters to private advisories.
 
 ## Re-run validation

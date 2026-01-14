@@ -19,7 +19,8 @@
 
 ## Overview
 
-This guide establishes testing standards for all Python code in the organization. Following these practices ensures:
+This guide establishes testing standards for all Python code in the
+organization. Following these practices ensures:
 
 - ✅ **80%+ code coverage** on all scripts
 - ✅ **Security-focused testing** for critical components
@@ -33,7 +34,8 @@ This guide establishes testing standards for all Python code in the organization
 
 ### Core Principles
 
-1. **Test Behavior, Not Implementation**: Test what code does, not how it does it
+1. **Test Behavior, Not Implementation**: Test what code does, not how it does
+   it
 1. **Fast First**: Unit tests should run in milliseconds
 1. **Security-Critical**: Always test security boundaries
 1. **Comprehensive Coverage**: Target 80%+ coverage, 100% for critical paths
@@ -87,12 +89,12 @@ tests/
 
 ### Minimum Targets
 
-| Category | Coverage | Priority |
-|----------|----------|----------|
-| **Security-critical** | 100% | 🔴 CRITICAL |
-| **Core scripts** | 80-90% | 🟡 HIGH |
-| **Utilities** | 70-80% | 🟢 MEDIUM |
-| **Overall** | 80%+ | 🟡 HIGH |
+| Category              | Coverage | Priority    |
+| --------------------- | -------- | ----------- |
+| **Security-critical** | 100%     | 🔴 CRITICAL |
+| **Core scripts**      | 80-90%   | 🟡 HIGH     |
+| **Utilities**         | 70-80%   | 🟢 MEDIUM   |
+| **Overall**           | 80%+     | 🟡 HIGH     |
 
 ### Security-Critical Components
 
@@ -140,23 +142,23 @@ from module_name import function_to_test
 
 class TestFeatureName:
     """Test specific feature or component"""
-    
+
     @pytest.fixture
     def setup_data(self):
         """Reusable test data"""
         return {"key": "value"}
-    
+
     def test_basic_functionality(self, setup_data):
         """Test the happy path"""
         result = function_to_test(setup_data)
         assert result is not None
         assert result == expected_value
-    
+
     def test_handles_edge_case(self):
         """Test edge cases and boundaries"""
         result = function_to_test(edge_case_input)
         assert result == expected_edge_behavior
-    
+
     def test_raises_on_invalid_input(self):
         """Test error handling"""
         with pytest.raises(ValueError):
@@ -215,7 +217,7 @@ def test_api_call(mock_get):
     """Mock external API calls"""
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"data": "test"}
-    
+
     result = fetch_data()
     assert result == {"data": "test"}
     mock_get.assert_called_once()
@@ -370,10 +372,10 @@ def test_reads_markdown_file(tmp_path):
     # Setup
     test_file = tmp_path / "test.md"
     test_file.write_text("# Test\nContent here")
-    
+
     # Execute
     content = read_markdown(test_file)
-    
+
     # Verify
     assert "Test" in content
 ```
@@ -388,9 +390,9 @@ def test_fetches_github_data(mock_get):
     mock_response.status_code = 200
     mock_response.json.return_value = {"repo": "test"}
     mock_get.return_value = mock_response
-    
+
     result = fetch_github_data("org", "repo")
-    
+
     assert result["repo"] == "test"
     mock_get.assert_called_with("https://api.github.com/repos/org/repo")
 ```
@@ -402,7 +404,7 @@ def test_handles_connection_error():
     """Test handling of network errors"""
     with patch('requests.get') as mock_get:
         mock_get.side_effect = requests.exceptions.ConnectionError()
-        
+
         with pytest.raises(NetworkError):
             fetch_data("https://example.com")
 ```
@@ -488,7 +490,8 @@ def test_handles_connection_error():
 
 - [pytest.ini](../../pytest.ini) - Test configuration
 - [conftest.py](../../tests/conftest.py) - Shared fixtures
-- [Test Coverage Workflow](../../.github/workflows/test-coverage.yml) - CI configuration
+- [Test Coverage Workflow](../../.github/workflows/test-coverage.yml) - CI
+  configuration
 - [CLEANUP_ROADMAP.md](../CLEANUP_ROADMAP.md) - Phase 8 details
 
 ---
@@ -499,7 +502,8 @@ def test_handles_connection_error():
 
 - [x] ✅ `pytest.ini` configured with 80% coverage target
 - [x] ✅ Test directory structure created (`unit/`, `integration/`, `fixtures/`)
-- [x] ✅ Unit tests for critical scripts (web_crawler, ecosystem_visualizer, sync_labels)
+- [x] ✅ Unit tests for critical scripts (web_crawler, ecosystem_visualizer,
+      sync_labels)
 - [x] ✅ Shared fixtures in `conftest.py`
 - [x] ✅ CI workflow for automated testing
 - [x] ✅ Pre-commit hooks for test execution
@@ -520,5 +524,4 @@ def test_handles_connection_error():
 
 ---
 
-_Last Updated: 2026-01-14_
-_Phase 8: Testing & Quality Assurance_
+_Last Updated: 2026-01-14_ _Phase 8: Testing & Quality Assurance_

@@ -1,6 +1,7 @@
 # Monitoring & Observability Guide
 
-> **Comprehensive guide to monitoring workflows, collecting metrics, and managing alerts**
+> **Comprehensive guide to monitoring workflows, collecting metrics, and
+> managing alerts**
 
 ## Table of Contents
 
@@ -18,22 +19,24 @@
 
 ## Overview
 
-This organization maintains a comprehensive monitoring and observability system to ensure:
+This organization maintains a comprehensive monitoring and observability system
+to ensure:
 
 - **Workflow Health**: Real-time failure detection and alerting
 - **Resource Management**: GitHub Actions minutes tracking and budget alerts
-- **Performance Metrics**: Success rates, duration trends, and optimization opportunities
+- **Performance Metrics**: Success rates, duration trends, and optimization
+  opportunities
 - **Proactive Response**: Automated alerts with runbooks for common issues
 
 ### Key Metrics Tracked
 
-| Metric | Target | Alert Threshold |
-|--------|--------|----------------|
-| Workflow Success Rate | >80% | <75% |
-| Average Workflow Duration | <30 min | >45 min |
-| Test Coverage | >80% | <70% |
-| GitHub Actions Minutes Used | <80% of quota | >90% |
-| Security Scan Findings | 0 critical | >0 critical |
+| Metric                      | Target         | Alert Threshold |
+| --------------------------- | -------------- | --------------- |
+| Workflow Success Rate       | >80%           | \<75%           |
+| Average Workflow Duration   | \<30 min       | >45 min         |
+| Test Coverage               | >80%           | \<70%           |
+| GitHub Actions Minutes Used | \<80% of quota | >90%            |
+| Security Scan Findings      | 0 critical     | >0 critical     |
 
 ---
 
@@ -61,8 +64,8 @@ This organization maintains a comprehensive monitoring and observability system 
 **Actions Taken**:
 
 1. Logs failure details to console
-2. Posts alert to GitHub Discussion #1
-3. Includes workflow name, repository, and run link
+1. Posts alert to GitHub Discussion #1
+1. Includes workflow name, repository, and run link
 
 **Usage**:
 
@@ -77,7 +80,7 @@ gh workflow run alert-on-workflow-failure.yml
 
 **Purpose**: Periodic collection of workflow metrics
 
-**Schedule**: Every 6 hours (0 */6* **)
+**Schedule**: Every 6 hours (0 _/6_ \*\*)
 
 **Data Collected**:
 
@@ -105,7 +108,7 @@ cat metrics/$(ls -t metrics/*.json | head -1)
 
 **Purpose**: Generate visual dashboard from collected metrics
 
-**Schedule**: Daily at midnight UTC (0 0 ** *)
+**Schedule**: Daily at midnight UTC (0 0 \*\* \*)
 
 **Generated Artifacts**:
 
@@ -136,8 +139,8 @@ gh run download $(gh run list -w metrics-dashboard.yml --limit 1 --json database
 
 **Schedule**:
 
-- Daily at 6 AM UTC (0 6 ** *)
-- Weekly summary on Mondays at 8 AM UTC (0 8 ** 1)
+- Daily at 6 AM UTC (0 6 \*\* \*)
+- Weekly summary on Mondays at 8 AM UTC (0 8 \*\* 1)
 
 **Reports Generated**:
 
@@ -168,11 +171,11 @@ gh workflow run usage-monitoring.yml -f alert_threshold=90
 ### How It Works
 
 1. **Workflow Completes**: Any monitored workflow finishes
-2. **Status Check**: Alert workflow checks `conclusion == 'failure'`
-3. **Notification Sent**: If failed, alert posted to:
+1. **Status Check**: Alert workflow checks `conclusion == 'failure'`
+1. **Notification Sent**: If failed, alert posted to:
    - Console output (visible in Actions tab)
    - GitHub Discussion #1 (🚨 Workflow Failure Alert)
-4. **Team Notified**: Subscribed team members receive notification
+1. **Team Notified**: Subscribed team members receive notification
 
 ### Monitored Workflows
 
@@ -190,10 +193,9 @@ Edit `.github/workflows/alert-on-workflow-failure.yml`:
 ```yaml
 on:
   workflow_run:
-    workflows:
-      [
+    workflows: [
         # ... existing workflows ...
-        your-new-workflow-name,  # Add here
+        your-new-workflow-name, # Add here
       ]
     types: [completed]
 ```
@@ -290,11 +292,11 @@ Navigate to: `https://github.com/ivviiviivvi/.github/tree/main/metrics`
 
 GitHub Actions minutes are tracked against included quota:
 
-| Plan | Included Minutes | Alert at 80% | Alert at 90% |
-|------|------------------|--------------|--------------|
-| Free | 2,000/month | 1,600 min | 1,800 min |
-| Team | 3,000/month | 2,400 min | 2,700 min |
-| Enterprise | 50,000/month | 40,000 min | 45,000 min |
+| Plan       | Included Minutes | Alert at 80% | Alert at 90% |
+| ---------- | ---------------- | ------------ | ------------ |
+| Free       | 2,000/month      | 1,600 min    | 1,800 min    |
+| Team       | 3,000/month      | 2,400 min    | 2,700 min    |
+| Enterprise | 50,000/month     | 40,000 min   | 45,000 min   |
 
 ### Usage Reports
 
@@ -339,8 +341,8 @@ Alerts triggered when:
 **Receiving Alerts**:
 
 1. Subscribe to GitHub Discussion #1
-2. Watch the repository for notifications
-3. Check `.github/reports/usage/` for detailed reports
+1. Watch the repository for notifications
+1. Check `.github/reports/usage/` for detailed reports
 
 **Adjusting Thresholds**:
 
@@ -393,22 +395,22 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
 
 ### Configured Thresholds
 
-| Alert | Threshold | Severity | Action Required |
-|-------|-----------|----------|-----------------|
-| Workflow Failure | Any critical workflow fails | 🔴 Critical | Investigate immediately |
-| Success Rate | <75% overall | 🟠 High | Review failing workflows within 4 hours |
-| Average Duration | >45 minutes | 🟡 Medium | Optimize within 48 hours |
-| Test Coverage | <70% | 🟡 Medium | Add tests within 1 week |
-| Usage Quota | >90% | 🟠 High | Optimize or purchase more minutes |
-| Security Findings | >0 critical | 🔴 Critical | Patch within 24 hours |
-| Security Findings | >5 high | 🟠 High | Remediate within 1 week |
+| Alert             | Threshold                   | Severity    | Action Required                         |
+| ----------------- | --------------------------- | ----------- | --------------------------------------- |
+| Workflow Failure  | Any critical workflow fails | 🔴 Critical | Investigate immediately                 |
+| Success Rate      | \<75% overall               | 🟠 High     | Review failing workflows within 4 hours |
+| Average Duration  | >45 minutes                 | 🟡 Medium   | Optimize within 48 hours                |
+| Test Coverage     | \<70%                       | 🟡 Medium   | Add tests within 1 week                 |
+| Usage Quota       | >90%                        | 🟠 High     | Optimize or purchase more minutes       |
+| Security Findings | >0 critical                 | 🔴 Critical | Patch within 24 hours                   |
+| Security Findings | >5 high                     | 🟠 High     | Remediate within 1 week                 |
 
 ### Escalation Path
 
 1. **Automated Alert** → GitHub Discussion #1
-2. **Team Notification** → Subscribed members notified
-3. **Severity Assessment** → Use runbooks below
-4. **Resolution** → Document in post-mortem (if critical)
+1. **Team Notification** → Subscribed members notified
+1. **Severity Assessment** → Use runbooks below
+1. **Resolution** → Document in post-mortem (if critical)
 
 ---
 
@@ -425,29 +427,29 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
    - Review error logs
    - Determine if user-facing service affected
 
-2. **Quick Triage**:
+1. **Quick Triage**:
 
    ```bash
    # View recent failures
    gh run list --workflow <workflow-name> --status failure --limit 5
-   
+
    # Download logs
    gh run view <run-id> --log-failed
    ```
 
-3. **Common Causes**:
+1. **Common Causes**:
    - **Flaky Tests**: Re-run workflow
    - **Rate Limiting**: Wait and retry
    - **Dependency Issues**: Check upstream services
    - **Code Errors**: Review recent commits
    - **Resource Exhaustion**: Check runner capacity
 
-4. **Resolution**:
+1. **Resolution**:
    - Fix identified issue
    - Re-run workflow to verify
    - Update discussion with resolution
 
-5. **Prevention**:
+1. **Prevention**:
    - Add tests if regression
    - Update documentation if config issue
    - Implement retry logic if transient
@@ -465,21 +467,21 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
    cat .github/reports/usage/latest-usage.json | jq '.top_consumers'
    ```
 
-2. **Optimization Strategies**:
+1. **Optimization Strategies**:
    - **Cancel redundant runs**: Enable `concurrency` in workflows
    - **Reduce test matrix**: Limit to essential OS/version combos
    - **Use caching**: Add `cache` to setup actions
    - **Optimize build times**: Parallelize jobs
    - **Schedule appropriately**: Avoid overlapping cron jobs
 
-3. **Example Optimization**:
+1. **Example Optimization**:
 
    ```yaml
    # Add concurrency to prevent duplicate runs
    concurrency:
      group: ${{ github.workflow }}-${{ github.ref }}
      cancel-in-progress: true
-   
+
    # Enable caching
    - uses: actions/setup-python@v5
      with:
@@ -487,16 +489,16 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
        cache: 'pip'  # Enable pip caching
    ```
 
-4. **Immediate Actions**:
+1. **Immediate Actions**:
    - Disable non-critical scheduled workflows
    - Reduce cron frequency (e.g., hourly → daily)
    - Defer integration tests to manual trigger
 
-5. **Long-term**:
+1. **Long-term**:
    - Request quota increase from GitHub
    - Consider self-hosted runners for heavy workloads
 
-### Runbook: Low Success Rate (<75%)
+### Runbook: Low Success Rate (\<75%)
 
 **Trigger**: Metrics collection detects success rate below threshold
 
@@ -509,18 +511,18 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
    cat metrics/baseline-metrics.json | jq '.workflows.by_name | to_entries | sort_by(.value.failure_rate) | reverse'
    ```
 
-2. **Root Cause Analysis**:
+1. **Root Cause Analysis**:
    - Are failures isolated to one workflow?
    - Are failures recent or ongoing?
    - Do logs show consistent error patterns?
 
-3. **Common Patterns**:
+1. **Common Patterns**:
    - **Flaky Tests**: Add retries, increase timeouts
    - **External Dependencies**: Mock or add fallbacks
    - **Resource Constraints**: Increase `timeout-minutes`
    - **Race Conditions**: Add synchronization
 
-4. **Resolution**:
+1. **Resolution**:
    - Fix identified issues
    - Add monitoring for early detection
    - Update tests to be more reliable
@@ -536,23 +538,23 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
    ```bash
    # View coverage report
    open htmlcov/index.html
-   
+
    # Find files with low coverage
    coverage report --skip-covered --show-missing
    ```
 
-2. **Prioritize Testing**:
+1. **Prioritize Testing**:
    - Critical paths: 100% coverage required
    - Security-related: 100% coverage required
    - Core functionality: 80%+ coverage
    - Utilities: 70%+ coverage
 
-3. **Add Tests**:
+1. **Add Tests**:
    - Use `pytest` with appropriate markers
    - Follow `docs/guides/testing-best-practices.md`
    - Run locally before pushing: `pytest tests/ --cov`
 
-4. **Verification**:
+1. **Verification**:
 
    ```bash
    # Check if coverage improved
@@ -570,8 +572,8 @@ Navigate to: `Actions > Metrics Dashboard > [Latest Run] > Artifacts`
 **Causes**:
 
 1. Workflow not in monitored list
-2. Discussion #1 doesn't exist
-3. Permissions issue
+1. Discussion #1 doesn't exist
+1. Permissions issue
 
 **Solutions**:
 
@@ -593,8 +595,8 @@ grep "permissions:" .github/workflows/alert-on-workflow-failure.yml
 **Causes**:
 
 1. Workflow disabled
-2. Schedule not triggering
-3. Permission error (contents:write)
+1. Schedule not triggering
+1. Permission error (contents:write)
 
 **Solutions**:
 
@@ -616,8 +618,8 @@ gh run list --workflow metrics-collection.yml --limit 1
 **Causes**:
 
 1. Metrics collection failing
-2. Dashboard generation failing
-3. GitHub Pages not configured
+1. Dashboard generation failing
+1. GitHub Pages not configured
 
 **Solutions**:
 
@@ -639,8 +641,8 @@ gh run view $(gh run list -w metrics-dashboard.yml --limit 1 --json databaseId -
 **Causes**:
 
 1. Threshold too sensitive
-2. Workflow includes expected failures (e.g., test matrix)
-3. Maintenance window
+1. Workflow includes expected failures (e.g., test matrix)
+1. Maintenance window
 
 **Solutions**:
 
@@ -655,8 +657,8 @@ gh run view $(gh run list -w metrics-dashboard.yml --limit 1 --json databaseId -
 **Causes**:
 
 1. Usage monitoring workflow disabled
-2. Alert threshold set too high
-3. Schedule not running
+1. Alert threshold set too high
+1. Schedule not running
 
 **Solutions**:
 
@@ -749,5 +751,4 @@ gh run watch
 
 ---
 
-_Last Updated: 2025-01-XX_
-_Maintained by: DevOps Team_
+_Last Updated: 2025-01-XX_ _Maintained by: DevOps Team_
