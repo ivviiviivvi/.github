@@ -19,11 +19,13 @@ for the ivviiviivvi GitHub organization.
    one place
 3. **Set up environment:** [Development Environment Setup](docs/DEVELOPMENT_ENVIRONMENT_SETUP.md)
 4. **Clone and explore:**
+
    ```bash
    git clone https://github.com/ivviiviivvi/.github.git
    cd .github
    pre-commit install  # Enable quality gates
    ```
+
 5. **Make your first contribution:** See open
    [good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
