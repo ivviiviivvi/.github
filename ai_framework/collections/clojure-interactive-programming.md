@@ -1,3 +1,10 @@
+---
+name: Clojure Interactive Programming
+description: Collection for Clojure Interactive Programming.
+tags: []
+updated: 2026-01-13
+---
+
 # Clojure Interactive Programming
 
 Tools for REPL-first Clojure workflows featuring Clojure instructions, the

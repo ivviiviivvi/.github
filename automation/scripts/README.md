@@ -246,6 +246,66 @@ python automation/scripts/generate_chatmode_inventory.py
 
 ---
 
+### ✅ `validate_agent_frontmatter.py`
+
+**Purpose**: Validate YAML frontmatter for agent definitions
+
+**Usage**:
+
+```bash
+python automation/scripts/validate_agent_frontmatter.py
+```
+
+---
+
+### 📋 `generate_agent_inventory.py`
+
+**Purpose**: Generate an agent inventory table from frontmatter
+
+**Usage**:
+
+```bash
+python automation/scripts/generate_agent_inventory.py
+```
+
+---
+
+### ✅ `validate_collection_frontmatter.py`
+
+**Purpose**: Validate YAML frontmatter for collection definitions
+
+**Usage**:
+
+```bash
+python automation/scripts/validate_collection_frontmatter.py
+```
+
+---
+
+### 📋 `generate_collection_inventory.py`
+
+**Purpose**: Generate a collection inventory table from frontmatter
+
+**Usage**:
+
+```bash
+python automation/scripts/generate_collection_inventory.py
+```
+
+---
+
+### 📋 `generate_agent_inventory.py`
+
+**Purpose**: Generate an agent inventory table from agent definitions
+
+**Usage**:
+
+```bash
+python automation/scripts/generate_agent_inventory.py
+```
+
+---
+
 ## 🐚 Shell Scripts
 
 ### Core Scripts

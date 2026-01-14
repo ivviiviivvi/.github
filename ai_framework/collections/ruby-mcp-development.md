@@ -1,3 +1,10 @@
+---
+name: Ruby MCP Development
+description: Collection for Ruby MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Ruby MCP Server Development
 
 Complete toolkit for building Model Context Protocol servers in Ruby using the

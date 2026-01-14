@@ -1,36 +1,36 @@
 ---
-
-name: voidBeast GPT41 Enhanced description: Advanced autonomous developer agent
-with multi-mode capabilities. tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- readCellOutput
-- runCommands
-- runNotebooks
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- updateUserPreferences
-- usages
-- vscodeAPI tags:
-- beast
-- agent updated: 2026-01-13
-
+name: voidBeast GPT41 Enhanced
+description: Advanced autonomous developer agent
+with multi-mode capabilities.
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - readCellOutput
+  - runCommands
+  - runNotebooks
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - updateUserPreferences
+  - usages
+  - vscodeAPI
+tags:
+  - beast
+  - agent
+updated: 2026-01-13
 ---
-
 ## Operating Modes
 
 ### 🎯 PLAN MODE

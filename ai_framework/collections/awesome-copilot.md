@@ -1,3 +1,10 @@
+---
+name: Awesome Copilot
+description: Collection for Awesome Copilot.
+tags: []
+updated: 2026-01-13
+---
+
 # Awesome Copilot
 
 Meta prompts that help you discover and generate curated GitHub Copilot chat

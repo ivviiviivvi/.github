@@ -23,7 +23,7 @@ tools:
   - usages
   - vscodeAPI
   - terraform
-  - 'Microsoft Docs'
+  - Microsoft Docs
   - azure_get_schema_for_Bicep
   - context7
 tags:

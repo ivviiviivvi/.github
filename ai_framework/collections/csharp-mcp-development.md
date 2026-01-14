@@ -1,3 +1,10 @@
+---
+name: Csharp MCP Development
+description: Collection for Csharp MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # C# MCP Server Development
 
 Complete toolkit for building Model Context Protocol (MCP) servers in C# using

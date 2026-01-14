@@ -2,7 +2,7 @@
 name: Kotlin MCP Expert
 description: Expert assistant for building MCP servers in Kotlin using the official SDK.
 model: GPT-4.1
-tools: []
+tools:
 tags:
   - kotlin
   - mcp

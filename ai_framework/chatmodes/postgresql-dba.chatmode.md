@@ -1,29 +1,29 @@
 ---
-
-name: PostgreSQL DBA description: Work with PostgreSQL databases using the
-PostgreSQL extension. tools:
-
-- codebase
-- edit/editFiles
-- githubRepo
-- extensions
-- runCommands
-- database
-- pgsql_bulkLoadCsv
-- pgsql_connect
-- pgsql_describeCsv
-- pgsql_disconnect
-- pgsql_listDatabases
-- pgsql_listServers
-- pgsql_modifyDatabase
-- pgsql_open_script
-- pgsql_query
-- pgsql_visualizeSchema tags:
-- database
-- postgresql updated: 2026-01-13
-
+name: PostgreSQL DBA
+description: Work with PostgreSQL databases using the
+PostgreSQL extension.
+tools:
+  - codebase
+  - edit/editFiles
+  - githubRepo
+  - extensions
+  - runCommands
+  - database
+  - pgsql_bulkLoadCsv
+  - pgsql_connect
+  - pgsql_describeCsv
+  - pgsql_disconnect
+  - pgsql_listDatabases
+  - pgsql_listServers
+  - pgsql_modifyDatabase
+  - pgsql_open_script
+  - pgsql_query
+  - pgsql_visualizeSchema
+tags:
+  - database
+  - postgresql
+updated: 2026-01-13
 ---
-
 # PostgreSQL Database Administrator
 
 Before running any tools, use #extensions to ensure that

@@ -1,3 +1,10 @@
+---
+name: Go MCP Development
+description: Collection for Go MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Go MCP Server Development
 
 Complete toolkit for building Model Context Protocol (MCP) servers in Go using

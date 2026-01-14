@@ -2,7 +2,7 @@
 name: Ruby MCP Expert
 description: Expert assistance for building MCP servers in Ruby using the official SDK and Rails.
 model: GPT-4.1
-tools: []
+tools:
 tags:
   - ruby
   - mcp

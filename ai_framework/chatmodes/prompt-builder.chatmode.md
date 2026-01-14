@@ -14,7 +14,7 @@ tools:
   - terminalSelection
   - usages
   - terraform
-  - 'Microsoft Docs'
+  - Microsoft Docs
   - context7
 tags:
   - prompts

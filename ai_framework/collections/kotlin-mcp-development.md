@@ -1,3 +1,10 @@
+---
+name: Kotlin MCP Development
+description: Collection for Kotlin MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # Kotlin MCP Server Development
 
 Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin

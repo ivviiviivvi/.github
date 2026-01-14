@@ -20,9 +20,10 @@ This directory holds reusable AI agent assets used across the organization.
 - `docs/README.chatmodes.md`
 - `docs/README.agents.md`
 - `docs/README.collections.md`
+- `ai_framework/agents/DEVELOPMENT_GUIDE.md`
+- `ai_framework/agents/SCHEMA.md`
 
-## Phase 6 Next Steps
+## Phase 6 Status
 
-- Audit chatmodes for duplicates and consolidate where appropriate.
-- Normalize frontmatter to a single schema and validate.
-- Add per-folder indexes if listings grow.
+Phase 6 is complete with normalized chatmodes, validation tooling, inventories,
+and agent documentation updates.

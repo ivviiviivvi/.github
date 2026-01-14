@@ -1,3 +1,10 @@
+---
+name: Frontend Web Dev
+description: Collection for Frontend Web Dev.
+tags: []
+updated: 2026-01-13
+---
+
 # Frontend Web Development
 
 Essential prompts, instructions, and chat modes for modern frontend web

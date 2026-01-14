@@ -1,3 +1,10 @@
+---
+name: Typescript MCP Development
+description: Collection for Typescript MCP Development.
+tags: []
+updated: 2026-01-13
+---
+
 # TypeScript MCP Server Development
 
 Complete toolkit for building Model Context Protocol (MCP) servers in

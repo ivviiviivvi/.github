@@ -1,3 +1,10 @@
+---
+name: Csharp Dotnet Development
+description: Collection for Csharp Dotnet Development.
+tags: []
+updated: 2026-01-13
+---
+
 # C# .NET Development
 
 Essential prompts, instructions, and chat modes for C# and .NET development

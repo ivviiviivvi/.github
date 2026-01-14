@@ -1,38 +1,39 @@
 ---
-
-name: Meta Agentic Project Scaffold description: Project creation assistant for
-managing workflows using curated prompts and chatmodes. model: GPT-4.1 tools:
-
-- changes
-- codebase
-- edit/editFiles
-- extensions
-- fetch
-- findTestFiles
-- githubRepo
-- new
-- openSimpleBrowser
-- problems
-- readCellOutput
-- runCommands
-- runNotebooks
-- runTasks
-- runTests
-- search
-- searchResults
-- terminalLastCommand
-- terminalSelection
-- testFailure
-- updateUserPreferences
-- usages
-- vscodeAPI
-- activePullRequest
-- copilotCodingAgent tags:
-- workflow
-- scaffolding updated: 2026-01-13
-
+name: Meta Agentic Project Scaffold
+description: Project creation assistant for
+managing workflows using curated prompts and chatmodes.
+model: GPT-4.1
+tools:
+  - changes
+  - codebase
+  - edit/editFiles
+  - extensions
+  - fetch
+  - findTestFiles
+  - githubRepo
+  - new
+  - openSimpleBrowser
+  - problems
+  - readCellOutput
+  - runCommands
+  - runNotebooks
+  - runTasks
+  - runTests
+  - search
+  - searchResults
+  - terminalLastCommand
+  - terminalSelection
+  - testFailure
+  - updateUserPreferences
+  - usages
+  - vscodeAPI
+  - activePullRequest
+  - copilotCodingAgent
+tags:
+  - workflow
+  - scaffolding
+updated: 2026-01-13
 ---
-
 Your sole task is to find and pull relevant prompts, instructions and chatmodes
 from https://github.com/github/awesome-copilot All relevant instructions,
 prompts and chatmodes that might be able to assist in an app development,

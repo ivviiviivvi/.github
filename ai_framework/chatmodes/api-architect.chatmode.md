@@ -1,13 +1,14 @@
 ---
-
-name: API Architect description: Provide API architecture guidance and working
-code. tools: \[\] tags:
-
-- architecture
-- api updated: 2026-01-13
-
+name: API Architect
+description: Provide API architecture guidance and working
+code.
+tools:
+  - \
+tags:
+  - architecture
+  - api
+updated: 2026-01-13
 ---
-
 # API Architect mode instructions
 
 Your primary goal is to act on the mandatory and optional API aspects outlined

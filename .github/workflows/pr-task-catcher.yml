@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to scan'
+        description: PR number to scan
         required: true
         type: number
 
@@ -246,88 +246,93 @@ jobs:
           fi
 
           # Build summary comment
-          SUMMARY="<!-- task-catcher-summary -->
-# $STATUS_EMOJI Task Catcher Summary
+          cat > /tmp/task_summary.md <<- 'EOF_SUMMARY'
+          <!-- task-catcher-summary -->
+          # $STATUS_EMOJI Task Catcher Summary
 
-$STATUS
+          $STATUS
 
-## 📋 Task Overview
+          ## 📋 Task Overview
 
-| Category | Count |
-|----------|-------|
-| PR Body Unchecked Tasks | $UNCHECKED_BODY |
-| PR Body Checked Tasks | $CHECKED_BODY ✅ |
-| Comment Tasks | $COMMENT_TASKS |
-| Blocker Items | $BLOCKERS 🚨 |
-| Suggestions | $SUGGESTIONS 💡 |
-| Unresolved Review Threads | $UNRESOLVED_THREADS |
+          | Category | Count |
+          |----------|-------|
+          | PR Body Unchecked Tasks | $UNCHECKED_BODY |
+          | PR Body Checked Tasks | $CHECKED_BODY ✅ |
+          | Comment Tasks | $COMMENT_TASKS |
+          | Blocker Items | $BLOCKERS 🚨 |
+          | Suggestions | $SUGGESTIONS 💡 |
+          | Unresolved Review Threads | $UNRESOLVED_THREADS |
 
----"
+          ---
+          EOF_SUMMARY
+          SUMMARY=$(cat /tmp/task_summary.md)
 
           # Add PR body tasks if any
           if [ "$UNCHECKED_BODY" -gt 0 ]; then
-            SUMMARY="$SUMMARY
+            cat >> /tmp/task_summary.md <<- 'EOF_BODY'
 
-## ✅ PR Body Tasks ($UNCHECKED_BODY unchecked)
+            ## ✅ PR Body Tasks ($UNCHECKED_BODY unchecked)
 
-${{ steps.body_tasks.outputs.unchecked_tasks }}
+            ${{ steps.body_tasks.outputs.unchecked_tasks }}
 
----"
+            ---
+            EOF_BODY
           fi
 
           # Add comment tasks if any
           if [ "$COMMENT_TASKS" -gt 0 ] || [ "$BLOCKERS" -gt 0 ]; then
-            SUMMARY="$SUMMARY
+            cat >> /tmp/task_summary.md <<- 'EOF_COMMENTS'
 
-## 💬 Comment Tasks & Blockers
+            ## 💬 Comment Tasks & Blockers
 
-${{ steps.comment_tasks.outputs.tasks_summary }}
+            ${{ steps.comment_tasks.outputs.tasks_summary }}
 
----"
+            ---
+            EOF_COMMENTS
           fi
 
           # Add guidance
-          SUMMARY="$SUMMARY
+          cat >> /tmp/task_summary.md <<- 'EOF_GUIDANCE'
 
-## 🎯 Next Steps
+          ## 🎯 Next Steps
 
-"
+          EOF_GUIDANCE
 
           if [ "$BLOCKERS" -gt 0 ]; then
-            SUMMARY="$SUMMARY- 🚨 **Address all blocker items** before merging
-"
+            printf "- 🚨 **Address all blocker items** before merging\n" >> /tmp/task_summary.md
           fi
 
           if [ "$UNCHECKED_BODY" -gt 0 ]; then
-            SUMMARY="$SUMMARY- ✅ Check off completed tasks in PR description
-"
+            printf "- ✅ Check off completed tasks in PR description\n" >> /tmp/task_summary.md
           fi
 
           if [ "$UNRESOLVED_THREADS" -gt 0 ]; then
-            SUMMARY="$SUMMARY- 💬 Resolve review discussion threads
-"
+            printf "- 💬 Resolve review discussion threads\n" >> /tmp/task_summary.md
           fi
 
           if [ "$COMMENT_TASKS" -gt 0 ]; then
-            SUMMARY="$SUMMARY- 📝 Complete or assign out tasks from comments
-"
+            printf "- 📝 Complete or assign out tasks from comments\n" >> /tmp/task_summary.md
           fi
 
           if [ "$TOTAL_TASKS" -eq 0 ] && [ "$BLOCKERS" -eq 0 ] && [ "$UNRESOLVED_THREADS" -eq 0 ]; then
-            SUMMARY="$SUMMARY- 🚀 All tasks complete! Ready to merge when CI passes.
-"
+            printf "- 🚀 All tasks complete! Ready to merge when CI passes.\n" >> /tmp/task_summary.md
           fi
 
-          SUMMARY="$SUMMARY
----
+          cat >> /tmp/task_summary.md <<- 'EOF_FOOTER'
 
-**Options:**
-- ✅ Check off tasks as you complete them
-- 📋 Create issues for tasks to handle later: Add \`create-issues-for-tasks\` label
-- 🚫 Ignore tasks for merge: Add \`ignore-task-checks\` label
+          ---
 
-*Last scanned: $(date -u +'%Y-%m-%d %H:%M UTC')*
-*Triggered by: ${{ github.event_name }}*"
+          **Options:**
+          - ✅ Check off tasks as you complete them
+          - 📋 Create issues for tasks to handle later: Add `create-issues-for-tasks` label
+          - 🚫 Ignore tasks for merge: Add `ignore-task-checks` label
+
+          *Last scanned: $(date -u +'%Y-%m-%d %H:%M UTC')*
+          *Triggered by: ${{ github.event_name }}*
+          EOF_FOOTER
+
+          # Read the complete summary
+          SUMMARY=$(cat /tmp/task_summary.md)
 
           # Save summary to file
           echo "$SUMMARY" > task_summary.md
@@ -418,16 +423,19 @@ ${{ steps.comment_tasks.outputs.tasks_summary }}
             echo "🚨 Blocking merge due to unresolved blockers"
             echo "should_block=true" >> $GITHUB_OUTPUT
 
-            gh pr comment $PR_NUM --body "🚫 **Merge Blocked**
+            cat > /tmp/blocker_message.md <<- 'EOF_BLOCKER'
+            🚫 **Merge Blocked**
 
-This PR has unresolved blocker items that must be addressed before merging.
+            This PR has unresolved blocker items that must be addressed before merging.
 
-Review the task summary above and:
-1. Address all items marked with 🚨 BLOCKER
-2. Check off completed tasks
-3. Or add \`ignore-task-checks\` label to bypass (not recommended)
+            Review the task summary above and:
+            1. Address all items marked with 🚨 BLOCKER
+            2. Check off completed tasks
+            3. Or add `ignore-task-checks` label to bypass (not recommended)
 
-The \`has-blockers\` label will be automatically removed when blockers are resolved."
+            The `has-blockers` label will be automatically removed when blockers are resolved.
+            EOF_BLOCKER
+            gh pr comment $PR_NUM --body-file /tmp/blocker_message.md
           else
             echo "✅ No blockers found, merge allowed"
             echo "should_block=false" >> $GITHUB_OUTPUT
@@ -477,25 +485,27 @@ The \`has-blockers\` label will be automatically removed when blockers are resol
             if [ -n "$TASK_TEXT" ]; then
               echo "Creating issue for: $TASK_TEXT"
 
-              ISSUE_BODY="# Task from PR #$PR_NUM
+              cat > /tmp/task_issue.md <<- 'EOF_TASK'
+              # Task from PR #$PR_NUM
 
-**Original PR:** #$PR_NUM - $PR_TITLE
-**Author:** @$AUTHOR
+              **Original PR:** #$PR_NUM - $PR_TITLE
+              **Author:** @$AUTHOR
 
-## Task
+              ## Task
 
-$TASK_TEXT
+              $TASK_TEXT
 
-## Context
+              ## Context
 
-This task was left incomplete in PR #$PR_NUM. See the original PR for full context.
+              This task was left incomplete in PR #$PR_NUM. See the original PR for full context.
 
----
-_Auto-created by [pr-task-catcher.yml](../.github/workflows/pr-task-catcher.yml)_"
+              ---
+              _Auto-created by [pr-task-catcher.yml](../.github/workflows/pr-task-catcher.yml)_
+              EOF_TASK
 
               gh issue create \
                 --title "Task from PR #$PR_NUM: $TASK_TEXT" \
-                --body "$ISSUE_BODY" \
+                --body-file /tmp/task_issue.md \
                 --label "task-from-pr,needs-triage" \
                 --assignee "$AUTHOR"
             fi

@@ -1,3 +1,10 @@
+---
+name: Devops Oncall
+description: Collection for Devops Oncall.
+tags: []
+updated: 2026-01-13
+---
+
 # DevOps On-Call
 
 A focused set of prompts, instructions, and a chat mode to help triage incidents

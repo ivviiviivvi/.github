@@ -1,3 +1,10 @@
+---
+name: Partners
+description: Collection for Partners.
+tags: []
+updated: 2026-01-13
+---
+
 # Partners
 
 Custom agents that have been created by GitHub partners

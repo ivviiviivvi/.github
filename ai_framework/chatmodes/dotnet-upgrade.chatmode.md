@@ -1,28 +1,28 @@
 ---
-
-name: .NET Upgrade description: Janitorial tasks for C#/.NET code including
-cleanup, modernization, and tech debt remediation. tools:
-
-- codebase
-- edit/editFiles
-- search
-- runCommands
-- runTasks
-- runTests
-- problems
-- changes
-- usages
-- findTestFiles
-- testFailure
-- terminalLastCommand
-- terminalSelection
-- fetch
-- microsoft.docs.mcp tags:
-- dotnet
-- cleanup updated: 2026-01-13
-
+name: .NET Upgrade
+description: Janitorial tasks for C#/.NET code including
+cleanup, modernization, and tech debt remediation.
+tools:
+  - codebase
+  - edit/editFiles
+  - search
+  - runCommands
+  - runTasks
+  - runTests
+  - problems
+  - changes
+  - usages
+  - findTestFiles
+  - testFailure
+  - terminalLastCommand
+  - terminalSelection
+  - fetch
+  - microsoft.docs.mcp
+tags:
+  - dotnet
+  - cleanup
+updated: 2026-01-13
 ---
-
 ## mode: dotnet-upgrade title: Analyze current .NET framework versions and create upgrade plan
 
 Analyze the repository and list each project's current TargetFramework along
