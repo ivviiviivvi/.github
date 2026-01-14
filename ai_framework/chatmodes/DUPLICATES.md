@@ -8,9 +8,9 @@ not a removal list.
 Candidates:
 
 - `ai_framework/chatmodes/plan.chatmode.md`
-- `ai_framework/chatmodes/planner.chatmode.md`
-- `ai_framework/chatmodes/task-planner.chatmode.md`
-- `ai_framework/chatmodes/implementation-plan.chatmode.md`
+- `ai_framework/chatmodes/archive/planner.chatmode.md`
+- `ai_framework/chatmodes/archive/task-planner.chatmode.md`
+- `ai_framework/chatmodes/archive/implementation-plan.chatmode.md`
 
 Rationale:
 

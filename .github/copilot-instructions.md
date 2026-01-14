@@ -326,3 +326,13 @@ The phase includes:
 2. **3.2 Audit and Optimize Python Scripts** - Add docstrings, run mypy --strict, achieve 80%+ test coverage, remove deprecated scripts, create README
 3. **3.3 Shell Script Cleanup** - Run shellcheck, add error handling, add usage/help messages, document env vars
 4. **3.4 Remove Build Artifacts** - Ensure .gitignore covers temp files, create cleanup script, add pre-commit hook
+
+#### Phase 4: Workflow Optimization (Priority: 🟢 MEDIUM)
+- Timeline: 1-2 weeks
+- Owner: DevOps Team
+
+Key tasks:
+1. **4.1 Audit All Workflows** - Generate workflow inventory
+2. **4.2 Fix Workflow Health Issues** - Issues #193, #207 (21 errors, 20 warnings)
+3. **4.3 Consolidate Reusable Workflows** - Reduce duplication
+4. **4.4 Optimize Workflow Triggers** - Reduce unnecessary runs

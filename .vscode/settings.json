@@ -5,7 +5,10 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "editor.rulers": [80, 120],
+  "editor.rulers": [
+    80,
+    120
+  ],
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
@@ -134,7 +137,9 @@
       "servers": {
         "markitdown": {
           "command": "uvx",
-          "args": ["markitdown-mcp==0.0.1a4"]
+          "args": [
+            "markitdown-mcp==0.0.1a4"
+          ]
         },
         "filesystem": {
           "command": "npx",
@@ -146,15 +151,24 @@
         },
         "sequential-thinking": {
           "command": "npx",
-          "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+          "args": [
+            "-y",
+            "@modelcontextprotocol/server-sequential-thinking"
+          ]
         },
         "memory": {
           "command": "npx",
-          "args": ["-y", "@modelcontextprotocol/server-memory"]
+          "args": [
+            "-y",
+            "@modelcontextprotocol/server-memory"
+          ]
         },
         "github": {
           "command": "npx",
-          "args": ["-y", "@modelcontextprotocol/server-github"],
+          "args": [
+            "-y",
+            "@modelcontextprotocol/server-github"
+          ],
           "env": {
             "GITHUB_TOKEN": "${env:GITHUB_TOKEN}"
           }
@@ -166,7 +180,7 @@
   "cody.autocomplete.languages": {
     "*": true
   },
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorTheme": "Solarized Light",
   "workbench.iconTheme": "vs-seti",
   "workbench.startupEditor": "readme",
   "security.workspace.trust.enabled": true,

@@ -7,6 +7,7 @@ This directory holds reusable AI agent assets used across the organization.
 - `ai_framework/agents/` agent definitions (`*.agent.md`)
 - `ai_framework/chatmodes/` chat mode definitions (`*.chatmode.md`)
 - `ai_framework/collections/` curated bundles (`*.collection.yml`, `*.md`)
+- `ai_framework/prompts/` prompt templates (`*.md`)
 
 ## Authoring Conventions
 
@@ -22,6 +23,7 @@ This directory holds reusable AI agent assets used across the organization.
 - `docs/README.collections.md`
 - `ai_framework/agents/DEVELOPMENT_GUIDE.md`
 - `ai_framework/agents/SCHEMA.md`
+- `ai_framework/prompts/SCHEMA.md`
 
 ## Phase 6 Status
 

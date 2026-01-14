@@ -37,7 +37,6 @@
 | `go-mcp-expert.chatmode.md` | Go MCP Expert | Expert assistant for building MCP servers in Go using the official SDK. | go, mcp |
 | `gpt-5-beast-mode.chatmode.md` | GPT-5 Beast Mode | Beast Mode 2.0 tuned | beast, agent |
 | `hlbpa.chatmode.md` | HLBPA | High-level architectural documentation and review | architecture |
-| `implementation-plan.chatmode.md` | Implementation Plan | Generate an implementation plan for new features or refactoring existing code. | planning, deprecated, archived |
 | `janitor.chatmode.md` | Janitor | Perform janitorial tasks on any codebase including cleanup, simplification, and tech debt remediation. | cleanup |
 | `java-mcp-expert.chatmode.md` | Java MCP Expert | Expert assistance for building MCP servers in Java with reactive streams and Spring Boot. | java, mcp |
 | `kotlin-mcp-expert.chatmode.md` | Kotlin MCP Expert | Expert assistant for building MCP servers in Kotlin using the official SDK. | kotlin, mcp |
@@ -51,7 +50,6 @@
 | `ms-sql-dba.chatmode.md` | MS SQL DBA | Work with Microsoft SQL Server databases using the | database, sql-server |
 | `php-mcp-expert.chatmode.md` | PHP MCP Expert | Expert assistant for PHP MCP server development using the official SDK with attribute-based discovery. | php, mcp |
 | `plan.chatmode.md` | Plan Mode | Strategic planning and architecture assistant focused on analysis before implementation. | planning, architecture |
-| `planner.chatmode.md` | Planner | Generate an implementation plan for new features or refactoring existing code. | planning, deprecated, archived |
 | `playwright-tester.chatmode.md` | Playwright Tester | Testing mode for Playwright tests. | testing, playwright |
 | `postgresql-dba.chatmode.md` | PostgreSQL DBA | Work with PostgreSQL databases using the | database, postgresql |
 | `power-bi-data-modeling-expert.chatmode.md` | Power BI Data Modeling Expert | Power BI data modeling guidance | power-bi, data-modeling |
@@ -78,7 +76,6 @@
 | `software-engineer-agent-v1.chatmode.md` | Software Engineer Agent v1 | Expert-level software engineering | engineering, agent |
 | `specification.chatmode.md` | Specification | Generate or update specification documents for new or existing functionality. | planning, spec |
 | `swift-mcp-expert.chatmode.md` | Swift MCP Expert | Expert assistance for building MCP servers in Swift using modern concurrency and the official SDK. | swift, mcp |
-| `task-planner.chatmode.md` | Task Planner | Task planner for creating actionable implementation plans. | planning, deprecated, archived |
 | `task-researcher.chatmode.md` | Task Researcher | Task research specialist for comprehensive project analysis. | planning, research |
 | `tdd-green.chatmode.md` | TDD Green | Implement minimal code to satisfy issue | tdd, testing |
 | `tdd-red.chatmode.md` | TDD Red | Write failing tests first based on issue | tdd, testing |

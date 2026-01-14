@@ -21,17 +21,17 @@ tags:
   ]
 items:
   # Planning Chat Modes
-  - path: chatmodes/task-planner.chatmode.md
+  - path: chatmodes/archive/task-planner.chatmode.md
     kind: chat-mode
   - path: chatmodes/task-researcher.chatmode.md
     kind: chat-mode
-  - path: chatmodes/planner.chatmode.md
+  - path: chatmodes/archive/planner.chatmode.md
     kind: chat-mode
   - path: chatmodes/plan.chatmode.md
     kind: chat-mode
   - path: chatmodes/prd.chatmode.md
     kind: chat-mode
-  - path: chatmodes/implementation-plan.chatmode.md
+  - path: chatmodes/archive/implementation-plan.chatmode.md
     kind: chat-mode
   - path: chatmodes/research-technical-spike.chatmode.md
     kind:

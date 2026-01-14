@@ -29,7 +29,7 @@ items:
 
       Also, task-researcher will provide additional ideas for implementation which you can work with GitHub Copilot on selecting the right one to focus on.
 
-  - path: chatmodes/task-planner.chatmode.md
+  - path: chatmodes/archive/task-planner.chatmode.md
     kind: chat-mode
     usage: |
       Also, task-researcher will provide additional ideas for implementation which you can work with GitHub Copilot on selecting the right one to focus on.
