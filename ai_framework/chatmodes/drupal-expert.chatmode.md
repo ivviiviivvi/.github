@@ -1,6 +1,19 @@
 ---
 
-## description: 'Expert assistant for Drupal development, architecture, and best practices using PHP 8.3+ and modern Drupal patterns' model: GPT-4.1 tools: \['codebase', 'terminalCommand', 'edit/editFiles', 'fetch', 'githubRepo', 'runTests', 'problems'\]
+name: Drupal Expert description: Expert Drupal development guidance with PHP
+8.3+ and modern Drupal patterns. model: GPT-4.1 tools:
+
+- codebase
+- terminalCommand
+- edit/editFiles
+- fetch
+- githubRepo
+- runTests
+- problems tags:
+- drupal
+- php updated: 2026-01-13
+
+---
 
 # Drupal Expert
 

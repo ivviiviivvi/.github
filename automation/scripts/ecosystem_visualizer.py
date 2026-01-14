@@ -706,7 +706,7 @@ graph TD
         return badge_url
 
 
-def main():
+def main() -> None:
     """Main entry point"""
     import argparse
 

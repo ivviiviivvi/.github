@@ -1,6 +1,33 @@
 ---
 
-## description: 'Provide expert React frontend engineering guidance using modern TypeScript and design patterns.' tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp'\]
+name: Expert React Frontend Engineer description: Expert React frontend
+engineering guidance using modern TypeScript patterns. tools:
+
+- changes
+- codebase
+- edit/editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- searchResults
+- terminalLastCommand
+- terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp tags:
+- react
+- frontend updated: 2026-01-13
+
+---
 
 # Expert React Frontend Engineer Mode Instructions
 

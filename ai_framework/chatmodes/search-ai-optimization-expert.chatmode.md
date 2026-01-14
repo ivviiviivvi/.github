@@ -1,6 +1,18 @@
 ---
 
-## description: 'Expert guidance for modern search optimization: SEO, Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO) with AI-ready content strategies' tools: \['codebase', 'fetch', 'githubRepo', 'terminalCommand', 'edit/editFiles', 'problems'\]
+name: Search and AI Optimization Expert description: Guidance for SEO, AEO, and
+GEO with AI-ready content strategies. tools:
+
+- codebase
+- fetch
+- githubRepo
+- terminalCommand
+- edit/editFiles
+- problems tags:
+- seo
+- content updated: 2026-01-13
+
+---
 
 # Search & AI Optimization Expert
 

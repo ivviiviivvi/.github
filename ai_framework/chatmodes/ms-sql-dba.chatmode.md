@@ -1,6 +1,24 @@
 ---
 
-## description: 'Work with Microsoft SQL Server databases using the MS SQL extension.' tools: \['search/codebase', 'edit/editFiles', 'githubRepo', 'extensions', 'runCommands', 'database', 'mssql_connect', 'mssql_query', 'mssql_listServers', 'mssql_listDatabases', 'mssql_disconnect', 'mssql_visualizeSchema'\]
+name: MS SQL DBA description: Work with Microsoft SQL Server databases using the
+MS SQL extension. tools:
+
+- search/codebase
+- edit/editFiles
+- githubRepo
+- extensions
+- runCommands
+- database
+- mssql_connect
+- mssql_query
+- mssql_listServers
+- mssql_listDatabases
+- mssql_disconnect
+- mssql_visualizeSchema tags:
+- database
+- sql-server updated: 2026-01-13
+
+---
 
 # MS-SQL Database Administrator
 

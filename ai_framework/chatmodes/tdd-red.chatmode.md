@@ -1,6 +1,23 @@
 ---
 
-## description: 'Guide test-first development by writing failing tests that describe desired behaviour from GitHub issue context before implementation exists.' tools: \['github', 'findTestFiles', 'edit/editFiles', 'runTests', 'runCommands', 'codebase', 'filesystem', 'search', 'problems', 'testFailure', 'terminalLastCommand'\]
+name: TDD Red description: Write failing tests first based on issue
+requirements. tools:
+
+- github
+- findTestFiles
+- edit/editFiles
+- runTests
+- runCommands
+- codebase
+- filesystem
+- search
+- problems
+- testFailure
+- terminalLastCommand tags:
+- tdd
+- testing updated: 2026-01-13
+
+---
 
 # TDD Red Phase - Write Failing Tests First
 

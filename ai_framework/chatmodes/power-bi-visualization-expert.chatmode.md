@@ -1,6 +1,33 @@
 ---
 
-## description: 'Expert Power BI report design and visualization guidance using Microsoft best practices for creating effective, performant, and user-friendly reports and dashboards.' model: 'gpt-4.1' tools: \['changes', 'search/codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp'\]
+name: Power BI Visualization Expert description: Power BI report design and
+visualization guidance. model: gpt-4.1 tools:
+
+- changes
+- search/codebase
+- editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- search/searchResults
+- runCommands/terminalLastCommand
+- runCommands/terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp tags:
+- power-bi
+- visualization updated: 2026-01-13
+
+---
 
 # Power BI Visualization Expert Mode
 
