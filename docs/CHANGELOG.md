@@ -10,6 +10,9 @@ and this project adheres to
 
 ### Added
 
+- Comprehensive 246-line documentation INDEX.md organizing 133+ files (Phase 2.2)
+- Comprehensive security best practices guide (850+ lines) (Phase 5.2)
+- Dependency management guide (500+ lines) (Phase 5.3)
 - Initial repository setup with comprehensive community health files
 - GitHub Actions workflows for automation
 - Issue and PR templates
@@ -17,8 +20,17 @@ and this project adheres to
 
 ### Changed
 
-- Consolidated documentation into structured docs/ subdirectories and
-  centralized config files
+- Consolidated 12 duplicate documentation files with backward-compatible redirects (Phase 2.1)
+- Reorganized documentation into clear hierarchy: guides/, governance/, workflows/, architecture/ (Phase 2.2)
+- Resolved index.md/INDEX.md case conflict (renamed to walkthrough-gallery.md) (Phase 2.2)
+- Enhanced bug report template with 8-point PII warning and log sanitization guide (Phase 5.1)
+- Updated security policy to mandate private-only vulnerability disclosure (Phase 5.1)
+- Consolidated documentation into structured docs/ subdirectories and centralized config files
+
+### Removed
+
+- Public security vulnerability disclosure template (Phase 5.1 - security risk mitigation)
+- Obsolete guides/WORKFLOW_OPTIMIZATION_ROADMAP.md redirect (Phase 2.1)
 
 ### Deprecated
 

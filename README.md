@@ -36,21 +36,22 @@ for the ivviiviivvi GitHub organization.
 
 ## 📚 Documentation
 
+**⭐ New:** [Complete Documentation Index](docs/INDEX.md) - Browse all 133+ docs organized by category
+
 ### Core Policies
 
-- **[SECURITY.md](SECURITY.md)** - Security vulnerability reporting and response
-  procedures
+- **[SECURITY.md](docs/governance/SECURITY.md)** - Security vulnerability reporting and response procedures
+- **[CONTRIBUTING.md](docs/governance/CONTRIBUTING.md)** - Guidelines for contributing to our projects
+- **[CODE_OF_CONDUCT.md](docs/governance/CODE_OF_CONDUCT.md)** - Community standards and enforcement (Contributor Covenant 2.1)
+- **[SUPPORT.md](docs/governance/SUPPORT.md)** - How to get help and support resources
+- **[GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)** - Governance framework and decision-making processes
 
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to our
-  projects
+### Quick Links
 
-- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - Community standards and
-  enforcement (Contributor Covenant 2.1)
-
-- **[SUPPORT.md](SUPPORT.md)** - How to get help and support resources
-
-- **[GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)** - Governance framework
-  and decision-making processes
+- 📖 [Quick Start Guides](docs/INDEX.md#quick-start) - Get up to speed in 15 minutes
+- 🎯 [Workflow Guides](docs/INDEX.md#guides) - Best practices and automation
+- 🔒 [Security Documentation](docs/guides/security-best-practices.md) - Comprehensive security guide (850+ lines)
+- 🤖 [AI Framework](docs/INDEX.md#ai-framework) - Agents, instructions, and MCP servers
 
 - **Default community health files** that apply to all repositories
 
