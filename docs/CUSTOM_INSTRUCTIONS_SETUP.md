@@ -106,7 +106,7 @@ Before setting up custom instructions, ensure you have:
 Each instruction file has an "Install in VS Code" badge that automatically
 installs it:
 
-1. Browse the [`instructions/`](../instructions/) directory
+1. Browse the [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/) directory
 1. Open an instruction file (e.g., `python.instructions.md`)
 1. Click the **"Install in VS Code"** badge at the top
 1. Follow the VS Code prompts to complete installation
@@ -258,7 +258,7 @@ languages, tools, and platforms.
 
 ### By Technology
 
-The [`instructions/`](../instructions/) directory contains instructions for:
+The [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/) directory contains instructions for:
 
 - **109 technologies** across multiple domains
 - **Languages**: Python, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Swift,
@@ -269,7 +269,7 @@ The [`instructions/`](../instructions/) directory contains instructions for:
 - **Tools**: Docker, Kubernetes, Terraform, Ansible, GitHub Actions
 - **Databases**: PostgreSQL, MongoDB, MySQL, Redis, Elasticsearch
 
-**Browse all instructions:** [`instructions/`](../instructions/)
+**Browse all instructions:** [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
 
 ---
 
@@ -557,7 +557,7 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 ### Organization Resources
 
-- [Instructions Directory](../instructions/) - Browse all 100+ instructions
+- [Instructions Directory](https://github.com/github/awesome-copilot/tree/main/instructions/) - Browse all 100+ instructions
 - [Instructions Documentation](README.instructions.md) - Detailed guide to
   instructions
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Using instructions
@@ -566,11 +566,11 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 ### Templates
 
-- [Instruction Template](../instructions/TEMPLATE.instructions.md) - Blank
+- [Instruction Template](https://github.com/github/awesome-copilot/blob/main/instructions/TEMPLATE.instructions.md) - Blank
   template for new instructions
-- [Python Template](../instructions/python.instructions.md) - Example Python
+- [Python Template](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md) - Example Python
   instructions
-- [TypeScript Template](../instructions/typescript.instructions.md) - Example
+- [TypeScript Template](https://github.com/github/awesome-copilot/blob/main/instructions/typescript.instructions.md) - Example
   TypeScript instructions
 
 ### Community
@@ -585,7 +585,7 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 ## Next Steps
 
-1. **Browse available instructions** in the [`instructions/`](../instructions/)
+1. **Browse available instructions** in the [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
    directory
 1. **Install instructions** for your primary technologies
 1. **Test with Copilot** on a sample project

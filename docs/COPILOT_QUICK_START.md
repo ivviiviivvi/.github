@@ -410,8 +410,8 @@ For full environment customization:
 | Directory                           | Contents                                              |
 | ----------------------------------- | ----------------------------------------------------- |
 | [`agents/`](../ai_framework/agents/)             | 26+ custom agents for specialized tasks               |
-| [`instructions/`](../instructions/) | 100+ custom instructions for languages and frameworks |
-| [`prompts/`](../prompts/)           | Reusable prompts for common tasks                     |
+| [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/) | 100+ custom instructions for languages and frameworks |
+| [`prompts/`](https://github.com/github/awesome-copilot/tree/main/prompts/)           | Reusable prompts for common tasks                     |
 | [`chatmodes/`](../ai_framework/chatmodes/)       | Specialized AI personas                               |
 | [`collections/`](../ai_framework/collections/)   | Curated bundles by theme                              |
 
