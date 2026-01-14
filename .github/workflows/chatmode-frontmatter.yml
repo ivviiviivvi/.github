@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - ai_framework/chatmodes/**
+      - ai_framework/chatmodes/INVENTORY.md
       - automation/scripts/generate_chatmode_inventory.py
       - automation/scripts/validate_chatmode_frontmatter.py
   push:
@@ -11,6 +12,7 @@ on:
       - main
     paths:
       - ai_framework/chatmodes/**
+      - ai_framework/chatmodes/INVENTORY.md
       - automation/scripts/generate_chatmode_inventory.py
       - automation/scripts/validate_chatmode_frontmatter.py
 
