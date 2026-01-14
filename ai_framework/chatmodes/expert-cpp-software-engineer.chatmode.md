@@ -1,6 +1,34 @@
 ---
 
-## description: 'Provide expert C++ software engineering guidance using modern C++ and industry best practices.' tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runNotebooks', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp'\]
+name: Expert C++ Software Engineer description: Expert C++ software engineering
+guidance using modern C++ best practices. tools:
+
+- changes
+- codebase
+- edit/editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runNotebooks
+- runTasks
+- runTests
+- search
+- searchResults
+- terminalLastCommand
+- terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp tags:
+- cpp
+- engineering updated: 2026-01-13
+
+---
 
 # Expert C++ software engineer mode instructions
 

@@ -1,15 +1,23 @@
 ---
 
-## description: "Code Review Mode tailored for Electron app with Node.js backend (main), Angular frontend (render), and native integration layer (e.g., AppleScript, shell, or native tooling). Services in other repos are not reviewed here." tools: \["codebase", "editFiles", "fetch", "problems", "runCommands", "search", "searchResults", "terminalLastCommand", "git", "git_diff", "git_log", "git_show", "git_status"\]
+name: Electron Angular Native Review description: Code review mode for Electron
+with Node.js, Angular, and native integrations. tools:
 
-# Electron Code Review Mode Instructions
-
-You're reviewing an Electron-based desktop app with:
-
-- **Main Process**: Node.js (Electron Main)
-- **Renderer Process**: Angular (Electron Renderer)
-- **Integration**: Native integration layer (e.g., AppleScript, shell, or other
-  tooling)
+- codebase
+- editFiles
+- fetch
+- problems
+- runCommands
+- search
+- searchResults
+- terminalLastCommand
+- git
+- git_diff
+- git_log
+- git_show
+- git_status tags:
+- electron
+- reviews updated: 2026-01-13
 
 ---
 

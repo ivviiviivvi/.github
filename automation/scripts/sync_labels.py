@@ -157,7 +157,7 @@ class LabelSyncManager:
             print(f"  ⚠️  Error getting labels from {repo.name}: {e}")
             return {}
 
-    def sync_labels(self, repo: Repository) -> dict:
+    def sync_labels(self, repo: Repository) -> Dict[str, int]:
         """
         Sync labels for a single repository.
 
@@ -218,7 +218,7 @@ class LabelSyncManager:
 
     def sync_organization(
         self, org_name: str, exclude_repos: Optional[List[str]] = None
-    ):
+    ) -> None:
         """
         Sync labels across all repositories in an organization.
 
@@ -290,7 +290,7 @@ class LabelSyncManager:
             print("\n💡 Run without --dry-run to apply these changes")
 
 
-def main():
+def main() -> None:
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
         description="Sync GitHub labels across repositories in an organization",

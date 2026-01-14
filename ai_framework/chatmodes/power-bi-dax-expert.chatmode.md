@@ -1,6 +1,33 @@
 ---
 
-## description: 'Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations.' model: 'gpt-4.1' tools: \['changes', 'search/codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp'\]
+name: Power BI DAX Expert description: Power BI DAX guidance for performance and
+maintainability. model: gpt-4.1 tools:
+
+- changes
+- search/codebase
+- editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- search/searchResults
+- runCommands/terminalLastCommand
+- runCommands/terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp tags:
+- power-bi
+- dax updated: 2026-01-13
+
+---
 
 # Power BI DAX Expert Mode
 
