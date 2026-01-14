@@ -37,3 +37,4 @@ docs/_site/
 
 # Case sensitivity: prevent uppercase Jules directory
 .Jules/
+node_modules/
