@@ -97,16 +97,15 @@ jobs:
             true
 
             # Enable debug output
-          debug-only: false
+          debug-only:
+            false
 
-          # Ascending order (oldest first)
-          ascending: true
+            # Exempt issues/PRs with assignees from being marked stale
+          exempt-all-assignees:
+            true
 
-          # Exempt issues/PRs with assignees from being marked stale
-          exempt-all-assignees: true
-
-          # Close reason for stale issues
-          close-issue-reason: 'not_planned'
+            # Close reason for stale issues
+          close-issue-reason: not_planned
 
       - name: Summary
         if: always()

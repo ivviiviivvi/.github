@@ -5,8 +5,10 @@ Identifies tasks that should run today based on cron schedules
 """
 
 import json
+import os
 import sys
 from datetime import datetime
+from pathlib import Path
 
 from croniter import croniter
 
@@ -70,8 +72,12 @@ def main():
     print(f"Found {len(daily_tasks)} tasks scheduled for today")
     print(json.dumps(daily_tasks, indent=2))
 
-    # Write to file for GitHub Actions
-    with open("/tmp/daily_tasks.json", "w") as f:
+    # Write to file for GitHub Actions (use RUNNER_TEMP if available)
+    import tempfile
+
+    output_dir = Path(os.environ.get("RUNNER_TEMP", tempfile.gettempdir()))
+    output_file = output_dir / "daily_tasks.json"
+    with open(output_file, "w") as f:
         json.dump(daily_tasks, f)
 
 

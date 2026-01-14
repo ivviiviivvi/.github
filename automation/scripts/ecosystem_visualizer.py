@@ -5,7 +5,6 @@ Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring
 """
 
 import json
-import os
 import re
 from datetime import datetime
 from pathlib import Path
@@ -193,9 +192,8 @@ graph TD
                 """    subgraph "Technologies"
 """
             )
-            for i, tech in enumerate(technologies[:15]):  # Limit to first 15
+            for i, tech in enumerate(technologies[:15]):  # Limit to 15
                 tech_id = f"TECH{i}"
-                safe_tech = tech.replace("-", "_").replace(".", "_")
                 parts.append(f"        {tech_id}[{tech}]:::tech\n")
 
             parts.append("    end\n")
@@ -630,16 +628,10 @@ graph TD
                         parts.append(f"### {label}\n\n")
                         parts.append("| Workflow | Action |\n|---|---|\n")
                         for w in items:
-                            parts.append(f"| `{w}` | [View]({workflow_path}{w}) |\n")
+                            parts.append(
+                                f"| `{w}` | " f"[View]({workflow_path}{w}) |\n"
+                            )
                         parts.append("\n")
-
-                    # Store for grouped display later
-                    grouped[f"{emoji} {category_name}"].append(workflow)
-
-                    # Link to the workflow file with calculated relative path
-                    parts.append(
-                        f"| {i} | {emoji} | `{workflow}` | [View]({workflow_path}{workflow}) |\n"
-                    )
 
                 parts.append("\n</details>\n")
             else:

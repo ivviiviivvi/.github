@@ -122,15 +122,6 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          print(due_tasks_json)
-
-          # Write to GITHUB_OUTPUT
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('due_tasks<<EOF\n')
-              f.write(f"{due_tasks_json}\n")
-              f.write('EOF\n')
-              f.write(f"due_tasks={due_tasks_json}\n")
-          EOF
 
       - name: Dispatch Due Tasks
         if: steps.orchestrator.outputs.has_tasks == 'true'

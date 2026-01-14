@@ -5,13 +5,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/labels.yml'
-      - '.github/workflows/label-sync.yml'
-  workflow_dispatch:
+      - .github/labels.yml
+      - .github/workflows/label-sync.yml
   workflow_call:
-  schedule:
-    # Run weekly on Monday at 00:00 UTC
-    - cron: 0 0 * * 1
   workflow_dispatch:
     inputs:
       dry_run:
@@ -22,6 +18,9 @@ on:
         options:
           - "true"
           - "false"
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: 0 0 * * 1
 
 permissions:
   issues: write
@@ -38,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Sync labels
-        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a  # v2.3.3
+        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
         with:
           node-version: "20"
 
