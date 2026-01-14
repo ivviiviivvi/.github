@@ -376,35 +376,42 @@ jobs:
             git add .github/workflows/
             git commit -m "chore: add workflow templates from .github repository
 
-- Added $COPIED workflow template(s)
-- Templates copied: ${TEMPLATES[@]%%:*}
-- Automated by repository-bootstrap workflow"
+            - Added $COPIED workflow template(s)
+            - Templates copied: ${TEMPLATES[@]%%:*}
+            - Automated by repository-bootstrap workflow"
 
             # Push and create PR
             git push origin "$BRANCH_NAME"
+
+            # Create PR body
+            cat > /tmp/pr_body.md <<-'EOF'
+            This PR adds standard workflow templates from the organization's `.github` repository.
+            
+            ## Templates Added
+            
+            EOF
+            for template_info in "${TEMPLATES[@]}"; do
+              IFS=':' read -r TEMPLATE DESC <<< "$template_info"
+              echo "- **$TEMPLATE**: $DESC" >> /tmp/pr_body.md
+            done
+            cat >> /tmp/pr_body.md <<-'EOF'
+            
+            ## Next Steps
+            
+            1. Review the workflows and customize as needed
+            2. Add any required secrets to the repository settings
+            3. Update workflow triggers based on your needs
+            
+            ---
+            *Automated by repository-bootstrap workflow*
+            EOF
 
             gh pr create \
               --repo "$TARGET_REPO" \
               --base main \
               --head "$BRANCH_NAME" \
               --title "chore: Add workflow templates" \
-              --body "This PR adds standard workflow templates from the organization's \`.github\` repository.
-
-## Templates Added
-
-$(for template_info in "${TEMPLATES[@]}"; do
-  IFS=':' read -r TEMPLATE DESC <<< "$template_info"
-  echo "- **$TEMPLATE**: $DESC"
-done)
-
-## Next Steps
-
-1. Review the workflows and customize as needed
-2. Add any required secrets to the repository settings
-3. Update workflow triggers based on your needs
-
----
-*Automated by repository-bootstrap workflow*" || {
+              --body-file /tmp/pr_body.md || {
               echo "⚠️ Warning: Could not create PR. Changes pushed to branch $BRANCH_NAME"
             }
 

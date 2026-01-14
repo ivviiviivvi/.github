@@ -30,4 +30,5 @@ jobs:
 
       - name: Commit state changes
         if: always()
-        run: ./scripts/commit_changes.sh "chore: reset quotas"
+        run: >
+          ./scripts/commit_changes.sh "chore: reset quotas"
