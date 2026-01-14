@@ -10,6 +10,14 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
 
+        ⚠️ **IMPORTANT - Do Not Include Sensitive Information:**
+        - **NO** Passwords, API keys, tokens, or secrets
+        - **NO** Personal Identifiable Information (PII) - names, emails, addresses, phone numbers
+        - **NO** Customer data or internal system details
+        - **NO** Production credentials or connection strings
+
+        If your bug involves security concerns, use our [Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new) instead.
+
   - type: input
     id: contact
     attributes:
@@ -104,8 +112,22 @@ body:
       label: Relevant log output
       description: |
         Please copy and paste any relevant log output.
-        Do not include sensitive data (passwords, API keys, tokens, PII, or customer data).
+
+        ⚠️ **SANITIZE YOUR LOGS - Do NOT include:**
+        - Passwords, API keys, tokens, secrets
+        - Personal Identifiable Information (PII)
+        - Customer data
+        - Internal system details
+        - Production credentials
+        - Full file paths that expose system structure
+
+        Redact sensitive information with `[REDACTED]` before pasting.
       render: shell
+      placeholder: |
+        Paste your sanitized log output here...
+        Example:
+        ERROR: Failed to connect to database at [REDACTED]
+        Auth token: [REDACTED]
 
   - type: checkboxes
     id: terms

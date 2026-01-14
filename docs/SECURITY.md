@@ -5,25 +5,23 @@
 We take the security of this project seriously. If you discover a security
 vulnerability, please report it responsibly.
 
-### Private Disclosure (Recommended for Sensitive Issues)
+### How to Report
 
-**For sensitive security vulnerabilities**, please report them privately through
-our
+**ALL security vulnerabilities must be reported privately** through our
 [Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
 page.
 
-**DO NOT** create a public issue for sensitive security vulnerabilities.
+**DO NOT** create a public issue for ANY security vulnerabilities.
 
-### Public Disclosure (For Low-Risk Issues)
+**Why private disclosure?**
 
-For security issues that are:
+- Protects users while we develop a fix
+- Prevents exploitation by malicious actors
+- Allows coordinated disclosure with affected parties
+- Follows industry-standard responsible disclosure practices
 
-- Already publicly disclosed
-- Low severity and don't pose immediate risk
-- Security enhancements or hardening suggestions
-
-You may create a public issue using our
-[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml).
+**For non-security bugs and enhancements**, please use our regular
+[issue templates](https://github.com/ivviiviivvi/.github/issues/new/choose).
 
 ## What to Include in Your Report
 
