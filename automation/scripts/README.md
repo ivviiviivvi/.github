@@ -121,6 +121,24 @@ python scripts/ecosystem_visualizer.py --find-latest --output reports/MY_DASHBOA
 
 ---
 
+### ✅ `validate_chatmode_frontmatter.py`
+
+**Purpose**: Validate YAML frontmatter for chatmode definitions
+
+**Usage**:
+
+```bash
+python automation/scripts/validate_chatmode_frontmatter.py
+```
+
+Auto-fix legacy description lines:
+
+```bash
+python automation/scripts/validate_chatmode_frontmatter.py --fix
+```
+
+---
+
 ### 🔒 `manage_lock.sh`
 
 **Purpose**: File-based locking mechanism for concurrent workflows

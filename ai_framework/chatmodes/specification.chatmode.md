@@ -1,6 +1,34 @@
 ---
 
-## description: 'Generate or update specification documents for new or existing functionality.' tools: \['changes', 'search/codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'github'\]
+name: Specification description: Generate or update specification documents for
+new or existing functionality. tools:
+
+- changes
+- search/codebase
+- edit/editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- search/searchResults
+- runCommands/terminalLastCommand
+- runCommands/terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp
+- github tags:
+- planning
+- spec updated: 2026-01-13
+
+---
 
 # Specification mode instructions
 

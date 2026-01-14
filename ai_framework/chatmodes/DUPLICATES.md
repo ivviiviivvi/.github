@@ -15,8 +15,9 @@ Candidates:
 Rationale:
 
 All four describe "planning" or "implementation plan" behavior. The difference
-is mostly tone and tooling requirements. Recommend choosing one canonical
-general planner and re-scoping the others (or merging content) to avoid overlap.
+is mostly tone and tooling requirements. Canonical: use
+`ai_framework/chatmodes/plan.chatmode.md` and treat the others as deprecated
+aliases until consolidated.
 
 ## Planning cluster (IaC specific)
 

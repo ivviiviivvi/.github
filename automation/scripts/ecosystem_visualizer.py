@@ -8,7 +8,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class EcosystemVisualizer:
@@ -16,11 +16,11 @@ class EcosystemVisualizer:
 
     _WORKFLOW_BASE_PATH = "../.github/workflows/"
 
-    # Configuration: Maximum workflows to display in the Mermaid diagram.
-    # Large organizations can have many workflows, and rendering all of them
+    # Configuration: Maximum workflows to display in Mermaid diagram.
+    # Large organizations can have many workflows, and rendering all
     # in a single graph quickly becomes unreadable and hard to navigate.
-    # This limit only affects the visualization: the full set of workflows
-    # is still listed in the "Active Workflows" section of the report below.
+    # This limit only affects the visualization: the full set of
+    # workflows is still listed in "Active Workflows" section below.
     MAX_DIAGRAM_WORKFLOWS = 10
 
     # Workflow categories mapping
@@ -45,7 +45,7 @@ class EcosystemVisualizer:
         (
             "🤖",
             re.compile(
-                r"gemini|claude|openai|perplexity|grok|jules|copilot|agent|ai\-"
+                r"gemini|claude|openai|perplexity|grok|jules|" r"copilot|agent|ai\-"
             ),
         ),
         ("🚀", re.compile(r"ci|test|build|deploy|release|publish|docker")),
@@ -54,7 +54,10 @@ class EcosystemVisualizer:
         ("💓", re.compile(r"health|check|monitor|metrics|dashboard|report")),
     ]
 
-    def __init__(self, report_path: Path = None):
+    # Technology icons (extendable)
+    TECHNOLOGY_ICONS: Dict[str, str] = {}
+
+    def __init__(self, report_path: Optional[Path] = None):
         self.report_path = report_path
         self.report_data = None
 
@@ -64,11 +67,12 @@ class EcosystemVisualizer:
 
     def _calculate_relative_path(self, output_path: Path, target_path: str) -> str:
         """
-        Calculate the correct relative path from output_path to target_path.
+        Calculate relative path from output_path to target_path.
 
         Args:
-            output_path: The path where the dashboard will be written
-            target_path: The target path relative to repository root (e.g., '.github/workflows/')
+            output_path: Path where the dashboard will be written
+            target_path: Target path relative to repository root
+                        (e.g., '.github/workflows/')
 
         Returns:
             The correct relative path to use in links
@@ -81,8 +85,9 @@ class EcosystemVisualizer:
         # This represents where the file will be located
         output_dir = output_path.parent
 
-        # Normalize the path to handle both absolute and relative paths consistently
-        # We only care about the depth of the directory structure, not the absolute location
+        # Normalize the path to handle both absolute and relative
+        # paths consistently. We only care about the depth of the
+        # directory structure, not the absolute location.
         # Convert Path('.') to empty to handle root level
         if output_dir == Path(".") or str(output_dir) == ".":
             depth = 0
@@ -102,7 +107,7 @@ class EcosystemVisualizer:
             parent_refs = "../" * depth
             return f"{parent_refs}{target_path}"
 
-    def generate_mermaid_diagram(self, output_path: Path = None) -> str:
+    def generate_mermaid_diagram(self, output_path: Optional[Path] = None) -> str:
         """Generate Mermaid diagram of the ecosystem"""
 
         if not self.report_data or "ecosystem_map" not in self.report_data:
@@ -111,7 +116,11 @@ class EcosystemVisualizer:
         em = self.report_data["ecosystem_map"]
 
         # Calculate the correct relative path for workflow links
-        workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
+        workflow_dir = ".github/workflows/"
+        if output_path:
+            workflow_path = self._calculate_relative_path(output_path, workflow_dir)
+        else:
+            workflow_path = workflow_dir
 
         # Use a list for efficient string concatenation
         parts = []
@@ -132,16 +141,18 @@ graph TD
 """
         )
 
-        # Add workflows (limited to MAX_DIAGRAM_WORKFLOWS for readability)
-        # Note: All workflows are listed in the "Active Workflows" section below
+        # Add workflows (limited to MAX_DIAGRAM_WORKFLOWS)
+        # Note: All workflows are listed in the "Active Workflows"
+        # section below
         workflows = em.get("workflows", [])
         displayed_workflows = workflows[: self.MAX_DIAGRAM_WORKFLOWS]
         for i, workflow in enumerate(displayed_workflows):
             workflow_id = f"WF{i}"
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
             # Add click event to open workflow file
+            click_target = f"{workflow_path}{workflow}"
             parts.append(
-                f'        click {workflow_id} "{workflow_path}{workflow}" "View Workflow"\n'
+                f'        click {workflow_id} "{click_target}" ' f'"View Workflow"\n'
             )
             parts.append(f"        ORG --> {workflow_id}\n")
 
@@ -163,9 +174,8 @@ graph TD
         instructions = em.get("copilot_instructions", [])
         if instructions:
             parts.append("        INSTR[Instructions]:::agent\n")
-            parts.append(
-                f"        INSTR_COUNT[{len(instructions)} instructions]:::agent\n"
-            )
+            count_node = f"INSTR_COUNT[{len(instructions)} instructions]"
+            parts.append(f"        {count_node}:::agent\n")
             parts.append("        INSTR --> INSTR_COUNT\n")
             parts.append("        ORG --> INSTR\n")
 
@@ -202,12 +212,12 @@ graph TD
 
         return "".join(parts)
 
-    def _render_grouped_section(self, items: List[Dict]) -> List[str]:
+    def _render_grouped_section(self, items: List[Dict[str, Any]]) -> List[str]:
         """Helper to render grouped alerts/points"""
         parts = []
 
         # Group items by category
-        grouped = {}
+        grouped: Dict[str, List[Dict[str, Any]]] = {}
         for item in items:
             cat = item.get("category", "Unknown")
             if cat not in grouped:
@@ -228,9 +238,13 @@ graph TD
             else:
                 severity = "UNKNOWN"
 
-            emoji = {"CRITICAL": "🔴", "HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢"}.get(
-                severity, "⚪"
-            )
+            severity_emojis = {
+                "CRITICAL": "🔴",
+                "HIGH": "🔴",
+                "MEDIUM": "🟡",
+                "LOW": "🟢",
+            }
+            emoji = severity_emojis.get(severity, "⚪")
 
             # UX Improvement: Use blockquotes for better visual distinction
             parts.append(f"> {emoji} **{category}** ({severity})\n")
@@ -244,8 +258,8 @@ graph TD
 
     def _classify_workflow(self, workflow_name: str) -> Tuple[str, str]:
         """
-        Classify a workflow based on its name using pre-compiled regex patterns.
-        Returns tuple of (emoji, category_name).
+        Classify a workflow based on its name using pre-compiled
+        regex patterns. Returns tuple of (emoji, category_name).
         """
         name = workflow_name.lower()
         for emoji, pattern in self.WORKFLOW_PATTERNS:
@@ -253,7 +267,7 @@ graph TD
                 return emoji, self.WORKFLOW_CATEGORIES[emoji]
         return "⚙️", self.WORKFLOW_CATEGORIES["⚙️"]
 
-    def generate_dashboard_markdown(self, output_path: Path = None) -> str:
+    def generate_dashboard_markdown(self, output_path: Optional[Path] = None) -> str:
         """Generate a comprehensive dashboard in Markdown"""
 
         if not self.report_data:
@@ -387,9 +401,8 @@ graph TD
             broken_links = lv.get("broken_links", [])
             if broken_links:
                 display_count = min(len(broken_links), 20)
-                parts.append(
-                    f"<details>\n<summary>View top {display_count} broken links (of {broken})</summary>\n\n"
-                )
+                summary = f"View top {display_count} broken links " f"(of {broken})"
+                parts.append(f"<details>\n<summary>{summary}</summary>\n\n")
                 parts.append("| URL | Status |\n|---|---|\n")
 
                 for link in broken_links[:display_count]:
@@ -407,17 +420,21 @@ graph TD
                     else:
                         status_emoji = "⚠️"  # Unknown/Other
 
-                    # Truncate long URLs for display (max 60 characters including ellipsis)
+                    # Truncate long URLs for display
+                    # (max 60 characters including ellipsis)
                     display_url = url if len(url) <= 60 else url[:57] + "..."
                     # Escape pipe characters for Markdown table
                     display_url = display_url.replace("|", "\\|")
-                    parts.append(f"| `{display_url}` | {status_emoji} {status} |\n")
+                    row = f"| `{display_url}` | {status_emoji} {status} |\n"
+                    parts.append(row)
 
                 parts.append("\n</details>\n\n")
         else:
-            parts.append(
-                "ℹ️ **No Data**: External link validation was skipped or found no links.\n\n"
+            no_data_msg = (
+                "ℹ️ **No Data**: External link validation was "
+                "skipped or found no links.\n\n"
             )
+            parts.append(no_data_msg)
 
         parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
 
@@ -435,7 +452,8 @@ graph TD
                 parts.extend(self._render_grouped_section(blind_spots))
 
             if shatter_points:
-                parts.append(f"\n### 💥 Shatter Points ({len(shatter_points)})\n\n")
+                sp_count = len(shatter_points)
+                parts.append(f"\n### 💥 Shatter Points ({sp_count})\n\n")
                 parts.extend(self._render_grouped_section(shatter_points))
 
         parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
@@ -443,26 +461,35 @@ graph TD
         # Ecosystem diagram
         parts.append("\n## 🗺️  Ecosystem Map\n\n")
 
-        # Add note about workflow display limit if there are more workflows than the limit
+        # Add note about workflow display limit if there are more
+        # workflows than the limit
         if "ecosystem_map" in self.report_data:
             em = self.report_data["ecosystem_map"]
             workflows = em.get("workflows", [])
             if len(workflows) > self.MAX_DIAGRAM_WORKFLOWS:
-                parts.append(
-                    f"ℹ️  *The diagram below displays the first {self.MAX_DIAGRAM_WORKFLOWS} workflows for readability. "
+                msg1 = (
+                    f"ℹ️  *The diagram below displays the first "
+                    f"{self.MAX_DIAGRAM_WORKFLOWS} workflows for "
+                    f"readability. "
                 )
-                parts.append(
-                    f"All {len(workflows)} workflows are listed in the [Active Workflows](#-active-workflows) section.*\n\n"
+                parts.append(msg1)
+                msg2 = (
+                    f"All {len(workflows)} workflows are listed in "
+                    f"the [Active Workflows](#-active-workflows) "
+                    f"section.*\n\n"
                 )
+                parts.append(msg2)
 
         parts.append(self.generate_mermaid_diagram(output_path))
-        parts.append(
-            "\n**Legend:** 🔵 Organization | 🟣 Workflow | 🟢 AI Agent | 🔘 Technology\n"
+        legend = (
+            "\n**Legend:** 🔵 Organization | 🟣 Workflow | "
+            "🟢 AI Agent | 🔘 Technology\n"
         )
+        parts.append(legend)
         parts.append("\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
 
         # Technology coverage
-        parts.append(f"\n## 🛠️  Technology Coverage\n\n")
+        parts.append("\n## 🛠️  Technology Coverage\n\n")
         if "ecosystem_map" in self.report_data:
             em = self.report_data["ecosystem_map"]
             technologies = em.get("technologies", [])
@@ -470,16 +497,16 @@ graph TD
             if technologies:
                 parts.append("Supported languages and frameworks:\n\n")
 
-                # UX Improvement: Use list for small numbers, table for large to avoid empty cells
+                # UX Improvement: Use list for small numbers,
+                # table for large to avoid empty cells
                 if len(technologies) <= 5:
                     for tech in technologies:
                         icon = self.TECHNOLOGY_ICONS.get(tech.lower(), "🔹")
                         parts.append(f"- {icon} `{tech}`\n")
                     parts.append("\n")
                 else:
-                    parts.append(
-                        f"<details>\n<summary>View all {len(technologies)} technologies</summary>\n\n"
-                    )
+                    summary = f"View all {len(technologies)} technologies"
+                    parts.append(f"<details>\n<summary>{summary}</summary>\n\n")
 
                     # Group into columns
                     cols = 4
@@ -494,14 +521,19 @@ graph TD
                         formatted_cells = []
                         for t in row_techs:
                             if t:
-                                icon = self.TECHNOLOGY_ICONS.get(t.lower(), "🔹")
+                                default_icon = "🔹"
+                                icon = self.TECHNOLOGY_ICONS.get(
+                                    t.lower(), default_icon
+                                )
                                 formatted_cells.append(f"{icon} `{t}`")
                             else:
                                 formatted_cells.append("")
-                        parts.append("| " + " | ".join(formatted_cells) + " |\n")
+                        row = "| " + " | ".join(formatted_cells) + " |\n"
+                        parts.append(row)
 
                         if i == 0:
-                            parts.append("| " + " | ".join(["---"] * cols) + " |\n")
+                            sep = "| " + " | ".join(["---"] * cols) + " |\n"
+                            parts.append(sep)
 
                     parts.append("\n</details>\n")
             else:
@@ -509,25 +541,29 @@ graph TD
         else:
             parts.append("No technology data available.\n")
 
-        parts.append(f"\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
+        back_to_top1 = "\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n"
+        parts.append(back_to_top1)
 
         # Top workflows
-        parts.append(f"\n## ⚙️  Active Workflows\n\n")
+        parts.append("\n## ⚙️  Active Workflows\n\n")
         if "ecosystem_map" in self.report_data:
             em = self.report_data["ecosystem_map"]
             workflows = em.get("workflows", [])
 
             if workflows:
                 # Calculate the correct relative path for workflow links
-                workflow_path = self._calculate_relative_path(
-                    output_path, ".github/workflows/"
-                )
+                if output_path:
+                    workflow_path = self._calculate_relative_path(
+                        output_path, ".github/workflows/"
+                    )
+                else:
+                    workflow_path = ".github/workflows/"
 
-                parts.append(
-                    f"<details>\n<summary>View all {len(workflows)} workflows</summary>\n\n"
-                )
+                summary = f"View all {len(workflows)} workflows"
+                parts.append(f"<details>\n<summary>{summary}</summary>\n\n")
 
-                # UX Improvement: Single source of truth for legend, using interpunct for cleaner look
+                # UX Improvement: Single source of truth for legend,
+                # using interpunct for cleaner look
                 legend_items = [
                     f"{emoji} {name}"
                     for emoji, name in self.WORKFLOW_CATEGORIES.items()
@@ -535,92 +571,22 @@ graph TD
                 legend_string = " · ".join(legend_items)
                 parts.append(f"> **Legend:** {legend_string}\n\n")
 
-                # Group workflows by category
-                categories = [
-                    (
-                        "🛡️ Safeguards & Policies",
-                        lambda n: n.startswith("safeguard") or "policy" in n,
-                    ),
-                    (
-                        "🔐 Security",
-                        lambda n: any(
-                            k in n
-                            for k in ("security", "scan", "codeql", "semgrep", "secret")
-                        ),
-                    ),
-                    ("♻️ Reusable Workflows", lambda n: "reusable" in n),
-                    (
-                        "🤖 AI Agents & Automation",
-                        lambda n: any(
-                            k in n
-                            for k in (
-                                "gemini",
-                                "claude",
-                                "openai",
-                                "perplexity",
-                                "grok",
-                                "jules",
-                                "copilot",
-                                "agent",
-                                "ai-",
-                            )
-                        ),
-                    ),
-                    (
-                        "🚀 CI/CD & Deployment",
-                        lambda n: any(
-                            k in n
-                            for k in (
-                                "ci",
-                                "test",
-                                "build",
-                                "deploy",
-                                "release",
-                                "publish",
-                                "docker",
-                            )
-                        ),
-                    ),
-                    (
-                        "🔀 PR Management",
-                        lambda n: any(k in n for k in ("pr-", "pull-request", "merge")),
-                    ),
-                    (
-                        "⏱️ Scheduled Tasks",
-                        lambda n: any(
-                            k in n
-                            for k in ("schedule", "cron", "daily", "weekly", "monthly")
-                        ),
-                    ),
-                    (
-                        "💓 Health & Metrics",
-                        lambda n: any(
-                            k in n
-                            for k in (
-                                "health",
-                                "check",
-                                "monitor",
-                                "metrics",
-                                "dashboard",
-                                "report",
-                            )
-                        ),
-                    ),
-                    ("⚙️ Utility & Other", lambda n: True),  # Fallback
-                ]
-
                 # Assign workflows to categories (first match wins)
                 # Grouping is now done efficiently
-                grouped = {}
+                grouped: Dict[str, List[str]] = {}
                 for emoji in self.WORKFLOW_CATEGORIES.keys():
                     grouped[f"{emoji} {self.WORKFLOW_CATEGORIES[emoji]}"] = []
 
                 # Count active categories
-                active_categories = sum(1 for items in grouped.values() if items)
-
-                parts.append(
-                    f"<details>\n<summary>View all {len(workflows)} workflows across {active_categories} categories</summary>\n\n"
+                active_categories = sum(
+                    1 for items in grouped.values() if len(items) > 0
                 )
+
+                summary = (
+                    f"View all {len(workflows)} workflows across "
+                    f"{active_categories} categories"
+                )
+                parts.append(f"<details>\n<summary>{summary}</summary>\n\n")
 
                 # Render categories
                 for label, items in grouped.items():
@@ -639,7 +605,8 @@ graph TD
         else:
             parts.append("No workflow data available.\n")
 
-        parts.append(f"\n[⬆️ Back to Top](#organization-ecosystem-dashboard)\n")
+        back_to_top2 = "\n[⬆️ Back to Top]" "(#organization-ecosystem-dashboard)\n"
+        parts.append(back_to_top2)
 
         parts.append("\n---\n\n")
         parts.append("*Dashboard generated by Ecosystem Visualizer*\n")
@@ -656,7 +623,10 @@ graph TD
         """Generate a health badge in Shields.io format"""
 
         if not self.report_data:
-            return "![Health](https://img.shields.io/badge/health-unknown-lightgrey)"
+            badge_url = (
+                "![Health](https://img.shields.io/badge/" "health-unknown-lightgrey)"
+            )
+            return badge_url
 
         # Calculate overall health score
         score = 0
@@ -729,7 +699,11 @@ graph TD
             color = "red"
             status = "critical"
 
-        return f"![Health](https://img.shields.io/badge/health-{health_pct}%25_{status}-{color})"
+        badge_url = (
+            f"![Health](https://img.shields.io/badge/"
+            f"health-{health_pct}%25_{status}-{color})"
+        )
+        return badge_url
 
 
 def main():
@@ -738,7 +712,10 @@ def main():
 
     parser = argparse.ArgumentParser(description="Ecosystem Visualizer")
     parser.add_argument(
-        "--report", type=Path, required=False, help="Path to health report JSON file"
+        "--report",
+        type=Path,
+        required=False,
+        help="Path to health report JSON file",
     )
     parser.add_argument(
         "--output",
@@ -760,7 +737,8 @@ def main():
         # Find the latest report
         reports_dir = Path("reports")
         if reports_dir.exists():
-            json_reports = sorted(reports_dir.glob("org_health_*.json"), reverse=True)
+            pattern = "org_health_*.json"
+            json_reports = sorted(reports_dir.glob(pattern), reverse=True)
             if json_reports:
                 report_path = json_reports[0]
                 print(f"📁 Using latest report: {report_path}")
@@ -773,7 +751,7 @@ def main():
 
     if not report_path:
         print("❌ No report specified.")
-        print("💡 Try running with --find-latest to use the most recent report:")
+        print("💡 Try running with --find-latest to use the " "most recent report:")
         print("   python3 scripts/ecosystem_visualizer.py --find-latest")
         return
 

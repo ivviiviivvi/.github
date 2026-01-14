@@ -9,11 +9,14 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List
 
-from croniter import croniter
+from croniter import croniter  # type: ignore[import-untyped]
 
 
-def get_daily_tasks(orchestration_file=".github/orchestration_tasks.json"):
+def get_daily_tasks(
+    orchestration_file: str = ".github/orchestration_tasks.json",
+) -> List[Dict[str, Any]]:
     """Get tasks scheduled for today"""
     now = datetime.now()
 
@@ -27,7 +30,10 @@ def get_daily_tasks(orchestration_file=".github/orchestration_tasks.json"):
         )
         return []
     except json.JSONDecodeError as e:
-        print(f"Error: Invalid JSON in orchestration file: {e}", file=sys.stderr)
+        print(
+            f"Error: Invalid JSON in orchestration file: {e}",
+            file=sys.stderr,
+        )
         return []
 
     daily_tasks = []
@@ -38,8 +44,9 @@ def get_daily_tasks(orchestration_file=".github/orchestration_tasks.json"):
 
         schedule = task.get("schedule", "")
         if not croniter.is_valid(schedule):
+            task_id = task.get("id", "unknown")
             print(
-                f"Warning: Invalid cron schedule for task {task.get('id', 'unknown')}: {schedule}",
+                f"Warning: Invalid cron for task {task_id}: {schedule}",
                 file=sys.stderr,
             )
             continue
@@ -60,7 +67,7 @@ def get_daily_tasks(orchestration_file=".github/orchestration_tasks.json"):
     return daily_tasks
 
 
-def main():
+def main() -> None:
     """Main entry point"""
     if len(sys.argv) > 1:
         orchestration_file = sys.argv[1]

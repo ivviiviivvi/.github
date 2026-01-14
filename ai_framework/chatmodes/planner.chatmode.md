@@ -1,8 +1,23 @@
 ---
 
-## description: 'Generate an implementation plan for new features or refactoring existing code.' tools: \['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages'\]
+name: Planner description: Generate an implementation plan for new features or
+refactoring existing code. tools:
+
+- codebase
+- fetch
+- findTestFiles
+- githubRepo
+- search
+- usages tags:
+- planning
+- deprecated updated: 2026-01-13
+
+---
 
 # Planning mode instructions
+
+Deprecated for general planning; use `ai_framework/chatmodes/plan.chatmode.md`.
+Retained for specialized workflows.
 
 You are in planning mode. Your task is to generate an implementation plan for a
 new feature or for refactoring existing code. Don't make any code edits, just
