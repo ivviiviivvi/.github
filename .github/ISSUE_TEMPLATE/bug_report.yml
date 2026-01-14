@@ -102,7 +102,9 @@ body:
     id: logs
     attributes:
       label: Relevant log output
-      description: Please copy and paste any relevant log output
+      description: |
+        Please copy and paste any relevant log output.
+        Do not include sensitive data (passwords, API keys, tokens, PII, or customer data).
       render: shell
 
   - type: checkboxes
