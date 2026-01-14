@@ -489,6 +489,7 @@ echo "✅ Cleanup complete"
 **Analysis Script:**
 
 Python-based workflow analyzer (`automation/scripts/analyze_workflows.py`) providing:
+
 - YAML parsing and validation
 - Trigger and job analysis
 - Complexity scoring
