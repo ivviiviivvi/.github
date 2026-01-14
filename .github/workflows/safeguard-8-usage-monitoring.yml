@@ -1,20 +1,20 @@
-name: 'Safeguard 8: Usage Monitoring & Reporting'
+name: "Safeguard 8: Usage Monitoring & Reporting"
 
 on:
   schedule:
     # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    - cron: 0 0 * * *
   workflow_dispatch:
     inputs:
       report_period:
-        description: 'Reporting period'
+        description: Reporting period
         required: false
-        default: 'daily'
+        default: daily
         type: choice
         options:
-          - 'daily'
-          - 'weekly'
-          - 'monthly'
+          - daily
+          - weekly
+          - monthly
 
 concurrency:
   group: ${{ github.workflow }}
@@ -27,27 +27,27 @@ permissions:
 
 jobs:
   collect-usage-metrics:
-    name: 'Collect GitHub Actions Usage Metrics'
+    name: Collect GitHub Actions Usage Metrics
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
-      - name: 'Checkout repository'
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: 'Set up Python'
+      - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: pip
 
-      - name: 'Install dependencies'
+      - name: Install dependencies
         run: |
           pip install requests python-dateutil pyyaml
 
-      - name: 'Fetch workflow runs'
+      - name: Fetch workflow runs
         id: fetch_runs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -134,7 +134,7 @@ jobs:
               f.write(f"lookback_days={lookback_days}\n")
           PYTHON_SCRIPT
 
-      - name: 'Fetch Actions billing info'
+      - name: Fetch Actions billing info
         id: billing
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -208,7 +208,7 @@ jobs:
                   f.write(f"billing_available=false\n")
           PYTHON_SCRIPT
 
-      - name: 'Calculate walkthrough-specific metrics'
+      - name: Calculate walkthrough-specific metrics
         id: walkthrough_metrics
         run: |
           python3 << 'PYTHON_SCRIPT'
@@ -269,7 +269,7 @@ jobs:
               f.write(f"failed_runs={failed}\n")
           PYTHON_SCRIPT
 
-      - name: 'Estimate minutes consumed by walkthroughs'
+      - name: Estimate minutes consumed by walkthroughs
         id: estimate
         run: |
           python3 << 'PYTHON_SCRIPT'
@@ -296,7 +296,7 @@ jobs:
               f.write(f"estimated_cost={round(estimated_cost, 2)}\n")
           PYTHON_SCRIPT
 
-      - name: 'Check quota thresholds'
+      - name: Check quota thresholds
         id: check_thresholds
         run: |
           python3 << 'PYTHON_SCRIPT'
@@ -338,7 +338,7 @@ jobs:
           QUOTA_PERCENTAGE: ${{ steps.billing.outputs.quota_percentage }}
           REMAINING_MINUTES: ${{ steps.billing.outputs.remaining_minutes }}
 
-      - name: 'Generate usage report'
+      - name: Generate usage report
         run: |
           python3 << 'PYTHON_SCRIPT'
           import json
@@ -368,132 +368,93 @@ jobs:
           lookback_days = os.getenv('LOOKBACK_DAYS', '1')
 
           # Generate markdown report
-          report = f"""# GitHub Actions Usage Report
-
-**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
-**Report Period:** Last {lookback_days} day(s)
-**Alert Level:** {alert_level.upper()}
-
-## Executive Summary
-
-### Overall Actions Usage
-
-| Metric | Value |
-|--------|-------|
-| Total Minutes Used | {billing['total_minutes_used']} |
-| Included Minutes | {billing['included_minutes']} |
-| Quota Used | {billing['quota_percentage']}% |
-| Remaining Minutes | {billing['remaining_minutes']} |
-
-### Walkthrough-Specific Metrics
-
-| Metric | Value |
-|--------|-------|
-| Total Walkthrough Runs | {metrics['total_runs']} |
-| Successful Runs | {metrics['succeeded']} |
-| Failed Runs | {metrics['failed']} |
-| Success Rate | {metrics['success_rate']}% |
-| Estimated Minutes Consumed | {estimated_minutes} |
-| Estimated Cost | ${estimated_cost} |
-
-## Alert Status
-
-"""
+          report = ("# GitHub Actions Usage Report\n\n"
+                    f"**Generated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+                    f"**Report Period:** Last {lookback_days} day(s)\n"
+                    f"**Alert Level:** {alert_level.upper()}\n\n"
+                    "## Executive Summary\n\n"
+                    "### Overall Actions Usage\n\n"
+                    "| Metric | Value |\n"
+                    "|--------|-------|\n"
+                    f"| Total Minutes Used | {billing['total_minutes_used']} |\n"
+                    f"| Included Minutes | {billing['included_minutes']} |\n"
+                    f"| Quota Used | {billing['quota_percentage']}% |\n"
+                    f"| Remaining Minutes | {billing['remaining_minutes']} |\n\n"
+                    "### Walkthrough-Specific Metrics\n\n"
+                    "| Metric | Value |\n"
+                    "|--------|-------|\n"
+                    f"| Total Walkthrough Runs | {metrics['total_runs']} |\n"
+                    f"| Successful Runs | {metrics['succeeded']} |\n"
+                    f"| Failed Runs | {metrics['failed']} |\n"
+                    f"| Success Rate | {metrics['success_rate']}% |\n"
+                    f"| Estimated Minutes Consumed | {estimated_minutes} |\n"
+                    f"| Estimated Cost | ${estimated_cost} |\n\n"
+                    "## Alert Status\n\n")
 
           # Add alert-specific messaging
           if alert_level == 'critical':
-              report += """### 🔴 CRITICAL ALERT
-
-**Quota nearly exhausted!** You have used {quota}% of your GitHub Actions minutes.
-
-**Immediate Actions Required:**
-1. ⛔ PAUSE all non-essential workflow runs
-2. 🔍 Review workflow efficiency
-3. 📊 Consider upgrading Actions plan
-4. ⏰ Enable staggered scheduling (Safeguard 7)
-
-**Remaining capacity:** {remaining} minutes ({days} days at current rate)
-
-""".format(
+              report += ("### 🔴 CRITICAL ALERT\n\n"
+                        "**Quota nearly exhausted!** You have used {quota}% of your GitHub Actions minutes.\n\n"
+                        "**Immediate Actions Required:**\n"
+                        "1. ⛔ PAUSE all non-essential workflow runs\n"
+                        "2. 🔍 Review workflow efficiency\n"
+                        "3. 📊 Consider upgrading Actions plan\n"
+                        "4. ⏰ Enable staggered scheduling (Safeguard 7)\n\n"
+                        "**Remaining capacity:** {remaining} minutes ({days} days at current rate)\n\n").format(
                   quota=billing['quota_percentage'],
                   remaining=billing['remaining_minutes'],
                   days=round(int(billing['remaining_minutes']) / (int(estimated_minutes) / int(lookback_days))) if int(estimated_minutes) > 0 else 'N/A'
               )
           elif alert_level == 'warning':
-              report += """### 🟡 WARNING
-
-**Quota consumption is high.** You have used {quota}% of your GitHub Actions minutes.
-
-**Recommended Actions:**
-1. ⏰ Enable staggered scheduling (Safeguard 7)
-2. 🔍 Review workflow efficiency
-3. 📊 Monitor daily usage
-4. 🚦 Consider throttling walkthrough generation
-
-""".format(quota=billing['quota_percentage'])
+              report += ("### 🟡 WARNING\n\n"
+                        "**Quota consumption is high.** You have used {quota}% of your GitHub Actions minutes.\n\n"
+                        "**Recommended Actions:**\n"
+                        "1. ⏰ Enable staggered scheduling (Safeguard 7)\n"
+                        "2. 🔍 Review workflow efficiency\n"
+                        "3. 📊 Monitor daily usage\n"
+                        "4. 🚦 Consider throttling walkthrough generation\n\n").format(quota=billing['quota_percentage'])
           else:
-              report += """### 🟢 NORMAL
+              report += ("### 🟢 NORMAL\n\n"
+                        "Quota consumption is within normal parameters. Continue monitoring.\n\n")
 
-Quota consumption is within normal parameters. Continue monitoring.
-
-"""
-
-          report += f"""
-## Walkthrough Workflows
-
-### By Workflow Type
-
-| Workflow | Runs |
-|----------|------|
-"""
+          report += ("\n## Walkthrough Workflows\n\n"
+                    "### By Workflow Type\n\n"
+                    "| Workflow | Runs |\n"
+                    "|----------|------|\n")
 
           for workflow, count in sorted(metrics['by_workflow'].items(), key=lambda x: x[1], reverse=True):
               report += f"| {workflow} | {count} |\n"
 
-          report += f"""
-### Top Repositories
-
-| Repository | Runs |
-|------------|------|
-"""
+          report += ("\n### Top Repositories\n\n"
+                    "| Repository | Runs |\n"
+                    "|------------|------|\n")
 
           for repo, count in list(metrics['by_repo'].items())[:10]:
               report += f"| {repo} | {count} |\n"
 
-          report += """
-## Recommendations
-
-### Optimization Strategies
-
-1. **Enable Staggered Scheduling (Safeguard 7)**
-   - Spread walkthrough generation across multiple days
-   - Prevent quota exhaustion
-   - Target: 20 repos/day maximum
-
-2. **Prioritize Critical Repositories**
-   - Focus on Tier 1 (critical) repos first
-   - Reduce frequency for Tier 3 (normal) repos
-   - Consider manual generation for rarely-updated repos
-
-3. **Optimize Workflow Efficiency**
-   - Cache dependencies more aggressively
-   - Reduce video quality for non-critical repos
-   - Skip generation if no code changes
-
-4. **Monitor Continuously**
-   - Review this report daily
-   - Set up alerts for 85% and 95% thresholds
-   - Track trends over time
-
-### Cost Savings Opportunities
-
-- **Estimated savings with staggered scheduling:** 30-40% reduction in peak usage
-- **Potential monthly cost:** ${estimated_cost} → ${ round(float(estimated_cost) * 0.6, 2) } (40% reduction)
-
----
-
-**This report was generated by Safeguard 8: Usage Monitoring & Reporting**
-"""
+          report += ("\n## Recommendations\n\n"
+                    "### Optimization Strategies\n\n"
+                    "1. **Enable Staggered Scheduling (Safeguard 7)**\n"
+                    "   - Spread walkthrough generation across multiple days\n"
+                    "   - Prevent quota exhaustion\n"
+                    "   - Target: 20 repos/day maximum\n\n"
+                    "2. **Prioritize Critical Repositories**\n"
+                    "   - Focus on Tier 1 (critical) repos first\n"
+                    "   - Reduce frequency for Tier 3 (normal) repos\n"
+                    "   - Consider manual generation for rarely-updated repos\n\n"
+                    "3. **Optimize Workflow Efficiency**\n"
+                    "   - Cache dependencies more aggressively\n"
+                    "   - Reduce video quality for non-critical repos\n"
+                    "   - Skip generation if no code changes\n\n"
+                    "4. **Monitor Continuously**\n"
+                    "   - Review this report daily\n"
+                    "   - Set up alerts for 85% and 95% thresholds\n"
+                    "   - Track trends over time\n\n"
+                    "### Cost Savings Opportunities\n\n"
+                    f"- **Estimated savings with staggered scheduling:** 30-40% reduction in peak usage\n"
+                    f"- **Potential monthly cost:** ${estimated_cost} → ${ round(float(estimated_cost) * 0.6, 2) } (40% reduction)\n\n"
+                    "---\n\n"
+                    "**This report was generated by Safeguard 8: Usage Monitoring & Reporting**\n")
 
           # Save report
           with open('usage_report.md', 'w') as f:
@@ -508,7 +469,7 @@ Quota consumption is within normal parameters. Continue monitoring.
           ALERT_LEVEL: ${{ steps.check_thresholds.outputs.alert_level }}
           LOOKBACK_DAYS: ${{ steps.fetch_runs.outputs.lookback_days }}
 
-      - name: 'Commit report to repository'
+      - name: Commit report to repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -538,7 +499,7 @@ Quota consumption is within normal parameters. Continue monitoring.
             git push
           fi
 
-      - name: 'Create alert issue if needed'
+      - name: Create alert issue if needed
         if: steps.check_thresholds.outputs.should_alert == 'true'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
         with:
@@ -594,7 +555,7 @@ Quota consumption is within normal parameters. Continue monitoring.
               labels: ['quota-alert', 'urgent', 'safeguard-8', alertLevel]
             });
 
-      - name: 'Upload report artifacts'
+      - name: Upload report artifacts
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
         with:
           name: usage-report-${{ github.run_number }}
@@ -606,6 +567,6 @@ Quota consumption is within normal parameters. Continue monitoring.
           retention-days: 90
           if-no-files-found: ignore
 
-      - name: 'Generate workflow summary'
+      - name: Generate workflow summary
         run: |
           cat usage_report.md >> $GITHUB_STEP_SUMMARY

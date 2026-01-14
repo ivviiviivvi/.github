@@ -46,3 +46,7 @@ on a set of requirements in a github issue.
 
 1. Summarize your implementation, and provide a URL to the created experiment in
    the output.
+## Usage Example
+
+Example prompt: "Use the Amplitude Experiment Implementation description: This custom agent uses Amplitude's MCP tools to deploy new experiments inside of Amplitude, enabling seamless variant testing capabilities and rollout of product features. agent to assess the task and propose next steps."
+

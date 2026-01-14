@@ -12,6 +12,7 @@ Custom chat mode definitions used by the organization.
   remove legacy description lines)
 - CI enforcement: not enabled yet; run locally until coverage improves
 - Inventory: `ai_framework/chatmodes/INVENTORY.md` (generated)
+- Testing: `ai_framework/chatmodes/TESTING.md`
 
 ## Notes
 

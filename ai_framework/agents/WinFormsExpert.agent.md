@@ -671,3 +671,7 @@ objects.
 | 5   | Designer files never use NRT annotations                                                            |
 | 6   | Modern C# features for regular code ONLY                                                            |
 | 7   | Data binding: Treat ViewModels as DataSources, remember `Command` and `CommandParameter` properties |
+## Usage Example
+
+Example prompt: "Use the WinForms Expert description: Support development of .NET (OOP) WinForms Designer compatible Apps. #version: 2025-10-24a agent to assess the task and propose next steps."
+

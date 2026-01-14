@@ -7,6 +7,8 @@ Agent definitions used for specialized workflows.
 - Count: 26 files
 - Schema: `ai_framework/agents/SCHEMA.md`
 - Inventory: `ai_framework/agents/INVENTORY.md` (generated)
+- Diagrams: `ai_framework/agents/DIAGRAMS.md`
+- Lifecycle: `ai_framework/agents/LIFECYCLE.md`
 - Full catalog: `docs/README.agents.md`
 - Inventory: `ai_framework/agents/INVENTORY.md`
 - Schema: `ai_framework/agents/SCHEMA.md`

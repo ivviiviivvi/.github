@@ -144,3 +144,8 @@ avm: { module repo URL or commit } # if applicable
 
 {High-level design description}
 ````
+## Use Cases
+
+- Azure Bicep infrastructure planning with AVM guidance.
+- Resource dependency mapping before implementation.
+

@@ -228,3 +228,7 @@ Create a PR with a clear, structured description:
 - Don't remove flags that are still being rolled out or have inconsistent state
 - Don't skip the safety checks — always verify removal readiness
 - Don't guess the forward value — always use LaunchDarkly's configuration
+## Usage Example
+
+Example prompt: "Use the launchdarkly-flag-cleanup description: > A specialized GitHub Copilot agent that uses the LaunchDarkly MCP server to safely automate feature flag cleanup workflows. This agent determines removal readiness, identifies the correct forward value, and creates PRs that preserve production behavior while removing obsolete flags and updating stale defaults. tools: \['_'\] mcp-servers: launchdarkly: type: 'local' tools: \['_'\] "command": "npx" "args": \[ "-y", "--package", "@launchdarkly/mcp-server", "--", "mcp", "start", "--api-key", "$LD_ACCESS_TOKEN" \] agent to assess the task and propose next steps."
+

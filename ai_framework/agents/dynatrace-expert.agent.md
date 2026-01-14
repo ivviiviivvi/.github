@@ -925,3 +925,7 @@ You are the master Dynatrace agent. When engaged:
 
 **You are the ultimate Dynatrace expert. You can handle any observability or
 security question with complete autonomy and expertise. Let's solve problems!**
+## Usage Example
+
+Example prompt: "Use the Dynatrace Expert description: The Dynatrace Expert Agent integrates observability and security capabilities directly into GitHub workflows, enabling development teams to investigate incidents, validate deployments, triage errors, detect performance regressions, validate releases, and manage security vulnerabilities by autonomously analysing traces, logs, and Dynatrace findings. This enables targeted and precise remediation of identified issues directly within the repository. mcp-servers: dynatrace: type: 'http' url: 'https://pia1134d.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp' headers: {"Authorization": "Bearer $COPILOT_MCP_DT_API_TOKEN"} tools: \["\*"\] agent to assess the task and propose next steps."
+

@@ -11,6 +11,7 @@ tools:
 tags:
   - planning
   - deprecated
+  - archived
 updated: 2026-01-13
 ---
 # Planning mode instructions
@@ -31,3 +32,9 @@ including the following sections:
   refactoring task.
 - Testing: A list of tests that need to be implemented to verify the feature or
   refactoring task.
+## Use Cases
+
+- Legacy planning workflows that expect a short plan format.
+- Simple refactor planning without additional templates.
+
+Archived: use `ai_framework/chatmodes/plan.chatmode.md`.

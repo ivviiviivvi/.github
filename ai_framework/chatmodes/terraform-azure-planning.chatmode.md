@@ -200,3 +200,8 @@ avm: {module repo URL or commit} # if applicable
 
 <!-- Repeat Phase blocks as needed: Phase 1, Phase 2, Phase 3, … -->
 ````
+## Use Cases
+
+- Azure Terraform infrastructure planning with WAF considerations.
+- Resource scope and module selection before coding.
+

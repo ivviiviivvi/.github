@@ -78,3 +78,8 @@ Create Markdown document with required sections:
 - Apply `/.github/ISSUE_TEMPLATE/chore_request.yml` template for remediation
   tasks
 - Reference existing issues when relevant
+## Use Cases
+
+- Technical debt remediation planning across code, tests, and docs.
+- Prioritized debt backlogs with impact and risk scoring.
+
