@@ -32,10 +32,9 @@ Choose your path based on your preferences and project needs:
 **Time**: 5 minutes setup + 5 minutes wait for first build
 
 1. **Install prerequisites**:
-
-   - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-   - [VS Code](https://code.visualstudio.com/)
-   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop -->
+   - [VS Code](https://code.visualstudio.com/)<!-- link:docs.vscode -->
+   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
 
 1. **Open project in container**:
 
@@ -46,7 +45,6 @@ Choose your path based on your preferences and project needs:
    ```
 
 1. **Reopen in container**:
-
    - Press `Cmd/Ctrl + Shift + P`
    - Select "Dev Containers: Reopen in Container"
    - Wait for build to complete
@@ -60,7 +58,6 @@ Choose your path based on your preferences and project needs:
 **Time**: 15 minutes
 
 1. **Install GitHub Copilot**:
-
    - Open VS Code Extensions (`Cmd/Ctrl + Shift + X`)
    - Install "GitHub Copilot" and "GitHub Copilot Chat"
    - Sign in when prompted
@@ -74,7 +71,6 @@ Choose your path based on your preferences and project needs:
    ```
 
 1. **Configure VS Code**:
-
    - Copy settings: `cp .github/.vscode/settings.json ~/.vscode/settings.json`
    - Restart VS Code
 
@@ -89,7 +85,6 @@ Choose your path based on your preferences and project needs:
 1. **Admin**: Ensure this repository is your organization's `.github` repository
 
 1. **Admin**: Verify files are in correct locations:
-
    - Instructions: `instructions/*.instructions.md`
    - Agents: `agents/*.agent.md`
    - Chat modes: `chatmodes/*.chatmode.md`
@@ -136,7 +131,6 @@ Choose your path based on your preferences and project needs:
 ### Test MCP Integration (Optional)
 
 1. **Check if MCP servers are configured**:
-
    - Open VS Code Settings
    - Search for "copilot mcp"
    - Verify servers are listed
@@ -163,7 +157,7 @@ pip install black flake8 pytest mypy
 
 **Collections to install**:
 
-- [Python MCP Development](../collections/python-mcp-development.md)
+- [Python MCP Development](../ai_framework/collections/python-mcp-development.md)
 
 **Test it**:
 
@@ -185,8 +179,8 @@ files
 
 **Collections to install**:
 
-- [TypeScript MCP Development](../collections/typescript-mcp-development.md)
-- [Frontend Web Dev](../collections/frontend-web-dev.md)
+- [TypeScript MCP Development](../ai_framework/collections/typescript-mcp-development.md)
+- [Frontend Web Dev](../ai_framework/collections/frontend-web-dev.md)
 
 **Test it**:
 
@@ -209,8 +203,8 @@ sdk install maven
 
 **Collections to install**:
 
-- [Java MCP Development](../collections/java-mcp-development.md)
-- [Java Development](../collections/java-development.md)
+- [Java MCP Development](../ai_framework/collections/java-mcp-development.md)
+- [Java Development](../ai_framework/collections/java-development.md)
 
 ### C# / .NET 🔷
 
@@ -226,8 +220,8 @@ bash dotnet-install.sh --version latest
 
 **Collections to install**:
 
-- [C# MCP Development](../collections/csharp-mcp-development.md)
-- [C#/.NET Development](../collections/csharp-dotnet-development.md)
+- [C# MCP Development](../ai_framework/collections/csharp-mcp-development.md)
+- [C#/.NET Development](../ai_framework/collections/csharp-dotnet-development.md)
 
 ### More Languages
 
@@ -276,11 +270,13 @@ Browse all 26+ agents: [Agent Registry](AGENT_REGISTRY.md)
 
 **Popular agents**:
 
-- [`CSharpExpert`](../agents/CSharpExpert.agent.md) - C# and .NET
-- [`terraform`](../agents/terraform.agent.md) - Infrastructure
-- [`security-audit`](../agents/security-audit.agent.md) - Security
-- [`adr-generator`](../agents/adr-generator.agent.md) - Documentation
-- [`workflow-optimizer`](../agents/workflow-optimizer.agent.md) - CI/CD
+- [`CSharpExpert`](../ai_framework/agents/CSharpExpert.agent.md) - C# and .NET
+- [`terraform`](../ai_framework/agents/terraform.agent.md) - Infrastructure
+- [`security-audit`](../ai_framework/agents/security-audit.agent.md) - Security
+- [`adr-generator`](../ai_framework/agents/adr-generator.agent.md) -
+  Documentation
+- [`workflow-optimizer`](../ai_framework/agents/workflow-optimizer.agent.md) -
+  CI/CD
 
 ---
 
@@ -309,7 +305,7 @@ Specialized AI personas for different roles and contexts:
 
 ### Available Chat Modes
 
-Browse: [`chatmodes/`](../chatmodes/) directory
+Browse: [`chatmodes/`](../ai_framework/chatmodes/) directory
 
 **Popular modes**:
 
@@ -331,7 +327,8 @@ Curated bundles of instructions, prompts, and chat modes organized by theme:
 
 ### How to Install
 
-1. **Browse collections**: [`collections/`](../collections/) directory
+1. **Browse collections**: [`collections/`](../ai_framework/collections/)
+   directory
 1. **Open a collection file**: e.g., `python-mcp-development.md`
 1. **Click install badges**: Each component has an "Install in VS Code" badge
 1. **Or install manually**: Copy files to your project
@@ -413,13 +410,13 @@ For full environment customization:
 
 ### Resource Directories
 
-| Directory                           | Contents                                              |
-| ----------------------------------- | ----------------------------------------------------- |
-| [`agents/`](../agents/)             | 26+ custom agents for specialized tasks               |
-| [`instructions/`](../instructions/) | 100+ custom instructions for languages and frameworks |
-| [`prompts/`](../prompts/)           | Reusable prompts for common tasks                     |
-| [`chatmodes/`](../chatmodes/)       | Specialized AI personas                               |
-| [`collections/`](../collections/)   | Curated bundles by theme                              |
+| Directory                                                                                                                             | Contents                                              |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [`agents/`](../ai_framework/agents/)                                                                                                  | 26+ custom agents for specialized tasks               |
+| [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions --> | 100+ custom instructions for languages and frameworks |
+| [`prompts/`](https://github.com/github/awesome-copilot/tree/main/prompts/)                                                            | Reusable prompts for common tasks                     |
+| [`chatmodes/`](../ai_framework/chatmodes/)                                                                                            | Specialized AI personas                               |
+| [`collections/`](../ai_framework/collections/)                                                                                        | Curated bundles by theme                              |
 
 ### Quick References
 
@@ -469,9 +466,10 @@ For full environment customization:
   [MCP Setup](MCP_SERVER_SETUP.md#troubleshooting) |
   [Custom Instructions](CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) |
   [Dev Environment](DEVELOPMENT_ENVIRONMENT_SETUP.md#troubleshooting)
-- Open an issue: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
+- Open an issue:
+  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - Ask in discussions:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 
@@ -540,8 +538,9 @@ For full environment customization:
 ### Community
 
 - **Questions**:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- **Issues**: [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- **Issues**:
+  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Feedback**: Open a discussion or issue
 
 ### Organization

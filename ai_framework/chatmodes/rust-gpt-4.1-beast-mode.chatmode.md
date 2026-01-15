@@ -1,7 +1,12 @@
 ---
 
-description: 'Rust GPT-4.1 Coding Beast Mode for VS Code' model: GPT-4.1 title:
-'Rust Beast Mode'
+name: Rust Beast Mode title: Rust Beast Mode description: Rust GPT-4.1 coding
+beast mode for VS Code. model: GPT-4.1 tools:
+
+- \
+  tags:
+- beast
+- rust updated: 2026-01-13
 
 ---
 

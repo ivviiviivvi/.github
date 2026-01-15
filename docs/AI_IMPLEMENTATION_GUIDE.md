@@ -147,7 +147,6 @@ This `.github` repository provides organization-wide defaults for:
    versions.
 
 1. **Using Workflow Templates**:
-
    - Go to Actions → New workflow
    - Look for organization templates in the "By your organization" section
    - Select and customize as needed

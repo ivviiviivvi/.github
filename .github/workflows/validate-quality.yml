@@ -3,11 +3,11 @@ name: Video Quality Validation
 on:
   push:
     paths:
-      - "videos/**"
-      - ".github/workflows/validate-quality.yml"
+      - videos/**
+      - .github/workflows/validate-quality.yml
   pull_request:
     paths:
-      - "videos/**"
+      - videos/**
   workflow_dispatch:
 
 concurrency:

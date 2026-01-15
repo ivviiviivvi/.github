@@ -3,6 +3,7 @@ name: AI Task Orchestrator
 on:
   schedule:
     - cron: "*/15 * * * *" # Runs every 15 minutes
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}
@@ -122,15 +123,6 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          print(due_tasks_json)
-
-          # Write to GITHUB_OUTPUT
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('due_tasks<<EOF\n')
-              f.write(f"{due_tasks_json}\n")
-              f.write('EOF\n')
-              f.write(f"due_tasks={due_tasks_json}\n")
-          EOF
 
       - name: Dispatch Due Tasks
         if: steps.orchestrator.outputs.has_tasks == 'true'
@@ -139,18 +131,18 @@ jobs:
             subscription_name=$(echo "$task" | jq -r '.subscription')
             task_id=$(echo "$task" | jq -r '.id')
             prompt=$(echo "$task" | jq -r '.prompt')
-            
+
             # Check for task deduplication
             TASK_DATA=$(echo "$task" | jq -c '{id, subscription, prompt}')
             DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "orchestrated_task" "$TASK_DATA" || echo '{"should_process":false,"reason":"script error"}')
             SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
             REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
-            
+
             if [ "$SHOULD_PROCESS" = "false" ]; then
               echo "⏭️  Skipping duplicate task $task_id: $REASON"
               continue
             fi
-            
+
             # Check quota
             usage=$(python scripts/quota_manager.py get_usage "$subscription_name")
             quota=$(jq -r --arg name "$subscription_name" '.subscriptions[] | select(.name==$name) | .quota' .github/subscriptions.json)

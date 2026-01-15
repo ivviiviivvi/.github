@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [opened, closed]
   schedule:
-    - cron: '0 0 * * MON'  # Weekly cleanup on Monday
+    - cron: 0 0 * * MON # Weekly cleanup on Monday
   workflow_dispatch:
 
 concurrency:
@@ -67,34 +67,34 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           ARCHIVE_DATE=$(date +%Y-%m-%d)
-          cat > ARCHIVE_NOTICE.md <<EOF
-# ARCHIVED PROJECT
+          cat > ARCHIVE_NOTICE.md <<-'EOF'
+          # ARCHIVED PROJECT
 
-**Status**: Archived
-**Archive Date**: ${ARCHIVE_DATE}
-**Branch**: ${BRANCH_NAME}
+          **Status**: Archived
+          **Archive Date**: ${ARCHIVE_DATE}
+          **Branch**: ${BRANCH_NAME}
 
-## Important Information
+          ## Important Information
 
-This branch is archived and is no longer maintained. It is kept for historical reference only.
+          This branch is archived and is no longer maintained. It is kept for historical reference only.
 
-## Migration Information
+          ## Migration Information
 
-To use the current version, see:
-- [Current Repository](https://github.com/${{ github.repository }})
-- [Version Control Standards](VERSION_CONTROL_STANDARDS.md)
+          To use the current version, see:
+          - [Current Repository](https://github.com/${{ github.repository }})
+          - [Version Control Standards](VERSION_CONTROL_STANDARDS.md)
 
-## Getting Help
+          ## Getting Help
 
-For archived version support:
-- Check archived documentation
-- Review closed issues
-- Contact maintainers
+          For archived version support:
+          - Check archived documentation
+          - Review closed issues
+          - Contact maintainers
 
-## Last Active
+          ## Last Active
 
-- Archive Date: ${ARCHIVE_DATE}
-EOF
+          - Archive Date: ${ARCHIVE_DATE}
+          EOF
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

@@ -1,6 +1,23 @@
 ---
 
-## description: 'Implement minimal code to satisfy GitHub issue requirements and make failing tests pass without over-engineering.' tools: \['github', 'findTestFiles', 'edit/editFiles', 'runTests', 'runCommands', 'codebase', 'filesystem', 'search', 'problems', 'testFailure', 'terminalLastCommand'\]
+name: TDD Green description: Implement minimal code to satisfy issue
+requirements and make tests pass. tools:
+
+- github
+- findTestFiles
+- edit/editFiles
+- runTests
+- runCommands
+- codebase
+- filesystem
+- search
+- problems
+- testFailure
+- terminalLastCommand tags:
+- tdd
+- testing updated: 2026-01-13
+
+---
 
 # TDD Green Phase - Make Tests Pass Quickly
 

@@ -21,6 +21,7 @@ on:
       - pyproject.toml
   schedule:
     - cron: 0 0 * * 0 # Weekly on Sundays
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -5,41 +5,41 @@
 app_type: vue
 
 # Core Configuration
-start_command: "npm run serve"
+start_command: npm run serve
 port: 8080
-install_command: "npm install"
+install_command: npm install
 
 # Walkthrough Settings
 duration: 60 # seconds
-voiceover_style: "casual" # Options: professional, casual, technical
+voiceover_style: casual # Options: professional, casual, technical
 
 # Focus Areas
 # List the key features and components you want to highlight
 focus_areas:
-  - "Reactive data binding and computed properties"
-  - "Component composition and props"
-  - "Vue Router navigation"
-  - "Vuex state management"
-  - "Form handling and validation"
+  - Reactive data binding and computed properties
+  - Component composition and props
+  - Vue Router navigation
+  - Vuex state management
+  - Form handling and validation
 
 # Demo Flow
 # Define the step-by-step journey through your application
 demo_flow:
-  - "Navigate to application homepage"
-  - "Demonstrate reactive data updates"
-  - "Show component interactions and props"
-  - "Navigate using Vue Router"
-  - "Demonstrate form input and validation"
-  - "Show state management with Vuex/Pinia"
-  - "Display computed properties and watchers"
-  - "Demonstrate lifecycle hooks in action"
-  - "Show dynamic component rendering"
-  - "Display custom directives"
+  - Navigate to application homepage
+  - Demonstrate reactive data updates
+  - Show component interactions and props
+  - Navigate using Vue Router
+  - Demonstrate form input and validation
+  - Show state management with Vuex/Pinia
+  - Display computed properties and watchers
+  - Demonstrate lifecycle hooks in action
+  - Show dynamic component rendering
+  - Display custom directives
 
 # Environment Variables (optional)
 environment_variables:
   NODE_ENV: development
-  VUE_APP_API_URL: "http://localhost:8080"
+  VUE_APP_API_URL: http://localhost:8080
   VUE_APP_DEBUG: "true"
 
 # Additional Settings
@@ -53,35 +53,35 @@ viewport:
 # Specific UI elements or functionality to emphasize
 feature_highlights:
   - element: "#app"
-    description: "Main Vue application mount point"
+    description: Main Vue application mount point
     duration: 2
 
-  - element: ".navbar"
-    description: "Navigation component with router-links"
+  - element: .navbar
+    description: Navigation component with router-links
     duration: 3
 
   - element: "#reactive-demo"
-    description: "Reactive data binding demonstration"
+    description: Reactive data binding demonstration
     duration: 5
 
-  - element: ".form-container"
-    description: "Form with v-model and validation"
+  - element: .form-container
+    description: Form with v-model and validation
     duration: 4
 
-  - element: ".data-display"
-    description: "Dynamic data rendering"
+  - element: .data-display
+    description: Dynamic data rendering
     duration: 4
 
 # Vue-Specific Demonstrations
 vue_features_to_show:
-  - "v-model two-way binding"
-  - "v-if and v-show conditional rendering"
-  - "v-for list rendering"
-  - "Event handling with @click, @input"
-  - "Custom components and props"
-  - "Slots and scoped slots"
-  - "Composition API (if used)"
-  - "Mixins or composables"
+  - v-model two-way binding
+  - v-if and v-show conditional rendering
+  - v-for list rendering
+  - Event handling with @click, @input
+  - Custom components and props
+  - Slots and scoped slots
+  - Composition API (if used)
+  - Mixins or composables
 
 # Custom Scripts (optional)
 pre_demo_script: |
@@ -120,7 +120,7 @@ performance:
 
 # State Management
 state_management:
-  tool: "vuex" # Options: vuex, pinia, none
+  tool: vuex # Options: vuex, pinia, none
   demonstrate_state_changes: true
   show_state_devtools: false
 

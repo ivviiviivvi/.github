@@ -1,0 +1,94 @@
+name: Artifact Management (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      operation:
+        description: "Operation to perform (upload, download)"
+        required: true
+        type: string
+      artifact-name:
+        description: "Name of the artifact"
+        required: true
+        type: string
+      artifact-path:
+        description: "Path to upload or download location"
+        required: true
+        type: string
+      retention-days:
+        description: "Days to retain artifact"
+        required: false
+        type: number
+        default: 30
+      if-no-files-found:
+        description: "What to do if no files found (error, warn, ignore)"
+        required: false
+        type: string
+        default: "warn"
+      compression-level:
+        description: "Compression level (0-9, where 0 is no compression)"
+        required: false
+        type: number
+        default: 6
+    outputs:
+      artifact-id:
+        description: "ID of the artifact"
+        value: ${{ jobs.artifact-ops.outputs.artifact-id }}
+      download-path:
+        description: "Path where artifact was downloaded"
+        value: ${{ jobs.artifact-ops.outputs.download-path }}
+
+jobs:
+  artifact-ops:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      download-path: ${{ steps.download.outputs.download-path }}
+
+    steps:
+      - name: Checkout code (for upload operations)
+        if: inputs.operation == 'upload'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Upload artifact
+        if: inputs.operation == 'upload'
+        id: upload
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+          retention-days: ${{ inputs.retention-days }}
+          if-no-files-found: ${{ inputs.if-no-files-found }}
+          compression-level: ${{ inputs.compression-level }}
+
+      - name: Download artifact
+        if: inputs.operation == 'download'
+        id: download
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+
+      - name: List downloaded files
+        if: inputs.operation == 'download'
+        shell: bash
+        run: |
+          echo "Downloaded artifact to: ${{ inputs.artifact-path }}"
+          ls -lah "${{ inputs.artifact-path }}" || echo "No files found"
+          echo "download-path=${{ inputs.artifact-path }}" >> $GITHUB_OUTPUT
+
+      - name: Verify uploaded files
+        if: inputs.operation == 'upload'
+        shell: bash
+        run: |
+          echo "Uploaded files from: ${{ inputs.artifact-path }}"
+          if [ -f "${{ inputs.artifact-path }}" ]; then
+            ls -lh "${{ inputs.artifact-path }}"
+          elif [ -d "${{ inputs.artifact-path }}" ]; then
+            ls -lah "${{ inputs.artifact-path }}"
+          else
+            echo "Path not found: ${{ inputs.artifact-path }}"
+            if [ "${{ inputs.if-no-files-found }}" = "error" ]; then
+              exit 1
+            fi
+          fi

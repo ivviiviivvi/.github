@@ -129,9 +129,11 @@ class MouthpieceFilter:
         analysis = {
             "intent": self._detect_intent(text),
             "concepts": concepts,
-            "metaphors": self._extract_metaphors(text)
-            if self.config["extract_metaphors"]
-            else [],
+            "metaphors": (
+                self._extract_metaphors(text)
+                if self.config["extract_metaphors"]
+                else []
+            ),
             "tone": self._detect_tone(text),
             "complexity": self._assess_complexity(text, concepts),
             "key_verbs": self._extract_key_verbs(text),

@@ -75,26 +75,22 @@ and ship features rapidly with minimal friction and maximum automation.**
 The lazy human only needs to intervene for:
 
 1. **Strategic Decisions**
-
    - Architecture and design choices
    - Technology stack selection
    - Breaking changes that affect APIs
    - Major refactoring decisions
 
 1. **Security Reviews**
-
    - Review HIGH severity security vulnerabilities
    - Approve changes to authentication/authorization
    - Review secrets management changes
 
 1. **Deployments**
-
    - Production deployments (after CI passes)
    - Infrastructure changes
    - Database migrations in production
 
 1. **Final Approval**
-
    - PR merge (but can be auto-merged if configured)
    - Release tagging
    - Public announcements
@@ -535,7 +531,7 @@ pre-commit install
 ## References
 
 - [AI Rapid Workflow Guide](../AI_RAPID_WORKFLOW.md)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Pre-commit Hooks](https://pre-commit.com/)
 - [GitHub Auto-merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
 - [Semantic Versioning](../SEMANTIC_VERSIONING.md)

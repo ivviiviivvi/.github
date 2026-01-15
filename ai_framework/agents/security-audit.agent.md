@@ -1,12 +1,6 @@
 ---
 
-description: 'Security Audit Agent - Performs comprehensive security audits of
-repositories, workflows, and organizational settings following security best
-practices' dependencies:
-
-- mcp: github
-
----
+## name: Security Audit description: Security Audit Agent - Performs comprehensive security audits of tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Security Audit Agent
 

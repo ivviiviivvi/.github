@@ -1,12 +1,6 @@
 ---
 
-description: 'Data Forensics Agent - Investigates data issues, security
-breaches, audit trails, and compliance violations with advanced analytical
-capabilities' dependencies:
-
-- mcp: github
-
----
+## name: Data Forensics description: Data Forensics Agent - Investigates data issues, security tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Data Forensics Agent
 

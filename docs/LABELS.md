@@ -10,22 +10,18 @@ label-sync workflow.
 These labels indicate the urgency or importance:
 
 - **priority: critical** 🚨
-
   - Color: `#d73a4a`
   - Description: Critical priority - immediate attention required
 
 - **priority: high** ⬆️
-
   - Color: `#ff6b6b`
   - Description: High priority - should be addressed soon
 
 - **priority: medium** ➡️
-
   - Color: `#ffa500`
   - Description: Medium priority - normal queue
 
 - **priority: low** ⬇️
-
   - Color: `#0e8a16`
   - Description: Low priority - can be scheduled later
 
@@ -34,106 +30,110 @@ These labels indicate the urgency or importance:
 These labels categorize the type of issue or PR:
 
 - **bug** 🐛
-
   - Color: `#d73a4a`
   - Description: Something isn't working
 
 - **enhancement** ✨
-
   - Color: `#a2eeef`
   - Description: New feature or request
 
-- **documentation** 📚
+- **feature-request** 💡
+  - Color: `#84b6eb`
+  - Description: Feature request from users or stakeholders
 
+- **documentation** 📚
   - Color: `#0075ca`
   - Description: Improvements or additions to documentation
 
-- **security** 🔒
+- **best-practices** 🧭
+  - Color: `#0e8a16`
+  - Description: Best practices review or improvement
 
+- **security** 🔒
   - Color: `#d93f0b`
   - Description: Security vulnerability or security-related issue
 
 - **task** 📋
-
   - Color: `#7057ff`
   - Description: General task or work item
 
 - **question** ❓
-
   - Color: `#d876e3`
   - Description: Further information is requested
 
 - **breaking-change** 💥
-
   - Color: `#d93f0b`
   - Description: Breaking change that requires migration
 
 - **performance** ⚡
-
   - Color: `#f9d0c4`
   - Description: Performance improvements
 
-- **refactoring** 🔨
+- **tech-debt** 🧱
+  - Color: `#f9d0c4`
+  - Description: Technical debt cleanup or remediation
 
+- **refactoring** 🔨
   - Color: `#fbca04`
   - Description: Code refactoring without functional changes
 
 - **testing** ✅
-
   - Color: `#c5def5`
   - Description: Related to testing
 
 - **accessibility** ♿
-
   - Color: `#f9c513`
   - Description: Accessibility improvements
+
+- **walkthrough** 🧭
+  - Color: `#c2e0c6`
+  - Description: Walkthrough request or guided setup
 
 ## Status Labels
 
 These labels track the current state:
 
 - **triage** 🏷️
-
   - Color: `#fbca04`
   - Description: Needs triage and initial assessment
 
-- **in-progress** 🔄
+- **needs-triage** 📝
+  - Color: `#fbca04`
+  - Description: Needs triage and initial review
 
+- **in-progress** 🔄
   - Color: `#0052cc`
   - Description: Work is currently in progress
 
 - **blocked** 🚧
-
   - Color: `#b60205`
   - Description: Blocked by another issue or external dependency
 
 - **needs-review** 👀
-
   - Color: `#6f42c1`
   - Description: Waiting for code review
 
-- **approved** ✔️
+- **review** 🔍
+  - Color: `#6f42c1`
+  - Description: Review requested or in progress
 
+- **approved** ✔️
   - Color: `#0e8a16`
   - Description: Approved and ready to merge
 
 - **duplicate** ➕
-
   - Color: `#cfd3d7`
   - Description: This issue or pull request already exists
 
 - **wontfix** 🚫
-
   - Color: `#ffffff`
   - Description: This will not be worked on
 
 - **invalid** ❌
-
   - Color: `#e4e669`
   - Description: This doesn't seem right
 
 - **stale** 💤
-
   - Color: `#eeeeee`
   - Description: Stale issue or PR - no recent activity
 
@@ -142,22 +142,26 @@ These labels track the current state:
 These labels help categorize the area of work:
 
 - **github-actions** ⚙️
-
   - Color: `#000000`
   - Description: Related to GitHub Actions workflows
 
 - **configuration** 🔧
-
   - Color: `#bfdadc`
   - Description: Configuration changes
 
-- **dependencies** 📦
+- **devops** 🛠️
+  - Color: `#1d76db`
+  - Description: DevOps or CI/CD operations
 
+- **infrastructure** 🏗️
+  - Color: `#0e8a16`
+  - Description: Infrastructure or platform changes
+
+- **dependencies** 📦
   - Color: `#0366d6`
   - Description: Pull requests that update a dependency file
 
 - **automated** 🤖
-
   - Color: `#ededed`
   - Description: Automated changes (e.g., Dependabot, bots)
 
@@ -165,13 +169,19 @@ These labels help categorize the area of work:
 
 These labels help community engagement:
 
-- **good-first-issue** 👶
+- **community** 🤝
+  - Color: `#bfd4f2`
+  - Description: Community engagement or health
 
+- **health-check** ✅
+  - Color: `#cfd3d7`
+  - Description: Community or repository health check
+
+- **good-first-issue** 👶
   - Color: `#7057ff`
   - Description: Good for newcomers
 
 - **help-wanted** 🙋
-
   - Color: `#008672`
   - Description: Extra attention is needed - looking for contributors
 
@@ -180,22 +190,18 @@ These labels help community engagement:
 These labels indicate specific functional areas:
 
 - **area: ci-cd** 🔁
-
   - Color: `#1d76db`
   - Description: Continuous Integration / Continuous Deployment
 
 - **area: api** 🔌
-
   - Color: `#5319e7`
   - Description: API-related changes
 
 - **area: ui** 🎨
-
   - Color: `#c2e0c6`
   - Description: User interface changes
 
 - **area: infrastructure** 🏗️
-
   - Color: `#0e8a16`
   - Description: Infrastructure and deployment
 

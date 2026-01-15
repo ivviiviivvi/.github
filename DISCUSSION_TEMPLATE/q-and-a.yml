@@ -3,79 +3,79 @@ labels:
   - question
   - help-wanted
 body: |
-  <!-- 
+  <!--
   Ask questions and get help from the community!
-  
+
   Before posting:
   - Check the documentation and README
   - Search existing discussions and issues
   - Provide enough context for others to help you
-  
+
   The best answer can be marked as the solution ✅
   -->
-  
+
   ## Question
-  
+
   <!-- State your question clearly and concisely -->
-  
-  
-  
+
+
+
   ## Context
-  
+
   <!-- What are you trying to accomplish? What have you tried? -->
-  
-  
-  
+
+
+
   ## Environment
-  
+
   <!-- If relevant, provide environment details -->
-  
-  - **OS:** 
-  - **Version:** 
-  - **Browser/Runtime:** 
-  - **Configuration:** 
-  
+
+  - **OS:**
+  - **Version:**
+  - **Browser/Runtime:**
+  - **Configuration:**
+
   ## Code/Configuration
-  
+
   <!-- If applicable, include relevant code snippets or configuration -->
-  
+
   ```
-  
+
   ```
-  
+
   ## Expected Behavior
-  
+
   <!-- What did you expect to happen? -->
-  
-  
-  
+
+
+
   ## Actual Behavior
-  
+
   <!-- What actually happened? -->
-  
-  
-  
+
+
+
   ## Error Messages / Logs
-  
+
   <!-- If you encountered errors, include them here -->
-  
+
   ```
-  
+
   ```
-  
+
   ## What I've Tried
-  
+
   <!-- What troubleshooting steps have you already taken? -->
-  
-  - 
-  - 
-  
+
+  -
+  -
+
   ## Additional Context
-  
+
   <!-- Any other information that might be relevant -->
-  
-  
-  
+
+
+
   ---
-  
+
   **Helpful?** If you receive a helpful answer, please mark it as the solution to help others with similar questions.

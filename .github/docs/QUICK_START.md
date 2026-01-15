@@ -29,31 +29,26 @@ walkthrough video in just 5 minutes.
 Fill in the workflow parameters:
 
 - **Duration** (30-120 seconds)
-
   - Recommended: 60 seconds for general demos
   - Short demos: 30-45 seconds
   - Detailed walkthroughs: 90-120 seconds
 
 - **Voiceover Style**
-
   - `professional` - Business presentations and client demos
   - `casual` - Team updates and informal explanations
   - `technical` - Deep-dives for developers
 
 - **Focus Areas** (comma-separated)
-
   - Examples: `user authentication, dashboard, data visualization`
   - Be specific: `login form, create post button, user profile page`
 
 - **Start Command** (optional)
-
   - React: `npm start`
   - Flask: `python app.py`
   - Vue: `npm run serve`
   - Leave blank to auto-detect
 
 - **Port** (optional)
-
   - React default: `3000`
   - Flask default: `5000`
   - Vue default: `8080`
@@ -270,7 +265,7 @@ available._
 - **Scheduled Automation**:
   [Automated Walkthrough Setup](../workflows/scheduled-walkthrough-generator.yml)
 - **Organization Repository**:
-  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)
+  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
 
 ### Support Channels
 
@@ -288,7 +283,8 @@ available._
 
 **Direct Contact** - Organization maintainer
 
-- GitHub: [@4444JPP](https://github.com/4444JPP)
+- GitHub:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - For: Urgent issues, security concerns, feature requests
 
 ### Response Times
@@ -319,7 +315,7 @@ available._
 ---
 
 **Questions?**
-[Open a discussion](https://github.com/ivviiviivvi/.github/discussions).
+[Open a discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->.
 
 **Found a bug?**
 [Report it here](https://github.com/ivviiviivvi/.github/issues/new).

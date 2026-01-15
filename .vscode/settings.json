@@ -67,11 +67,11 @@
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
     "editor.wordWrap": "on"
   },
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "ms-python.autopep8",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
@@ -166,7 +166,7 @@
   "cody.autocomplete.languages": {
     "*": true
   },
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorTheme": "Solarized Light",
   "workbench.iconTheme": "vs-seti",
   "workbench.startupEditor": "readme",
   "security.workspace.trust.enabled": true,

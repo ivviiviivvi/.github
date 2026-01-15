@@ -1,24 +1,11 @@
 ---
 
-description: Your perfect AI chat mode for high-level architectural
-documentation and review. Perfect for targeted updates after a story or
-researching that legacy system when nobody remembers what it's supposed to be
-doing. model: 'claude-sonnet-4' tools:
+name: HLBPA description: High-level architectural documentation and review
+assistant. tools:
 
-- 'search/codebase'
-- 'changes'
-- 'edit/editFiles'
-- 'fetch'
-- 'findTestFiles'
-- 'githubRepo'
-- 'runCommands'
-- 'runTests'
-- 'search'
-- 'search/searchResults'
-- 'testFailure'
-- 'usages'
-- 'activePullRequest'
-- 'copilotCodingAgent'
+- \
+  tags:
+- architecture updated: 2026-01-13
 
 ---
 

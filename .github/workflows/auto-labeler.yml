@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened]
   issues:
     types: [opened, edited]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number }}

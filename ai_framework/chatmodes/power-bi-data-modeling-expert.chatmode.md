@@ -1,6 +1,33 @@
 ---
 
-## description: 'Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices for optimal model performance and usability.' model: 'gpt-4.1' tools: \['changes', 'search/codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp'\]
+name: Power BI Data Modeling Expert description: Power BI data modeling guidance
+using star schema principles and best practices. model: gpt-4.1 tools:
+
+- changes
+- search/codebase
+- editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- search/searchResults
+- runCommands/terminalLastCommand
+- runCommands/terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp tags:
+- power-bi
+- data-modeling updated: 2026-01-13
+
+---
 
 # Power BI Data Modeling Expert Mode
 

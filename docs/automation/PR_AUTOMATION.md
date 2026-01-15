@@ -540,19 +540,16 @@ git push origin --delete feature/my-feature
    ```
 
 1. **Keep PRs focused and small**
-
    - One feature/fix per PR
    - Easier to review and merge
    - Reduces conflict likelihood
 
 1. **Update PR descriptions**
-
    - Auto-generated descriptions are starting points
    - Add context and testing details
    - Link related issues
 
 1. **Monitor auto-merge status**
-
    - Check workflow summaries
    - Address failed checks promptly
    - Respond to review feedback
@@ -575,19 +572,16 @@ git push origin --delete feature/my-feature
    ```
 
 1. **Don't ignore merge conflicts**
-
    - Address conflicts promptly
    - Test after resolving
    - Don't just accept all changes
 
 1. **Don't disable safety features**
-
    - Keep required approvals
    - Maintain status checks
    - Use branch protection
 
 1. **Don't use auto-merge for breaking changes**
-
    - Breaking changes need careful review
    - Add `do-not-merge` label
    - Coordinate with team
@@ -727,13 +721,13 @@ Initial release:
 
 ## Related Documentation
 
-- [Git Workflow Guide](GIT_WORKFLOW.md) - Branching strategy and commit
+- [Git Workflow Guide](../workflows/GIT_WORKFLOW.md) - Branching strategy and commit
   conventions
 - [Automation Master Guide](AUTOMATION_MASTER_GUIDE.md) - Overall automation
   architecture
-- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to the
+- [Contributing Guidelines](../CONTRIBUTING.md) - How to contribute to the
   organization
-- [Branch Protection](BRANCH_PROTECTION.md) - Branch protection configuration
+- [Branch Protection](../BRANCH_PROTECTION.md) - Branch protection configuration
 
 ---
 

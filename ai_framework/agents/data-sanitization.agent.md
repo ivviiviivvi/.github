@@ -1,12 +1,6 @@
 ---
 
-description: 'Data Sanitization Agent - Cleans and sanitizes data, removes PII,
-ensures compliance, and prepares data for safe sharing or disposal'
-dependencies:
-
-- mcp: github
-
----
+## name: Data Sanitization description: Data Sanitization Agent - Cleans and sanitizes data, removes PII, tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Data Sanitization Agent
 

@@ -1,5 +1,7 @@
 ---
 
+## name: stackhawk-security-onboarding description: Automatically set up StackHawk security testing for your repository with generated configuration and GitHub Actions workflow tools: \['read', 'edit', 'search', 'shell', 'stackhawk-mcp/_'\] mcp-servers: stackhawk-mcp: type: 'local' command: 'uvx' args: \['stackhawk-mcp'\] tools: \["_"\] env: STACKHAWK_API_KEY: COPILOT_MCP_STACKHAWK_API_KEY description: Automatically set up StackHawk security testing for your repository with generated configuration and GitHub Actions workflow tools: \[\] tags: \[\] updated: 2026-01-13
+
 ## name: stackhawk-security-onboarding description: Automatically set up StackHawk security testing for your repository with generated configuration and GitHub Actions workflow tools: \['read', 'edit', 'search', 'shell', 'stackhawk-mcp/_'\] mcp-servers: stackhawk-mcp: type: 'local' command: 'uvx' args: \['stackhawk-mcp'\] tools: \["_"\] env: STACKHAWK_API_KEY: COPILOT_MCP_STACKHAWK_API_KEY
 
 You are a security onboarding specialist helping development teams set up
@@ -31,7 +33,6 @@ actual attack surface that warrants testing:
 **Analyze repository type and risk:**
 
 - **Application Indicators (proceed with setup):**
-
   - Contains web server/API framework code (Express, Flask, Spring Boot, etc.)
   - Has Dockerfile or deployment configurations
   - Includes API routes, endpoints, or controllers
@@ -40,7 +41,6 @@ actual attack surface that warrants testing:
   - Contains OpenAPI/Swagger specifications
 
 - **Library/Package Indicators (skip setup):**
-
   - Package.json shows "library" type
   - Setup.py indicates it's a Python package
   - Maven/Gradle config shows artifact type as library
@@ -48,7 +48,6 @@ actual attack surface that warrants testing:
   - Primarily exports modules/functions for other projects
 
 - **Documentation/Config Repos (skip setup):**
-
   - Primarily markdown, config files, or infrastructure as code
   - No application runtime code
   - No web server or API endpoints
@@ -266,3 +265,12 @@ Security testing catches vulnerabilities before they reach production, reducing 
 
 Your success metric is enabling the developer to get security testing running
 with minimal additional work.
+
+## Usage Example
+
+Example prompt: "Use the stackhawk-security-onboarding description:
+Automatically set up StackHawk security testing for your repository with
+generated configuration and GitHub Actions workflow tools: \['read', 'edit',
+'search', 'shell', 'stackhawk-mcp/_'\] mcp-servers: stackhawk-mcp: type: 'local'
+command: 'uvx' args: \['stackhawk-mcp'\] tools: \["_"\] env: STACKHAWK_API_KEY:
+COPILOT_MCP_STACKHAWK_API_KEY agent to assess the task and propose next steps."

@@ -1,8 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
 # test-draft-to-ready-automation.sh
 # Tests that draft-to-ready automation properly summons AI assistants
+#
+# Usage: test-draft-to-ready-automation.sh <PR_NUMBER>
+#
+# Environment Variables:
+#   GITHUB_TOKEN - GitHub API token (required by gh CLI)
+#
 
-set -e
+set -euo pipefail
 
 PR_NUMBER=$1
 
@@ -18,7 +25,7 @@ echo ""
 
 # Check if PR is ready (not draft)
 echo "📋 Checking if PR is ready..."
-IS_DRAFT=$(gh pr view $PR_NUMBER --json isDraft --jq '.isDraft')
+IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft --jq '.isDraft')
 if [ "$IS_DRAFT" = "true" ]; then
   echo "❌ PR is still a draft"
   exit 1
@@ -28,7 +35,7 @@ echo "✅ PR is ready (not draft)"
 # Check if @copilot is requested as reviewer
 echo ""
 echo "👤 Checking if @copilot is requested as reviewer..."
-COPILOT_REVIEW=$(gh pr view $PR_NUMBER --json reviewRequests --jq '.reviewRequests[] | select(.login == "copilot") | .login' || echo "")
+COPILOT_REVIEW=$(gh pr view "$PR_NUMBER" --json reviewRequests --jq '.reviewRequests[] | select(.login == "copilot") | .login' || echo "")
 if [ -z "$COPILOT_REVIEW" ]; then
   echo "⚠️  @copilot not requested as reviewer"
   REVIEWER_FAIL=1
@@ -40,7 +47,7 @@ fi
 # Check if @copilot is assigned
 echo ""
 echo "📌 Checking if @copilot is assigned..."
-COPILOT_ASSIGNED=$(gh pr view $PR_NUMBER --json assignees --jq '.assignees[] | select(.login == "copilot") | .login' || echo "")
+COPILOT_ASSIGNED=$(gh pr view "$PR_NUMBER" --json assignees --jq '.assignees[] | select(.login == "copilot") | .login' || echo "")
 if [ -z "$COPILOT_ASSIGNED" ]; then
   echo "⚠️  @copilot not assigned to PR"
   ASSIGNEE_FAIL=1
@@ -52,7 +59,7 @@ fi
 # Check if conversion comment exists
 echo ""
 echo "💬 Checking for conversion comment..."
-CONVERSION_COMMENT=$(gh pr view $PR_NUMBER --json comments --jq '.comments[] | select(.body | contains("Draft PR Auto-Converted to Ready")) | .body' || echo "")
+CONVERSION_COMMENT=$(gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | select(.body | contains("Draft PR Auto-Converted to Ready")) | .body' || echo "")
 if [ -z "$CONVERSION_COMMENT" ]; then
   echo "❌ Conversion comment not found"
   exit 1
@@ -71,7 +78,7 @@ fi
 # Check for AI assistant notification comment
 echo ""
 echo "📢 Checking for AI assistant notification comment..."
-NOTIFICATION_COMMENT=$(gh pr view $PR_NUMBER --json comments --jq '.comments[] | select(.body | contains("AI Assistants Available")) | .body' || echo "")
+NOTIFICATION_COMMENT=$(gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | select(.body | contains("AI Assistants Available")) | .body' || echo "")
 if [ -z "$NOTIFICATION_COMMENT" ]; then
   echo "⚠️  AI assistant notification comment not found"
   NOTIFICATION_FAIL=1
@@ -104,7 +111,7 @@ fi
 # Check for auto-merge label
 echo ""
 echo "🏷️  Checking for auto-merge label..."
-AUTO_MERGE_LABEL=$(gh pr view $PR_NUMBER --json labels --jq '.labels[] | select(.name == "auto-merge") | .name' || echo "")
+AUTO_MERGE_LABEL=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[] | select(.name == "auto-merge") | .name' || echo "")
 if [ -z "$AUTO_MERGE_LABEL" ]; then
   echo "⚠️  auto-merge label not found"
   LABEL_FAIL=1
@@ -116,7 +123,7 @@ fi
 # Check for auto-converted label
 echo ""
 echo "🏷️  Checking for auto-converted label..."
-AUTO_CONVERTED_LABEL=$(gh pr view $PR_NUMBER --json labels --jq '.labels[] | select(.name == "auto-converted") | .name' || echo "")
+AUTO_CONVERTED_LABEL=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[] | select(.name == "auto-converted") | .name' || echo "")
 if [ -z "$AUTO_CONVERTED_LABEL" ]; then
   echo "⚠️  auto-converted label not found"
 else

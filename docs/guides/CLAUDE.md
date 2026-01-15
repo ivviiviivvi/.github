@@ -237,7 +237,6 @@ main (production)
 #### Branch Types
 
 1. **`main`** - Production-ready code
-
    - Highest protection level
    - No direct commits
    - Requires PR approval
@@ -245,34 +244,29 @@ main (production)
    - Signed commits required
 
 1. **`develop`** - Integration branch
-
    - High protection level
    - Auto-deploys to staging
    - Merges from feature branches
 
 1. **`feature/*`** - New features or enhancements
-
    - Naming: `feature/short-description` or `feature/TICKET-123-description`
    - Base: `develop`
    - Merge to: `develop`
    - Delete after merging
 
 1. **`release/*`** - Prepare for production
-
    - Naming: `release/v1.2.0`
    - Base: `develop`
    - Merge to: Both `main` and `develop`
    - Only version bumps, final testing, bug fixes
 
 1. **`hotfix/*`** - Urgent production fixes
-
    - Naming: `hotfix/critical-fix-description`
    - Base: `main`
    - Merge to: Both `main` and `develop`
    - Highest priority
 
 1. **`bugfix/*`** - Non-critical bug fixes
-
    - Naming: `bugfix/fix-login-error`
    - Base: `develop`
    - Merge to: `develop`
@@ -436,7 +430,7 @@ Use specialized templates via `?template=<name>.md`:
 ## GitHub Copilot Customizations
 
 This repository includes **300+ GitHub Copilot customizations** from
-[github/awesome-copilot](https://github.com/github/awesome-copilot).
+[github/awesome-copilot](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->.
 
 ### 1. Agents (14 files)
 
@@ -690,14 +684,12 @@ useful insights into proper documentation.
 #### Security & Compliance (6 workflows)
 
 1. **CodeQL Analysis** (`codeql-analysis.yml`)
-
    - **Languages**: Go, Python, Ruby, JavaScript/TypeScript
    - **Triggers**: Push, PR, weekly schedule
    - **Output**: SARIF to GitHub Security tab
    - **Queries**: Security and quality
 
 1. **Semgrep** (`semgrep.yml`)
-
    - **Jobs**: 4 parallel jobs
      - Security audit (OWASP Top 10, CWE Top 25)
      - Secrets detection
@@ -707,26 +699,22 @@ useful insights into proper documentation.
    - **Output**: SARIF, inline PR comments
 
 1. **Dependency Review** (`dependency-review.yml`)
-
    - **Triggers**: Pull requests
    - **Checks**: Vulnerabilities, license compliance
    - **Blocks**: GPL-3.0, AGPL-3.0
    - **Allows**: MIT, Apache-2.0, BSD
 
 1. **SBOM Generation** (`sbom-generation.yml`)
-
    - **Formats**: SPDX, CycloneDX
    - **Purpose**: Supply chain transparency
 
 1. **Dependency Updates** (`dependabot.yml`)
-
    - **Ecosystems**: npm, pip, GitHub Actions, Docker, Go, Composer
    - **Schedule**: Weekly Monday 3 AM UTC
    - **Limits**: 5 PRs max per ecosystem
    - **Auto-labeling**: `dependencies` tag
 
 1. **Renovate** (`renovate.json`)
-
    - **Features**: Dependency dashboard, smart grouping
    - **Schedule**: Before 4 AM Monday
    - **Limits**: 10 concurrent PRs, 5/hour
@@ -735,36 +723,30 @@ useful insights into proper documentation.
 #### Quality Assurance (8 workflows)
 
 1. **Auto-Labeler** (`auto-labeler.yml`)
-
    - Path-based labels: `frontend`, `backend`, `docs`, `ci/cd`, `security`
    - Size labels: `size/XS`, `size/S`, `size/M`, `size/L`, `size/XL`
 
 1. **Auto-Assign** (`auto-assign.yml`)
-
    - Assigns PR to author
    - Requests reviews from CODEOWNERS
    - Team-based reviewers
 
 1. **PR Quality Checks** (`pr-quality-checks.yml`)
-
    - Conventional commit title
    - Description length >50 characters
    - Linked issues check
    - Checklist completion
 
 1. **Link Checker** (`link-checker.yml`)
-
    - Weekly validation of markdown links
    - Runs on PRs modifying documentation
 
 1. **Community Health** (`community-health.yml`)
-
    - Stale issue management
    - 60 days inactive → 7 days warning → close
    - Labels: `stale`, `no-issue-activity`
 
 1. **Welcome Bot** (`welcome.yml`)
-
    - Greets first-time contributors
    - Links to CONTRIBUTING.md, CODE_OF_CONDUCT.md
 
@@ -775,67 +757,55 @@ useful insights into proper documentation.
 #### AI & Code Intelligence (9 workflows)
 
 1. **Claude Code Review** (`claude-code-review.yml`)
-
    - AI-powered PR reviews
    - Analyzes: security, performance, best practices
    - Posts review comments
 
 1. **OpenAI Workflow** (`openai_workflow.yml`)
-
    - OpenAI API integration for code analysis
    - Configurable for various AI tasks
 
 1. **Gemini Workflow** (`gemini_workflow.yml`)
-
    - Google Gemini integration
    - Multi-modal AI capabilities
 
 1. **Grok Workflow** (`grok_workflow.yml`)
-
    - xAI Grok integration
    - Real-time AI assistance
 
 1. **Perplexity Workflow** (`perplexity_workflow.yml`)
-
    - Perplexity AI integration
    - Research and code understanding
 
 1. **Jules** (`jules.yml`)
-
    - AI-powered development assistant
    - Automated task execution
 
 1. **Orchestrator** (`orchestrator.yml`)
-
    - Coordinates multi-AI workflows
    - Task distribution and management
 
 1. **Process Queue** (`process_queue.yml`)
-
    - Async task processing
    - Quota management integration
 
 1. **CI Advanced** (`ci-advanced.yml`)
-
    - Advanced continuous integration
    - AI-enhanced build and test automation
 
 #### Metrics & Reporting (5 workflows)
 
 1. **Commit Tracking** (`commit-tracking.yml`)
-
    - Validates commit messages
    - Generates statistics by author
    - Tracks activity patterns
 
 1. **Weekly Commit Report** (`weekly-commit-report.yml`)
-
    - Auto-generated every Monday
    - 7-day activity summary
    - Stored in `reports/commit-report-YYYY-MM-DD.md`
 
 1. **Repository Metrics** (`repo-metrics.yml`)
-
    - Monthly analytics
    - Issue/PR timing
    - Contributor stats
@@ -848,19 +818,16 @@ useful insights into proper documentation.
 #### Release Management (3 workflows)
 
 1. **Semantic Release** (`semantic-release.yml`)
-
    - Automated releases based on conventional commits
    - Changelog generation
    - Version bumping
    - GitHub release creation
 
 1. **Version Bump** (`version-bump.yml`)
-
    - Supports: major.minor.patch
    - Ecosystems: npm, Python, Rust
 
 1. **Release** (`release.yml`)
-
    - Changelog generation
    - Asset uploads
    - Release notes
@@ -868,22 +835,18 @@ useful insights into proper documentation.
 #### Orchestration & Quota Management (4 workflows)
 
 1. **Orchestrator** (`orchestrator.yml`)
-
    - Coordinates multi-AI workflows
    - Manages task distribution across AI providers
 
 1. **Process Queue** (`process_queue.yml`)
-
    - Async task processing with quota management
    - Handles background job execution
 
 1. **Reset Quotas** (`reset_quotas.yml`)
-
    - Automated quota reset on schedule
    - Manages API rate limits
 
 1. **Manual Reset** (`manual_reset.yml`)
-
    - Manual quota reset trigger
    - Emergency quota management
 
@@ -894,26 +857,22 @@ useful insights into proper documentation.
 ### Multi-Layered Security
 
 1. **SAST Scanning**:
-
    - CodeQL for multiple languages
    - Semgrep with custom rules (1511 lines)
    - Scheduled and event-driven
 
 1. **Dependency Security**:
-
    - Dependency review on PRs
    - Dependabot weekly updates
    - Renovate advanced management
    - License compliance enforcement
 
 1. **Secrets Detection**:
-
    - Semgrep secrets scanning
    - GitHub secret scanning (where enabled)
    - Pre-commit hooks
 
 1. **Supply Chain**:
-
    - SBOM generation (SPDX, CycloneDX)
    - Supply chain analysis via Semgrep
    - Dependency provenance
@@ -979,7 +938,6 @@ useful insights into proper documentation.
 ### Documentation Standards
 
 1. **README.md** - Must have:
-
    - Title and description
    - Table of contents (if >200 lines)
    - Installation instructions
@@ -988,13 +946,11 @@ useful insights into proper documentation.
    - License
 
 1. **Code Comments**:
-
    - Use docstrings/JSDoc for functions
    - Explain WHY, not WHAT
    - Keep comments up-to-date
 
 1. **Markdown**:
-
    - Use ATX-style headers (`#` not `===`)
    - Fenced code blocks with language
    - Reference-style links for readability
@@ -1014,65 +970,54 @@ useful insights into proper documentation.
    exists
 
 1. **Follow Established Patterns**:
-
    - Use appropriate Copilot agents for specialized tasks
    - Apply instructions based on file types
    - Reference existing prompts for common tasks
 
 1. **Respect Security Constraints**:
-
    - Never hardcode secrets
    - Don't bypass security checks
    - Always run security scans
 
 1. **Update Documentation**:
-
    - When adding features, update relevant docs
    - Add new Copilot customizations to README files
    - Keep CHANGELOG.md current
 
 1. **Use Auto-Labeling**:
-
    - Understand that PRs will be auto-labeled
    - Don't manually add labels that auto-labeler handles
 
 1. **Reference Issues**:
-
    - Link PRs to issues with `Closes #123`, `Fixes #456`
    - Provide context in PR descriptions
 
 1. **Test Thoroughly**:
-
    - Run all checks locally before pushing
    - Verify CI passes before requesting review
 
 #### DON'T:
 
 1. **Don't Bypass Quality Checks**:
-
    - Don't use `--no-verify` on commits
    - Don't push without running tests
    - Don't merge with failing CI
 
 1. **Don't Create Duplicate Automation**:
-
    - Check existing workflows first
    - Reuse workflow templates where possible
 
 1. **Don't Ignore Security Alerts**:
-
    - Always address CodeQL findings
    - Review Semgrep warnings
    - Update vulnerable dependencies
 
 1. **Don't Commit Generated Files** (unless necessary):
-
    - Build artifacts
    - Lock files (if not needed)
    - IDE-specific files
 
 1. **Don't Use Non-Standard Formats**:
-
    - Follow conventional commits strictly
    - Use established branch naming
    - Match existing code style
@@ -1080,44 +1025,37 @@ useful insights into proper documentation.
 ### Recommended Workflow for AI Assistants
 
 1. **Understand the Task**:
-
    - Read relevant documentation
    - Check existing implementations
    - Identify applicable Copilot customizations
 
 1. **Plan the Changes**:
-
    - Use TodoWrite tool to track tasks
    - Break down complex changes
    - Identify potential issues
 
 1. **Implement**:
-
    - Follow established conventions
    - Use appropriate tools and agents
    - Write clean, documented code
 
 1. **Test**:
-
    - Run local tests
    - Verify security scans pass
    - Check documentation builds
 
 1. **Commit**:
-
    - Use conventional commit format
    - Write descriptive messages
    - Reference related issues
 
 1. **Create PR**:
-
    - Use appropriate template
    - Write clear description
    - Link to issues
    - Complete checklist
 
 1. **Respond to Feedback**:
-
    - Address review comments
    - Update based on CI failures
    - Keep PR up-to-date with base branch

@@ -1,0 +1,46 @@
+name: "Standardized Checkout"
+description: "Checkout code with consistent settings and ratchet-pinned versions"
+inputs:
+  fetch-depth:
+    description: "Number of commits to fetch. 0 indicates all history for all branches and tags"
+    required: false
+    default: "1"
+  token:
+    description: "Personal access token (PAT) used to fetch the repository"
+    required: false
+    default: ${{ github.token }}
+  submodules:
+    description: "Whether to checkout submodules (true, false, recursive)"
+    required: false
+    default: "false"
+  lfs:
+    description: "Whether to download Git-LFS files"
+    required: false
+    default: "false"
+  ref:
+    description: "The branch, tag or SHA to checkout"
+    required: false
+    default: ""
+outputs:
+  commit-sha:
+    description: "The commit SHA that was checked out"
+    value: ${{ steps.checkout.outputs.commit }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      id: checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        token: ${{ inputs.token }}
+        submodules: ${{ inputs.submodules }}
+        lfs: ${{ inputs.lfs }}
+        ref: ${{ inputs.ref }}
+
+    - name: Output commit information
+      shell: bash
+      run: |
+        echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        echo "Checked out commit: $(git rev-parse HEAD)"
+        echo "Branch: $(git branch --show-current || echo 'detached HEAD')"

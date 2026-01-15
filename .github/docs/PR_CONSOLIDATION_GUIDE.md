@@ -125,31 +125,26 @@ This will:
 The workflow creates a comprehensive PR that includes:
 
 1. **Summary Section**
-
    - Total PRs consolidated
    - Successfully merged count
    - Conflicts encountered
 
 1. **Consolidated PRs List**
-
    - Checklist of all included PRs
    - Links to original PRs
    - Author information
 
 1. **Merge Report**
-
    - Details for each PR merge
    - Conflict information
    - Resolution status
 
 1. **Extracted Tasks**
-
    - All PR descriptions
    - Comments and discussions
    - TODO/FIXME/NOTE items
 
 1. **Issues Requiring Decision**
-
    - Merge conflicts (if any)
    - Functionality preservation checklist
    - Next steps

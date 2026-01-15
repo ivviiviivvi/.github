@@ -1,12 +1,6 @@
 ---
 
-description: 'Completionism Specialist Agent - Ensures every field, form,
-textbox, and documentation section is thoroughly completed with no blank spaces
-or missing information' dependencies:
-
-- mcp: github
-
----
+## name: Completionism Specialist description: Completionism Specialist Agent - Ensures every field, form, tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Completionism Specialist Agent
 

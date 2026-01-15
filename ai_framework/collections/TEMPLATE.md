@@ -1,3 +1,7 @@
+---
+
+## name: Template description: A brief description of what this collection provides and who should use it. tags: \[\] updated: 2026-01-13
+
 # Collections Template
 
 Use this template to create a new collection of related prompts, instructions,

@@ -1,12 +1,6 @@
 ---
 
-description: 'AI GitHub Organization Manager - Assists with implementing the
-8-module AI GitHub Management Protocol for organization governance and
-automation' dependencies:
-
-- mcp: github
-
----
+## name: Github Org Manager description: AI GitHub Organization Manager - Assists with implementing the tools: \[\] tags: \[\] updated: 2026-01-13
 
 # GitHub Organization Manager Agent
 

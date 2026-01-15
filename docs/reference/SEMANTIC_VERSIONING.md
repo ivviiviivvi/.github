@@ -271,12 +271,10 @@ config:
 ### BREAKING CHANGES
 
 - **Authentication**: Switched from API keys to OAuth2
-
   - **Migration**: See [migration guide](docs/migration-v2.md)
   - **Timeline**: Support for API keys ends 2024-12-31
 
 - **Database**: User model restructured
-
   - `name` field split into `firstName` and `lastName`
   - **Migration**: Run `npm run migrate` to update database
 

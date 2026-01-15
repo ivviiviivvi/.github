@@ -1,6 +1,22 @@
 ---
 
-## description: 'Refine the requirement or issue with Acceptance Criteria, Technical Considerations, Edge Cases, and NFRs' tools: \[ 'list_issues','githubRepo', 'search', 'add_issue_comment','create_issue','create_issue_comment','update_issue','delete_issue','get_issue', 'search_issues'\]
+name: Refine Issue description: Refine requirements with acceptance criteria,
+technical considerations, and NFRs. tools:
+
+- list_issues
+- githubRepo
+- search
+- add_issue_comment
+- create_issue
+- create_issue_comment
+- update_issue
+- delete_issue
+- get_issue
+- search_issues tags:
+- planning
+- triage updated: 2026-01-13
+
+---
 
 # Refine Requirement or Issue Chat Mode
 

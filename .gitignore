@@ -15,7 +15,15 @@ gha-creds-*.json
 
 # Python
 __pycache__/
+*.py[cod]
 *.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg
 
 # Jekyll
 _site/
@@ -32,5 +40,20 @@ docs/_site/
 *.backup
 *.bak
 
+# Editor artifacts
+*~
+*.swp
+*.swo
+.vscode/.ropeproject
+.idea/
+
+# OS artifacts
+Thumbs.db
+Desktop.ini
+
 # Generated state files
 .github/task_state.json
+
+# Case sensitivity: prevent uppercase Jules directory
+.Jules/
+node_modules/

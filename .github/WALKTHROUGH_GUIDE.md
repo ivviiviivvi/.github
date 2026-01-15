@@ -255,12 +255,10 @@ custom_settings:
 All generated videos are stored in two locations:
 
 1. **GitHub Actions Artifacts** (90-day retention)
-
    - Access via: Actions tab → Workflow run → Artifacts section
    - Format: `walkthrough-{repo-name}-{run-number}.zip`
 
 1. **Repository Files** (Permanent via PR)
-
    - Location: `walkthroughs/` directory
    - Files:
      - `{app-name}-walkthrough-{date}.mp4` - The video file
@@ -645,7 +643,7 @@ created.
 
 ### Documentation
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [FFmpeg Documentation](https://ffmpeg.org/documentation.html)
 - [Workflow Configuration Reference](walkthrough-config.yml)
 

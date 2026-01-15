@@ -3,7 +3,7 @@
 > Comprehensive guide for configuring API keys and optional integrations
 
 **Last Updated:** December 21, 2025 **Maintainer:** @4444JPP **Support:**
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 
@@ -550,17 +550,14 @@ Error: HttpError: Bad credentials
    ```
 
 1. **Verify Secret Name:**
-
    - Ensure secret name matches workflow reference
    - Check for typos or case sensitivity
 
 1. **Regenerate Token:**
-
    - Create new PAT with correct scopes
    - Update secret value
 
 1. **Check Permissions:**
-
    - Verify token has required scopes
    - Check repository access settings
 
@@ -575,7 +572,6 @@ Error: Rate limit reached for requests
 **Solutions:**
 
 1. **Check API Quota:**
-
    - Log into OpenAI dashboard
    - View usage and limits
 
@@ -591,7 +587,6 @@ Error: Rate limit reached for requests
    ```
 
 1. **Upgrade Plan:**
-
    - Consider higher tier for more requests
 
 #### Issue: "Secret not found"
@@ -611,12 +606,10 @@ Error: Secret OPENAI_API_KEY not found
    ```
 
 1. **Check Repository Access:**
-
    - Organization secret: verify repository is selected
    - Environment secret: ensure correct environment
 
 1. **Check Secret Name:**
-
    - Must be UPPERCASE with underscores
    - No spaces or special characters
 
@@ -645,12 +638,10 @@ Error: Resource not accessible by integration
    ```
 
 1. **Repository Settings:**
-
    - Settings → Actions → Workflow permissions
    - Enable: Read and write permissions
 
 1. **Organization Policy:**
-
    - Check organization-wide action policies
    - Ensure repository can use workflows
 
@@ -665,12 +656,10 @@ Error: Voice ID not found or access denied
 **Solutions:**
 
 1. **Verify Voice ID:**
-
    - Log into voice provider dashboard
    - Copy voice ID exactly
 
 1. **Check API Key Permissions:**
-
    - Ensure API key has voice access
    - Verify voice is in your account
 
@@ -692,12 +681,10 @@ Error: Access Denied when uploading to S3
 **Solutions:**
 
 1. **Check IAM Permissions:**
-
    - Verify policy includes `s3:PutObject`
    - Check bucket policy
 
 1. **Verify Bucket Name:**
-
    - Ensure bucket exists
    - Check region is correct
 
@@ -872,7 +859,8 @@ Video Generation: Free
 
 ### Documentation
 
-- 📋 [Walkthrough Request Template](../ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📋
+  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 - 📢 [Announcement & Quick Start](./WALKTHROUGH_ANNOUNCEMENT.md)
 - 🏗️ [System Architecture](./AI_IMPLEMENTATION_GUIDE.md)
 - 🤝 [Contributing Guide](./CONTRIBUTING.md)
@@ -880,8 +868,8 @@ Video Generation: Free
 ### Getting Help
 
 - 💬 **GitHub Discussions**:
-  [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 **Bug Reports**: [File an issue](../ISSUE_TEMPLATE/)
+  [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 **Bug Reports**: [File an issue](../.github/ISSUE_TEMPLATE/)
 - 📧 **Direct Support**: Contact @4444JPP
 - 📖 **Documentation Hub**: [View all docs](./)
 
@@ -935,7 +923,7 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 ---
 
 **Last Updated:** December 21, 2025 **Version:** 1.0.0 **Feedback:**
-[Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)
+[Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 

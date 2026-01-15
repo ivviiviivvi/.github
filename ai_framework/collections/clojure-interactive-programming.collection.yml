@@ -1,3 +1,9 @@
+---
+name: Clojure Interactive Programming
+description: Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance.
+tags: []
+updated: 2026-01-13
+---
 id: clojure-interactive-programming
 name: Clojure Interactive Programming
 description: Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance.

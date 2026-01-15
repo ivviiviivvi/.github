@@ -20,7 +20,6 @@ The `.github` repository at the organization level (e.g.,
 
 1. **Community Health Files** - Organization-wide defaults that cascade to all
    repos:
-
    - `CODE_OF_CONDUCT.md` - Community standards
    - `CONTRIBUTING.md` - Contribution guidelines
    - `SECURITY.md` - Security policies
@@ -28,18 +27,15 @@ The `.github` repository at the organization level (e.g.,
    - `FUNDING.yml` - Funding/sponsorship configuration
 
 1. **Templates** - Default templates applied organization-wide:
-
    - Issue templates (`ISSUE_TEMPLATE/`)
    - Pull request templates (`PULL_REQUEST_TEMPLATE/`)
 
 1. **Workflow Templates** - Reusable GitHub Actions workflows:
-
    - CI/CD pipelines
    - Automation workflows
    - Deployment templates
 
 1. **Configuration Files** - Organization-wide settings:
-
    - `dependabot.yml` - Dependency management
    - GitHub Apps configurations
    - Automation settings
@@ -144,7 +140,6 @@ Based on the repository contents, the "Living Document System" appears to refer
 to the **AI GitHub Organization Management Protocol**, which includes:
 
 - **8 Core Modules** (defined in `for-ai-implementation.txt`):
-
   1. Organization & Repository Administration
   1. Project Management & Workflow Automation
   1. CI/CD & Development Lifecycle
@@ -155,7 +150,6 @@ to the **AI GitHub Organization Management Protocol**, which includes:
   1. Strategic Analysis & Risk Mitigation
 
 - **Supporting Documents**:
-
   - `AI_IMPLEMENTATION_GUIDE.md` - Implementation status and guidelines
   - `MANIFESTO.md` - Organization principles (includes "Living Document"
     section)
@@ -373,7 +367,6 @@ for the organization-wide management functions, governance protocols, and
 ### Best Practice Recommendations
 
 1. **DO use `.github` for:**
-
    - Default community health files
    - Issue and PR templates
    - Reusable workflow templates
@@ -382,7 +375,6 @@ for the organization-wide management functions, governance protocols, and
    - Configuration files (dependabot, etc.)
 
 1. **DO NOT use `.github` for:**
-
    - Application code or libraries
    - Project-specific issues or wikis
    - AI/ML models or datasets
@@ -390,7 +382,6 @@ for the organization-wide management functions, governance protocols, and
    - Team or project management
 
 1. **OPTIONAL for `.github`:**
-
    - Hosting organization discussions (can use `.github` or any other repo as
      source)
 

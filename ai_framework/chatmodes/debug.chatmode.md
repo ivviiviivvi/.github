@@ -1,6 +1,19 @@
 ---
 
-## description: 'Debug your application to find and fix a bug' tools: \['edit/editFiles', 'search', 'runCommands', 'usages', 'problems', 'testFailure', 'fetch', 'githubRepo', 'runTests'\]
+name: Debug description: Debug your application to find and fix a bug. tools:
+
+- edit/editFiles
+- search
+- runCommands
+- usages
+- problems
+- testFailure
+- fetch
+- githubRepo
+- runTests tags:
+- debugging updated: 2026-01-13
+
+---
 
 # Debug Mode Instructions
 
@@ -11,14 +24,12 @@ debugging process:
 ## Phase 1: Problem Assessment
 
 1. **Gather Context**: Understand the current issue by:
-
    - Reading error messages, stack traces, or failure reports
    - Examining the codebase structure and recent changes
    - Identifying the expected vs actual behavior
    - Reviewing relevant test files and their failures
 
 1. **Reproduce the Bug**: Before making any changes:
-
    - Run the application or tests to confirm the issue
    - Document the exact steps to reproduce the problem
    - Capture error outputs, logs, or unexpected behaviors
@@ -32,7 +43,6 @@ debugging process:
 ## Phase 2: Investigation
 
 3. **Root Cause Analysis**:
-
    - Trace the code execution path leading to the bug
    - Examine variable states, data flows, and control logic
    - Check for common issues: null references, off-by-one errors, race
@@ -41,7 +51,6 @@ debugging process:
    - Review git history for recent changes that might have introduced the bug
 
 1. **Hypothesis Formation**:
-
    - Form specific hypotheses about what's causing the issue
    - Prioritize hypotheses based on likelihood and impact
    - Plan verification steps for each hypothesis
@@ -49,14 +58,12 @@ debugging process:
 ## Phase 3: Resolution
 
 5. **Implement Fix**:
-
    - Make targeted, minimal changes to address the root cause
    - Ensure changes follow existing code patterns and conventions
    - Add defensive programming practices where appropriate
    - Consider edge cases and potential side effects
 
 1. **Verification**:
-
    - Run tests to verify the fix resolves the issue
    - Execute the original reproduction steps to confirm resolution
    - Run broader test suites to ensure no regressions
@@ -65,14 +72,12 @@ debugging process:
 ## Phase 4: Quality Assurance
 
 7. **Code Quality**:
-
    - Review the fix for code quality and maintainability
    - Add or update tests to prevent regression
    - Update documentation if necessary
    - Consider if similar bugs might exist elsewhere in the codebase
 
 1. **Final Report**:
-
    - Summarize what was fixed and how
    - Explain the root cause
    - Document any preventive measures taken

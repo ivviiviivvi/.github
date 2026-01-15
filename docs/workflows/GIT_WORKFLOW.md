@@ -98,7 +98,8 @@ feature/add-dark-mode
 
 ### Conventional Commits
 
-Follow the [Conventional Commits](https://www.conventionalcommits.org/)
+Follow the
+[Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 specification.
 
 ### Format
@@ -157,20 +158,17 @@ Performance improvement: 10x faster for large datasets
 ### Commit Message Guidelines
 
 1. **Subject line**:
-
    - Max 50 characters
    - Imperative mood ("add" not "added")
    - No period at the end
    - Capitalize first letter
 
 1. **Body** (optional):
-
    - Wrap at 72 characters
    - Explain what and why, not how
    - Separate from subject with blank line
 
 1. **Footer** (optional):
-
    - Reference issues: `Closes #123`, `Fixes #456`
    - Breaking changes: `BREAKING CHANGE: description`
 
@@ -268,14 +266,12 @@ Relates to #456
 ### 4. Code Review Process
 
 1. **Automated Checks**: Must pass before review
-
    - Linting
    - Tests
    - Security scans
    - Coverage thresholds
 
 1. **Peer Review**: At least one approval required
-
    - Review code quality
    - Check for bugs
    - Verify tests
@@ -551,7 +547,7 @@ git show <commit-hash>
 
 ## Versioning Strategy
 
-We use [Semantic Versioning](https://semver.org/):
+We use [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->:
 
 ```
 MAJOR.MINOR.PATCH

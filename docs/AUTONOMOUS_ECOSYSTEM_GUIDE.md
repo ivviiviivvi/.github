@@ -231,25 +231,21 @@ fast client-side search
 **Strategies**:
 
 1. **pages-direct**: Static/frontend apps
-
    - React, Vue, Angular, Static HTML
    - Deploys to GitHub Pages
    - CDN-backed, instant loading
 
 1. **docker**: Backend apps
-
    - Express, Flask, FastAPI, Django
    - Pushes to Docker Hub
    - Embeds in Pages with instructions
 
 1. **codespaces**: Complex apps
-
    - Microservices, full-stack
    - One-click Codespaces environment
    - Full dev environment
 
 1. **documentation-only**: CLI/Libraries
-
    - npm packages, Python libraries
    - Shows installation instructions
    - No visual UI
@@ -757,10 +753,10 @@ jobs:
 
 ### Documentation
 
-- [Walkthrough Setup Guide](./docs/WALKTHROUGH_GUIDE.md)
-- [AgentSphere Documentation](./docs/AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup](./docs/GITHUB_PAGES_SETUP.md)
-- [Security Best Practices](./docs/SECURITY.md)
+- [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
+- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
+- [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
+- [Security Best Practices](SECURITY.md)
 
 ### Workflow Files
 
@@ -770,9 +766,9 @@ jobs:
 
 ### External Links
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [GitHub Pages Guide](https://docs.github.com/en/pages)
-- [Docker Documentation](https://docs.docker.com/)
+- [Docker Documentation](https://docs.docker.com/)<!-- link:docs.docker -->
 - [GitHub Codespaces](https://github.com/features/codespaces)
 
 ---
@@ -788,13 +784,13 @@ jobs:
 
 ### Contributing
 
-See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ### Feedback
 
 - Feature requests: Create issue with `enhancement` label
 - Bug reports: Create issue with `bug` label
-- Security issues: See [SECURITY.md](./docs/SECURITY.md)
+- Security issues: See [SECURITY.md](SECURITY.md)
 
 ---
 
@@ -813,5 +809,5 @@ See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines
 **Maintained by**: @4444JPP\
 **Organization**: ivviiviivvi\
 **License**: See
-[LICENSE](./LICENSE)\
+[LICENSE](../LICENSE)\
 **Last Updated**: 2025-12-22

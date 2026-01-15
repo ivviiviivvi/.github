@@ -61,6 +61,7 @@ scrape_configs:
     static_configs:
       - targets: [localhost:9121]
 
+
 # Example alert rules (save as alerts/app.yml)
 ---
 groups:

@@ -28,9 +28,17 @@
   color: "a2eeef"
   description: "New feature or request"
 
+- name: "feature-request"
+  color: "84b6eb"
+  description: "Feature request from users or stakeholders"
+
 - name: "documentation"
   color: "0075ca"
   description: "Improvements or additions to documentation"
+
+- name: "best-practices"
+  color: "0e8a16"
+  description: "Best practices review or improvement"
 
 - name: "security"
   color: "d93f0b"
@@ -49,6 +57,10 @@
   color: "fbca04"
   description: "Needs triage and initial assessment"
 
+- name: "needs-triage"
+  color: "fbca04"
+  description: "Needs triage and initial review"
+
 - name: "in-progress"
   color: "0052cc"
   description: "Work is currently in progress"
@@ -60,6 +72,10 @@
 - name: "needs-review"
   color: "6f42c1"
   description: "Waiting for code review"
+
+- name: "review"
+  color: "6f42c1"
+  description: "Review requested or in progress"
 
 - name: "approved"
   color: "0e8a16"
@@ -73,6 +89,14 @@
 - name: "configuration"
   color: "bfdadc"
   description: "Configuration changes"
+
+- name: "devops"
+  color: "1d76db"
+  description: "DevOps or CI/CD operations"
+
+- name: "infrastructure"
+  color: "0e8a16"
+  description: "Infrastructure or platform changes"
 
 - name: "dependencies"
   color: "0366d6"
@@ -91,6 +115,10 @@
   color: "f9d0c4"
   description: "Performance improvements"
 
+- name: "tech-debt"
+  color: "f9d0c4"
+  description: "Technical debt cleanup or remediation"
+
 - name: "refactoring"
   color: "fbca04"
   description: "Code refactoring without functional changes"
@@ -102,6 +130,10 @@
 - name: "accessibility"
   color: "f9c513"
   description: "Accessibility improvements"
+
+- name: "walkthrough"
+  color: "c2e0c6"
+  description: "Walkthrough request or guided setup"
 
 # Status Labels (continued)
 - name: "duplicate"
@@ -127,6 +159,15 @@
 - name: "stale"
   color: "eeeeee"
   description: "Stale issue or PR - no recent activity"
+
+# Community Labels
+- name: "community"
+  color: "bfd4f2"
+  description: "Community engagement or health"
+
+- name: "health-check"
+  color: "cfd3d7"
+  description: "Community or repository health check"
 
 # Area Labels
 - name: "area: ci-cd"

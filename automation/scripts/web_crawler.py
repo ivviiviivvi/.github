@@ -15,7 +15,7 @@ import ssl
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import requests
 import urllib3
@@ -38,7 +38,10 @@ class OrganizationCrawler:
     )
 
     def __init__(
-        self, github_token: str = None, org_name: str = None, max_workers: int = 10
+        self,
+        github_token: Optional[str] = None,
+        org_name: Optional[str] = None,
+        max_workers: int = 10,
     ):
         self.github_token = github_token or os.environ.get("GITHUB_TOKEN")
         self.org_name = (
@@ -232,30 +235,29 @@ class OrganizationCrawler:
             return False
 
     @functools.lru_cache(maxsize=1024)
-    def _get_pinned_pool(self, scheme: str, safe_ip: str, port: int, hostname: str):
+    def _get_pinned_pool(
+        self, scheme: str, safe_ip: str, port: int, hostname: str
+    ) -> urllib3.HTTPConnectionPool:
         """Get a cached connection pool for a specific (IP, hostname) tuple
 
-        This enables TCP Keep-Alive and SSL Session reuse across multiple requests
-        to the same pinned IP, which significantly improves performance for
-        crawler workloads.
+        This enables TCP Keep-Alive and SSL Session reuse across multiple
+        requests to the same pinned IP, improving performance for crawlers.
         """
-        if scheme == 'https':
+        if scheme == "https":
             # Use system default SSL context to avoid extra dependencies
             # Optimization: Reuse pre-initialized SSL context
             return urllib3.HTTPSConnectionPool(
                 host=safe_ip,
                 port=port,
                 maxsize=self.max_workers,
-                cert_reqs='CERT_REQUIRED',
+                cert_reqs="CERT_REQUIRED",
                 ssl_context=self.ssl_context,
                 assert_hostname=hostname,
                 server_hostname=hostname,
             )
         else:
             return urllib3.HTTPConnectionPool(
-                host=safe_ip,
-                port=port,
-                maxsize=self.max_workers
+                host=safe_ip, port=port, maxsize=self.max_workers
             )
 
     def _check_link(self, url: str, timeout: int = 10) -> int:
@@ -355,12 +357,12 @@ class OrganizationCrawler:
                     # Security: Use preload_content=False to prevent DoS from large files
                     # We only need the status code, not the body
                     response = pool.request(
-                        'GET',
+                        "GET",
                         url_path,
                         timeout=timeout,
                         retries=False,
                         headers=headers,
-                        preload_content=False
+                        preload_content=False,
                     )
 
                     try:

@@ -1,0 +1,61 @@
+name: Chatmode Frontmatter
+
+on:
+  pull_request:
+    paths:
+      - ai_framework/chatmodes/**
+      - ai_framework/chatmodes/INVENTORY.md
+      - ai_framework/agents/**
+      - ai_framework/agents/INVENTORY.md
+      - ai_framework/collections/**
+      - ai_framework/collections/INVENTORY.md
+      - automation/scripts/generate_chatmode_inventory.py
+      - automation/scripts/generate_agent_inventory.py
+      - automation/scripts/generate_collection_inventory.py
+      - automation/scripts/validate_agent_frontmatter.py
+      - automation/scripts/validate_collection_frontmatter.py
+      - automation/scripts/validate_chatmode_frontmatter.py
+  push:
+    branches:
+      - main
+    paths:
+      - ai_framework/chatmodes/**
+      - ai_framework/chatmodes/INVENTORY.md
+      - ai_framework/agents/**
+      - ai_framework/agents/INVENTORY.md
+      - ai_framework/collections/**
+      - ai_framework/collections/INVENTORY.md
+      - automation/scripts/generate_chatmode_inventory.py
+      - automation/scripts/generate_agent_inventory.py
+      - automation/scripts/generate_collection_inventory.py
+      - automation/scripts/validate_agent_frontmatter.py
+      - automation/scripts/validate_collection_frontmatter.py
+      - automation/scripts/validate_chatmode_frontmatter.py
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate chatmode frontmatter
+        run: python automation/scripts/validate_chatmode_frontmatter.py
+      - name: Verify chatmode inventory is up to date
+        run: |
+          python automation/scripts/generate_chatmode_inventory.py
+          git diff --exit-code ai_framework/chatmodes/INVENTORY.md
+      - name: Validate agent frontmatter
+        run: python automation/scripts/validate_agent_frontmatter.py
+      - name: Verify agent inventory is up to date
+        run: |
+          python automation/scripts/generate_agent_inventory.py
+          git diff --exit-code ai_framework/agents/INVENTORY.md
+      - name: Validate collection frontmatter
+        run: python automation/scripts/validate_collection_frontmatter.py
+      - name: Verify collection inventory is up to date
+        run: |
+          python automation/scripts/generate_collection_inventory.py
+          git diff --exit-code ai_framework/collections/INVENTORY.md

@@ -59,17 +59,14 @@ Model**: {current_model}
 ### Priority Tasks
 
 1. **{priority_task_1}**
-
    - Dependencies: {task_1_deps}
    - Estimated time: {task_1_time}
 
 1. **{priority_task_2}**
-
    - Dependencies: {task_2_deps}
    - Estimated time: {task_2_time}
 
 1. **{priority_task_3}**
-
    - Dependencies: {task_3_deps}
    - Estimated time: {task_3_time}
 

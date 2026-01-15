@@ -455,9 +455,9 @@ npm install @org/package@1.2.0
 
 ## Documentation
 
-- [API Reference](/docs/api/v1.2.0)
-- [Migration Guide](/docs/migration/v1-to-v1.2)
-- [Changelog](/CHANGELOG.md)
+- [API Reference](../api/v1.2.0)
+- [Migration Guide](../migration/v1-to-v1.2)
+- [Changelog](../CHANGELOG.md)
 
 ## Support
 
@@ -674,11 +674,13 @@ git push origin production/hotfix/revert-feature-x
 
 ## Related Documentation
 
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control
+- [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) -
+  Version control
   standards
-- [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) - Version numbering rules
+- [SEMANTIC_VERSIONING.md](../reference/SEMANTIC_VERSIONING.md) - Version
+  numbering rules
 - [BRANCH_STRATEGY.md](BRANCH_STRATEGY.md) - Branching strategies
-- [CHANGELOG.md](CHANGELOG.md) - Changelog format
+- [CHANGELOG.md](../CHANGELOG.md) - Changelog format
 - [GIT_WORKFLOW.md](GIT_WORKFLOW.md) - Git workflow details
 
 ---

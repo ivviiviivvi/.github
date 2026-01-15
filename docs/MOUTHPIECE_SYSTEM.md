@@ -47,20 +47,17 @@ structured, clear prompts that AI systems can understand and act upon.
 ### Core Principles
 
 1. **Human First, AI Second**
-
    - Humans should communicate naturally
    - AI should adapt to humans, not vice versa
    - Preserve humanity in every transformation
 
 1. **Poetry to Precision**
-
    - Metaphors carry meaning
    - Emotions provide context
    - Imperfection is authentic
    - Clarity emerges from understanding
 
 1. **Bridge, Don't Replace**
-
    - Enhance human expression
    - Maintain the original voice
    - Add structure without removing soul
@@ -127,7 +124,6 @@ Customizable settings to control:
 ### Quick Start (5 minutes)
 
 1. **Choose Your Interface**
-
    - CLI: Use the filter script directly
    - Copilot: Use the chat mode or prompt
    - Integration: Build into your workflow
@@ -140,7 +136,6 @@ Customizable settings to control:
    ```
 
 1. **Review the Output**
-
    - See your original text preserved
    - Check the optimized prompt
    - Notice preserved metaphors
@@ -538,31 +533,26 @@ Create a task in `.vscode/tasks.json`:
 ### Do's ✅
 
 1. **Write Naturally**
-
    - Use your normal voice
    - Include metaphors if they help
    - Don't self-censor or over-polish
 
 1. **Provide Context**
-
    - Mention what you're trying to achieve
    - Include relevant background
    - Express uncertainties
 
 1. **Iterate**
-
    - Use the output as a starting point
    - Refine and adjust as needed
    - Combine with human review
 
 1. **Preserve Humanity**
-
    - Keep meaningful metaphors
    - Maintain emotional context
    - Let your personality show
 
 1. **Specify Format When Needed**
-
    - Mention "as GitHub issue" if needed
    - Specify "technical spec" for formal docs
    - Request "user story" for product work
@@ -570,25 +560,21 @@ Create a task in `.vscode/tasks.json`:
 ### Don'ts ❌
 
 1. **Don't Pre-optimize**
-
    - Don't write "for the AI"
    - Don't remove personality
    - Don't force formality
 
 1. **Don't Lose Meaning**
-
    - Review transformations
    - Ensure intent is preserved
    - Adjust if meaning shifts
 
 1. **Don't Skip Human Judgment**
-
    - AI assists, humans decide
    - Review before using
    - Add context the AI missed
 
 1. **Don't Over-rely**
-
    - Use for appropriate tasks
    - Some things need direct communication
    - Know when to skip the filter
@@ -683,7 +669,7 @@ Want to improve the Mouthpiece System?
 - **Integration examples**: Share your workflows
 - **Documentation**: Improve guides and examples
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 

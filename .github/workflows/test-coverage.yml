@@ -1,0 +1,139 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "automation/scripts/**.py"
+      - "tests/**.py"
+      - "pytest.ini"
+      - ".github/workflows/test-coverage.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "automation/scripts/**.py"
+      - "tests/**.py"
+      - "pytest.ini"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  test:
+    name: Run Tests with Coverage
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-mock requests urllib3 PyGithub
+
+          # Install additional dependencies if requirements.txt exists
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ \
+            --cov=automation/scripts \
+            --cov-report=term-missing \
+            --cov-report=html:htmlcov \
+            --cov-report=xml:coverage.xml \
+            --cov-fail-under=70 \
+            --verbose \
+            --tb=short \
+            --durations=10
+        continue-on-error: ${{ matrix.python-version != '3.11' }}
+
+      - name: Upload coverage reports to Codecov
+        if: matrix.python-version == '3.11'
+        uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.2
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-${{ matrix.python-version }}
+          fail_ci_if_error: false
+
+      - name: Archive coverage results
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@4cfc6a5bfb4c4c58c3682138ebdb5cc854f79043 # v4.6.0
+        with:
+          name: coverage-report
+          path: htmlcov/
+          retention-days: 30
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request' && matrix.python-version == '3.11'
+        uses: py-cov-action/python-coverage-comment-action@9b085fa02e87fd313fb35bed8c2e1894b616d9aa # v3.31
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          MINIMUM_GREEN: 80
+          MINIMUM_ORANGE: 70
+          ANNOTATE_MISSING_LINES: true
+
+  security-tests:
+    name: Run Security-Focused Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-mock requests urllib3 PyGithub
+
+      - name: Run security tests
+        run: |
+          pytest tests/ -m security --verbose --tb=short
+
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pytest-mock requests urllib3 PyGithub
+
+      - name: Run integration tests
+        run: |
+          pytest tests/ -m integration --verbose --tb=short
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

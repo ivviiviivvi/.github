@@ -1,56 +1,6 @@
 ---
 
-## name: WinForms Expert description: Support development of .NET (OOP) WinForms Designer compatible Apps. #version: 2025-10-24a
-
-# WinForms Development Guidelines
-
-These are the coding and design guidelines and instructions for WinForms Expert
-Agent development. When customer asks/requests will require the creation of new
-projects
-
-**New Projects:**
-
-- Prefer .NET 10+. Note: MVVM Binding requires .NET 8+.
-- Prefer `Application.SetColorMode(SystemColorMode.System);` in `Program.cs` at
-  application startup for DarkMode support (.NET 9+).
-- Make Windows API projection available by default. Assume 10.0.22000.0 as
-  minimum Windows version requirement.
-
-```xml
-    <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
-```
-
-**Critical:**
-
-**📦 NUGET:** New projects or supporting class libraries often need special NuGet
-packages. Follow these rules strictly:
-
-- Prefer well-known, stable, and widely adopted NuGet packages - compatible with
-  the project's TFM.
-- Define the versions to the latest STABLE major version, e.g.: `[2.*,)`
-
-**⚙️ Configuration and App-wide HighDPI settings:** _app.config_ files are
-discouraged for configuration for .NET. For setting the HighDpiMode, use e.g.
-`Application.SetHighDpiMode(HighDpiMode.SystemAware)` at application startup,
-not _app.config_ nor _manifest_ files.
-
-Note: `SystemAware` is standard for .NET, use `PerMonitorV2` when explicitly
-requested.
-
-**VB Specifics:**
-
-- In VB, do NOT create a _Program.vb_ - rather use the VB App Framework.
-- For the specific settings, make sure the VB code file _ApplicationEvents.vb_
-  is available. Handle the `ApplyApplicationDefaults` event there and use the
-  passed EventArgs to set the App defaults via its properties.
-
-| Property    | Type              | Purpose                                                                                       |
-| ----------- | ----------------- | --------------------------------------------------------------------------------------------- |
-| ColorMode   | `SystemColorMode` | DarkMode setting for the application. Prefer `System`. Other options: `Dark`, `Classic`.      |
-| Font        | `Font`            | Default Font for the whole Application.                                                       |
-| HighDpiMode | `HighDpiMode`     | `SystemAware` is default. `PerMonitorV2` only when asked for HighDPI Multi-Monitor scenarios. |
-
----
+## name: WinForms Expert description: Support development of .NET (OOP) WinForms Designer compatible Apps. #version: 2025-10-24a description: Support development of .NET (OOP) WinForms Designer compatible Apps. #version: 2025-10-24a tools: \[\] tags: \[\] updated: 2026-01-13
 
 ## 🎯 Critical Generic WinForms Issue: Dealing with Two Code Contexts
 
@@ -524,7 +474,6 @@ derived from `Component` or `Control`.
   (FLP) over absolute positioning of controls.
 
 - The layout cell-sizing approach priority for TLPs is:
-
   - Rows: AutoSize > Percent > Absolute
   - Columns: AutoSize > Percent > Absolute
 
@@ -536,7 +485,6 @@ derived from `Component` or `Control`.
 
 - Be DarkMode-aware in .NET 9+ - Query current DarkMode status:
   `Application.IsDarkModeEnabled`
-
   - Note: In DarkMode, only the `SystemColors` values change automatically to
     the complementary color palette.
 
@@ -566,7 +514,6 @@ derived from `Component` or `Control`.
 **Sizing rules: TLP cell fundamentals**
 
 - Columns:
-
   - AutoSize for caption columns with `Anchor = Left | Right`.
   - Percent for content columns, percentage distribution by good reasoning,
     `Anchor = Top | Bottom | Left | Right`. Never dock cells, always anchor!
@@ -574,7 +521,6 @@ derived from `Component` or `Control`.
     content (icons, buttons).
 
 - Rows:
-
   - AutoSize for rows with "single-line" character (typical entry fields,
     captions, checkboxes).
   - Percent for multi-line TextBoxes, rendering areas AND filling distance
@@ -720,3 +666,9 @@ objects.
 | 5   | Designer files never use NRT annotations                                                            |
 | 6   | Modern C# features for regular code ONLY                                                            |
 | 7   | Data binding: Treat ViewModels as DataSources, remember `Command` and `CommandParameter` properties |
+
+## Usage Example
+
+Example prompt: "Use the WinForms Expert description: Support development of
+.NET (OOP) WinForms Designer compatible Apps. #version: 2025-10-24a agent to
+assess the task and propose next steps."

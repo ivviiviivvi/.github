@@ -22,7 +22,6 @@ framework that enables developers to:
 
 1. **[Workspace & Containerization Protocols](./WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)**
    (30+ pages)
-
    - Complete architecture and design philosophy
    - Multi-container orchestration patterns
    - Security and compliance protocols
@@ -30,7 +29,6 @@ framework that enables developers to:
    - Best practices and troubleshooting
 
 1. **[Codespaces Guide](./CODESPACES_GUIDE.md)** (25+ pages)
-
    - GitHub Codespaces setup and configuration
    - Cost management and optimization
    - Team collaboration features
@@ -38,7 +36,6 @@ framework that enables developers to:
    - Migration guides
 
 1. **[Code-Server Setup Guide](./CODE_SERVER_SETUP.md)** (15+ pages)
-
    - Self-hosted VS Code in browser
    - Security hardening with HTTPS
    - Multiple deployment options
@@ -46,7 +43,6 @@ framework that enables developers to:
    - Production-ready configurations
 
 1. **[Quick Start Guide](./WORKSPACE_QUICK_START.md)** (10+ pages)
-
    - Get productive in 5 minutes
    - Choose-your-own-path approach
    - Common tasks reference
@@ -58,7 +54,6 @@ framework that enables developers to:
 #### Implemented Templates
 
 1. **Full-Stack Template** - Complete web development stack
-
    - **Languages**: Node.js 20, Python 3.11
    - **Services**: PostgreSQL 16, Redis 7, MailHog, Adminer
    - **Features**: Hot reload, database UI, email testing
@@ -66,7 +61,6 @@ framework that enables developers to:
    - **Resource Requirements**: 4 CPU, 8GB RAM
 
 1. **Data Science Template** - ML/AI development environment
-
    - **Languages**: Python 3.11 with data science stack
    - **Tools**: Jupyter Lab, MLflow, pandas, scikit-learn, TensorFlow
    - **Services**: PostgreSQL, Redis
@@ -118,7 +112,6 @@ Each template includes:
    ```
 
    Features:
-
    - Template selection
    - Service configuration
    - Project scaffolding
@@ -132,7 +125,6 @@ Each template includes:
    ```
 
    Checks:
-
    - Docker daemon status
    - Container running state
    - Service health (PostgreSQL, Redis, etc.)
@@ -150,7 +142,6 @@ Each template includes:
    ```
 
    Features:
-
    - Technology detection
    - Automatic configuration
    - Database URL updates
@@ -167,31 +158,26 @@ Each template includes:
 Automated validation includes:
 
 1. **Configuration Validation**
-
    - JSON/YAML syntax checking
    - Schema validation
    - Required files verification
 
 1. **Build Testing**
-
    - Container image builds
    - Service startup tests
    - Health check verification
 
 1. **Script Validation**
-
    - Bash syntax checking
    - Execution permission verification
    - Dry-run testing
 
 1. **Documentation Quality**
-
    - Markdown link checking
    - README updates verification
    - Completeness checks
 
 1. **Security Scanning**
-
    - Secret detection
    - Docker security best practices
    - Vulnerability scanning
@@ -238,26 +224,22 @@ Automated validation includes:
 ### Key Design Principles
 
 1. **Light Local, Heavy Remote**
-
    - Local machines are thin clients
    - Heavy computation in containers
    - State persists independently
 
 1. **Universal Access**
-
    - Same workspace via multiple interfaces
    - Seamless switching between access methods
    - Consistent experience everywhere
 
 1. **Security First**
-
    - Network isolation by default
    - Secrets never in containers
    - Encrypted communications
    - Audit logging enabled
 
 1. **Developer Experience**
-
    - 5-minute setup time
    - Automatic service configuration
    - Pre-configured tools
@@ -354,31 +336,26 @@ git clone <repo>
 ### Implemented Security Controls
 
 1. **Network Isolation**
-
    - Services in private network
    - Only necessary ports exposed
    - Firewall rules enforced
 
 1. **Secret Management**
-
    - Environment variables only
    - No secrets in images
    - External secret stores supported
 
 1. **Access Control**
-
    - Authentication required
    - Role-based access (RBAC)
    - Session management
 
 1. **Audit Logging**
-
    - All actions logged
    - Centralized log collection
    - Retention policies
 
 1. **Container Security**
-
    - Non-root users
    - Read-only filesystems where possible
    - Resource limits enforced
@@ -494,8 +471,10 @@ git clone <repo>
 
 ### Community
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - 📚 [Wiki](https://github.com/ivviiviivvi/.github/wiki)
 
 ### Training

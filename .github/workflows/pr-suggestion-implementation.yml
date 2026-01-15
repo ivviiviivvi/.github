@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: "PR number to implement suggestions for"
+        description: PR number to implement suggestions for
         required: true
         type: number
 

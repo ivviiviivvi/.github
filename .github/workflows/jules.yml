@@ -12,10 +12,10 @@ on:
   workflow_dispatch:
     inputs:
       issue_number:
-        description: 'The issue number to process'
+        description: "The issue number to process"
         required: false
       pr_number:
-        description: 'The PR number to process'
+        description: "The PR number to process"
         required: false
 
 concurrency:
@@ -50,8 +50,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
-          python-version: '3.x'
-          cache: 'pip'
+          python-version: "3.x"
+          cache: "pip"
 
       - name: Check quota and deduplication
         id: quota
@@ -60,19 +60,19 @@ jobs:
           quota=$(jq -r '.subscriptions[] | select(.name=="Jules_Agent") | .quota' .github/subscriptions.json)
           echo "usage=$usage" >> $GITHUB_OUTPUT
           echo "quota=$quota" >> $GITHUB_OUTPUT
-          
+
           # Check for task deduplication
           ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
           TASK_TYPE="jules_request"
           TASK_DATA="{\"issue\":\"$ISSUE_NUM\",\"event\":\"${{ github.event_name }}\",\"repo\":\"${{ github.repository }}\"}"
-          
+
           DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "$TASK_TYPE" "$TASK_DATA" || echo '{"should_process":false,"reason":"deduplication check failed"}')
           SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
           REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
-          
+
           echo "should_process=$SHOULD_PROCESS" >> $GITHUB_OUTPUT
           echo "dedupe_reason=$REASON" >> $GITHUB_OUTPUT
-          
+
           if [ "$SHOULD_PROCESS" = "false" ]; then
             echo "⏭️  Skipping duplicate task: $REASON"
           fi
@@ -83,11 +83,11 @@ jobs:
           ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
           if [ -n "$ISSUE_NUM" ]; then
             gh issue comment $ISSUE_NUM --body "⏭️  **Duplicate Request Detected**
-            
+
             This Jules request was already processed recently: ${{ steps.quota.outputs.dedupe_reason }}
-            
+
             To prevent redundant work and PR sprawl, duplicate requests are automatically skipped. If you need to re-run this task, please wait 24 hours or contact a maintainer.
-            
+
             _Automated by [jules.yml](../.github/workflows/jules.yml) with task deduplication_" || echo "Could not post comment"
           fi
         env:

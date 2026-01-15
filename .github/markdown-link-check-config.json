@@ -26,6 +26,45 @@
     },
     {
       "pattern": "^https://semver.org/"
+    },
+    {
+      "pattern": "^https?://[^/]*example\\.com"
+    },
+    {
+      "pattern": "^https?://agentsphere\\.example\\.com"
+    },
+    {
+      "pattern": "^https?://demo-.*\\.agentsphere\\.dev"
+    },
+    {
+      "pattern": "^https?://github\\.com/organization/repository"
+    },
+    {
+      "pattern": "^https?://github\\.com/username/repo"
+    },
+    {
+      "pattern": "^https?://github\\.com/OWNER/REPO"
+    },
+    {
+      "pattern": "^https?://\\{[^}]+\\}"
+    },
+    {
+      "pattern": "^https?://<"
+    },
+    {
+      "pattern": "^https?://\\$"
+    },
+    {
+      "pattern": "^https?://code-server"
+    },
+    {
+      "pattern": "^https?://\\.\\.\\."
+    },
+    {
+      "pattern": "^https?://[^\\s]*\\[NUMBER"
+    },
+    {
+      "pattern": "^https?://\\[[^\\]]+\\]"
     }
   ],
   "replacementPatterns": [],

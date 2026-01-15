@@ -186,24 +186,20 @@ gh repo view $REPO --json hasIssuesEnabled,hasDiscussionsEnabled,hasProjectsEnab
 For each repository:
 
 1. **Issues**:
-
    - Enable issue templates
    - Disable blank issues (optional)
    - Set up labels (see Step 2.3)
 
 1. **Discussions**:
-
    - Enable discussions
    - Create categories (see Step 3.2)
    - Set category settings
 
 1. **Projects**:
-
    - Enable projects v2
    - Create initial project (see Step 3.3)
 
 1. **Wiki**:
-
    - Enable wiki
    - Restrict editing (optional)
 
@@ -313,7 +309,6 @@ and create manually.
 In repository settings → Discussions:
 
 1. **Create Categories**:
-
    - 📢 Announcements (read-only)
    - 💡 Ideas & Feature Proposals
    - ❓ Q&A
@@ -322,7 +317,6 @@ In repository settings → Discussions:
    - 🐛 Troubleshooting & Support
 
 1. **Configure Each Category**:
-
    - Set appropriate format (Discussion/Q&A/Announcement)
    - Write category descriptions
    - Set moderation policies
@@ -352,7 +346,6 @@ In repository settings → Discussions:
 **Using GitHub Web UI** (Projects v2 CLI support is limited):
 
 1. **Create Product Roadmap Project**:
-
    - Go to organization → Projects → New project
    - Choose "Roadmap" template or blank
    - Add custom fields from
@@ -360,14 +353,12 @@ In repository settings → Discussions:
    - Set up views (Roadmap, By Status, By Priority)
 
 1. **Create Bug Triage Project**:
-
    - Create new project
    - Add custom fields from
      [bug-triage.json](.github/project-templates/bug-triage.json)
    - Set up board view grouped by priority
 
 1. **Link to Repository**:
-
    - Add repository to project
    - Set up auto-add workflows
    - Configure status automations
@@ -410,19 +401,16 @@ git push
 **Adapt to your workflow** (1-2 hours):
 
 1. **Review Issue Types**:
-
    - Remove irrelevant types
    - Add domain-specific types
    - Adjust priority levels
 
 1. **Customize Templates**:
-
    - Edit `.github/ISSUE_TEMPLATE/*.yml`
    - Adjust fields and options
    - Update descriptions
 
 1. **Define Your SLAs**:
-
    - Set realistic response times
    - Define escalation procedures
    - Document in taxonomy
@@ -432,19 +420,16 @@ git push
 **Adapt categories to your community** (1 hour):
 
 1. **Adjust Categories**:
-
    - Add/remove categories
    - Rename for your terminology
    - Reorder by importance
 
 1. **Create Custom Starters**:
-
    - Write domain-specific templates
    - Add recurring discussion topics
    - Prepare FAQ content
 
 1. **Set Moderation Policies**:
-
    - Define response expectations
    - Assign category moderators
    - Create escalation procedures
@@ -454,19 +439,16 @@ git push
 **Customize for your workflows** (2 hours):
 
 1. **Adjust Project Templates**:
-
    - Modify custom fields
    - Change status options
    - Add/remove columns
 
 1. **Set Up Automations**:
-
    - Auto-add items based on labels
    - Auto-set field values
    - Status transitions
 
 1. **Create Views**:
-
    - Team-specific views
    - Sprint/milestone views
    - Leadership dashboards
@@ -476,19 +458,16 @@ git push
 **Structure for your content** (1-2 hours):
 
 1. **Plan Wiki Structure**:
-
    - Identify main sections
    - Plan page hierarchy
    - Design navigation
 
 1. **Customize Templates**:
-
    - Adjust page templates
    - Add domain-specific sections
    - Create custom templates
 
 1. **Create Content Plan**:
-
    - List pages to create
    - Assign content owners
    - Set deadlines
@@ -500,19 +479,16 @@ git push
 **Prepare team for new system** (2-3 hours):
 
 1. **Quick Reference Guides**:
-
    - One-pagers for each feature
    - Common workflows
    - Where to find what
 
 1. **Video Walkthroughs**:
-
    - Screen recordings of key tasks
    - 2-5 minutes each
    - Upload to YouTube or internal platform
 
 1. **FAQ Document**:
-
    - Anticipated questions
    - Answers with examples
    - Links to detailed docs
@@ -562,9 +538,9 @@ git push
 
    ## Resources
 
-   - [Master Index](link) - Start here
-   - [Training Videos](link) - Quick walkthroughs
-   - [FAQ](link) - Common questions
+   - [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - Start here
+   - [Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md) - Quick walkthroughs
+   - [Summary](ORGANIZATIONAL_CONTENT_SUMMARY.md) - Common questions
 
    ## Getting Help
 
@@ -576,7 +552,6 @@ git push
    ```
 
 1. **Distribution Channels**:
-
    - [ ] GitHub Discussions announcement
    - [ ] Slack/Teams announcement
    - [ ] Email to organization
@@ -588,19 +563,16 @@ git push
 **Help team during transition** (ongoing):
 
 1. **Office Hours**:
-
    - Weekly drop-in sessions
    - First 2-4 weeks
    - Record and share
 
 1. **Slack Channel**:
-
    - Dedicated help channel
    - Monitor actively
    - Build FAQ from questions
 
 1. **Documentation**:
-
    - Keep docs updated
    - Add examples from real use
    - Iterate based on feedback
@@ -637,19 +609,16 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 **Learn what works** (monthly):
 
 1. **Surveys**:
-
    - Monthly pulse surveys
    - Specific feature feedback
    - Improvement suggestions
 
 1. **Retrospectives**:
-
    - Monthly retro meeting
    - Review what's working
    - Identify pain points
 
 1. **Usage Analysis**:
-
    - Most/least used features
    - Common workflows
    - Bottlenecks
@@ -659,21 +628,18 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 **Continuously improve** (ongoing):
 
 1. **Monthly Reviews**:
-
    - [ ] Review metrics
    - [ ] Analyze feedback
    - [ ] Identify improvements
    - [ ] Update documentation
 
 1. **Quarterly Updates**:
-
    - [ ] Major taxonomy updates
    - [ ] New templates
    - [ ] Process improvements
    - [ ] Training refreshers
 
 1. **Annual Assessment**:
-
    - [ ] Full system review
    - [ ] ROI analysis
    - [ ] Strategic adjustments
@@ -752,25 +718,21 @@ cross-repo discussions
 After successful pilot:
 
 1. **Expand to More Repositories**:
-
    - Apply learnings
    - Streamline process
    - Automate where possible
 
 1. **Enhance Automation**:
-
    - More workflow automations
    - Integration with other tools
    - Reporting dashboards
 
 1. **Community Building**:
-
    - Foster engagement
    - Recognize contributors
    - Build culture
 
 1. **Continuous Improvement**:
-
    - Regular reviews
    - Keep current with GitHub features
    - Adapt to changing needs

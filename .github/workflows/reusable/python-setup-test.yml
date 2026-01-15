@@ -1,0 +1,113 @@
+name: Python Setup & Test (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: Python version to use
+        required: false
+        type: string
+        default: "3.11"
+      requirements-file:
+        description: Path to requirements file
+        required: false
+        type: string
+        default: requirements.txt
+      run-tests:
+        description: Whether to run tests
+        required: false
+        type: boolean
+        default: true
+      test-command:
+        description: Command to run tests
+        required: false
+        type: string
+        default: pytest --cov=. --cov-report=xml
+      install-dev-deps:
+        description: Install development dependencies
+        required: false
+        type: boolean
+        default: false
+      cache-dependency-path:
+        description: Path to cache dependencies
+        required: false
+        type: string
+        default: "**/requirements*.txt"
+      working-directory:
+        description: Working directory for commands
+        required: false
+        type: string
+        default: .
+    outputs:
+      coverage-report-path:
+        description: Path to coverage report
+        value: ${{ jobs.setup-test.outputs.coverage-path }}
+      test-results-path:
+        description: Path to test results
+        value: ${{ jobs.setup-test.outputs.test-path }}
+
+jobs:
+  setup-test:
+    runs-on: ubuntu-latest
+    outputs:
+      coverage-path: ${{ steps.run-tests.outputs.coverage-path }}
+      test-path: ${{ steps.run-tests.outputs.test-path }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+          cache-dependency-path: ${{ inputs.cache-dependency-path }}
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f "${{ inputs.requirements-file }}" ]; then
+            pip install -r ${{ inputs.requirements-file }}
+          fi
+
+      - name: Install development dependencies
+        if: inputs.install-dev-deps
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          if [ -f "requirements-dev.txt" ]; then
+            pip install -r requirements-dev.txt
+          fi
+          if [ -f "requirements.test.txt" ]; then
+            pip install -r requirements.test.txt
+          fi
+
+      - name: Run tests
+        if: inputs.run-tests
+        id: run-tests
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          ${{ inputs.test-command }}
+          echo "coverage-path=coverage.xml" >> $GITHUB_OUTPUT
+          echo "test-path=pytest-results.xml" >> $GITHUB_OUTPUT
+
+      - name: Upload coverage reports
+        if: inputs.run-tests && hashFiles('coverage.xml') != ''
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: coverage-report-${{ inputs.python-version }}
+          path: coverage.xml
+          retention-days: 30
+
+      - name: Upload test results
+        if: inputs.run-tests && (success() || failure())
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: test-results-${{ inputs.python-version }}
+          path: |
+            pytest-results.xml
+            .pytest_cache
+          retention-days: 7

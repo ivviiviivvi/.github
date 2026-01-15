@@ -1,0 +1,102 @@
+name: Node.js Setup & Build (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to use"
+        required: false
+        type: string
+        default: "18"
+      package-manager:
+        description: "Package manager (npm, yarn, pnpm)"
+        required: false
+        type: string
+        default: "npm"
+      install-command:
+        description: "Command to install dependencies"
+        required: false
+        type: string
+        default: "" # Auto-detected based on package-manager
+      build-command:
+        description: "Command to build project"
+        required: false
+        type: string
+        default: ""
+      test-command:
+        description: "Command to run tests"
+        required: false
+        type: string
+        default: ""
+      working-directory:
+        description: "Working directory for commands"
+        required: false
+        type: string
+        default: "."
+    outputs:
+      build-artifact-path:
+        description: "Path to build artifacts"
+        value: ${{ jobs.setup-build.outputs.build-path }}
+
+jobs:
+  setup-build:
+    runs-on: ubuntu-latest
+    outputs:
+      build-path: ${{ steps.build.outputs.build-path }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.package-manager }}
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          if [ -n "${{ inputs.install-command }}" ]; then
+            ${{ inputs.install-command }}
+          else
+            case "${{ inputs.package-manager }}" in
+              npm)
+                npm ci
+                ;;
+              yarn)
+                yarn install --frozen-lockfile
+                ;;
+              pnpm)
+                pnpm install --frozen-lockfile
+                ;;
+              *)
+                echo "Unknown package manager: ${{ inputs.package-manager }}"
+                exit 1
+                ;;
+            esac
+          fi
+
+      - name: Build project
+        if: inputs.build-command != ''
+        id: build
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          ${{ inputs.build-command }}
+          echo "build-path=dist" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        if: inputs.test-command != ''
+        working-directory: ${{ inputs.working-directory }}
+        run: ${{ inputs.test-command }}
+
+      - name: Upload build artifacts
+        if: inputs.build-command != '' && hashFiles('dist/**') != ''
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: build-artifacts-node-${{ inputs.node-version }}
+          path: ${{ inputs.working-directory }}/dist
+          retention-days: 7

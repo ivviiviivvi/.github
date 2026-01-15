@@ -2,8 +2,7 @@ name: PR Quality Checks
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited]
-
+    types: [opened, synchronize, reopened, edited]  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true

@@ -6,22 +6,18 @@ Discussion in the Ivviiviivvi organization.
 ## Quick Steps
 
 1. **Navigate to Organization Discussions**
-
    - Go to: https://github.com/orgs/ivviiviivvi/discussions
 
 1. **Create New Discussion**
-
    - Click the **"New discussion"** button
    - Select category: **Announcements**
 
 1. **Fill in Details**
-
    - **Title**: `🎬 Introducing: Autonomous Walkthrough Generation for All Repos`
    - **Body**: Copy the entire contents of
      [`WALKTHROUGH_ANNOUNCEMENT.md`](./WALKTHROUGH_ANNOUNCEMENT.md)
 
 1. **Post Discussion**
-
    - Click **"Start discussion"**
    - Pin the discussion (optional but recommended)
    - Lock the discussion to comments only (optional)

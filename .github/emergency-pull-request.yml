@@ -2,10 +2,10 @@
 # https://github.com/apps/emergency-pull-request
 
 # Label to apply to emergency PRs
-label: "emergency"
+label: emergency
 
 # Branch prefix for emergency PRs
-branchPrefix: "emergency/"
+branchPrefix: emergency/
 # Reviewers to request (optional)
 # reviewers:
 #   - user1

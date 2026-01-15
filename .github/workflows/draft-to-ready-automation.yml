@@ -8,11 +8,11 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: "PR number to convert from draft to ready"
+        description: PR number to convert from draft to ready
         required: true
         type: number
       force:
-        description: "Force conversion even if checks are not passing"
+        description: Force conversion even if checks are not passing
         required: false
         type: boolean
         default: false

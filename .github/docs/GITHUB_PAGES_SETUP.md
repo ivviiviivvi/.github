@@ -14,43 +14,36 @@ accessing live demos.
 The Pages site is built and updated through multiple workflows:
 
 1. **After Walkthrough Generation** (`workflow_run` trigger)
-
    - Automatically triggered when a new walkthrough video is created
    - Updates the gallery with the latest video
 
 1. **Scheduled Updates** (every 6 hours)
-
    - Periodically scans all organization repositories
    - Discovers new applications and updates
    - Refreshes metadata and deployment status
 
 1. **Manual Dispatch**
-
    - Can be manually triggered from GitHub Actions
    - Useful for immediate updates or troubleshooting
 
 ### Build Process
 
 1. **Metadata Aggregation**
-
    - Queries GitHub API for all organization repositories
    - Collects walkthrough videos from workflow artifacts
    - Extracts repository details (name, description, topics)
 
 1. **Data Generation**
-
    - Creates `docs/_data/walkthroughs.yml` with all metadata
    - Updates `docs/_data/app-deployments.yml` with live demo URLs
    - Generates index and gallery pages
 
 1. **Jekyll Build**
-
    - Processes Markdown files with Liquid templates
    - Applies responsive layouts and styling
    - Generates static HTML/CSS/JS
 
 1. **Deployment**
-
    - Uploads built site as artifact
    - Deploys to GitHub Pages
    - Site available at `https://ivviiviivvi.github.io`
@@ -201,7 +194,6 @@ fetch("https://ivviiviivvi.github.io/data/walkthroughs.json")
    ```
 
 1. **Update repository settings**:
-
    - Go to Settings → Pages
    - Enter custom domain: `apps.yourdomain.com`
    - Enable HTTPS
@@ -235,7 +227,6 @@ dig apps.yourdomain.com +short
    ```
 
 1. **Verify installation**:
-
    - Visit your site
    - Check Google Analytics real-time dashboard
    - Should show active user
@@ -467,7 +458,8 @@ GitHub Pages automatically caches static assets with proper headers.
 
 ## Getting Help
 
-- **Issues**: [Create an issue](https://github.com/ivviiviivvi/.github/issues)
+- **Issues**:
+  [Create an issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Join the discussion](https://github.com/ivviiviivvi/.github/discussions)
+  [Join the discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation**: [Main README](../README.md)

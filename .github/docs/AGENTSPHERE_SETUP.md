@@ -30,7 +30,6 @@ The AgentSphere deployment workflow is triggered automatically when:
 The workflow automatically detects your application type by examining:
 
 - **Node.js**: Presence of `package.json`
-
   - React: `"react"` dependency
   - Vue: `"vue"` dependency
   - Angular: `"@angular/core"` dependency
@@ -38,14 +37,12 @@ The workflow automatically detects your application type by examining:
   - Generic Node.js: Default to `npm start`
 
 - **Python**: Presence of `requirements.txt`, `setup.py`, or `pyproject.toml`
-
   - Flask: `app.py` file
   - FastAPI: `main.py` with `fastapi`/`uvicorn` in requirements
   - Django: `manage.py` file
   - Generic Python: Default to Python scripts
 
 - **Java**: Presence of `pom.xml` or `build.gradle`
-
   - Spring Boot with Maven: `mvn spring-boot:run`
   - Spring Boot with Gradle: `gradle bootRun`
 
@@ -279,7 +276,6 @@ app.listen(3000, "0.0.0.0");
    ```
 
 1. Optimize build process:
-
    - Use lighter dependencies
    - Pre-build assets
    - Enable dependency caching

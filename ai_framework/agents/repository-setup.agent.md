@@ -1,12 +1,6 @@
 ---
 
-description: 'Repository Setup Agent - Automates the creation and configuration
-of new repositories following organization standards and best practices'
-dependencies:
-
-- mcp: github
-
----
+## name: Repository Setup description: Repository Setup Agent - Automates the creation and configuration tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Repository Setup Agent
 

@@ -221,7 +221,6 @@ on:
    ```
 
 1. **Implement Secret Rotation Schedule**
-
    - API Keys: Quarterly
    - Service Credentials: Bi-annually
    - Document last rotation date
@@ -236,7 +235,6 @@ on:
 #### Long-term Strategy
 
 1. **Migrate to OIDC** (OpenID Connect)
-
    - Eliminates need for long-lived credentials
    - Supported by AWS, Azure, GCP
 
@@ -250,12 +248,10 @@ on:
    ```
 
 1. **Consolidate Secrets**
-
    - Use single GitHub App instead of multiple API keys
    - Reduces attack surface
 
 1. **Implement HashiCorp Vault** (for larger scale)
-
    - Centralized secret management
    - Automatic rotation
    - Audit logging
@@ -447,17 +443,14 @@ on:
 #### Protection Mechanisms ✅
 
 1. **Workflow Approval Required**
-
    - First-time contributors' workflows require approval
    - Configured in: Settings → Actions → Fork pull request workflows
 
 1. **Protected Branches**
-
    - `main` branch should be protected
    - Require reviews before merge
 
 1. **CODEOWNERS**
-
    - `.github/CODEOWNERS` file exists ✅
    - Should include workflow directory:
      ```

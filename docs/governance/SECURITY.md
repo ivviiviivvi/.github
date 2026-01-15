@@ -2,35 +2,41 @@
 
 ## Supported Versions
 
-We take security seriously and provide security updates for the following versions:
+We take security seriously and provide security updates for the following
+versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.x     | :white_check_mark: |
-| < 1.0   | :x:                |
+| \< 1.0  | :x:                |
 
-**Note:** Only the latest major version receives security updates. Please upgrade to the latest version to ensure you have the latest security patches.
+**Note:** Only the latest major version receives security updates. Please
+upgrade to the latest version to ensure you have the latest security patches.
 
 ## Reporting a Vulnerability
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-We strongly encourage responsible disclosure of security vulnerabilities. If you discover a security issue, please report it privately using one of the following methods:
+We strongly encourage responsible disclosure of security vulnerabilities. If you
+discover a security issue, please report it privately using one of the following
+methods:
 
 ### Preferred Method: GitHub Security Advisories
 
 1. Navigate to the repository's **Security** tab
-2. Click **"Report a vulnerability"**
-3. Fill out the advisory form with details about the vulnerability
-4. Submit the report
+1. Click **"Report a vulnerability"**
+1. Fill out the advisory form with details about the vulnerability
+1. Submit the report
 
 GitHub Security Advisories allow us to:
+
 - Discuss the vulnerability privately
 - Collaborate on a fix
 - Publish a CVE if needed
 - Credit you for the discovery
 
-**Report URL:** [https://github.com/ivviiviivvi/.github/security/advisories/new](https://github.com/ivviiviivvi/.github/security/advisories/new)
+**Report URL:**
+[https://github.com/ivviiviivvi/.github/security/advisories/new](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ### Alternative: Security Contact Email
 
@@ -39,6 +45,7 @@ If you prefer email or cannot use GitHub Security Advisories, email us at:
 **📧 security@ivviiviivvi.com**
 
 Please include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -48,14 +55,15 @@ Please include:
 
 We are committed to responding quickly to security reports:
 
-| Timeline | Action |
-|----------|--------|
-| **Within 24 hours** | Acknowledgment of your report |
-| **Within 72 hours** | Initial assessment and severity classification |
-| **Within 7 days** | Detailed response with remediation plan |
-| **Within 30 days** | Fix deployed (for critical/high severity issues) |
+| Timeline            | Action                                           |
+| ------------------- | ------------------------------------------------ |
+| **Within 24 hours** | Acknowledgment of your report                    |
+| **Within 72 hours** | Initial assessment and severity classification   |
+| **Within 7 days**   | Detailed response with remediation plan          |
+| **Within 30 days**  | Fix deployed (for critical/high severity issues) |
 
 Response times may vary based on:
+
 - Severity of the vulnerability
 - Complexity of the fix
 - Need for coordinated disclosure with other parties
@@ -63,11 +71,11 @@ Response times may vary based on:
 ## Vulnerability Disclosure Process
 
 1. **Report Received** - We acknowledge receipt within 24 hours
-2. **Assessment** - We evaluate severity and impact (72 hours)
-3. **Remediation** - We develop and test a fix
-4. **Disclosure** - We coordinate disclosure timing with you
-5. **Release** - We deploy the fix and publish an advisory
-6. **Credit** - We publicly credit you (unless you prefer anonymity)
+1. **Assessment** - We evaluate severity and impact (72 hours)
+1. **Remediation** - We develop and test a fix
+1. **Disclosure** - We coordinate disclosure timing with you
+1. **Release** - We deploy the fix and publish an advisory
+1. **Credit** - We publicly credit you (unless you prefer anonymity)
 
 ## Severity Classification
 
@@ -82,36 +90,51 @@ We use the [CVSS 3.1](https://www.first.org/cvss/calculator/3.1) scoring system:
 
 **Status:** Coming Soon
 
-We are planning to launch a bug bounty program to reward security researchers who responsibly disclose vulnerabilities. Details will be published here when available.
+We are planning to launch a bug bounty program to reward security researchers
+who responsibly disclose vulnerabilities. Details will be published here when
+available.
 
-Interested in participating? Watch this repository or contact us at security@ivviiviivvi.com.
+Interested in participating? Watch this repository or contact us at
+security@ivviiviivvi.com.
 
 ## Security Scanning Tools
 
 We use the following automated security tools to detect vulnerabilities:
 
 ### Secret Detection
-- **[TruffleHog](https://github.com/trufflesecurity/trufflehog)** - Scans for secrets, API keys, tokens
-- **[Gitleaks](https://github.com/gitleaks/gitleaks)** - Detects hardcoded credentials and sensitive data
-- **[detect-secrets](https://github.com/Yelp/detect-secrets)** - Prevents secrets from entering the codebase
+
+- **[TruffleHog](https://github.com/trufflesecurity/trufflehog)** - Scans for
+  secrets, API keys, tokens
+- **[Gitleaks](https://github.com/gitleaks/gitleaks)** - Detects hardcoded
+  credentials and sensitive data
+- **[detect-secrets](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->**
+  \- Prevents secrets from entering the codebase
 
 ### Dependency Scanning
-- **[Dependabot](https://github.com/dependabot)** - Automated dependency updates and security patches
-- **[GitHub Advanced Security](https://docs.github.com/en/code-security)** - Dependency vulnerability scanning
+
+- **[Dependabot](https://github.com/dependabot)<!-- link:github.dependabot -->**
+  \- Automated dependency updates and security patches
+- **[GitHub Advanced Security](https://docs.github.com/en/code-security)<!-- link:docs.github_code_security -->**
+  \- Dependency vulnerability scanning
 
 ### Code Analysis
-- **[CodeQL](https://codeql.github.com/)** - Semantic code analysis for security vulnerabilities
+
+- **[CodeQL](https://codeql.github.com/)** - Semantic code analysis for security
+  vulnerabilities
 - **[Semgrep](https://semgrep.dev/)** - Static analysis for security patterns
 
 ## Security Workflows
 
 Our security workflows run automatically on every push and pull request:
 
-- **🔒 Secret Scanning** - [`.github/workflows/security-scan.yml`](.github/workflows/security-scan.yml)
-- **🔍 Code Scanning (CodeQL)** - [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml)
-- **📦 Dependency Review** - [`.github/workflows/dependency-review.yml`](.github/workflows/dependency-review.yml)
+- **🔒 Secret Scanning** -
+  [`.github/workflows/security-scan.yml`](../../.github/workflows/security-scan.yml)
+- **🔍 Code Scanning (CodeQL)** -
+  [`.github/workflows/codeql-analysis.yml`](../../.github/workflows/codeql-analysis.yml)
+- **📦 Dependency Review** -
+  [`.github/workflows/dependency-review.yml`](../../.github/workflows/dependency-review.yml)
 
-View all security workflows: [Security Workflows](.github/workflows/)
+View all security workflows: [Security Workflows](../../.github/workflows/)
 
 ## Security Best Practices
 
@@ -128,20 +151,25 @@ When contributing to this project:
 
 - **General Security Issues:** security@ivviiviivvi.com
 - **Security Team:** @ivviiviivvi/security
-- **Emergency Contact:** [Create a private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+- **Emergency Contact:**
+  [Create a private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ## Hall of Fame
 
-We thank the following researchers for responsibly disclosing security vulnerabilities:
+We thank the following researchers for responsibly disclosing security
+vulnerabilities:
 
 <!-- This section will be populated as researchers report vulnerabilities -->
-*No vulnerabilities reported yet.*
+
+_No vulnerabilities reported yet._
 
 ---
 
 **Last Updated:** January 12, 2026
 
-For general questions about this policy, please contact security@ivviiviivvi.com.
+For general questions about this policy, please contact
+security@ivviiviivvi.com.
+
 ## Reporting Security Vulnerabilities
 
 We take the security of this project seriously. If you discover a security
@@ -151,7 +179,7 @@ vulnerability, please report it responsibly.
 
 **For sensitive security vulnerabilities**, please report them privately through
 our
-[Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+[Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 page.
 
 **DO NOT** create a public issue for sensitive security vulnerabilities.
@@ -165,7 +193,7 @@ For security issues that are:
 - Security enhancements or hardening suggestions
 
 You may create a public issue using our
-[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml).
+[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml)<!-- link:github.security_vulnerability -->.
 
 ## What to Include in Your Report
 

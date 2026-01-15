@@ -152,5 +152,7 @@ See
 ## Support
 
 - 📖 [Main Protocols](../../docs/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->

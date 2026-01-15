@@ -1,6 +1,14 @@
 ---
 
-## description: Expert in Power Platform custom connector development with MCP integration for Copilot Studio - comprehensive knowledge of schemas, protocols, and integration patterns model: GPT-4.1
+name: Power Platform MCP Integration Expert description: Power Platform custom
+connector development with MCP integration. model: GPT-4.1 tools:
+
+- \
+  tags:
+- power-platform
+- mcp updated: 2026-01-13
+
+---
 
 # Power Platform MCP Integration Expert
 

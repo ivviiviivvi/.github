@@ -311,9 +311,11 @@ AgentSphere offers a generous free tier:
 
 Need help? Contact:
 
-- 💬 **GitHub**: [@4444JPP](https://github.com/4444JPP)
+- 💬 **GitHub**:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - 📚 **Documentation**: [GitHub Pages Setup](./GITHUB_PAGES_SETUP.md)
-- 🐛 **Issues**: [Report a bug](https://github.com/ivviiviivvi/.github/issues)
+- 🐛 **Issues**:
+  [Report a bug](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

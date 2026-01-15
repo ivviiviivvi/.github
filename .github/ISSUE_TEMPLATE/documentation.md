@@ -1,6 +1,6 @@
 ---
 
-## name: 📚 Documentation Issue about: Report an issue with documentation title: '\[DOCS\] ' labels: \['documentation'\] assignees: \[\]
+## name: "📚 Documentation Issue" about: "Report an issue with documentation" title: "\[DOCS\] " labels: \["documentation"\] assignees: \[\]
 
 ## Documentation Issue
 

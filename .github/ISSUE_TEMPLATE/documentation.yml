@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         ## Documentation Request
-        
+
         Thank you for helping improve our documentation! Please provide details about the documentation you'd like to see added or improved.
 
   - type: textarea
@@ -66,7 +66,7 @@ body:
       description: Link to or quote the current documentation that needs improvement.
       placeholder: |
         Link: https://docs.example.com/authentication  # allow-secret
-        
+
         Or quote the current text that needs improvement.
 
   - type: textarea
@@ -76,11 +76,11 @@ body:
       description: If you have ideas for how the documentation should read, please provide them here.
       placeholder: |
         Example:
-        
+
         ## Authentication with OAuth2
-        
+
         To authenticate using OAuth2, first obtain an access token...
-        
+
         ```python
         import auth
         token = auth.get_oauth2_token(...)  # allow-secret
@@ -154,11 +154,11 @@ body:
     attributes:
       value: |
         ---
-        
+
         ### After Submission
-        
+
         - A maintainer will review your request and add appropriate labels
         - If approved, the issue will be assigned or opened for community contribution
         - Documentation PRs should reference this issue number
-        
+
         Thank you for helping improve our documentation! 📚

@@ -3,16 +3,16 @@ name: Daily Master Orchestrator
 on:
   schedule:
     # Run once per day at 1 AM UTC - coordinates all daily operations
-    - cron: '0 1 * * *'
+    - cron: 0 1 * * *
   workflow_dispatch:
     inputs:
       force_run:
-        description: 'Force run even if already executed today'
+        description: Force run even if already executed today
         required: false
         type: boolean
         default: false
       wait_time_minutes:
-        description: 'Minutes to wait for tasks to complete before consolidation'
+        description: Minutes to wait for tasks to complete before consolidation
         required: false
         type: number
         default: 30
@@ -34,33 +34,33 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
-      
+
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
-          python-version: '3.x'
-      
+          python-version: 3.x
+
       - name: Check Last Run
         id: check
         run: |
           FORCE_RUN="${{ github.event.inputs.force_run }}"
           TODAY=$(date -u +%Y-%m-%d)
-          
+
           # Check if we already ran today
           if [ -f ".github/task_state.json" ]; then
             LAST_ORCHESTRATION=$(jq -r '.last_orchestration // "never"' .github/task_state.json)
-            
+
             if [ "$LAST_ORCHESTRATION" = "$TODAY" ] && [ "$FORCE_RUN" != "true" ]; then
               echo "should-run=false" >> $GITHUB_OUTPUT
               echo "⏭️  Already ran today ($TODAY), skipping"
               exit 0
             fi
           fi
-          
+
           echo "should-run=true" >> $GITHUB_OUTPUT
           echo "✅ Should run orchestration for $TODAY"
 
@@ -71,23 +71,23 @@ jobs:
     if: needs.check-if-should-run.outputs.should-run == 'true'
     outputs:
       tasks-executed: ${{ steps.orchestrate.outputs.tasks-executed }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
-          python-version: '3.x'
-      
+          python-version: 3.x
+
       - name: Install dependencies
         run: |
           pip install croniter
-      
+
       - name: Execute Daily Orchestration
         id: orchestrate
         env:
@@ -95,40 +95,40 @@ jobs:
         run: |
           TODAY=$(date -u +%Y-%m-%d)
           echo "🎯 Orchestrating daily tasks for $TODAY"
-          
+
           # Get tasks scheduled for today
           python3 .github/scripts/get_daily_tasks.py
-          
+
           TASK_COUNT=$(jq 'length' /tmp/daily_tasks.json)
           echo "tasks-executed=$TASK_COUNT" >> $GITHUB_OUTPUT
-          
+
           # Dispatch tasks with deduplication
           jq -c '.[]' /tmp/daily_tasks.json | while read -r task; do
             TASK_ID=$(echo "$task" | jq -r '.id')
             SUBSCRIPTION=$(echo "$task" | jq -r '.subscription')
             PROMPT=$(echo "$task" | jq -r '.prompt')
-            
+
             echo ""
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "Task: $TASK_ID"
             echo "Subscription: $SUBSCRIPTION"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            
+
             # Check if task is duplicate using deduplication system
             TASK_DATA=$(echo "$task" | jq -c '{id, subscription, prompt}')
             DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "orchestrated_task" "$TASK_DATA" || echo '{"should_process":false,"reason":"script error"}')
-            
+
             SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
             REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
-            
+
             if [ "$SHOULD_PROCESS" = "true" ]; then
               echo "✅ Processing task: $REASON"
-              
+
               # Get workflow file for subscription
               WORKFLOW_FILE=$(jq -r --arg name "$SUBSCRIPTION" \
                 '.subscriptions[] | select(.name==$name) | .relevant_workflows[0] // empty' \
                 .github/subscriptions.json)
-              
+
               if [ -n "$WORKFLOW_FILE" ] && [ "$WORKFLOW_FILE" != "null" ]; then
                 echo "Dispatching workflow: $WORKFLOW_FILE"
                 gh workflow run "$WORKFLOW_FILE" --ref ${{ github.ref }} -f "prompt=$PROMPT" || echo "Failed to dispatch"
@@ -139,20 +139,20 @@ jobs:
               echo "⏭️  Skipping task: $REASON"
             fi
           done
-          
+
           # Update state
           if [ ! -f ".github/task_state.json" ]; then
             echo '{"processed_tasks":{},"active_prs":[],"last_orchestration":null}' > .github/task_state.json
           fi
-          
+
           jq --arg date "$TODAY" '.last_orchestration = $date' .github/task_state.json > /tmp/task_state.json
           mv /tmp/task_state.json .github/task_state.json
-      
+
       - name: Commit State Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add .github/task_state.json
           git diff --staged --quiet || git commit -m "chore: update daily orchestration state [skip ci]"
           git push origin ${{ github.ref_name }} || echo "No changes to push"
@@ -162,7 +162,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-if-should-run, orchestrate-daily-tasks]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
-    
+
     steps:
       - name: Trigger Queue Processing
         env:
@@ -176,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-if-should-run, orchestrate-daily-tasks, process-task-queue]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
-    
+
     steps:
       - name: Wait for Task Completion
         run: |
@@ -184,7 +184,7 @@ jobs:
           WAIT_SECONDS=$((WAIT_MINUTES * 60))
           echo "⏳ Waiting $WAIT_MINUTES minutes for tasks to complete and PRs to be created..."
           sleep $WAIT_SECONDS
-      
+
       - name: Trigger PR Consolidation
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -197,26 +197,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-if-should-run, consolidate-prs]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
-      
+
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # ratchet:actions/setup-python@v5.3.0
         with:
-          python-version: '3.x'
-      
+          python-version: 3.x
+
       - name: Run Cleanup
         run: |
           echo "🧹 Cleaning up old task records..."
           python3 .github/scripts/task_deduplicator.py cleanup 7
-      
+
       - name: Commit Cleanup Changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add .github/task_state.json
           git diff --staged --quiet || git commit -m "chore: cleanup old task records [skip ci]"
           git push origin ${{ github.ref_name }} || echo "No changes to push"
@@ -224,9 +224,16 @@ jobs:
   summary:
     name: Daily Orchestration Summary
     runs-on: ubuntu-latest
-    needs: [check-if-should-run, orchestrate-daily-tasks, process-task-queue, consolidate-prs, cleanup]
+    needs:
+      [
+        check-if-should-run,
+        orchestrate-daily-tasks,
+        process-task-queue,
+        consolidate-prs,
+        cleanup,
+      ]
     if: always()
-    
+
     steps:
       - name: Generate Summary
         run: |
@@ -235,7 +242,7 @@ jobs:
           echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
           echo "**Should Run:** ${{ needs.check-if-should-run.outputs.should-run }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ needs.check-if-should-run.outputs.should-run }}" = "true" ]; then
             echo "## 📊 Execution Summary" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY

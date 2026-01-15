@@ -12,7 +12,6 @@ collecting and aggregating deployment metadata.
 ### Workflow Components
 
 1. **`deploy-to-pages-live.yml`** (In each source repository)
-
    - Detects app type and deployment strategy
    - Deploys the application (Pages Direct, Docker, Codespaces, or
      Documentation)
@@ -20,14 +19,12 @@ collecting and aggregating deployment metadata.
    - Triggers the collect-deployment-metadata workflow
 
 1. **`collect-deployment-metadata.yml`** (In `.github` repository)
-
    - **Reusable workflow** with `workflow_call` trigger
    - Downloads deployment metadata artifacts
    - Validates metadata structure and required fields
    - Triggers gallery index update via repository dispatch
 
 1. **`generate-pages-index.yml`** (In `.github` repository)
-
    - Queries GitHub API for all organization repositories
    - Discovers deployment configurations in each repo
    - Aggregates deployment metadata into `docs/_data/app-deployments.yml`

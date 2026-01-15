@@ -25,34 +25,34 @@ specialized agents that extend GitHub Copilot's capabilities.
 
 ## Quick Reference
 
-| Agent                                                                         | Category                     | Description                                                                                        | MCP Servers   | File Path                                                                                                                                 |
-| ----------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| [ADR Generator](#adr-generator)                                               | Documentation & Analysis     | Creates comprehensive Architectural Decision Records                                               | None          | [agents/adr-generator.agent.md](../agents/adr-generator.agent.md)                                                                         |
-| [Amplitude Experiment](#amplitude-experiment-implementation)                  | Development & Operations     | Deploys feature experiments using Amplitude MCP                                                    | None          | [agents/amplitude-experiment-implementation.agent.md](../agents/amplitude-experiment-implementation.agent.md)                             |
-| [Arm Migration](#arm-migration-agent)                                         | Infrastructure & DevOps      | Migrates x86 workloads to Arm infrastructure                                                       | custom-mcp    | [agents/arm-migration.agent.md](../agents/arm-migration.agent.md)                                                                         |
-| [C# Expert](#c-expert)                                                        | Language & Framework Experts | .NET project development specialist                                                                | None          | [agents/CSharpExpert.agent.md](../agents/CSharpExpert.agent.md)                                                                           |
-| [Completionism Specialist](#completionism-specialist)                         | Documentation & Analysis     | Ensures every field, form, and documentation section is complete                                   | github        | [agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md)                                                   |
-| [Data Decommissioning](#data-decommissioning-agent)                           | Security & Compliance        | Securely removes data and systems following compliance requirements                                | github        | [agents/data-decommissioning.agent.md](../agents/data-decommissioning.agent.md)                                                           |
-| [Data Forensics](#data-forensics-agent)                                       | Security & Compliance        | Investigates data issues, security breaches, and compliance violations                             | github        | [agents/data-forensics.agent.md](../agents/data-forensics.agent.md)                                                                       |
-| [Data Reclamation](#data-reclamation-agent)                                   | Security & Compliance        | Recovers lost, corrupted, or accidentally deleted data                                             | github        | [agents/data-reclamation.agent.md](../agents/data-reclamation.agent.md)                                                                   |
-| [Data Sanitization](#data-sanitization-agent)                                 | Security & Compliance        | Cleans data, removes PII, ensures compliance                                                       | github        | [agents/data-sanitization.agent.md](../agents/data-sanitization.agent.md)                                                                 |
-| [Dynatrace Expert](#dynatrace-expert)                                         | Development & Operations     | Observability and security incident response                                                       | dynatrace     | [agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md)                                                                   |
-| [GitHub Org Manager](#github-organization-manager)                            | Infrastructure & DevOps      | Organization governance and automation                                                             | github        | [agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md)                                                               |
-| [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent)   | Infrastructure & DevOps      | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github        | [agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md)                                   |
-| [House-Keeping PR Branch Deep Cleaner](#house-keeping-pr-branch-deep-cleaner) | Infrastructure & DevOps      | Deep housekeeping for comprehensive PR and branch cleanup with task extraction                     | github        | [agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md) |
-| [JFrog Security](#jfrog-security-agent)                                       | Security & Compliance        | Application security remediation                                                                   | None          | [agents/jfrog-sec.agent.md](../agents/jfrog-sec.agent.md)                                                                                 |
-| [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup)                       | Development & Operations     | Automated feature flag cleanup                                                                     | launchdarkly  | [agents/launchdarkly-flag-cleanup.agent.md](../agents/launchdarkly-flag-cleanup.agent.md)                                                 |
-| [Neon Migration Specialist](#neon-migration-specialist)                       | Infrastructure & DevOps      | Zero-downtime Postgres migrations                                                                  | None          | [agents/neon-migration-specialist.agent.md](../agents/neon-migration-specialist.agent.md)                                                 |
-| [Neon Performance Analyzer](#neon-performance-analyzer)                       | Infrastructure & DevOps      | Postgres query optimization                                                                        | None          | [agents/neon-optimization-analyzer.agent.md](../agents/neon-optimization-analyzer.agent.md)                                               |
-| [Nervous Archaeologist](#nervous-archaeologist)                               | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/nervous-archaeologist.agent.md](../agents/nervous-archaeologist.agent.md)                                                         |
-| [Octopus Release Notes](#octopus-deploy-release-notes)                        | Development & Operations     | Generates Octopus Deploy release notes                                                             | octopus       | [agents/octopus-deploy-release-notes-mcp.agent.md](../agents/octopus-deploy-release-notes-mcp.agent.md)                                   |
-| [PagerDuty Responder](#pagerduty-incident-responder)                          | Security & Compliance        | Incident response automation                                                                       | pagerduty     | [agents/pagerduty-incident-responder.agent.md](../agents/pagerduty-incident-responder.agent.md)                                           |
-| [Repository Setup](#repository-setup-agent)                                   | Infrastructure & DevOps      | New repository creation and configuration                                                          | github        | [agents/repository-setup.agent.md](../agents/repository-setup.agent.md)                                                                   |
-| [Security Audit](#security-audit-agent)                                       | Security & Compliance        | Comprehensive security audits                                                                      | github        | [agents/security-audit.agent.md](../agents/security-audit.agent.md)                                                                       |
-| [StackHawk Onboarding](#stackhawk-security-onboarding)                        | Security & Compliance        | API security testing setup                                                                         | stackhawk-mcp | [agents/stackhawk-security-onboarding.agent.md](../agents/stackhawk-security-onboarding.agent.md)                                         |
-| [Terraform](#terraform-agent)                                                 | Infrastructure & DevOps      | Infrastructure as Code specialist                                                                  | terraform     | [agents/terraform.agent.md](../agents/terraform.agent.md)                                                                                 |
-| [WinForms Expert](#winforms-expert)                                           | Language & Framework Experts | .NET WinForms development                                                                          | None          | [agents/WinFormsExpert.agent.md](../agents/WinFormsExpert.agent.md)                                                                       |
-| [Workflow Optimizer](#workflow-optimizer-agent)                               | Infrastructure & DevOps      | GitHub Actions optimization                                                                        | github        | [agents/workflow-optimizer.agent.md](../agents/workflow-optimizer.agent.md)                                                               |
+| Agent                                                                         | Category                     | Description                                                                                        | MCP Servers   | File Path                                                                                                                                              |
+| ----------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [ADR Generator](#adr-generator)                                               | Documentation & Analysis     | Creates comprehensive Architectural Decision Records                                               | None          | [agents/adr-generator.agent.md](../ai_framework/agents/adr-generator.agent.md)                                                                         |
+| [Amplitude Experiment](#amplitude-experiment-implementation)                  | Development & Operations     | Deploys feature experiments using Amplitude MCP                                                    | None          | [agents/amplitude-experiment-implementation.agent.md](../ai_framework/agents/amplitude-experiment-implementation.agent.md)                             |
+| [Arm Migration](#arm-migration-agent)                                         | Infrastructure & DevOps      | Migrates x86 workloads to Arm infrastructure                                                       | custom-mcp    | [agents/arm-migration.agent.md](../ai_framework/agents/arm-migration.agent.md)                                                                         |
+| [C# Expert](#c-expert)                                                        | Language & Framework Experts | .NET project development specialist                                                                | None          | [agents/CSharpExpert.agent.md](../ai_framework/agents/CSharpExpert.agent.md)                                                                           |
+| [Completionism Specialist](#completionism-specialist)                         | Documentation & Analysis     | Ensures every field, form, and documentation section is complete                                   | github        | [agents/completionism-specialist.agent.md](../ai_framework/agents/completionism-specialist.agent.md)                                                   |
+| [Data Decommissioning](#data-decommissioning-agent)                           | Security & Compliance        | Securely removes data and systems following compliance requirements                                | github        | [agents/data-decommissioning.agent.md](../ai_framework/agents/data-decommissioning.agent.md)                                                           |
+| [Data Forensics](#data-forensics-agent)                                       | Security & Compliance        | Investigates data issues, security breaches, and compliance violations                             | github        | [agents/data-forensics.agent.md](../ai_framework/agents/data-forensics.agent.md)                                                                       |
+| [Data Reclamation](#data-reclamation-agent)                                   | Security & Compliance        | Recovers lost, corrupted, or accidentally deleted data                                             | github        | [agents/data-reclamation.agent.md](../ai_framework/agents/data-reclamation.agent.md)                                                                   |
+| [Data Sanitization](#data-sanitization-agent)                                 | Security & Compliance        | Cleans data, removes PII, ensures compliance                                                       | github        | [agents/data-sanitization.agent.md](../ai_framework/agents/data-sanitization.agent.md)                                                                 |
+| [Dynatrace Expert](#dynatrace-expert)                                         | Development & Operations     | Observability and security incident response                                                       | dynatrace     | [agents/dynatrace-expert.agent.md](../ai_framework/agents/dynatrace-expert.agent.md)                                                                   |
+| [GitHub Org Manager](#github-organization-manager)                            | Infrastructure & DevOps      | Organization governance and automation                                                             | github        | [agents/github-org-manager.agent.md](../ai_framework/agents/github-org-manager.agent.md)                                                               |
+| [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent)   | Infrastructure & DevOps      | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github        | [agents/greener-grass-workflow-benchmark.agent.md](../ai_framework/agents/greener-grass-workflow-benchmark.agent.md)                                   |
+| [House-Keeping PR Branch Deep Cleaner](#house-keeping-pr-branch-deep-cleaner) | Infrastructure & DevOps      | Deep housekeeping for comprehensive PR and branch cleanup with task extraction                     | github        | [agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../ai_framework/agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md) |
+| [JFrog Security](#jfrog-security-agent)                                       | Security & Compliance        | Application security remediation                                                                   | None          | [agents/jfrog-sec.agent.md](../ai_framework/agents/jfrog-sec.agent.md)                                                                                 |
+| [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup)                       | Development & Operations     | Automated feature flag cleanup                                                                     | launchdarkly  | [agents/launchdarkly-flag-cleanup.agent.md](../ai_framework/agents/launchdarkly-flag-cleanup.agent.md)                                                 |
+| [Neon Migration Specialist](#neon-migration-specialist)                       | Infrastructure & DevOps      | Zero-downtime Postgres migrations                                                                  | None          | [agents/neon-migration-specialist.agent.md](../ai_framework/agents/neon-migration-specialist.agent.md)                                                 |
+| [Neon Performance Analyzer](#neon-performance-analyzer)                       | Infrastructure & DevOps      | Postgres query optimization                                                                        | None          | [agents/neon-optimization-analyzer.agent.md](../ai_framework/agents/neon-optimization-analyzer.agent.md)                                               |
+| [Nervous Archaeologist](#nervous-archaeologist)                               | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/nervous-archaeologist.agent.md](../ai_framework/agents/nervous-archaeologist.agent.md)                                                         |
+| [Octopus Release Notes](#octopus-deploy-release-notes)                        | Development & Operations     | Generates Octopus Deploy release notes                                                             | octopus       | [agents/octopus-deploy-release-notes-mcp.agent.md](../ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)                                   |
+| [PagerDuty Responder](#pagerduty-incident-responder)                          | Security & Compliance        | Incident response automation                                                                       | pagerduty     | [agents/pagerduty-incident-responder.agent.md](../ai_framework/agents/pagerduty-incident-responder.agent.md)                                           |
+| [Repository Setup](#repository-setup-agent)                                   | Infrastructure & DevOps      | New repository creation and configuration                                                          | github        | [agents/repository-setup.agent.md](../ai_framework/agents/repository-setup.agent.md)                                                                   |
+| [Security Audit](#security-audit-agent)                                       | Security & Compliance        | Comprehensive security audits                                                                      | github        | [agents/security-audit.agent.md](../ai_framework/agents/security-audit.agent.md)                                                                       |
+| [StackHawk Onboarding](#stackhawk-security-onboarding)                        | Security & Compliance        | API security testing setup                                                                         | stackhawk-mcp | [agents/stackhawk-security-onboarding.agent.md](../ai_framework/agents/stackhawk-security-onboarding.agent.md)                                         |
+| [Terraform](#terraform-agent)                                                 | Infrastructure & DevOps      | Infrastructure as Code specialist                                                                  | terraform     | [agents/terraform.agent.md](../ai_framework/agents/terraform.agent.md)                                                                                 |
+| [WinForms Expert](#winforms-expert)                                           | Language & Framework Experts | .NET WinForms development                                                                          | None          | [agents/WinFormsExpert.agent.md](../ai_framework/agents/WinFormsExpert.agent.md)                                                                       |
+| [Workflow Optimizer](#workflow-optimizer-agent)                               | Infrastructure & DevOps      | GitHub Actions optimization                                                                        | github        | [agents/workflow-optimizer.agent.md](../ai_framework/agents/workflow-optimizer.agent.md)                                                               |
 
 ## Getting Started
 
@@ -71,18 +71,15 @@ capabilities with domain-specific expertise. Each agent is configured with:
 #### In VS Code / VS Code Insiders
 
 1. **Install an agent**:
-
    - Click the install button in the Quick Reference table above
    - Or download the `*.agent.md` file and add it to your repository
 
 1. **Configure MCP servers** (if required):
-
    - Each agent specifies required MCP servers in its documentation
    - Follow the installation links in the Quick Reference table
    - Configure environment variables as needed
 
 1. **Invoke the agent**:
-
    - Use the `@agent-name` syntax in GitHub Copilot Chat
    - Example: `@terraform create a VPC module`
    - Or assign the agent in the Copilot Coding Agent (CCA)
@@ -154,7 +151,8 @@ verification.
 
 **Related Workflows**: None
 
-**Documentation**: [agents/jfrog-sec.agent.md](../agents/jfrog-sec.agent.md)
+**Documentation**:
+[agents/jfrog-sec.agent.md](../ai_framework/agents/jfrog-sec.agent.md)
 
 ---
 
@@ -202,7 +200,7 @@ organizational settings.
 - Branch protection rules
 
 **Documentation**:
-[agents/security-audit.agent.md](../agents/security-audit.agent.md)
+[agents/security-audit.agent.md](../ai_framework/agents/security-audit.agent.md)
 
 ---
 
@@ -245,7 +243,7 @@ repositories.
 - CI/CD pipelines
 
 **Documentation**:
-[agents/stackhawk-security-onboarding.agent.md](../agents/stackhawk-security-onboarding.agent.md)
+[agents/stackhawk-security-onboarding.agent.md](../ai_framework/agents/stackhawk-security-onboarding.agent.md)
 
 ---
 
@@ -288,7 +286,7 @@ incidents.
 - Deployment automation
 
 **Documentation**:
-[agents/pagerduty-incident-responder.agent.md](../agents/pagerduty-incident-responder.agent.md)
+[agents/pagerduty-incident-responder.agent.md](../ai_framework/agents/pagerduty-incident-responder.agent.md)
 
 ---
 
@@ -337,7 +335,8 @@ DevOps automation.
 - Infrastructure deployment pipelines
 - Terraform plan/apply automation
 
-**Documentation**: [agents/terraform.agent.md](../agents/terraform.agent.md)
+**Documentation**:
+[agents/terraform.agent.md](../ai_framework/agents/terraform.agent.md)
 
 ---
 
@@ -378,7 +377,7 @@ DevOps automation.
 - Performance benchmarking
 
 **Documentation**:
-[agents/arm-migration.agent.md](../agents/arm-migration.agent.md)
+[agents/arm-migration.agent.md](../ai_framework/agents/arm-migration.agent.md)
 
 ---
 
@@ -421,7 +420,7 @@ branching.
 - Schema validation
 
 **Documentation**:
-[agents/neon-migration-specialist.agent.md](../agents/neon-migration-specialist.agent.md)
+[agents/neon-migration-specialist.agent.md](../ai_framework/agents/neon-migration-specialist.agent.md)
 
 ---
 
@@ -464,7 +463,7 @@ branching.
 - Query optimization tracking
 
 **Documentation**:
-[agents/neon-optimization-analyzer.agent.md](../agents/neon-optimization-analyzer.agent.md)
+[agents/neon-optimization-analyzer.agent.md](../ai_framework/agents/neon-optimization-analyzer.agent.md)
 
 ---
 
@@ -510,7 +509,7 @@ organization governance.
 - Compliance reporting
 
 **Documentation**:
-[agents/github-org-manager.agent.md](../agents/github-org-manager.agent.md)
+[agents/github-org-manager.agent.md](../ai_framework/agents/github-org-manager.agent.md)
 
 ---
 
@@ -556,7 +555,7 @@ organization standards.
 - Onboarding workflows
 
 **Documentation**:
-[agents/repository-setup.agent.md](../agents/repository-setup.agent.md)
+[agents/repository-setup.agent.md](../ai_framework/agents/repository-setup.agent.md)
 
 ---
 
@@ -598,7 +597,7 @@ cost, security, and reliability.
 - All `.github/workflows/*.yml` files
 
 **Documentation**:
-[agents/workflow-optimizer.agent.md](../agents/workflow-optimizer.agent.md)
+[agents/workflow-optimizer.agent.md](../ai_framework/agents/workflow-optimizer.agent.md)
 
 ---
 
@@ -654,7 +653,7 @@ practices and successful patterns to identify improvement opportunities.
 - Workflow run history and metrics
 
 **Documentation**:
-[agents/greener-grass-workflow-benchmark.agent.md](../agents/greener-grass-workflow-benchmark.agent.md)
+[agents/greener-grass-workflow-benchmark.agent.md](../ai_framework/agents/greener-grass-workflow-benchmark.agent.md)
 
 ---
 
@@ -721,7 +720,7 @@ maintain optimal repository health.
 - `.github/workflows/branch-cleanup-notify.yml`
 
 **Documentation**:
-[agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md)
+[agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md](../ai_framework/agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md)
 
 ---
 
@@ -774,7 +773,7 @@ and performance analysis.
 - Performance monitoring
 
 **Documentation**:
-[agents/dynatrace-expert.agent.md](../agents/dynatrace-expert.agent.md)
+[agents/dynatrace-expert.agent.md](../ai_framework/agents/dynatrace-expert.agent.md)
 
 ---
 
@@ -817,7 +816,7 @@ source of truth.
 - Code cleanup automation
 
 **Documentation**:
-[agents/launchdarkly-flag-cleanup.agent.md](../agents/launchdarkly-flag-cleanup.agent.md)
+[agents/launchdarkly-flag-cleanup.agent.md](../ai_framework/agents/launchdarkly-flag-cleanup.agent.md)
 
 ---
 
@@ -859,7 +858,7 @@ source of truth.
 - A/B testing pipelines
 
 **Documentation**:
-[agents/amplitude-experiment-implementation.agent.md](../agents/amplitude-experiment-implementation.agent.md)
+[agents/amplitude-experiment-implementation.agent.md](../ai_framework/agents/amplitude-experiment-implementation.agent.md)
 
 ---
 
@@ -903,7 +902,7 @@ deployments.
 - Changelog generation
 
 **Documentation**:
-[agents/octopus-deploy-release-notes-mcp.agent.md](../agents/octopus-deploy-release-notes-mcp.agent.md)
+[agents/octopus-deploy-release-notes-mcp.agent.md](../ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)
 
 ---
 
@@ -950,7 +949,7 @@ Specialized agents for specific programming languages and frameworks.
 - NuGet package publishing
 
 **Documentation**:
-[agents/CSharpExpert.agent.md](../agents/CSharpExpert.agent.md)
+[agents/CSharpExpert.agent.md](../ai_framework/agents/CSharpExpert.agent.md)
 
 ---
 
@@ -993,7 +992,7 @@ applications.
 - MSI/installer creation
 
 **Documentation**:
-[agents/WinFormsExpert.agent.md](../agents/WinFormsExpert.agent.md)
+[agents/WinFormsExpert.agent.md](../ai_framework/agents/WinFormsExpert.agent.md)
 
 ---
 
@@ -1038,7 +1037,7 @@ Records (ADRs).
 - Architecture reviews
 
 **Documentation**:
-[agents/adr-generator.agent.md](../agents/adr-generator.agent.md)
+[agents/adr-generator.agent.md](../ai_framework/agents/adr-generator.agent.md)
 
 ---
 
@@ -1087,7 +1086,7 @@ thoroughly completed with no blank spaces or missing information.
 - Quality assurance
 
 **Documentation**:
-[agents/completionism-specialist.agent.md](../agents/completionism-specialist.agent.md)
+[agents/completionism-specialist.agent.md](../ai_framework/agents/completionism-specialist.agent.md)
 
 ---
 
@@ -1135,7 +1134,7 @@ excavation, generates actionable tasks, and creates persistent memories.
 - Technical debt analysis
 
 **Documentation**:
-[agents/nervous-archaeologist.agent.md](../agents/nervous-archaeologist.agent.md)
+[agents/nervous-archaeologist.agent.md](../ai_framework/agents/nervous-archaeologist.agent.md)
 
 ---
 
@@ -1331,19 +1330,19 @@ All new agents must go through:
 
 ### Organization Guides
 
-- [QUICK_START.md](../QUICK_START.md) - Organization quick start guide
-- [BEST_PRACTICES.md](../BEST_PRACTICES.md) - Development best practices
-- [AUTOMATION_MASTER_GUIDE.md](../AUTOMATION_MASTER_GUIDE.md) - Automation
-  patterns
-- [AI_RAPID_WORKFLOW.md](../AI_RAPID_WORKFLOW.md) - AI-assisted development
-  workflow
+- [QUICK_START.md](guides/QUICK_START.md) - Organization quick start guide
+- [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) - Development best practices
+- [AUTOMATION_MASTER_GUIDE.md](automation/AUTOMATION_MASTER_GUIDE.md) -
+  Automation patterns
+- [AI_RAPID_WORKFLOW.md](workflows/AI_RAPID_WORKFLOW.md) - AI-assisted
+  development workflow
 
 ### Technical References
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [MCP Protocol Specification](https://modelcontextprotocol.io/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Semantic Versioning](https://semver.org/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
 
 ---
 
@@ -1384,10 +1383,12 @@ to share, please open a discussion or feature request issue.
 
 ### Questions or Issues?
 
-- **General Questions**: Open a [discussion](../../discussions)
-- **Bug Reports**: Create an [issue](../../issues/new?template=bug_report.md)
+- **General Questions**: Open a
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- **Bug Reports**: Create an
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
-  [issue](../../issues/new?template=feature_request.md)
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - **Security Issues**: See [SECURITY.md](SECURITY.md) for reporting procedures
 
 ### Contributing

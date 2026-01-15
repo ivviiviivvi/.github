@@ -297,7 +297,6 @@ ticket for traceability.
 
 1. **Reference in PR**: Link the issue in your PR description using GitHub
    keywords:
-
    - `Fixes #123`
    - `Closes #123`
    - `Resolves #123`

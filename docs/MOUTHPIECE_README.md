@@ -61,11 +61,11 @@ In Copilot Chat:
 
 | Component                                                     | Purpose                   | When to Use                              |
 | ------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
-| **[Filter Script](scripts/mouthpiece_filter.py)**             | CLI transformation engine | Programmatic use, scripting, automation  |
-| **[Chat Mode](chatmodes/mouthpiece.chatmode.md)**             | Interactive AI persona    | Conversational transformation, iteration |
-| **[Prompt Template](prompts/mouthpiece-transform.prompt.md)** | Quick transformation      | Fast, one-off transformations            |
-| **[Documentation](docs/MOUTHPIECE_SYSTEM.md)**                | Complete guide            | Learning, reference, integration         |
-| **[Examples](docs/mouthpiece-examples.md)**                   | Real transformations      | Inspiration, patterns, learning          |
+| **[Filter Script](../automation/scripts/mouthpiece_filter.py)** | CLI transformation engine | Programmatic use, scripting, automation  |
+| **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** | Interactive AI persona    | Conversational transformation, iteration |
+| **[Prompt Template](README.prompts.md)**                        | Quick transformation      | Fast, one-off transformations            |
+| **[Documentation](MOUTHPIECE_SYSTEM.md)**                       | Complete guide            | Learning, reference, integration         |
+| **[Examples](mouthpiece-examples.md)**                          | Real transformations      | Inspiration, patterns, learning          |
 
 ## Features
 
@@ -162,7 +162,7 @@ The visualization should feel organic and natural, using water-flow metaphors
 to make complex data flows immediately understandable.
 ```
 
-See **[more examples](docs/mouthpiece-examples.md)** for additional
+See **[more examples](mouthpiece-examples.md)** for additional
 transformations.
 
 ## Usage
@@ -261,25 +261,21 @@ print(result["prompt"])
 ### Core Beliefs
 
 1. **Humans should stay human**
-
    - Preserve natural expression
    - Celebrate imperfection
    - Honor authentic voice
 
 1. **AI should adapt to humans**
-
    - Not the other way around
    - Bridge the communication gap
    - Make technology accessible
 
 1. **Poetry carries meaning**
-
    - Metaphors provide context
    - Emotion conveys priority
    - Imperfection shows authenticity
 
 1. **Structure emerges from understanding**
-
    - Intent reveals requirements
    - Clarity comes from interpretation
    - Organization follows comprehension
@@ -293,10 +289,10 @@ systems with your ideas while staying rooted in your authentic expression.
 
 ## Documentation
 
-- **[Complete Guide](docs/MOUTHPIECE_SYSTEM.md)** - Full system documentation
-- **[Examples](docs/mouthpiece-examples.md)** - Real-world transformations
-- **[Chat Mode](chatmodes/mouthpiece.chatmode.md)** - Interactive persona
-- **[Prompt Template](prompts/mouthpiece-transform.prompt.md)** - Quick
+- **[Complete Guide](MOUTHPIECE_SYSTEM.md)** - Full system documentation
+- **[Examples](mouthpiece-examples.md)** - Real-world transformations
+- **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** - Interactive persona
+- **[Prompt Template](README.prompts.md)** - Quick
   reference
 
 ## Best Practices
@@ -377,7 +373,7 @@ goes to the database, gotta be fast though"
 → Technical architecture specification
 ```
 
-See **[full examples](docs/mouthpiece-examples.md)** for complete
+See **[full examples](mouthpiece-examples.md)** for complete
 transformations.
 
 ## License
@@ -401,10 +397,10 @@ python scripts/mouthpiece_filter.py "your natural thoughts here"
 
 <div align="center">
 
-**[Documentation](docs/MOUTHPIECE_SYSTEM.md)** •
-**[Examples](docs/mouthpiece-examples.md)** •
-**[Chat Mode](chatmodes/mouthpiece.chatmode.md)** •
-**[Prompt](prompts/mouthpiece-transform.prompt.md)**
+**[Documentation](MOUTHPIECE_SYSTEM.md)** •
+**[Examples](mouthpiece-examples.md)** •
+**[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** •
+**[Prompt](README.prompts.md)**
 
 _Built with ❤️ for humans who want to stay human_
 

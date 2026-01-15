@@ -19,14 +19,17 @@ docs/audits/
 
 ## Naming Convention
 
-- **Folder Format**: `YYYY-MM` (e.g., `2024-01` for January 2024, `2024-12` for December 2024)
-- **Documents**: Store all audit-related documents within the respective month's folder:
+- **Folder Format**: `YYYY-MM` (e.g., `2024-01` for January 2024, `2024-12` for
+  December 2024)
+- **Documents**: Store all audit-related documents within the respective month's
+  folder:
   - `audit-report.md` - Summary report
   - `findings.md` - Detailed findings with evidence
   - `remediation-plan.md` - Action items with owners and timelines
 
 ## Retention Policy
 
-- Audit reports are retained according to the organization's data retention policy
+- Audit reports are retained according to the organization's data retention
+  policy
 - Reports are reviewed annually for relevance and compliance requirements
 - Follow-up reviews verify remediation of identified issues

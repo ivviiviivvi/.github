@@ -361,8 +361,8 @@ repository health after bootstrap.
 - [Repository Setup Checklist](../REPOSITORY_SETUP_CHECKLIST.md) - Manual setup
   checklist
 - [Labels Documentation](../LABELS.md) - Standard label definitions
-- [Repository Setup Agent](../../agents/repository-setup.agent.md) - AI-powered
-  setup assistant
+- [Repository Setup Agent](../../ai_framework/agents/repository-setup.agent.md)
+  \- AI-powered setup assistant
 
 ## Contributing
 

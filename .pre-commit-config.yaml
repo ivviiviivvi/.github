@@ -32,42 +32,57 @@ repos:
         args: [--fix=lf]
       - id: detect-private-key
       - id: check-executables-have-shebangs
-      - id: check-shebang-scripts-are-executable
+      - id:
+          check-shebang-scripts-are-executable
+          # Prevent committing build artifacts
+      - id: no-commit-to-branch
+        args: [--pattern, __pycache__, --pattern, "*.pyc", --pattern, "*.pyo"]
+        always_run: false
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+        exclude: |
+          (?x)^(
+              .*\.(pyc|pyo|egg-info|pytest_cache|mypy_cache|DS_Store|swp|swo)$
+          )
 
-        # Git commit message checks
+    # Git commit message checks
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.3.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [--strict]
+        args:
+          [--strict]
 
-        # YAML formatting
+          # YAML formatting
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
     rev: v2.16.0
     hooks:
       - id: pretty-format-yaml
-        args: [--autofix, --indent, "2"]
+        args:
+          [--autofix, --indent, "2"]
 
-        # Markdown formatting
+          # Markdown formatting
   - repo: https://github.com/executablebooks/mdformat
-    rev: 1.0.0
+    rev: 0.7.17 # Compatible with gfm plugins
     hooks:
       - id: mdformat
         additional_dependencies:
-          - mdformat-gfm
+          - mdformat-gfm>=0.3.5
           - mdformat-tables
           - mdformat-toc
-        args: [--wrap=80]
+        args:
+          [--wrap=80]
 
-        # Shell script checks
+          # Shell script checks
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
-        args: [--severity=warning]
+        args:
+          [--severity=warning]
 
-        # Python hooks
+          # Python hooks
   - repo: https://github.com/psf/black
     rev: 25.12.0
     hooks:
@@ -90,9 +105,10 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
-        args: [--ignore-missing-imports]
+        args:
+          [--ignore-missing-imports]
 
-        # JavaScript/TypeScript hooks
+          # JavaScript/TypeScript hooks
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8
     hooks:
@@ -110,22 +126,24 @@ repos:
           - eslint@8.56.0
           - eslint-config-prettier@9.1.0
 
-        # Docker
+            # Docker
   - repo: https://github.com/hadolint/hadolint
     rev: v2.14.0
     hooks:
       - id: hadolint-docker
-        args: [--ignore, DL3008, --ignore, DL3009]
+        args:
+          [--ignore, DL3008, --ignore, DL3009]
 
-        # Secrets detection
+          # Secrets detection
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
-        exclude: package-lock.json
+        exclude:
+          package-lock.json
 
-        # Security checks for Python
+          # Security checks for Python
   - repo: https://github.com/PyCQA/bandit
     rev: 1.9.2
     hooks:
@@ -133,28 +151,48 @@ repos:
         args: [-c, .bandit]
         files: \.py$
 
-        # Dependency security checks
+    # Dependency security checks
   - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
     rev: v1.4.2
     hooks:
       - id: python-safety-dependencies-check
         files: requirements.*\.txt$
 
-        # Terraform (if used)
+    # Python testing (Phase 8)
+  - repo: local
+    hooks:
+      - id: resolve-managed-links
+        name: resolve-managed-links
+        entry: python automation/scripts/resolve_link_placeholders.py --write --annotate
+        language: system
+        pass_filenames: false
+        files: \.md$
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: false
+        args: [tests/, -v, --tb=short, --maxfail=1]
+        stages: [pre-push]
+
+    # Terraform (if used)
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.105.0
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-      - id: terraform_docs
+      - id:
+          terraform_docs
 
-        # Dockerfile linting
+          # Dockerfile linting
   - repo: https://github.com/AleksaC/hadolint-py
     rev: v2.14.0
     hooks:
-      - id: hadolint
+      - id:
+          hadolint
 
-        # Go formatting (if used)
+          # Go formatting (if used)
   - repo: https://github.com/dnephin/pre-commit-golang
     rev: v0.5.1
     hooks:
@@ -163,9 +201,10 @@ repos:
       - id: go-imports
       - id: go-cyclo
         args: [-over=15]
-      - id: golangci-lint
+      - id:
+          golangci-lint
 
-        # Rust formatting (if used)
+          # Rust formatting (if used)
   - repo: https://github.com/doublify/pre-commit-rust
     rev: v1.0
     hooks:

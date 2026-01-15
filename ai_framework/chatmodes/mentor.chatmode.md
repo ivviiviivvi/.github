@@ -1,6 +1,17 @@
 ---
 
-## description: 'Help mentor the engineer by providing guidance and support.' tools: \['codebase', 'fetch', 'findTestFiles', 'githubRepo', 'search', 'usages'\]
+name: Mentor description: Help mentor the engineer by providing guidance and
+support. tools:
+
+- codebase
+- fetch
+- findTestFiles
+- githubRepo
+- search
+- usages tags:
+- coaching updated: 2026-01-13
+
+---
 
 # Mentor mode instructions
 

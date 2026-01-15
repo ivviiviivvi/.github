@@ -5,22 +5,22 @@ body:
   - type: markdown
     attributes:
       value: |
-        <!-- 
+        <!--
         Start a general discussion about the project!
-        
+
         Use this category for:
         - General topics that don't fit other categories
         - Community discussions
         - Project direction and philosophy
         - Best practices and patterns
         - Meta discussions about the project
-        
+
         Not suitable for:
         - Bug reports (use Issues instead)
         - Specific support questions (use Q&A instead)
         - Feature requests (use Ideas instead)
         -->
-  
+
   - type: textarea
     id: topic
     attributes:
@@ -29,7 +29,7 @@ body:
       placeholder: Describe the topic you want to discuss...
     validations:
       required: true
-  
+
   - type: textarea
     id: background
     attributes:
@@ -38,7 +38,7 @@ body:
       placeholder: Share relevant context...
     validations:
       required: false
-  
+
   - type: textarea
     id: discussion_points
     attributes:
@@ -50,7 +50,7 @@ body:
         - Point 3
     validations:
       required: false
-  
+
   - type: textarea
     id: thoughts
     attributes:
@@ -59,7 +59,7 @@ body:
       placeholder: Your initial thoughts...
     validations:
       required: false
-  
+
   - type: textarea
     id: questions
     attributes:
@@ -71,7 +71,7 @@ body:
         3. Question 3
     validations:
       required: false
-  
+
   - type: textarea
     id: resources
     attributes:
@@ -82,10 +82,10 @@ body:
         - Resource 2
     validations:
       required: false
-  
+
   - type: markdown
     attributes:
       value: |
         ---
-        
+
         **Be Respectful:** Remember to follow our [Code of Conduct](../CODE_OF_CONDUCT.md) and be respectful of diverse opinions.

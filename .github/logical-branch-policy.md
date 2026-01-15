@@ -575,7 +575,6 @@ Repository Maintainers
   ```
 
 - [ ] **Day 4-5**: Follow up with non-responsive owners
-
   - Send reminder emails
   - Escalate to team leads
 
@@ -592,7 +591,6 @@ Repository Maintainers
   ```
 
 - [ ] **Day 3**: Update documentation
-
   - [ ] Update branch count in README (if mentioned)
   - [ ] Document archived branches in `BRANCH_ARCHIVE_LOG.md`
   - [ ] Update team wiki/docs with new policy
@@ -1178,7 +1176,6 @@ See `branch-name-check` job in [CI/CD Checks](#2-cicd-checks) above.
    ```
 
 1. **Keep branches short-lived**
-
    - Target: 1-3 days
    - Maximum: 7 days
    - If longer needed, break into smaller PRs
@@ -1221,7 +1218,6 @@ See `branch-name-check` job in [CI/CD Checks](#2-cicd-checks) above.
    ```
 
 1. **Write comprehensive PR descriptions**
-
    - What changed?
    - Why?
    - How to test?
@@ -1230,36 +1226,29 @@ See `branch-name-check` job in [CI/CD Checks](#2-cicd-checks) above.
 #### ❌ Don'ts
 
 1. **Don't commit directly to main**
-
    - Always use PRs, even for hotfixes
 
 1. **Don't let branches go stale**
-
    - Push commits regularly to show activity
    - If blocked, communicate in PR comments
 
 1. **Don't mix unrelated changes**
-
    - One feature/fix per branch
    - Create separate branches for independent work
 
 1. **Don't skip tests**
-
    - Write tests for new code
    - Ensure existing tests pass
 
 1. **Don't ignore review feedback**
-
    - Address all comments
    - Explain disagreements respectfully
 
 1. **Don't force push after review starts**
-
    - Use `git commit --fixup` and `git rebase --autosquash` instead
    - Or add new commits and squash during merge
 
 1. **Don't create `develop`, `staging`, or similar branches**
-
    - Use `main` only model
    - Use environments and feature flags instead
 
@@ -1268,33 +1257,27 @@ See `branch-name-check` job in [CI/CD Checks](#2-cicd-checks) above.
 #### ✅ Do's
 
 1. **Enable auto-delete merged branches**
-
    - Settings → General → Pull Requests → ☑️ Automatically delete head branches
 
 1. **Configure branch protection for `main`**
-
    - Require PR reviews
    - Require status checks
    - Require conversation resolution
 
 1. **Run weekly stale branch checks**
-
    - Use automation (see [Branch Cleanup Workflow](#2-branch-cleanup-workflow))
    - Notify owners proactively
 
 1. **Document branch archival**
-
    - Update `BRANCH_ARCHIVE_LOG.md`
    - Add ARCHIVE_README.md to archived branches
 
 1. **Communicate policy changes**
-
    - Announce in team channels
    - Update `CONTRIBUTING.md`
    - Provide training if needed
 
 1. **Monitor branch health metrics**
-
    - Number of active branches
    - Average branch lifetime
    - Merge time (PR open → merged)
@@ -1302,22 +1285,18 @@ See `branch-name-check` job in [CI/CD Checks](#2-cicd-checks) above.
 #### ❌ Don'ts
 
 1. **Don't delete branches without confirmation**
-
    - Always notify owner first (except very old dead branches)
    - Archive if uncertain about value
 
 1. **Don't bypass branch protection**
-
    - Even admins should follow the process
    - Use emergency override only for critical incidents
 
 1. **Don't let policy drift**
-
    - Enforce consistently
    - Update policy based on team feedback
 
 1. **Don't over-automate deletion**
-
    - Require manual approval for auto-cleanup
    - False positives can lose valuable work
 
@@ -1534,8 +1513,8 @@ fix/password-reset-flow
 ### Best Practices and Standards
 
 - [Trunk-Based Development](https://trunkbaseddevelopment.com/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
 - [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 
 ---

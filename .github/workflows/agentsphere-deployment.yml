@@ -5,6 +5,19 @@ on:
     branches:
       - main
       - master
+    paths:
+      - "**.py"
+      - "**.js"
+      - "**.ts"
+      - "**.jsx"
+      - "**.tsx"
+      - "**.html"
+      - "**.css"
+      - "requirements*.txt"
+      - "package*.json"
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - ".github/workflows/agentsphere-deployment.yml"
   workflow_dispatch:
     inputs:
       force_deploy:

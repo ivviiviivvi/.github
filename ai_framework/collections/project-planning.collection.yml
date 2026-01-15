@@ -1,3 +1,9 @@
+---
+name: Project Planning
+description: Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams.
+tags: []
+updated: 2026-01-13
+---
 id: project-planning
 name: Project Planning & Management
 description: Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams.
@@ -14,17 +20,17 @@ tags:
   ]
 items:
   # Planning Chat Modes
-  - path: chatmodes/task-planner.chatmode.md
+  - path: chatmodes/archive/task-planner.chatmode.md
     kind: chat-mode
   - path: chatmodes/task-researcher.chatmode.md
     kind: chat-mode
-  - path: chatmodes/planner.chatmode.md
+  - path: chatmodes/archive/planner.chatmode.md
     kind: chat-mode
   - path: chatmodes/plan.chatmode.md
     kind: chat-mode
   - path: chatmodes/prd.chatmode.md
     kind: chat-mode
-  - path: chatmodes/implementation-plan.chatmode.md
+  - path: chatmodes/archive/implementation-plan.chatmode.md
     kind: chat-mode
   - path: chatmodes/research-technical-spike.chatmode.md
     kind:

@@ -1,3 +1,9 @@
+---
+name: Devops Oncall
+description: A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.
+tags: []
+updated: 2026-01-13
+---
 id: devops-oncall
 name: DevOps On-Call
 description: A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.

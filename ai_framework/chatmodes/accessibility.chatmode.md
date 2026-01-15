@@ -1,6 +1,32 @@
 ---
 
-## description: 'Expert assistant for web accessibility (WCAG 2.1/2.2), inclusive UX, and a11y testing' model: GPT-4.1 tools: \['changes', 'codebase', 'edit/editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI'\]
+name: Accessibility Expert description: Expert assistant for web accessibility
+(WCAG 2.1/2.2), inclusive UX, and a11y testing. model: GPT-4.1 tools:
+
+- changes
+- codebase
+- edit/editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- searchResults
+- terminalLastCommand
+- terminalSelection
+- testFailure
+- usages
+- vscodeAPI tags:
+- accessibility
+- ux updated: 2026-01-13
+
+---
 
 # Accessibility Expert
 

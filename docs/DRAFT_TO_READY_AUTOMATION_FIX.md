@@ -12,20 +12,16 @@ event.
 This created a chain-breaking issue where:
 
 1. **Auto-assign workflow** (`auto-assign.yml`) did not run
-
    - @copilot was not requested as a reviewer
    - PR was not assigned to @copilot
 
 1. **Auto-enable-merge workflow** (`auto-enable-merge.yml`) did not run
-
    - Auto-merge was not enabled for qualifying PRs
 
 1. **PR task catcher** (`pr-task-catcher.yml`) did not run
-
    - Tasks and blockers were not scanned
 
 1. **AI assistants were not summoned**
-
    - @claude, @jules, @gemini workflows depend on being able to review PRs
    - Without being assigned as reviewers or getting notifications, they remained
      idle

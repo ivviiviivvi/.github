@@ -126,13 +126,11 @@ Use the provided installation badges to automatically install MCP resources:
    ```
 
 1. **Copy MCP resources** to your project or VS Code settings directory:
-
    - **Instructions**: Copy to `.github/copilot-instructions/` in your project
    - **Chat Modes**: Install via VS Code's chat mode settings
    - **Prompts**: Install via VS Code's prompt settings
 
 1. **Configure VS Code** to recognize the custom resources:
-
    - Open VS Code Settings (`Cmd/Ctrl + ,`)
    - Search for "Copilot"
    - Ensure custom instructions and chat modes are enabled
@@ -196,13 +194,13 @@ Each language has a complete development toolkit including:
 #### Python
 
 - **Collection**:
-  [`collections/python-mcp-development.md`](../collections/python-mcp-development.md)
+  [`collections/python-mcp-development.md`](../ai_framework/collections/python-mcp-development.md)
 - **Chat Mode**:
-  [`chatmodes/python-mcp-expert.chatmode.md`](../chatmodes/python-mcp-expert.chatmode.md)
+  [`chatmodes/python-mcp-expert.chatmode.md`](../ai_framework/chatmodes/python-mcp-expert.chatmode.md)
 - **Instructions**:
-  [`instructions/python-mcp-server.instructions.md`](../instructions/python-mcp-server.instructions.md)
+  [`instructions/python-mcp-server.instructions.md`](https://github.com/github/awesome-copilot/blob/main/instructions/python-mcp-server.instructions.md)
 - **Prompt**:
-  [`prompts/python-mcp-server-generator.prompt.md`](../prompts/python-mcp-server-generator.prompt.md)
+  [`prompts/python-mcp-server-generator.prompt.md`](https://github.com/github/awesome-copilot/blob/main/prompts/python-mcp-server-generator.prompt.md)
 - **SDK**: `mcp` package with FastMCP for rapid development
 - **Transport**: stdio (local) or streamable HTTP (remote)
 
@@ -222,13 +220,13 @@ uv run mcp dev server.py
 #### TypeScript
 
 - **Collection**:
-  [`collections/typescript-mcp-development.md`](../collections/typescript-mcp-development.md)
+  [`collections/typescript-mcp-development.md`](../ai_framework/collections/typescript-mcp-development.md)
 - **Chat Mode**:
-  [`chatmodes/typescript-mcp-expert.chatmode.md`](../chatmodes/typescript-mcp-expert.chatmode.md)
+  [`chatmodes/typescript-mcp-expert.chatmode.md`](../ai_framework/chatmodes/typescript-mcp-expert.chatmode.md)
 - **Instructions**:
-  [`instructions/typescript-mcp-server.instructions.md`](../instructions/typescript-mcp-server.instructions.md)
+  [`instructions/typescript-mcp-server.instructions.md`](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-mcp-server.instructions.md)
 - **Prompt**:
-  [`prompts/typescript-mcp-server-generator.prompt.md`](../prompts/typescript-mcp-server-generator.prompt.md)
+  [`prompts/typescript-mcp-server-generator.prompt.md`](https://github.com/github/awesome-copilot/blob/main/prompts/typescript-mcp-server-generator.prompt.md)
 - **SDK**: `@modelcontextprotocol/sdk`
 - **Transport**: stdio or SSE
 
@@ -249,26 +247,26 @@ node build/index.js
 #### Java
 
 - **Collection**:
-  [`collections/java-mcp-development.md`](../collections/java-mcp-development.md)
+  [`collections/java-mcp-development.md`](../ai_framework/collections/java-mcp-development.md)
 - **Chat Mode**:
-  [`chatmodes/java-mcp-expert.chatmode.md`](../chatmodes/java-mcp-expert.chatmode.md)
+  [`chatmodes/java-mcp-expert.chatmode.md`](../ai_framework/chatmodes/java-mcp-expert.chatmode.md)
 - **Instructions**:
-  [`instructions/java-mcp-server.instructions.md`](../instructions/java-mcp-server.instructions.md)
+  [`instructions/java-mcp-server.instructions.md`](https://github.com/github/awesome-copilot/blob/main/instructions/java-mcp-server.instructions.md)
 - **Prompt**:
-  [`prompts/java-mcp-server-generator.prompt.md`](../prompts/java-mcp-server-generator.prompt.md)
+  [`prompts/java-mcp-server-generator.prompt.md`](https://github.com/github/awesome-copilot/blob/main/prompts/java-mcp-server-generator.prompt.md)
 - **SDK**: Maven/Gradle MCP SDK
 - **Transport**: stdio or SSE
 
 #### C# (.NET)
 
 - **Collection**:
-  [`collections/csharp-mcp-development.md`](../collections/csharp-mcp-development.md)
+  [`collections/csharp-mcp-development.md`](../ai_framework/collections/csharp-mcp-development.md)
 - **Chat Mode**:
-  [`chatmodes/csharp-mcp-expert.chatmode.md`](../chatmodes/csharp-mcp-expert.chatmode.md)
+  [`chatmodes/csharp-mcp-expert.chatmode.md`](../ai_framework/chatmodes/csharp-mcp-expert.chatmode.md)
 - **Instructions**:
-  [`instructions/csharp-mcp-server.instructions.md`](../instructions/csharp-mcp-server.instructions.md)
+  [`instructions/csharp-mcp-server.instructions.md`](https://github.com/github/awesome-copilot/blob/main/instructions/csharp-mcp-server.instructions.md)
 - **Prompt**:
-  [`prompts/csharp-mcp-server-generator.prompt.md`](../prompts/csharp-mcp-server-generator.prompt.md)
+  [`prompts/csharp-mcp-server-generator.prompt.md`](https://github.com/github/awesome-copilot/blob/main/prompts/csharp-mcp-server-generator.prompt.md)
 - **SDK**: `ModelContextProtocol` NuGet packages
 - **Transport**: stdio or HTTP
 
@@ -289,13 +287,13 @@ dotnet run
 #### Go
 
 - **Collection**:
-  [`collections/go-mcp-development.md`](../collections/go-mcp-development.md)
+  [`collections/go-mcp-development.md`](../ai_framework/collections/go-mcp-development.md)
 - **Chat Mode**:
-  [`chatmodes/go-mcp-expert.chatmode.md`](../chatmodes/go-mcp-expert.chatmode.md)
+  [`chatmodes/go-mcp-expert.chatmode.md`](../ai_framework/chatmodes/go-mcp-expert.chatmode.md)
 - **Instructions**:
-  [`instructions/go-mcp-server.instructions.md`](../instructions/go-mcp-server.instructions.md)
+  [`instructions/go-mcp-server.instructions.md`](https://github.com/github/awesome-copilot/blob/main/instructions/go-mcp-server.instructions.md)
 - **Prompt**:
-  [`prompts/go-mcp-server-generator.prompt.md`](../prompts/go-mcp-server-generator.prompt.md)
+  [`prompts/go-mcp-server-generator.prompt.md`](https://github.com/github/awesome-copilot/blob/main/prompts/go-mcp-server-generator.prompt.md)
 
 #### Additional Languages
 
@@ -412,7 +410,7 @@ This agent uses MCP servers to:
 ### Example: Agent with MCP Server
 
 See
-[`agents/octopus-deploy-release-notes-mcp.agent.md`](../agents/octopus-deploy-release-notes-mcp.agent.md)
+[`agents/octopus-deploy-release-notes-mcp.agent.md`](../ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)
 for a real-world example of an agent that integrates with an MCP server.
 
 **Architecture:**
@@ -676,10 +674,10 @@ Copilot Chat.
 
 ### Official Documentation
 
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
 - [MCP Python SDK Documentation](https://github.com/modelcontextprotocol/python-sdk)
 - [MCP TypeScript SDK Documentation](https://github.com/modelcontextprotocol/typescript-sdk)
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 
 ### Organization Resources
 
@@ -703,10 +701,10 @@ Each language collection includes:
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Ask
-  questions and share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report bugs
-  or request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Ask questions and share ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report bugs or request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute to this documentation
 
 ---

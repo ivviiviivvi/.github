@@ -1,33 +1,98 @@
 # ivviiviivvi Organization Policies
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)<!-- link:badges.live_demo -->](https://demo-ivviiviivvi-.github.agentsphere.dev)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)<!-- link:badges.pre_commit -->](https://github.com/pre-commit/pre-commit)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-98%20workflows-blue?logo=github-actions)<!-- link:badges.github_actions -->](https://github.com/ivviiviivvi/.github/actions)
+[![Security Scanning](https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security)<!-- link:badges.security -->](https://github.com/ivviiviivvi/.github)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)<!-- link:badges.docs -->](docs/INDEX.md)
 
-This repository contains community health files and organization-wide policies for the ivviiviivvi GitHub organization.
+This repository contains community health files and organization-wide policies
+for the ivviiviivvi GitHub organization.
+
+## 🚀 Quick Start (5 Minutes)
+
+**New here? Get started in 5 minutes:**
+
+1. **Read the basics:** [CONTRIBUTING.md](CONTRIBUTING.md) +
+   [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+1. **Browse documentation:** [Documentation Index](docs/INDEX.md) - All docs in
+   one place
+
+1. **Set up environment:**
+   [Development Environment Setup](docs/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+
+1. **Clone and explore:**
+
+   ```bash
+   git clone https://github.com/ivviiviivvi/.github.git
+   cd .github
+   pre-commit install  # Enable quality gates
+   ```
+
+1. **Make your first contribution:** See open
+   [good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)<!-- link:github.good_first_issue -->
+
+**Need help?** Check [SUPPORT.md](SUPPORT.md) or
+[start a discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->.
+
+---
 
 ## 📚 Documentation
 
+**⭐ New:** [Complete Documentation Index](docs/INDEX.md) - Browse all 133+ docs
+organized by category
+
 ### Core Policies
 
-- **[SECURITY.md](SECURITY.md)** - Security vulnerability reporting and response procedures
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to our projects
-- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - Community standards and enforcement (Contributor Covenant 2.1)
-- **[SUPPORT.md](SUPPORT.md)** - How to get help and support resources
-- **[GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)** - Governance framework and decision-making processes
+- **[SECURITY.md](docs/governance/SECURITY.md)** - Security vulnerability
+  reporting and response procedures
+- **[CONTRIBUTING.md](docs/governance/CONTRIBUTING.md)** - Guidelines for
+  contributing to our projects
+- **[CODE_OF_CONDUCT.md](docs/governance/CODE_OF_CONDUCT.md)** - Community
+  standards and enforcement (Contributor Covenant 2.1)
+- **[SUPPORT.md](docs/governance/SUPPORT.md)** - How to get help and support
+  resources
+- **[GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)** - Governance framework
+  and decision-making processes
+
+### Quick Links
+
+- 📖 [Quick Start Guides](docs/INDEX.md#quick-start) - Get up to speed in 15
+  minutes
+
+- 🎯 [Workflow Guides](docs/INDEX.md#guides) - Best practices and automation
+
+- 🔒 [Security Documentation](docs/guides/security-best-practices.md) -
+  Comprehensive security guide (850+ lines)
+
+- 🤖 [AI Framework](docs/INDEX.md#ai-framework) - Agents, instructions, and MCP
+  servers
 
 - **Default community health files** that apply to all repositories
+
 - **Standardized templates** for issues and pull requests
+
 - **Reusable workflow templates** for CI/CD and automation
+
 - **Organization-wide configuration** and documentation standards
+
 - **Living Document System** - AI-driven governance and management protocols
+
 - **Mouthpiece Filter System** - Transform natural human expression into
   AI-optimized prompts
+
 - **🤖 PR & Dependency Automation** - Comprehensive automation for managing PRs
   at scale
+
 - **🏗️ Workspace & Containerization Protocols** - Lightweight local systems with
   flexible remote access
 
-- **[docs/TEAM_STRUCTURE.md](docs/TEAM_STRUCTURE.md)** - Team organization, permissions, and CODEOWNERS
-- **[docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)** - Branch protection rules and workflows
+- **[docs/TEAM_STRUCTURE.md](docs/TEAM_STRUCTURE.md)** - Team organization,
+  permissions, and CODEOWNERS
+
+- **[docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)** - Branch protection
+  rules and workflows
 
 ### Templates
 
@@ -76,9 +141,12 @@ gh codespace create --repo ivviiviivvi/.github
 
 **🎯 NEW: Jules Task Cascade Prevention & Daily PR Consolidation**
 
-Say goodbye to PR sprawl! Our enhanced automation now prevents cascading redundant tasks and consolidates ALL bot PRs into a SINGLE daily PR for streamlined review.
+Say goodbye to PR sprawl! Our enhanced automation now prevents cascading
+redundant tasks and consolidates ALL bot PRs into a SINGLE daily PR for
+streamlined review.
 
 ### What's New
+
 - ✅ **Task Deduplication** - Prevents Jules and automated tasks from cascading
 - ✅ **Daily Consolidation** - All bot/Jules PRs merged into ONE PR per day
 - ✅ **Smart Scheduling** - Master orchestrator coordinates all daily operations
@@ -86,6 +154,7 @@ Say goodbye to PR sprawl! Our enhanced automation now prevents cascading redunda
 - ✅ **Simple Review** - ONE checklist, ONE PR to approve daily
 
 **Quick Start:**
+
 ```bash
 # View your consolidated PR (created daily at 1:30 AM UTC)
 gh pr list --label consolidated
@@ -97,7 +166,9 @@ gh workflow run daily-pr-consolidator.yml
 cat .github/task_state.json | jq '.'
 ```
 
-📖 **Full docs:** [Jules Cascade Prevention](docs/JULES_CASCADE_PREVENTION.md) | [Quick Reference](docs/JULES_CASCADE_PREVENTION_QUICK_REF.md) | [Implementation Summary](docs/JULES_IMPLEMENTATION_SUMMARY.md)
+📖 **Full docs:** [Jules Cascade Prevention](docs/JULES_CASCADE_PREVENTION.md) |
+[Quick Reference](docs/JULES_CASCADE_PREVENTION_QUICK_REF.md) |
+[Implementation Summary](docs/JULES_IMPLEMENTATION_SUMMARY.md)
 
 ### Classic PR Automation (Still Available)
 
@@ -182,6 +253,7 @@ source scripts/op-mcp-env.sh
 ## Our Mission
 
 #### Discussion Templates (`.github/DISCUSSION_TEMPLATE/`)
+
 - `announcements.yml` - Official announcements
 - `ideas.yml` - Feature ideas and suggestions
 - `q-and-a.yml` - Q&A discussions
@@ -189,14 +261,18 @@ source scripts/op-mcp-env.sh
 - `general.yml` - General discussions
 
 #### Pull Request Template
-- **[PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)** - PR checklist and guidelines
+
+- **[PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)** - PR
+  checklist and guidelines
 
 ### Configuration Files
 
 - **[CODEOWNERS](.github/CODEOWNERS)** - Code ownership by team
-- **[dependabot.yml](.github/dependabot.yml)** - Automated dependency updates (7 ecosystems)
+- **[dependabot.yml](.github/dependabot.yml)** - Automated dependency updates (7
+  ecosystems)
 - **[labels.yml](.github/labels.yml)** - Standardized label definitions
-- **[.pre-commit-config.yaml](.pre-commit-config.yaml)** - Pre-commit hook configuration
+- **[.pre-commit-config.yaml](.pre-commit-config.yaml)** - Pre-commit hook
+  configuration
 
 ## 🔄 Workflows
 
@@ -379,8 +455,8 @@ transform our CI/CD from "Very Good" (B+) to "Industry-Leading" (A+).
 ### GitHub Copilot Customizations
 
 This repository includes comprehensive GitHub Copilot customizations from the
-[github/awesome-copilot](https://github.com/github/awesome-copilot) repository
-for organization-wide implementation.
+[github/awesome-copilot](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
+repository for organization-wide implementation.
 
 #### 🚀 Quick Start
 
@@ -1112,7 +1188,6 @@ The [profile/README.md](profile/README.md) file is displayed on our organization
    ealth files from this repository if they don't have their own versions.
 
 1. **Using Workflow Templates**:
-
    - Navigate to **Actions → New workflow** in your repository
    - Look for templates in the "By your organization" section
    - Select, customize, and commit the workflow
@@ -1239,29 +1314,34 @@ tion default.
 ### For Contributors
 
 1. **Read the docs**: Start with [CONTRIBUTING.md](CONTRIBUTING.md)
-2. **Set up your environment**: Follow development setup instructions
-3. **Install pre-commit hooks**: `pip install pre-commit && pre-commit install`
-4. **Create a branch**: `git checkout -b feature/your-feature`
-5. **Make changes**: Follow our code style guidelines
-6. **Submit a PR**: Use the PR template
+1. **Set up your environment**: Follow development setup instructions
+1. **Install pre-commit hooks**: `pip install pre-commit && pre-commit install`
+1. **Create a branch**: `git checkout -b feature/your-feature`
+1. **Make changes**: Follow our code style guidelines
+1. **Submit a PR**: Use the PR template
 
 ### For Maintainers
 
-1. **Review policies**: Familiarize yourself with [GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)
-2. **Set up teams**: Follow [docs/TEAM_STRUCTURE.md](docs/TEAM_STRUCTURE.md)
-3. **Apply branch protection**: See [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)
-4. **Sync labels**: Run label sync workflow or use `scripts/sync_labels_gh.sh`
+1. **Review policies**: Familiarize yourself with
+   [GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)
+1. **Set up teams**: Follow [docs/TEAM_STRUCTURE.md](docs/TEAM_STRUCTURE.md)
+1. **Apply branch protection**: See
+   [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md)
+1. **Sync labels**: Run label sync workflow or use `scripts/sync_labels_gh.sh`
 
 ## 🔒 Security
 
 **Found a security vulnerability?**
 
-**DO NOT create a public issue.** Follow our [Security Policy](SECURITY.md) to report privately:
+**DO NOT create a public issue.** Follow our [Security Policy](SECURITY.md) to
+report privately:
 
-- Email: security@ivviiviivvi.com
-- GitHub Security Advisory: [Create Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+- Email: <security@ivviiviivvi.com>
+- GitHub Security Advisory:
+  [Create Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 **Response Timeline:**
+
 - 24 hours: Acknowledgment
 - 72 hours: Initial assessment
 - 7 days: Detailed response
@@ -1271,17 +1351,22 @@ tion default.
 
 ### Getting Help
 
-- **Questions**: [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
+- **Questions**:
+  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation**: [docs/](docs/)
 - **Support**: [SUPPORT.md](SUPPORT.md)
-- **Email**: support@ivviiviivvi.com
+- **Email**: <support@ivviiviivvi.com>
 
 ### Contributing
 
 We welcome contributions from the community! Please see:
+
 - **Dependabot**: Automatic dependency updates across multiple ecosystems
+
 - **CodeQL Analysis**: Continuous security scanning for vulnerabilities
+
 - **Branch Protection**: Enforced protection rules on production branches
+
 - **Secret Scanning**: Multi-tool detection system with false positive
   management
   - 🔍 **TruffleHog**: Entropy-based secret detection
@@ -1292,13 +1377,19 @@ We welcome contributions from the community! Please see:
     and troubleshooting documentation
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
+
 - [Good First Issues](https://github.com/search?q=org%3Aivviiviivvi+label%3A%22good+first+issue%22+state%3Aopen&type=issues)
 
 ### Code of Conduct
 
-This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
-- **PR Compliance Guide**: Comprehensive guide for addressing pull request compliance checks - [PR_COMPLIANCE_GUIDE.md](docs/PR_COMPLIANCE_GUIDE.md)
+This project follows the
+[Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating,
+you are expected to uphold this code.
+
+- **PR Compliance Guide**: Comprehensive guide for addressing pull request
+  compliance checks - [PR_COMPLIANCE_GUIDE.md](docs/PR_COMPLIANCE_GUIDE.md)
 - **Standardized Templates**: Consistent issue and PR formats
 - **Code Review Guidelines**: Built into PR templates
 - **Testing Standards**: Documented in [TESTING.md](docs/TESTING.md)
@@ -1343,16 +1434,19 @@ for complete templates, facilitation guides, and getting started instructions.
 
 ### Developer Experience
 
-Report violations to: conduct@ivviiviivvi.com
+Report violations to: <conduct@ivviiviivvi.com>
 
 ## 📊 Labels
 
 We use a standardized label system across all repositories:
 
-**Priority:** critical, high, medium, low  
-**Type:** bug, enhancement, documentation, security, task, question  
-**Status:** triage, in-progress, blocked, needs-review, approved  
-**Category:** github-actions, configuration, dependencies, automated
+**Priority:** critical, high, medium, low\
+**Type:** bug, enhancement,
+documentation, security, task, question\
+**Status:** triage, in-progress,
+blocked, needs-review, approved\
+**Category:** github-actions, configuration,
+dependencies, automated
 
 See [labels.yml](.github/labels.yml) for complete definitions.
 
@@ -1361,6 +1455,7 @@ See [labels.yml](.github/labels.yml) for complete definitions.
 ### Dependabot
 
 Automated dependency updates configured for:
+
 - GitHub Actions (weekly, Monday 9am)
 - pip/Python (weekly, Monday 9am)
 - npm/Node.js (weekly, Monday 9am)
@@ -1382,17 +1477,19 @@ Automated dependency updates configured for:
 
 ## 📝 License
 
-Organization policies and documentation are available under the [MIT License](LICENSE).
+Organization policies and documentation are available under the
+[MIT License](LICENSE).
 
-Individual repositories may use different licenses - check each repository's LICENSE file.
+Individual repositories may use different licenses - check each repository's
+LICENSE file.
 
 ## 📞 Contact
 
-- **General**: info@ivviiviivvi.com
-- **Security**: security@ivviiviivvi.com
-- **Support**: support@ivviiviivvi.com
-- **Governance**: governance@ivviiviivvi.com
-- **Conduct**: conduct@ivviiviivvi.com
+- **General**: <info@ivviiviivvi.com>
+- **Security**: <security@ivviiviivvi.com>
+- **Support**: <support@ivviiviivvi.com>
+- **Governance**: <governance@ivviiviivvi.com>
+- **Conduct**: <conduct@ivviiviivvi.com>
 - 📖 Check our [Support Documentation](docs/SUPPORT.md) for detailed guidance
 - 🐛 Report issues using our [issue templates](ISSUE_TEMPLATE/)
 - 📧 Contact repository maintainers through GitHub
@@ -1401,5 +1498,5 @@ Individual repositories may use different licenses - check each repository's LIC
 
 ---
 
-**Last Updated**: January 12, 2026  
+**Last Updated**: January 12, 2026\
 **Maintained by**: @ivviiviivvi/leadership

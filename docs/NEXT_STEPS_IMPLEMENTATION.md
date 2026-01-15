@@ -314,7 +314,6 @@ gh run view --log
    ```
 
 1. For each workflow found, add appropriate caching:
-
    - Python: `cache: 'pip'` in setup-python
    - Node.js: `cache: 'npm'` in setup-node
    - Ruby: `bundler-cache: true` in setup-ruby

@@ -46,32 +46,27 @@ A manual scan of the repository confirmed:
 ### Changes Made
 
 1. **Created `.gitleaks.toml`** - Configuration file for Gitleaks scanner
-
    - Allowlists documentation files with example patterns
    - Allowlists workflow files that define patterns
    - Defines stop words for placeholders (example, xxx, etc.)
    - Custom rules for API keys, tokens, and private keys
 
 1. **Created `.secrets.baseline`** - Baseline file for detect-secrets
-
    - Generated with all plugins enabled
    - Contains 26 verified false positives across 20 files
    - All findings are in documentation, workflows, or examples
 
 1. **Fixed Python Setup Issue**
-
    - Removed `cache: 'pip'` from both secret scanning workflows
    - Prevents cache-related failures when no requirements file exists
    - Affects: `scan-for-secrets.yml` and `safeguard-5-secret-scanning.yml`
 
 1. **Updated Workflows**
-
    - Both workflows now use `.gitleaks.toml` configuration
    - Both workflows now use `.secrets.baseline` for comparison
    - Better error handling and clearer output messages
 
 1. **Created Documentation**
-
    - Added comprehensive `docs/SECRET_SCANNING_GUIDE.md`
    - Explains all three scanning tools
    - Documents how to manage false positives
@@ -111,40 +106,33 @@ positives\
 The baseline now properly handles these false positive categories:
 
 1. **Documentation Examples** (7 files)
-
    - `docs/guides/QUICK_START.md`
    - `docs/reference/SECURITY_ADVANCED.md`
    - `docs/guides/DOCKER_BEST_PRACTICES.md`
    - etc.
 
 1. **Workflow Definitions** (3 files)
-
    - `.github/workflows/scan-for-secrets.yml` (pattern definitions)
    - `.github/workflows/safeguard-5-secret-scanning.yml` (pattern definitions)
    - `.github/workflows/gemini-dispatch.yml`
 
 1. **Example Configurations** (4 files)
-
    - `.github/examples/flask-app-walkthrough-config.yml`
    - `.github/examples/fullstack-app-walkthrough-config.yml`
    - `.github/scheduled-walkthrough-config.yml`
    - `workflow-templates/enhanced-pr-quality.yml`
 
 1. **Agent Documentation** (1 file)
-
    - `agents/dynatrace-expert.agent.md` (pattern examples)
 
 1. **Development Configurations** (2 files)
-
    - `.devcontainer/docker-compose.yml`
    - `.devcontainer/post-create.sh`
 
 1. **Security Rules** (1 file)
-
    - `.semgrep/rules.yml` (example patterns)
 
 1. **Instructions & Prompts** (2 files)
-
    - `instructions/security-and-owasp.instructions.md`
    - `prompts/generate-documentation.prompt.md`
 
@@ -163,27 +151,23 @@ fixed\
 ### Ongoing Best Practices
 
 1. **For Developers**
-
    - Always use environment variables for secrets
    - Add secrets to `.gitignore`
    - Review changes before committing
    - Use pre-commit hooks
 
 1. **For Documentation**
-
    - Use clear placeholders (xxx, your-token-here)
    - Mark examples as examples
    - Use partial patterns (AKIA...)
 
 1. **For Videos**
-
    - Use dummy credentials
    - Blur sensitive areas
    - Review frames before publishing
    - Keep terminal history clean
 
 1. **For Maintenance**
-
    - Review scan results weekly
    - Update baseline when adding new examples
    - Keep `.gitleaks.toml` rules current
@@ -193,8 +177,8 @@ fixed\
 
 - [GitHub Secret Scanning Documentation](https://docs.github.com/en/code-security/secret-scanning)
 - [Gitleaks Documentation](https://github.com/gitleaks/gitleaks)
-- [detect-secrets Documentation](https://github.com/Yelp/detect-secrets)
-- [Secret Scanning Guide](docs/SECRET_SCANNING_GUIDE.md)
+- [detect-secrets Documentation](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->
+- [Secret Scanning Guide](SECRET_SCANNING_GUIDE.md)
 
 ## Summary
 

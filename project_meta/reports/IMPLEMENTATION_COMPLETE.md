@@ -269,14 +269,12 @@ Developer Push to Main
 ### Testing Phase
 
 1. **First Deployment**
-
    - Push to test repository
    - Verify workflows execute
    - Check gallery builds
    - Test live deployments
 
 1. **Monitoring**
-
    - Review workflow logs
    - Check 6-hour updates
    - Verify search works

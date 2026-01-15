@@ -676,24 +676,20 @@ Registry Update                     Public Gallery
 ### Performance Optimization Strategies
 
 1. **Staggered Scheduling** (Safeguard 7)
-
    - Spread 100 repos across 5 days = 20/day
    - Prevents quota exhaustion
    - Reduces peak concurrency
 
 1. **Caching**
-
    - Cache Node.js dependencies (`actions/setup-node@v4` with cache)
    - Cache Python dependencies (`pip cache`)
    - Cache Docker layers
 
 1. **Parallel Execution**
-
    - Organization-wide generator runs repos in parallel
    - Limited by GitHub Actions concurrency (20-60 jobs)
 
 1. **Quality Tiers**
-
    - Tier 1 (Critical): High quality, frequent updates
    - Tier 2 (Important): Medium quality, weekly updates
    - Tier 3 (Normal): Lower quality, monthly updates

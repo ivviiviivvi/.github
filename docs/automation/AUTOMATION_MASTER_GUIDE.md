@@ -465,6 +465,7 @@ git commit --no-verify -m "WIP: quick fix"
 on:
   workflow_dispatch: # Only manual trigger
 
+
 # Or comment out the triggers
 # on:
 #   push:
@@ -716,7 +717,7 @@ gh secret remove SECRET_NAME
 
 ## Resources
 
-- [GitHub Actions Docs](https://docs.github.com/en/actions)
+- [GitHub Actions Docs](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [Workflow Syntax](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions)
 - [pre-commit Docs](https://pre-commit.com/)
 - [semantic-release Docs](https://semantic-release.gitbook.io/)

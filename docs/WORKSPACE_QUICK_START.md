@@ -10,10 +10,9 @@ minutes.
 **Best for**: Daily development with full IDE features
 
 1. **Install Prerequisites**:
-
-   - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-   - [VS Code](https://code.visualstudio.com/)
-   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop -->
+   - [VS Code](https://code.visualstudio.com/)<!-- link:docs.vscode -->
+   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
 
 1. **Clone and Open**:
 
@@ -24,7 +23,6 @@ minutes.
    ```
 
 1. **Reopen in Container**:
-
    - Press `F1` → `Dev Containers: Reopen in Container`
    - Wait for build (2-5 minutes first time)
    - Start coding!
@@ -46,7 +44,6 @@ minutes.
    Or via GitHub UI: Repository → Code → Codespaces → Create
 
 1. **Start Coding**:
-
    - Opens automatically in browser
    - Or connect with VS Code Desktop
    - Full development environment ready
@@ -83,7 +80,6 @@ minutes.
    ```
 
 1. **Access**:
-
    - Open `https://code.yourdomain.com`
    - Enter password
    - Start coding!
@@ -97,18 +93,15 @@ minutes.
 **Best for**: Quick edits, reviewing code, mobile access
 
 1. **GitHub.dev** (instant):
-
    - Press `.` on any GitHub repository
    - Or visit `https://github.dev/ivviiviivvi/.github`
    - Edit files directly
 
 1. **StackBlitz** (for web projects):
-
    - Visit `https://stackblitz.com/github/ivviiviivvi/.github`
    - Full Node.js environment
 
 1. **GitPod**:
-
    - Visit `https://gitpod.io/#https://github.com/ivviiviivvi/.github`
    - Full cloud IDE
 
@@ -281,8 +274,10 @@ ports:
 
 ### Get Help
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

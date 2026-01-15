@@ -14,13 +14,23 @@ _**Agent (model copilot/gpt-5.1-codex-max)**_
 
 **Proposing stash triage plan**
 
-I see you have over 280 stashed changes and ongoing issues to fix. I can help by gathering a concise git status and summarizing your stashes, then we can prioritize which to address. Shall I start by running git status and showing a brief stash list summary?- Sounds messy with ~280 stashes and outstanding issues. I can triage quickly: gather current working tree status, count and sample the stash entries (newest/oldest), and list recent failing issues/workflows if needed.  
-- To proceed, pick one:  
-  1) I’ll collect `git status` and a stash inventory summary (count + newest/oldest entries).  
-  2) I’ll focus on active issues you want fixed—tell me which ones or point me to a failing workflow.  
-  3) I’ll prune stale stashes after we back up the few you care about.
+I see you have over 280 stashed changes and ongoing issues to fix. I can help by
+gathering a concise git status and summarizing your stashes, then we can
+prioritize which to address. Shall I start by running git status and showing a
+brief stash list summary?- Sounds messy with ~280 stashes and outstanding
+issues. I can triage quickly: gather current working tree status, count and
+sample the stash entries (newest/oldest), and list recent failing
+issues/workflows if needed.
 
-Let me know which option (or a mix) you want, and any stash prefixes or branches I should treat as keepers.
+- To proceed, pick one:
+  1. I’ll collect `git status` and a stash inventory summary (count +
+     newest/oldest entries).
+  1. I’ll focus on active issues you want fixed—tell me which ones or point me
+     to a failing workflow.
+  1. I’ll prune stale stashes after we back up the few you care about.
+
+Let me know which option (or a mix) you want, and any stash prefixes or branches
+I should treat as keepers.
 
 ---
 
@@ -35,7 +45,6 @@ _**Agent (model copilot/gpt-5.1-codex-max)**_
 <tool-use data-tool-type="unknown" data-tool-name="run_in_terminal">
 <details>
 <summary>Tool use: **run_in_terminal**</summary>
-
 
 Parameters:
 
@@ -81,6 +90,7 @@ Parameters:
   }
 }
 ```
+
 Additional data:
 
 ```json
@@ -89,6 +99,7 @@ Additional data:
   "isHidden": false
 }
 ```
+
 Result:
 
 ```json
@@ -102,8 +113,8 @@ Result:
   "toolCallResult": null
 }
 ```
-Status: **completed**
 
+Status: **completed**
 
 </details>
 </tool-use>
@@ -113,7 +124,6 @@ Status: **completed**
 <tool-use data-tool-type="unknown" data-tool-name="run_in_terminal">
 <details>
 <summary>Tool use: **run_in_terminal**</summary>
-
 
 Parameters:
 
@@ -129,6 +139,7 @@ Parameters:
   "language": "sh"
 }
 ```
+
 Additional data:
 
 ```json
@@ -137,6 +148,7 @@ Additional data:
   "isHidden": false
 }
 ```
+
 Result:
 
 ```json
@@ -147,8 +159,8 @@ Result:
   "toolCallResult": null
 }
 ```
-Status: **completed**
 
+Status: **completed**
 
 </details>
 </tool-use>
@@ -157,7 +169,8 @@ Status: **completed**
 
 **Preparing parallel git status and stash commands**
 
-I'm running git status with short branch info and a summarized git stash list (head, tail, and count) in parallel, scoped to the /workspace directory to gather repo state efficiently.
+I'm running git status with short branch info and a summarized git stash list
+(head, tail, and count) in parallel, scoped to the /workspace directory to
+gather repo state efficiently.
 
 ---
-

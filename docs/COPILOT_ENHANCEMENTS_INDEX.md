@@ -51,7 +51,7 @@ Specialized AI assistants for specific domains:
 - **Documentation**: ADR Generator, Completionism Specialist
 - **Operations**: PagerDuty Responder, Dynatrace Expert, LaunchDarkly Cleanup
 
-**Browse**: [`agents/`](../agents/) | **Learn**:
+**Browse**: [`agents/`](../ai_framework/agents/) | **Learn**:
 [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md)
 
 ### Custom Instructions (100+)
@@ -65,8 +65,9 @@ Coding standards that apply automatically:
 - **Platforms**: Azure, AWS, Google Cloud, Vercel, Netlify
 - **Tools**: Docker, Kubernetes, Terraform, Ansible, GitHub Actions
 
-**Browse**: [`instructions/`](../instructions/) | **Setup**:
-[Custom Instructions Setup](CUSTOM_INSTRUCTIONS_SETUP.md)
+**Browse**:
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
+| **Setup**: [Custom Instructions Setup](CUSTOM_INSTRUCTIONS_SETUP.md)
 
 ### MCP Servers
 
@@ -86,8 +87,8 @@ Model Context Protocol integration for 11 languages:
 | Kotlin         | ✅        | ✅     | ✅           | ✅         |
 | Power Platform | ✅        | ✅     | ✅           | ✅         |
 
-**Browse**: MCP chat modes in [`chatmodes/`](../chatmodes/) | **Setup**:
-[MCP Server Setup](MCP_SERVER_SETUP.md)
+**Browse**: MCP chat modes in [`chatmodes/`](../ai_framework/chatmodes/) |
+**Setup**: [MCP Server Setup](MCP_SERVER_SETUP.md)
 
 ### Prompts
 
@@ -98,8 +99,9 @@ Reusable commands for common tasks:
 - **Testing**: Test suite generation, fixture creation, mocking helpers
 - **Refactoring**: Code modernization, pattern application, optimization
 
-**Browse**: [`prompts/`](../prompts/) | **Learn**:
-[Prompts Documentation](README.prompts.md)
+**Browse**:
+[`prompts/`](https://github.com/github/awesome-copilot/tree/main/prompts/) |
+**Learn**: [Prompts Documentation](README.prompts.md)
 
 ### Chat Modes
 
@@ -109,7 +111,7 @@ Specialized AI personas for different contexts:
 - **Role-Based**: Architect, DBA, DevOps Engineer, Security Expert
 - **Domain-Specific**: MCP development, Cloud architecture, API design
 
-**Browse**: [`chatmodes/`](../chatmodes/) | **Learn**:
+**Browse**: [`chatmodes/`](../ai_framework/chatmodes/) | **Learn**:
 [Chat Modes Documentation](README.chatmodes.md)
 
 ### Collections
@@ -123,7 +125,7 @@ Curated bundles organized by theme:
 - **Operations**: DevOps OnCall, Database Management
 - **Specialized**: Edge AI Tasks, Clojure Interactive Programming
 
-**Browse**: [`collections/`](../collections/) | **Learn**:
+**Browse**: [`collections/`](../ai_framework/collections/) | **Learn**:
 [Collections Documentation](README.collections.md)
 
 ---
@@ -148,28 +150,36 @@ Curated bundles organized by theme:
 
 ### By Language
 
-- **Python**: [MCP Development](../collections/python-mcp-development.md) |
-  [Instructions](../instructions/python.instructions.md)
+- **Python**:
+  [MCP Development](../ai_framework/collections/python-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)<!-- link:github.awesome_copilot_python_instruction -->
 - **TypeScript**:
-  [MCP Development](../collections/typescript-mcp-development.md) |
-  [Instructions](../instructions/typescript.instructions.md)
-- **Java**: [MCP Development](../collections/java-mcp-development.md) |
-  [Instructions](../instructions/java.instructions.md)
-- **C#**: [MCP Development](../collections/csharp-mcp-development.md) |
-  [Instructions](../instructions/csharp.instructions.md)
-- **Go**: [MCP Development](../collections/go-mcp-development.md) |
-  [Instructions](../instructions/go.instructions.md)
-- **Rust**: [MCP Development](../collections/rust-mcp-development.md) |
-  [Instructions](../instructions/rust.instructions.md)
+  [MCP Development](../ai_framework/collections/typescript-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)<!-- link:github.awesome_copilot_typescript_instruction -->
+- **Java**:
+  [MCP Development](../ai_framework/collections/java-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md)
+- **C#**:
+  [MCP Development](../ai_framework/collections/csharp-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/csharp.instructions.md)
+- **Go**: [MCP Development](../ai_framework/collections/go-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/go.instructions.md)
+- **Rust**:
+  [MCP Development](../ai_framework/collections/rust-mcp-development.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/rust.instructions.md)
 
 ### By Technology
 
-- **React**: [Instructions](../instructions/react.instructions.md)
-- **Angular**: [Instructions](../instructions/angular.instructions.md)
-- **Azure**: [Collection](../collections/azure-cloud-development.md)
-- **Docker**: [Instructions](../instructions/docker.instructions.md)
-- **Terraform**: [Agent](../agents/terraform.agent.md) |
-  [Instructions](../instructions/terraform.instructions.md)
+- **React**:
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/reactjs.instructions.md)
+- **Angular**:
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/angular.instructions.md)
+- **Azure**:
+  [Collection](../ai_framework/collections/azure-cloud-development.md)
+- **Docker**:
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/containerization-docker-best-practices.instructions.md)
+- **Terraform**: [Agent](../ai_framework/agents/terraform.agent.md) |
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/terraform.instructions.md)
 
 ---
 
@@ -188,17 +198,17 @@ Curated bundles organized by theme:
 
 ### External Resources
 
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 - [VS Code Copilot Settings](https://code.visualstudio.com/docs/copilot/copilot-settings)
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Ask
-  questions, share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report bugs,
-  request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Ask questions, share ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report bugs, request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute to this repository
 
 ---
@@ -250,9 +260,9 @@ Curated bundles organized by theme:
   [Troubleshooting](CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) sections in
   guides
 - **Questions**: Ask in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - **Issues**: Report in
-  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Documentation Feedback**: Open a PR or issue
 
 ---

@@ -81,7 +81,6 @@ detect-secrets scan --all-files --force-use-all-plugins > .secrets.baseline
 ### When a False Positive is Detected
 
 1. **Verify it's actually a false positive** by checking:
-
    - Is it in documentation or examples?
    - Is it a pattern definition in the scanner itself?
    - Is it a placeholder like `xxx`, `example`, `your-token-here`?
@@ -145,13 +144,11 @@ These are automatically allowlisted:
    ```
 
 1. **📹 UPDATE VIDEOS** - If secrets appear in walkthrough videos:
-
    - Delete the video files
    - Re-record without exposing credentials
    - Use environment variables or dummy credentials
 
 1. **📝 DOCUMENT** - Update this issue with:
-
    - What was exposed
    - Actions taken
    - Lessons learned

@@ -1,5 +1,7 @@
 ---
 
+## name: arm-migration-agent description: "Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base image and dependency incompatibilities, and recommends Arm-optimized changes. It can drive multi-arch container builds, validate performance, and guide optimization, enabling smooth cross-platform deployment directly inside GitHub." mcp-servers: custom-mcp: type: "local" command: "docker" args: \["run", "--rm", "-i", "-v", "${{ github.workspace }}:/workspace", "--name", "arm-mcp", "armswdev/arm-mcp:latest"\] tools: \["skopeo", "check_image", "knowledge_base_search", "migrate_ease_scan", "mcp", "sysreport_instructions"\] description: Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base image and dependency incompatibilities, and recommends Arm-optimized changes. It can drive multi-arch container builds, validate performance, and guide optimization, enabling smooth cross-platform deployment directly inside GitHub." tools: \[\] tags: \[\] updated: 2026-01-13
+
 ## name: arm-migration-agent description: "Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base image and dependency incompatibilities, and recommends Arm-optimized changes. It can drive multi-arch container builds, validate performance, and guide optimization, enabling smooth cross-platform deployment directly inside GitHub." mcp-servers: custom-mcp: type: "local" command: "docker" args: \["run", "--rm", "-i", "-v", "${{ github.workspace }}:/workspace", "--name", "arm-mcp", "armswdev/arm-mcp:latest"\] tools: \["skopeo", "check_image", "knowledge_base_search", "migrate_ease_scan", "mcp", "sysreport_instructions"\]
 
 Your goal is to migrate a codebase from x86 to Arm. Use the mcp server tools to
@@ -50,3 +52,17 @@ confirmation.
 
 Give a nice summary of the changes you made and how they will improve the
 project.
+
+## Usage Example
+
+Example prompt: "Use the arm-migration-agent description: "Arm Cloud Migration
+Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the
+repository for architecture assumptions, portability issues, container base
+image and dependency incompatibilities, and recommends Arm-optimized changes. It
+can drive multi-arch container builds, validate performance, and guide
+optimization, enabling smooth cross-platform deployment directly inside GitHub."
+mcp-servers: custom-mcp: type: "local" command: "docker" args: \["run", "--rm",
+"-i", "-v", "${{ github.workspace }}:/workspace", "--name", "arm-mcp",
+"armswdev/arm-mcp:latest"\] tools: \["skopeo", "check_image",
+"knowledge_base_search", "migrate_ease_scan", "mcp", "sysreport_instructions"\]
+agent to assess the task and propose next steps."

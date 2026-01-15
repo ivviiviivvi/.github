@@ -659,13 +659,11 @@ Overall Health Score: [X/100]
 **Activities**:
 
 1. Workflow inventory (15 min)
-
    - List all workflows
    - Document purpose of each
    - Identify dependencies
 
 2. Metrics review (15 min)
-
    - Average run times
    - Failure rates
    - Resource usage/costs
@@ -690,19 +688,16 @@ Overall Health Score: [X/100]
 **Topics**:
 
 1. Caching strategies (15 min)
-
    - Dependency caching
    - Build artifact caching
    - When and how to cache
 
 2. Parallelization (15 min)
-
    - Job-level parallelization
    - Matrix strategies
    - Conditional execution
 
 3. Resource optimization (15 min)
-
    - Runner selection
    - Timeout configurations
    - Cost optimization
@@ -725,13 +720,11 @@ Overall Health Score: [X/100]
 **Activities**:
 
 1. Prioritization (20 min)
-
    - High-impact, low-effort wins
    - Strategic improvements
    - Long-term investments
 
 2. Implementation planning (30 min)
-
    - Detailed action items
    - Dependencies and prerequisites
    - Risk assessment
@@ -1002,17 +995,17 @@ Overall Health Score: [X/100]
 ### Internal Resources
 
 - [Best Practices Guide](./BEST_PRACTICES.md)
-- [Workflow Optimization Guide](../../WORKFLOW_OPTIMIZATION_INDEX.md)
-- [Security Best Practices](../../WORKFLOW_SECURITY_AUDIT.md)
+- [Workflow Optimization Guide](../WORKFLOW_OPTIMIZATION_INDEX.md)
+- [Security Best Practices](../WORKFLOW_SECURITY_AUDIT.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 - [Community Standards](../CODE_OF_CONDUCT.md)
 
 ### GitHub Documentation
 
-- [GitHub Actions Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
-- [Community Standards](https://docs.github.com/en/communities)
+- [GitHub Actions Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
+- [Community Standards](https://docs.github.com/en/communities)<!-- link:docs.github_communities -->
 - [Repository Best Practices](https://docs.github.com/en/repositories)
-- [Security Best Practices](https://docs.github.com/en/code-security)
+- [Security Best Practices](https://docs.github.com/en/code-security)<!-- link:docs.github_code_security -->
 
 ### External Resources
 
@@ -1022,10 +1015,10 @@ Overall Health Score: [X/100]
 
 ### Templates
 
-- [Issue Templates](../../ISSUE_TEMPLATE/)
-- [PR Templates](../../PULL_REQUEST_TEMPLATE/)
+- [Issue Templates](../../.github/ISSUE_TEMPLATE/)
+- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- [Workflow Templates](../../workflow-templates/)
+- [Workflow Templates](../../automation/workflow-templates/)
 
 ---
 
@@ -1146,8 +1139,8 @@ Ready to run your first session? Here's a simple starter path:
 Need help planning or running a session?
 
 - 💬 **Start a
-  [Discussion](https://github.com/ivi374forivi/.github/discussions)** in the
-  Best Practices category
+  [Discussion](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->**
+  in the Best Practices category
 - 🎫 **Open an
   [Issue](https://github.com/ivi374forivi/.github/issues/new/choose)** using the
   "Best Practices Review" template

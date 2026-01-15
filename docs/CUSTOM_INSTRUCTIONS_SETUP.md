@@ -106,7 +106,9 @@ Before setting up custom instructions, ensure you have:
 Each instruction file has an "Install in VS Code" badge that automatically
 installs it:
 
-1. Browse the [`instructions/`](../instructions/) directory
+1. Browse the
+   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
+   directory
 1. Open an instruction file (e.g., `python.instructions.md`)
 1. Click the **"Install in VS Code"** badge at the top
 1. Follow the VS Code prompts to complete installation
@@ -134,7 +136,7 @@ To apply instructions to a specific repository:
 
    # Or copy specific instructions
    cp /path/to/.github/instructions/python.instructions.md .github/copilot-instructions/
-   cp /path/to/.github/instructions/react.instructions.md .github/copilot-instructions/
+   cp /path/to/.github/instructions/reactjs.instructions.md .github/copilot-instructions/
    ```
 
 1. **Commit and push**:
@@ -173,7 +175,7 @@ To apply instructions globally for your user account:
       "file": "/path/to/instructions/python.instructions.md"
     },
     {
-      "file": "/path/to/instructions/react.instructions.md"
+      "file": "/path/to/instructions/reactjs.instructions.md"
     }
   ]
 }
@@ -258,7 +260,9 @@ languages, tools, and platforms.
 
 ### By Technology
 
-The [`instructions/`](../instructions/) directory contains instructions for:
+The
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
+directory contains instructions for:
 
 - **109 technologies** across multiple domains
 - **Languages**: Python, TypeScript, Java, C#, Go, Rust, Ruby, PHP, Swift,
@@ -269,7 +273,8 @@ The [`instructions/`](../instructions/) directory contains instructions for:
 - **Tools**: Docker, Kubernetes, Terraform, Ansible, GitHub Actions
 - **Databases**: PostgreSQL, MongoDB, MySQL, Redis, Elasticsearch
 
-**Browse all instructions:** [`instructions/`](../instructions/)
+**Browse all instructions:**
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
 
 ---
 
@@ -551,41 +556,43 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 ### Documentation
 
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 - [VS Code Copilot Settings](https://code.visualstudio.com/docs/copilot/copilot-settings)
-- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)
+- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 
 ### Organization Resources
 
-- [Instructions Directory](../instructions/) - Browse all 100+ instructions
+- [Instructions Directory](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
+  \- Browse all 100+ instructions
 - [Instructions Documentation](README.instructions.md) - Detailed guide to
   instructions
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Using instructions
   with agents
-- [Collections](../collections/) - Bundled instructions by theme
+- [Collections](../ai_framework/collections/) - Bundled instructions by theme
 
 ### Templates
 
-- [Instruction Template](../instructions/TEMPLATE.instructions.md) - Blank
-  template for new instructions
-- [Python Template](../instructions/python.instructions.md) - Example Python
-  instructions
-- [TypeScript Template](../instructions/typescript.instructions.md) - Example
-  TypeScript instructions
+- [Instruction Template](https://github.com/github/awesome-copilot/blob/main/instructions/instructions.instructions.md)
+  \- Blank template for new instructions
+- [Python Template](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)<!-- link:github.awesome_copilot_python_instruction -->
+  \- Example Python instructions
+- [TypeScript Template](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)<!-- link:github.awesome_copilot_typescript_instruction -->
+  \- Example TypeScript instructions
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Share
-  instruction ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report issues
-  or request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Share instruction ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report issues or request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute new instructions
 
 ---
 
 ## Next Steps
 
-1. **Browse available instructions** in the [`instructions/`](../instructions/)
+1. **Browse available instructions** in the
+   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
    directory
 1. **Install instructions** for your primary technologies
 1. **Test with Copilot** on a sample project

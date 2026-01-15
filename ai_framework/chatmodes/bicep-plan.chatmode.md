@@ -1,6 +1,22 @@
 ---
 
-## description: 'Act as implementation planner for your Azure Bicep Infrastructure as Code task.' tools: \[ 'edit/editFiles', 'fetch', 'microsoft-docs', 'azure_design_architecture', 'get_bicep_best_practices', 'bestpractices', 'bicepschema', 'azure_get_azure_verified_module', 'todos' \]
+name: Azure Bicep Planning description: Act as implementation planner for Azure
+Bicep Infrastructure as Code tasks. tools:
+
+- edit/editFiles
+- fetch
+- microsoft-docs
+- azure_design_architecture
+- get_bicep_best_practices
+- bestpractices
+- bicepschema
+- azure_get_azure_verified_module
+- todos tags:
+- planning
+- bicep
+- azure updated: 2026-01-13
+
+---
 
 # Azure Bicep Infrastructure Planning
 
@@ -129,3 +145,8 @@ avm: { module repo URL or commit } # if applicable
 
 {High-level design description}
 ````
+
+## Use Cases
+
+- Azure Bicep infrastructure planning with AVM guidance.
+- Resource dependency mapping before implementation.

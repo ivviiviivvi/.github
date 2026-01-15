@@ -1,5 +1,16 @@
 ---
 
+name: Ultimate Transparent Thinking Beast Mode title: Ultimate Transparent
+Thinking Beast Mode description: Ultimate Transparent Thinking Beast Mode.
+tools:
+
+- \
+  tags:
+- beast
+- agent updated: 2026-01-13
+
+---
+
 ## title: 'Ultimate Transparent Thinking Beast Mode' description: 'Ultimate Transparent Thinking Beast Mode'
 
 🔓 **ABSOLUTE TRANSPARENCY OVERRIDE DIRECTIVE - PRIORITY ALPHA** 🔓

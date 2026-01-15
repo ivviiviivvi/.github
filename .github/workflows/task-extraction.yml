@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to extract tasks from'
+        description: PR number to extract tasks from
         required: true
         type: number
 
@@ -126,43 +126,46 @@ jobs:
           TASK_COUNT="${{ steps.extract.outputs.task_count }}"
 
           # Create issue body
-          ISSUE_BODY="# Extracted Tasks from Closed PR
+          cat > /tmp/issue_body.md <<-'EOF'
+          # Extracted Tasks from Closed PR
 
-**Original PR:** #$PR_NUM - $TITLE
-**Author:** @$AUTHOR
-**PR URL:** $URL
+          **Original PR:** #$PR_NUM - $TITLE
+          **Author:** @$AUTHOR
+          **PR URL:** $URL
 
-## Status
+          ## Status
 
-- Created: $(date -d "$CREATED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CREATED")
-- Closed: $(date -d "$CLOSED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CLOSED")
-- Status: Closed without merging
-- Original labels: $LABELS
+          - Created: $(date -d "$CREATED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CREATED")
+          - Closed: $(date -d "$CLOSED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CLOSED")
+          - Status: Closed without merging
+          - Original labels: $LABELS
 
-## Incomplete Tasks ($TASK_COUNT found)
+          ## Incomplete Tasks ($TASK_COUNT found)
 
-$TASKS
+          $TASKS
 
-## Context
+          ## Context
 
-The original PR was closed without merging. Review the PR for full context:
-👉 #$PR_NUM
+          The original PR was closed without merging. Review the PR for full context:
+          👉 #$PR_NUM
 
-## Next Steps
+          ## Next Steps
 
-- [ ] Triage these tasks
-- [ ] Determine if work should continue
-- [ ] Create new PR if needed, or close as obsolete
-- [ ] Assign to appropriate milestone/sprint
+          - [ ] Triage these tasks
+          - [ ] Determine if work should continue
+          - [ ] Create new PR if needed, or close as obsolete
+          - [ ] Assign to appropriate milestone/sprint
 
-## Related Work
+          ## Related Work
 
-If you create a new PR for this work, reference it here:
-- New PR: (link here)
+          If you create a new PR for this work, reference it here:
+          - New PR: (link here)
 
----
-_Auto-extracted by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
-_To prevent task extraction, add \`do-not-extract-tasks\` label to PR before closing_"
+          ---
+          _Auto-extracted by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+          _To prevent task extraction, add \`do-not-extract-tasks\` label to PR before closing_
+          EOF
+          ISSUE_BODY=$(cat /tmp/issue_body.md)
 
           # Create the issue
           ISSUE_NUM=$(gh issue create \
@@ -174,15 +177,18 @@ _To prevent task extraction, add \`do-not-extract-tasks\` label to PR before clo
           echo "✅ Created issue #$ISSUE_NUM with $TASK_COUNT extracted tasks"
 
           # Comment on the closed PR
-          gh pr comment $PR_NUM --body "📋 **Tasks Extracted**
+          cat > /tmp/pr_comment.md <<-'EOF'
+          📋 **Tasks Extracted**
 
-This PR was closed with $TASK_COUNT incomplete tasks.
+          This PR was closed with $TASK_COUNT incomplete tasks.
 
-**Tasks have been extracted to:** #$ISSUE_NUM
+          **Tasks have been extracted to:** #$ISSUE_NUM
 
-Review and triage the extracted tasks. If this work should continue, create a new PR and reference the issue.
+          Review and triage the extracted tasks. If this work should continue, create a new PR and reference the issue.
 
-_Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_"
+          _Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+          EOF
+          gh pr comment $PR_NUM --body-file /tmp/pr_comment.md
 
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -192,13 +198,16 @@ _Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_"
         run: |
           PR_NUM=${{ steps.pr.outputs.number }}
 
-          gh pr comment $PR_NUM --body "ℹ️ **No Tasks to Extract**
+          cat > /tmp/pr_comment.md <<-'EOF'
+          ℹ️ **No Tasks to Extract**
 
-This PR was closed, but no incomplete task items were found.
+          This PR was closed, but no incomplete task items were found.
 
-If there's work that should be tracked, create an issue manually.
+          If there's work that should be tracked, create an issue manually.
 
-_Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_"
+          _Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+          EOF
+          gh pr comment $PR_NUM --body-file /tmp/pr_comment.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -1030,9 +1030,9 @@ def setup_agent_logging(agent_name: str, level: int = logging.DEBUG):
 
 **Internal Resources:**
 
-- [Agent Examples](../agents/)
-- [MCP Server Documentation](https://modelcontextprotocol.io/)
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
+- [Agent Examples](../ai_framework/agents/)
+- [MCP Server Documentation](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 
 **Community Support:**
 
@@ -1056,9 +1056,9 @@ def setup_agent_logging(agent_name: str, level: int = logging.DEBUG):
 
 ### References
 
-- [GitHub Awesome Copilot](https://github.com/github/awesome-copilot)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [GitHub Copilot Docs](https://docs.github.com/copilot)
+- [GitHub Awesome Copilot](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
+- [Model Context Protocol](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [GitHub Copilot Docs](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 - [Python Type Hints](https://docs.python.org/3/library/typing.html)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 

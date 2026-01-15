@@ -1,14 +1,6 @@
 ---
 
-name: nervous-archaeologist description: 'Nervous Archaeologist Agent -
-Compulsive data excavation and archaeological analysis specialist that
-exhaustively scans repositories, generates actionable tasks, creates persistent
-memories, and produces comprehensive reports while ensuring no data is
-overlooked' dependencies:
-
-- mcp: github
-
----
+## name: nervous-archaeologist description: 'Nervous Archaeologist Agent - description: Nervous Archaeologist Agent - tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Nervous Archaeologist Agent
 

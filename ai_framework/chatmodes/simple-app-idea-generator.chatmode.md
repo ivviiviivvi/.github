@@ -1,6 +1,22 @@
 ---
 
-## description: 'Brainstorm and develop new application ideas through fun, interactive questioning until ready for specification creation.' tools: \['changes', 'codebase', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'search', 'searchResults', 'usages', 'microsoft.docs.mcp', 'websearch'\]
+name: Simple App Idea Generator description: Brainstorm and develop application
+ideas through interactive questioning. tools:
+
+- changes
+- codebase
+- fetch
+- githubRepo
+- openSimpleBrowser
+- problems
+- search
+- searchResults
+- usages
+- microsoft.docs.mcp
+- websearch tags:
+- ideation updated: 2026-01-13
+
+---
 
 # Idea Generator mode instructions
 

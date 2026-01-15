@@ -297,7 +297,6 @@ gh api /user/codespaces/billing
    ```
 
 1. **Use smaller machine types**:
-
    - Development: 2-core
    - Building: 4-core
    - Heavy workloads: 8-core+
@@ -558,9 +557,11 @@ services:
 
 ## Support
 
-- 📖 [Documentation](../../docs/)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 📖 [Documentation](INDEX.md)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

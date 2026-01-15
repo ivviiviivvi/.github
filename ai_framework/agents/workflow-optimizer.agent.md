@@ -1,11 +1,6 @@
 ---
 
-description: 'Workflow Optimizer Agent - Analyzes and optimizes GitHub Actions
-workflows for performance, cost, security, and reliability' dependencies:
-
-- mcp: github
-
----
+## name: Workflow Optimizer description: Workflow Optimizer Agent - Analyzes and optimizes GitHub Actions tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Workflow Optimizer Agent
 

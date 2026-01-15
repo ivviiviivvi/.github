@@ -1,22 +1,23 @@
-name: "CodeQL"
+name: CodeQL
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
     paths:
       - "**.py"
       - "**.go"
       - "**.rb"
-      - ".github/workflows/codeql-analysis.yml"
+      - .github/workflows/codeql-analysis.yml
   pull_request:
-    branches: ["main"]
+    branches: [main]
     paths:
       - "**.py"
       - "**.go"
       - "**.rb"
-      - ".github/workflows/codeql-analysis.yml"
+      - .github/workflows/codeql-analysis.yml
   schedule:
-    - cron: "0 6 * * 1" # Weekly on Mondays
+    - cron: 0 6 * * 1 # Weekly on Mondays
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -35,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["go", "python", "ruby"]
+        language: [go, python, ruby]
 
     steps:
       - name: Checkout repository
@@ -52,4 +53,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # ratchet:github/codeql-action/analyze@v3.27.5
         with:
-          category: "/language:${{matrix.language}}"
+          category: /language:${{matrix.language}}

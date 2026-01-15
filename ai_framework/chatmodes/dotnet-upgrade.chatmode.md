@@ -1,28 +1,35 @@
 ---
 
-## description: 'Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation.' tools: \['codebase', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'runTests', 'problems', 'changes', 'usages', 'findTestFiles', 'testFailure', 'terminalLastCommand', 'terminalSelection', 'fetch', 'microsoft.docs.mcp'\]
+name: .NET Upgrade description: Janitorial tasks for C#/.NET code including
+cleanup, modernization, and tech debt remediation. tools:
 
-# .NET Upgrade Collection
+- codebase
+- edit/editFiles
+- search
+- runCommands
+- runTasks
+- runTests
+- problems
+- changes
+- usages
+- findTestFiles
+- testFailure
+- terminalLastCommand
+- terminalSelection
+- fetch
+- microsoft.docs.mcp tags:
+- dotnet
+- cleanup updated: 2026-01-13
 
-.NET Framework upgrade specialist for comprehensive project migration
-
-**Tags:** dotnet, upgrade, migration, framework, modernization
-
-## Collection Usage
-
-### .NET Upgrade Chat Mode
-
-Discover and plan your .NET upgrade journey!
-
-```markdown, upgrade-analysis.prompt.md
 ---
-mode: dotnet-upgrade
-title: Analyze current .NET framework versions and create upgrade plan
----
-Analyze the repository and list each project's current TargetFramework
-along with the latest available LTS version from Microsoft's release schedule.
-Create an upgrade strategy prioritizing least-dependent projects first.
-```
+
+## mode: dotnet-upgrade title: Analyze current .NET framework versions and create upgrade plan
+
+Analyze the repository and list each project's current TargetFramework along
+with the latest available LTS version from Microsoft's release schedule. Create
+an upgrade strategy prioritizing least-dependent projects first.
+
+````
 
 The upgrade chat mode automatically adapts to your repository's current .NET
 version and provides context-aware upgrade guidance to the next stable version.
@@ -101,7 +108,7 @@ grep -r "<TargetFramework" **/*.csproj | sed 's/.*<TargetFramework>//;s/<\/Targe
 
 # 4. Verify runtime environment
 dotnet --info | grep "Version"
-```
+````
 
 **Chat Prompt:**
 

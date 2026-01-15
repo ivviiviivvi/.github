@@ -84,7 +84,6 @@ permissions:
 The `CLAUDE_CODE_OAUTH_TOKEN` must be configured with:
 
 1. **Minimal required scopes** - Only grant permissions needed for:
-
    - Reading repository content
    - Commenting on PRs and issues
    - Viewing CI results
@@ -164,6 +163,6 @@ Recommended schedule:
 
 ## References
 
-- [GitHub Actions Security Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
+- [GitHub Actions Security Best Practices](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
 - [Claude Code Action Documentation](https://github.com/anthropics/claude-code-action)
 - [Repository Security Policy](./SECURITY.md)

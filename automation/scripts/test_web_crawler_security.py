@@ -163,7 +163,7 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         self.assertEqual(status, 200)
         mock_request.assert_called()
 
-    @patch('urllib3.HTTPSConnectionPool')
+    @patch("urllib3.HTTPSConnectionPool")
     def test_fallback_get_uses_safe_pool(self, MockHTTPSConnectionPool):
         """
         Verify that the fallback GET request uses the same IP-pinned pool
@@ -206,11 +206,12 @@ class TestWebCrawlerSecurity(unittest.TestCase):
 
         # Verify first call was HEAD
         args1, _ = mock_pool.request.call_args_list[0]
-        self.assertEqual(args1[0], 'HEAD')
+        self.assertEqual(args1[0], "HEAD")
 
         # Verify second call was GET
         args2, _ = mock_pool.request.call_args_list[1]
-        self.assertEqual(args2[0], 'GET')
+        self.assertEqual(args2[0], "GET")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 ---
 
-## name: 🐛 Bug Report about: Report a bug to help us improve title: '\[BUG\] ' labels: \['bug'\] assignees: \[\]
+## name: "🐛 Bug Report" about: "Report a bug to help us improve" title: "\[BUG\] " labels: \["bug"\] assignees: \[\]
 
 ## Describe the Bug
 

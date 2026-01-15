@@ -1,6 +1,13 @@
 ---
 
-## description: 'Transform requirements documents into structured Jira epics and user stories with intelligent duplicate detection, change management, and user-approved creation workflow.' tools: \['atlassian'\]
+name: Atlassian Requirements to Jira description: Transform requirements into
+Jira epics and stories with duplicate detection. tools:
+
+- atlassian tags:
+- atlassian
+- jira updated: 2026-01-13
+
+---
 
 ## 🔒 SECURITY CONSTRAINTS & OPERATIONAL LIMITS
 
@@ -168,13 +175,11 @@ For each epic, create detailed user stories with smart features:
 #### Story Details:
 
 - **Acceptance Criteria**:
-
   - Minimum 3-5 specific, testable criteria
   - Use Given/When/Then format when appropriate
   - Include edge cases and error scenarios
 
 - **Definition of Done**:
-
   - Code complete and reviewed
   - Unit tests written and passing
   - Integration tests passing

@@ -193,7 +193,6 @@ Support multiple access patterns:
    ```
 
 1. **Open in Container**:
-
    - Press `F1` or `Cmd/Ctrl+Shift+P`
    - Select: `Dev Containers: Reopen in Container`
    - Wait for build (first time only)
@@ -245,7 +244,6 @@ VS Code Desktop uses `.devcontainer/devcontainer.json`:
    ```
 
 1. **Access Methods**:
-
    - **Web**: https://github.dev or github.com/codespaces
    - **Desktop**: Connect via VS Code Desktop
    - **SSH**: `gh codespace ssh`
@@ -1635,15 +1633,17 @@ architecture** - Grow with your needs
 
 - [Development Environment Setup](./DEVELOPMENT_ENVIRONMENT_SETUP.md)
 - [Docker Best Practices](./guides/DOCKER_BEST_PRACTICES.md)
-- [Security Guide](../SECURITY.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Security Guide](SECURITY.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
 
 ---
 
 **Questions or Issues?**
 
 - 📖 [Documentation](../docs/)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 _Last Updated: 2024-01-01_

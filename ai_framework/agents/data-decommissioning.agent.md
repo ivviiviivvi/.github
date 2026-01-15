@@ -1,12 +1,6 @@
 ---
 
-description: 'Data Decommissioning Agent - Securely removes data and systems
-following compliance requirements, ensuring complete and verifiable data
-destruction' dependencies:
-
-- mcp: github
-
----
+## name: Data Decommissioning description: Data Decommissioning Agent - Securely removes data and systems tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Data Decommissioning Agent
 

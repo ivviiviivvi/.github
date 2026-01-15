@@ -3,8 +3,8 @@ project:
   name: .github
   description: Auto-generated seed. Waiting for human intent.
   owners:
-  - handle: ivviiviivvi
-    role: steward
+    - handle: ivviiviivvi
+      role: steward
   repo:
     org: ivviiviivvi
     type: generic
@@ -14,11 +14,11 @@ architecture:
 automation_contract:
   ai_access:
     read_paths:
-    - '**/*'
+      - "**/*"
     write_paths:
-    - src/**
-    - docs/**
-    - tests/**
+      - src/**
+      - docs/**
+      - tests/**
     disallowed_writes:
-    - .github/workflows/**
-    - seed.yaml
+      - .github/workflows/**
+      - seed.yaml

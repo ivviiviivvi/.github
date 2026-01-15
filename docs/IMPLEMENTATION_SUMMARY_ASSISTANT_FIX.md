@@ -26,51 +26,43 @@ Modified `.github/workflows/draft-to-ready-automation.yml` to add three new
 steps after PR conversion:
 
 1. **Trigger Auto-Assign Workflow** (lines 280-313)
-
    - Manually requests @copilot as reviewer
    - Assigns @copilot to the PR
    - Includes error handling for failures
 
 1. **Trigger PR Task Catcher** (lines 315-337)
-
    - Dispatches `pr-task-catcher.yml` workflow
    - Passes PR number as input
    - Scans for tasks and blockers
 
 1. **Enable Auto-Merge via GitHub CLI** (lines 339-354)
-
    - Attempts to enable auto-merge using `gh pr merge --auto`
    - Gracefully handles failures if checks incomplete
    - Allows existing auto-merge workflow to retry later
 
 1. **Updated PR Comment** (line 260)
-
    - Informs users that AI assistants have been notified
    - Mentions @copilot, @claude, @jules specifically
 
 ### Documentation Created
 
 1. **Technical Documentation** - `docs/DRAFT_TO_READY_AUTOMATION_FIX.md`
-
    - Detailed explanation of the problem and solution
    - Code walkthrough with comments
    - Benefits and backwards compatibility analysis
    - Future improvement suggestions
 
 1. **Testing Documentation** - `docs/TESTING_DRAFT_TO_READY_FIX.md`
-
    - Complete test plan with 5 scenarios
    - Manual verification checklist
    - Success criteria definition
    - Rollback plan if needed
 
 1. **Updated User Guide** - `PR_AUTOMATION_GUIDE.md`
-
    - Added explanation of the enhancement
    - Documented why this was necessary
 
 1. **Updated README** - `README.md`
-
    - Added mention of AI assistant summoning feature
    - Linked to technical documentation
 

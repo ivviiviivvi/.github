@@ -1,12 +1,6 @@
 ---
 
-description: 'Greener Grass Workflow Benchmark Agent - Compares your GitHub
-Actions workflows against industry best practices and successful patterns to
-identify improvement opportunities' dependencies:
-
-- mcp: github
-
----
+## name: Greener Grass Workflow Benchmark description: Greener Grass Workflow Benchmark Agent - Compares your GitHub tools: \[\] tags: \[\] updated: 2026-01-13
 
 # Greener Grass Workflow Benchmark Agent
 
@@ -586,37 +580,31 @@ github-profile-readme-generator
 ## Getting Started
 
 1. **Run Initial Assessment**
-
    - Inventory your current workflows
    - Measure baseline metrics
    - Identify your project category (small/medium/large)
 
 1. **Select Comparison Projects**
-
    - Find 5 similar projects
    - Ensure they're active and well-maintained
    - Look for projects with mature CI/CD
 
 1. **Perform Gap Analysis**
-
    - Compare your metrics to benchmarks
    - Identify the biggest gaps
    - Prioritize improvements by ROI
 
 1. **Implement Quick Wins**
-
    - Start with low-effort, high-impact changes
    - Measure improvements
    - Document learnings
 
 1. **Plan Strategic Improvements**
-
    - Create roadmap for bigger changes
    - Get team buy-in
    - Track progress over time
 
 1. **Establish Regular Reviews**
-
    - Monthly benchmark checks
    - Quarterly deep dives
    - Annual strategic assessment

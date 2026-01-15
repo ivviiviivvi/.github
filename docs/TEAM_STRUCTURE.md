@@ -382,18 +382,15 @@ For organizations using external identity providers (e.g., Azure AD, Okta):
 ### For Team Members
 
 1. **Identify Required Access**
-
    - Determine which team you need to join
    - Understand the access level needed
 
 1. **Submit Request**
-
    - Open an issue using the appropriate template
    - Tag team lead or organization admin
    - Provide justification for access
 
 1. **Wait for Approval**
-
    - Team lead reviews request
    - Access granted if approved
    - You'll receive notification via GitHub
@@ -401,19 +398,16 @@ For organizations using external identity providers (e.g., Azure AD, Okta):
 ### For Team Leads
 
 1. **Review Access Requests**
-
    - Verify requestor's identity
    - Confirm access is appropriate
    - Check with other team leads if needed
 
 1. **Grant or Deny Access**
-
    - Add member to team if approved
    - Document reason for denial if rejected
    - Notify requestor of decision
 
 1. **Set Appropriate Permissions**
-
    - Assign correct permission level
    - Add to specific repositories if needed
    - Review access periodically

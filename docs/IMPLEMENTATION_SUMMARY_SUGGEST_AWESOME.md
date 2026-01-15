@@ -227,7 +227,6 @@ All five prompts now share:
 ### Quick Start
 
 1. Choose the appropriate prompt:
-
    - Need specific workflows? → `suggest-awesome-github-copilot-prompts`
    - Need language standards? → `suggest-awesome-github-copilot-instructions`
    - Need role personas? → `suggest-awesome-github-copilot-chatmodes`
@@ -235,14 +234,12 @@ All five prompts now share:
    - Need comprehensive bundles? → `suggest-awesome-github-copilot-collections`
 
 1. Review the output:
-
    - Start with 🎯 Executive Summary
    - Focus on 🔥🔥🔥 Critical priority
    - Check quality indicators (⭐ 📈 💬)
    - Review category breakdown for gaps
 
 1. Make decisions:
-
    - > 300 stars + 📈 trending = high confidence
    - Critical priority + >70% new = install now
    - Check setup time and ROI indicators

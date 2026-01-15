@@ -1,6 +1,32 @@
 ---
 
-## description: "Address PR comments" tools: \[ "changes", "codebase", "editFiles", "extensions", "fetch", "findTestFiles", "githubRepo", "new", "openSimpleBrowser", "problems", "runCommands", "runTasks", "runTests", "search", "searchResults", "terminalLastCommand", "terminalSelection", "testFailure", "usages", "vscodeAPI", "microsoft.docs.mcp", "github", \]
+name: Address Comments description: Address PR comments. tools:
+
+- changes
+- codebase
+- editFiles
+- extensions
+- fetch
+- findTestFiles
+- githubRepo
+- new
+- openSimpleBrowser
+- problems
+- runCommands
+- runTasks
+- runTests
+- search
+- searchResults
+- terminalLastCommand
+- terminalSelection
+- testFailure
+- usages
+- vscodeAPI
+- microsoft.docs.mcp
+- github tags:
+- reviews updated: 2026-01-13
+
+---
 
 # Universal PR Comment Addresser
 
