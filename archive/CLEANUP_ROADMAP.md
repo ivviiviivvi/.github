@@ -7,7 +7,7 @@ For current project status and next steps, see:
 
 - [Project Retrospective: Lessons Learned](../docs/PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md)
 - [Phase 7 Completion Summary](../docs/guides/PHASE_7_EXECUTION_SUMMARY.md)
-- [Current Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+- [Current Issues](https://github.com/ivviiviivvi/.github/issues)
 
 ---
 
