@@ -70,6 +70,12 @@ New to this repository? Start here:
 
 ### Workflow & Automation
 
+- [WORKFLOW_DESIGN.md](WORKFLOW_DESIGN.md) - ⭐ Complete workflow architecture
+- [CONTRIBUTOR_WORKFLOW.md](CONTRIBUTOR_WORKFLOW.md) - ⭐ Contributor guide
+- [MAINTAINER_WORKFLOW.md](MAINTAINER_WORKFLOW.md) - ⭐ Maintainer operations
+- [WORKFLOW_VISUALIZATION.md](WORKFLOW_VISUALIZATION.md) - ⭐ Flow diagrams
+- [WORKFLOW_IMPLEMENTATION_SUMMARY.md](WORKFLOW_IMPLEMENTATION_SUMMARY.md) - ⭐
+  Deployment guide
 - [WORKFLOW_OPTIMIZATION_INDEX.md](guides/WORKFLOW_OPTIMIZATION_INDEX.md) -
   Complete workflow guide
 - [WORKFLOW_QUICK_REFERENCE.md](guides/WORKFLOW_QUICK_REFERENCE.md) - Quick
