@@ -24,10 +24,12 @@ except ImportError:  # pragma: no cover - fallback parser below
 
 
 LINK_WITH_COMMENT_RE = re.compile(
-    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)(?P<suffix>\)\s*<!--\s*link:(?P<key>[A-Za-z0-9._-]+)\s*-->)"
+    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)"
+    r"(?P<suffix>\)\s*<!--\s*link:(?P<key>[A-Za-z0-9._-]+)\s*-->)"
 )
 UNANNOTATED_LINK_RE = re.compile(
-    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)(?P<suffix>\))(?!\s*<!--\s*link:)"
+    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)"
+    r"(?P<suffix>\))(?!\s*<!--\s*link:)"
 )
 PLACEHOLDER_RE = re.compile(r"^\[\[link:(?P<key>[A-Za-z0-9._-]+)\]\]$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
@@ -35,8 +37,14 @@ FENCE_RE = re.compile(r"^\s*(```|~~~)")
 DEFAULT_EXCLUDES = {
     ".git",
     "node_modules",
+    "vendor",
+    "dist",
+    "build",
     ".venv",
     "venv",
+    ".cache",
+    "archive",
+    "docs/archive",
     "docs/_site",
     "docs/.jekyll-cache",
     "project_meta/reports",
@@ -183,7 +191,9 @@ def replace_links(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Resolve managed Markdown links.")
+    parser = argparse.ArgumentParser(
+        description="Resolve managed Markdown links."
+    )
     parser.add_argument(
         "--map",
         dest="map_path",
@@ -225,7 +235,7 @@ def main() -> int:
         return 2
 
     link_map = load_link_map(map_path)
-    reverse_map = {}
+    reverse_map: dict[str, str] = {}
     for key, value in link_map.items():
         reverse_map.setdefault(value, key)
 
@@ -261,7 +271,9 @@ def main() -> int:
 
     if total_missing > 0:
         return 1
-    if args.check and (changed_files > 0 or total_updates > 0 or total_annotations > 0):
+    if args.check and (
+        changed_files > 0 or total_updates > 0 or total_annotations > 0
+    ):
         return 1
 
     return 0
