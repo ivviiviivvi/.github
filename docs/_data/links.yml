@@ -1,0 +1,59 @@
+github:
+  org: https://github.com/ivviiviivvi
+  root: https://github.com
+  dotgithub: https://github.com/ivviiviivvi/.github
+  org_discussions: https://github.com/orgs/ivviiviivvi/discussions
+  legacy_discussions: https://github.com/ivi374forivi/.github/discussions
+  discussions: https://github.com/ivviiviivvi/.github/discussions
+  issues: https://github.com/ivviiviivvi/.github/issues
+  issues_new: https://github.com/ivviiviivvi/.github/issues/new/choose
+  good_first_issue: https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+  bug_report: https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml
+  feature_request: https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml
+  security_vulnerability: https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml
+  security_advisory: https://github.com/ivviiviivvi/.github/security/advisories/new
+  dependabot: https://github.com/dependabot
+  detect_secrets: https://github.com/Yelp/detect-secrets
+  pip_audit: https://github.com/pypa/pip-audit
+  ratchet: https://github.com/sethvargo/ratchet
+  awesome_copilot: https://github.com/github/awesome-copilot
+  awesome_copilot_instructions: https://github.com/github/awesome-copilot/tree/main/instructions/
+  awesome_copilot_python_instruction: https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md
+  awesome_copilot_typescript_instruction: https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md
+docs:
+  docker: https://docs.docker.com/
+  docker_desktop: https://www.docker.com/products/docker-desktop
+  github_actions: https://docs.github.com/en/actions
+  github_actions_root: https://docs.github.com/actions
+  github_actions_workflow_syntax: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+  github_actions_caching: https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+  github_discussions: https://docs.github.com/en/discussions
+  github_issues: https://docs.github.com/en/issues
+  github_projects: https://docs.github.com/en/issues/planning-and-tracking-with-projects
+  github_wikis: https://docs.github.com/en/communities/documenting-your-project-with-wikis
+  github_communities: https://docs.github.com/en/communities
+  github_copilot: https://docs.github.com/copilot
+  github_code_security: https://docs.github.com/en/code-security
+  github_actions_hardening: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  modelcontextprotocol: https://modelcontextprotocol.io/
+  vscode: https://code.visualstudio.com/
+  vscode_remote_containers: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+standards:
+  conventional_commits: https://www.conventionalcommits.org/
+  semver: https://semver.org/
+  semver_spec: https://semver.org/spec/v2.0.0.html
+  keepachangelog: https://keepachangelog.com/en/1.0.0/
+badges:
+  vs_code_install: https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white
+  vs_code_insiders_install: https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white
+  install_vs_code: https://img.shields.io/badge/Install-VS_Code-0098FF?style=flat-square
+  install_vs_code_insiders: https://img.shields.io/badge/Install-VS_Code_Insiders-24bfa5?style=flat-square
+  install_visual_studio: https://img.shields.io/badge/Install-Visual_Studio-C16FDE?style=flat-square
+  live_demo: https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge
+  pre_commit: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit
+  github_actions: https://img.shields.io/badge/GitHub%20Actions-98%20workflows-blue?logo=github-actions
+  security: https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security
+  docs: https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown
+examples:
+  placeholder: https://example.com
+  sample_profile: https://github.com/4444JPP

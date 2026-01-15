@@ -3,7 +3,7 @@
 > Comprehensive guide for configuring API keys and optional integrations
 
 **Last Updated:** December 21, 2025 **Maintainer:** @4444JPP **Support:**
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 
@@ -859,7 +859,8 @@ Video Generation: Free
 
 ### Documentation
 
-- 📋 [Walkthrough Request Template](../ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📋
+  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 - 📢 [Announcement & Quick Start](./WALKTHROUGH_ANNOUNCEMENT.md)
 - 🏗️ [System Architecture](./AI_IMPLEMENTATION_GUIDE.md)
 - 🤝 [Contributing Guide](./CONTRIBUTING.md)
@@ -867,8 +868,8 @@ Video Generation: Free
 ### Getting Help
 
 - 💬 **GitHub Discussions**:
-  [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 **Bug Reports**: [File an issue](../ISSUE_TEMPLATE/)
+  [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 **Bug Reports**: [File an issue](../.github/ISSUE_TEMPLATE/)
 - 📧 **Direct Support**: Contact @4444JPP
 - 📖 **Documentation Hub**: [View all docs](./)
 
@@ -922,7 +923,7 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 ---
 
 **Last Updated:** December 21, 2025 **Version:** 1.0.0 **Feedback:**
-[Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)
+[Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 

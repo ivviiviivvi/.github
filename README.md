@@ -1,10 +1,10 @@
 # ivviiviivvi Organization Policies
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-98%20workflows-blue?logo=github-actions)](https://github.com/ivviiviivvi/.github/actions)
-[![Security Scanning](https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security)](https://github.com/ivviiviivvi/.github)
-[![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](docs/INDEX.md)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)<!-- link:badges.live_demo -->](https://demo-ivviiviivvi-.github.agentsphere.dev)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)<!-- link:badges.pre_commit -->](https://github.com/pre-commit/pre-commit)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-98%20workflows-blue?logo=github-actions)<!-- link:badges.github_actions -->](https://github.com/ivviiviivvi/.github/actions)
+[![Security Scanning](https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security)<!-- link:badges.security -->](https://github.com/ivviiviivvi/.github)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)<!-- link:badges.docs -->](docs/INDEX.md)
 
 This repository contains community health files and organization-wide policies
 for the ivviiviivvi GitHub organization.
@@ -31,10 +31,10 @@ for the ivviiviivvi GitHub organization.
    ```
 
 1. **Make your first contribution:** See open
-   [good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+   [good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)<!-- link:github.good_first_issue -->
 
 **Need help?** Check [SUPPORT.md](SUPPORT.md) or
-[start a discussion](https://github.com/orgs/ivviiviivvi/discussions).
+[start a discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->.
 
 ---
 
@@ -455,8 +455,8 @@ transform our CI/CD from "Very Good" (B+) to "Industry-Leading" (A+).
 ### GitHub Copilot Customizations
 
 This repository includes comprehensive GitHub Copilot customizations from the
-[github/awesome-copilot](https://github.com/github/awesome-copilot) repository
-for organization-wide implementation.
+[github/awesome-copilot](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
+repository for organization-wide implementation.
 
 #### 🚀 Quick Start
 
@@ -1338,7 +1338,7 @@ report privately:
 
 - Email: <security@ivviiviivvi.com>
 - GitHub Security Advisory:
-  [Create Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+  [Create Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 **Response Timeline:**
 
@@ -1352,7 +1352,7 @@ report privately:
 ### Getting Help
 
 - **Questions**:
-  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
+  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation**: [docs/](docs/)
 - **Support**: [SUPPORT.md](SUPPORT.md)
 - **Email**: <support@ivviiviivvi.com>

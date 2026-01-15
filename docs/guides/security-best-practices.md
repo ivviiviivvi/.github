@@ -255,7 +255,9 @@ Personal Identifiable Information (PII) includes:
 
 **✅ BEST PRACTICE: Pin Actions to Full Commit SHAs**
 
-We use [Ratchet](https://github.com/sethvargo/ratchet) to maintain SHA pinning:
+We use
+[Ratchet](https://github.com/sethvargo/ratchet)<!-- link:github.ratchet --> to
+maintain SHA pinning:
 
 ```yaml
 # ✅ CORRECT - SHA pinned with ratchet comment
@@ -563,14 +565,17 @@ Enable these features for all repositories:
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
-- [GitHub Security Best Practices](https://docs.github.com/en/code-security)
+- [GitHub Security Best Practices](https://docs.github.com/en/code-security)<!-- link:docs.github_code_security -->
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
 
 ### Tools
 
-- [detect-secrets](https://github.com/Yelp/detect-secrets) - Secret scanning
-- [Ratchet](https://github.com/sethvargo/ratchet) - Action SHA pinning
-- [pip-audit](https://github.com/pypa/pip-audit) - Python vulnerability scanning
+- [detect-secrets](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->
+  \- Secret scanning
+- [Ratchet](https://github.com/sethvargo/ratchet)<!-- link:github.ratchet --> -
+  Action SHA pinning
+- [pip-audit](https://github.com/pypa/pip-audit)<!-- link:github.pip_audit --> -
+  Python vulnerability scanning
 - [Bandit](https://github.com/PyCQA/bandit) - Python security linter
 
 ---
@@ -578,9 +583,9 @@ Enable these features for all repositories:
 ## Questions or Concerns?
 
 - **Security Issues**: Use
-  [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+  [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 - **General Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation Improvements**: Submit a [pull request](../CONTRIBUTING.md)
 
 ---

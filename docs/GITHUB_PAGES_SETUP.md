@@ -464,9 +464,11 @@ Access at: `https://ivviiviivvi.github.io/.github/_data/api/walkthroughs.json`
 
 Need help? Contact:
 
-- 💬 **GitHub**: [@4444JPP](https://github.com/4444JPP)
+- 💬 **GitHub**:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - 📚 **Documentation**: [AgentSphere Setup](./AGENTSPHERE_SETUP.md)
-- 🐛 **Issues**: [Report a bug](https://github.com/ivviiviivvi/.github/issues)
+- 🐛 **Issues**:
+  [Report a bug](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - 📖 **Jekyll Docs**: https://jekyllrb.com/docs/
 
 ---

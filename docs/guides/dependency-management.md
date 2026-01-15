@@ -721,15 +721,16 @@ Before adding a new dependency, verify:
 
 ### Dependency Management Tools
 
-- **[Dependabot](https://github.com/dependabot)** - Automated dependency updates
+- **[Dependabot](https://github.com/dependabot)<!-- link:github.dependabot -->**
+  \- Automated dependency updates
 - **[Renovate](https://github.com/renovatebot/renovate)** - Alternative to
   Dependabot
-- **[pip-audit](https://github.com/pypa/pip-audit)** - Python vulnerability
-  scanner
+- **[pip-audit](https://github.com/pypa/pip-audit)<!-- link:github.pip_audit -->**
+  \- Python vulnerability scanner
 - **[npm audit](https://docs.npmjs.com/cli/v8/commands/npm-audit)** - Node.js
   vulnerability scanner
-- **[Ratchet](https://github.com/sethvargo/ratchet)** - GitHub Actions SHA
-  pinning
+- **[Ratchet](https://github.com/sethvargo/ratchet)<!-- link:github.ratchet -->**
+  \- GitHub Actions SHA pinning
 
 ### Security Resources
 
@@ -753,9 +754,9 @@ Before adding a new dependency, verify:
 ## Questions or Feedback?
 
 - **Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Issues**: Report in
-  [issue tracker](https://github.com/ivviiviivvi/.github/issues)
+  [issue tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Improvements**: Submit a [pull request](../CONTRIBUTING.md)
 
 ---

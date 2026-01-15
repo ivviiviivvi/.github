@@ -669,7 +669,7 @@ Want to improve the Mouthpiece System?
 - **Integration examples**: Share your workflows
 - **Documentation**: Improve guides and examples
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 

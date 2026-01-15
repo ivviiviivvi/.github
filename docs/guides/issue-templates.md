@@ -1,101 +1,236 @@
-# Issue Templates
+# Issue Templates Guide
 
-This guide documents the issue templates under `.github/ISSUE_TEMPLATE/`, the
-current validation status, and follow-up items.
+> **Quick Reference:** How to use GitHub issue templates in this organization
 
-## Issue forms (YAML)
+## Overview
 
-- accessibility_issue.yml: Accessibility issues; labels: accessibility,
-  needs-triage
-- best-practices-review.yml: Best practices review; labels: best-practices,
-  review, enhancement
-- bug_report.yml: Bug reports; labels: bug, triage
-- community-health-check.yml: Community health checks; labels: community,
-  health-check, documentation
-- documentation.yml: Documentation updates; labels: documentation, triage
-- feature_request.yml: Feature requests; labels: enhancement, triage
-- infrastructure.yml: Infrastructure or DevOps requests; labels: infrastructure,
-  devops, needs-triage
-- performance_issue.yml: Performance issues; labels: performance, needs-triage
-- task.yml: Tasks; labels: task
-- tech_debt.yml: Technical debt or refactoring; labels: tech-debt, refactoring,
-  needs-triage
-- walkthrough-request.yml: Walkthrough requests; labels: walkthrough,
-  feature-request, documentation
+This repository provides **17 specialized issue templates** to streamline bug
+reports, feature requests, and other contributions. Using the right template
+ensures your issue contains the necessary information for quick triage and
+resolution.
 
-## Legacy markdown templates
+## Available Templates
 
-These files are legacy markdown templates that duplicate the issue forms. The
-front matter is valid; consider removing them if you want to use only forms:
+### 🐛 Bug Reports
 
-- bug_report.md
-- custom.md
-- documentation.md
-- feature_request.md
-- question.md
+#### `bug_report.yml` ⭐ **Recommended**
 
-## Validation checklist
+- **Purpose:** Report bugs with structured fields
+- **Use when:** Something isn't working as expected
+- **Fields:** Environment, steps to reproduce, expected vs actual behavior
+- **Auto-labels:** `bug`
 
-- YAML issue forms parse cleanly and include name, description, and body.
-- Body items include type and id (non-markdown types) and attributes with
-  labels.
-- config.yml contains contact_links with valid URLs (no placeholders).
-- Labels are defined for each issue form.
-- Template labels exist in `.github/labels.yml`.
-- Template labels exist in the repository label set.
-- Logs or attachment fields include a warning against sharing sensitive data.
-- Security reporting path points to a private advisory workflow.
-- Template links point to valid repository documents.
+#### `bug_report.md` (Legacy)
 
-## Latest validation (2026-01-14)
+- **Purpose:** Markdown-based bug report
+- **Use when:** You prefer freeform markdown
+- **Status:** Deprecated - use `bug_report.yml` instead
 
-- YAML issue forms: OK (11 files).
-- config.yml: OK (3 contact links).
-- Markdown templates: OK (front matter validated).
-- Manual check: bug_report.yml logs field includes a PII warning.
-- Links updated to canonical docs and correct org URLs.
-- Labels synced in `.github/labels.yml` for all templates.
-- Repo labels synced to match `.github/labels.yml`.
-- Created and closed template validation issues #230-240; labels matched
-  expected template label sets.
-- Security template removed; config.yml directs reporters to private advisories.
+### ✨ Enhancements
 
-## Re-run validation
+#### `feature_request.yml` ⭐ **Recommended**
 
-```bash
-python - <<'PY'
-from pathlib import Path
-import yaml
+- **Purpose:** Request new features with business case
+- **Use when:** You want new functionality
+- **Fields:** Problem statement, proposed solution, alternatives
+- **Auto-labels:** `enhancement`
 
-issue_dir = Path(".github/ISSUE_TEMPLATE")
-for path in sorted(issue_dir.glob("*.yml")):
-    if path.name == "config.yml":
-        continue
-    data = yaml.safe_load(path.read_text())
-    assert isinstance(data, dict), f"{path.name}: not a mapping"
-    for key in ("name", "description", "body"):
-        assert key in data, f"{path.name}: missing {key}"
-    for item in data.get("body", []):
-        if item.get("type") != "markdown":
-            assert item.get("id"), f"{path.name}: missing id"
-            assert item.get("attributes", {}).get("label"), f"{path.name}: missing label"
-labels = set()
-labels_data = yaml.safe_load(Path(".github/labels.yml").read_text())
-items = labels_data.get("labels") if isinstance(labels_data, dict) else labels_data
-if isinstance(items, list):
-    for entry in items:
-        if isinstance(entry, dict) and "name" in entry:
-            labels.add(entry["name"])
-missing = []
-for path in sorted(issue_dir.glob("*.yml")):
-    if path.name == "config.yml":
-        continue
-    data = yaml.safe_load(path.read_text())
-    lbls = data.get("labels")
-    if isinstance(lbls, list):
-        missing.extend([lbl for lbl in lbls if lbl not in labels])
-if missing:
-    raise SystemExit(f"Missing labels: {sorted(set(missing))}")
-print("Issue forms and labels validated")
-PY
+#### `feature_request.md` (Legacy)
+
+- **Purpose:** Markdown-based feature request
+- **Status:** Deprecated - use `feature_request.yml` instead
+
+### 🔧 Specialized Issues
+
+#### `accessibility_issue.yml`
+
+- **Purpose:** Report accessibility concerns
+- **Use when:** WCAG compliance issues, screen reader problems
+- **Fields:** WCAG criteria, user impact, severity
+- **Auto-labels:** `accessibility`, `a11y`
+
+#### `best-practices-review.yml`
+
+- **Purpose:** Request code or process review
+- **Use when:** Seeking feedback on implementation approach
+- **Fields:** Area to review, specific concerns, context
+- **Auto-labels:** `review`, `best-practices`
+
+#### `community-health-check.yml`
+
+- **Purpose:** Provide community feedback
+- **Use when:** Suggesting improvements to community processes
+- **Fields:** Health metrics, concerns, suggestions
+- **Auto-labels:** `community`
+
+#### `infrastructure.yml`
+
+- **Purpose:** Report infrastructure/deployment issues
+- **Use when:** CI/CD, deployment, or infrastructure problems
+- **Fields:** Environment, affected services, logs
+- **Auto-labels:** `infrastructure`, `devops`
+
+#### `performance_issue.yml`
+
+- **Purpose:** Report performance problems
+- **Use when:** Slowness, memory leaks, inefficiency
+- **Fields:** Baseline metrics, current metrics, profiling data
+- **Auto-labels:** `performance`, `optimization`
+
+#### `tech_debt.yml`
+
+- **Purpose:** Track technical debt
+- **Use when:** Code needs refactoring or modernization
+- **Fields:** Current state, proposed improvements, impact
+- **Auto-labels:** `tech-debt`, `refactoring`
+
+#### `walkthrough-request.yml`
+
+- **Purpose:** Request interactive demo or tutorial
+- **Use when:** You want a guided walkthrough created
+- **Fields:** Topic, target audience, format preferences
+- **Auto-labels:** `walkthrough`, `documentation`
+
+### 📚 Documentation
+
+#### `documentation.yml`
+
+- **Purpose:** Request documentation improvements
+- **Use when:** Docs are missing, unclear, or outdated
+- **Fields:** Affected docs, what's missing, suggested improvements
+- **Auto-labels:** `documentation`
+
+#### `documentation.md` (Legacy)
+
+- **Purpose:** Markdown-based documentation request
+- **Status:** Deprecated - use `documentation.yml` instead
+
+### 🎯 General
+
+#### `task.yml`
+
+- **Purpose:** Track general tasks
+- **Use when:** Work item that doesn't fit other categories
+- **Fields:** Description, acceptance criteria, dependencies
+- **Auto-labels:** `task`
+
+#### `question.md`
+
+- **Purpose:** Ask questions
+- **Use when:** You need help or clarification
+- **Note:** Consider using GitHub Discussions instead
+- **Auto-labels:** `question`
+
+#### `custom.md`
+
+- **Purpose:** Custom issue not fitting other templates
+- **Use when:** None of the above templates apply
+- **Note:** This is a fallback - try to use a specific template
+
+## Template Selection Guide
+
+```mermaid
+graph TD
+    A[New Issue] --> B{What type?}
+    B -->|Something broken| C[bug_report.yml]
+    B -->|Want new feature| D[feature_request.yml]
+    B -->|Performance problem| E[performance_issue.yml]
+    B -->|Accessibility concern| F[accessibility_issue.yml]
+    B -->|Infrastructure issue| G[infrastructure.yml]
+    B -->|Docs need update| H[documentation.yml]
+    B -->|Tech debt| I[tech_debt.yml]
+    B -->|Request walkthrough| J[walkthrough-request.yml]
+    B -->|Need review| K[best-practices-review.yml]
+    B -->|Community feedback| L[community-health-check.yml]
+    B -->|Task tracking| M[task.yml]
+    B -->|General question| N[question.md or Discussions]
+    B -->|None fit| O[custom.md]
 ```
+
+## Best Practices
+
+### DO ✅
+
+- **Search first** - Check if your issue already exists
+- **Use the right template** - Choose the most specific template
+- **Fill all required fields** - Helps with quick triage
+- **Provide context** - Include relevant details
+- **Add labels** - Help categorize your issue (auto-applied by templates)
+- **Link related issues** - Use `#issue-number` to reference
+
+### DON'T ❌
+
+- **Skip required fields** - Makes triage difficult
+- **Create duplicates** - Search before creating
+- **Mix multiple issues** - Create separate issues instead
+- **Use vague titles** - Be specific and descriptive
+- **Post sensitive data** - Remove secrets, PII, etc.
+
+## For Template Maintainers
+
+### Template Structure
+
+All YAML templates follow this structure:
+
+```yaml
+name: Template Name
+description: Brief description
+title: "[CATEGORY] "
+labels: ["label1", "label2"]
+body:
+  - type: markdown | input | textarea | dropdown | checkboxes
+    attributes:
+      label: Field Label
+      description: Help text
+      placeholder: Example value (optional)
+    validations:
+      required: true | false
+```
+
+### Validation Rules
+
+- **Required fields:** User must fill before submitting
+- **Dropdown fields:** Limit choices to predefined options
+- **Checkbox fields:** Allow multiple selections
+- **Input fields:** Single-line text
+- **Textarea fields:** Multi-line text with optional placeholder
+
+### Auto-applied Labels
+
+Labels specified in template frontmatter are automatically applied when the
+issue is created. This ensures consistent categorization.
+
+### Updating Templates
+
+When updating templates:
+
+1. **Test changes** - Create test issues to verify functionality
+1. **Update this guide** - Keep documentation in sync
+1. **Announce changes** - Notify users of significant updates
+1. **Version templates** - Consider adding version comments
+
+## Related Resources
+
+- **GitHub Discussions:** For questions and general discussion
+- **Contributing Guide:** See `CONTRIBUTING.md`
+- **Issue Triage Process:** See `docs/guides/issue-triage.md`
+- **Label Guide:** See `docs/LABELS.md`
+
+## Support
+
+**Need help choosing a template?**
+
+- Post in
+  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- Ask in the #help channel (if applicable)
+- Use the `question.md` template
+
+**Found a problem with a template?**
+
+- Use `bug_report.yml` to report template issues
+- Tag with `template-issue` label
+
+---
+
+**Last Updated:** 2026-01-15\
+**Maintained by:** Documentation Team

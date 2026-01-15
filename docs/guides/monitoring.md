@@ -713,7 +713,7 @@ gh workflow run usage-monitoring.yml -f alert_threshold=80
 
 - [Testing Best Practices](testing-best-practices.md)
 - [Workflow Optimization Guide](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
-- [GitHub Actions Documentation](https://docs.github.com/actions)
+- [GitHub Actions Documentation](https://docs.github.com/actions)<!-- link:docs.github_actions_root -->
 
 ### Workflows
 

@@ -278,7 +278,7 @@ These root files now redirect to organized locations:
 
 **Need Help?**
 
-- [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+- [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - [Support Guide](governance/SUPPORT.md)
 
 ---

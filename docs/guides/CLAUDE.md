@@ -430,7 +430,7 @@ Use specialized templates via `?template=<name>.md`:
 ## GitHub Copilot Customizations
 
 This repository includes **300+ GitHub Copilot customizations** from
-[github/awesome-copilot](https://github.com/github/awesome-copilot).
+[github/awesome-copilot](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->.
 
 ### 1. Agents (14 files)
 

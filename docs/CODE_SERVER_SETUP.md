@@ -666,13 +666,15 @@ proxy_set_header Connection "upgrade";
 
 - [code-server Documentation](https://coder.com/docs/code-server)
 - [VS Code Web](https://code.visualstudio.com/docs/remote/vscode-server)
-- [Docker Docs](https://docs.docker.com/)
+- [Docker Docs](https://docs.docker.com/)<!-- link:docs.docker -->
 
 ## Support
 
 - 📖 [Main Protocols](./WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

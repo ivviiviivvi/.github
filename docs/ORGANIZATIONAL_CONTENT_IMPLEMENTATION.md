@@ -538,9 +538,9 @@ git push
 
    ## Resources
 
-   - [Master Index](link) - Start here
-   - [Training Videos](link) - Quick walkthroughs
-   - [FAQ](link) - Common questions
+   - [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - Start here
+   - [Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md) - Quick walkthroughs
+   - [Summary](ORGANIZATIONAL_CONTENT_SUMMARY.md) - Common questions
 
    ## Getting Help
 

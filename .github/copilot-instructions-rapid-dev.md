@@ -531,7 +531,7 @@ pre-commit install
 ## References
 
 - [AI Rapid Workflow Guide](../AI_RAPID_WORKFLOW.md)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Pre-commit Hooks](https://pre-commit.com/)
 - [GitHub Auto-merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
 - [Semantic Versioning](../SEMANTIC_VERSIONING.md)

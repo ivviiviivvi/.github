@@ -254,14 +254,13 @@ All templates have been validated for:
 
 ### For Running Sessions
 
-1. Review the [Complete Guide](docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
+1. Review the [Complete Guide](GITHUB_BEST_PRACTICES_SESSIONS.md)
 1. Start with a 30-minute Knowledge Share
 1. Use provided templates and checklists
 1. Track action items
 1. Measure and iterate
 
-**Quick Start**: See
-[Quick Reference Guide](docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md)
+**Quick Start**: See [Quick Reference Guide](BEST_PRACTICES_QUICK_REFERENCE.md)
 
 ---
 
@@ -373,12 +372,12 @@ Track these metrics to measure impact:
 ### Templates
 
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- [Issue Templates](../../ISSUE_TEMPLATE/)
-- [PR Templates](../../PULL_REQUEST_TEMPLATE/)
+- [Issue Templates](../../.github/ISSUE_TEMPLATE/)
+- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
 
 ### External
 
-- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
+- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
 - [Issue Forms Syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms)
 - [Community Health Files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
 
@@ -388,7 +387,8 @@ Track these metrics to measure impact:
 
 Need help implementing or using these templates?
 
-- 💬 [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)
+- 💬
+  [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->
 - 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
 - 📖 [Read the Docs](../../)
 - 🤝 [Contributing Guide](../CONTRIBUTING.md)

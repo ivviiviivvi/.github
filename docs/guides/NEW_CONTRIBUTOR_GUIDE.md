@@ -82,12 +82,12 @@ gh pr create --fill
 
 Install these tools before starting:
 
-| Tool               | Purpose              | Installation                                                                         |
-| ------------------ | -------------------- | ------------------------------------------------------------------------------------ |
-| **Git**            | Version control      | [git-scm.com](https://git-scm.com/)                                                  |
-| **GitHub CLI**     | GitHub operations    | `brew install gh` or [cli.github.com](https://cli.github.com/)                       |
-| **VS Code**        | Code editor          | [code.visualstudio.com](https://code.visualstudio.com/)                              |
-| **Docker Desktop** | DevContainer support | [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop) |
+| Tool               | Purpose              | Installation                                                                                                          |
+| ------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Git**            | Version control      | [git-scm.com](https://git-scm.com/)                                                                                   |
+| **GitHub CLI**     | GitHub operations    | `brew install gh` or [cli.github.com](https://cli.github.com/)                                                        |
+| **VS Code**        | Code editor          | [code.visualstudio.com](https://code.visualstudio.com/)<!-- link:docs.vscode -->                                      |
+| **Docker Desktop** | DevContainer support | [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop --> |
 
 ### Option 1: DevContainer Setup (Recommended)
 
@@ -101,7 +101,7 @@ Install these tools before starting:
 
 1. **Install Prerequisites**:
    - VS Code +
-     [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+     [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
    - Docker Desktop (running)
 
 1. **Clone and Open**:
@@ -1109,8 +1109,8 @@ official actions when possible.
 
 **GitHub Discussions**:
 
-- [Ask Questions](https://github.com/orgs/ivviiviivvi/discussions) - Get help
-  from the community
+- [Ask Questions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Get help from the community
 - [Ideas](https://github.com/orgs/ivviiviivvi/discussions/categories/ideas) -
   Share suggestions
 - [Show and Tell](https://github.com/orgs/ivviiviivvi/discussions/categories/show-and-tell)
@@ -1118,8 +1118,8 @@ official actions when possible.
 
 **GitHub Issues**:
 
-- [Report Bugs](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)
-- [Request Features](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)
+- [Report Bugs](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+- [Request Features](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - [Improve Docs](https://github.com/ivviiviivvi/.github/issues/new?template=documentation.yml)
 
 ### Direct Support
