@@ -1,10 +1,19 @@
+---
+
+**ARCHIVED:** This file has been archived as of 2026-01-15 after successful completion of all 10 phases.
+
+For current project status and next steps, see:
+- [Project Retrospective: Lessons Learned](../docs/PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md)
+- [Phase 7 Completion Summary](../docs/guides/PHASE_7_EXECUTION_SUMMARY.md)
+- [Current Issues](https://github.com/ivviiviivvi/.github/issues)
+
+---
+
 # Comprehensive Codebase Cleanup & Consolidation Roadmap
 
 # Organization: ivviiviivvi/.github
 
 # Generated: 2026-01-13 | Completed: 2026-01-15
-
-> **📦 ARCHIVED:** This roadmap has been completed and archived. An archival copy is maintained at [`archive/CLEANUP_ROADMAP.md`](archive/CLEANUP_ROADMAP.md). For post-completion insights, see [Project Retrospective: Lessons Learned](docs/PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md).
 
 ## Executive Summary
 
