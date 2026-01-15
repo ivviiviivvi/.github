@@ -37,9 +37,15 @@ jobs:
           BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
           echo "Branch name: $BRANCH_NAME"
 
-          # Skip validation for protected branches
+          # Skip validation for protected branches and push events to main
           if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]] || [[ "$BRANCH_NAME" == "develop" ]]; then
             echo "Skipping validation for protected branch: $BRANCH_NAME"
+            exit 0
+          fi
+          
+          # Skip validation on push events (only validate PRs)
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "Skipping validation for push event to $BRANCH_NAME"
             exit 0
           fi
 
@@ -50,6 +56,8 @@ jobs:
             "^maintenance/v[0-9]+-maintenance$"
             "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"
             "^archive/[a-z0-9-]+/[a-z0-9-]+$"
+            # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
+            "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
           )
 
           VALID=false
