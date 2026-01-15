@@ -42,7 +42,7 @@ jobs:
             echo "Skipping validation for protected branch: $BRANCH_NAME"
             exit 0
           fi
-          
+
           # Skip validation on push events (only validate PRs)
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "Skipping validation for push event to $BRANCH_NAME"

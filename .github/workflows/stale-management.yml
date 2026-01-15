@@ -1,0 +1,321 @@
+name: Stale Item Management
+
+on:
+  schedule:
+    # Run daily at 1 AM UTC
+    - cron: 0 1 * * *
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run (only log, dont take action)
+        required: false
+        default: "false"
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  stale-issues:
+    name: Manage Stale Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark and close stale issues
+        uses: actions/stale@v9
+        with:
+          repo-token:
+            ${{ secrets.GITHUB_TOKEN }}
+
+            # Issue Configuration
+          stale-issue-message: |
+            👋 This issue has been automatically marked as stale due to inactivity.
+
+            **Why?** Issues with no activity for 90 days are assumed to be no longer relevant.
+
+            **What happens next?**
+            - This issue will be closed in 7 days if no further activity occurs
+            - You can remove the stale label to keep it open
+            - Commenting will automatically remove the stale label
+
+            **Still relevant?**
+            - Add a comment explaining why this should remain open
+            - Provide any updates or additional context
+            - Indicate if you're still working on it
+
+            Thank you for your contributions! 🙏
+
+            ---
+            *Automated stale issue management*
+
+          close-issue-message: |
+            🔒 This issue has been automatically closed due to inactivity.
+
+            **Closed because:** No activity for 97 days (90 days + 7 day grace period)
+
+            **Need to reopen?**
+            - Comment with updated information
+            - Reference this issue in a new issue or PR
+            - Contact a maintainer if this was closed in error
+
+            Thank you for understanding! The issue can be reopened if needed.
+
+            ---
+            *Automated stale issue closure*
+
+          days-before-stale: 90
+          days-before-close: 7
+          stale-issue-label: stale
+          exempt-issue-labels: "pinned,security,priority: critical,priority: high,status: in-progress,status: in-review"
+          exempt-all-milestones: true
+          operations-per-run:
+            100
+
+            # PR Configuration
+          stale-pr-message: |
+            👋 This pull request has been automatically marked as stale due to inactivity.
+
+            **Why?** PRs with no activity for 30 days are assumed to be abandoned or no longer needed.
+
+            **What happens next?**
+            - This PR will be closed in 7 days if no further activity occurs
+            - You can remove the stale label to keep it open
+            - Pushing new commits will automatically remove the stale label
+
+            **Still working on this?**
+            - Push new commits to show continued work
+            - Comment with a status update
+            - Request review if ready
+            - Indicate if you need help or review
+
+            Thank you for your contributions! 🙏
+
+            ---
+            *Automated stale PR management*
+
+          close-pr-message: |
+            🔒 This pull request has been automatically closed due to inactivity.
+
+            **Closed because:** No activity for 37 days (30 days + 7 day grace period)
+
+            **Want to revive this?**
+            - Reopen the PR and push new commits
+            - Comment explaining the status
+            - Create a new PR with fresh changes
+            - Contact a maintainer if this was closed in error
+
+            Thank you for understanding! The PR can be reopened if needed.
+
+            ---
+            *Automated stale PR closure*
+
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-pr-label: stale
+          exempt-pr-labels: "pinned,priority: critical,priority: high,work-in-progress,awaiting-review"
+          exempt-draft-pr:
+            true
+
+            # General Configuration
+          ascending: true
+          remove-stale-when-updated: true
+          enable-statistics: true
+
+  warn-inactive-assigned:
+    name: Warn on Inactive Assigned Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for inactive assigned issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
+            const now = new Date();
+
+            // Get all open issues that are assigned and in-progress
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'status: in-progress',
+              per_page: 100
+            });
+
+            for (const issue of issues) {
+              // Skip if no assignees
+              if (!issue.assignees || issue.assignees.length === 0) continue;
+
+              // Get issue events to find last activity
+              const events = await github.rest.issues.listEvents({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                per_page: 100
+              });
+
+              // Get comments
+              const comments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                per_page: 100
+              });
+
+              // Find most recent activity
+              let lastActivityDate = new Date(issue.updated_at);
+
+              if (events.length > 0) {
+                const lastEventDate = new Date(events[events.length - 1].created_at);
+                if (lastEventDate > lastActivityDate) {
+                  lastActivityDate = lastEventDate;
+                }
+              }
+
+              if (comments.length > 0) {
+                const lastCommentDate = new Date(comments[comments.length - 1].created_at);
+                if (lastCommentDate > lastActivityDate) {
+                  lastActivityDate = lastCommentDate;
+                }
+              }
+
+              const inactiveMs = now - lastActivityDate;
+
+              // If inactive for 14+ days, warn
+              if (inactiveMs > FOURTEEN_DAYS_MS) {
+                const assigneeLogins = issue.assignees.map(a => `@${a.login}`).join(', ');
+
+                // Check if we already warned recently
+                const recentWarning = comments.some(c =>
+                  c.body.includes('⏰ **Inactivity Check**') &&
+                  (now - new Date(c.created_at)) < 7 * 24 * 60 * 60 * 1000 // Within 7 days
+                );
+
+                if (!recentWarning) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: `⏰ **Inactivity Check**
+
+                    ${assigneeLogins} - This issue has been assigned for ${Math.floor(inactiveMs / (24 * 60 * 60 * 1000))} days with no recent activity.
+
+                    **Please provide an update:**
+                    - Are you still working on this?
+                    - Do you need help or have blockers?
+                    - Should we reassign to someone else?
+
+                    **If no response:**
+                    - This issue will be unassigned and returned to the backlog in 7 days
+                    - You can always pick it up again later
+
+                    Thank you! 🙏
+
+                    ---
+                    *Automated inactivity check - Issue #${issue.number}*`
+                  });
+
+                  // Add label
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: ['inactive-assignment']
+                  });
+                }
+              }
+            }
+
+  unassign-inactive:
+    name: Unassign Long-Inactive Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Unassign from very inactive issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const TWENTY_ONE_DAYS_MS = 21 * 24 * 60 * 60 * 1000;
+            const now = new Date();
+
+            // Get issues labeled as inactive-assignment
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'inactive-assignment',
+              per_page: 100
+            });
+
+            for (const issue of issues) {
+              if (!issue.assignees || issue.assignees.length === 0) continue;
+
+              // Check when inactive label was added
+              const events = await github.rest.issues.listEvents({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                per_page: 100
+              });
+
+              const labeledEvent = events
+                .reverse()
+                .find(e => e.event === 'labeled' && e.label?.name === 'inactive-assignment');
+
+              if (labeledEvent) {
+                const labeledDate = new Date(labeledEvent.created_at);
+                const inactiveLabelAge = now - labeledDate;
+
+                // If labeled inactive for 7+ days, unassign
+                if (inactiveLabelAge > 7 * 24 * 60 * 60 * 1000) {
+                  const assignees = issue.assignees.map(a => a.login);
+                  const assigneeLogins = assignees.map(a => `@${a}`).join(', ');
+
+                  // Unassign
+                  await github.rest.issues.removeAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    assignees: assignees
+                  });
+
+                  // Update labels
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: 'inactive-assignment'
+                  });
+
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: 'status: in-progress'
+                  });
+
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: ['status: backlog']
+                  });
+
+                  // Comment
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: `🔄 **Reassignment**
+
+                    This issue has been unassigned from ${assigneeLogins} due to extended inactivity.
+
+                    **Returned to:** Backlog
+                    **Available for:** Anyone to pick up
+
+                    **Previous assignee:** You're welcome to reassign yourself if you'd like to continue working on this!
+
+                    ---
+                    *Automated inactivity management - Issue #${issue.number}*`
+                  });
+                }
+              }
+            }

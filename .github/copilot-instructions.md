@@ -17,6 +17,12 @@ globs: *
 
 ## WORKFLOW & RELEASE RULES
 
+- The discussion/issue/PR workflow should follow GitHub best practices, standards, and protocols.
+- Use discussions for exploration, issues for commitment, and PRs for implementation.
+- Implement early quality gates at each transition.
+- Ensure clear ownership for every item.
+- Automate processes using GitHub Actions.
+
 ## REFERENCE EXAMPLES
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM

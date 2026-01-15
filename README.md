@@ -56,6 +56,47 @@ organized by category
 - **[GOVERNANCE_ANALYSIS.md](GOVERNANCE_ANALYSIS.md)** - Governance framework
   and decision-making processes
 
+### 🔄 Workflow System (NEW!)
+
+**Complete discussion/issue/PR workflow following GitHub best practices**
+
+Our new workflow system provides a clear path from idea to deployment:
+
+- 📖 **[Workflow Design](docs/WORKFLOW_DESIGN.md)** - Complete architecture and
+  automation strategy
+- 👥 **[Contributor Workflow](docs/CONTRIBUTOR_WORKFLOW.md)** - Step-by-step
+  guide for contributors
+- 🔧 **[Maintainer Workflow](docs/MAINTAINER_WORKFLOW.md)** - Comprehensive guide
+  for maintainers
+- 🎨 **[Workflow Visualization](docs/WORKFLOW_VISUALIZATION.md)** - Flow diagrams
+  and visual representations
+- ✅ **[Implementation Summary](docs/WORKFLOW_IMPLEMENTATION_SUMMARY.md)** -
+  What's implemented and how to deploy
+- 🧪 **[Testing Guide](docs/WORKFLOW_TESTING_GUIDE.md)** - Complete test
+  scenarios for validation
+- 🎓 **[Onboarding Materials](docs/WORKFLOW_ONBOARDING.md)** - Training slides
+  and presentation scripts
+- 📊 **[GitHub Projects Setup](docs/GITHUB_PROJECTS_CONFIGURATION.md)** - Visual
+  tracking and kanban boards
+
+**Features:**
+
+- ✅ Automated issue triage (48-hour SLA enforcement)
+- ✅ Auto-assign reviewers based on CODEOWNERS
+- ✅ Status synchronization between issues and PRs
+- ✅ Stale item management (90-day issues, 30-day PRs)
+- ✅ Clear lifecycle stages with quality gates
+- ✅ Progressive disclosure: Discussion → Issue → PR → Deployment
+- ✅ Metrics dashboard for monitoring workflow health
+
+**Quick Start:**
+
+- **Contributors**: See [Contributor Workflow](docs/CONTRIBUTOR_WORKFLOW.md)
+- **Maintainers**: See [Maintainer Workflow](docs/MAINTAINER_WORKFLOW.md)
+- **Deploy**: Use
+  [Deployment Checklist](.github/ISSUE_TEMPLATE/workflow-deployment.md)
+- **Visualize**: Set up [GitHub Projects](docs/GITHUB_PROJECTS_CONFIGURATION.md)
+
 ### Quick Links
 
 - 📖 [Quick Start Guides](docs/INDEX.md#quick-start) - Get up to speed in 15
