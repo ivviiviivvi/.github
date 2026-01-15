@@ -545,12 +545,14 @@ jobs:
 
 ## Related Documentation
 
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Overall version
+- [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) -
+  Overall version
   control standards
 - [GIT_WORKFLOW.md](GIT_WORKFLOW.md) - Detailed Git workflow
-- [SEMANTIC_VERSIONING.md](SEMANTIC_VERSIONING.md) - Version numbering rules
+- [SEMANTIC_VERSIONING.md](../reference/SEMANTIC_VERSIONING.md) - Version
+  numbering rules
 - [RELEASE_PROCESS.md](RELEASE_PROCESS.md) - Creating and managing releases
-- [docs/BRANCH_PROTECTION.md](docs/BRANCH_PROTECTION.md) - Protection rule
+- [BRANCH_PROTECTION.md](../BRANCH_PROTECTION.md) - Protection rule
   configuration
 
 ---

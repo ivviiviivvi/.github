@@ -357,7 +357,8 @@ We want to hear from you! Please share:
 1. **What features would you like to see?**
 1. **How has this impacted your workflow?**
 
-Post in [GitHub Discussions](../../discussions) or create an issue.
+Post in [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
+or create an issue.
 
 ---
 

@@ -302,7 +302,7 @@ Increase the `timeout-minutes` in your workflow configuration.
 
 ## 📚 Documentation Resources
 
-- 📋 [Walkthrough Request Template](../ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📋 [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 - 🔐 [Secrets Setup Guide](./SECRETS_SETUP.md)
 - 🏗️ [Architecture Documentation](./AI_IMPLEMENTATION_GUIDE.md)
 - 🤝 [Contributing Guidelines](./CONTRIBUTING.md)
@@ -373,7 +373,7 @@ Have questions or need help getting started?
 **Ready to create your first walkthrough?**
 
 👉
-[Create a Walkthrough Request Issue](../ISSUE_TEMPLATE/walkthrough-request.yml)
+[Create a Walkthrough Request Issue](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 👉 [Read the Setup Guide](./SECRETS_SETUP.md) 👉
 [Join the Discussion](https://github.com/orgs/ivviiviivvi/discussions)
 

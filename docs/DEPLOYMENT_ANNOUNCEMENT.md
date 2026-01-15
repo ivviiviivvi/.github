@@ -161,16 +161,16 @@ cp .github/.github/app-deployment-config.yml your-repo/.github/
 
 ### Must-Read
 
-- **[Complete Integration Guide](./docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md)** -
+- **[Complete Integration Guide](AUTONOMOUS_ECOSYSTEM_GUIDE.md)** -
   Everything you need to know
-- **[Deployment Summary](./docs/DEPLOYMENT_SUMMARY.md)** - What was deployed and
+- **[Deployment Summary](DEPLOYMENT_SUMMARY.md)** - What was deployed and
   why
 
 ### Additional Resources
 
-- [Walkthrough Setup Guide](./docs/WALKTHROUGH_GUIDE.md)
-- [AgentSphere Documentation](./docs/AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup](./docs/GITHUB_PAGES_SETUP.md)
+- [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
+- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
+- [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
 
 ---
 

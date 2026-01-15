@@ -492,7 +492,7 @@ def test_handles_connection_error():
 - [conftest.py](../../tests/conftest.py) - Shared fixtures
 - [Test Coverage Workflow](../../.github/workflows/test-coverage.yml) - CI
   configuration
-- [CLEANUP_ROADMAP.md](../CLEANUP_ROADMAP.md) - Phase 8 details
+- [CLEANUP_ROADMAP.md](../../CLEANUP_ROADMAP.md) - Phase 8 details
 
 ---
 

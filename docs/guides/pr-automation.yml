@@ -1,0 +1,152 @@
+# PR Automation Configuration
+# This file controls the behavior of automated PR creation and merging
+
+# Auto PR Creation Settings
+auto_pr:
+  # Enable automatic PR creation when feature branches are pushed
+  enabled: true
+
+  # Branch patterns that trigger auto-PR creation
+  branch_patterns:
+    - feature/**
+    - bugfix/**
+    - hotfix/**
+    - release/**
+
+  # Base branch mapping (branch type -> base branch)
+  base_branches:
+    feature: develop
+    bugfix: develop
+    hotfix: main
+    release: main
+
+  # Default labels to apply to auto-created PRs
+  default_labels:
+    feature: [enhancement, auto-created]
+    bugfix: [bug, auto-created]
+    hotfix: [hotfix, priority:high, auto-created]
+    release: [release, auto-created]
+
+  # Auto-assign PR to author
+  auto_assign: true
+
+  # Automatically mark PR as draft
+  create_as_draft: false
+
+# Auto Merge Settings
+auto_merge:
+  # Enable automatic PR merging
+  enabled: true
+
+  # Require specific labels for auto-merge
+  # Set to empty array [] to allow all PRs marked with 'auto-merge' label
+  required_labels: []
+
+  # Exclude PRs with these labels from auto-merge
+  excluded_labels:
+    - do-not-merge
+    - wip
+    - on-hold
+
+  # Auto-merge triggers
+  triggers:
+    # Auto-merge PRs with 'auto-merge' or 'automerge' label
+    label_based: true
+    # Auto-merge all auto-created PRs
+    auto_created_prs: true
+    # Auto-merge PRs with [auto-merge] in title
+    title_based: true
+
+  # Approval requirements
+  approvals:
+    # Minimum number of approvals required
+    # Can be overridden per branch type
+    minimum: 1
+
+    # Branch-specific approval requirements
+    by_branch_type:
+      feature: 1
+      bugfix: 1
+      hotfix: 0 # Hotfixes can be merged without approval in emergencies
+      release: 2
+
+  # Status check requirements
+  status_checks:
+    # Require all status checks to pass
+    require_all_passed: true
+
+    # Allow auto-merge if these checks are pending
+    # (useful for non-critical checks)
+    allow_pending: []
+
+    # Ignore these specific checks
+    ignore_checks: []
+
+  # Merge conflict handling
+  conflict_resolution:
+    # Attempt to auto-update branch when conflicts are detected
+    auto_update_branch: true
+
+    # Comment on PR when conflicts cannot be auto-resolved
+    notify_on_conflict: true
+
+  # Merge method
+  # Options: 'merge', 'squash', 'rebase'
+  merge_method: squash
+
+  # Branch cleanup after merge
+  delete_branch_after_merge: true
+
+  # Protected branches (never auto-delete these)
+  protected_branches:
+    - main
+    - master
+    - develop
+    - staging
+    - production
+
+# Notification Settings
+notifications:
+  # Post comment when PR is auto-created
+  on_pr_created: true
+
+  # Post comment when attempting auto-merge
+  on_merge_attempt: true
+
+  # Post comment when auto-merge succeeds
+  on_merge_success: true
+
+  # Post comment when auto-merge fails
+  on_merge_failure: true
+
+  # Post comment when conflicts are detected
+  on_conflict_detected: true
+
+# Skip Automation
+# PRs/commits containing these strings will skip automation
+skip_patterns:
+  pr_creation:
+    - "[skip-auto-pr]"
+    - "[no-auto-pr]"
+  merge:
+    - "[skip-auto-merge]"
+    - "[no-auto-merge]"
+
+# Advanced Settings
+advanced:
+  # Maximum PR age (in days) before auto-merge is disabled
+  # Set to 0 to disable this check
+  max_pr_age_days: 30
+
+  # Minimum PR age (in hours) before auto-merge is allowed
+  # Useful to ensure time for review
+  min_pr_age_hours: 0
+
+  # Re-run checks before merging
+  rerun_checks_before_merge: false
+
+  # Require PR description to be at least this many characters
+  min_description_length: 50
+
+  # Require at least one linked issue
+  require_linked_issue: false

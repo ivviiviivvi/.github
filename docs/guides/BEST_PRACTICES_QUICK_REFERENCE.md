@@ -14,7 +14,7 @@ practices:
 - 📖 [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
 - 📚 [Best Practices Overview](./BEST_PRACTICES.md)
 - 💬 [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- 🎫 [Issue Templates](../../ISSUE_TEMPLATE/)
+- 🎫 [Issue Templates](../../.github/ISSUE_TEMPLATE/)
 
 ---
 
@@ -77,7 +77,7 @@ discussions:
 
 ## Enhanced Issue Templates
 
-Located in `ISSUE_TEMPLATE/`, these templates facilitate structured requests:
+Located in `.github/ISSUE_TEMPLATE/`, these templates facilitate structured requests:
 
 ### Best Practices Review (`best-practices-review.yml`)
 

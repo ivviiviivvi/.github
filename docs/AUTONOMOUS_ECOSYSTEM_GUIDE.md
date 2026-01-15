@@ -753,10 +753,10 @@ jobs:
 
 ### Documentation
 
-- [Walkthrough Setup Guide](./docs/WALKTHROUGH_GUIDE.md)
-- [AgentSphere Documentation](./docs/AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup](./docs/GITHUB_PAGES_SETUP.md)
-- [Security Best Practices](./docs/SECURITY.md)
+- [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
+- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
+- [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
+- [Security Best Practices](SECURITY.md)
 
 ### Workflow Files
 
@@ -784,13 +784,13 @@ jobs:
 
 ### Contributing
 
-See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ### Feedback
 
 - Feature requests: Create issue with `enhancement` label
 - Bug reports: Create issue with `bug` label
-- Security issues: See [SECURITY.md](./docs/SECURITY.md)
+- Security issues: See [SECURITY.md](SECURITY.md)
 
 ---
 
@@ -809,5 +809,5 @@ See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for guidelines
 **Maintained by**: @4444JPP\
 **Organization**: ivviiviivvi\
 **License**: See
-[LICENSE](./LICENSE)\
+[LICENSE](../LICENSE)\
 **Last Updated**: 2025-12-22
