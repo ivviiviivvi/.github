@@ -1513,8 +1513,8 @@ fix/password-reset-flow
 ### Best Practices and Standards
 
 - [Trunk-Based Development](https://trunkbaseddevelopment.com/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
 - [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 
 ---

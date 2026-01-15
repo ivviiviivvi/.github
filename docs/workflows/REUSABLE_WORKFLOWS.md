@@ -668,7 +668,7 @@ on:
 
 ## 📖 Additional Resources
 
-- **[GitHub Actions Documentation](https://docs.github.com/actions)**
+- **[GitHub Actions Documentation](https://docs.github.com/actions)<!-- link:docs.github_actions_root -->**
 - **[Reusable Workflows Docs](https://docs.github.com/actions/using-workflows/reusing-workflows)**
 - **[Composite Actions Docs](https://docs.github.com/actions/creating-actions/creating-a-composite-action)**
 - **[Organization Workflows Guide](https://docs.github.com/actions/using-workflows/sharing-workflows-secrets-and-runners-with-your-organization)**
@@ -730,8 +730,10 @@ Have ideas for new reusable workflows? See our
 
 - 📖
   [View Examples](https://github.com/ivviiviivvi/.github/tree/main/.github/workflows/reusable)
-- 💬 [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Report an Issue](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛
+  [Report an Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

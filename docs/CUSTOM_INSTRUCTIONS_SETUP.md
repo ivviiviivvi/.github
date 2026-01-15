@@ -107,7 +107,7 @@ Each instruction file has an "Install in VS Code" badge that automatically
 installs it:
 
 1. Browse the
-   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
+   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
    directory
 1. Open an instruction file (e.g., `python.instructions.md`)
 1. Click the **"Install in VS Code"** badge at the top
@@ -261,7 +261,7 @@ languages, tools, and platforms.
 ### By Technology
 
 The
-[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
 directory contains instructions for:
 
 - **109 technologies** across multiple domains
@@ -274,7 +274,7 @@ directory contains instructions for:
 - **Databases**: PostgreSQL, MongoDB, MySQL, Redis, Elasticsearch
 
 **Browse all instructions:**
-[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
 
 ---
 
@@ -556,13 +556,13 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 ### Documentation
 
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 - [VS Code Copilot Settings](https://code.visualstudio.com/docs/copilot/copilot-settings)
-- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)
+- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 
 ### Organization Resources
 
-- [Instructions Directory](https://github.com/github/awesome-copilot/tree/main/instructions/)
+- [Instructions Directory](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
   \- Browse all 100+ instructions
 - [Instructions Documentation](README.instructions.md) - Detailed guide to
   instructions
@@ -574,17 +574,17 @@ raise ProcessingError(f"Invalid data format: {e}")
 
 - [Instruction Template](https://github.com/github/awesome-copilot/blob/main/instructions/instructions.instructions.md)
   \- Blank template for new instructions
-- [Python Template](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)
+- [Python Template](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)<!-- link:github.awesome_copilot_python_instruction -->
   \- Example Python instructions
-- [TypeScript Template](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)
+- [TypeScript Template](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)<!-- link:github.awesome_copilot_typescript_instruction -->
   \- Example TypeScript instructions
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Share
-  instruction ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report issues
-  or request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Share instruction ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report issues or request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute new instructions
 
 ---
@@ -592,7 +592,7 @@ raise ProcessingError(f"Invalid data format: {e}")
 ## Next Steps
 
 1. **Browse available instructions** in the
-   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
+   [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
    directory
 1. **Install instructions** for your primary technologies
 1. **Test with Copilot** on a sample project

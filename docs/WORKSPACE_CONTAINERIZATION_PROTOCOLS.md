@@ -1641,7 +1641,9 @@ architecture** - Grow with your needs
 **Questions or Issues?**
 
 - 📖 [Documentation](../docs/)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 _Last Updated: 2024-01-01_

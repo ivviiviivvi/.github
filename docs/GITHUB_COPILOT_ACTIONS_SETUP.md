@@ -238,7 +238,7 @@ Actions setup:
 - [GitHub Copilot Firewall Configuration](https://gh.io/copilot/firewall-config)
 - [Claude Code Action Documentation](https://github.com/anthropics/claude-code-action)
 - [Google Gemini CLI Documentation](https://github.com/google-github-actions/run-gemini-cli)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 
 ## Support
 

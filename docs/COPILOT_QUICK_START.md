@@ -32,9 +32,9 @@ Choose your path based on your preferences and project needs:
 **Time**: 5 minutes setup + 5 minutes wait for first build
 
 1. **Install prerequisites**:
-   - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-   - [VS Code](https://code.visualstudio.com/)
-   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop -->
+   - [VS Code](https://code.visualstudio.com/)<!-- link:docs.vscode -->
+   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
 
 1. **Open project in container**:
 
@@ -410,13 +410,13 @@ For full environment customization:
 
 ### Resource Directories
 
-| Directory                                                                            | Contents                                              |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| [`agents/`](../ai_framework/agents/)                                                 | 26+ custom agents for specialized tasks               |
-| [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/) | 100+ custom instructions for languages and frameworks |
-| [`prompts/`](https://github.com/github/awesome-copilot/tree/main/prompts/)           | Reusable prompts for common tasks                     |
-| [`chatmodes/`](../ai_framework/chatmodes/)                                           | Specialized AI personas                               |
-| [`collections/`](../ai_framework/collections/)                                       | Curated bundles by theme                              |
+| Directory                                                                                                                             | Contents                                              |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [`agents/`](../ai_framework/agents/)                                                                                                  | 26+ custom agents for specialized tasks               |
+| [`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions --> | 100+ custom instructions for languages and frameworks |
+| [`prompts/`](https://github.com/github/awesome-copilot/tree/main/prompts/)                                                            | Reusable prompts for common tasks                     |
+| [`chatmodes/`](../ai_framework/chatmodes/)                                                                                            | Specialized AI personas                               |
+| [`collections/`](../ai_framework/collections/)                                                                                        | Curated bundles by theme                              |
 
 ### Quick References
 
@@ -466,9 +466,10 @@ For full environment customization:
   [MCP Setup](MCP_SERVER_SETUP.md#troubleshooting) |
   [Custom Instructions](CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) |
   [Dev Environment](DEVELOPMENT_ENVIRONMENT_SETUP.md#troubleshooting)
-- Open an issue: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
+- Open an issue:
+  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - Ask in discussions:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 ---
 
@@ -537,8 +538,9 @@ For full environment customization:
 ### Community
 
 - **Questions**:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- **Issues**: [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- **Issues**:
+  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Feedback**: Open a discussion or issue
 
 ### Organization

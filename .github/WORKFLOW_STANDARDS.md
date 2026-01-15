@@ -350,7 +350,7 @@ echo "foo=bar" >> $GITHUB_OUTPUT
 
 ## References
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
-- [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
+- [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)<!-- link:docs.github_actions_workflow_syntax -->
 - [Action Pinning](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions)

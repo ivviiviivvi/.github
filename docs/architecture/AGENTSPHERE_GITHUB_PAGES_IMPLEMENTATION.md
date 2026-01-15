@@ -288,9 +288,11 @@ This system is ready for immediate deployment. To customize:
 
 ## 📞 Support
 
-- 💬 **GitHub**: [@4444JPP](https://github.com/4444JPP)
+- 💬 **GitHub**:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - 📚 **Documentation**: See `docs/` directory
-- 🐛 **Issues**: [Report a bug](https://github.com/ivviiviivvi/.github/issues)
+- 🐛 **Issues**:
+  [Report a bug](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ## 📜 License
 

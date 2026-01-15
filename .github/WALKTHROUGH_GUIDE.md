@@ -643,7 +643,7 @@ created.
 
 ### Documentation
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [FFmpeg Documentation](https://ffmpeg.org/documentation.html)
 - [Workflow Configuration Reference](walkthrough-config.yml)
 

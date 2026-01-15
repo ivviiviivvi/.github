@@ -10,9 +10,9 @@ minutes.
 **Best for**: Daily development with full IDE features
 
 1. **Install Prerequisites**:
-   - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-   - [VS Code](https://code.visualstudio.com/)
-   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop -->
+   - [VS Code](https://code.visualstudio.com/)<!-- link:docs.vscode -->
+   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
 
 1. **Clone and Open**:
 
@@ -274,8 +274,10 @@ ports:
 
 ### Get Help
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

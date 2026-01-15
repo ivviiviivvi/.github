@@ -75,6 +75,22 @@ python scripts/web_crawler.py --github-token ghp_xxx --org-name myorg
 
 ---
 
+### 🔗 `resolve_link_placeholders.py`
+
+**Status**: Managed link resolution and annotation
+
+**Purpose**: Keeps shared links consistent by updating URLs tagged with
+`<!-- link:key -->` using `docs/_data/links.yml`.
+
+**Usage**:
+
+```bash
+# Annotate and update links in place
+python scripts/resolve_link_placeholders.py --write --annotate
+```
+
+---
+
 ### 🎨 `ecosystem_visualizer.py` ✅
 
 **Status**: 812 lines, fully type-hinted, mypy --strict compliant\

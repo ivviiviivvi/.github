@@ -265,7 +265,7 @@ available._
 - **Scheduled Automation**:
   [Automated Walkthrough Setup](../workflows/scheduled-walkthrough-generator.yml)
 - **Organization Repository**:
-  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)
+  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
 
 ### Support Channels
 
@@ -283,7 +283,8 @@ available._
 
 **Direct Contact** - Organization maintainer
 
-- GitHub: [@4444JPP](https://github.com/4444JPP)
+- GitHub:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - For: Urgent issues, security concerns, feature requests
 
 ### Response Times
@@ -314,7 +315,7 @@ available._
 ---
 
 **Questions?**
-[Open a discussion](https://github.com/ivviiviivvi/.github/discussions).
+[Open a discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->.
 
 **Found a bug?**
 [Report it here](https://github.com/ivviiviivvi/.github/issues/new).

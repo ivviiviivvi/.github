@@ -177,7 +177,7 @@ fixed\
 
 - [GitHub Secret Scanning Documentation](https://docs.github.com/en/code-security/secret-scanning)
 - [Gitleaks Documentation](https://github.com/gitleaks/gitleaks)
-- [detect-secrets Documentation](https://github.com/Yelp/detect-secrets)
+- [detect-secrets Documentation](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->
 - [Secret Scanning Guide](SECRET_SCANNING_GUIDE.md)
 
 ## Summary

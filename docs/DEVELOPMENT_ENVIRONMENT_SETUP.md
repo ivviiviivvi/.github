@@ -86,10 +86,10 @@ for creating an environment that:
 For the fastest, most consistent setup:
 
 1. **Install prerequisites**:
-   - [VS Code](https://code.visualstudio.com/) or
+   - [VS Code](https://code.visualstudio.com/)<!-- link:docs.vscode --> or
      [VS Code Insiders](https://code.visualstudio.com/insiders/)
-   - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+   - [Docker Desktop](https://www.docker.com/products/docker-desktop)<!-- link:docs.docker_desktop -->
+   - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)<!-- link:docs.vscode_remote_containers -->
 
 1. **Open in container**:
 
@@ -829,8 +829,8 @@ eval "$(starship init zsh)"
 ### Documentation
 
 - [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers)
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
-- [Docker Documentation](https://docs.docker.com/)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
+- [Docker Documentation](https://docs.docker.com/)<!-- link:docs.docker -->
 
 ### Organization Resources
 

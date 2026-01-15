@@ -766,9 +766,9 @@ jobs:
 
 ### External Links
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [GitHub Pages Guide](https://docs.github.com/en/pages)
-- [Docker Documentation](https://docs.docker.com/)
+- [Docker Documentation](https://docs.docker.com/)<!-- link:docs.docker -->
 - [GitHub Codespaces](https://github.com/features/codespaces)
 
 ---

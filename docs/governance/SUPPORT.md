@@ -24,20 +24,21 @@ Before asking for help, please:
 
 ### When to Use What
 
-| Situation                     | Where to Go                                                              |
-| ----------------------------- | ------------------------------------------------------------------------ |
-| Questions, ideas, discussions | [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions) |
-| Bug reports                   | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)           |
-| Feature requests              | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)           |
-| Security vulnerabilities      | [Security Policy](SECURITY.md)                                           |
-| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                    |
-| Code of Conduct violations    | conduct@ivviiviivvi.com                                                  |
+| Situation                     | Where to Go                                                                                              |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Questions, ideas, discussions | [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions --> |
+| Bug reports                   | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->                |
+| Feature requests              | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->                |
+| Security vulnerabilities      | [Security Policy](SECURITY.md)                                                                           |
+| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                                                    |
+| Code of Conduct violations    | conduct@ivviiviivvi.com                                                                                  |
 
 ## GitHub Discussions
 
 **Best for**: Questions, ideas, general help, and community discussion
 
-👉 **[Start a Discussion](https://github.com/ivviiviivvi/.github/discussions)**
+👉
+**[Start a Discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->**
 
 ### Discussion Categories
 
@@ -59,15 +60,21 @@ Before asking for help, please:
 
 ### Official Documentation
 
-- **📖 [Main Documentation](../INDEX.md)** - Comprehensive guides and API reference
-- **🚀 [Getting Started Guide](../WORKSPACE_QUICK_START.md)** - Quick start tutorial
+- **📖 [Main Documentation](../INDEX.md)** - Comprehensive guides and API
+  reference
+- **🚀 [Getting Started Guide](../WORKSPACE_QUICK_START.md)** - Quick start
+  tutorial
 - **📚 [Reference Docs](../reference/)** - Detailed technical reference
-- **🔧 [Configuration Guide](../DEVELOPMENT_ENVIRONMENT_SETUP.md)** - Configuration options
-- **🏗️ [Architecture Overview](../architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md)** - System architecture
+- **🔧 [Configuration Guide](../DEVELOPMENT_ENVIRONMENT_SETUP.md)** -
+  Configuration options
+- **🏗️
+  [Architecture Overview](../architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md)**
+  \- System architecture
 
 ### Tutorials and Examples
 
-- **[Walkthrough Gallery](../walkthrough-gallery.md)** - Code examples and templates
+- **[Walkthrough Gallery](../walkthrough-gallery.md)** - Code examples and
+  templates
 - **[Video Tutorials](https://youtube.com/@ivviiviivvi)** - Video walkthroughs
   (coming soon)
 
@@ -85,8 +92,8 @@ Before asking for help, please:
 
 **Q: How do I get started with the project?**
 
-A: Follow our [Getting Started Guide](../WORKSPACE_QUICK_START.md) for installation
-and setup instructions.
+A: Follow our [Getting Started Guide](../WORKSPACE_QUICK_START.md) for
+installation and setup instructions.
 
 **Q: What are the system requirements?**
 
@@ -99,8 +106,8 @@ A:
 
 **Q: Is this project free to use?**
 
-A: Yes, this project is open source and free to use under the [LICENSE](../../LICENSE)
-terms.
+A: Yes, this project is open source and free to use under the
+[LICENSE](../../LICENSE) terms.
 
 #### Installation
 
@@ -126,8 +133,8 @@ pip install --upgrade -r requirements.txt
 
 **Q: How do I report a bug?**
 
-A: Use our [Bug Report Template](../../.github/ISSUE_TEMPLATE/bug_report.yml) and
-include:
+A: Use our [Bug Report Template](../../.github/ISSUE_TEMPLATE/bug_report.yml)
+and include:
 
 - Steps to reproduce
 - Expected vs actual behavior
@@ -156,7 +163,7 @@ Before asking for help, please check our documentation:
 ## 💬 GitHub Discussions
 
 For questions, ideas, and general discussions, use
-[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions):
+[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->:
 
 - **[Q&A](https://github.com/ivviiviivvi/.github/discussions/categories/q-and-a)**
   \- Ask questions
@@ -170,13 +177,13 @@ For questions, ideas, and general discussions, use
 ## 🐛 Bug Reports
 
 If you've found a bug, please
-[create an issue](https://github.com/ivviiviivvi/.github/issues/new/choose)
+[create an issue](https://github.com/ivviiviivvi/.github/issues/new/choose)<!-- link:github.issues_new -->
 using our bug report template.
 
 ## ✨ Feature Requests
 
 Have an idea for a new feature?
-[Submit a feature request](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)!
+[Submit a feature request](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->!
 
 ## 🔒 Security Issues
 
@@ -185,7 +192,7 @@ Have an idea for a new feature?
 For security issues, please:
 
 1. Use our
-   [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+   [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
    (preferred)
 1. Review our [Security Policy](SECURITY.md) for details
 
@@ -212,7 +219,7 @@ Yes! We welcome contributions. Please read our
 ### How do I report a bug?
 
 Use our
-[bug report template](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)
+[bug report template](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 and provide as much detail as possible.
 
 ### Where can I find examples?
@@ -224,7 +231,7 @@ and provide as much detail as possible.
 ### How do I request a feature?
 
 Use our
-[feature request template](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)
+[feature request template](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 and describe:
 
 - The problem you're trying to solve
@@ -252,7 +259,7 @@ A:
    [`good first issue`](https://github.com/ivviiviivvi/.github/labels/good%20first%20issue)
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
 1. Ask questions in
-   [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 1. Join our [Discord](https://discord.gg/ivviiviivvi) for real-time help
 
 #### Security
@@ -394,10 +401,11 @@ For enterprise support, training, or consulting:
 ## 🌐 Community Resources
 
 - **GitHub Repository**:
-  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)
-- **Issues**: [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
+- **Issues**:
+  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Community Discussions](https://github.com/ivviiviivvi/.github/discussions)
+  [Community Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation**: [INDEX.md](../INDEX.md)
 
 ## 📧 Contact

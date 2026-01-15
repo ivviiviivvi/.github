@@ -471,10 +471,10 @@ git add . && git commit -m "Update" && git push
 
 ### External Resources
 
-- [GitHub Issues Documentation](https://docs.github.com/en/issues)
-- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
-- [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
-- [GitHub Wiki Documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
+- [GitHub Issues Documentation](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
+- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
+- [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
+- [GitHub Wiki Documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis)<!-- link:docs.github_wikis -->
 
 ## ✅ What's Ready to Use
 
@@ -552,8 +552,10 @@ git add . && git commit -m "Update" && git push
 
 ### Getting Help
 
-- 💬 [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - 📧 Contact organization maintainers
 - 📖 Review documentation guides
 

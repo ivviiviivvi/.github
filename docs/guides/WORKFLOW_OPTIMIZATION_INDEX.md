@@ -249,8 +249,8 @@ cover-to-cover)\
 
 ### Action 1: Fix Critical Security Issue (30 minutes)
 
-**File to read**: [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md) -
-Section 1
+**File to read**: [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md)
+\- Section 1
 
 **What to do**:
 
@@ -289,8 +289,8 @@ Section 1
 ### Action 3: Create Contributor Guide (1 hour)
 
 **File to read**:
-[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md) - Phase
-1
+[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md) -
+Phase 1
 
 **What to do**: Create `.github/WORKFLOW_GUIDE.md` using template from roadmap
 
@@ -371,10 +371,10 @@ Section 1
 
 ### External Resources
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Workflow Syntax Reference](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
-- [Security Hardening Guide](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
-- [Caching Dependencies](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Workflow Syntax Reference](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)<!-- link:docs.github_actions_workflow_syntax -->
+- [Security Hardening Guide](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
+- [Caching Dependencies](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows)<!-- link:docs.github_actions_caching -->
 
 ---
 

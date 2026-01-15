@@ -98,7 +98,8 @@ feature/add-dark-mode
 
 ### Conventional Commits
 
-Follow the [Conventional Commits](https://www.conventionalcommits.org/)
+Follow the
+[Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 specification.
 
 ### Format
@@ -546,7 +547,7 @@ git show <commit-hash>
 
 ## Versioning Strategy
 
-We use [Semantic Versioning](https://semver.org/):
+We use [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->:
 
 ```
 MAJOR.MINOR.PATCH

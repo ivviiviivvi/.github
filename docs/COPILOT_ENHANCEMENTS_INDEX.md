@@ -66,7 +66,7 @@ Coding standards that apply automatically:
 - **Tools**: Docker, Kubernetes, Terraform, Ansible, GitHub Actions
 
 **Browse**:
-[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)
+[`instructions/`](https://github.com/github/awesome-copilot/tree/main/instructions/)<!-- link:github.awesome_copilot_instructions -->
 | **Setup**: [Custom Instructions Setup](CUSTOM_INSTRUCTIONS_SETUP.md)
 
 ### MCP Servers
@@ -152,10 +152,10 @@ Curated bundles organized by theme:
 
 - **Python**:
   [MCP Development](../ai_framework/collections/python-mcp-development.md) |
-  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/python.instructions.md)<!-- link:github.awesome_copilot_python_instruction -->
 - **TypeScript**:
   [MCP Development](../ai_framework/collections/typescript-mcp-development.md) |
-  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)
+  [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/typescript-5-es2022.instructions.md)<!-- link:github.awesome_copilot_typescript_instruction -->
 - **Java**:
   [MCP Development](../ai_framework/collections/java-mcp-development.md) |
   [Instructions](https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md)
@@ -198,17 +198,17 @@ Curated bundles organized by theme:
 
 ### External Resources
 
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [Awesome Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 - [VS Code Copilot Settings](https://code.visualstudio.com/docs/copilot/copilot-settings)
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Ask
-  questions, share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report bugs,
-  request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Ask questions, share ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report bugs, request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute to this repository
 
 ---
@@ -260,9 +260,9 @@ Curated bundles organized by theme:
   [Troubleshooting](CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) sections in
   guides
 - **Questions**: Ask in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - **Issues**: Report in
-  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Documentation Feedback**: Open a PR or issue
 
 ---

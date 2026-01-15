@@ -427,6 +427,20 @@ See [Installation](#installation) section.
 See [Contributing Guide](../CONTRIBUTING.md).
 ```
 
+#### Managed Links
+
+For links that should stay consistent across the repo, add a link key comment:
+
+```markdown
+[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+```
+
+Update all managed links with:
+
+```bash
+python automation/scripts/resolve_link_placeholders.py --write --annotate
+```
+
 **Rules**:
 
 1. Use descriptive link text (not "click here")
@@ -1015,7 +1029,8 @@ git commit -m "message"
 
 **Wrong**: "Click [here](../WORKSPACE_QUICK_START.md) for more information"
 
-**Right**: "See the [installation guide](../WORKSPACE_QUICK_START.md) for more information"
+**Right**: "See the [installation guide](../WORKSPACE_QUICK_START.md) for more
+information"
 
 ### 5. Walls of Text
 

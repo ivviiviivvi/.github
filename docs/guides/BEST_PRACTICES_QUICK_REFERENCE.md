@@ -77,7 +77,8 @@ discussions:
 
 ## Enhanced Issue Templates
 
-Located in `.github/ISSUE_TEMPLATE/`, these templates facilitate structured requests:
+Located in `.github/ISSUE_TEMPLATE/`, these templates facilitate structured
+requests:
 
 ### Best Practices Review (`best-practices-review.yml`)
 
@@ -345,7 +346,8 @@ consistent sessions beat rare large workshops.
 
 Need assistance?
 
-- 💬 [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)
+- 💬
+  [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->
   using our discussion templates
 - 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
   for template improvements
@@ -359,7 +361,7 @@ Need assistance?
 Found these templates helpful? Have improvements to suggest?
 
 - Share your session experiences in
-  [Show and Tell discussions](https://github.com/ivi374forivi/.github/discussions)
+  [Show and Tell discussions](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->
 - Propose new templates or improvements
 - Document your use cases and lessons learned
 - Help others by answering questions

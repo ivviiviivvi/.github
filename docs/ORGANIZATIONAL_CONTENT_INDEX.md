@@ -543,7 +543,8 @@ open https://github.com/org/repo/wiki
 
 **For Users**:
 
-- 💬 [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+- 💬
+  [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 📖 Read the documentation guides
 - 🔍 Search existing issues and discussions
 
@@ -556,8 +557,10 @@ open https://github.com/org/repo/wiki
 **For Contributors**:
 
 - 🤝 [Contributing Guide](CONTRIBUTING.md)
-- 💬 [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛
+  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ### Feedback & Improvements
 
@@ -579,10 +582,10 @@ This framework is continuously evolving. We welcome:
 
 **External**:
 
-- [GitHub Issues Docs](https://docs.github.com/en/issues)
-- [GitHub Discussions Docs](https://docs.github.com/en/discussions)
-- [GitHub Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
-- [GitHub Wiki Docs](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
+- [GitHub Issues Docs](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
+- [GitHub Discussions Docs](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
+- [GitHub Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
+- [GitHub Wiki Docs](https://docs.github.com/en/communities/documenting-your-project-with-wikis)<!-- link:docs.github_wikis -->
 
 ## Version History
 
@@ -602,8 +605,9 @@ Quarterly\
 
 **📝 Contribute**: See [CONTRIBUTING.md](CONTRIBUTING.md)\
 **💬 Discuss**:
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)\
+[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->\
 **🐛
-Report Issues**: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
+Report Issues**:
+[GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 **Built with ❤️ by the Ivviiviivvi community**

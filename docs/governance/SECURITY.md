@@ -36,7 +36,7 @@ GitHub Security Advisories allow us to:
 - Credit you for the discovery
 
 **Report URL:**
-[https://github.com/ivviiviivvi/.github/security/advisories/new](https://github.com/ivviiviivvi/.github/security/advisories/new)
+[https://github.com/ivviiviivvi/.github/security/advisories/new](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ### Alternative: Security Contact Email
 
@@ -107,15 +107,15 @@ We use the following automated security tools to detect vulnerabilities:
   secrets, API keys, tokens
 - **[Gitleaks](https://github.com/gitleaks/gitleaks)** - Detects hardcoded
   credentials and sensitive data
-- **[detect-secrets](https://github.com/Yelp/detect-secrets)** - Prevents
-  secrets from entering the codebase
+- **[detect-secrets](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->**
+  \- Prevents secrets from entering the codebase
 
 ### Dependency Scanning
 
-- **[Dependabot](https://github.com/dependabot)** - Automated dependency updates
-  and security patches
-- **[GitHub Advanced Security](https://docs.github.com/en/code-security)** -
-  Dependency vulnerability scanning
+- **[Dependabot](https://github.com/dependabot)<!-- link:github.dependabot -->**
+  \- Automated dependency updates and security patches
+- **[GitHub Advanced Security](https://docs.github.com/en/code-security)<!-- link:docs.github_code_security -->**
+  \- Dependency vulnerability scanning
 
 ### Code Analysis
 
@@ -152,7 +152,7 @@ When contributing to this project:
 - **General Security Issues:** security@ivviiviivvi.com
 - **Security Team:** @ivviiviivvi/security
 - **Emergency Contact:**
-  [Create a private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+  [Create a private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ## Hall of Fame
 
@@ -179,7 +179,7 @@ vulnerability, please report it responsibly.
 
 **For sensitive security vulnerabilities**, please report them privately through
 our
-[Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)
+[Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 page.
 
 **DO NOT** create a public issue for sensitive security vulnerabilities.
@@ -193,7 +193,7 @@ For security issues that are:
 - Security enhancements or hardening suggestions
 
 You may create a public issue using our
-[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml).
+[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml)<!-- link:github.security_vulnerability -->.
 
 ## What to Include in Your Report
 

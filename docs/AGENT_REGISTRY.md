@@ -1340,9 +1340,9 @@ All new agents must go through:
 ### Technical References
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [MCP Protocol Specification](https://modelcontextprotocol.io/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Semantic Versioning](https://semver.org/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
 
 ---
 
@@ -1384,11 +1384,11 @@ to share, please open a discussion or feature request issue.
 ### Questions or Issues?
 
 - **General Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Bug Reports**: Create an
-  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
-  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - **Security Issues**: See [SECURITY.md](SECURITY.md) for reporting procedures
 
 ### Contributing

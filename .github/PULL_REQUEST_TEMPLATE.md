@@ -117,7 +117,8 @@
 ### Conventional Commit Reminder
 
 Please ensure your commit messages follow the
-[Conventional Commits](https://www.conventionalcommits.org/) specification:
+[Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
+specification:
 
 ```
 <type>(<scope>): <subject>

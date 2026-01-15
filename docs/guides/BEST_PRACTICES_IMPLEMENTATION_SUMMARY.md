@@ -260,8 +260,7 @@ All templates have been validated for:
 1. Track action items
 1. Measure and iterate
 
-**Quick Start**: See
-[Quick Reference Guide](BEST_PRACTICES_QUICK_REFERENCE.md)
+**Quick Start**: See [Quick Reference Guide](BEST_PRACTICES_QUICK_REFERENCE.md)
 
 ---
 
@@ -378,7 +377,7 @@ Track these metrics to measure impact:
 
 ### External
 
-- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
+- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
 - [Issue Forms Syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms)
 - [Community Health Files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
 
@@ -388,7 +387,8 @@ Track these metrics to measure impact:
 
 Need help implementing or using these templates?
 
-- 💬 [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)
+- 💬
+  [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->
 - 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
 - 📖 [Read the Docs](../../)
 - 🤝 [Contributing Guide](../CONTRIBUTING.md)

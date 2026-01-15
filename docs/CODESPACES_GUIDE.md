@@ -558,8 +558,10 @@ services:
 ## Support
 
 - 📖 [Documentation](INDEX.md)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

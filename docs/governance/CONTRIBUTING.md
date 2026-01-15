@@ -91,8 +91,9 @@ include:
 
 ### Suggesting Features
 
-Use our [Feature Request template](../../.github/ISSUE_TEMPLATE/feature_request.yml)
-and include:
+Use our
+[Feature Request template](../../.github/ISSUE_TEMPLATE/feature_request.yml) and
+include:
 
 - Problem statement
 - Proposed solution
@@ -140,7 +141,8 @@ def calc(x):
 
 ## Commit Message Format
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
+We follow
+[Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->:
 
 ```
 <type>(<scope>): <subject>
@@ -269,10 +271,13 @@ def test1():
 
 ## Getting Help
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask
-  questions
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  \- Ask questions
 - 📚 [Documentation](../../README.md) - Read the docs
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues) - Report bugs
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report bugs
 
 ## Recognition
 
