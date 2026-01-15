@@ -824,7 +824,7 @@ jobs:
           cat ORGANIZATIONAL_CONTENT_SUMMARY.md
 
       - name: Commit summary
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # ratchet:stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # ratchet:stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "docs: add organizational content creation summary"
           file_pattern: "ORGANIZATIONAL_CONTENT_SUMMARY.md .github/discussion-starters/* .github/project-templates/* .github/wiki-templates/*"
