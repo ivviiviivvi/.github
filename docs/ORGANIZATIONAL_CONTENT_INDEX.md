@@ -80,10 +80,10 @@ gh repo edit owner/repo \
 
 Read the guide relevant to what you're setting up:
 
-- [Issue Taxonomy](docs/ISSUE_TAXONOMY.md) - Issue classification
-- [Discussion Guide](docs/DISCUSSION_GUIDE.md) - Discussion framework
-- [Projects Guide](docs/PROJECTS_GUIDE.md) - Project management
-- [Wiki Guide](docs/WIKI_GUIDE.md) - Wiki structure
+- [Issue Taxonomy](ISSUE_TAXONOMY.md) - Issue classification
+- [Discussion Guide](DISCUSSION_GUIDE.md) - Discussion framework
+- [Projects Guide](PROJECTS_GUIDE.md) - Project management
+- [Wiki Guide](WIKI_GUIDE.md) - Wiki structure
 
 **3. Deploy Templates** (15 minutes)
 
@@ -160,10 +160,10 @@ See the relevant guide for standards and conventions.
 
 ### Supporting Documentation
 
-- [Labels Guide](docs/LABELS.md) - Standard label taxonomy
-- [Contributing Guide](docs/CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](docs/CODE_OF_CONDUCT.md) - Community standards
-- [Governance](docs/GOVERNANCE.md) - Decision-making process
+- [Labels Guide](LABELS.md) - Standard label taxonomy
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- [Governance](GOVERNANCE.md) - Decision-making process
 
 ## Templates & Tools
 
@@ -307,7 +307,7 @@ gh workflow run create-organizational-content.yml \
 - **Project Sync**: Auto-add issues to projects
 - **Wiki Backup**: Automated wiki backups
 
-See [Automation Guide](docs/automation/) for details.
+See [Automation Guide](automation/) for details.
 
 ## Best Practices
 
@@ -543,7 +543,8 @@ open https://github.com/org/repo/wiki
 
 **For Users**:
 
-- 💬 [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+- 💬
+  [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 📖 Read the documentation guides
 - 🔍 Search existing issues and discussions
 
@@ -555,9 +556,11 @@ open https://github.com/org/repo/wiki
 
 **For Contributors**:
 
-- 🤝 [Contributing Guide](docs/CONTRIBUTING.md)
-- 💬 [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
+- 🤝 [Contributing Guide](CONTRIBUTING.md)
+- 💬
+  [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛
+  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ### Feedback & Improvements
 
@@ -572,17 +575,17 @@ This framework is continuously evolving. We welcome:
 
 **Internal**:
 
-- [Organization README](README.md)
-- [Contributing Guidelines](docs/CONTRIBUTING.md)
-- [Code of Conduct](docs/CODE_OF_CONDUCT.md)
-- [Security Policy](docs/SECURITY.md)
+- [Organization README](../README.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
 
 **External**:
 
-- [GitHub Issues Docs](https://docs.github.com/en/issues)
-- [GitHub Discussions Docs](https://docs.github.com/en/discussions)
-- [GitHub Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
-- [GitHub Wiki Docs](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
+- [GitHub Issues Docs](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
+- [GitHub Discussions Docs](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
+- [GitHub Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
+- [GitHub Wiki Docs](https://docs.github.com/en/communities/documenting-your-project-with-wikis)<!-- link:docs.github_wikis -->
 
 ## Version History
 
@@ -600,10 +603,11 @@ Quarterly\
 
 ---
 
-**📝 Contribute**: See [CONTRIBUTING.md](docs/CONTRIBUTING.md)\
+**📝 Contribute**: See [CONTRIBUTING.md](CONTRIBUTING.md)\
 **💬 Discuss**:
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)\
+[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->\
 **🐛
-Report Issues**: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)
+Report Issues**:
+[GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 **Built with ❤️ by the Ivviiviivvi community**

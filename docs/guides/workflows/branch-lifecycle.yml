@@ -1,0 +1,373 @@
+name: Branch Lifecycle Management
+
+on:
+  schedule:
+    # Run every 12 hours (reduced from 6 hours for cost savings)
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  # Burst mode for rapid development (12h warning, 24h close)
+  # Normal mode for lower velocity (48h warning, 96h close)
+  BURST_MODE: "true" # Change to 'false' for normal mode
+
+jobs:
+  manage-stale-prs:
+    name: Manage Stale PRs and Branches
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+
+      - name: Get All Open PRs
+        id: prs
+        run: |
+          gh pr list --json number,title,createdAt,updatedAt,labels,headRefName,author,url \
+            --limit 100 > prs.json
+          cat prs.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Process Each PR
+        run: |
+          NOW=$(date +%s)
+
+          jq -c '.[]' prs.json | while read -r pr; do
+            PR_NUMBER=$(echo "$pr" | jq -r '.number')
+            CREATED_AT=$(echo "$pr" | jq -r '.createdAt')
+            UPDATED_AT=$(echo "$pr" | jq -r '.updatedAt')
+            LABELS=$(echo "$pr" | jq -r '.labels | map(.name) | join(",")')
+            BRANCH=$(echo "$pr" | jq -r '.headRefName')
+            AUTHOR=$(echo "$pr" | jq -r '.author.login')
+            URL=$(echo "$pr" | jq -r '.url')
+            TITLE=$(echo "$pr" | jq -r '.title')
+
+            # Calculate age in hours
+            CREATED_SECONDS=$(date -d "$CREATED_AT" +%s)
+            UPDATED_SECONDS=$(date -d "$UPDATED_AT" +%s)
+            AGE_HOURS=$(( ($NOW - $CREATED_SECONDS) / 3600 ))
+            INACTIVE_HOURS=$(( ($NOW - $UPDATED_SECONDS) / 3600 ))
+
+            echo "---"
+            echo "PR #$PR_NUMBER: $TITLE"
+            echo "Age: ${AGE_HOURS}h, Inactive: ${INACTIVE_HOURS}h"
+            echo "Labels: $LABELS"
+
+            # Skip if has keep-alive label
+            if [[ "$LABELS" =~ "keep-alive" ]]; then
+              echo "✓ Skipping: has keep-alive label"
+              continue
+            fi
+
+            # Configure thresholds based on mode
+            if [ "${{ env.BURST_MODE }}" == "true" ]; then
+              # Burst mode: 12h warning, 24h close
+              WARNING_HOURS=12
+              CLOSE_HOURS=24
+              MODE_NAME="Burst Mode"
+            else
+              # Normal mode: 48h warning, 72h final warning, 96h close
+              WARNING_HOURS=48
+              FINAL_WARNING_HOURS=72
+              CLOSE_HOURS=96
+              MODE_NAME="Normal Mode"
+            fi
+
+            echo "Mode: $MODE_NAME (Warning: ${WARNING_HOURS}h, Close: ${CLOSE_HOURS}h)"
+
+            # Skip if recently updated
+            if [ "$INACTIVE_HOURS" -lt "$WARNING_HOURS" ]; then
+              echo "✓ Active: updated within ${WARNING_HOURS}h"
+              continue
+            fi
+
+            # Determine action based on age and mode
+            ACTION="none"
+
+            if [ "$AGE_HOURS" -ge "$CLOSE_HOURS" ]; then
+              # Close threshold reached
+              if [[ ! "$LABELS" =~ "stale" ]]; then
+                ACTION="close"
+              else
+                ACTION="already_closed"
+              fi
+            elif [ "${{ env.BURST_MODE }}" == "false" ] && [ "$AGE_HOURS" -ge "$FINAL_WARNING_HOURS" ]; then
+              # Normal mode only: 72-96 hours final warning
+              if [[ ! "$LABELS" =~ "stale:final-warning" ]]; then
+                ACTION="final_warning"
+              fi
+            elif [ "$AGE_HOURS" -ge "$WARNING_HOURS" ]; then
+              # Warning threshold reached
+              if [[ ! "$LABELS" =~ "stale:warning" ]] && [[ ! "$LABELS" =~ "stale:final-warning" ]]; then
+                ACTION="warning"
+              fi
+            fi
+
+            echo "Action: $ACTION"
+
+            # Execute action
+            case "$ACTION" in
+              warning)
+                echo "⚠️ Adding warning label and comment"
+                gh pr edit $PR_NUMBER --add-label "stale:warning"
+
+                if [ "${{ env.BURST_MODE }}" == "true" ]; then
+                  # Burst mode warning
+                  cat > /tmp/pr_comment.md <<- 'EOF_BURST'
+                  ⚠️ **Stale PR Warning (Burst Mode)**
+
+                  This PR has been inactive for ${INACTIVE_HOURS}h.
+
+                  **Mode:** Burst Mode (rapid development)
+                  **This PR will be auto-closed in ~$((CLOSE_HOURS - AGE_HOURS)) hours** (at ${CLOSE_HOURS}h total age)
+
+                  **Next steps:**
+                  - Merge it NOW with `automerge:when-ci-passes` label
+                  - Add `keep-alive` label if legitimately needs more time
+                  - Or close it manually if no longer needed
+
+                  **Why so fast?**
+                  In burst mode, features should ship in hours. If this PR isn't merged by ${CLOSE_HOURS}h, either:
+                  - CI is failing (fix it)
+                  - It needs review (add `needs-review` label)
+                  - It's abandoned (will extract tasks to issue)
+
+                  See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details.
+                  EOF_BURST
+                  gh pr comment $PR_NUMBER --body-file /tmp/pr_comment.md
+                else
+                  # Normal mode warning
+                  cat > /tmp/pr_comment.md <<- 'EOF_NORMAL'
+                  ⚠️ **Stale PR Warning**
+
+                  This PR has been inactive for ${INACTIVE_HOURS}h.
+
+                  **Next steps:**
+                  - Update the PR to keep it active
+                  - Add `keep-alive` label to prevent auto-closure
+                  - Or close it manually if no longer needed
+
+                  **Timeline:**
+                  - Now: Warning issued (${AGE_HOURS}h old)
+                  - 72h: Final warning
+                  - 96h: Auto-closed with task extraction
+
+                  See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details.
+                  EOF_NORMAL
+                  gh pr comment $PR_NUMBER --body-file /tmp/pr_comment.md
+                fi
+                ;;
+
+              final_warning)
+                echo "🚨 Adding final warning"
+                gh pr edit $PR_NUMBER --remove-label "stale:warning" --add-label "stale:final-warning"
+                cat > /tmp/pr_comment.md <<- 'EOF_FINAL'
+                🚨 **Final Warning: PR Will Be Closed Soon**
+
+                This PR has been inactive for ${INACTIVE_HOURS}h.
+
+                **This PR will be auto-closed in ~24 hours** unless:
+                - You push new commits
+                - You add the `keep-alive` label
+                - You manually close it
+
+                Any incomplete tasks will be extracted to a new issue before closing.
+
+                **Timeline:**
+                - Created: $(date -d "$CREATED_AT" +'%Y-%m-%d %H:%M')
+                - Last update: $(date -d "$UPDATED_AT" +'%Y-%m-%d %H:%M')
+                - Auto-close: ~$(date -d "+24 hours" +'%Y-%m-%d %H:%M')
+
+                See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details.
+                EOF_FINAL
+                gh pr comment $PR_NUMBER --body-file /tmp/pr_comment.md
+                ;;
+
+              close)
+                echo "🔒 Closing stale PR and extracting tasks"
+
+                # Extract task list from PR body and comments
+                TASKS=$(gh pr view $PR_NUMBER --json body,comments --jq '
+                  ([.body] + [.comments[].body]) |
+                  map(
+                    split("\n") |
+                    map(select(test("^\\s*[-*]\\s*\\[[ ]\\]"))) |
+                    .[]
+                  ) |
+                  unique |
+                  join("\n")
+                ')
+
+                # Create issue with extracted tasks if any found
+                if [ -n "$TASKS" ]; then
+                  cat > /tmp/issue_body.md <<- 'EOF_ISSUE'
+                  # Extracted Tasks from PR #$PR_NUMBER
+
+                  Original PR: $URL
+                  PR Title: $TITLE
+                  Author: @$AUTHOR
+                  Closed: $(date +'%Y-%m-%d %H:%M UTC')
+                  Reason: Stale (inactive for ${INACTIVE_HOURS}h)
+
+                  ## Incomplete Tasks
+
+                  $TASKS
+
+                  ## Context
+
+                  Review the original PR for context: #$PR_NUMBER
+
+                  ## Next Steps
+
+                  - [ ] Triage these tasks
+                  - [ ] Assign to appropriate sprint/milestone
+                  - [ ] Create new PRs or close as obsolete
+
+                  ---
+                  _Auto-generated by [branch-lifecycle.yml](../.github/workflows/branch-lifecycle.yml)_
+                  EOF_ISSUE
+
+                  ISSUE_NUMBER=$(gh issue create \
+                    --title "Tasks from stale PR #$PR_NUMBER: $TITLE" \
+                    --body-file /tmp/issue_body.md \
+                    --label "extracted-tasks,needs-triage" \
+                    --assignee "$AUTHOR" | grep -oP '\d+$')
+
+                  echo "Created issue #$ISSUE_NUMBER with extracted tasks"
+
+                  # Close PR with reference to issue
+                  cat > /tmp/pr_close.md <<- 'EOF_CLOSE_TASKS'
+                  🔒 **PR Auto-Closed (Stale)**
+
+                  This PR was inactive for ${INACTIVE_HOURS} hours and has been automatically closed.
+
+                  **Incomplete tasks have been extracted to:** #$ISSUE_NUMBER
+
+                  **Why was this closed?**
+                  - Inactive for >96 hours
+                  - No updates after warnings
+                  - Part of automated stale PR management
+
+                  **To resume this work:**
+                  - Review extracted tasks in #$ISSUE_NUMBER
+                  - Create a new PR if still needed
+                  - Reference this PR for context
+
+                  See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details.
+                  EOF_CLOSE_TASKS
+                  gh pr close $PR_NUMBER --comment-file /tmp/pr_close.md
+
+                  # Delete branch
+                  git push origin --delete "$BRANCH" || echo "Branch may already be deleted"
+
+                else
+                  # No tasks found, just close
+                  cat > /tmp/pr_close.md <<- 'EOF_CLOSE_NOTASKS'
+                  🔒 **PR Auto-Closed (Stale)**
+
+                  This PR was inactive for ${INACTIVE_HOURS} hours and has been automatically closed.
+
+                  No incomplete tasks were detected in this PR.
+
+                  **Why was this closed?**
+                  - Inactive for >96 hours
+                  - No updates after warnings
+                  - Part of automated stale PR management
+
+                  See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#branch-lifecycle-management) for details.
+                  EOF_CLOSE_NOTASKS
+                  gh pr close $PR_NUMBER --comment-file /tmp/pr_close.md
+
+                  # Delete branch
+                  git push origin --delete "$BRANCH" || echo "Branch may already be deleted"
+                fi
+                ;;
+            esac
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup-merged-branches:
+    name: Cleanup Merged Branches
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Delete Merged Branches
+        run: |
+          echo "🧹 Cleaning up merged branches..."
+
+          # Get all remote branches that are merged into develop
+          git fetch origin develop
+
+          MERGED_BRANCHES=$(git branch -r --merged origin/develop | \
+            grep -v 'HEAD' | \
+            grep -v 'main' | \
+            grep -v 'master' | \
+            grep -v 'develop' | \
+            sed 's/origin\///' | \
+            tr -d ' ')
+
+          if [ -z "$MERGED_BRANCHES" ]; then
+            echo "No merged branches to delete"
+            exit 0
+          fi
+
+          echo "Found merged branches:"
+          echo "$MERGED_BRANCHES"
+
+          # Delete each merged branch
+          echo "$MERGED_BRANCHES" | while read -r branch; do
+            if [ -n "$branch" ]; then
+              echo "Deleting merged branch: $branch"
+              git push origin --delete "$branch" || echo "Failed to delete $branch (may already be deleted)"
+            fi
+          done
+
+          echo "✅ Cleanup complete"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  report-stale-stats:
+    name: Report Stale Statistics
+    runs-on: ubuntu-latest
+    needs: [manage-stale-prs]
+
+    steps:
+      - name: Generate Stale Report
+        run: |
+          echo "📊 Stale PR Statistics"
+          echo "====================="
+
+          STALE_WARNING=$(gh pr list --label "stale:warning" --json number,title | jq length)
+          STALE_FINAL=$(gh pr list --label "stale:final-warning" --json number,title | jq length)
+          TOTAL_OPEN=$(gh pr list --json number | jq length)
+
+          echo "Total Open PRs: $TOTAL_OPEN"
+          echo "PRs with Warning: $STALE_WARNING"
+          echo "PRs with Final Warning: $STALE_FINAL"
+
+          if [ "$STALE_WARNING" -gt 5 ] || [ "$STALE_FINAL" -gt 2 ]; then
+            echo "⚠️ High number of stale PRs detected!"
+            echo "Consider:"
+            echo "- Batch merging related PRs"
+            echo "- Closing obsolete PRs manually"
+            echo "- Using keep-alive labels for important work"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

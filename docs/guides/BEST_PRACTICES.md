@@ -596,22 +596,22 @@ Workflow Dispatch → Select bump type → PR created → Review → Merge → T
 
 ### GitHub Documentation
 
-- [GitHub Actions](https://docs.github.com/en/actions)
-- [Security Features](https://docs.github.com/en/code-security)
-- [Community Health](https://docs.github.com/en/communities)
+- [GitHub Actions](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Security Features](https://docs.github.com/en/code-security)<!-- link:docs.github_code_security -->
+- [Community Health](https://docs.github.com/en/communities)<!-- link:docs.github_communities -->
 
 ### Tools & Actions
 
 - [CodeQL](https://codeql.github.com/)
-- [Dependabot](https://github.com/dependabot)
+- [Dependabot](https://github.com/dependabot)<!-- link:github.dependabot -->
 - [Renovate](https://www.mend.io/renovate/)
 - [All Contributors](https://allcontributors.org/)
 
 ### Standards
 
 - [Keep a Changelog](https://keepachangelog.com/)
-- [Semantic Versioning](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 
 ---
 

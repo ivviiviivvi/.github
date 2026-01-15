@@ -5,7 +5,7 @@
 The `suggest-awesome-*` family of prompts has been enhanced with comprehensive
 quality metrics, improved visual hierarchy, and intelligent categorization to
 help teams discover the best GitHub Copilot assets from the
-[awesome-copilot repository](https://github.com/github/awesome-copilot).
+[awesome-copilot repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->.
 
 ## What's New
 
@@ -470,7 +470,7 @@ Planned improvements include:
 - [Prompts Documentation](README.prompts.md)
 - [Chat Modes Documentation](README.chatmodes.md)
 - [Collections Documentation](README.collections.md)
-- [GitHub Awesome-Copilot Repository](https://github.com/github/awesome-copilot)
+- [GitHub Awesome-Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 
 ## Feedback
 

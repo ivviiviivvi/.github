@@ -719,11 +719,12 @@ USER node
 - [GitHub Pages Setup Guide](GITHUB_PAGES_SETUP.md)
 - [Docker Documentation](https://docs.docker.com)
 - [GitHub Codespaces Documentation](https://docs.github.com/en/codespaces)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 
 ## Getting Help
 
-- **Issues:** [Report a problem](https://github.com/ivviiviivvi/.github/issues)
+- **Issues:**
+  [Report a problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Discussions:**
-  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)
+  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Documentation:** [Main README](../README.md)

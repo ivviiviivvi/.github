@@ -557,9 +557,11 @@ services:
 
 ## Support
 
-- 📖 [Documentation](../../docs/)
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 📖 [Documentation](INDEX.md)
+- 💬
+  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ---
 

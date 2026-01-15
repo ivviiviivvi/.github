@@ -327,9 +327,9 @@ git push origin main
 ## 📚 Learn More
 
 - [Full Documentation](PR_AUTOMATION_GUIDE.md)
-- [Workflow Files](.github/workflows/)
-- [Dependabot Config](.github/dependabot.yml)
-- [PR Automation Config](.github/pr-automation.yml)
+- [Workflow Files](../../.github/workflows/)
+- [Dependabot Config](../../.github/dependabot.yml)
+- [PR Automation Config](../../.github/pr-automation.yml)
 
 ## 💡 Tips & Tricks
 

@@ -36,7 +36,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 1. Master Index (15,496 characters)
 
-**File**: `docs/ORGANIZATIONAL_CONTENT_INDEX.md`
+**File**: `ORGANIZATIONAL_CONTENT_INDEX.md`
 
 **Purpose**: Central hub for all organizational content resources
 
@@ -53,7 +53,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 2. Quick Start Guide (7,472 characters)
 
-**File**: `docs/ORGANIZATIONAL_CONTENT_QUICK_START.md`
+**File**: `ORGANIZATIONAL_CONTENT_QUICK_START.md`
 
 **Purpose**: Get started in 15 minutes
 
@@ -69,7 +69,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 3. Implementation Guide (17,358 characters)
 
-**File**: `docs/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md`
+**File**: `ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md`
 
 **Purpose**: Step-by-step full deployment
 
@@ -87,7 +87,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 4. Issue Taxonomy (10,280 characters)
 
-**File**: `docs/ISSUE_TAXONOMY.md`
+**File**: `ISSUE_TAXONOMY.md`
 
 **Purpose**: Comprehensive issue classification system
 
@@ -113,7 +113,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 5. Discussion Guide (16,855 characters)
 
-**File**: `docs/DISCUSSION_GUIDE.md`
+**File**: `DISCUSSION_GUIDE.md`
 
 **Purpose**: Complete discussion framework
 
@@ -146,7 +146,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 6. Projects Guide (20,000 characters)
 
-**File**: `docs/PROJECTS_GUIDE.md`
+**File**: `PROJECTS_GUIDE.md`
 
 **Purpose**: GitHub Projects v2 best practices
 
@@ -176,7 +176,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### 7. Wiki Guide (26,984 characters)
 
-**File**: `docs/WIKI_GUIDE.md`
+**File**: `WIKI_GUIDE.md`
 
 **Purpose**: Wiki structure and maintenance
 
@@ -207,7 +207,7 @@ and managing exhaustive organizational content across all GitHub features:
 
 ### Discussion Starters (3 files)
 
-**Location**: `.github/discussion-starters/`
+**Location**: `.github/DISCUSSION_TEMPLATE/`
 
 1. **welcome.md** - Welcome new community members
 1. **monthly-showcase.md** - Monthly community showcase
@@ -451,30 +451,30 @@ git add . && git commit -m "Update" && git push
 
 ### Documentation
 
-- [📖 Master Index](docs/ORGANIZATIONAL_CONTENT_INDEX.md)
-- [🚀 Quick Start](docs/ORGANIZATIONAL_CONTENT_QUICK_START.md)
-- [🛠️ Implementation Guide](docs/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md)
-- [📝 Issue Taxonomy](docs/ISSUE_TAXONOMY.md)
-- [💬 Discussion Guide](docs/DISCUSSION_GUIDE.md)
-- [📊 Projects Guide](docs/PROJECTS_GUIDE.md)
-- [📚 Wiki Guide](docs/WIKI_GUIDE.md)
+- [📖 Master Index](ORGANIZATIONAL_CONTENT_INDEX.md)
+- [🚀 Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)
+- [🛠️ Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md)
+- [📝 Issue Taxonomy](ISSUE_TAXONOMY.md)
+- [💬 Discussion Guide](DISCUSSION_GUIDE.md)
+- [📊 Projects Guide](PROJECTS_GUIDE.md)
+- [📚 Wiki Guide](WIKI_GUIDE.md)
 
 ### Templates
 
-- [Discussion Starters](.github/discussion-starters/)
-- [Project Templates](.github/project-templates/)
-- [Wiki Templates](.github/wiki-templates/)
+- [Discussion Templates](../.github/DISCUSSION_TEMPLATE/)
+- [Project Templates](../.github/project-templates/)
+- [Wiki Templates](../.github/wiki-templates/)
 
 ### Automation
 
-- [Creation Workflow](.github/workflows/create-organizational-content.yml)
+- [Creation Workflow](../.github/workflows/create-organizational-content.yml)
 
 ### External Resources
 
-- [GitHub Issues Documentation](https://docs.github.com/en/issues)
-- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
-- [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
-- [GitHub Wiki Documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis)
+- [GitHub Issues Documentation](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
+- [GitHub Discussions Documentation](https://docs.github.com/en/discussions)<!-- link:docs.github_discussions -->
+- [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
+- [GitHub Wiki Documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis)<!-- link:docs.github_wikis -->
 
 ## ✅ What's Ready to Use
 
@@ -505,7 +505,7 @@ git add . && git commit -m "Update" && git push
 ### For Administrators
 
 1. ✅ Review this summary
-1. ✅ Read [Quick Start](docs/ORGANIZATIONAL_CONTENT_QUICK_START.md)
+1. ✅ Read [Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)
 1. ✅ Choose implementation path
 1. ✅ Deploy to pilot repository
 1. ✅ Gather feedback
@@ -552,8 +552,10 @@ git add . && git commit -m "Update" && git push
 
 ### Getting Help
 
-- 💬 [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬
+  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- 🐛
+  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - 📧 Contact organization maintainers
 - 📖 Review documentation guides
 
@@ -589,6 +591,6 @@ organization\
 2025-12-28
 
 **Ready to get started?** →
-[Quick Start Guide](docs/ORGANIZATIONAL_CONTENT_QUICK_START.md)
+[Quick Start Guide](ORGANIZATIONAL_CONTENT_QUICK_START.md)
 
 **Built with ❤️ for the Ivviiviivvi community**

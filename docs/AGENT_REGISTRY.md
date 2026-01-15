@@ -1330,19 +1330,19 @@ All new agents must go through:
 
 ### Organization Guides
 
-- [QUICK_START.md](../QUICK_START.md) - Organization quick start guide
-- [BEST_PRACTICES.md](../BEST_PRACTICES.md) - Development best practices
-- [AUTOMATION_MASTER_GUIDE.md](../AUTOMATION_MASTER_GUIDE.md) - Automation
-  patterns
-- [AI_RAPID_WORKFLOW.md](../AI_RAPID_WORKFLOW.md) - AI-assisted development
-  workflow
+- [QUICK_START.md](guides/QUICK_START.md) - Organization quick start guide
+- [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) - Development best practices
+- [AUTOMATION_MASTER_GUIDE.md](automation/AUTOMATION_MASTER_GUIDE.md) -
+  Automation patterns
+- [AI_RAPID_WORKFLOW.md](workflows/AI_RAPID_WORKFLOW.md) - AI-assisted
+  development workflow
 
 ### Technical References
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [MCP Protocol Specification](https://modelcontextprotocol.io/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Semantic Versioning](https://semver.org/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
 
 ---
 
@@ -1383,10 +1383,12 @@ to share, please open a discussion or feature request issue.
 
 ### Questions or Issues?
 
-- **General Questions**: Open a [discussion](../../discussions)
-- **Bug Reports**: Create an [issue](../../issues/new?template=bug_report.md)
+- **General Questions**: Open a
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+- **Bug Reports**: Create an
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
-  [issue](../../issues/new?template=feature_request.md)
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - **Security Issues**: See [SECURITY.md](SECURITY.md) for reporting procedures
 
 ### Contributing

@@ -674,10 +674,10 @@ Copilot Chat.
 
 ### Official Documentation
 
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)<!-- link:docs.modelcontextprotocol -->
 - [MCP Python SDK Documentation](https://github.com/modelcontextprotocol/python-sdk)
 - [MCP TypeScript SDK Documentation](https://github.com/modelcontextprotocol/typescript-sdk)
-- [GitHub Copilot Documentation](https://docs.github.com/copilot)
+- [GitHub Copilot Documentation](https://docs.github.com/copilot)<!-- link:docs.github_copilot -->
 
 ### Organization Resources
 
@@ -701,10 +701,10 @@ Each language collection includes:
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions) - Ask
-  questions and share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues) - Report bugs
-  or request features
+- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  \- Ask questions and share ideas
+- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  \- Report bugs or request features
 - [Contributing Guide](CONTRIBUTING.md) - Contribute to this documentation
 
 ---

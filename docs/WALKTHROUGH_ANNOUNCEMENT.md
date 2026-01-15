@@ -257,7 +257,7 @@ Increase the `timeout-minutes` in your workflow configuration.
 
 - 📖 **Documentation**: Check our [comprehensive guides](./)
 - 💬 **Discussions**: Ask questions in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 🐛 **Bug Reports**: File an issue using our bug report template
 - 📧 **Direct Support**: Contact @4444JPP for urgent issues
 
@@ -302,7 +302,8 @@ Increase the `timeout-minutes` in your workflow configuration.
 
 ## 📚 Documentation Resources
 
-- 📋 [Walkthrough Request Template](../ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📋
+  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 - 🔐 [Secrets Setup Guide](./SECRETS_SETUP.md)
 - 🏗️ [Architecture Documentation](./AI_IMPLEMENTATION_GUIDE.md)
 - 🤝 [Contributing Guidelines](./CONTRIBUTING.md)
@@ -363,7 +364,7 @@ contributors and early testers!
 Have questions or need help getting started?
 
 - 💬 **Start a discussion** in the
-  [Discussions tab](https://github.com/orgs/ivviiviivvi/discussions)
+  [Discussions tab](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 📧 **Contact** @4444JPP for direct support
 - 🐛 **Report issues** using the bug report template
 - 📖 **Check the docs** at [our documentation hub](./)
@@ -373,8 +374,8 @@ Have questions or need help getting started?
 **Ready to create your first walkthrough?**
 
 👉
-[Create a Walkthrough Request Issue](../ISSUE_TEMPLATE/walkthrough-request.yml)
+[Create a Walkthrough Request Issue](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 👉 [Read the Setup Guide](./SECRETS_SETUP.md) 👉
-[Join the Discussion](https://github.com/orgs/ivviiviivvi/discussions)
+[Join the Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 
 Happy walkthrough generating! 🎬✨

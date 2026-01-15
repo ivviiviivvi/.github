@@ -163,9 +163,9 @@ environment:
 
 ## 📖 Documentation
 
-- **[AgentSphere Setup Guide](docs/AGENTSPHERE_SETUP.md)** - Complete deployment
+- **[AgentSphere Setup Guide](../AGENTSPHERE_SETUP.md)** - Complete deployment
   guide
-- **[GitHub Pages Setup Guide](docs/GITHUB_PAGES_SETUP.md)** - Gallery
+- **[GitHub Pages Setup Guide](../GITHUB_PAGES_SETUP.md)** - Gallery
   customization
 
 ## 🧪 Testing
@@ -288,9 +288,11 @@ This system is ready for immediate deployment. To customize:
 
 ## 📞 Support
 
-- 💬 **GitHub**: [@4444JPP](https://github.com/4444JPP)
+- 💬 **GitHub**:
+  [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - 📚 **Documentation**: See `docs/` directory
-- 🐛 **Issues**: [Report a bug](https://github.com/ivviiviivvi/.github/issues)
+- 🐛 **Issues**:
+  [Report a bug](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ## 📜 License
 

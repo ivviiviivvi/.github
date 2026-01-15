@@ -414,10 +414,10 @@ strategy:
 
 ### External Resources
 
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Workflow Syntax Reference](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
-- [Security Hardening Guide](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
-- [Caching Dependencies](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
+- [Workflow Syntax Reference](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)<!-- link:docs.github_actions_workflow_syntax -->
+- [Security Hardening Guide](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
+- [Caching Dependencies](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows)<!-- link:docs.github_actions_caching -->
 
 ### Getting Support
 

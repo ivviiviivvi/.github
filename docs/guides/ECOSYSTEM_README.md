@@ -277,9 +277,9 @@ google_analytics: UA-XXXXXXXXX-X
 
 ## 📚 Documentation
 
-- [AgentSphere Setup Guide](.github/docs/AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup Guide](.github/docs/GITHUB_PAGES_SETUP.md)
-- [Live Deployment Guide](.github/docs/LIVE_DEPLOYMENT_GUIDE.md)
+- [AgentSphere Setup Guide](../../.github/docs/AGENTSPHERE_SETUP.md)
+- [GitHub Pages Setup Guide](../../.github/docs/GITHUB_PAGES_SETUP.md)
+- [Live Deployment Guide](../../.github/docs/LIVE_DEPLOYMENT_GUIDE.md)
 
 ## 🤝 Contributing
 

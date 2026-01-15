@@ -360,7 +360,7 @@ Track these issue metrics:
 
 ## References
 
-- [GitHub Issues Documentation](https://docs.github.com/en/issues)
+- [GitHub Issues Documentation](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
 - [Project Planning Guide](PROJECT_PLANNING.md)
 - [Label Standards](LABELS.md)
 - [Contributing Guidelines](CONTRIBUTING.md)

@@ -312,8 +312,8 @@
 ---
 
 **Ready to start?** →
-[Quick Start Guide](docs/ORGANIZATIONAL_CONTENT_QUICK_START.md)
+[Quick Start Guide](ORGANIZATIONAL_CONTENT_QUICK_START.md)
 
-**Need help?** → [Master Index](docs/ORGANIZATIONAL_CONTENT_INDEX.md)
+**Need help?** → [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md)
 
 **Built with ❤️ for the Ivviiviivvi community**
