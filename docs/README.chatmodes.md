@@ -12,6 +12,9 @@ enabling enhanced context-aware assistance for particular tasks or workflows.
 - Download the `*.chatmode.md` file and manually install it in VS Code using the
   Command Palette
 
+**Note**: Upstream installs now use `*.agent.md` files from
+`github/awesome-copilot/agents` (the install buttons below reflect that shift).
+
 **To Activate/Use:**
 
 - Import the chat mode configuration into your VS Code settings

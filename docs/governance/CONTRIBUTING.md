@@ -81,7 +81,7 @@ pre-commit run ruff --all-files
 
 ### Reporting Bugs
 
-Use our [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml) and
+Use our [Bug Report template](../../.github/ISSUE_TEMPLATE/bug_report.yml) and
 include:
 
 - Clear description of the issue
@@ -91,7 +91,7 @@ include:
 
 ### Suggesting Features
 
-Use our [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.yml)
+Use our [Feature Request template](../../.github/ISSUE_TEMPLATE/feature_request.yml)
 and include:
 
 - Problem statement
@@ -101,7 +101,7 @@ and include:
 ### Improving Documentation
 
 Documentation improvements are always welcome! Use our
-[Documentation template](.github/ISSUE_TEMPLATE/documentation.yml) for doc
+[Documentation template](../../.github/ISSUE_TEMPLATE/documentation.yml) for doc
 issues.
 
 ## Code Style Guidelines
@@ -271,7 +271,7 @@ def test1():
 
 - 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask
   questions
-- 📚 [Documentation](README.md) - Read the docs
+- 📚 [Documentation](../../README.md) - Read the docs
 - 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues) - Report bugs
 
 ## Recognition

@@ -128,13 +128,13 @@ We use the following automated security tools to detect vulnerabilities:
 Our security workflows run automatically on every push and pull request:
 
 - **🔒 Secret Scanning** -
-  [`.github/workflows/security-scan.yml`](.github/workflows/security-scan.yml)
+  [`.github/workflows/security-scan.yml`](../../.github/workflows/security-scan.yml)
 - **🔍 Code Scanning (CodeQL)** -
-  [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml)
+  [`.github/workflows/codeql-analysis.yml`](../../.github/workflows/codeql-analysis.yml)
 - **📦 Dependency Review** -
-  [`.github/workflows/dependency-review.yml`](.github/workflows/dependency-review.yml)
+  [`.github/workflows/dependency-review.yml`](../../.github/workflows/dependency-review.yml)
 
-View all security workflows: [Security Workflows](.github/workflows/)
+View all security workflows: [Security Workflows](../../.github/workflows/)
 
 ## Security Best Practices
 

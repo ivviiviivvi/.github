@@ -1330,12 +1330,12 @@ All new agents must go through:
 
 ### Organization Guides
 
-- [QUICK_START.md](../QUICK_START.md) - Organization quick start guide
-- [BEST_PRACTICES.md](../BEST_PRACTICES.md) - Development best practices
-- [AUTOMATION_MASTER_GUIDE.md](../AUTOMATION_MASTER_GUIDE.md) - Automation
-  patterns
-- [AI_RAPID_WORKFLOW.md](../AI_RAPID_WORKFLOW.md) - AI-assisted development
-  workflow
+- [QUICK_START.md](guides/QUICK_START.md) - Organization quick start guide
+- [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) - Development best practices
+- [AUTOMATION_MASTER_GUIDE.md](automation/AUTOMATION_MASTER_GUIDE.md) -
+  Automation patterns
+- [AI_RAPID_WORKFLOW.md](workflows/AI_RAPID_WORKFLOW.md) - AI-assisted
+  development workflow
 
 ### Technical References
 
@@ -1383,10 +1383,12 @@ to share, please open a discussion or feature request issue.
 
 ### Questions or Issues?
 
-- **General Questions**: Open a [discussion](../../discussions)
-- **Bug Reports**: Create an [issue](../../issues/new?template=bug_report.md)
+- **General Questions**: Open a
+  [discussion](https://github.com/ivviiviivvi/.github/discussions)
+- **Bug Reports**: Create an
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)
 - **Feature Requests**: Create an
-  [issue](../../issues/new?template=feature_request.md)
+  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)
 - **Security Issues**: See [SECURITY.md](SECURITY.md) for reporting procedures
 
 ### Contributing

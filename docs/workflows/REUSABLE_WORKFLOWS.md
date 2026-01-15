@@ -679,14 +679,14 @@ on:
   tips
 - **[Security Best Practices](../SECURITY_BEST_PRACTICES.md)** - Security
   guidelines
-- **[Contributing Guide](../../CONTRIBUTING.md)** - How to contribute
+- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute
 
 ---
 
 ## 🤝 Contributing
 
 Have ideas for new reusable workflows? See our
-[Contributing Guide](../../CONTRIBUTING.md).
+[Contributing Guide](../CONTRIBUTING.md).
 
 **Common workflow patterns to contribute:**
 

@@ -995,8 +995,8 @@ Overall Health Score: [X/100]
 ### Internal Resources
 
 - [Best Practices Guide](./BEST_PRACTICES.md)
-- [Workflow Optimization Guide](../../WORKFLOW_OPTIMIZATION_INDEX.md)
-- [Security Best Practices](../../WORKFLOW_SECURITY_AUDIT.md)
+- [Workflow Optimization Guide](../WORKFLOW_OPTIMIZATION_INDEX.md)
+- [Security Best Practices](../WORKFLOW_SECURITY_AUDIT.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 - [Community Standards](../CODE_OF_CONDUCT.md)
 
@@ -1015,10 +1015,10 @@ Overall Health Score: [X/100]
 
 ### Templates
 
-- [Issue Templates](../../ISSUE_TEMPLATE/)
-- [PR Templates](../../PULL_REQUEST_TEMPLATE/)
+- [Issue Templates](../../.github/ISSUE_TEMPLATE/)
+- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- [Workflow Templates](../../workflow-templates/)
+- [Workflow Templates](../../automation/workflow-templates/)
 
 ---
 

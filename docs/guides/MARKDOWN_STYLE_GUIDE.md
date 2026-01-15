@@ -424,7 +424,7 @@ More information in the [API reference][api].
 ```markdown
 See [Installation](#installation) section.
 
-See [Contributing Guide](CONTRIBUTING.md).
+See [Contributing Guide](../CONTRIBUTING.md).
 ```
 
 **Rules**:
@@ -437,13 +437,13 @@ See [Contributing Guide](CONTRIBUTING.md).
 **Good**:
 
 ```markdown
-Read the [installation guide](INSTALL.md) for setup instructions.
+Read the [installation guide](../WORKSPACE_QUICK_START.md) for setup instructions.
 ```
 
 **Bad**:
 
 ```markdown
-Click [here](INSTALL.md) to install.
+Click [here](../WORKSPACE_QUICK_START.md) to install.
 ```
 
 ### Code Blocks
@@ -1013,9 +1013,9 @@ git commit -m "message"
 
 ### 4. Poor Link Text
 
-**Wrong**: "Click [here](link) for more information"
+**Wrong**: "Click [here](../WORKSPACE_QUICK_START.md) for more information"
 
-**Right**: "See the [installation guide](link) for more information"
+**Right**: "See the [installation guide](../WORKSPACE_QUICK_START.md) for more information"
 
 ### 5. Walls of Text
 
@@ -1059,10 +1059,10 @@ This is a **living document**. To propose changes:
 
 ## Related Documentation
 
-- [CONTRIBUTING.md](docs/CONTRIBUTING.md) - Contributing guidelines
-- [VERSION_CONTROL_STANDARDS.md](VERSION_CONTROL_STANDARDS.md) - Version control
-  standards
-- [README.md](README.md) - Repository overview
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contributing guidelines
+- [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) -
+  Version control standards
+- [README.md](../../README.md) - Repository overview
 
 ---
 

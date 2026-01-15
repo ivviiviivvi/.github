@@ -1633,8 +1633,8 @@ architecture** - Grow with your needs
 
 - [Development Environment Setup](./DEVELOPMENT_ENVIRONMENT_SETUP.md)
 - [Docker Best Practices](./guides/DOCKER_BEST_PRACTICES.md)
-- [Security Guide](../SECURITY.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Security Guide](SECURITY.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
 
 ---
 

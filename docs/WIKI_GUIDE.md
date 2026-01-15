@@ -163,7 +163,7 @@ Last updated: {{date}} | [Edit this page]({{page_url}}) | [View history]({{histo
 
 ---
 
-Licensed under [MIT License](LICENSE) | [Code of Conduct](CODE_OF_CONDUCT.md) | [Security Policy](SECURITY.md)
+Licensed under [MIT License](../LICENSE) | [Code of Conduct](CODE_OF_CONDUCT.md) | [Security Policy](SECURITY.md)
 ```
 
 ## Content Types
@@ -750,7 +750,7 @@ See [[Contributing]] for complete guidelines.
 
 ### I found a bug. What should I do?
 
-Please [open an issue](link) with:
+Please [open an issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml) with:
 - Bug description
 - Steps to reproduce
 - Expected vs actual behavior
@@ -758,7 +758,7 @@ Please [open an issue](link) with:
 
 ### I have a feature request
 
-Great! Please [open a feature request](link) and describe:
+Great! Please [open a feature request](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml) and describe:
 - What problem it solves
 - How you envision it working
 - Any alternatives you've considered
@@ -767,7 +767,7 @@ Great! Please [open a feature request](link) and describe:
 
 ### What license is [Project] under?
 
-[Project] is licensed under [License]. See [LICENSE](link) for details.
+[Project] is licensed under [License]. See [LICENSE](../LICENSE) for details.
 
 ### Can I use [Project] commercially?
 
@@ -790,7 +790,7 @@ You can support [Project] by:
 
 ---
 
-**Don't see your question?** [Ask it in Discussions](link)
+**Don't see your question?** [Ask it in Discussions](https://github.com/ivviiviivvi/.github/discussions)
 ````
 
 ### 7. Troubleshooting Guide Template
@@ -806,9 +806,9 @@ You can support [Project] by:
 
 If you can't find your issue here:
 
-1. Search [existing issues](link)
-2. Ask in [Discussions](link)
-3. [Open a new issue](link)
+1. Search [existing issues](https://github.com/ivviiviivvi/.github/issues)
+2. Ask in [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+3. [Open a new issue](https://github.com/ivviiviivvi/.github/issues/new/choose)
 
 ## Diagnostic Steps
 
@@ -1080,8 +1080,8 @@ Include this when asking for help!
 
 ### Community Support
 
-- 💬 [Discussions](link) - Ask the community
-- 🐛 [Issues](link) - Report bugs
+- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask the community
+- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues) - Report bugs
 - 📧 [Email](mailto:support@example.com) - Private support
 
 ## See Also

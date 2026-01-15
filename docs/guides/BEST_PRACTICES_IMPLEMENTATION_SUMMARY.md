@@ -254,14 +254,14 @@ All templates have been validated for:
 
 ### For Running Sessions
 
-1. Review the [Complete Guide](docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
+1. Review the [Complete Guide](GITHUB_BEST_PRACTICES_SESSIONS.md)
 1. Start with a 30-minute Knowledge Share
 1. Use provided templates and checklists
 1. Track action items
 1. Measure and iterate
 
 **Quick Start**: See
-[Quick Reference Guide](docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md)
+[Quick Reference Guide](BEST_PRACTICES_QUICK_REFERENCE.md)
 
 ---
 
@@ -373,8 +373,8 @@ Track these metrics to measure impact:
 ### Templates
 
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- [Issue Templates](../../ISSUE_TEMPLATE/)
-- [PR Templates](../../PULL_REQUEST_TEMPLATE/)
+- [Issue Templates](../../.github/ISSUE_TEMPLATE/)
+- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
 
 ### External
 

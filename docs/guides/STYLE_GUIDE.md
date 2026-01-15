@@ -894,14 +894,14 @@ graph LR
 **Descriptive Links**:
 
 ```
-Read the [installation guide](link).
+Read the [installation guide](../WORKSPACE_QUICK_START.md).
 ```
 
 **Avoid**:
 
 ```
-Click [here](link).
-Read more [here](link).
+Click [here](../WORKSPACE_QUICK_START.md).
+Read more [here](../WORKSPACE_QUICK_START.md).
 ```
 
 ### Color

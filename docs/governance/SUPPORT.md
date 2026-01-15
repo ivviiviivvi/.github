@@ -59,15 +59,15 @@ Before asking for help, please:
 
 ### Official Documentation
 
-- **📖 [Main Documentation](docs/)** - Comprehensive guides and API reference
-- **🚀 [Getting Started Guide](docs/getting-started.md)** - Quick start tutorial
-- **📚 [API Reference](docs/api/)** - Detailed API documentation
-- **🔧 [Configuration Guide](docs/configuration.md)** - Configuration options
-- **🏗️ [Architecture Overview](docs/architecture.md)** - System architecture
+- **📖 [Main Documentation](../INDEX.md)** - Comprehensive guides and API reference
+- **🚀 [Getting Started Guide](../WORKSPACE_QUICK_START.md)** - Quick start tutorial
+- **📚 [Reference Docs](../reference/)** - Detailed technical reference
+- **🔧 [Configuration Guide](../DEVELOPMENT_ENVIRONMENT_SETUP.md)** - Configuration options
+- **🏗️ [Architecture Overview](../architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md)** - System architecture
 
 ### Tutorials and Examples
 
-- **[Examples Repository](examples/)** - Code examples and templates
+- **[Walkthrough Gallery](../walkthrough-gallery.md)** - Code examples and templates
 - **[Video Tutorials](https://youtube.com/@ivviiviivvi)** - Video walkthroughs
   (coming soon)
 
@@ -85,7 +85,7 @@ Before asking for help, please:
 
 **Q: How do I get started with the project?**
 
-A: Follow our [Getting Started Guide](docs/getting-started.md) for installation
+A: Follow our [Getting Started Guide](../WORKSPACE_QUICK_START.md) for installation
 and setup instructions.
 
 **Q: What are the system requirements?**
@@ -99,7 +99,7 @@ A:
 
 **Q: Is this project free to use?**
 
-A: Yes, this project is open source and free to use under the [LICENSE](LICENSE)
+A: Yes, this project is open source and free to use under the [LICENSE](../../LICENSE)
 terms.
 
 #### Installation
@@ -111,7 +111,7 @@ A:
 1. Ensure you have Python 3.11+ installed: `python --version`
 1. Update pip: `pip install --upgrade pip`
 1. Try installing in a virtual environment
-1. Check [Common Issues](docs/troubleshooting.md) in documentation
+1. Check [Common Issues](../SUPPORT.md) in documentation
 
 **Q: How do I update to the latest version?**
 
@@ -126,7 +126,7 @@ pip install --upgrade -r requirements.txt
 
 **Q: How do I report a bug?**
 
-A: Use our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.yml) and
+A: Use our [Bug Report Template](../../.github/ISSUE_TEMPLATE/bug_report.yml) and
 include:
 
 - Steps to reproduce
@@ -137,7 +137,7 @@ include:
 **Q: How do I request a new feature?**
 
 A: Use our
-[Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.yml) and
+[Feature Request Template](../../.github/ISSUE_TEMPLATE/feature_request.yml) and
 explain:
 
 ## Getting Help
@@ -149,9 +149,9 @@ get support.
 
 Before asking for help, please check our documentation:
 
-- **[README](README.md)** - Project overview and quick start
+- **[README](../../README.md)** - Project overview and quick start
 - **[Contributing Guide](CONTRIBUTING.md)** - How to contribute
-- **[Documentation](docs/)** - Detailed guides and references
+- **[Documentation](../INDEX.md)** - Detailed guides and references
 
 ## 💬 GitHub Discussions
 
@@ -193,8 +193,8 @@ For security issues, please:
 
 ### How do I get started?
 
-1. Read the [README](README.md)
-1. Check the [Documentation](docs/)
+1. Read the [README](../../README.md)
+1. Check the [Documentation](../INDEX.md)
 1. Look at existing issues and discussions
 1. Join the community discussions
 
@@ -217,7 +217,7 @@ and provide as much detail as possible.
 
 ### Where can I find examples?
 
-- Check the [examples/](examples/) directory (if applicable)
+- Check the [examples/](../../.github/examples/) directory (if applicable)
 - Look at existing issues and pull requests
 - Browse the documentation
 
@@ -300,9 +300,9 @@ Before filing an issue:
 
 Use appropriate templates:
 
-- [Bug Report](.github/ISSUE_TEMPLATE/bug_report.yml)
-- [Feature Request](.github/ISSUE_TEMPLATE/feature_request.yml)
-- [Task](.github/ISSUE_TEMPLATE/task.yml)
+- [Bug Report](../../.github/ISSUE_TEMPLATE/bug_report.yml)
+- [Feature Request](../../.github/ISSUE_TEMPLATE/feature_request.yml)
+- [Task](../../.github/ISSUE_TEMPLATE/task.yml)
 
 ## Response Times
 
@@ -398,7 +398,7 @@ For enterprise support, training, or consulting:
 - **Issues**: [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
 - **Discussions**:
   [Community Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- **Documentation**: [docs/](docs/)
+- **Documentation**: [INDEX.md](../INDEX.md)
 
 ## 📧 Contact
 
