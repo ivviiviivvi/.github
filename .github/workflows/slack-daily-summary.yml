@@ -1,0 +1,146 @@
+name: Slack Daily Summary
+
+on:
+  schedule:
+    # Run at 9:00 AM UTC daily
+    - cron: 0 9 * * *
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  daily-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get yesterday's metrics
+        id: metrics
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const startDate = yesterday.toISOString().split('T')[0];
+
+            // Get workflow runs from yesterday
+            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              created: `>=${startDate}`,
+              per_page: 100
+            });
+
+            const relevantWorkflows = [
+              'issue-triage.yml',
+              'auto-assign-reviewers.yml',
+              'status-sync.yml',
+              'stale-management.yml'
+            ];
+
+            const workflowRuns = runs.workflow_runs.filter(run =>
+              relevantWorkflows.includes(run.path.split('/').pop())
+            );
+
+            const total = workflowRuns.length;
+            const successful = workflowRuns.filter(r => r.conclusion === 'success').length;
+            const failed = workflowRuns.filter(r => r.conclusion === 'failure').length;
+            const successRate = total > 0 ? ((successful / total) * 100).toFixed(1) : 0;
+
+            // Count by workflow
+            const byWorkflow = {};
+            relevantWorkflows.forEach(wf => {
+              const wfRuns = workflowRuns.filter(r => r.path.endsWith(wf));
+              byWorkflow[wf.replace('.yml', '')] = {
+                total: wfRuns.length,
+                successful: wfRuns.filter(r => r.conclusion === 'success').length,
+                failed: wfRuns.filter(r => r.conclusion === 'failure').length
+              };
+            });
+
+            core.setOutput('total', total);
+            core.setOutput('successful', successful);
+            core.setOutput('failed', failed);
+            core.setOutput('success-rate', successRate);
+            core.setOutput('by-workflow', JSON.stringify(byWorkflow));
+            core.setOutput('date', startDate);
+
+      - name: Send daily summary to Slack
+        shell: bash
+        run: |
+          WORKFLOW_DATA='${{ steps.metrics.outputs.by-workflow }}'
+
+          # Determine status emoji
+          SUCCESS_RATE=${{ steps.metrics.outputs.success-rate }}
+          if (( $(echo "$SUCCESS_RATE >= 98" | bc -l) )); then
+            STATUS_EMOJI=":white_check_mark:"
+            STATUS_COLOR="#36A64F"
+          elif (( $(echo "$SUCCESS_RATE >= 95" | bc -l) )); then
+            STATUS_EMOJI=":large_orange_diamond:"
+            STATUS_COLOR="#FFA500"
+          else
+            STATUS_EMOJI=":warning:"
+            STATUS_COLOR="#FF0000"
+          fi
+
+          # Build workflow breakdown
+          WORKFLOW_BREAKDOWN=$(echo "$WORKFLOW_DATA" | jq -r 'to_entries | map("*" + .key + ":* " + (.value.successful|tostring) + "/" + (.value.total|tostring) + " (" + (if .value.total > 0 then ((.value.successful / .value.total * 100)|tostring|split(".")[0]) else "0" end) + "%)") | join("\n")')
+
+          curl -X POST "${{ secrets.SLACK_WEBHOOK_METRICS }}" \
+            -H 'Content-Type: application/json' \
+            -d "{
+              \"blocks\": [
+                {
+                  \"type\": \"header\",
+                  \"text\": {
+                    \"type\": \"plain_text\",
+                    \"text\": \"${STATUS_EMOJI} Daily Workflow Summary - ${{ steps.metrics.outputs.date }}\",
+                    \"emoji\": true
+                  }
+                },
+                {
+                  \"type\": \"section\",
+                  \"fields\": [
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Total Runs:*\n${{ steps.metrics.outputs.total }}\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Success Rate:*\n${{ steps.metrics.outputs.success-rate }}%\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Successful:*\n${{ steps.metrics.outputs.successful }}\"
+                    },
+                    {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Failed:*\n${{ steps.metrics.outputs.failed }}\"
+                    }
+                  ]
+                },
+                {
+                  \"type\": \"section\",
+                  \"text\": {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Workflow Breakdown:*\n${WORKFLOW_BREAKDOWN}\"
+                  }
+                },
+                {
+                  \"type\": \"actions\",
+                  \"elements\": [
+                    {
+                      \"type\": \"button\",
+                      \"text\": {
+                        \"type\": \"plain_text\",
+                        \"text\": \"View Dashboard\"
+                      },
+                      \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions\"
+                    }
+                  ]
+                }
+              ]
+            }"

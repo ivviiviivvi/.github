@@ -1,0 +1,125 @@
+name: Slack Notification
+description: Send notifications to Slack channels based on priority level
+author: Workflow Automation Team
+
+inputs:
+  webhook-url:
+    description: Slack webhook URL
+    required: true
+  priority:
+    description: Alert priority (P0, P1, P2, P3)
+    required: true
+  title:
+    description: Notification title
+    required: true
+  message:
+    description: Notification message
+    required: true
+  workflow:
+    description: Source workflow name
+    required: true
+  status:
+    description: Workflow status (success, failure, warning)
+    required: true
+  details-url:
+    description: URL to detailed information
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Determine notification settings
+      shell: bash
+      id: settings
+      run: |
+        case "${{ inputs.priority }}" in
+          P0)
+            echo "mention=<!channel>" >> $GITHUB_OUTPUT
+            echo "color=#FF0000" >> $GITHUB_OUTPUT
+            echo "send=true" >> $GITHUB_OUTPUT
+            ;;
+          P1)
+            echo "mention=<!here>" >> $GITHUB_OUTPUT
+            echo "color=#FFA500" >> $GITHUB_OUTPUT
+            echo "send=true" >> $GITHUB_OUTPUT
+            ;;
+          P2)
+            echo "mention=" >> $GITHUB_OUTPUT
+            echo "color=#FFFF00" >> $GITHUB_OUTPUT
+            echo "send=true" >> $GITHUB_OUTPUT
+            ;;
+          P3)
+            # P3 alerts go to dashboard only, no Slack noise
+            echo "send=false" >> $GITHUB_OUTPUT
+            ;;
+        esac
+
+        case "${{ inputs.status }}" in
+          success)
+            echo "icon=:white_check_mark:" >> $GITHUB_OUTPUT
+            ;;
+          failure)
+            echo "icon=:x:" >> $GITHUB_OUTPUT
+            ;;
+          warning)
+            echo "icon=:warning:" >> $GITHUB_OUTPUT
+            ;;
+        esac
+
+    - name: Send Slack notification
+      if: steps.settings.outputs.send == 'true'
+      shell: bash
+      run: |
+        DETAILS_SECTION=""
+        if [ -n "${{ inputs.details-url }}" ]; then
+          DETAILS_SECTION=",{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"text\":\"View Details\"},\"url\":\"${{ inputs.details-url }}\"}]}"
+        fi
+
+        MENTION_SECTION=""
+        if [ -n "${{ steps.settings.outputs.mention }}" ]; then
+          MENTION_SECTION=",{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"${{ steps.settings.outputs.mention }}\"}]}"
+        fi
+
+        curl -X POST "${{ inputs.webhook-url }}" \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"blocks\": [
+              {
+                \"type\": \"header\",
+                \"text\": {
+                  \"type\": \"plain_text\",
+                  \"text\": \"${{ steps.settings.outputs.icon }} ${{ inputs.title }}\",
+                  \"emoji\": true
+                }
+              },
+              {
+                \"type\": \"section\",
+                \"fields\": [
+                  {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Workflow:*\n${{ inputs.workflow }}\"
+                  },
+                  {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Priority:*\n${{ inputs.priority }}\"
+                  },
+                  {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Status:*\n${{ inputs.status }}\"
+                  },
+                  {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Time:*\n$(date -u '+%Y-%m-%d %H:%M:%S UTC')\"
+                  }
+                ]
+              },
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"${{ inputs.message }}\"
+                }
+              }${DETAILS_SECTION}${MENTION_SECTION}
+            ]
+          }"

@@ -1,0 +1,37 @@
+name: Test Slack Notifications
+
+on:
+  workflow_dispatch:
+    inputs:
+      priority:
+        description: Priority level to test
+        required: true
+        type: choice
+        options:
+          - P0
+          - P1
+          - P2
+          - P3
+      message:
+        description: Test message
+        required: false
+        default: This is a test notification
+        type: string
+
+jobs:
+  test-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Test Notification
+        uses: ./.github/actions/slack-notify
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_ALERTS }}
+          priority: ${{ github.event.inputs.priority }}
+          title: "[TEST] ${{ github.event.inputs.priority }} Notification Test"
+          message: ${{ github.event.inputs.message }}
+          workflow: test-slack-notifications
+          status: success
+          details-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
