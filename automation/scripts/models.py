@@ -14,7 +14,7 @@ All models use Pydantic for validation and serialization.
 
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field, validator
 
@@ -568,6 +568,67 @@ class FeatureImportance(BaseModel):
         default_factory=list, description="Top N features"
     )
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        """Pydantic configuration."""
+
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
+
+# =============================================================================
+# SLA Monitoring Models
+# =============================================================================
+
+
+class SLAConfig(BaseModel):
+    """Configuration for SLA monitoring."""
+
+    enabled: bool = True
+    check_interval_minutes: int = Field(15, ge=1)
+    thresholds: List["SLAThresholds"] = Field(default_factory=list)
+
+    class Config:
+        """Example SLA config."""
+
+        schema_extra = {
+            "example": {
+                "enabled": True,
+                "check_interval_minutes": 15,
+                "thresholds": [],
+            }
+        }
+
+
+class SLABreach(BaseModel):
+    """Record of an SLA breach."""
+
+    item_type: str = Field(..., description="Type of item (issue/pr/workflow)")
+    item_number: int = Field(..., description="Item number")
+    priority: Priority
+    breach_type: str = Field(..., description="Type of breach")
+    threshold_value: float = Field(..., description="SLA threshold")
+    actual_value: float = Field(..., description="Actual value")
+    breach_time: datetime = Field(default_factory=datetime.utcnow)
+    resolved: bool = False
+    resolution_time: Optional[datetime] = None
+
+    class Config:
+        """Pydantic configuration."""
+
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
+
+class SLAReport(BaseModel):
+    """Comprehensive SLA report."""
+
+    repository: str
+    period_start: datetime
+    period_end: datetime
+    metrics: Dict[str, SLAMetrics] = Field(default_factory=dict)
+    total_breaches: int = 0
+    compliance_percentage: float = 100.0
+    trends: Dict[str, Any] = Field(default_factory=dict)
+    generated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
         """Pydantic configuration."""
