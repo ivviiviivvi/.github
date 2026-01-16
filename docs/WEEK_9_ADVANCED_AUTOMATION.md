@@ -637,7 +637,7 @@ cp .github/sla.yml.example .github/sla.yml
 cp .github/incident.yml.example .github/incident.yml
 ```
 
-2. **Update organization details**:
+1. **Update organization details**:
 
 ```yaml
 # Common settings across all configs
@@ -654,7 +654,7 @@ notifications:
     integration_key: "${PAGERDUTY_KEY}"
 ```
 
-3. **Configure thresholds**:
+1. **Configure thresholds**:
 
 Adjust thresholds based on your team's needs:
 
@@ -943,9 +943,9 @@ python automation/scripts/SCRIPT.py --debug
 ### Support Channels
 
 - **Slack**: #automation-support
-- **Email**: automation-team@example.com
-- **Documentation**: https://docs.example.com/automation
-- **Issues**: https://github.com/org/repo/issues
+- **Email**: <automation-team@example.com>
+- **Documentation**: <https://docs.example.com/automation>
+- **Issues**: <https://github.com/org/repo/issues>
 
 ---
 

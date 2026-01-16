@@ -700,3 +700,37 @@ class PostIncidentReport(BaseModel):
         """Pydantic configuration."""
 
         json_encoders = {datetime: lambda v: v.isoformat()}
+
+
+# ==================== Validation Models ====================
+
+
+class ValidationResult(BaseModel):
+    """Result of a capability validation."""
+
+    capability: str
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    passed: bool = False
+    message: str = ""
+    errors: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+    metrics: Dict[str, Any] = Field(default_factory=dict)
+
+
+class ValidationSuite(BaseModel):
+    """Complete validation suite results."""
+
+    repository: str
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    duration_seconds: float = 0.0
+    results: List[ValidationResult] = Field(default_factory=list)
+    passed: int = 0
+    failed: int = 0
+    warnings: int = 0
+
+    def dict(self, **kwargs):
+        """Override dict to handle datetime serialization."""
+        d = super().dict(**kwargs)
+        return d
