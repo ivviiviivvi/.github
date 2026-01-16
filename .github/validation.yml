@@ -18,7 +18,7 @@ validation:
   # Notification channels for validation results
   notifications:
     on_failure: true
-    on_success: false  # Only notify failures by default
+    on_success: false # Only notify failures by default
     channels:
       - type: "slack"
         channel: "#automation-validation"
@@ -31,43 +31,43 @@ capabilities:
     # Test auto-merge eligibility checker
     enabled: true
     test_pr_count: 20
-    min_merge_rate: 0.30  # At least 30% merge rate expected
-    alert_threshold: 0.20  # Alert if below 20%
+    min_merge_rate: 0.30 # At least 30% merge rate expected
+    alert_threshold: 0.20 # Alert if below 20%
 
   intelligent-routing:
     # Test intelligent routing algorithm
     enabled: true
     test_pr_count: 50
-    min_assignment_rate: 0.80  # At least 80% PRs should get reviewers
-    workload_balance_threshold: 0.10  # Max 10% variance
+    min_assignment_rate: 0.80 # At least 80% PRs should get reviewers
+    workload_balance_threshold: 0.10 # Max 10% variance
 
   self-healing:
     # Test self-healing workflow
     enabled: true
     test_run_count: 50
-    min_recovery_rate: 0.70  # At least 70% recovery expected
-    max_failure_rate: 0.30  # Alert if >30% failures
+    min_recovery_rate: 0.70 # At least 70% recovery expected
+    max_failure_rate: 0.30 # Alert if >30% failures
 
   maintenance:
     # Test proactive maintenance
     enabled: true
     check_scheduled_tasks: true
     check_completion_rate: true
-    min_completion_rate: 0.90  # 90% tasks should complete
+    min_completion_rate: 0.90 # 90% tasks should complete
 
   analytics:
     # Test enhanced analytics ML
     enabled: true
     check_model_files: true
-    required_models: 3  # Random Forest, Gradient Boosting, Neural Network
-    min_accuracy: 0.85  # 85% accuracy target
-    alert_accuracy: 0.80  # Alert if below 80%
+    required_models: 3 # Random Forest, Gradient Boosting, Neural Network
+    min_accuracy: 0.85 # 85% accuracy target
+    alert_accuracy: 0.80 # Alert if below 80%
 
   sla-monitoring:
     # Test SLA monitoring
     enabled: true
     test_item_count: 50
-    min_compliance_rate: 0.95  # 95% SLA compliance
+    min_compliance_rate: 0.95 # 95% SLA compliance
     check_breach_detection: true
 
   incident-response:
@@ -142,8 +142,8 @@ reporting:
 # Thresholds and Alerts
 thresholds:
   # Overall validation success
-  min_passed_capabilities: 6  # At least 6/7 must pass
-  max_warnings: 5  # Alert if more than 5 warnings
+  min_passed_capabilities: 6 # At least 6/7 must pass
+  max_warnings: 5 # Alert if more than 5 warnings
 
   # Capability-specific thresholds
   critical_capabilities:

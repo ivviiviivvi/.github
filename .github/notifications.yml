@@ -1,0 +1,382 @@
+# Unified Notifications Configuration
+# Centralized notification system for all Week 9 automation capabilities
+
+# Notification Channels
+channels:
+  # Slack Configuration
+  slack:
+    # Default webhook URL (fallback)
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+
+    # Channel-specific webhooks
+    channels:
+      "#incidents":
+        webhook_url: "${SLACK_INCIDENTS_WEBHOOK}"
+        description: "Critical incidents and SEV-1 alerts"
+
+      "#automation-alerts":
+        webhook_url: "${SLACK_AUTOMATION_WEBHOOK}"
+        description: "Automation system alerts and failures"
+
+      "#monitoring":
+        webhook_url: "${SLACK_MONITORING_WEBHOOK}"
+        description: "SLA breaches, validation results, metrics"
+
+      "#oncall":
+        webhook_url: "${SLACK_ONCALL_WEBHOOK}"
+        description: "On-call team notifications"
+
+  # Email Configuration
+  email:
+    # SMTP settings
+    smtp:
+      server: "${SMTP_SERVER}"
+      port: 587
+      use_tls: true
+      username: "${SMTP_USERNAME}"
+      password: "${SMTP_PASSWORD}"
+
+    # Sender
+    from_address: "automation@example.com"
+    from_name: "GitHub Automation"
+
+    # Recipient groups
+    recipients:
+      oncall:
+        - "oncall@example.com"
+
+      team:
+        - "automation-team@example.com"
+        - "devops-team@example.com"
+
+      management:
+        - "engineering-manager@example.com"
+        - "director@example.com"
+
+      all:
+        - "oncall@example.com"
+        - "automation-team@example.com"
+        - "engineering-manager@example.com"
+
+    # Default recipients (if not specified)
+    default_recipients:
+      - "automation-team@example.com"
+
+  # PagerDuty Configuration
+  pagerduty:
+    integration_key: "${PAGERDUTY_INTEGRATION_KEY}"
+
+    # Service-specific routing
+    services:
+      production:
+        integration_key: "${PAGERDUTY_PRODUCTION_KEY}"
+
+      infrastructure:
+        integration_key: "${PAGERDUTY_INFRA_KEY}"
+
+  # Custom Webhooks
+  webhooks:
+    datadog:
+      url: "${DATADOG_WEBHOOK_URL}"
+      headers:
+        DD-API-KEY: "${DATADOG_API_KEY}"
+
+    jira:
+      url: "${JIRA_WEBHOOK_URL}"
+      auth:
+        username: "${JIRA_USERNAME}"
+        password: "${JIRA_API_TOKEN}"
+
+# Priority-Based Routing
+# Defines which channels receive notifications at each priority level
+priority_routing:
+  CRITICAL:
+    # SEV-1 incidents, P0 SLA breaches
+    - "slack:#incidents"
+    - "pagerduty"
+    - "email:oncall"
+    - "email:management"
+
+  HIGH:
+    # SEV-2 incidents, P1 SLA breaches
+    - "slack:#incidents"
+    - "email:team"
+
+  MEDIUM:
+    # SEV-3 incidents, validation failures
+    - "slack:#automation-alerts"
+    - "email:team"
+
+  LOW:
+    # Successful operations, informational
+    - "slack:#monitoring"
+
+  INFO:
+    # General information (typically not sent)
+    - []
+
+# Source-Specific Routing
+# Override priority routing based on notification source
+source_routing:
+  sla-monitor:
+    CRITICAL:
+      - "slack:#oncall"
+      - "pagerduty"
+      - "email:oncall"
+
+  incident-response:
+    CRITICAL:
+      - "slack:#incidents"
+      - "pagerduty"
+      - "email:oncall"
+      - "email:management"
+    HIGH:
+      - "slack:#incidents"
+      - "email:team"
+
+  validation-framework:
+    MEDIUM:
+      - "slack:#automation-alerts"
+      - "email:team"
+
+  self-healing:
+    HIGH:
+      - "slack:#automation-alerts"
+      - "email:team"
+
+  maintenance-scheduler:
+    MEDIUM:
+      - "slack:#monitoring"
+    LOW:
+      - "slack:#monitoring"
+
+  analytics:
+    MEDIUM:
+      - "slack:#automation-alerts"
+
+  auto-merge:
+    HIGH:
+      - "slack:#automation-alerts"
+
+# Message Templates
+templates:
+  # SLA Breach Template
+  sla_breach:
+    title: "SLA Breach Detected - {{priority}}"
+    message: |
+      **Item:** {{item_type}} #{{item_number}}
+      **Repository:** {{repository}}
+      **Breach Type:** {{breach_type}}
+      **Threshold:** {{threshold}}
+      **Actual:** {{actual}}
+      **Priority:** {{priority}}
+
+      Action required to maintain SLA compliance.
+
+  # Incident Created Template
+  incident_created:
+    title: "New Incident - {{severity}}"
+    message: |
+      **Incident ID:** {{incident_id}}
+      **Severity:** {{severity}}
+      **Repository:** {{repository}}
+
+      {{description}}
+
+      **Status:** {{status}}
+      **Created:** {{created_at}}
+
+  # Validation Failure Template
+  validation_failure:
+    title: "Validation Failed - {{capability}}"
+    message: |
+      **Capability:** {{capability}}
+      **Repository:** {{repository}}
+
+      {{error_message}}
+
+      Please investigate and remediate.
+
+  # Self-Healing Failure Template
+  self_healing_failure:
+    title: "Self-Healing Failed - {{workflow}}"
+    message: |
+      **Workflow:** {{workflow}}
+      **Run ID:** {{run_id}}
+      **Failure Type:** {{failure_type}}
+      **Attempts:** {{attempts}}
+
+      Manual intervention may be required.
+
+  # Maintenance Scheduled Template
+  maintenance_scheduled:
+    title: "Maintenance Scheduled"
+    message: |
+      **Task:** {{task_name}}
+      **Window:** {{start_time}} - {{end_time}}
+      **Duration:** {{duration}} minutes
+      **Impact:** {{impact}}
+
+      Maintenance will be performed automatically.
+
+# Rate Limiting
+rate_limiting:
+  # Enable rate limiting
+  enabled: true
+
+  # Max notifications per minute per channel
+  max_per_minute:
+    slack: 10
+    email: 5
+    pagerduty: 5
+    webhook: 20
+
+  # Burst allowance
+  burst_size:
+    slack: 20
+    email: 10
+    pagerduty: 10
+
+# Deduplication
+deduplication:
+  # Enable deduplication
+  enabled: true
+
+  # Time window for deduplication (seconds)
+  window_seconds: 300 # 5 minutes
+
+  # Keys to use for deduplication
+  keys:
+    - source
+    - title
+
+  # Exceptions (always send)
+  exceptions:
+    - priority: CRITICAL
+    - source: incident-response
+
+# Delivery Options
+delivery:
+  # Retry configuration
+  retry:
+    enabled: true
+    max_attempts: 3
+    backoff_multiplier: 2 # Exponential backoff
+    initial_delay_seconds: 5
+
+  # Timeout configuration (seconds)
+  timeouts:
+    slack: 10
+    email: 30
+    pagerduty: 10
+    webhook: 15
+
+  # Delivery tracking
+  tracking:
+    enabled: true
+    log_directory: ".github/notifications/delivery_log"
+    retention_days: 30
+
+# Formatting
+formatting:
+  # Slack message formatting
+  slack:
+    # Use Slack blocks for rich formatting
+    use_blocks: true
+
+    # Include metadata section
+    include_metadata: true
+
+    # Include timestamp
+    include_timestamp: true
+
+    # Mention users for critical notifications
+    mention_oncall_on_critical: true
+
+  # Email formatting
+  email:
+    # Use HTML formatting
+    use_html: true
+
+    # Include header/footer
+    include_branding: true
+
+    # Email subject prefix
+    subject_prefix: "[GitHub Automation]"
+
+# Health Monitoring
+health_monitoring:
+  # Monitor notification system health
+  enabled: true
+
+  # Check interval (minutes)
+  check_interval_minutes: 15
+
+  # Metrics to track
+  metrics:
+    - delivery_success_rate
+    - delivery_latency
+    - rate_limit_hits
+    - deduplication_hits
+    - failed_deliveries
+
+  # Alert if delivery success rate drops below threshold
+  alert_threshold:
+    success_rate: 0.95 # 95%
+    latency_seconds: 30
+
+# Integration
+integration:
+  # Week 9 systems
+  systems:
+    sla_monitor:
+      enabled: true
+      default_priority: HIGH
+
+    incident_response:
+      enabled: true
+      default_priority: CRITICAL
+
+    validation_framework:
+      enabled: true
+      default_priority: MEDIUM
+
+    self_healing:
+      enabled: true
+      default_priority: HIGH
+
+    maintenance_scheduler:
+      enabled: true
+      default_priority: LOW
+
+    analytics:
+      enabled: true
+      default_priority: MEDIUM
+
+    auto_merge:
+      enabled: true
+      default_priority: MEDIUM
+
+# Advanced Options
+advanced:
+  # Async delivery
+  async_delivery:
+    enabled: true
+    max_concurrent: 10
+
+  # Queue management
+  queue:
+    enabled: true
+    max_size: 1000
+    overflow_action: "drop_oldest"
+
+  # Notification aggregation
+  aggregation:
+    enabled: false
+    window_seconds: 60
+    max_per_aggregate: 10
+
+  # Custom delivery handlers
+  custom_handlers:
+    enabled: false
+    directory: ".github/notifications/handlers"

@@ -163,7 +163,8 @@ class ValidationFramework:
 
             if assigned_prs:
                 result.metrics["assigned_prs"] = len(assigned_prs)
-                result.metrics["assignment_rate"] = len(assigned_prs) / len(prs)
+                result.metrics["assignment_rate"] = len(
+                    assigned_prs) / len(prs)
 
                 # Check reviewer distribution
                 reviewers = {}
@@ -174,7 +175,8 @@ class ValidationFramework:
 
                 result.metrics["unique_reviewers"] = len(reviewers)
                 result.metrics["avg_prs_per_reviewer"] = (
-                    sum(reviewers.values()) / len(reviewers) if reviewers else 0
+                    sum(reviewers.values()) /
+                    len(reviewers) if reviewers else 0
                 )
 
             result.passed = True
@@ -375,7 +377,8 @@ class ValidationFramework:
                 result.metrics["total_incidents"] = len(incidents)
 
                 # Analyze incident severity distribution
-                severity_counts = {"SEV-1": 0, "SEV-2": 0, "SEV-3": 0, "SEV-4": 0}
+                severity_counts = {"SEV-1": 0,
+                                   "SEV-2": 0, "SEV-3": 0, "SEV-4": 0}
                 for incident_file in incidents:
                     with open(incident_file) as f:
                         incident = json.load(f)
@@ -453,7 +456,8 @@ Capabilities:
         logger.info(f"Generating {days}-day validation report")
 
         cutoff = datetime.now() - timedelta(days=days)
-        validation_files = sorted(self.validation_dir.glob("validation_*.json"))
+        validation_files = sorted(
+            self.validation_dir.glob("validation_*.json"))
 
         # Load recent validations
         recent_validations = []
