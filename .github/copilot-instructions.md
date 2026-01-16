@@ -146,7 +146,8 @@ globs: *
 - **Pre-commit Hook Dependency Conflict:**
   - When pre-commit hooks fail due to dependency conflicts, especially with
     `mdformat`, update to a compatible version that works with GFM plugins.
-  - Specifically, ensure that the `mdformat` hook in `.pre-commit-config-rapid.yaml`
+  - Specifically, ensure that the `mdformat` hook in
+    `.pre-commit-config-rapid.yaml`
     is using a compatible revision and includes the necessary
     `additional_dependencies`.
   - Example:

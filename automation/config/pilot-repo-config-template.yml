@@ -1,0 +1,302 @@
+# Pilot Repository Configuration Template
+# Week 6 - Repository Expansion
+
+# Repository Information
+repository:
+  owner: your-org
+  name: pilot-repo-name
+  defaultBranch: main
+  visibility: public # or "private"
+  language: Python # Primary language
+
+# Evaluation Scores (from evaluate_repository.py)
+evaluation:
+  totalScore: 85.0
+  recommendation: EXCELLENT - Highly recommended for pilot
+  activityScore: 80.0
+  documentationScore: 100.0
+  date: "2026-02-22"
+
+# Customization Settings
+customization:
+  # Label Mapping
+  # Maps standard labels to repository-specific labels
+  labels:
+    # Standard → Pilot Repo Equivalent
+    bug: bug
+    enhancement: feature-request
+    documentation: docs
+    good first issue: beginner-friendly
+    help wanted: help-wanted
+    question: question
+    wontfix: wont-fix
+    duplicate: duplicate
+    invalid: invalid
+    "priority: critical": P0
+    "priority: high": P1
+    "priority: medium": P2
+    "priority: low": P3
+    "status: triage": needs-triage
+    "status: in-progress": in-progress
+    "status: blocked": blocked
+    "status: review": ready-for-review
+
+  # CODEOWNERS Configuration
+  codeowners:
+    exists: true
+    path: .github/CODEOWNERS
+    teams:
+      - "@your-org/team-backend"
+      - "@your-org/team-frontend"
+    individuals:
+      - "@maintainer1"
+      - "@maintainer2"
+    # Validation rules
+    validation:
+      requireTeamReview: true
+      minReviewers: 2
+      requireCodeOwnerApproval: true
+
+  # Stale Detection Parameters
+  stale:
+    daysUntilStale: 60
+    daysUntilClose: 7 # Will be adjusted based on A/B test results
+    exemptLabels:
+      - pinned
+      - security
+      - in-progress
+      - P0
+      - P1
+    staleIssueLabel: stale
+    stalePRLabel: stale
+    staleIssueMessage: >
+      This issue has been automatically marked as stale because it has not had
+      recent activity. It will be closed in 7 days if no further activity occurs.
+      Thank you for your contributions!
+    stalePRMessage: >
+      This pull request has been automatically marked as stale because it has not had
+      recent activity. It will be closed in 7 days if no further activity occurs.
+      Please rebase and update if you plan to continue working on this.
+
+# Workflow Configuration
+workflows:
+  # Issue Triage
+  issueTriage:
+    enabled: true
+    priority: P1 # Slack notification priority on failure
+    triggerEvents:
+      - issues.opened
+      - issues.reopened
+    labelRules:
+      - pattern: bug
+        conditions:
+          - titleContains: [bug, error, crash, fail]
+          - bodyContains: [stacktrace, exception, TypeError]
+      - pattern: feature-request
+        conditions:
+          - titleContains: [feature, enhancement, add, support]
+      - pattern: docs
+        conditions:
+          - titleContains: [docs, documentation, readme]
+          - bodyContains: [documentation, tutorial]
+    autoAssign:
+      enabled: true
+      teams:
+        - "@your-org/triage-team"
+
+  # Auto-Assign Reviewers
+  autoAssignReviewers:
+    enabled: true
+    priority: P1 # Slack notification priority on failure
+    triggerEvents:
+      - pull_request.opened
+      - pull_request.ready_for_review
+    rules:
+      - paths: [backend/**, api/**]
+        reviewers:
+          - "@your-org/team-backend"
+        count: 2
+      - paths: [frontend/**, ui/**]
+        reviewers:
+          - "@your-org/team-frontend"
+        count: 2
+      - paths: [docs/**, "*.md"]
+        reviewers:
+          - "@maintainer1"
+        count: 1
+
+  # Status Sync
+  statusSync:
+    enabled: true
+    priority: P2 # Slack notification priority on failure
+    triggerEvents:
+      - pull_request.synchronize
+      - check_suite.completed
+    statusChecks:
+      - ci/tests
+      - ci/lint
+      - ci/build
+
+  # Stale Management
+  staleManagement:
+    enabled: true
+    priority: P2 # Slack notification priority on failure
+    schedule: 0 1 * * * # 1 AM UTC daily
+
+  # Workflow Metrics
+  workflowMetrics:
+    enabled: true
+    priority: P3 # Success notifications dashboard-only
+    schedule: 0 */6 * * * # Every 6 hours
+
+# Deployment Strategy
+deployment:
+  # Phase 1: Passive Mode (24 hours)
+  phase1:
+    duration: 24 hours
+    mode: passive
+    workflows:
+      - issueTriage
+      - autoAssignReviewers
+      - statusSync
+      - staleManagement
+    dryRun: true
+    observeOnly: true
+    notifyChannel: "#workflow-alerts"
+
+  # Phase 2: Active Mode (Gradual)
+  phase2:
+    mode: active
+    gradualActivation:
+      - day: 1
+        workflows: [issueTriage]
+        monitoring: intensive
+      - day: 2
+        workflows: [autoAssignReviewers]
+        monitoring: intensive
+      - day: 3
+        workflows: [statusSync]
+        monitoring: normal
+      - day: 4
+        workflows: [staleManagement]
+        monitoring: normal
+
+# Monitoring Configuration
+monitoring:
+  # Intensive Monitoring (Phase 2, Days 1-2)
+  intensive:
+    frequency: 3x daily # 9 AM, 2 PM, 6 PM UTC
+    checks:
+      - workflowExecutions
+      - notificationDelivery
+      - errorRates
+      - responseTimesP1
+    alerts:
+      failureThreshold: 1 # Alert on any failure
+      responseTimeThreshold: 30 # minutes for P1
+
+  # Normal Monitoring (Phase 2, Days 3-4)
+  normal:
+    frequency: 2x daily # 9 AM, 5 PM UTC
+    checks:
+      - workflowExecutions
+      - errorRates
+    alerts:
+      failureThreshold: 2 # Alert after 2 failures
+      responseTimeThreshold: 60 # minutes for P1
+
+  # Success Criteria
+  successCriteria:
+    - metric: workflowSuccessRate
+      target: ">95%"
+      timeframe: 3 days
+    - metric: notificationDelivery
+      target: ">99%"
+      timeframe: 3 days
+    - metric: p1ResponseTime
+      target: <30 min
+      timeframe: 3 days
+    - metric: teamSatisfaction
+      target: ">8.0/10"
+      method: survey
+    - metric: falsePositives
+      target: <5%
+      timeframe: 3 days
+
+# Rollback Plan
+rollback:
+  triggers:
+    - successRate < 90%
+    - criticalFailure
+    - teamRequest
+    - stakeholderRequest
+  procedure:
+    - step: Disable workflows immediately
+      command: gh workflow disable <workflow-id> --repo {repo}
+    - step: Notify team in Slack
+      channel: "#workflow-alerts"
+    - step: Document issue
+      location: GitHub Issue
+    - step: Analyze root cause
+      responsible: "@workflow-team"
+    - step: Fix and redeploy
+      timeframe: 24-48 hours
+
+# Stakeholder Information
+stakeholders:
+  primary:
+    - name: Repository Maintainer
+      github: "@maintainer1"
+      email: maintainer1@your-org.com
+      role: Pilot Owner
+  secondary:
+    - name: Team Lead
+      github: "@team-lead"
+      email: teamlead@your-org.com
+      role: Approver
+  informed:
+    - name: Engineering Manager
+      email: engmanager@your-org.com
+      role: Stakeholder
+
+# Communication Plan
+communication:
+  preDeployment:
+    - channel: "#pilot-repo-general"
+      message: Workflow automation pilot announcement
+      timing: 3 days before
+    - channel: Email to stakeholders
+      message: Detailed pilot plan
+      timing: 2 days before
+
+  duringDeployment:
+    - channel: "#workflow-alerts"
+      frequency: Real-time
+      content: Status updates and issues
+    - channel: "#pilot-repo-general"
+      frequency: Daily
+      content: Daily summary
+
+  postDeployment:
+    - channel: "#pilot-repo-general"
+      message: Pilot completion summary
+      timing: 1 week after
+    - channel: Monthly Review Meeting
+      message: Results presentation
+      timing: Feb 28, 2026
+
+# Notes and Special Considerations
+notes:
+  - This repository uses feature-request instead of enhancement label
+  - "Team prefers P0-P3 priority labels over priority: labels"
+  - CODEOWNERS requires 2 reviewers for all PRs
+  - Stale detection grace period matches A/B test experiment group (10 days)
+  - Repository has active security policies - exempt security label from stale
+
+# Metadata
+metadata:
+  createdDate: "2026-02-22"
+  createdBy: workflow-team
+  version: "1.0"
+  lastUpdated: "2026-02-22"
+  status: pending-approval
