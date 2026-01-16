@@ -156,7 +156,7 @@ Week 9 overachieved by delivering **71% of Week 10's planned scope early**. This
 
 ## Success Criteria
 
-### Week 10 Complete When:
+### Week 10 Complete When
 
 - ✅ Batch onboarding script operational
 - ✅ Can onboard 5+ repositories in parallel (<1 hour)
@@ -165,7 +165,7 @@ Week 9 overachieved by delivering **71% of Week 10's planned scope early**. This
 - ✅ Documentation complete
 - ✅ Zero critical bugs in test runs
 
-### Week 11 Ready When:
+### Week 11 Ready When
 
 - ✅ All Week 9 capabilities deployed to 12 repositories
 - ✅ Monitoring operational

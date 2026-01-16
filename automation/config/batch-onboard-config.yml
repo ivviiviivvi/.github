@@ -1,0 +1,69 @@
+# Batch Onboarding Configuration Template
+#
+# This file defines the repositories and configurations for batch onboarding.
+# Copy this file and customize for your onboarding batch.
+
+# List of repositories to onboard (required)
+repositories:
+  - "ivviiviivvi/repo1"
+  - "ivviiviivvi/repo2"
+  - "ivviiviivvi/repo3"
+
+# Workflows to deploy (optional)
+workflows:
+  - "workflow-validation.yml"
+  - "pr-automation.yml"
+  - "security-scan.yml"
+
+# Labels to configure (optional)
+labels:
+  "Status: Draft":
+    color: "d4d4d4"
+    description: "PR is in draft state"
+  "Status: Ready":
+    color: "0e8a16"
+    description: "PR is ready for review"
+  "Priority: High":
+    color: "d93f0b"
+    description: "High priority issue or PR"
+  "Type: Enhancement":
+    color: "a2eeef"
+    description: "New feature or request"
+
+# Branch protection rules (optional)
+branch_protection:
+  branch: "main"  # or "master"
+  required_approving_reviews: 1
+  require_code_owner_reviews: true
+  dismiss_stale_reviews: true
+  enforce_admins: false
+  required_checks:
+    - "ci/test"
+    - "ci/lint"
+
+# Repository secrets (optional)
+# Note: Requires GitHub App or PAT with admin:org scope
+secrets:
+  DEPLOY_KEY: "from_environment"
+  API_TOKEN: "from_environment"
+
+# Environments to create (optional)
+environments:
+  - "production"
+  - "staging"
+  - "development"
+
+# Dependencies (optional)
+# List repositories that depend on others (processed after non-dependent repos)
+dependencies:
+  - "ivviiviivvi/dependent-repo"
+
+# Processing configuration
+max_concurrent: 5  # Maximum parallel onboardings
+timeout_seconds: 300  # Timeout per repository
+validate_before: true  # Validate configuration before processing
+rollback_on_failure: true  # Automatically rollback failed onboardings
+
+# Example usage:
+# python automation/scripts/batch_onboard_repositories.py --config config.yml
+# python automation/scripts/batch_onboard_repositories.py --config config.yml --dry-run
