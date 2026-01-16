@@ -443,6 +443,36 @@ python3 batch_onboard_repositories.py \
 
 ---
 
+## Label Validation Tool
+
+**New**: Automated label validation script available!
+
+```bash
+# Validate Phase 1 labels exist
+cd /workspace/automation/scripts
+python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.yml
+
+# Auto-create missing labels (if you have appropriate PAT)
+python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.yml --fix
+```
+
+**Features**:
+
+- ✅ Validates label existence and color matching
+- 🔧 Auto-fix mode to create/update labels (requires `issues: write` permission)
+- 📊 Detailed per-repository reporting
+- 🎯 Exit codes for scripting integration
+
+**Documentation**: [automation/scripts/README_VALIDATION.md](../automation/scripts/README_VALIDATION.md)
+
+This tool can:
+
+1. **Verify** labels after manual deployment
+2. **Auto-create** labels if you have a PAT with appropriate permissions
+3. **Integrate** with deployment workflow for automated validation
+
+---
+
 ## Next Actions
 
 ### Immediate (User Action Required)

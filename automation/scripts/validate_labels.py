@@ -57,7 +57,8 @@ class LabelValidator:
         """
         try:
             result = subprocess.run(
-                ["gh", "label", "list", "--repo", repo, "--json", "name,color,description"],
+                ["gh", "label", "list", "--repo", repo,
+                    "--json", "name,color,description"],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -93,7 +94,8 @@ class LabelValidator:
             subprocess.run(cmd, capture_output=True, text=True, check=True)
             return True
         except subprocess.CalledProcessError as e:
-            print(f"❌ Error creating label {label['name']} in {repo}: {e.stderr}")
+            print(
+                f"❌ Error creating label {label['name']} in {repo}: {e.stderr}")
             return False
 
     def _normalize_color(self, color: str) -> str:
@@ -219,7 +221,8 @@ class LabelValidator:
             print("❌ No labels found in configuration")
             return False
 
-        print(f"📋 Validating {len(required_labels)} labels across {len(repositories)} repositories")
+        print(
+            f"📋 Validating {len(required_labels)} labels across {len(repositories)} repositories")
         print(f"{'🔧 FIX MODE ENABLED' if self.fix_mode else '👀 VALIDATION MODE'}\n")
 
         all_success = True
@@ -258,7 +261,8 @@ class LabelValidator:
             return True
         else:
             failed_count = sum(1 for r in results.values() if not r["success"])
-            print(f"❌ {failed_count}/{len(repositories)} repositories have label issues")
+            print(
+                f"❌ {failed_count}/{len(repositories)} repositories have label issues")
             if not self.fix_mode:
                 print("\n💡 Tip: Run with --fix to automatically create/update labels")
             return False
