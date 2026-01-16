@@ -1,0 +1,4 @@
+2026-01-16 20:11:16,650 - __main__ - INFO - Starting batch onboarding for 3 repositories
+2026-01-16 20:11:16,650 - __main__ - INFO - DRY RUN MODE - No changes will be made
+2026-01-16 20:11:17,875 - __main__ - ERROR - Configuration validation failed: ['Workflow file not found: pr-validation.yml', 'Workflow file not found: merge-related-prs.yml']
+2026-01-16 20:11:17,877 - __main__ - INFO - Results saved to week11-phase1-pilot-dryrun.json
