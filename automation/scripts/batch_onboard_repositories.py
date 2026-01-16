@@ -34,7 +34,7 @@ import yaml
 
 try:
     import aiohttp
-    from github import Github, GithubException
+    from github import Auth, Github, GithubException
 except ImportError:
     print("Error: Required packages not installed.")
     print("Install with: pip install PyGithub aiohttp pyyaml")
@@ -88,7 +88,9 @@ class BatchOnboardingOrchestrator:
         config: OnboardingConfig,
         dry_run: bool = False
     ):
-        self.github = Github(github_token)
+        # Use Auth.Token to avoid deprecation warning
+        auth = Auth.Token(github_token)
+        self.github = Github(auth=auth)
         self.config = config
         self.dry_run = dry_run
         self.results: List[OnboardingResult] = []
