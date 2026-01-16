@@ -367,23 +367,24 @@ class BatchOnboardingOrchestrator:
             branch = repo.get_branch(branch_name)
 
             # Configure protection
+            protection_config = self.config.branch_protection
+            required_checks = protection_config.get('required_checks', [])
+
             branch.edit_protection(
-                required_approving_review_count=self.config.branch_protection.get(
+                required_approving_review_count=protection_config.get(
                     'required_approving_reviews', 1
                 ),
-                require_code_owner_reviews=self.config.branch_protection.get(
+                require_code_owner_reviews=protection_config.get(
                     'require_code_owner_reviews', True
                 ),
-                dismiss_stale_reviews=self.config.branch_protection.get(
+                dismiss_stale_reviews=protection_config.get(
                     'dismiss_stale_reviews', True
                 ),
-                enforce_admins=self.config.branch_protection.get(
+                enforce_admins=protection_config.get(
                     'enforce_admins', False
                 ),
-                required_status_checks={
-                    "strict": True,
-                    "contexts": self.config.branch_protection.get('required_checks', [])
-                } if self.config.branch_protection.get('required_checks') else None
+                strict=True,
+                contexts=required_checks
             )
 
             logger.info(f"    Configured branch protection for {branch_name}")

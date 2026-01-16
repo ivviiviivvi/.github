@@ -27,20 +27,21 @@ labels:
     description: "Automated deployment testing"
 
 # Branch protection for integration testing
-# Using test branch to avoid affecting main branch
-branch_protection:
-  branch: "test-batch-onboarding"
-  required_approving_reviews: 1
-  require_code_owner_reviews: false
-  dismiss_stale_reviews: false
-  enforce_admins: false
-  required_checks: []
+# Disabled due to token permission limitations
+# Uncomment when using admin token
+# branch_protection:
+#   branch: "test-batch-onboarding"
+#   required_approving_reviews: 1
+#   require_code_owner_reviews: false
+#   dismiss_stale_reviews: false
+#   enforce_admins: false
+#   required_checks: []
 
 # Processing options optimized for integration testing
-max_concurrent: 3  # Conservative for testing
-timeout_seconds: 300  # 5 minutes per repository
-validate_before: true  # Always validate
-rollback_on_failure: true  # Enable rollback for safety
+max_concurrent: 3 # Conservative for testing
+timeout_seconds: 300 # 5 minutes per repository
+validate_before: true # Always validate
+rollback_on_failure: true # Enable rollback for safety
 
 # Integration test notes:
 # 1. Start with single repository
@@ -50,7 +51,7 @@ rollback_on_failure: true  # Enable rollback for safety
 # 5. Validate deployments manually after batch run
 
 # Test execution commands:
-# 
+#
 # Phase 1: Single repository test
 # python3 automation/scripts/batch_onboard_repositories.py \
 #   --config automation/config/batch-onboard-integration.yml \
