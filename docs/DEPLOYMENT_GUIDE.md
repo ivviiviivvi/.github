@@ -330,14 +330,18 @@ Saved to `automation/deployment/logs/rollback_{deployment_id}.json`:
 **Solutions:**
 
 1. Identify failing workflows:
+
    ```bash
    ./health_checks.py --repo org/repo --output report.json
    cat report.json | jq '.workflows'
    ```
+
 2. Check specific workflow:
+
    ```bash
    gh run list --workflow <workflow-name>.yml --limit 20
    ```
+
 3. Review workflow configuration and secrets
 
 #### Problem: Health checks timeout
@@ -350,9 +354,11 @@ Saved to `automation/deployment/logs/rollback_{deployment_id}.json`:
 **Solutions:**
 
 1. Increase timeout in `environments.yml`:
+
    ```yaml
    health_check_duration: 600  # 10 minutes
    ```
+
 2. Check for workflow performance issues
 3. Review GitHub Actions status: [status.github.com](https://www.githubstatus.com/)
 
@@ -368,14 +374,18 @@ Saved to `automation/deployment/logs/rollback_{deployment_id}.json`:
 **Solutions:**
 
 1. Check commit history:
+
    ```bash
    git log --oneline .github/workflows/<workflow>.yml
    ```
+
 2. Manually revert if needed:
+
    ```bash
    git revert <commit-sha>
    git push
    ```
+
 3. Verify repository permissions
 
 #### Problem: Partial rollback
@@ -389,9 +399,11 @@ Saved to `automation/deployment/logs/rollback_{deployment_id}.json`:
 
 1. Check rollback log for failed repositories
 2. Manually rollback failed repositories:
+
    ```bash
    ./rollback.py --repo org/failed-repo --to-commit <sha> --execute
    ```
+
 3. Run health checks to verify state
 
 ## Best Practices
@@ -481,7 +493,7 @@ If success rate drops below SLA:
 
 ## Additional Resources
 
-- **GitHub Actions Documentation**: [docs.github.com/actions](https://docs.github.com/actions)
+- **GitHub Actions Documentation**: [docs.github.com/actions](https://docs.github.com/actions)<!-- link:docs.github_actions_root -->
 - **Workflow Syntax**: [docs.github.com/actions/reference/workflow-syntax-for-github-actions](https://docs.github.com/actions/reference/workflow-syntax-for-github-actions)
 - **API Reference**: [docs.github.com/rest](https://docs.github.com/rest)
 - **Status Page**: [status.github.com](https://www.githubstatus.com/)
