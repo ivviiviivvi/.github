@@ -73,7 +73,8 @@ class OnboardingResult:
     steps_completed: List[str] = field(default_factory=list)
     error: Optional[str] = None
     duration_seconds: float = 0.0
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(
+        default_factory=lambda: datetime.utcnow().isoformat())
 
 
 class BatchOnboardingOrchestrator:
@@ -110,7 +111,8 @@ class BatchOnboardingOrchestrator:
         if self.config.validate_before:
             validation_errors = await self._validate_configuration()
             if validation_errors:
-                logger.error(f"Configuration validation failed: {validation_errors}")
+                logger.error(
+                    f"Configuration validation failed: {validation_errors}")
                 return []
 
         # Resolve dependencies
@@ -138,7 +140,8 @@ class BatchOnboardingOrchestrator:
         if self.config.rollback_on_failure and not self.dry_run:
             failed = [r for r in self.results if not r.success]
             if failed:
-                logger.warning(f"Rolling back {len(failed)} failed onboardings")
+                logger.warning(
+                    f"Rolling back {len(failed)} failed onboardings")
                 await self._rollback_failed(failed)
 
         return self.results
@@ -263,7 +266,8 @@ class BatchOnboardingOrchestrator:
             finally:
                 # Calculate duration
                 end_time = datetime.utcnow()
-                result.duration_seconds = (end_time - start_time).total_seconds()
+                result.duration_seconds = (
+                    end_time - start_time).total_seconds()
 
         return result
 
@@ -296,14 +300,16 @@ class BatchOnboardingOrchestrator:
                         break
 
                 if not workflow_path:
-                    raise FileNotFoundError(f"Workflow file not found: {workflow_file}")
+                    raise FileNotFoundError(
+                        f"Workflow file not found: {workflow_file}")
 
                 with open(workflow_path, "r") as f:
                     content = f.read()
 
                 # Check if file already exists
                 try:
-                    existing = repo.get_contents(f".github/workflows/{workflow_file}")
+                    existing = repo.get_contents(
+                        f".github/workflows/{workflow_file}")
                     # Update existing file
                     repo.update_file(
                         path=f".github/workflows/{workflow_file}",
@@ -344,7 +350,8 @@ class BatchOnboardingOrchestrator:
             return
 
         try:
-            existing_labels = {label.name: label for label in repo.get_labels()}
+            existing_labels = {
+                label.name: label for label in repo.get_labels()}
 
             for label_name, label_config in self.config.labels.items():
                 color = label_config.get("color", "cccccc")
@@ -372,7 +379,8 @@ class BatchOnboardingOrchestrator:
     async def _setup_branch_protection(self, repo, result: OnboardingResult) -> None:
         """Set up branch protection rules"""
         step = "setup_branch_protection"
-        branch_name = self.config.branch_protection.get("branch", repo.default_branch)
+        branch_name = self.config.branch_protection.get(
+            "branch", repo.default_branch)
         logger.info(
             f"  [{repo.full_name}] Setting up branch protection for {branch_name}"
         )
@@ -453,7 +461,8 @@ class BatchOnboardingOrchestrator:
         Args:
             failed_results: List of failed OnboardingResult objects
         """
-        logger.info(f"Starting rollback for {len(failed_results)} repositories")
+        logger.info(
+            f"Starting rollback for {len(failed_results)} repositories")
 
         for result in failed_results:
             try:
@@ -475,7 +484,8 @@ class BatchOnboardingOrchestrator:
                                     sha=contents.sha,
                                     branch=repo.default_branch,
                                 )
-                                logger.info(f"  Removed workflow: {workflow_file}")
+                                logger.info(
+                                    f"  Removed workflow: {workflow_file}")
                             except GithubException:
                                 pass  # File doesn't exist or already removed
 
@@ -542,7 +552,8 @@ async def main():
     parser = argparse.ArgumentParser(
         description="Batch onboard multiple repositories with validation and rollback"
     )
-    parser.add_argument("--config", type=str, help="Path to configuration YAML file")
+    parser.add_argument("--config", type=str,
+                        help="Path to configuration YAML file")
     parser.add_argument(
         "--repos", nargs="+", help="List of repositories to onboard (owner/repo format)"
     )

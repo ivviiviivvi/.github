@@ -43,6 +43,7 @@ Week 11 Phase 1 has successfully resolved all technical blockers. The deployment
 **Problem**: Week 11 configs used nested structure incompatible with OnboardingConfig dataclass
 
 **Resolution**:
+
 - Simplified to flat structure matching Week 10 format
 - Removed processing/monitoring/validation/metadata sections
 - Validated against working configurations
@@ -56,6 +57,7 @@ Week 11 Phase 1 has successfully resolved all technical blockers. The deployment
 **Root Cause**: Hardcoded relative paths from script execution directory
 
 **Resolution**:
+
 ```python
 # Before (relative, broken):
 workflow_dirs = [
@@ -74,12 +76,14 @@ workflow_dirs = [
 ```
 
 **Changes Made**:
+
 1. Updated `_validate_configuration()` method (lines 170-192)
 2. Updated `_deploy_workflows()` method (lines 287-305)
 3. Both sections now use absolute paths from workspace root
 4. Consistent multi-directory search pattern
 
 **Testing**:
+
 ```text
 ✓ Successfully onboarded ivviiviivvi/theoretical-specifications-first
 ✓ Successfully onboarded ivviiviivvi/system-governance-framework
@@ -99,12 +103,14 @@ Average: 0.45 seconds per repository
 **Problem**: GitHub Actions token lacks `issues: write` permission
 
 **Testing Performed**:
+
 1. batch_onboard_repositories.py with GITHUB_TOKEN → 403 Forbidden
 2. gh CLI with GitHub Actions token → 403 Forbidden (same token)
 
 **Discovery**: Both automation methods use the same restricted GitHub Actions token
 
 **Workaround Created**: Manual deployment guide (280 lines)
+
 - **Option A**: Web UI deployment (15 min, recommended)
 - **Option B**: Fine-grained PAT with proper permissions (10 min)
 - **Option C**: Sync from .github repository label config (5 min)
@@ -124,6 +130,7 @@ Average: 0.45 seconds per repository
 **Purpose**: Validate config structure fix
 
 **Command**:
+
 ```bash
 python3 batch_onboard_repositories.py \
   --config batch-onboard-week11-phase1-pilot.yml \
@@ -132,6 +139,7 @@ python3 batch_onboard_repositories.py \
 ```
 
 **Results**:
+
 - ✅ Total repositories: 3
 - ✅ Success rate: 100%
 - ✅ Duration: 1.44 seconds
@@ -145,6 +153,7 @@ python3 batch_onboard_repositories.py \
 **Purpose**: Validate workflow path resolution fix
 
 **Command**:
+
 ```bash
 python3 batch_onboard_repositories.py \
   --config batch-onboard-week11-phase1-pilot.yml \
@@ -153,6 +162,7 @@ python3 batch_onboard_repositories.py \
 ```
 
 **Results**:
+
 - ✅ Total repositories: 3
 - ✅ Success rate: 100%
 - ✅ Duration: 1.35 seconds (faster than test #1!)
@@ -171,6 +181,7 @@ python3 batch_onboard_repositories.py \
 **Purpose**: Attempt full deployment
 
 **Results**:
+
 - ❌ Failed: 3/3 repositories (100% failure)
 - ❌ Error: HTTP 403 Forbidden (token permissions)
 - ✅ Rollback: Successful (all 3 repositories)
@@ -234,11 +245,13 @@ rollback_on_failure: true
 ### Files Changed
 
 **Modified**:
+
 - `automation/scripts/batch_onboard_repositories.py` - Absolute path resolution
 - `automation/config/batch-onboard-week11-phase1-pilot.yml` - Workflows re-enabled
 - `docs/WEEK_11_PHASE1_STATUS.md` - Status updates (2x)
 
 **Created**:
+
 - `docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md` - 280 lines
 - `automation/scripts/week11-phase1-pilot-dryrun.json` - Test results
 - `automation/scripts/week11-phase1-with-workflows-dryrun.json` - Test results
@@ -285,28 +298,33 @@ rollback_on_failure: true
 ### Immediate (User Action Required)
 
 **Option A: Web UI Deployment** (Recommended - 15 minutes)
+
 1. Visit repository label pages (links in manual guide)
 2. Create 12 labels per repository
 3. Verify using `gh label list --repo ...`
 
 **Option B: Fine-grained PAT** (10 minutes)
-1. Generate token at https://github.com/settings/tokens?type=beta
+
+1. Generate token at <https://github.com/settings/tokens?type=beta>
 2. Grant "Repository permissions → Issues: Read and write"
 3. Authenticate gh CLI: `gh auth login --with-token`
 4. Run manual deployment script
 
 **Option C: Sync from .github** (5 minutes, if available)
+
 1. Configure label sync in .github repository
 2. Import labels to target repositories
 
 ### After Labels Deployed (Agent Controlled)
 
 1. **Production Deployment** (10 minutes)
+
    ```bash
    python3 batch_onboard_repositories.py \
      --config batch-onboard-week11-phase1-pilot.yml \
      --output week11-phase1-production-results.json
    ```
+
    - Expected: 100% success (labels already exist, workflows deploy)
    - Duration: ~5-10 seconds
 

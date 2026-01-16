@@ -50,7 +50,8 @@
 | `type/documentation` | `0075CA` | Documentation improvements |
 | `type/maintenance` | `FEF2C0` | Maintenance or housekeeping tasks |
 
-3. **Verify labels created**:
+1. **Verify labels created**:
+
    ```bash
    gh label list --repo ivviiviivvi/theoretical-specifications-first
    gh label list --repo ivviiviivvi/system-governance-framework
@@ -70,7 +71,7 @@
 ### Steps
 
 1. **Generate fine-grained PAT**:
-   - Go to: https://github.com/settings/tokens?type=beta
+   - Go to: <https://github.com/settings/tokens?type=beta>
    - Click "Generate new token"
    - **Name**: "Week 11 Deployment"
    - **Repository access**: Select "Only select repositories"
@@ -80,11 +81,13 @@
    - **COPY TOKEN** (you won't see it again!)
 
 2. **Authenticate gh CLI**:
+
    ```bash
    echo "YOUR_TOKEN_HERE" | gh auth login --with-token
    ```
 
 3. **Run deployment script**:
+
    ```bash
    cd /workspace/automation/scripts
    python3 batch_onboard_repositories.py \
@@ -93,6 +96,7 @@
    ```
 
 4. **Verify deployment**:
+
    ```bash
    gh label list --repo ivviiviivvi/theoretical-specifications-first
    gh label list --repo ivviiviivvi/system-governance-framework
@@ -113,6 +117,7 @@
 ### Steps
 
 1. **Check for existing label config**:
+
    ```bash
    ls -la /workspace/.github/labels.yml
    # or
@@ -124,6 +129,7 @@
    - Import from .github repository
 
 3. **Verify**:
+
    ```bash
    gh label list --repo ivviiviivvi/theoretical-specifications-first
    ```
@@ -149,6 +155,7 @@ python3 batch_onboard_repositories.py \
 ```
 
 **Expected Results**:
+
 - ✅ 3 repositories: 100% success
 - ✅ 12 labels per repo: Already exist (skip)
 - ✅ 3 workflows per repo: Deploy successfully
@@ -158,11 +165,13 @@ python3 batch_onboard_repositories.py \
 ### Validation (1 hour)
 
 1. **Check labels** (should see 12 per repo):
+
    ```bash
    gh label list --repo ivviiviivvi/theoretical-specifications-first
    ```
 
 2. **Check workflows** (should see 3 per repo):
+
    ```bash
    gh api repos/ivviiviivvi/theoretical-specifications-first/contents/.github/workflows
    ```
@@ -241,6 +250,7 @@ cd /workspace/automation/scripts && python3 batch_onboard_repositories.py \
 ## Contact
 
 For questions or issues:
+
 - Review documentation files above
 - Check GitHub Actions logs
 - Open issue in .github repository

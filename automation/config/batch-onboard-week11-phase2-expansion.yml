@@ -1,197 +1,69 @@
-# Week 11 Production Deployment - Phase 2: Expansion (8 Total Repositories)
-#
-# Purpose: Expand deployment after pilot validation
-# Timeline: Day 3 (after 48-hour pilot monitoring)
-# Expected Duration: ~46 seconds (8 repos × 5.78s)
-# Risk Level: Low-Medium (includes pilot repos + 5 new)
-# Success Criteria: 100% deployment success, pilot repos stable
+# Week 11 Phase 2: Expansion Deployment
+# 5 additional repositories (total: 8 repositories operational)
+# Simplified flat configuration format
 
 repositories:
-  # ===== PILOT REPOSITORIES (Already deployed in Phase 1) =====
-  # Included for reference and validation
+  - "ivviiviivvi/intelligent-artifice-ark"
+  - "ivviiviivvi/render-second-amendment"
+  - "ivviiviivvi/a-mavs-olevm"
+  - "ivviiviivvi/a-recursive-root"
+  - "ivviiviivvi/collective-persona-operations"
 
-  - name: ivviiviivvi/theoretical-specifications-first
-    enabled: false # Already deployed
-    note: "Phase 1 pilot - monitoring stability"
-
-  - name: ivviiviivvi/system-governance-framework
-    enabled: false # Already deployed
-    note: "Phase 1 pilot - monitoring stability"
-
-  - name: ivviiviivvi/trade-perpetual-future
-    enabled: false # Already deployed
-    note: "Phase 1 pilot - monitoring stability"
-
-  # ===== NEW REPOSITORIES FOR PHASE 2 =====
-
-  # Repository 4: Intelligent Artifice Ark
-  # - Active: 2025-12-11
-  # - Type: Application (ChatGPT export tool)
-  # - Visibility: Public
-  # - Risk: Low
-  - name: ivviiviivvi/intelligent-artifice-ark
-    enabled: true
-
-  # Repository 5: Render Second Amendment
-  # - Active: 2025-12-19
-  # - Type: Repository/documentation
-  # - Visibility: Public
-  # - Risk: Low (informational repo)
-  - name: ivviiviivvi/render-second-amendment
-    enabled: true
-
-  # Repository 6: A-Mavs-Olevm
-  # - Active: 2026-01-11 (very recent)
-  # - Type: Website/platform
-  # - Visibility: Public
-  # - Risk: Low (active maintenance)
-  - name: ivviiviivvi/a-mavs-olevm
-    enabled: true
-
-  # Repository 7: A-Recursive-Root
-  # - Active: 2025-12-22
-  # - Type: System architecture
-  # - Visibility: Public
-  # - Risk: Low (well-structured)
-  - name: ivviiviivvi/a-recursive-root
-    enabled: true
-
-  # Repository 8: Collective Persona Operations
-  # - Active: 2025-09-26
-  # - Type: Multi-agent system
-  # - Visibility: Public
-  # - Risk: Low (different project type for diversity)
-  - name: ivviiviivvi/collective-persona-operations
-    enabled: true
-
-# Workflow templates (same as Phase 1)
 workflows:
-  - name: pr-validation.yml
-    source: workflow-templates/pr-validation.yml
-    destination: .github/workflows/pr-validation.yml
-    enabled: true
+  - "repository-health-check.yml"
+  - "enhanced-pr-quality.yml"
+  - "stale-management.yml"
 
-  - name: merge-related-prs.yml
-    source: workflow-templates/merge-related-prs.yml
-    destination: .github/workflows/merge-related-prs.yml
-    enabled: true
-
-# Labels (same as Phase 1)
 labels:
-  # Status labels
-  - name: "status: in progress"
-    color: "1d76db"
-    description: "Work is actively being done"
-
-  - name: "status: blocked"
-    color: "d93f0b"
-    description: "Blocked by dependencies or issues"
-
-  - name: "status: ready for review"
-    color: "0e8a16"
-    description: "Ready for code review"
-
-  - name: "status: changes requested"
-    color: "fbca04"
-    description: "Changes requested by reviewers"
-
-  # Priority labels
-  - name: "priority: critical"
-    color: "b60205"
-    description: "Critical priority - immediate attention"
-
-  - name: "priority: high"
-    color: "d93f0b"
-    description: "High priority"
-
-  - name: "priority: medium"
-    color: "fbca04"
-    description: "Medium priority"
-
-  - name: "priority: low"
-    color: "0e8a16"
-    description: "Low priority"
-
-  # Type labels
-  - name: "type: bug"
-    color: "d73a4a"
-    description: "Something isn't working"
-
-  - name: "type: feature"
-    color: "a2eeef"
+  - name: "week11/phase2"
+    color: "0E8A16"
+    description: "Week 11 Phase 2 expansion deployment"
+  
+  - name: "priority/critical"
+    color: "B60205"
+    description: "Critical priority - immediate attention required"
+  
+  - name: "priority/high"
+    color: "D93F0B"
+    description: "High priority - address soon"
+  
+  - name: "priority/medium"
+    color: "FEF2C0"
+    description: "Medium priority - normal timeline"
+  
+  - name: "priority/low"
+    color: "0E8A16"
+    description: "Low priority - address when possible"
+  
+  - name: "status/blocked"
+    color: "D93F0B"
+    description: "Work is blocked by external dependency"
+  
+  - name: "status/in-progress"
+    color: "FBCA04"
+    description: "Work is actively in progress"
+  
+  - name: "status/review-ready"
+    color: "0E8A16"
+    description: "Ready for review"
+  
+  - name: "type/bug"
+    color: "D73A4A"
+    description: "Something isn't working correctly"
+  
+  - name: "type/feature"
+    color: "A2EEEF"
     description: "New feature or request"
-
-  - name: "type: documentation"
-    color: "0075ca"
+  
+  - name: "type/documentation"
+    color: "0075CA"
     description: "Documentation improvements"
+  
+  - name: "type/maintenance"
+    color: "FEF2C0"
+    description: "Maintenance or housekeeping tasks"
 
-  - name: "type: maintenance"
-    color: "e99695"
-    description: "Maintenance and refactoring"
-
-# Processing options (validated in Week 10)
-processing:
-  # Optimal concurrency from Week 10 Day 4 Phase 3
-  max_concurrent: 3
-
-  # Validated timeout
-  timeout_seconds: 60
-
-  # Always enable rollback
-  rollback_on_error: true
-
-  # Stop if critical errors (lessons from pilot)
-  continue_on_error: false
-
-  # Production deployment
-  dry_run: false
-
-# Branch protection (still disabled - can enable after Phase 2 validation)
-branch_protection:
-  enabled: false
-  default_branch: main
-
-# Monitoring and validation
-monitoring:
-  verbose: true
-  output_file: "week11-phase2-expansion-results.json"
-  track_performance: true
-  summary_report: true
-
-  # Enhanced monitoring for expansion
-  compare_to_pilot: true
-  alert_on_variance: true
-
-# Validation
-validation:
-  pre_validation: true
-  post_validation: true
-  check_workflow_syntax: true
-  verify_repository_access: true
-
-  # Additional validation for expansion
-  verify_pilot_stability: true
-  check_api_rate_limits: true
-
-# Metadata
-metadata:
-  deployment_phase: "Phase 2: Expansion"
-  week: 11
-  day: 3
-  operator: "Automated Batch Onboarding System"
-  notes: "Expansion after successful 48-hour pilot validation"
-  prerequisites:
-    - "Phase 1 pilot: 100% successful"
-    - "Pilot repositories: 48-hour stable"
-    - "No issues reported by teams"
-    - "Workflows executing correctly"
-  success_criteria:
-    - "All 5 new repositories onboarded successfully"
-    - "Total 8 repositories operational"
-    - "Deployment time under 60 seconds"
-    - "Performance consistent with pilot"
-    - "No errors or rollbacks"
-  lessons_from_pilot:
-    - "Monitor API rate limits for larger batches"
-    - "Verify all repositories before expansion"
-    - "Team communication crucial for smooth deployment"
+max_concurrent: 3
+timeout_seconds: 60
+validate_before: true
+rollback_on_failure: true
