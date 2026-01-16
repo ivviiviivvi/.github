@@ -11,7 +11,6 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-
 EMAIL_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -255,7 +254,7 @@ def format_time_ago(timestamp: str) -> str:
     dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
     now = datetime.now(dt.tzinfo)
     delta = now - dt
-    
+
     if delta.days > 0:
         return f"{delta.days} day{'s' if delta.days != 1 else ''} ago"
     elif delta.seconds >= 3600:
@@ -272,7 +271,7 @@ def generate_summary(metrics: dict) -> str:
     """Generate executive summary from metrics."""
     success_rate = metrics['workflows']['successRate']
     total_runs = metrics['workflows']['totalRuns']
-    
+
     if success_rate >= 95:
         quality = "excellent"
     elif success_rate >= 90:
@@ -281,7 +280,7 @@ def generate_summary(metrics: dict) -> str:
         quality = "good"
     else:
         quality = "concerning"
-        
+
     return (
         f"This week's workflow automation showed {quality} performance "
         f"with {total_runs} total executions and a {success_rate}% success rate."
@@ -291,12 +290,12 @@ def generate_summary(metrics: dict) -> str:
 def generate_trend_commentary(metrics: dict) -> tuple:
     """Generate trend analysis commentary."""
     success_rate = metrics['workflows']['successRate']
-    
+
     # Simulate week-over-week comparison (would be calculated from historical data)
     # For demo purposes, use random-ish values
     prev_rate = 95.2
     change = float(success_rate) - prev_rate
-    
+
     if change > 0:
         direction = "increased"
         sentiment = "positive"
@@ -309,7 +308,7 @@ def generate_trend_commentary(metrics: dict) -> tuple:
         direction = "remained stable"
         sentiment = "neutral"
         commentary = "Consistent performance indicates stable automation."
-    
+
     return direction, abs(round(change, 1)), commentary, sentiment
 
 
@@ -318,7 +317,7 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
     # Load data
     metrics = load_json(metrics_file)
     events = load_json(events_file)
-    
+
     # Extract metrics
     period_start = metrics['period']['start']
     period_end = metrics['period']['end']
@@ -329,13 +328,14 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
     issues_processed = issues_opened + issues_closed
     prs_opened = metrics['pullRequests']['opened']
     prs_merged = metrics['pullRequests']['merged']
-    
+
     # Generate summary
     summary = generate_summary(metrics)
-    
+
     # Trend analysis
-    trend_direction, trend_amount, trend_commentary, trend_sentiment = generate_trend_commentary(metrics)
-    
+    trend_direction, trend_amount, trend_commentary, trend_sentiment = generate_trend_commentary(
+        metrics)
+
     # Format events
     events_html = ""
     if events:
@@ -346,8 +346,9 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
                 url=event['html_url'],
                 time_ago=format_time_ago(event['created_at'])
             ))
-        events_html = EVENTS_SECTION_TEMPLATE.format(events="\n".join(event_items))
-    
+        events_html = EVENTS_SECTION_TEMPLATE.format(
+            events="\n".join(event_items))
+
     # Generate HTML
     html = EMAIL_TEMPLATE.format(
         period_start=period_start,
@@ -372,7 +373,7 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
         repo_url="https://github.com/ivviiviivvi/.github",
         repo_name="ivviiviivvi/.github"
     )
-    
+
     # Write to file
     output_file.write_text(html)
     print(f"Email digest generated: {output_file}")
@@ -384,9 +385,9 @@ def main():
     parser.add_argument('--metrics', required=True, help='Metrics JSON file')
     parser.add_argument('--events', required=True, help='Events JSON file')
     parser.add_argument('--output', required=True, help='Output HTML file')
-    
+
     args = parser.parse_args()
-    
+
     generate_email(
         Path(args.metrics),
         Path(args.events),
