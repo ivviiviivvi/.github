@@ -216,6 +216,7 @@ The following instructions are only to be applied when performing a code review.
 ## README updates
 
 - [ ] The new file should be added to the `README.md`.
+- [ ] The "Workflow System" section should be updated with the new information.
 
 ## Prompt file guide
 
