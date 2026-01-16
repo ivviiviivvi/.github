@@ -14,11 +14,13 @@ Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo and workflow access
 """
 
-from utils import ConfigLoader, GitHubAPIClient, setup_logger
-from notification_integration import (
-    notify_self_healing_success,
-    notify_self_healing_failure,
-)
+import argparse
+import sys
+import time
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
 from models import (
     FailureClassification,
     FailureType,
@@ -26,12 +28,11 @@ from models import (
     SelfHealingConfig,
     SelfHealingResult,
 )
-import argparse
-import sys
-import time
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from notification_integration import (
+    notify_self_healing_failure,
+    notify_self_healing_success,
+)
+from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -736,7 +737,7 @@ class SelfHealingEngine:
         classification: FailureClassification,
     ) -> None:
         """Send notification about failure.
-        
+
         Note: Notifications now handled by unified notification system.
         This method maintained for backward compatibility.
         """
