@@ -129,7 +129,8 @@ class IncidentResponseEngine:
         if self.config.auto_execute_runbooks:
             self._execute_runbook(incident)
 
-        logger.info(f"Incident {incident_id} created with severity {severity.value}")
+        logger.info(
+            f"Incident {incident_id} created with severity {severity.value}")
         return incident
 
     def _classify_severity(
@@ -305,7 +306,8 @@ class IncidentResponseEngine:
     def _execute_create_issue_action(self, incident: Incident, step: RunbookStep):
         """Execute create issue action."""
         if incident.github_issue_number:
-            logger.info(f"Issue already exists: #{incident.github_issue_number}")
+            logger.info(
+                f"Issue already exists: #{incident.github_issue_number}")
             return
 
         owner, repo = incident.repository.split("/")
@@ -350,7 +352,8 @@ Current status: {incident.status.value}
         # Increase severity if not already SEV-1
         if incident.severity != IncidentSeverity.SEV1:
             old_severity = incident.severity
-            incident.severity = IncidentSeverity(incident.severity.value[:-1] + "1")
+            incident.severity = IncidentSeverity(
+                incident.severity.value[:-1] + "1")
             logger.info(
                 f"Escalated from {old_severity.value} to {incident.severity.value}"
             )
@@ -367,7 +370,8 @@ Current status: {incident.status.value}
 
         self.github.post(
             f"/repos/{owner}/{repo}/actions/workflows/{workflow_name}/dispatches",
-            json={"ref": "main", "inputs": {"incident_id": incident.incident_id}},
+            json={"ref": "main", "inputs": {
+                "incident_id": incident.incident_id}},
         )
 
     def _execute_update_status_action(self, incident: Incident, step: RunbookStep):
@@ -410,7 +414,8 @@ Current status: {incident.status.value}
 
         # Send notification if status changed
         if old_status != status:
-            self._send_incident_notification(incident, f"status_changed_{status.value}")
+            self._send_incident_notification(
+                incident, f"status_changed_{status.value}")
 
         return incident
 
@@ -497,7 +502,8 @@ Current status: {incident.status.value}
 
         if incident.time_to_resolution_minutes:
             if incident.time_to_resolution_minutes < 60:
-                lessons.append("Quick resolution time demonstrates effective runbook")
+                lessons.append(
+                    "Quick resolution time demonstrates effective runbook")
             elif incident.time_to_resolution_minutes > 240:
                 lessons.append(
                     "Long resolution time indicates need for process improvement"
@@ -616,10 +622,12 @@ Repository: {incident.repository}
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Incident Response Automation")
+    parser = argparse.ArgumentParser(
+        description="Incident Response Automation")
     parser.add_argument("--owner", help="Repository owner")
     parser.add_argument("--repo", help="Repository name")
-    parser.add_argument("--create", action="store_true", help="Create incident")
+    parser.add_argument("--create", action="store_true",
+                        help="Create incident")
     parser.add_argument("--title", help="Incident title")
     parser.add_argument("--description", help="Incident description")
     parser.add_argument(
@@ -631,8 +639,10 @@ def main():
     )
     parser.add_argument("--update-status", help="Update status")
     parser.add_argument("--resolution", help="Resolution details")
-    parser.add_argument("--report", action="store_true", help="Generate report")
-    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    parser.add_argument("--report", action="store_true",
+                        help="Generate report")
+    parser.add_argument("--debug", action="store_true",
+                        help="Enable debug logging")
 
     args = parser.parse_args()
 

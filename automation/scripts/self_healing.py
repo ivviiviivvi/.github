@@ -15,6 +15,10 @@ Environment Variables:
 """
 
 from utils import ConfigLoader, GitHubAPIClient, setup_logger
+from notification_integration import (
+    notify_self_healing_success,
+    notify_self_healing_failure,
+)
 from models import (
     FailureClassification,
     FailureType,
@@ -405,6 +409,35 @@ class SelfHealingEngine:
                 f"Workflow {'re-run successfully' if success else 're-run failed'}",
             ]
 
+            # Send notification about healing result
+            if self.config.send_notifications:
+                if success:
+                    notify_self_healing_success(
+                        workflow_name=run['name'],
+                        run_id=run['id'],
+                        failure_type=classification.failure_type.value,
+                        action_taken=f"Retry {retry_count + 1} succeeded",
+                        metadata={
+                            'repository': f"{owner}/{repo}",
+                            'retry_count': retry_count + 1,
+                            'delay': delay,
+                            'confidence': classification.confidence,
+                        }
+                    )
+                else:
+                    notify_self_healing_failure(
+                        workflow_name=run['name'],
+                        run_id=run['id'],
+                        failure_type=classification.failure_type.value,
+                        attempts=retry_count + 1,
+                        metadata={
+                            'repository': f"{owner}/{repo}",
+                            'reason': 'Retry failed',
+                            'confidence': classification.confidence,
+                        }
+                    )
+                actions.append("Sent notification")
+
             return SelfHealingResult(
                 run_id=run["id"],
                 repository=f"{owner}/{repo}",
@@ -470,6 +503,34 @@ class SelfHealingEngine:
                 f"Workflow {'re-run successfully' if success else 're-run failed'}"
             )
 
+            # Send notification about healing result
+            if self.config.send_notifications:
+                if success:
+                    notify_self_healing_success(
+                        workflow_name=run['name'],
+                        run_id=run['id'],
+                        failure_type=classification.failure_type.value,
+                        action_taken=f"Dependency resolved, retry succeeded",
+                        metadata={
+                            'repository': f"{owner}/{repo}",
+                            'wait_time': wait_time,
+                            'confidence': classification.confidence,
+                        }
+                    )
+                else:
+                    notify_self_healing_failure(
+                        workflow_name=run['name'],
+                        run_id=run['id'],
+                        failure_type=classification.failure_type.value,
+                        attempts=1,
+                        metadata={
+                            'repository': f"{owner}/{repo}",
+                            'reason': 'Dependency retry failed',
+                            'wait_time': wait_time,
+                        }
+                    )
+                actions.append("Sent notification")
+
             return SelfHealingResult(
                 run_id=run["id"],
                 repository=f"{owner}/{repo}",
@@ -533,7 +594,20 @@ class SelfHealingEngine:
 
         # Send notifications
         if self.config.send_notifications:
-            self._send_notification(owner, repo, run, classification)
+            notify_self_healing_failure(
+                workflow_name=run['name'],
+                run_id=run['id'],
+                failure_type=classification.failure_type.value,
+                attempts=0,  # Permanent failure - no retry attempted
+                metadata={
+                    'repository': f"{owner}/{repo}",
+                    'classification': classification.failure_type.value,
+                    'priority': classification.priority.value,
+                    'confidence': classification.confidence,
+                    'reason': classification.reason,
+                    'requires_manual_intervention': True,
+                }
+            )
             actions.append("Sent notification to team")
 
         return SelfHealingResult(
@@ -661,12 +735,13 @@ class SelfHealingEngine:
         run: Dict,
         classification: FailureClassification,
     ) -> None:
-        """Send notification about failure (placeholder)."""
-        # In production, would integrate with Slack, email, PagerDuty, etc.
-        self.logger.info(
-            f"📢 Notification: {classification.priority.value} workflow failure in "
-            f"{owner}/{repo} - {run['name']}"
-        )
+        """Send notification about failure.
+        
+        Note: Notifications now handled by unified notification system.
+        This method maintained for backward compatibility.
+        """
+        # Notifications now sent via notify_self_healing_success/failure
+        pass
 
 
 def main():

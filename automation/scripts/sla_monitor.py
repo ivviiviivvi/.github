@@ -554,8 +554,6 @@ class SLAMonitor:
                 }
             )
 
-
-
     def _log_breaches(self, owner: str, repo: str, breaches: List[SLABreach]):
         """Log SLA breaches to file."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
