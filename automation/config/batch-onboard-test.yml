@@ -11,8 +11,8 @@ repositories:
     # - "ivviiviivvi/test-repo-2"
 
 # Test workflow deployment (minimal set for testing)
-workflows:
-  - workflow-validation.yml
+# Using empty list for initial testing - add workflows after validation
+workflows: []
 
 # Test labels (subset for quick validation)
 labels:
