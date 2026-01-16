@@ -137,11 +137,13 @@ Notification(
 ### Quick Start
 
 1. **Copy default configuration**:
+
    ```bash
    cp .github/notifications.yml.example .github/notifications.yml
    ```
 
 2. **Set environment variables**:
+
    ```bash
    export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
    export SLACK_INCIDENTS_WEBHOOK="https://hooks.slack.com/services/INCIDENTS/WEBHOOK"
@@ -153,6 +155,7 @@ Notification(
    ```
 
 3. **Test configuration**:
+
    ```bash
    python automation/scripts/notification_manager.py \
      --title "Test Notification" \
@@ -593,6 +596,7 @@ When rate limit is exceeded:
 Deduplication prevents sending duplicate notifications within a time window.
 
 **Deduplication Keys:**
+
 - `source` (e.g., "sla-monitor")
 - `title` (e.g., "SLA Breach - P0")
 
@@ -719,10 +723,12 @@ notification_delivery_duration_seconds_bucket{channel="slack",le="1"} 1000
 #### 1. Notifications Not Sending
 
 **Symptoms:**
+
 - No notifications received
 - Delivery records show `FAILED` status
 
 **Solutions:**
+
 - Check environment variables are set correctly
 - Verify webhook URLs are valid
 - Test with CLI to isolate issue
@@ -742,10 +748,12 @@ cat .github/notifications/delivery_log/NOTIF-*.json
 #### 2. Rate Limiting
 
 **Symptoms:**
+
 - Notifications delayed or skipped
 - Delivery records show `RATE_LIMITED` status
 
 **Solutions:**
+
 - Increase rate limits in configuration
 - Reduce notification frequency
 - Use aggregation to batch notifications
@@ -760,10 +768,12 @@ rate_limiting:
 #### 3. Duplicate Notifications
 
 **Symptoms:**
+
 - Same notification sent multiple times
 - Deduplication not working
 
 **Solutions:**
+
 - Verify deduplication is enabled
 - Check deduplication window is appropriate
 - Review deduplication keys
@@ -778,10 +788,12 @@ deduplication:
 #### 4. PagerDuty Not Creating Incidents
 
 **Symptoms:**
+
 - No PagerDuty incidents created
 - Delivery shows `SENT` but no incident
 
 **Solutions:**
+
 - Verify integration key is correct
 - Check PagerDuty service is active
 - Review severity mapping
