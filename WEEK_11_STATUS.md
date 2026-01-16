@@ -85,6 +85,29 @@ All technical work for Week 11 deployment is **100% complete**:
 
 ## Quick Actions
 
+### Pre-Deployment Validation (Recommended First Step)
+
+**Run comprehensive pre-deployment checklist**:
+
+```bash
+cd /workspace/automation/scripts
+
+# Check all prerequisites for Phase 1
+python3 pre_deployment_checklist.py --phase 1
+```
+
+This validates:
+
+- ✅ Configuration files
+- ✅ GitHub CLI authentication
+- ✅ Workflow templates
+- ✅ Repository access
+- ✅ Label deployment status
+
+See [automation/scripts/README_CHECKLIST.md](automation/scripts/README_CHECKLIST.md) for details.
+
+---
+
 ### For User (Now)
 
 **Option 1: Automated Validation & Fix** (if you have a PAT with `issues: write`):
