@@ -84,7 +84,21 @@ All technical work for Week 11 deployment is **100% complete**:
 
 ### For User (Now)
 
-**Deploy labels via Web UI** (recommended):
+**Option 1: Automated Validation & Fix** (if you have a PAT with `issues: write`):
+
+```bash
+cd /workspace/automation/scripts
+
+# Validate labels exist
+python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.yml
+
+# Auto-create missing labels
+python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.yml --fix
+```
+
+**Option 2: Manual Web UI Deployment** (recommended, no PAT required):
+
+**Deploy labels via Web UI** (15 minutes):
 
 1. Open repository label pages:
    - [theoretical-specifications-first/labels](https://github.com/ivviiviivvi/theoretical-specifications-first/labels)
