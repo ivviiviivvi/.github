@@ -1,0 +1,26 @@
+[
+  {
+    "repository": "ivviiviivvi/theoretical-specifications-first",
+    "success": false,
+    "steps_completed": [],
+    "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/issues/labels#create-a-label\", \"status\": \"403\"}",
+    "duration_seconds": 1.30933,
+    "timestamp": "2026-01-16T20:12:28.770232"
+  },
+  {
+    "repository": "ivviiviivvi/system-governance-framework",
+    "success": false,
+    "steps_completed": [],
+    "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/issues/labels#create-a-label\", \"status\": \"403\"}",
+    "duration_seconds": 1.299327,
+    "timestamp": "2026-01-16T20:12:30.079664"
+  },
+  {
+    "repository": "ivviiviivvi/trade-perpetual-future",
+    "success": false,
+    "steps_completed": [],
+    "error": "Resource not accessible by integration: 403 {\"message\": \"Resource not accessible by integration\", \"documentation_url\": \"https://docs.github.com/rest/issues/labels#create-a-label\", \"status\": \"403\"}",
+    "duration_seconds": 1.203057,
+    "timestamp": "2026-01-16T20:12:31.379044"
+  }
+]
