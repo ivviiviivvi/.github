@@ -1,0 +1,78 @@
+# Batch Onboarding Integration Test Configuration
+#
+# This configuration is for Day 4 integration testing with real API calls
+# Use with caution - will make actual changes to repositories
+
+# Test repositories for integration testing
+repositories:
+  - "ivviiviivvi/.github"
+  # Add more test repositories here as needed
+  # - "ivviiviivvi/test-repo-1"
+  # - "ivviiviivvi/test-repo-2"
+
+# Workflow deployment for integration testing
+workflows:
+  - "test-batch-onboarding-validation.yml"
+
+# Labels for integration testing
+labels:
+  "Test: Batch Onboarding":
+    color: "0052cc"
+    description: "Deployed via batch onboarding integration test"
+  "Status: Integration Test":
+    color: "fef2c0"
+    description: "Part of integration testing process"
+  "Type: Automation":
+    color: "84b6eb"
+    description: "Automated deployment testing"
+
+# Branch protection for integration testing
+# Using test branch to avoid affecting main branch
+branch_protection:
+  branch: "test-batch-onboarding"
+  required_approving_reviews: 1
+  require_code_owner_reviews: false
+  dismiss_stale_reviews: false
+  enforce_admins: false
+  required_checks: []
+
+# Processing options optimized for integration testing
+max_concurrent: 3  # Conservative for testing
+timeout_seconds: 300  # 5 minutes per repository
+validate_before: true  # Always validate
+rollback_on_failure: true  # Enable rollback for safety
+
+# Integration test notes:
+# 1. Start with single repository
+# 2. Verify each step completes successfully
+# 3. Add more repositories gradually
+# 4. Monitor logs for any issues
+# 5. Validate deployments manually after batch run
+
+# Test execution commands:
+# 
+# Phase 1: Single repository test
+# python3 automation/scripts/batch_onboard_repositories.py \
+#   --config automation/config/batch-onboard-integration.yml \
+#   --output test-results-integration-single.json
+#
+# Phase 2: Multiple repositories test (add repos to list above first)
+# python3 automation/scripts/batch_onboard_repositories.py \
+#   --config automation/config/batch-onboard-integration.yml \
+#   --max-concurrent 3 \
+#   --output test-results-integration-multi.json
+#
+# Phase 3: Performance test with higher concurrency
+# python3 automation/scripts/batch_onboard_repositories.py \
+#   --config automation/config/batch-onboard-integration.yml \
+#   --max-concurrent 5 \
+#   --output test-results-integration-perf.json
+
+# Rollback test configuration:
+# To test rollback, intentionally break configuration (e.g., invalid workflow file)
+# then run batch onboarding and verify rollback triggers correctly
+
+# Performance benchmarking:
+# Run with varying concurrency: 1, 3, 5, 10
+# Measure total execution time and per-repository average
+# Monitor GitHub API rate limit usage
