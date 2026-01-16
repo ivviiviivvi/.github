@@ -8,8 +8,11 @@ repositories:
   - ivviiviivvi/system-governance-framework
   - ivviiviivvi/trade-perpetual-future
 
-# No workflows for now - focus on labels only
-workflows: []
+# Workflows from automation/workflow-templates/
+workflows:
+  - repository-health-check.yml
+  - enhanced-pr-quality.yml
+  - stale-management.yml
 
 labels:
   "status: in progress":
