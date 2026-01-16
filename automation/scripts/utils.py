@@ -20,7 +20,6 @@ from typing import Any, Dict, Optional
 import requests
 import yaml
 
-
 # =============================================================================
 # Logging Configuration
 # =============================================================================
@@ -90,7 +89,8 @@ class ConfigLoader:
         config_path = self.config_dir / filename
 
         if not config_path.exists():
-            raise FileNotFoundError(f"Configuration file not found: {config_path}")
+            raise FileNotFoundError(
+                f"Configuration file not found: {config_path}")
 
         self.logger.info(f"Loading configuration from {config_path}")
 
@@ -204,7 +204,8 @@ class GitHubAPIClient:
         """
         self.token = token or os.environ.get("GITHUB_TOKEN")
         if not self.token:
-            raise ValueError("GitHub token required (GITHUB_TOKEN env var or token param)")
+            raise ValueError(
+                "GitHub token required (GITHUB_TOKEN env var or token param)")
 
         self.base_url = "https://api.github.com"
         self.session = requests.Session()
@@ -279,7 +280,8 @@ class GitHubAPIClient:
                     )
                     time.sleep(delay)
                 else:
-                    self.logger.error(f"Request timeout after {max_attempts} attempts")
+                    self.logger.error(
+                        f"Request timeout after {max_attempts} attempts")
                     raise
 
             except requests.exceptions.HTTPError as e:
@@ -305,7 +307,8 @@ class GitHubAPIClient:
                         raise
                 else:
                     # Don't retry 4xx errors (except 429)
-                    self.logger.error(f"HTTP {e.response.status_code}: {e.response.text}")
+                    self.logger.error(
+                        f"HTTP {e.response.status_code}: {e.response.text}")
                     raise
 
             except requests.exceptions.RequestException as e:
@@ -514,7 +517,8 @@ def retry_with_backoff(
             last_exception = e
 
             if attempt < max_attempts:
-                delay = min(max_delay, initial_delay * (backoff_factor ** (attempt - 1)))
+                delay = min(max_delay, initial_delay *
+                            (backoff_factor ** (attempt - 1)))
                 if jitter:
                     delay += random.uniform(0, 1)
 

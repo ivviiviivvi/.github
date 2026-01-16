@@ -65,12 +65,14 @@ Week 9 focuses on architectural design and foundation for Month 3 advanced autom
 **Purpose**: Safely merge PRs that meet all quality criteria
 
 **Components**:
+
 - Eligibility checker (Python script)
 - Safety validation (workflow)
 - Revert automation (workflow)
 - Notification system (Slack integration)
 
 **Safety Checks**:
+
 1. All tests passed (CI status green)
 2. Required reviews approved (min 1)
 3. No merge conflicts
@@ -78,6 +80,7 @@ Week 9 focuses on architectural design and foundation for Month 3 advanced autom
 5. Code coverage threshold met (≥80%)
 
 **Data Flow**:
+
 ```
 PR Ready → Check Eligibility → Validate Safety → Merge → Monitor → Alert if Issues
 ```
@@ -87,12 +90,14 @@ PR Ready → Check Eligibility → Validate Safety → Merge → Monitor → Ale
 **Purpose**: Optimize issue/PR assignment using ML predictions
 
 **Components**:
+
 - Routing algorithm (Python script)
 - Performance tracker
 - Load balancer
 - Fallback mechanism
 
 **Routing Factors** (weighted):
+
 1. **Expertise** (35%) - Historical contribution patterns
 2. **Workload** (25%) - Current assignment count
 3. **Response Time** (20%) - Average time to first response
@@ -100,6 +105,7 @@ PR Ready → Check Eligibility → Validate Safety → Merge → Monitor → Ale
 5. **Performance** (5%) - Success rate and quality metrics
 
 **Algorithm**:
+
 ```python
 score = (
     0.35 * expertise_score +
@@ -116,17 +122,20 @@ assignee = max(candidates, key=lambda c: score(c))
 **Purpose**: Automatically recover from transient failures
 
 **Components**:
+
 - Failure detector
 - Retry orchestrator
 - Dependency resolver
 - Success tracker
 
 **Failure Classification**:
+
 - **Transient**: Network timeout, API rate limit, temporary service unavailability
 - **Permanent**: Invalid configuration, missing credentials, syntax errors
 - **Dependency**: Waiting for external service, blocked by another workflow
 
 **Retry Strategy**:
+
 ```python
 # Exponential backoff with jitter
 delay = min(60, (2 ** attempt) + random.uniform(0, 1))
@@ -134,6 +143,7 @@ max_attempts = 3
 ```
 
 **Decision Tree**:
+
 ```
 Failure Detected
 ├── Transient? → Retry with exponential backoff (max 3)
@@ -146,23 +156,27 @@ Failure Detected
 **Purpose**: Schedule maintenance during low-impact windows
 
 **Components**:
+
 - ML timing predictor
 - Disruption calculator
 - Task scheduler
 - Notification system
 
 **Maintenance Tasks**:
+
 1. **Dependency Updates**: npm, pip, gems, etc.
 2. **Cleanup Operations**: Old branches, stale PRs, artifacts
 3. **Optimization**: Index rebuilding, cache warming, log rotation
 
 **Timing Prediction**:
+
 - Historical activity patterns
 - Time-of-day analysis
 - Day-of-week patterns
 - Holiday/event calendar
 
 **Scoring**:
+
 ```python
 impact_score = (
     active_users_count * 0.4 +
@@ -178,12 +192,14 @@ impact_score = (
 **Purpose**: Advanced ML predictions with 85% accuracy target
 
 **Components**:
+
 - ML model trainer
 - Feature extractor
 - Prediction API
 - Dashboard generator
 
 **Features** (expanded from Month 2):
+
 1. **Basic**: Hour, day of week, run attempt, workflow ID
 2. **Code Metrics**: Commit size, file count, lines changed
 3. **Author History**: Success rate, average duration, expertise
@@ -191,12 +207,14 @@ impact_score = (
 5. **Test Coverage**: Coverage percentage, test count, new tests
 
 **Model Architecture**:
+
 ```
 Input Features (15) → Dense(64, ReLU) → Dropout(0.3) →
 Dense(32, ReLU) → Dropout(0.2) → Dense(1, Sigmoid) → Prediction
 ```
 
 **Predictions**:
+
 - Workflow success probability
 - Estimated duration
 - Risk level (LOW/MEDIUM/HIGH/CRITICAL)
@@ -207,12 +225,14 @@ Dense(32, ReLU) → Dropout(0.2) → Dense(1, Sigmoid) → Prediction
 **Purpose**: SLA monitoring and incident response automation
 
 **Components**:
+
 - SLA monitor (workflow)
 - Threshold engine
 - Incident responder (workflow)
 - Runbook executor
 
 **SLA Metrics**:
+
 1. **Response Time**: Time from issue creation to first response
    - Target: ≤ 5 minutes (P0), ≤ 30 minutes (P1), ≤ 2 hours (P2)
 2. **Resolution Time**: Time from issue creation to closure
@@ -223,6 +243,7 @@ Dense(32, ReLU) → Dropout(0.2) → Dense(1, Sigmoid) → Prediction
    - Target: ≥ 99.9%
 
 **Incident Response Workflow**:
+
 ```
 SLA Breach Detected
 ├── Assess Severity → P0 (Critical), P1 (High), P2 (Medium)
@@ -678,6 +699,7 @@ def check_sla_compliance(
 **Principle**: Least privilege access for all automation
 
 **Implementation**:
+
 ```yaml
 # GitHub token scopes (minimum required)
 required_scopes:
@@ -694,6 +716,7 @@ excluded_scopes:
 ```
 
 **Secrets Management**:
+
 - All secrets stored in GitHub Secrets
 - Rotation schedule: 90 days
 - Audit logging enabled
@@ -704,6 +727,7 @@ excluded_scopes:
 **Principle**: Validate and sanitize all inputs
 
 **Implementation**:
+
 ```python
 # Example validation
 def validate_pr_number(pr_number: Any) -> int:
@@ -727,6 +751,7 @@ def validate_pr_number(pr_number: Any) -> int:
 **Principle**: Respect API rate limits
 
 **Implementation**:
+
 ```python
 # GitHub API rate limiter
 class RateLimiter:
@@ -759,6 +784,7 @@ class RateLimiter:
 **Principle**: Log all significant actions
 
 **Implementation**:
+
 ```python
 # Audit log format
 {
@@ -785,6 +811,7 @@ class RateLimiter:
 **Principle**: Fail securely, never expose sensitive data
 
 **Implementation**:
+
 ```python
 # Secure error handling
 try:
@@ -804,6 +831,7 @@ except Exception as e:
 **Coverage Target**: 90%
 
 **Focus Areas**:
+
 - Algorithm logic (routing, scoring, classification)
 - Data validation and sanitization
 - Error handling and edge cases
@@ -817,6 +845,7 @@ except Exception as e:
 **Coverage Target**: 100% of critical paths
 
 **Focus Areas**:
+
 - GitHub API interactions
 - Workflow trigger and execution
 - Cross-component communication
@@ -830,6 +859,7 @@ except Exception as e:
 **Coverage**: All user journeys
 
 **Scenarios**:
+
 1. PR auto-merge lifecycle
 2. Issue routing and assignment
 3. Workflow failure and self-healing
@@ -841,6 +871,7 @@ except Exception as e:
 ### 4. Performance Tests
 
 **Targets**:
+
 - Routing algorithm: < 100ms per assignment
 - Analytics prediction: < 500ms per prediction
 - SLA check: < 2s for 24h window
@@ -851,6 +882,7 @@ except Exception as e:
 ### 5. Security Tests
 
 **Focus Areas**:
+
 - Input validation bypass attempts
 - API rate limit enforcement
 - Token scope verification
@@ -913,6 +945,7 @@ except Exception as e:
 ### Week 10: Core Implementation (April 8-14)
 
 Focus areas:
+
 1. Complete all core algorithms
 2. Build GitHub Action workflows
 3. Implement ML model training
@@ -922,12 +955,14 @@ Focus areas:
 ### Dependencies
 
 **Immediate**:
+
 - GitHub API token with required scopes
 - ML training data (historical workflows)
 - Slack webhook for notifications
 - PagerDuty integration key
 
 **Future**:
+
 - Production environment setup
 - SLA threshold definitions
 - On-call rotation schedule

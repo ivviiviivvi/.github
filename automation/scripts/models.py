@@ -64,9 +64,11 @@ class AutoMergeSafetyChecks(BaseModel):
     all_tests_passed: bool = Field(
         ..., description="All CI tests passed successfully"
     )
-    reviews_approved: bool = Field(..., description="Required reviews approved")
+    reviews_approved: bool = Field(...,
+                                   description="Required reviews approved")
     no_conflicts: bool = Field(..., description="No merge conflicts present")
-    branch_up_to_date: bool = Field(..., description="Branch is up-to-date with base")
+    branch_up_to_date: bool = Field(...,
+                                    description="Branch is up-to-date with base")
     coverage_threshold_met: bool = Field(
         ..., description="Code coverage meets minimum threshold"
     )
@@ -79,7 +81,8 @@ class AutoMergeEligibility(BaseModel):
     repository: str = Field(..., description="Repository full name")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
-    eligible: bool = Field(..., description="Whether PR is eligible for auto-merge")
+    eligible: bool = Field(...,
+                           description="Whether PR is eligible for auto-merge")
     checks_passed: AutoMergeSafetyChecks
     reasons: List[str] = Field(
         default_factory=list, description="Reasons if not eligible"
@@ -122,13 +125,16 @@ class AutoMergeConfig(BaseModel):
 class RoutingFactorScores(BaseModel):
     """Individual routing factor scores."""
 
-    expertise: float = Field(..., ge=0.0, le=1.0, description="Expertise score")
+    expertise: float = Field(..., ge=0.0, le=1.0,
+                             description="Expertise score")
     workload: float = Field(..., ge=0.0, le=1.0, description="Workload score")
     response_time: float = Field(
         ..., ge=0.0, le=1.0, description="Response time score"
     )
-    availability: float = Field(..., ge=0.0, le=1.0, description="Availability score")
-    performance: float = Field(..., ge=0.0, le=1.0, description="Performance score")
+    availability: float = Field(..., ge=0.0, le=1.0,
+                                description="Availability score")
+    performance: float = Field(..., ge=0.0, le=1.0,
+                               description="Performance score")
 
 
 class RoutingDecision(BaseModel):
@@ -139,9 +145,12 @@ class RoutingDecision(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     assignee: str = Field(..., description="Selected assignee username")
-    score: float = Field(..., ge=0.0, le=1.0, description="Overall assignment score")
-    scores: RoutingFactorScores = Field(..., description="Individual factor scores")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Decision confidence")
+    score: float = Field(..., ge=0.0, le=1.0,
+                         description="Overall assignment score")
+    scores: RoutingFactorScores = Field(...,
+                                        description="Individual factor scores")
+    confidence: float = Field(..., ge=0.0, le=1.0,
+                              description="Decision confidence")
     fallback_used: bool = Field(
         default=False, description="Whether fallback was triggered"
     )
@@ -177,7 +186,8 @@ class RoutingConfig(BaseModel):
         """Validate routing weights sum to 1.0."""
         total = sum(v.values())
         if not (0.99 <= total <= 1.01):  # Allow small floating point error
-            raise ValueError(f"Routing factor weights must sum to 1.0, got {total}")
+            raise ValueError(
+                f"Routing factor weights must sum to 1.0, got {total}")
         return v
 
 
@@ -196,7 +206,8 @@ class FailureClassification(BaseModel):
     classification: FailureType = Field(..., description="Failure type")
     should_retry: bool = Field(..., description="Whether to retry")
     retry_delay: int = Field(..., ge=0, description="Retry delay in seconds")
-    max_attempts: int = Field(default=3, ge=1, description="Maximum retry attempts")
+    max_attempts: int = Field(
+        default=3, ge=1, description="Maximum retry attempts")
     reason: str = Field(..., description="Classification reason")
     suggested_action: str = Field(..., description="Suggested action to take")
 
@@ -211,10 +222,14 @@ class SelfHealingConfig(BaseModel):
 
     enabled: bool = True
     max_attempts: int = Field(default=3, ge=1, le=10)
-    initial_delay: int = Field(default=2, ge=1, description="Initial delay in seconds")
-    max_delay: int = Field(default=60, ge=1, description="Maximum delay in seconds")
-    backoff_factor: float = Field(default=2.0, ge=1.0, description="Backoff multiplier")
-    jitter: bool = Field(default=True, description="Add random jitter to delays")
+    initial_delay: int = Field(
+        default=2, ge=1, description="Initial delay in seconds")
+    max_delay: int = Field(
+        default=60, ge=1, description="Maximum delay in seconds")
+    backoff_factor: float = Field(
+        default=2.0, ge=1.0, description="Backoff multiplier")
+    jitter: bool = Field(
+        default=True, description="Add random jitter to delays")
     notify_after_attempts: int = Field(default=2, ge=1)
 
     transient_patterns: List[str] = Field(
@@ -245,7 +260,8 @@ class MaintenanceWindow(BaseModel):
     impact_score: float = Field(
         ..., ge=0.0, le=1.0, description="Impact score (lower is better)"
     )
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Prediction confidence")
+    confidence: float = Field(..., ge=0.0, le=1.0,
+                              description="Prediction confidence")
     alternatives: List[Dict] = Field(
         default_factory=list, description="Alternative time windows"
     )
@@ -261,11 +277,13 @@ class MaintenanceConfig(BaseModel):
     """Proactive maintenance configuration."""
 
     enabled: bool = True
-    timing_predictor: str = Field(default="ml", description="Timing method: ml or fixed")
+    timing_predictor: str = Field(
+        default="ml", description="Timing method: ml or fixed")
 
     # Preferred windows
     preferred_hours: List[int] = Field(default=[2, 3, 4], description="2-4 AM")
-    preferred_days: List[int] = Field(default=[6, 0], description="Saturday, Sunday")
+    preferred_days: List[int] = Field(
+        default=[6, 0], description="Saturday, Sunday")
     avoid_dates: List[str] = Field(default_factory=list)
 
     # Task configuration
@@ -315,9 +333,11 @@ class WorkflowPrediction(BaseModel):
     success_probability: float = Field(
         ..., ge=0.0, le=1.0, description="Predicted success probability"
     )
-    estimated_duration: int = Field(..., ge=0, description="Estimated duration in seconds")
+    estimated_duration: int = Field(..., ge=0,
+                                    description="Estimated duration in seconds")
     risk_level: RiskLevel = Field(..., description="Risk classification")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence")
+    confidence: float = Field(..., ge=0.0, le=1.0,
+                              description="Model confidence")
     factors: Dict[str, float] = Field(
         default_factory=dict, description="Feature importance scores"
     )
@@ -377,7 +397,8 @@ class SLAMetrics(BaseModel):
     """Complete SLA metrics for a repository."""
 
     repository: str = Field(..., description="Repository full name")
-    time_window: str = Field(..., description="Time window (e.g., '24h', '7d')")
+    time_window: str = Field(...,
+                             description="Time window (e.g., '24h', '7d')")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     overall_compliance: float = Field(
@@ -389,7 +410,8 @@ class SLAMetrics(BaseModel):
     success_rate: SuccessRateMetric
     availability: AvailabilityMetric
 
-    breaches: List[Dict] = Field(default_factory=list, description="SLA breach details")
+    breaches: List[Dict] = Field(
+        default_factory=list, description="SLA breach details")
     trend: str = Field(..., description="improving, stable, or degrading")
 
     class Config:

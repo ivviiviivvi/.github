@@ -122,7 +122,6 @@ security:
   required_scopes:
     - repo
     - workflow
-
 # Example: Stricter settings for production branches
 # Uncomment to use different settings per branch
 # branch_overrides:
@@ -132,7 +131,7 @@ security:
 #       coverage_threshold: 90
 #     advanced:
 #       merge_delay: 300  # 5 minutes
-#   
+#
 #   develop:
 #     requirements:
 #       min_reviews: 1

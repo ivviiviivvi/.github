@@ -17,6 +17,12 @@ Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo access
 """
 
+from utils import ConfigLoader, GitHubAPIClient, setup_logger
+from models import (
+    AutoMergeConfig,
+    AutoMergeEligibility,
+    AutoMergeSafetyChecks,
+)
 import argparse
 import sys
 from pathlib import Path
@@ -24,13 +30,6 @@ from typing import Dict, List
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
-
-from models import (
-    AutoMergeConfig,
-    AutoMergeEligibility,
-    AutoMergeSafetyChecks,
-)
-from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 
 class AutoMergeChecker:
@@ -62,7 +61,8 @@ class AutoMergeChecker:
         Returns:
             Auto-merge eligibility result
         """
-        self.logger.info(f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}")
+        self.logger.info(
+            f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}")
 
         # Get PR details
         pr = self._get_pull_request(owner, repo, pr_number)
@@ -127,7 +127,8 @@ class AutoMergeChecker:
             reviews_approved=self._check_reviews_approved(owner, repo, pr),
             no_conflicts=self._check_no_conflicts(pr),
             branch_up_to_date=self._check_branch_up_to_date(pr),
-            coverage_threshold_met=self._check_coverage_threshold(owner, repo, pr),
+            coverage_threshold_met=self._check_coverage_threshold(
+                owner, repo, pr),
         )
 
     def _check_tests_passed(self, owner: str, repo: str, pr: Dict) -> bool:
@@ -158,11 +159,13 @@ class AutoMergeChecker:
             endpoint = f"/repos/{owner}/{repo}/commits/{head_sha}/check-runs"
             check_runs = self.client.get(endpoint)
 
-            check_names = {run["name"]: run["conclusion"] for run in check_runs.get("check_runs", [])}
+            check_names = {run["name"]: run["conclusion"]
+                           for run in check_runs.get("check_runs", [])}
 
             for required_check in self.config.required_checks:
                 if required_check not in check_names:
-                    self.logger.debug(f"Required check '{required_check}' not found")
+                    self.logger.debug(
+                        f"Required check '{required_check}' not found")
                     return False
                 if check_names[required_check] != "success":
                     self.logger.debug(
@@ -195,7 +198,8 @@ class AutoMergeChecker:
             # Keep only the latest review state per reviewer
             reviewer_states[reviewer] = review["state"]
 
-        approved_count = sum(1 for state in reviewer_states.values() if state == "APPROVED")
+        approved_count = sum(
+            1 for state in reviewer_states.values() if state == "APPROVED")
 
         self.logger.debug(
             f"Reviews: {approved_count} approved (need {self.config.min_reviews})"
@@ -246,7 +250,8 @@ class AutoMergeChecker:
         acceptable_states = ["clean", "unstable", "has_hooks"]
         is_current = mergeable_state in acceptable_states
 
-        self.logger.debug(f"Mergeable state: {mergeable_state}, current: {is_current}")
+        self.logger.debug(
+            f"Mergeable state: {mergeable_state}, current: {is_current}")
         return is_current
 
     def _check_coverage_threshold(self, owner: str, repo: str, pr: Dict) -> bool:
@@ -355,19 +360,23 @@ class AutoMergeChecker:
         # PR age (older = more confident, up to 7 days)
         from datetime import datetime, timezone
 
-        created_at = datetime.fromisoformat(pr["created_at"].replace("Z", "+00:00"))
-        age_hours = (datetime.now(timezone.utc) - created_at).total_seconds() / 3600
+        created_at = datetime.fromisoformat(
+            pr["created_at"].replace("Z", "+00:00"))
+        age_hours = (datetime.now(timezone.utc) -
+                     created_at).total_seconds() / 3600
         age_score = min(1.0, age_hours / (7 * 24))  # Max confidence at 7 days
         confidence += age_score * 0.2  # 20% weight for age
 
         # Commit count (fewer = more confident)
         commits = pr.get("commits", 0)
-        commit_score = max(0.0, 1.0 - (commits / 20))  # Penalty after 20 commits
+        # Penalty after 20 commits
+        commit_score = max(0.0, 1.0 - (commits / 20))
         confidence += commit_score * 0.15  # 15% weight for commits
 
         # Changed files (fewer = more confident)
         changed_files = pr.get("changed_files", 0)
-        files_score = max(0.0, 1.0 - (changed_files / 10))  # Penalty after 10 files
+        files_score = max(0.0, 1.0 - (changed_files / 10)
+                          )  # Penalty after 10 files
         confidence += files_score * 0.15  # 15% weight for files
 
         return min(1.0, confidence)
@@ -380,7 +389,8 @@ def main():
     )
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
-    parser.add_argument("--pr", required=True, type=int, help="Pull request number")
+    parser.add_argument("--pr", required=True, type=int,
+                        help="Pull request number")
     parser.add_argument(
         "--config",
         default=".github/auto-merge.yml",
@@ -424,11 +434,16 @@ def main():
         print(f"Confidence: {result.confidence:.1%}")
 
         print(f"\nSafety Checks:")
-        print(f"  • All tests passed: {'✅' if result.checks_passed.all_tests_passed else '❌'}")
-        print(f"  • Reviews approved: {'✅' if result.checks_passed.reviews_approved else '❌'}")
-        print(f"  • No conflicts: {'✅' if result.checks_passed.no_conflicts else '❌'}")
-        print(f"  • Branch up-to-date: {'✅' if result.checks_passed.branch_up_to_date else '❌'}")
-        print(f"  • Coverage threshold met: {'✅' if result.checks_passed.coverage_threshold_met else '❌'}")
+        print(
+            f"  • All tests passed: {'✅' if result.checks_passed.all_tests_passed else '❌'}")
+        print(
+            f"  • Reviews approved: {'✅' if result.checks_passed.reviews_approved else '❌'}")
+        print(
+            f"  • No conflicts: {'✅' if result.checks_passed.no_conflicts else '❌'}")
+        print(
+            f"  • Branch up-to-date: {'✅' if result.checks_passed.branch_up_to_date else '❌'}")
+        print(
+            f"  • Coverage threshold met: {'✅' if result.checks_passed.coverage_threshold_met else '❌'}")
 
         if result.reasons:
             print(f"\nReasons for ineligibility:")

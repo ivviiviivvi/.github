@@ -1,0 +1,204 @@
+# Intelligent Routing Configuration
+#
+# Configures the intelligent routing algorithm for optimal issue/PR assignment.
+# The routing algorithm uses multiple factors to select the best assignee:
+# - Expertise: Historical contribution patterns
+# - Workload: Current assignment count
+# - Response Time: Average time to first response
+# - Availability: Recent activity patterns
+# - Performance: Success rate and quality metrics
+
+intelligent_routing:
+  # Enable or disable intelligent routing
+  enabled: true
+
+  # Routing factor weights (must sum to 1.0)
+  # Adjust these based on what's most important for your team
+  factors:
+    expertise: 0.35      # Historical contributions and domain knowledge (35%)
+    workload: 0.25       # Current assignment load (25%)
+    response_time: 0.20  # Speed of response (20%)
+    availability: 0.15   # Recent activity (15%)
+    performance: 0.05    # Success rate (5%)
+
+  # Maximum assignments per user before heavily penalizing workload score
+  # Default: 10 concurrent assignments
+  max_assignments_per_user: 10
+
+  # Fallback strategies when normal routing can't determine best assignee
+  # Strategies are tried in order until one succeeds
+  # Options: "round_robin", "random", "least_busy"
+  fallback_strategy:
+    - "round_robin"
+    - "random"
+
+  # Labels that exempt issues from intelligent routing
+  # These issues will use fallback strategy immediately
+  exempt_labels:
+    - "security"
+    - "hotfix"
+    - "urgent"
+    - "manual-assignment"
+
+  # Minimum confidence threshold for assignment
+  # If confidence is below this, use fallback strategy
+  # Range: 0.0 to 1.0 (default: 0.3)
+  min_confidence: 0.3
+
+  # Consider only users who have been active in the last N days
+  # Users inactive longer than this get 0 availability score
+  # Default: 14 days
+  activity_lookback_days: 14
+
+  # Historical data lookback for expertise calculation
+  # Default: 90 days
+  expertise_lookback_days: 90
+
+  # Performance metric lookback
+  # Default: 90 days
+  performance_lookback_days: 90
+
+# Advanced Options
+advanced:
+  # Enable machine learning model for routing (future enhancement)
+  ml_enhanced: false
+
+  # Cache routing decisions to speed up subsequent calculations
+  cache_enabled: true
+  cache_ttl_minutes: 60
+
+  # Notify assignee when assigned via intelligent routing
+  notify_assignee: true
+  notification_channel: "slack"  # Options: slack, email, github
+
+  # Log detailed routing decisions for analysis
+  detailed_logging: true
+  log_alternatives: true  # Log top 5 alternative assignees
+
+  # A/B testing configuration
+  ab_testing:
+    enabled: false
+    control_group_percentage: 50  # % of assignments using old method
+    experiment_duration_days: 30
+
+# Branch-specific overrides
+branch_overrides:
+  main:
+    # More conservative routing for main branch
+    factors:
+      expertise: 0.40
+      workload: 0.20
+      response_time: 0.20
+      availability: 0.15
+      performance: 0.05
+    min_confidence: 0.5
+
+  develop:
+    # Standard routing for develop branch
+    # Uses default factors
+
+  hotfix/*:
+    # Prioritize availability and response time for hotfixes
+    factors:
+      expertise: 0.25
+      workload: 0.15
+      response_time: 0.35
+      availability: 0.20
+      performance: 0.05
+    exempt_labels: []  # Override global exempt labels
+
+# Label-specific routing
+label_routing:
+  # Route security issues to security team members
+  security:
+    allowed_assignees:
+      - "security-team-lead"
+      - "appsec-engineer"
+    factors:
+      expertise: 0.50
+      workload: 0.20
+      response_time: 0.15
+      availability: 0.10
+      performance: 0.05
+
+  # Route documentation issues to technical writers
+  documentation:
+    allowed_assignees:
+      - "tech-writer-1"
+      - "tech-writer-2"
+    factors:
+      expertise: 0.40
+      workload: 0.30
+      response_time: 0.15
+      availability: 0.10
+      performance: 0.05
+
+  # Route frontend issues to frontend team
+  frontend:
+    allowed_assignees:
+      - "frontend-lead"
+      - "ui-engineer"
+      - "react-specialist"
+    factors:
+      expertise: 0.45
+      workload: 0.25
+      response_time: 0.15
+      availability: 0.10
+      performance: 0.05
+
+# Notification Templates
+notifications:
+  assignment:
+    title: "🎯 Intelligent Routing Assignment"
+    body: |
+      You've been assigned to {{ issue_type }} #{{ issue_number }} via intelligent routing.
+      
+      **Repository:** {{ repository }}
+      **Title:** {{ title }}
+      **Assignment Score:** {{ score }} ({{ confidence }}% confidence)
+      
+      **Why you were selected:**
+      - Expertise: {{ expertise_score }}
+      - Current Workload: {{ workload_score }}
+      - Response Time: {{ response_time_score }}
+      - Availability: {{ availability_score }}
+      - Performance: {{ performance_score }}
+      
+      **Alternative assignees:** {{ alternatives }}
+      
+      [View Issue]({{ url }})
+
+  fallback:
+    title: "⚠️ Fallback Assignment"
+    body: |
+      You've been assigned to {{ issue_type }} #{{ issue_number }} using fallback strategy.
+      
+      **Repository:** {{ repository }}
+      **Strategy Used:** {{ strategy }}
+      **Reason:** {{ reason }}
+      
+      [View Issue]({{ url }})
+
+# Audit and Compliance
+audit:
+  # Log all routing decisions for compliance
+  enabled: true
+  retention_days: 90
+
+  # Fields to include in audit log
+  fields:
+    - timestamp
+    - issue_number
+    - repository
+    - assignee
+    - score
+    - scores  # Individual factor scores
+    - confidence
+    - fallback_used
+    - alternatives
+
+  # Export audit logs for analysis
+  export:
+    enabled: true
+    format: "json"  # Options: json, csv
+    destination: ".github/audit/routing/"
