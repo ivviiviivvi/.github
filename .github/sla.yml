@@ -5,10 +5,10 @@
 sla:
   # Enable SLA monitoring
   enabled: true
-  
+
   # Monitoring interval (minutes)
   check_interval: 15
-  
+
   # Track historical data
   track_history: true
   history_retention_days: 90
@@ -16,60 +16,60 @@ sla:
 # SLA Thresholds by Priority
 thresholds:
   # P0 - Critical (Production issues, security vulnerabilities)
-  - priority: "P0"
-    response_time_minutes: 15      # 15 minutes
-    resolution_time_hours: 4       # 4 hours
-    success_rate_percentage: 99.5  # 99.5%
-    availability_percentage: 99.9  # 99.9%
-    
-  # P1 - High (Major bugs, important features)
-  - priority: "P1"
-    response_time_minutes: 60      # 1 hour
-    resolution_time_hours: 24      # 24 hours
-    success_rate_percentage: 98.0  # 98%
-    availability_percentage: 99.5  # 99.5%
-    
-  # P2 - Medium (Minor bugs, standard features)
-  - priority: "P2"
-    response_time_minutes: 240     # 4 hours
-    resolution_time_hours: 72      # 3 days
-    success_rate_percentage: 95.0  # 95%
-    availability_percentage: 99.0  # 99%
-    
-  # P3 - Low (Enhancements, questions)
-  - priority: "P3"
-    response_time_minutes: 1440    # 24 hours
-    resolution_time_hours: 168     # 1 week
-    success_rate_percentage: 90.0  # 90%
-    availability_percentage: 95.0  # 95%
+  - priority: P0
+    response_time_minutes: 15 # 15 minutes
+    resolution_time_hours: 4 # 4 hours
+    success_rate_percentage: 99.5 # 99.5%
+    availability_percentage: 99.9 # 99.9%
+
+    # P1 - High (Major bugs, important features)
+  - priority: P1
+    response_time_minutes: 60 # 1 hour
+    resolution_time_hours: 24 # 24 hours
+    success_rate_percentage: 98.0 # 98%
+    availability_percentage: 99.5 # 99.5%
+
+    # P2 - Medium (Minor bugs, standard features)
+  - priority: P2
+    response_time_minutes: 240 # 4 hours
+    resolution_time_hours: 72 # 3 days
+    success_rate_percentage: 95.0 # 95%
+    availability_percentage: 99.0 # 99%
+
+    # P3 - Low (Enhancements, questions)
+  - priority: P3
+    response_time_minutes: 1440 # 24 hours
+    resolution_time_hours: 168 # 1 week
+    success_rate_percentage: 90.0 # 90%
+    availability_percentage: 95.0 # 95%
 
 # Priority Detection
 priority_detection:
   # Determine priority from labels
   label_mapping:
-    P0: ["p0", "critical", "urgent", "production", "security"]
-    P1: ["p1", "high", "important", "bug"]
-    P2: ["p2", "medium", "normal", "enhancement"]
-    P3: ["p3", "low", "question", "documentation"]
-  
+    P0: [p0, critical, urgent, production, security]
+    P1: [p1, high, important, bug]
+    P2: [p2, medium, normal, enhancement]
+    P3: [p3, low, question, documentation]
+
   # Default priority when no labels match
-  default_priority: "P3"
-  
+  default_priority: P3
+
   # Auto-assign priority based on context
   auto_assign:
     enabled: true
     rules:
       # Workflow failures in production
-      - condition: "workflow_failure AND branch=main"
-        priority: "P0"
-      
-      # Security issues
-      - condition: "label:security"
-        priority: "P0"
-      
-      # Pull requests to main branch
-      - condition: "pull_request AND base=main"
-        priority: "P1"
+      - condition: workflow_failure AND branch=main
+        priority: P0
+
+        # Security issues
+      - condition: label:security
+        priority: P0
+
+        # Pull requests to main branch
+      - condition: pull_request AND base=main
+        priority: P1
 
 # Monitoring Scope
 monitoring:
@@ -78,28 +78,28 @@ monitoring:
     - issues
     - pull_requests
     - workflows
-  
+
   # Monitor only specific labels
   filter_labels: []
-  
+
   # Exclude items with these labels
   exclude_labels:
-    - "wip"           # Work in progress
-    - "on-hold"       # Temporarily paused
-    - "waiting-user"  # Waiting for user response
-    - "duplicate"     # Duplicate issue
-  
+    - wip # Work in progress
+    - on-hold # Temporarily paused
+    - waiting-user # Waiting for user response
+    - duplicate # Duplicate issue
+
   # Workflow-specific monitoring
   workflows:
     # Monitor all workflows
     monitor_all: true
-    
+
     # Or specify workflows to monitor
     specific_workflows: []
-    
+
     # Success rate window (hours)
     success_rate_window: 24
-    
+
     # Minimum runs required for success rate
     min_runs_for_rate: 10
 
@@ -107,102 +107,102 @@ monitoring:
 breach_detection:
   # Enable automatic breach detection
   enabled: true
-  
+
   # Grace period before flagging breach (minutes)
   grace_period_minutes: 5
-  
+
   # Breach categories
   categories:
     response_time:
       enabled: true
-      description: "Time to first response exceeds threshold"
-      
+      description: Time to first response exceeds threshold
+
     resolution_time:
       enabled: true
-      description: "Time to resolution exceeds threshold"
-      
+      description: Time to resolution exceeds threshold
+
     success_rate:
       enabled: true
-      description: "Success rate below threshold"
-      
+      description: Success rate below threshold
+
     availability:
       enabled: true
-      description: "Availability below threshold"
-  
+      description: Availability below threshold
+
   # Escalation rules
   escalation:
     # Auto-escalate after N breaches
     enabled: true
     threshold: 3
-    
+
     # Escalation actions
     actions:
-      - add_label: "sla-breach"
+      - add_label: sla-breach
       - increase_priority: true
       - notify_management: true
-      - create_incident: true  # For P0/P1
+      - create_incident: true # For P0/P1
 
 # Notifications
 notifications:
   # Breach notifications
   breach:
     enabled: true
-    
+
     # Channels by priority
     channels:
       P0:
-        - type: "slack"
+        - type: slack
           channel: "#incidents"
           mention: "@oncall"
-        - type: "pagerduty"
-          service: "production"
-        - type: "email"
-          recipients: ["oncall@example.com", "management@example.com"]
-          
+        - type: pagerduty
+          service: production
+        - type: email
+          recipients: [oncall@example.com, management@example.com]
+
       P1:
-        - type: "slack"
+        - type: slack
           channel: "#alerts"
-        - type: "email"
-          recipients: ["team@example.com"]
-          
+        - type: email
+          recipients: [team@example.com]
+
       P2:
-        - type: "slack"
+        - type: slack
           channel: "#monitoring"
-          
+
       P3:
-        - type: "slack"
+        - type: slack
           channel: "#monitoring"
-    
+
     # Notification templates
     templates:
       breach: |
         🚨 **SLA Breach - {{priority}}**
-        
+
         Repository: {{repository}}
         Item: {{item_type}} #{{item_number}}
         Breach: {{breach_type}}
         Threshold: {{threshold_value}}
         Actual: {{actual_value}}
-        
+
         {{url}}
-      
+
       resolved: |
         ✅ **SLA Breach Resolved**
-        
+
         Repository: {{repository}}
         Item: {{item_type}} #{{item_number}}
         Resolution time: {{resolution_time}}
-  
+
   # Regular status updates
   status_updates:
     enabled: true
-    frequency: "daily"  # Options: hourly, daily, weekly
-    time: "09:00"       # UTC time
-    
+    frequency: daily # Options: hourly, daily, weekly
+    time: 09:00 # UTC time
+
     channels:
-      - type: "slack"
+      - type: slack
         channel: "#metrics"
-    
+
     # Include in status update
     include:
       - current_metrics
@@ -214,37 +214,37 @@ notifications:
 reporting:
   # Generate periodic reports
   enabled: true
-  
+
   # Report schedule
   schedule:
     daily:
       enabled: true
-      time: "08:00"  # UTC
-      
+      time: 08:00 # UTC
+
     weekly:
       enabled: true
-      day: "monday"
-      time: "09:00"
-      
+      day: monday
+      time: 09:00
+
     monthly:
       enabled: true
       day: 1
-      time: "09:00"
-  
+      time: 09:00
+
   # Report format
-  format: "json"  # Options: json, markdown, html
-  
+  format: json # Options: json, markdown, html
+
   # Report destination
   destination:
-    path: ".github/sla/reports/"
-    
+    path: .github/sla/reports/
+
     # Also send to channels
     channels:
-      - type: "slack"
+      - type: slack
         channel: "#metrics"
-      - type: "email"
-        recipients: ["management@example.com"]
-  
+      - type: email
+        recipients: [management@example.com]
+
   # Metrics to include
   metrics:
     - response_times
@@ -254,26 +254,26 @@ reporting:
     - trends
     - top_performers
     - top_violators
-  
+
   # Trend analysis
   trends:
     enabled: true
     compare_periods:
-      - "previous_week"
-      - "previous_month"
-      - "same_week_last_month"
+      - previous_week
+      - previous_month
+      - same_week_last_month
 
 # Dashboard Integration
 dashboard:
   # Enable dashboard metrics export
   enabled: true
-  
+
   # Export format
-  format: "prometheus"  # Options: prometheus, influxdb, custom
-  
+  format: prometheus # Options: prometheus, influxdb, custom
+
   # Export interval (seconds)
   export_interval: 60
-  
+
   # Metrics to export
   metrics:
     - sla_response_time
@@ -282,7 +282,7 @@ dashboard:
     - sla_breach_count
     - sla_items_within_threshold
     - sla_items_breached
-  
+
   # Labels/tags
   labels:
     - repository
@@ -298,9 +298,9 @@ automation:
     add_labels:
       enabled: true
       labels:
-        - "sla-breach"
-        - "needs-attention"
-    
+        - sla-breach
+        - needs-attention
+
     # Assign to team
     auto_assign:
       enabled: true
@@ -309,36 +309,36 @@ automation:
         P0: ["@oncall-team"]
         P1: ["@senior-team"]
         P2: ["@team"]
-    
+
     # Update priority
     update_priority:
       enabled: true
-      escalate_levels: 1  # Increase priority by N levels
-    
+      escalate_levels: 1 # Increase priority by N levels
+
     # Comment on item
     add_comment:
       enabled: true
       template: |
         ⚠️ This {{item_type}} has breached SLA thresholds:
         - **{{breach_type}}**: {{actual_value}} (threshold: {{threshold_value}})
-        
+
         Please address this urgently.
-  
+
   # Actions on resolution
   on_resolution:
     # Remove labels
     remove_labels:
       enabled: true
       labels:
-        - "sla-breach"
-    
+        - sla-breach
+
     # Add resolution comment
     add_comment:
       enabled: true
       template: |
         ✅ SLA breach resolved
         Resolution time: {{resolution_time}}
-    
+
     # Track in metrics
     record_metrics:
       enabled: true
@@ -347,54 +347,54 @@ automation:
 analysis:
   # Enable trend analysis
   enabled: true
-  
+
   # Analysis window (days)
   window_days: 30
-  
+
   # Detect patterns
   pattern_detection:
     enabled: true
     patterns:
-      - "recurring_breaches"      # Same item breaches repeatedly
-      - "time_based_patterns"     # Breaches at specific times
-      - "assignee_patterns"       # Specific assignees have more breaches
-      - "label_patterns"          # Specific labels correlate with breaches
-  
+      - recurring_breaches # Same item breaches repeatedly
+      - time_based_patterns # Breaches at specific times
+      - assignee_patterns # Specific assignees have more breaches
+      - label_patterns # Specific labels correlate with breaches
+
   # Predictive analytics
   predictions:
-    enabled: false  # Requires ML model
-    model: "enhanced_analytics"
+    enabled: false # Requires ML model
+    model: enhanced_analytics
     confidence_threshold: 0.7
 
 # Compliance
 compliance:
   # Track compliance percentage
   enabled: true
-  
+
   # Compliance targets
   targets:
-    P0: 99.0  # 99% of P0 items within SLA
-    P1: 97.0  # 97% of P1 items within SLA
-    P2: 95.0  # 95% of P2 items within SLA
-    P3: 90.0  # 90% of P3 items within SLA
-  
+    P0: 99.0 # 99% of P0 items within SLA
+    P1: 97.0 # 97% of P1 items within SLA
+    P2: 95.0 # 95% of P2 items within SLA
+    P3: 90.0 # 90% of P3 items within SLA
+
   # Alert when below target
   alert_below_target:
     enabled: true
     channels:
-      - type: "slack"
+      - type: slack
         channel: "#management"
-      - type: "email"
-        recipients: ["management@example.com"]
+      - type: email
+        recipients: [management@example.com]
 
 # Audit Logging
 audit:
   # Log all SLA events
   enabled: true
-  
+
   # Retention period (days)
   retention_days: 365
-  
+
   # Events to log
   events:
     - breach_detected
@@ -402,12 +402,12 @@ audit:
     - threshold_updated
     - priority_changed
     - escalation_triggered
-  
+
   # Export location
-  export_path: ".github/sla/audit/"
-  
+  export_path: .github/sla/audit/
+
   # Export format
-  export_format: "json"
+  export_format: json
 
 # Advanced Options
 advanced:
@@ -415,16 +415,16 @@ advanced:
   business_hours_only:
     enabled: false
     hours:
-      start: "09:00"
-      end: "17:00"
-    timezone: "UTC"
-    days: [1, 2, 3, 4, 5]  # Mon-Fri
-  
+      start: 09:00
+      end: 17:00
+    timezone: UTC
+    days: [1, 2, 3, 4, 5] # Mon-Fri
+
   # Holiday calendar
   holidays:
     enabled: false
     dates: []
-  
+
   # Custom breach logic
   custom_breach_rules:
     enabled: false

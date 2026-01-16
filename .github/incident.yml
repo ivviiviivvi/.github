@@ -1,0 +1,361 @@
+# Incident Response Configuration
+# Automates incident detection, classification, and response
+
+# Incident Response Settings
+incident_response:
+  # Enable incident response automation
+  enabled: true
+
+  # Automatically create GitHub issues for incidents
+  create_github_issues: true
+
+  # Auto-execute runbooks
+  auto_execute_runbooks: true
+
+  # Incident ID prefix
+  id_prefix: INC
+
+# Severity Classification
+severity:
+  # SEV-1: Critical - Production down, data loss, security breach
+  SEV1:
+    description: Critical incident requiring immediate action
+    keywords:
+      - production down
+      - outage
+      - data loss
+      - security breach
+      - critical failure
+    response_time_minutes: 5
+    escalation_time_minutes: 15
+
+  # SEV-2: High - Major feature broken, significant user impact
+  SEV2:
+    description: High severity incident with significant impact
+    keywords:
+      - major failure
+      - high priority
+      - significant impact
+      - main feature
+    response_time_minutes: 30
+    escalation_time_minutes: 60
+
+  # SEV-3: Medium - Minor feature broken, workaround available
+  SEV3:
+    description: Medium severity incident with limited impact
+    keywords:
+      - minor issue
+      - workaround available
+      - limited impact
+    response_time_minutes: 120
+    escalation_time_minutes: 240
+
+  # SEV-4: Low - Cosmetic issues, no user impact
+  SEV4:
+    description: Low severity incident with minimal impact
+    keywords:
+      - cosmetic
+      - minor bug
+      - documentation
+    response_time_minutes: 480
+    escalation_time_minutes: 1440
+
+# Automated Runbooks
+runbooks:
+  SEV1:
+    - name: Page on-call team
+      action: notify
+      params:
+        channel: pagerduty
+        priority: critical
+
+    - name: Create war room
+      action: create_issue
+      params:
+        labels: [incident, sev-1, war-room]
+
+    - name: Notify management
+      action: notify
+      params:
+        channel: email
+        recipients: [management@example.com]
+
+    - name: Start incident bridge
+      action: notify
+      params:
+        channel: slack
+        message: "Join incident bridge: https://meet.example.com/incident"
+
+  SEV2:
+    - name: Notify on-call team
+      action: notify
+      params:
+        channel: slack
+        priority: high
+
+    - name: Create tracking issue
+      action: create_issue
+      params:
+        labels: [incident, sev-2]
+
+    - name: Start investigation
+      action: update_status
+      params:
+        status: investigating
+
+  SEV3:
+    - name: Notify team
+      action: notify
+      params:
+        channel: slack
+        priority: normal
+
+    - name: Log incident
+      action: update_status
+      params:
+        status: triaging
+
+  SEV4:
+    - name: Log incident
+      action: update_status
+      params:
+        status: triaging
+
+# Escalation Rules
+escalation:
+  # Auto-escalate if not acknowledged
+  auto_escalate:
+    enabled: true
+
+  # Escalation triggers
+  triggers:
+    # SEV-1: Escalate after 15 minutes without ack
+    SEV1:
+      time_minutes: 15
+      escalate_to: [director, vp-engineering]
+
+    # SEV-2: Escalate after 1 hour without progress
+    SEV2:
+      time_minutes: 60
+      escalate_to: [engineering-manager]
+
+    # SEV-3: Escalate after 4 hours without assignment
+    SEV3:
+      time_minutes: 240
+      escalate_to: [team-lead]
+
+  # Escalation actions
+  actions:
+    - increase_severity: true
+    - notify_management: true
+    - add_label: escalated
+
+# Notifications
+notifications:
+  # Notification channels by severity
+  channels:
+    SEV1:
+      - type: pagerduty
+        service: production
+        urgency: high
+      - type: slack
+        channel: "#incidents"
+        mention: "@here"
+      - type: email
+        recipients: [oncall@example.com, management@example.com]
+
+    SEV2:
+      - type: slack
+        channel: "#incidents"
+      - type: email
+        recipients: [team@example.com]
+
+    SEV3:
+      - type: slack
+        channel: "#alerts"
+
+    SEV4:
+      - type: slack
+        channel: "#monitoring"
+
+  # Notification templates
+  templates:
+    incident_created: |
+      🚨 **New Incident - {{severity}}**
+
+      ID: {{incident_id}}
+      Title: {{title}}
+      Repository: {{repository}}
+
+      {{description}}
+
+      Status: {{status}}
+
+    incident_resolved: |
+      ✅ **Incident Resolved**
+
+      ID: {{incident_id}}
+      Resolution time: {{resolution_time}} minutes
+
+      {{resolution}}
+
+    incident_escalated: |
+      ⚠️ **Incident Escalated**
+
+      ID: {{incident_id}}
+      Old severity: {{old_severity}}
+      New severity: {{new_severity}}
+
+      Reason: No progress within escalation window
+
+# Integration
+integration:
+  # SLA monitoring
+  sla_monitor:
+    enabled: true
+    # Create incident on SLA breach
+    create_incident_on_breach: true
+    severity_mapping:
+      P0: SEV1
+      P1: SEV2
+      P2: SEV3
+      P3: SEV4
+
+  # Self-healing
+  self_healing:
+    enabled: true
+    # Create incident on repeated failures
+    create_incident_on_failure: true
+    failure_threshold: 3
+
+  # Workflow monitoring
+  workflows:
+    enabled: true
+    # Create incident on workflow failure
+    critical_workflows:
+      - production-deploy
+      - security-scan
+    severity: SEV2
+
+# Post-Incident Process
+post_incident:
+  # Automatically generate reports
+  auto_generate_reports: true
+
+  # Report components
+  include:
+    - timeline
+    - root_cause_analysis
+    - lessons_learned
+    - action_items
+
+  # Action item tracking
+  action_items:
+    # Create GitHub issues for action items
+    create_issues: true
+
+    # Default assignee
+    default_assignee: team
+
+    # Labels
+    labels: [post-incident, action-item]
+
+  # Review meeting
+  review_meeting:
+    required_for: [SEV1, SEV2]
+    schedule_days: 3 # Days after resolution
+
+# Status Workflow
+status_workflow:
+  # Available statuses
+  statuses:
+    - OPEN # Incident detected, not yet acknowledged
+    - ACKNOWLEDGED # Team notified, investigating
+    - INVESTIGATING # Active investigation
+    - IDENTIFIED # Root cause identified
+    - MITIGATING # Mitigation in progress
+    - RESOLVED # Incident resolved
+    - CLOSED # Post-incident complete
+
+  # Status transitions
+  allowed_transitions:
+    OPEN: [ACKNOWLEDGED, CLOSED]
+    ACKNOWLEDGED: [INVESTIGATING, RESOLVED]
+    INVESTIGATING: [IDENTIFIED, RESOLVED]
+    IDENTIFIED: [MITIGATING, RESOLVED]
+    MITIGATING: [RESOLVED]
+    RESOLVED: [CLOSED, OPEN] # Can reopen if needed
+
+  # Auto-status updates
+  auto_updates:
+    # Auto-resolve after mitigation
+    auto_resolve:
+      enabled: false
+      delay_minutes: 30
+
+    # Auto-close after resolution
+    auto_close:
+      enabled: false
+      delay_days: 7
+
+# Metrics and Reporting
+metrics:
+  # Track incident metrics
+  enabled: true
+
+  # Metrics to track
+  tracked_metrics:
+    - incident_count
+    - mean_time_to_acknowledge
+    - mean_time_to_resolve
+    - severity_distribution
+    - top_failure_sources
+    - escalation_rate
+
+  # Dashboard export
+  export:
+    enabled: true
+    format: prometheus
+    interval_seconds: 60
+
+# Compliance
+compliance:
+  # Audit all incident actions
+  audit_logging:
+    enabled: true
+    retention_days: 365
+
+  # Required fields for closure
+  required_for_closure:
+    - root_cause
+    - resolution
+    - lessons_learned
+    - action_items
+
+  # Post-incident review
+  review_required:
+    SEV1: true
+    SEV2: true
+    SEV3: false
+    SEV4: false
+
+# Advanced Options
+advanced:
+  # Machine learning for severity classification
+  ml_classification:
+    enabled: false
+    model: enhanced_analytics
+    confidence_threshold: 0.8
+
+  # Automatic remediation
+  auto_remediation:
+    enabled: false
+    safe_actions_only: true
+    require_approval: true
+
+  # Incident correlation
+  correlation:
+    enabled: true
+    # Link related incidents
+    time_window_minutes: 60
+    similarity_threshold: 0.7
