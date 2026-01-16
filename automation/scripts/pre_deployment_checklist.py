@@ -110,18 +110,18 @@ class PreDeploymentChecker:
         try:
             with open(self.config_path, "r") as f:
                 self.config = yaml.safe_load(f)
-            
+
             # Check required keys
             required_keys = ["repositories", "workflows", "labels"]
             missing = [key for key in required_keys if key not in self.config]
-            
+
             if missing:
                 return CheckResult(
                     "Configuration Valid",
                     False,
                     f"Missing required keys: {', '.join(missing)}",
                 )
-            
+
             return CheckResult(
                 "Configuration Valid",
                 True,
@@ -283,34 +283,65 @@ class PreDeploymentChecker:
             )
 
         repositories = self.config.get("repositories", [])
-        required_labels = {label["name"] for label in self.config.get("labels", [])}
+        labels_config = self.config.get("labels", [])
+        
+        # Handle both list and dict formats
+        if isinstance(labels_config, list):
+            required_labels = {
+                label.get("name", "") 
+                for label in labels_config 
+                if isinstance(label, dict)
+            }
+        elif isinstance(labels_config, dict):
+            required_labels = set(labels_config.keys())
+        else:
+            return CheckResult(
+                "Label Deployment",
+                False,
+                "Invalid labels configuration format",
+                f"Expected list or dict, got {type(labels_config).__name__}",
+            )
+        
         repos_missing_labels = []
 
         for repo in repositories:
             success, stdout, stderr = self._run_command(
                 ["gh", "label", "list", "--repo", repo, "--json", "name"]
             )
-            
+
             if not success:
                 repos_missing_labels.append(f"{repo} (inaccessible)")
                 continue
 
             try:
-                existing_labels = {label["name"] for label in json.loads(stdout)}
-                missing = required_labels - existing_labels
-                if missing:
+                labels_data = json.loads(stdout)
+                if isinstance(labels_data, list):
+                    existing_labels = {
+                        label.get("name", "") 
+                        for label in labels_data 
+                        if isinstance(label, dict)
+                    }
+                    missing = required_labels - existing_labels
+                    if missing:
+                        repos_missing_labels.append(
+                            f"{repo} (missing {len(missing)} labels)"
+                        )
+                else:
                     repos_missing_labels.append(
-                        f"{repo} (missing {len(missing)} labels)"
+                        f"{repo} (invalid format)"
                     )
-            except json.JSONDecodeError:
-                repos_missing_labels.append(f"{repo} (parse error)")
+            except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as e:
+                repos_missing_labels.append(
+                    f"{repo} (error: {type(e).__name__})"
+                )
 
         if repos_missing_labels:
             return CheckResult(
                 "Label Deployment",
                 False,
                 f"{len(repos_missing_labels)}/{len(repositories)} repositories missing labels",
-                "\n   ".join([""] + repos_missing_labels) if self.verbose else None,
+                "\n   ".join(
+                    [""] + repos_missing_labels) if self.verbose else None,
             )
         else:
             return CheckResult(
@@ -328,11 +359,11 @@ class PreDeploymentChecker:
                 True,
                 "Phase 1 is initial deployment",
             )
-        
+
         # For Phase 2 and 3, check previous phase
         previous_phase = self.phase - 1
         previous_config_path = self._get_config_path()
-        
+
         # This is a placeholder - in real implementation, would check
         # previous phase deployment status from logs/state files
         return CheckResult(
@@ -386,7 +417,7 @@ class PreDeploymentChecker:
         print("=" * 80)
         passed = sum(1 for r in self.results if r.passed)
         total = len(self.results)
-        
+
         if passed == total:
             print(f"✅ ALL CHECKS PASSED ({passed}/{total})")
             print()
@@ -402,15 +433,17 @@ class PreDeploymentChecker:
             print(f"❌ {failed} CHECK(S) FAILED ({passed}/{total} passed)")
             print()
             print("Fix the issues above before deploying.")
-            
+
             # Provide helpful suggestions
             if not self.skip_labels:
-                label_check = next((r for r in self.results if "Label" in r.name), None)
+                label_check = next(
+                    (r for r in self.results if "Label" in r.name), None)
                 if label_check and not label_check.passed:
                     print()
                     print("💡 To deploy labels automatically:")
-                    print(f"   python3 validate_labels.py --config {self.config_path.name} --fix")
-            
+                    print(
+                        f"   python3 validate_labels.py --config {self.config_path.name} --fix")
+
             return False
 
 
@@ -445,7 +478,7 @@ def main():
         skip_labels=args.skip_labels,
         verbose=args.verbose,
     )
-    
+
     success = checker.run_all_checks()
     sys.exit(0 if success else 1)
 

@@ -83,6 +83,7 @@ python3 pre_deployment_checklist.py --phase 3
 ### 1. Configuration File Exists
 
 Verifies the phase-specific configuration file exists:
+
 - Phase 1: `batch-onboard-week11-phase1-pilot.yml`
 - Phase 2: `batch-onboard-week11-phase2-expansion.yml`
 - Phase 3: `batch-onboard-week11-phase3-final.yml`
@@ -90,6 +91,7 @@ Verifies the phase-specific configuration file exists:
 ### 2. Configuration Valid
 
 Checks:
+
 - Valid YAML syntax
 - Required keys present (`repositories`, `workflows`, `labels`)
 - Configuration can be parsed
@@ -97,6 +99,7 @@ Checks:
 ### 3. GitHub CLI Installed and Authenticated
 
 Verifies:
+
 - `gh` command is in PATH
 - User is authenticated with GitHub
 - Can execute GitHub API calls
@@ -104,11 +107,13 @@ Verifies:
 ### 4. Python Dependencies
 
 Ensures required packages are installed:
+
 - `pyyaml` for configuration parsing
 
 ### 5. Workflow Templates Exist
 
 Checks that all workflow files referenced in config exist in:
+
 - `automation/workflow-templates/`
 - `workflow-templates/`
 - `.github/workflows/`
@@ -116,6 +121,7 @@ Checks that all workflow files referenced in config exist in:
 ### 6. Repository Access
 
 Verifies:
+
 - All target repositories are accessible
 - User has read permissions
 - Repositories exist
@@ -123,6 +129,7 @@ Verifies:
 ### 7. Labels Deployed
 
 For each repository, checks:
+
 - All required labels exist
 - Labels are accessible via GitHub API
 
@@ -131,6 +138,7 @@ For each repository, checks:
 ### 8. Phase Prerequisites
 
 Validates:
+
 - Phase 1: No prerequisites (initial deployment)
 - Phase 2: Phase 1 should be verified manually as stable
 - Phase 3: Phase 2 should be verified manually as stable
