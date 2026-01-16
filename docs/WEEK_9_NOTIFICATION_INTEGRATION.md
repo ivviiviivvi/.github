@@ -50,6 +50,7 @@ notify_sla_breach(
 ```
 
 **Benefits:**
+
 - ✅ Automatic channel routing based on priority
 - ✅ Consistent message formatting
 - ✅ Rate limiting and deduplication
@@ -91,6 +92,7 @@ notify_sla_compliance(
 ```
 
 **Priority Mapping:**
+
 - `P0` → `Priority.CRITICAL` → Slack + PagerDuty + Email (oncall + mgmt)
 - `P1` → `Priority.HIGH` → Slack + Email (team)
 - `P2` → `Priority.MEDIUM` → Slack + Email (team)
@@ -99,11 +101,13 @@ notify_sla_compliance(
 **Migration Steps:**
 
 1. Import notification functions:
+
    ```python
    from notification_integration import notify_sla_breach
    ```
 
 2. Replace existing notification code:
+
    ```python
    # OLD:
    send_notification("slack", f"SLA breach: {item_number}")
@@ -150,6 +154,7 @@ notify_incident_resolved(
 ```
 
 **Severity Mapping:**
+
 - `SEV-1` → `Priority.CRITICAL` → All channels
 - `SEV-2` → `Priority.HIGH` → Slack + Email
 - `SEV-3` → `Priority.MEDIUM` → Slack + Email
@@ -158,6 +163,7 @@ notify_incident_resolved(
 **Migration Steps:**
 
 1. Find incident creation code:
+
    ```python
    # OLD:
    send_notification("slack", f"Incident {incident_id} created")
@@ -165,6 +171,7 @@ notify_incident_resolved(
    ```
 
 2. Replace with unified call:
+
    ```python
    # NEW:
    notify_incident_created(
@@ -207,6 +214,7 @@ notify_validation_success(
 **Migration Steps:**
 
 1. In `_send_validation_notification()`:
+
    ```python
    # OLD:
    send_notification("slack", validation_message)
@@ -263,6 +271,7 @@ notify_self_healing_failure(
 **Migration Steps:**
 
 1. In `_send_notification()`:
+
    ```python
    # OLD:
    if self.config.send_notifications:
@@ -503,6 +512,7 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 **Problem:** Notifications not being sent
 
 **Solutions:**
+
 - Check environment variables are set
 - Verify `.github/notifications.yml` exists and is valid
 - Check notification manager logs
@@ -511,6 +521,7 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 **Problem:** Duplicate notifications
 
 **Solutions:**
+
 - Verify deduplication is enabled in config
 - Check deduplication window is appropriate (default 5 minutes)
 - Review notification source and title for uniqueness
@@ -518,7 +529,9 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 **Problem:** Rate limiting too aggressive
 
 **Solutions:**
+
 - Increase rate limits in `.github/notifications.yml`:
+
   ```yaml
   rate_limiting:
     max_per_minute:
@@ -528,6 +541,7 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 **Problem:** Wrong channels receiving notifications
 
 **Solutions:**
+
 - Check priority routing in config
 - Verify source-specific routing overrides
 - Review priority mapping in integration functions
@@ -539,11 +553,13 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 ### 1. Use Specific Functions
 
 ✅ **Good:**
+
 ```python
 notify_sla_breach(item_type="issue", item_number="123", ...)
 ```
 
 ❌ **Avoid:**
+
 ```python
 send_notification("slack", "SLA breach on issue 123")
 ```
@@ -590,10 +606,10 @@ cat .github/notifications/delivery_log/NOTIF-*.json | tail -1
 
 ## Support
 
-- **Documentation**: 
+- **Documentation**:
   - [Unified Notification System](UNIFIED_NOTIFICATION_SYSTEM.md)
   - [Week 9 Advanced Automation](WEEK_9_ADVANCED_AUTOMATION.md)
-- **Code**: 
+- **Code**:
   - `automation/scripts/notification_manager.py`
   - `automation/scripts/notification_integration.py`
 - **Configuration**: `.github/notifications.yml`

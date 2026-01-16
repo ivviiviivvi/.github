@@ -43,7 +43,8 @@ from models import (
     SLAReport,
     SLAThresholds,
 )
-from utils import GitHubAPIClient, load_config, send_notification
+from notification_integration import notify_sla_breach
+from utils import GitHubAPIClient, load_config
 
 # Configure logging
 logging.basicConfig(
@@ -537,33 +538,23 @@ class SLAMonitor:
             ]
         )
 
-        message = f"""
-🚨 **SLA Breach Alert - {priority}**
+        # Send unified notifications for each breach
+        for breach in breaches:
+            notify_sla_breach(
+                item_type=breach.item_type,
+                item_number=breach.item_number,
+                repository=f"{owner}/{repo}",
+                breach_type=breach.breach_type,
+                threshold=f"{breach.threshold_minutes}min",
+                actual=f"{breach.actual_minutes}min",
+                priority=breach.priority.value,
+                metadata={
+                    "breach_count": len(breaches),
+                    "timestamp": breach.timestamp.isoformat(),
+                }
+            )
 
-Repository: {owner}/{repo}
-Breaches: {len(breaches)}
 
-{breach_list}
-
-Please address these items urgently.
-"""
-
-        # Determine notification channels based on priority
-        channels = self._get_notification_channels(Priority(priority))
-
-        for channel in channels:
-            send_notification(channel, message)
-
-    def _get_notification_channels(self, priority: Priority) -> List[str]:
-        """Get notification channels based on priority."""
-        if priority == Priority.P0:
-            return ["slack", "pagerduty", "email"]
-        elif priority == Priority.P1:
-            return ["slack", "email"]
-        elif priority == Priority.P2:
-            return ["slack"]
-        else:
-            return []
 
     def _log_breaches(self, owner: str, repo: str, breaches: List[SLABreach]):
         """Log SLA breaches to file."""

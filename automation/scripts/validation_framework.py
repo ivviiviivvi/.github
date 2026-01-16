@@ -30,7 +30,11 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from models import ValidationResult, ValidationSuite
-from utils import GitHubAPIClient, send_notification
+from notification_integration import (
+    notify_validation_failure,
+    notify_validation_success,
+)
+from utils import GitHubAPIClient
 
 # Configure logging
 logging.basicConfig(
@@ -431,13 +435,26 @@ Capabilities:
             emoji = "✅" if result.passed else "❌"
             message += f"- {emoji} {result.capability}\n"
 
+        # Send unified notifications
         if suite.failed > 0:
-            message += "\n**Issues Found:**\n"
+            # Notify about each failed capability
             for result in suite.results:
                 if not result.passed:
-                    message += f"- {result.capability}: {result.errors[0]}\n"
-
-        send_notification("slack", message)
+                    notify_validation_failure(
+                        capability=result.capability,
+                        repository=suite.repository,
+                        errors=result.errors,
+                        warnings=result.warnings,
+                        metadata=result.metrics,
+                    )
+        else:
+            # Notify about successful validation
+            notify_validation_success(
+                repository=suite.repository,
+                passed_count=suite.passed,
+                total_count=len(suite.results),
+                metadata={"duration_seconds": suite.duration_seconds},
+            )
 
     def generate_report(
         self, owner: str, repo: str, days: int = 7

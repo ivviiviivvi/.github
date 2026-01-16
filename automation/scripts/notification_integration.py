@@ -21,7 +21,7 @@ Usage in existing scripts:
 import logging
 from typing import Dict, List, Optional
 
-from notification_manager import NotificationManager, Notification, Priority
+from notification_manager import Notification, NotificationManager, Priority
 
 # Initialize global notification manager
 _notification_manager = None

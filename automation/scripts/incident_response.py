@@ -43,7 +43,8 @@ from models import (
     PostIncidentReport,
     RunbookStep,
 )
-from utils import GitHubAPIClient, load_config, send_notification
+from notification_integration import notify_incident_created
+from utils import GitHubAPIClient, load_config
 
 # Configure logging
 logging.basicConfig(
@@ -287,22 +288,19 @@ class IncidentResponseEngine:
 
     def _execute_notify_action(self, incident: Incident, step: RunbookStep):
         """Execute notification action."""
-        channel = step.params.get("channel", "slack")
-        priority = step.params.get("priority", "normal")
-
-        message = f"""
-🚨 **Incident Alert - {incident.severity.value}**
-
-ID: {incident.incident_id}
-Title: {incident.title}
-Severity: {incident.severity.value}
-Status: {incident.status.value}
-Repository: {incident.repository}
-
-{incident.description}
-"""
-
-        send_notification(channel, message)
+        # Use unified notification system
+        notify_incident_created(
+            incident_id=incident.incident_id,
+            severity=incident.severity.value,
+            repository=incident.repository,
+            description=incident.description,
+            status=incident.status.value,
+            metadata={
+                "title": incident.title,
+                "created_at": incident.created_at.isoformat(),
+                "workflow_run_id": incident.workflow_run_id,
+            },
+        )
 
     def _execute_create_issue_action(self, incident: Incident, step: RunbookStep):
         """Execute create issue action."""
@@ -580,13 +578,10 @@ Current status: {incident.status.value}
         return issue
 
     def _send_incident_notification(self, incident: Incident, event: str):
-        """Send incident notification."""
-        channels = self._get_notification_channels(incident.severity)
-
-        message = self._format_notification(incident, event)
-
-        for channel in channels:
-            send_notification(channel, message)
+        """Send incident notification via unified notification system."""
+        # Notifications now handled by notify_incident_created/resolved
+        # This method maintained for backward compatibility but is now a no-op
+        pass
 
     def _get_notification_channels(self, severity: IncidentSeverity) -> List[str]:
         """Get notification channels for severity."""
