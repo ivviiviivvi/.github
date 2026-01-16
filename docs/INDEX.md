@@ -83,6 +83,14 @@ New to this repository? Start here:
 - [PR_AUTOMATION_GUIDE.md](guides/PR_AUTOMATION_GUIDE.md) - PR automation
 - [PR_AUTOMATION_QUICK_REF.md](guides/PR_AUTOMATION_QUICK_REF.md) - Quick ref
 
+### Advanced Automation ⭐ Week 9 Complete
+
+- [WEEK_9_ADVANCED_AUTOMATION.md](WEEK_9_ADVANCED_AUTOMATION.md) - ⭐ Complete Week 9 guide (1,000+ lines)
+- [UNIFIED_NOTIFICATION_SYSTEM.md](UNIFIED_NOTIFICATION_SYSTEM.md) - ⭐ Notification infrastructure (700+ lines)
+- [WEEK_9_NOTIFICATION_INTEGRATION.md](WEEK_9_NOTIFICATION_INTEGRATION.md) - ⭐ Integration guide (600+ lines)
+- [NOTIFICATION_MIGRATION_COMPLETE.md](NOTIFICATION_MIGRATION_COMPLETE.md) - ⭐ Migration report (600+ lines)
+- [WEEK9_ARCHITECTURE.md](WEEK9_ARCHITECTURE.md) - Technical architecture
+
 ### Monitoring & Operations ⭐ Phase 9
 
 - [monitoring.md](guides/monitoring.md) - ⭐ Complete monitoring guide (450+
