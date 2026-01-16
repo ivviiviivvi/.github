@@ -370,6 +370,7 @@ Results are saved as JSON with the following structure:
 **Problem**: `401 Unauthorized` or `403 Forbidden`
 
 **Solutions**:
+
 - Verify `GITHUB_TOKEN` is set correctly
 - Check token has required permissions:
   - `repo` - Full repository access
@@ -381,6 +382,7 @@ Results are saved as JSON with the following structure:
 **Problem**: `404 Not Found` for repository
 
 **Solutions**:
+
 - Verify repository name format: `owner/repo`
 - Check repository exists and token has access
 - Confirm organization/user name is correct
@@ -390,6 +392,7 @@ Results are saved as JSON with the following structure:
 **Problem**: Workflow file missing during deployment
 
 **Solutions**:
+
 - Verify workflow file exists in `.github/workflows/`
 - Check file name matches configuration exactly
 - Use relative path from repository root
@@ -399,6 +402,7 @@ Results are saved as JSON with the following structure:
 **Problem**: `403 Rate limit exceeded`
 
 **Solutions**:
+
 - Reduce `max_concurrent` value
 - Use GitHub App token (higher rate limit)
 - Wait for rate limit reset
@@ -409,6 +413,7 @@ Results are saved as JSON with the following structure:
 **Problem**: Operations timing out
 
 **Solutions**:
+
 - Increase `timeout_seconds` in configuration
 - Reduce `max_concurrent` to avoid resource contention
 - Check network connectivity
@@ -421,11 +426,13 @@ If pre-flight validation fails:
 1. Review validation error messages
 2. Fix configuration issues
 3. Run validation manually:
+
    ```bash
    python automation/scripts/batch_onboard_repositories.py \
      --config config.yml \
      --dry-run
    ```
+
 4. Verify all referenced files exist
 
 ### Rollback Failed
@@ -456,6 +463,7 @@ Based on testing with standard configurations:
 | 50 | 10 | 15s | 75s |
 
 **Note**: Times vary based on:
+
 - Number of steps per repository
 - Network latency
 - GitHub API response times
@@ -489,10 +497,12 @@ Based on testing with standard configurations:
 ### Token Permissions
 
 **Minimum Required**:
+
 - `repo` - Repository access
 - `workflow` - Update workflows
 
 **Optional (Enhanced Features)**:
+
 - `admin:org` - Configure secrets
 - `admin:repo_hook` - Configure webhooks
 
@@ -610,12 +620,14 @@ on:
 ### Planned Enhancements
 
 **Version 1.1** (Week 11):
+
 - ✨ Enhanced secret management
 - ✨ Webhook configuration
 - ✨ Custom script execution
 - ✨ Pre/post-onboarding hooks
 
 **Version 1.2** (Future):
+
 - ✨ Interactive CLI mode
 - ✨ Web dashboard
 - ✨ Advanced dependency graphs
@@ -634,7 +646,7 @@ on:
 ### Getting Help
 
 - **Issues**: Open an issue in this repository
-- **Discussions**: Join [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+- **Discussions**: Join [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - **Slack**: Contact the DevOps team
 
 ---

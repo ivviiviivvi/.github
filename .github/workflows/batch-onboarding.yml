@@ -4,18 +4,18 @@ on:
   workflow_dispatch:
     inputs:
       config_file:
-        description: 'Configuration file path (relative to repo root)'
+        description: "Configuration file path (relative to repo root)"
         required: true
-        default: 'automation/config/batch-onboard-config.yml'
+        default: "automation/config/batch-onboard-config.yml"
       dry_run:
-        description: 'Run in dry-run mode (no changes)'
+        description: "Run in dry-run mode (no changes)"
         required: false
         type: boolean
         default: true
       max_concurrent:
-        description: 'Maximum concurrent onboardings'
+        description: "Maximum concurrent onboardings"
         required: false
-        default: '5'
+        default: "5"
 
 permissions:
   contents: write
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       config-valid: ${{ steps.validate.outputs.valid }}
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     if: needs.validate.outputs.config-valid == 'true'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -76,7 +76,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -91,7 +91,7 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             DRY_RUN_FLAG="--dry-run"
           fi
-          
+
           python automation/scripts/batch_onboard_repositories.py \
             --config "${{ github.event.inputs.config_file }}" \
             --max-concurrent "${{ github.event.inputs.max_concurrent }}" \
@@ -112,14 +112,14 @@ jobs:
           python -c "
           import json
           import sys
-          
+
           with open('onboarding_results.json', 'r') as f:
               results = json.load(f)
-          
+
           total = len(results)
           successful = sum(1 for r in results if r['success'])
           failed = total - successful
-          
+
           print(f'## Batch Onboarding Summary')
           print(f'')
           print(f'- **Total repositories:** {total}')
@@ -127,7 +127,7 @@ jobs:
           print(f'- **Failed:** {failed}')
           print(f'- **Mode:** ${{ github.event.inputs.dry_run && \"Dry Run\" || \"Live\" }}')
           print(f'')
-          
+
           if failed > 0:
               print(f'### Failed Repositories')
               print(f'')
@@ -136,7 +136,7 @@ jobs:
                       print(f'- **{result[\"repository\"]}:** {result[\"error\"]}')
                       print(f'  - Steps completed: {len(result[\"steps_completed\"])}')
                       print(f'  - Duration: {result[\"duration_seconds\"]:.2f}s')
-          
+
           if successful > 0:
               print(f'')
               print(f'### Successful Repositories')
@@ -144,7 +144,7 @@ jobs:
               for result in results:
                   if result['success']:
                       print(f'- ✅ **{result[\"repository\"]}** ({result[\"duration_seconds\"]:.2f}s)')
-          
+
           sys.exit(1 if failed > 0 else 0)
           " >> $GITHUB_STEP_SUMMARY
 
@@ -154,10 +154,10 @@ jobs:
           python -c "
           import json
           import sys
-          
+
           with open('onboarding_results.json', 'r') as f:
               results = json.load(f)
-          
+
           failed = sum(1 for r in results if not r['success'])
           sys.exit(1 if failed > 0 else 0)
           "
@@ -167,7 +167,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: onboard
     if: always()
-    
+
     steps:
       - name: Download results
         uses: actions/download-artifact@v4

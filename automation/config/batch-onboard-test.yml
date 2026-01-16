@@ -1,0 +1,63 @@
+# Batch Onboarding Test Configuration
+#
+# Test configuration for validating batch onboarding with 3-5 test repositories
+# Use this for dry-run testing before production deployment
+
+# Test repositories (using actual .github repo and mock examples)
+repositories:
+  - ivviiviivvi/.github
+    # Add 2-4 additional test repositories here for parallel testing
+    # - "ivviiviivvi/test-repo-1"
+    # - "ivviiviivvi/test-repo-2"
+
+# Test workflow deployment (minimal set for testing)
+workflows:
+  - workflow-validation.yml
+
+# Test labels (subset for quick validation)
+labels:
+  "Test: Automated":
+    color: bfd4f2
+    description: Created by automated batch onboarding test
+  "Status: Testing":
+    color: fbca04
+    description: Test status label
+
+# Test branch protection (non-disruptive settings)
+branch_protection:
+  branch: test-branch # Use test branch, not main
+  required_approving_reviews: 1
+  require_code_owner_reviews: false
+  dismiss_stale_reviews: false
+  enforce_admins: false
+  required_checks: []
+
+# Conservative processing settings for testing
+max_concurrent: 3 # Lower concurrency for controlled testing
+timeout_seconds: 180 # 3 minutes per repository
+validate_before: true # Always validate in tests
+rollback_on_failure: true # Enable rollback for safety
+
+
+# Test-specific notes:
+# 1. Always run with --dry-run flag first
+# 2. Verify validation passes before real run
+# 3. Monitor logs for any errors
+# 4. Check results JSON for detailed outcomes
+# 5. Validate rollback works if any failure occurs
+
+# Example test commands:
+#
+# Step 1: Dry-run validation
+# python automation/scripts/batch_onboard_repositories.py \
+#   --config automation/config/batch-onboard-test.yml \
+#   --dry-run \
+#   --output test-results-dryrun.json
+#
+# Step 2: Real run (after dry-run success)
+# python automation/scripts/batch_onboard_repositories.py \
+#   --config automation/config/batch-onboard-test.yml \
+#   --output test-results.json
+#
+# Step 3: Verify results
+# cat test-results.json | jq '.[] | {repository, success, duration_seconds}'

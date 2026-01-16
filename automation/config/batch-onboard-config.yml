@@ -32,7 +32,7 @@ labels:
 
 # Branch protection rules (optional)
 branch_protection:
-  branch: "main"  # or "master"
+  branch: "main" # or "master"
   required_approving_reviews: 1
   require_code_owner_reviews: true
   dismiss_stale_reviews: true
@@ -59,10 +59,10 @@ dependencies:
   - "ivviiviivvi/dependent-repo"
 
 # Processing configuration
-max_concurrent: 5  # Maximum parallel onboardings
-timeout_seconds: 300  # Timeout per repository
-validate_before: true  # Validate configuration before processing
-rollback_on_failure: true  # Automatically rollback failed onboardings
+max_concurrent: 5 # Maximum parallel onboardings
+timeout_seconds: 300 # Timeout per repository
+validate_before: true # Validate configuration before processing
+rollback_on_failure: true # Automatically rollback failed onboardings
 
 # Example usage:
 # python automation/scripts/batch_onboard_repositories.py --config config.yml

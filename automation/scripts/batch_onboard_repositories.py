@@ -21,19 +21,20 @@ Usage:
 
 import argparse
 import asyncio
+import json
 import logging
+import os
 import sys
-import yaml
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
-import json
-import os
+
+import yaml
 
 try:
-    from github import Github, GithubException
     import aiohttp
+    from github import Github, GithubException
 except ImportError:
     print("Error: Required packages not installed.")
     print("Install with: pip install PyGithub aiohttp pyyaml")
@@ -71,7 +72,8 @@ class OnboardingResult:
     steps_completed: List[str] = field(default_factory=list)
     error: Optional[str] = None
     duration_seconds: float = 0.0
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(
+        default_factory=lambda: datetime.utcnow().isoformat())
 
 
 class BatchOnboardingOrchestrator:
@@ -95,7 +97,7 @@ class BatchOnboardingOrchestrator:
     async def onboard_repositories(self) -> List[OnboardingResult]:
         """
         Onboard all configured repositories in parallel.
-        
+
         Returns:
             List of OnboardingResult objects for each repository
         """
@@ -109,20 +111,21 @@ class BatchOnboardingOrchestrator:
         if self.config.validate_before:
             validation_errors = await self._validate_configuration()
             if validation_errors:
-                logger.error(f"Configuration validation failed: {validation_errors}")
+                logger.error(
+                    f"Configuration validation failed: {validation_errors}")
                 return []
 
         # Resolve dependencies
         ordered_repos = self._resolve_dependencies()
-        
+
         # Process repositories in parallel
         tasks = [
             self._onboard_repository(repo)
             for repo in ordered_repos
         ]
-        
+
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # Handle any exceptions
         self.results = [
             r if isinstance(r, OnboardingResult) else OnboardingResult(
@@ -140,7 +143,8 @@ class BatchOnboardingOrchestrator:
         if self.config.rollback_on_failure and not self.dry_run:
             failed = [r for r in self.results if not r.success]
             if failed:
-                logger.warning(f"Rolling back {len(failed)} failed onboardings")
+                logger.warning(
+                    f"Rolling back {len(failed)} failed onboardings")
                 await self._rollback_failed(failed)
 
         return self.results
@@ -148,7 +152,7 @@ class BatchOnboardingOrchestrator:
     async def _validate_configuration(self) -> List[str]:
         """
         Validate configuration before processing.
-        
+
         Returns:
             List of validation errors (empty if valid)
         """
@@ -171,20 +175,21 @@ class BatchOnboardingOrchestrator:
         # Validate secrets are available (if specified)
         for secret_name in self.config.secrets.keys():
             if secret_name not in os.environ:
-                errors.append(f"Required secret not found in environment: {secret_name}")
+                errors.append(
+                    f"Required secret not found in environment: {secret_name}")
 
         return errors
 
     def _resolve_dependencies(self) -> List[str]:
         """
         Resolve repository dependencies to determine processing order.
-        
+
         Returns:
             Ordered list of repositories
         """
         # For now, simple dependency resolution
         # Future: Build dependency graph and topological sort
-        
+
         if not self.config.dependencies:
             return self.config.repositories
 
@@ -199,10 +204,10 @@ class BatchOnboardingOrchestrator:
     async def _onboard_repository(self, repo_name: str) -> OnboardingResult:
         """
         Onboard a single repository with all configured features.
-        
+
         Args:
             repo_name: Full repository name (owner/repo)
-            
+
         Returns:
             OnboardingResult with details of the operation
         """
@@ -247,14 +252,16 @@ class BatchOnboardingOrchestrator:
             finally:
                 # Calculate duration
                 end_time = datetime.utcnow()
-                result.duration_seconds = (end_time - start_time).total_seconds()
+                result.duration_seconds = (
+                    end_time - start_time).total_seconds()
 
         return result
 
     async def _deploy_workflows(self, repo, result: OnboardingResult) -> None:
         """Deploy workflow files to repository"""
         step = "deploy_workflows"
-        logger.info(f"  [{repo.full_name}] Deploying {len(self.config.workflows)} workflows")
+        logger.info(
+            f"  [{repo.full_name}] Deploying {len(self.config.workflows)} workflows")
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
@@ -263,16 +270,18 @@ class BatchOnboardingOrchestrator:
         try:
             for workflow_file in self.config.workflows:
                 workflow_path = Path(".github/workflows") / workflow_file
-                
+
                 if not workflow_path.exists():
-                    raise FileNotFoundError(f"Workflow file not found: {workflow_path}")
+                    raise FileNotFoundError(
+                        f"Workflow file not found: {workflow_path}")
 
                 with open(workflow_path, 'r') as f:
                     content = f.read()
 
                 # Check if file already exists
                 try:
-                    existing = repo.get_contents(f".github/workflows/{workflow_file}")
+                    existing = repo.get_contents(
+                        f".github/workflows/{workflow_file}")
                     # Update existing file
                     repo.update_file(
                         path=f".github/workflows/{workflow_file}",
@@ -304,14 +313,16 @@ class BatchOnboardingOrchestrator:
     async def _configure_labels(self, repo, result: OnboardingResult) -> None:
         """Configure repository labels"""
         step = "configure_labels"
-        logger.info(f"  [{repo.full_name}] Configuring {len(self.config.labels)} labels")
+        logger.info(
+            f"  [{repo.full_name}] Configuring {len(self.config.labels)} labels")
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
             return
 
         try:
-            existing_labels = {label.name: label for label in repo.get_labels()}
+            existing_labels = {
+                label.name: label for label in repo.get_labels()}
 
             for label_name, label_config in self.config.labels.items():
                 color = label_config.get('color', 'cccccc')
@@ -343,8 +354,10 @@ class BatchOnboardingOrchestrator:
     async def _setup_branch_protection(self, repo, result: OnboardingResult) -> None:
         """Set up branch protection rules"""
         step = "setup_branch_protection"
-        branch_name = self.config.branch_protection.get('branch', repo.default_branch)
-        logger.info(f"  [{repo.full_name}] Setting up branch protection for {branch_name}")
+        branch_name = self.config.branch_protection.get(
+            'branch', repo.default_branch)
+        logger.info(
+            f"  [{repo.full_name}] Setting up branch protection for {branch_name}")
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
@@ -352,7 +365,7 @@ class BatchOnboardingOrchestrator:
 
         try:
             branch = repo.get_branch(branch_name)
-            
+
             # Configure protection
             branch.edit_protection(
                 required_approving_review_count=self.config.branch_protection.get(
@@ -383,7 +396,8 @@ class BatchOnboardingOrchestrator:
     async def _configure_secrets(self, repo, result: OnboardingResult) -> None:
         """Configure repository secrets"""
         step = "configure_secrets"
-        logger.info(f"  [{repo.full_name}] Configuring {len(self.config.secrets)} secrets")
+        logger.info(
+            f"  [{repo.full_name}] Configuring {len(self.config.secrets)} secrets")
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
@@ -391,13 +405,16 @@ class BatchOnboardingOrchestrator:
 
         # Note: GitHub API doesn't allow reading secrets, only creating/updating
         # This is a placeholder for actual implementation
-        logger.warning("    Secret configuration requires GitHub App or PAT with admin:org scope")
-        result.steps_completed.append(f"{step} (skipped - requires elevated permissions)")
+        logger.warning(
+            "    Secret configuration requires GitHub App or PAT with admin:org scope")
+        result.steps_completed.append(
+            f"{step} (skipped - requires elevated permissions)")
 
     async def _create_environments(self, repo, result: OnboardingResult) -> None:
         """Create repository environments"""
         step = "create_environments"
-        logger.info(f"  [{repo.full_name}] Creating {len(self.config.environments)} environments")
+        logger.info(
+            f"  [{repo.full_name}] Creating {len(self.config.environments)} environments")
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
@@ -411,11 +428,12 @@ class BatchOnboardingOrchestrator:
     async def _rollback_failed(self, failed_results: List[OnboardingResult]) -> None:
         """
         Rollback changes for failed onboardings.
-        
+
         Args:
             failed_results: List of failed OnboardingResult objects
         """
-        logger.info(f"Starting rollback for {len(failed_results)} repositories")
+        logger.info(
+            f"Starting rollback for {len(failed_results)} repositories")
 
         for result in failed_results:
             try:
@@ -428,14 +446,16 @@ class BatchOnboardingOrchestrator:
                         # Remove deployed workflows
                         for workflow_file in self.config.workflows:
                             try:
-                                contents = repo.get_contents(f".github/workflows/{workflow_file}")
+                                contents = repo.get_contents(
+                                    f".github/workflows/{workflow_file}")
                                 repo.delete_file(
                                     path=contents.path,
                                     message=f"chore: rollback {workflow_file}",
                                     sha=contents.sha,
                                     branch=repo.default_branch
                                 )
-                                logger.info(f"  Removed workflow: {workflow_file}")
+                                logger.info(
+                                    f"  Removed workflow: {workflow_file}")
                             except GithubException:
                                 pass  # File doesn't exist or already removed
 
@@ -459,8 +479,9 @@ class BatchOnboardingOrchestrator:
         logger.info(f"Successful: {successful}")
         logger.info(f"Failed: {failed}")
         logger.info(f"Total duration: {total_duration:.2f} seconds")
-        logger.info(f"Average duration: {total_duration / len(self.results):.2f} seconds")
-        
+        logger.info(
+            f"Average duration: {total_duration / len(self.results):.2f} seconds")
+
         if failed > 0:
             logger.info("\nFailed repositories:")
             for result in self.results:
