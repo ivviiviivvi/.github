@@ -39,11 +39,19 @@ class MouthpieceFilter:
     """
 
     # Pre-compiled patterns for performance
+
+    # Capitalized words (potential proper nouns or important concepts)
     _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
+
+    # Quoted terms
     _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
     _QUOTED_SINGLE = re.compile(r"'([^']+)'")
-    _TECHNICAL_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
-    _TECHNICAL_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")
+
+    # Technical-looking terms (contains underscores, dots, or mixed case)
+    # Replaces _TECHNICAL_TERMS_MIXED, _TECHNICAL_TERMS_DOT_UNDERSCORE, _TECH_TERMS_MIXED
+    _TECH_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
+    # Replaces _TECHNICAL_TERMS_CAMEL, _CAMEL_CASE, _TECH_TERMS_CAMEL
+    _TECH_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")
 
     _METAPHOR_INDICATORS = [
         "like",
@@ -67,42 +75,23 @@ class MouthpieceFilter:
         r"|".join(map(re.escape, _METAPHOR_INDICATORS)), re.IGNORECASE
     )
 
-    _SENTENCE_SPLIT = re.compile(r"[.!?]+")
-    _QUESTIONS_PATTERN = re.compile(r"([^.!?]*\?)")
-    _STEPS_PATTERN = re.compile(
+    # Sentence splitters
+    # Replaces _SENTENCE_SPLIT, _SENTENCE_SPLITTER
+    _SENTENCE_SPLITTER = re.compile(r"[.!?]+")
+
+    # Paragraph splitters
+    # Replaces _PARAGRAPH_SPLIT, _PARAGRAPHS, _PARAGRAPH_SPLITTER
+    _PARAGRAPH_SPLITTER = re.compile(r"\n\s*\n")
+
+    # Questions
+    # Replaces _QUESTIONS_PATTERN, _QUESTIONS
+    _QUESTIONS = re.compile(r"([^.!?]*\?)")
+
+    # Steps
+    # Replaces _STEPS_PATTERN, _STEPS
+    _STEPS = re.compile(
         r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b",
         re.IGNORECASE,
-    )
-    _PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
-    # Compile regex patterns once for better performance
-    _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
-    _DOUBLE_QUOTES = re.compile(r'"([^"]+)"')
-    _SINGLE_QUOTES = re.compile(r"'([^']+)'")
-    _TECHNICAL_TERMS_DOT_UNDERSCORE = re.compile(r"\b\w+[._]\w+\b")
-    _CAMEL_CASE = re.compile(r"\b[a-z]+[A-Z]\w+\b")
-    _SENTENCE_SPLIT = re.compile(r"[.!?]+")
-    _QUESTIONS = re.compile(r"([^.!?]*\?)")
-    _STEPS = re.compile(
-        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
-    )
-    _PARAGRAPHS = re.compile(r"\n\s*\n")
-    # Compile regex patterns once for performance
-    # Capitalized words (potential proper nouns or important concepts)
-    _CAPITALIZED_WORDS = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b")
-    # Quoted terms
-    _QUOTED_DOUBLE = re.compile(r'"([^"]+)"')
-    _QUOTED_SINGLE = re.compile(r"'([^']+)'")
-    # Technical-looking terms (contains underscores, dots, or mixed case)
-    _TECH_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
-    _TECH_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")  # camelCase
-    # Sentence splitters
-    _SENTENCE_SPLITTER = re.compile(r"[.!?]+")
-    _PARAGRAPH_SPLITTER = re.compile(r"\n\s*\n")
-    # Questions
-    _QUESTIONS = re.compile(r"([^.!?]*\?)")
-    # Steps
-    _STEPS = re.compile(
-        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
     )
 
     def __init__(self, config: Optional[Dict] = None):
@@ -220,21 +209,14 @@ class MouthpieceFilter:
         concepts.extend(self._QUOTED_SINGLE.findall(text))
 
         # Technical-looking terms (contains underscores, dots, or mixed case)
-        concepts.extend(self._TECHNICAL_TERMS_MIXED.findall(text))
-        concepts.extend(self._TECHNICAL_TERMS_CAMEL.findall(text))
-        concepts.extend(self._DOUBLE_QUOTES.findall(text))
-        concepts.extend(self._SINGLE_QUOTES.findall(text))
-
-        # Technical-looking terms (contains underscores, dots, or mixed case)
-        concepts.extend(self._TECHNICAL_TERMS_DOT_UNDERSCORE.findall(text))
-        concepts.extend(self._CAMEL_CASE.findall(text))
+        concepts.extend(self._TECH_TERMS_MIXED.findall(text))
+        concepts.extend(self._TECH_TERMS_CAMEL.findall(text))
 
         return list(set(concepts))  # Remove duplicates
 
     def _extract_metaphors(self, text: str) -> List[str]:
         """Extract metaphorical language that adds color and meaning."""
         metaphors = []
-        sentences = self._SENTENCE_SPLIT.split(text)
         sentences = self._SENTENCE_SPLITTER.split(text)
 
         for sentence in sentences:
@@ -274,7 +256,7 @@ class MouthpieceFilter:
     def _assess_complexity(self, text: str, concepts: List[str] = None) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
-        sentences = self._SENTENCE_SPLIT.split(text)
+        sentences = self._SENTENCE_SPLITTER.split(text)
 
         avg_sentence_length = len(words) / max(len(sentences), 1)
 
@@ -337,7 +319,6 @@ class MouthpieceFilter:
     def _extract_questions(self, text: str) -> List[str]:
         """Extract questions from the text."""
         # Find sentences ending with question marks
-        questions = self._QUESTIONS_PATTERN.findall(text)
         questions = self._QUESTIONS.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
@@ -391,16 +372,14 @@ class MouthpieceFilter:
     def _has_steps(self, text: str) -> bool:
         """Check if the text contains step-by-step information."""
         # Look for numbered lists or step indicators
-        return bool(self._STEPS_PATTERN.search(text))
-        return bool(self._STEPS.search(text.lower()))
+        return bool(self._STEPS.search(text))
 
     def _identify_sections(self, text: str) -> List[str]:
         """Identify logical sections in the text."""
         sections = []
 
         # Split by double newlines or paragraph indicators
-        paragraphs = self._PARAGRAPH_SPLIT.split(text)
-        paragraphs = self._PARAGRAPHS.split(text)
+        paragraphs = self._PARAGRAPH_SPLITTER.split(text)
 
         for i, para in enumerate(paragraphs):
             if para.strip():
@@ -495,7 +474,7 @@ class MouthpieceFilter:
     def _extract_main_objective(self, text: str, analysis: Dict) -> str:
         """Extract the main objective from the text."""
         # Get the first sentence or up to first period
-        sentences = self._SENTENCE_SPLIT.split(text)
+        sentences = self._SENTENCE_SPLITTER.split(text)
         main_sentence = sentences[0].strip() if sentences else text
 
         # Clean it up
