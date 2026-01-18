@@ -5,10 +5,6 @@ globs: *
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
-## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
-
-## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
-
 ## PROJECT OVERVIEW
 
 ## CODE STYLE
@@ -520,3 +516,44 @@ globs: *
     3.  Ensure the root directory contains only essential files such as `README.md`, `CHANGELOG.md`, schema implementation guides, version files, configuration files, and license files.
     4.  Enhance documentation by creating a comprehensive `archive/README.md` explaining the archive structure, purpose of each category, archival policy, and links to active documentation.
     5.  Update the `.gitignore` file to ignore future temporary files like test results and status files.
+
+- **Multi-Organization Ecosystem Strategy:**
+  - The organization ecosystem consists of four entities:
+    1. **ivviiviivvi:** Core infrastructure, AI framework, production systems.
+    2. **labores-profani-crux:** _Purpose to be determined_.
+    3. **omni-dromenon-machina:** _Purpose to be determined_.
+    4. **4444J99:** Personal learning, experiments, knowledge base, forks.
+  - Repository distribution should align with the purpose of each organization.
+  - "Money-making" repositories should be placed in their logical, business-focused organization.
+  - Repositories for personal use should remain in the personal account (4444J99).
+  - **Action:** Create a `MULTI_ORG_DISTRIBUTION_STRATEGY.md` document that:
+    1. Categorizes all repositories by recommended organization.
+    2. Defines each organization's purpose and repository criteria.
+    3. Creates migration plans for moving repositories between organizations.
+    4. Establishes cross-organization integration patterns (shared .github infrastructure, common workflows, cross-org automation).
+    5. Documents the "macro level interactions" architecture.
+
+- **Multi-Organization Ecosystem Strategy (Revised):**
+  - The organization ecosystem consists of four entities, each with a defined function:
+    1. **ivviiviivvi:** Conceptual / Symbolic Engine - Generates, tests, and preserves formal thinking (rules, grammars, symbolic models, ontologies). It is upstream of all other organs.
+    2. **omni-dromenon-machina:** Art / Enactment / Experiential Systems - Turns symbolic structures into events, experiences, performances, and temporal works.
+    3. **labores-profani-crux:** Commerce / Applied Labor / Survival Surface - Performs work in the world under constraint, acknowledging the necessity of income, clients, and deadlines.
+    4. **Orchestration Layer:**  Governance / Flow Control / System Integrity - Coordinates, enforces boundaries, decides what moves between organs, and maintains documentation. This is not a separate GitHub organization but a function.
+    5. **Public Process:** Translucent Visibility / Attention Filtering - Makes process visible without resolving it, releasing essays, fragments, and partial thoughts.
+    6. **Community:** Reciprocal Continuity - Exists only for people who have already demonstrated sustained interest, focusing on conversation and shared reference.
+    7. **Marketing:** Attention Routing - Exists purely to route attention through announcements and templates.
+    8. **4444J99 (Personal Profile):** Liminal Incubation Zone - A transitional space for drafts, experiments, and volatile ideas.
+
+  - **Repository Distribution:** Repository distribution should align with the purpose of each organization. "Money-making" repositories should be placed in their logical, business-focused organization. Repositories for personal use should remain in the personal account (4444J99).
+
+  - **Key Principles:**
+    - Each organ has a defined purpose, permissions, prohibitions, cadence, and interfaces.
+    - The Orchestration Layer (function) governs the flow and boundaries between organs.
+    - Personal profiles (like 4444J99) serve as liminal incubation zones.
+
+  - **Action:** Create a `MULTI_ORG_DISTRIBUTION_STRATEGY.md` document that:
+    1. Categorizes all repositories by recommended organization, based on the organ functions defined above.
+    2. Defines each organization's purpose and repository criteria (as outlined in the organ descriptions).
+    3. Creates migration plans for moving repositories between organizations.
+    4. Establishes cross-organization integration patterns (shared .github infrastructure, common workflows, cross-org automation).
+    5. Documents the "macro level interactions" architecture.
