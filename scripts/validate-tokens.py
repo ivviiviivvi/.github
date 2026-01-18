@@ -15,10 +15,10 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 import requests
+from secret_manager import get_secret
 
 # Add parent directory to path for imports
 sys.path.insert(0, "automation/scripts")
-from secret_manager import get_secret
 
 # ANSI color codes
 GREEN = "\033[0;32m"
