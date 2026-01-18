@@ -180,11 +180,13 @@ Add Hour 6 entry to `PHASE1_MONITORING_LOG.md`:
 ### If Yellow Warnings 🟡
 
 **Scenarios**:
+
 - Single workflow failure → Investigate logs, may be transient
 - Slow execution times → Monitor trend, may be GitHub platform issue
 - Labels not applying → Check PR/issue trigger conditions
 
 **Actions**:
+
 - Document the issue
 - Determine if it's blocking or non-blocking
 - Set reminder to check again at Hour 12
@@ -192,12 +194,14 @@ Add Hour 6 entry to `PHASE1_MONITORING_LOG.md`:
 ### If Critical Issues 🔴
 
 **Scenarios**:
+
 - Multiple workflow failures
 - Permission errors
 - Missing workflow files
 - Repository access issues
 
 **Actions**:
+
 1. Stop monitoring period
 2. Investigate root cause immediately
 3. Fix issue if possible
