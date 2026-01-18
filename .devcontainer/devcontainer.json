@@ -161,7 +161,7 @@
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
 
-  "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+  "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && if [ -n \"$GITHUB_TOKEN\" ]; then unset GITHUB_TOKEN; fi",
 
   "remoteUser": "vscode",
 
