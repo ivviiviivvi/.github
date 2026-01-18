@@ -85,6 +85,21 @@ if [ -f "Cargo.toml" ]; then
   cargo build
 fi
 
+# Ensure gh CLI uses PAT instead of GITHUB_TOKEN
+echo "🔐 Configuring gh CLI to use PAT (not GITHUB_TOKEN)..."
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  echo "⚠️  GITHUB_TOKEN detected in environment - unsetting to allow PAT authentication"
+  unset GITHUB_TOKEN
+fi
+
+# Verify gh authentication
+if gh auth status >/dev/null 2>&1; then
+  echo "✅ gh CLI authenticated successfully"
+  gh auth status 2>&1 | grep -E "(Token scopes|workflow)" || true
+else
+  echo "⚠️  gh CLI not authenticated - manual 'gh auth login' may be required"
+fi
+
 echo "✅ Development environment setup complete!"
 echo ""
 echo "💡 Quick tips:"
