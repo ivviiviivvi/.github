@@ -413,7 +413,8 @@ class MouthpieceFilter:
 
         # Header
         if self.config["preserve_poetry"] and analysis["metaphors"]:
-            prompt_parts.append(f"# {title}: {text.split('.')[0].strip()}...\n")
+            prompt_parts.append(
+                f"# {title}: {text.split('.')[0].strip()}...\n")
             prompt_parts.append(
                 f"_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else ""
             )
@@ -422,13 +423,15 @@ class MouthpieceFilter:
 
         # Main objective
         prompt_parts.append("## Objective\n")
-        prompt_parts.append(f"{self._extract_main_objective(text, analysis)}\n")
+        prompt_parts.append(
+            f"{self._extract_main_objective(text, analysis)}\n")
 
         # Key requirements
         if analysis["key_verbs"]:
             prompt_parts.append("\n## Requirements\n")
             for verb in analysis["key_verbs"][:5]:  # Top 5 verbs
-                prompt_parts.append(f"- {verb.capitalize()} the relevant components\n")
+                prompt_parts.append(
+                    f"- {verb.capitalize()} the relevant components\n")
 
         # Concepts and context
         if analysis["concepts"]:
@@ -511,7 +514,8 @@ class MouthpieceFilter:
                 output.append("Metadata:")
                 output.append(f"  Intent: {result['metadata']['intent']}")
                 output.append(f"  Tone: {result['metadata']['tone']}")
-                output.append(f"  Complexity: {result['metadata']['complexity']}")
+                output.append(
+                    f"  Complexity: {result['metadata']['complexity']}")
                 output.append(
                     f"  Concepts found: {result['metadata']['concept_count']}"
                 )
@@ -555,7 +559,8 @@ Examples:
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("text", nargs="?", help="Text to transform")
     input_group.add_argument("--file", "-f", help="Read text from file")
-    input_group.add_argument("--stdin", action="store_true", help="Read from stdin")
+    input_group.add_argument(
+        "--stdin", action="store_true", help="Read from stdin")
 
     # Configuration options
     parser.add_argument("--config", "-c", help="Path to config JSON file")

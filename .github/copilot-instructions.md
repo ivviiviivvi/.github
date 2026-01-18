@@ -1,4 +1,7 @@
 ---
+description: AI rules derived by SpecStory from the project AI interaction history
+globs: *
+---
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
@@ -235,6 +238,25 @@
 - **Link Checking**
   - When checking the links in files, use the tool to validate they are working
     and remove any non-functional links.
+- **Branch Review and Deletion**
+  - Before deleting remote branches, perform a thorough review to prevent data
+    loss:
+    1.  **List all remote branches:** Use `git branch -r` to identify all remote
+        branches.
+    2.  **For each remote branch:**
+        a.  **Examine the branch's commit history:** Use `git log --oneline
+            --graph --decorate -20` or similar to understand the work done.
+        b.  **Identify valuable commits:** Check if commits contain unique and
+            valuable code or configurations.
+        c.  **Cherry-pick or merge:** If valuable commits are found, cherry-pick
+            them into the main branch or another appropriate branch.
+        d.  **Confirm successful integration:** Verify the changes are now safely
+            integrated into the main branch.
+        e.  **Delete remote branch:** Use `git push origin --delete branch_name` to
+            delete the remote branch.
+    3.  **Verify Clean State:** Use `git fetch --prune && git branch -r` to
+        update the local list of remote branches and remove any that have been
+        deleted.
 
 ## FINAL DOs AND DON'Ts
 
