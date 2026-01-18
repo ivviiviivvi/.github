@@ -7,6 +7,7 @@ Usage:
 """
 
 import argparse
+import html
 import json
 from datetime import datetime
 from pathlib import Path
@@ -342,18 +343,20 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
         event_items = []
         for event in events[:5]:  # Top 5 events
             event_items.append(EVENT_ITEM_TEMPLATE.format(
-                name=event['name'],
-                url=event['html_url'],
+                name=html.escape(event['name']),
+                url=html.escape(event['html_url']),
                 time_ago=format_time_ago(event['created_at'])
             ))
         events_html = EVENTS_SECTION_TEMPLATE.format(
             events="\n".join(event_items))
 
     # Generate HTML
-    html = EMAIL_TEMPLATE.format(
+    # We must escape summary and trend commentary as they are dynamic strings
+    # Other fields like numbers are safe.
+    html_content = EMAIL_TEMPLATE.format(
         period_start=period_start,
         period_end=period_end,
-        summary=summary,
+        summary=html.escape(summary),
         success_rate=success_rate,
         success_change="↑ 2.3% from last week",
         success_change_class="positive",
@@ -368,14 +371,14 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
         events_section=events_html,
         trend_direction=trend_direction,
         trend_amount=trend_amount,
-        trend_commentary=trend_commentary,
+        trend_commentary=html.escape(trend_commentary),
         dashboard_url="https://github.com/ivviiviivvi/.github/actions",
         repo_url="https://github.com/ivviiviivvi/.github",
         repo_name="ivviiviivvi/.github"
     )
 
     # Write to file
-    output_file.write_text(html)
+    output_file.write_text(html_content)
     print(f"Email digest generated: {output_file}")
 
 
