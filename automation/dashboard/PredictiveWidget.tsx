@@ -28,10 +28,11 @@ const PredictiveWidget: React.FC = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [metrics, setMetrics] = useState<ModelMetrics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPredictions();
+    fetchPredictions(true);
     fetchMetrics();
     
     // Refresh every 5 minutes
@@ -42,7 +43,9 @@ const PredictiveWidget: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const fetchPredictions = async () => {
+  const fetchPredictions = async (isInitial = false) => {
+    if (!isInitial && !loading) setIsRefreshing(true);
+
     try {
       const response = await fetch('/api/predictions/high-risk');
       if (!response.ok) throw new Error('Failed to fetch predictions');
@@ -54,6 +57,7 @@ const PredictiveWidget: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -97,7 +101,7 @@ const PredictiveWidget: React.FC = () => {
       <div className="predictive-widget error">
         <h3>⚠️ Error Loading Predictions</h3>
         <p>{error}</p>
-        <button onClick={fetchPredictions}>Retry</button>
+        <button onClick={() => fetchPredictions()}>Retry</button>
       </div>
     );
   }
@@ -153,7 +157,14 @@ const PredictiveWidget: React.FC = () => {
                 </div>
               </div>
               
-              <div className="progress-bar">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                aria-valuenow={pred.failure_probability * 100}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Failure probability: ${(pred.failure_probability * 100).toFixed(1)}%`}
+              >
                 <div
                   className={`progress-fill ${getRiskClass(pred.risk_color)}`}
                   style={{ width: `${pred.failure_probability * 100}%` }}
@@ -190,8 +201,13 @@ const PredictiveWidget: React.FC = () => {
       )}
 
       <div className="widget-actions">
-        <button onClick={fetchPredictions} className="refresh-btn">
-          🔄 Refresh
+        <button
+          onClick={() => fetchPredictions()}
+          className="refresh-btn"
+          disabled={isRefreshing}
+          aria-busy={isRefreshing}
+        >
+          {isRefreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
         </button>
         <a href="/predictions" className="view-all-btn">
           View All →
