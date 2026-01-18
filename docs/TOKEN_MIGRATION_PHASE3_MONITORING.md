@@ -12,6 +12,7 @@
 Phase 3 focuses on validating that the 4 purpose-specific tokens work correctly in production and monitoring for any authentication issues.
 
 **Prerequisites:**
+
 - ✅ Phase 1 Complete: All 4 tokens created and stored
 - ✅ Phase 2 Complete: All 5 scripts updated
 - ✅ Documentation: TOKEN_REGISTRY.md and guides updated
@@ -59,12 +60,14 @@ bash scripts/complete-project-setup.sh # (check if supports --dry-run)
 - [ ] **Verify gh CLI fallback**: Confirm utils.py uses gh token when available
 
 **Expected Results:**
+
 - All tokens authenticate successfully
 - Scripts retrieve correct tokens from 1Password
 - No "401 Unauthorized" or "Bad credentials" errors
 - Rate limits show reasonable remaining quota
 
 **Action if issues:**
+
 - Check token scopes match requirements
 - Verify 1Password item names are exact
 - Re-run token creation if needed
@@ -96,6 +99,7 @@ gh run list --workflow=token-health-check.yml --limit 5
 ```
 
 **Expected Results:**
+
 - Scripts complete successfully in production
 - GitHub Actions daily health check passes
 - Each token used for its designated purpose
@@ -125,6 +129,7 @@ python3 -c "from automation.scripts.secret_manager import get_github_token; prin
 ```
 
 **Expected Results:**
+
 - Clear error messages when tokens not found
 - Helpful guidance on which token to use
 - No silent failures or unclear exceptions
@@ -158,6 +163,7 @@ done
 ```
 
 **Expected Results:**
+
 - All tokens validate successfully
 - Rate limits show sufficient remaining quota
 - No authentication errors in logs
@@ -197,11 +203,13 @@ done
 ### Issue 1: Token Not Found in 1Password
 
 **Symptoms:**
+
 ```
 ERROR: Token 'org-label-sync-token' not found in 1Password
 ```
 
 **Diagnosis:**
+
 ```bash
 # Check if item exists
 op item list --vault Personal | grep org-label-sync-token
@@ -211,6 +219,7 @@ op read "op://Personal/org-label-sync-token/password" --reveal
 ```
 
 **Solution:**
+
 - Verify token name spelling (exact match required)
 - Check 1Password vault is "Personal" (not "Private")
 - Re-authenticate: `eval $(op signin)`
@@ -221,11 +230,13 @@ op read "op://Personal/org-label-sync-token/password" --reveal
 ### Issue 2: Authentication Fails (401 Unauthorized)
 
 **Symptoms:**
+
 ```
 {"message":"Bad credentials","documentation_url":"..."}
 ```
 
 **Diagnosis:**
+
 ```bash
 # Test token directly with GitHub API
 TOKEN=$(op read "op://Personal/org-label-sync-token/password" --reveal)
@@ -233,6 +244,7 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/user
 ```
 
 **Solution:**
+
 - Token may be expired (check expiration in TOKEN_REGISTRY.md)
 - Token may have been revoked in GitHub settings
 - Token scopes may be insufficient
@@ -243,10 +255,12 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/user
 ### Issue 3: Wrong Token Used
 
 **Symptoms:**
+
 - Script works but uses wrong scopes
 - Audit log shows unexpected token usage
 
 **Diagnosis:**
+
 ```bash
 # Check which token script is using
 # Add debug print in script:
@@ -254,6 +268,7 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/user
 ```
 
 **Solution:**
+
 - Review script code (should explicitly name token)
 - Check secret_manager.py requires token name (no defaults)
 - Update script to use correct token
@@ -264,11 +279,13 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/user
 ### Issue 4: Rate Limit Exceeded
 
 **Symptoms:**
+
 ```
 {"message":"API rate limit exceeded..."}
 ```
 
 **Diagnosis:**
+
 ```bash
 # Check rate limit for token
 TOKEN=$(op read "op://Personal/org-label-sync-token/password" --reveal)
@@ -276,6 +293,7 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/rate_limit | jq
 ```
 
 **Solution:**
+
 - Wait for rate limit reset (check X-RateLimit-Reset header)
 - Use different token if available
 - Implement request caching
@@ -286,11 +304,13 @@ curl -H "Authorization: token $TOKEN" https://api.github.com/rate_limit | jq
 ### Issue 5: 1Password CLI Not Authenticated
 
 **Symptoms:**
+
 ```
 [ERROR] 2026/01/18 17:22:00 You are not currently signed in. Please run `op signin`
 ```
 
 **Solution:**
+
 ```bash
 # Re-authenticate
 eval $(op signin)
