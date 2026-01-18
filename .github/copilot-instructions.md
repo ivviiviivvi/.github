@@ -1,7 +1,6 @@
 ---
-description: AI rules derived by SpecStory from the project AI interaction history
-globs: *
----
+
+## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
@@ -259,15 +258,15 @@ globs: *
       tokens by 2026-02-18
     - GitHub Personal Access Tokens (Classic) REQUIRE the Web UI.
     - **1Password Authentication Troubleshooting:**
-      - **Issue**: 1Password CLI shows as signed in, but still cannot access
-        the vault and requires re-authentication.
+      - **Issue**: 1Password CLI shows as signed in, but still cannot access the
+        vault and requires re-authentication.
       - **Root Cause**: Likely due to a missing integration between the
         1Password CLI and the desktop app, or biometric lock settings.
       - **Solution**:
         1. **Open 1Password Desktop App:** Ensure the 1Password desktop
            application is running.
-        1. **Enable CLI Integration:** Go to Settings -> Developer ->
-           "Integrate with 1Password CLI" and ensure this option is turned ON.
+        1. **Enable CLI Integration:** Go to Settings -> Developer -> "Integrate
+           with 1Password CLI" and ensure this option is turned ON.
         1. **Enable Biometric Unlock (Optional):** Enable "Connect with
            1Password CLI" biometric unlock for added convenience.
 
@@ -709,4 +708,4 @@ globs: *
        referenced.
     1. **Usage Analysis:** Analyze how the token is being used across the
        organization, including in GitHub workflows, scripts, and documentation.
-    1. **Scope
+    1. \*\*Scope

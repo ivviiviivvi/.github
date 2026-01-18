@@ -82,9 +82,9 @@ def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict
         # Get token from environment variable or 1Password
         if verbose:
             if token:
-                print(f"  → Using token from environment variable")
+                print("  → Using token from environment variable")
             else:
-                print(f"  → Retrieving from 1Password...")
+                print("  → Retrieving from 1Password...")
 
         if not token:
             token = get_secret(token_name, "password")
@@ -212,9 +212,7 @@ def print_summary(results: List[Dict], verbose: bool = False):
 
 def main():
     """Main validation function"""
-    parser = argparse.ArgumentParser(
-        description="Validate organization GitHub tokens"
-    )
+    parser = argparse.ArgumentParser(description="Validate organization GitHub tokens")
     parser.add_argument(
         "--token",
         help="Validate specific token only",
@@ -254,9 +252,7 @@ def main():
 
         if not args.verbose:
             if result["valid"]:
-                rate_info = (
-                    f"(rate limit: {result['rate_limit']['remaining']})"
-                )
+                rate_info = f"(rate limit: {result['rate_limit']['remaining']})"
                 print(f"{GREEN}✅ Valid{NC} {rate_info}")
             elif result["status"] == "planned":
                 print(f"{YELLOW}⏳ Planned{NC} (not yet created)")
@@ -270,17 +266,11 @@ def main():
     if not all_valid and not args.ignore_planned:
         print(f"\n{RED}⚠️  Some tokens failed validation!{NC}")
         print("Review docs/TOKEN_REGISTRY.md and rotate failed tokens.")
-        print(
-            "Or create planned tokens: see "
-            "docs/MASTER_ORG_TOKEN_QUICK_ACTION.md"
-        )
+        print("Or create planned tokens: see " "docs/MASTER_ORG_TOKEN_QUICK_ACTION.md")
         sys.exit(1)
-    elif planned_count := sum(
-        1 for r in results if r["status"] == "planned"
-    ):
+    elif planned_count := sum(1 for r in results if r["status"] == "planned"):
         print(
-            f"\n{YELLOW}⏳ {planned_count} token(s) "
-            f"planned but not yet created{NC}"
+            f"\n{YELLOW}⏳ {planned_count} token(s) " f"planned but not yet created{NC}"
         )
         print("See docs/MASTER_ORG_TOKEN_QUICK_ACTION.md for next steps")
         sys.exit(0)
