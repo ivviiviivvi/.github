@@ -7,6 +7,7 @@
 ## 🎯 What You're Configuring
 
 ### Views (42 total - 6 per project)
+
 - **Board View** - Kanban-style workflow
 - **Table View** - Detailed data grid
 - **Roadmap View** - Timeline/Gantt chart
@@ -15,6 +16,7 @@
 - **Status View** - Grouped status summary
 
 ### Automation Rules (35+ total)
+
 - **Status transitions** - Auto-update status on PR events
 - **Field mapping** - Auto-populate fields from labels/paths
 - **Workflow triggers** - Actions on item events
@@ -35,6 +37,7 @@ cd /workspace
 ```
 
 **Features:**
+
 - ✅ Step-by-step instructions for each configuration
 - ✅ Progress tracking with auto-save
 - ✅ Resume anytime - your progress is saved
@@ -44,6 +47,7 @@ cd /workspace
 ### Option B: Manual Reference Mode
 
 Use the comprehensive guides:
+
 - Views: [setup-automation-rules.md](setup-automation-rules.md) (Section: Views Configuration)
 - Automation: [setup-automation-rules.md](setup-automation-rules.md) (Section: Automation Rules)
 
@@ -52,17 +56,20 @@ Use the comprehensive guides:
 ## 📋 Recommended Workflow
 
 ### Phase 1: Start with Project #8 (AI Framework Development)
+
 **Why start here?** Establishes patterns you'll replicate to other projects.
 
 **Time:** ~1.5 hours
 
 1. **Configure all 6 views** (~45 min)
+
    ```bash
    ./scripts/configure-project-views-guide.sh
    # Select option: 8
    ```
 
 2. **Configure all 5 automation rules** (~30 min)
+
    ```bash
    ./scripts/configure-automation-rules-guide.sh
    # Select option: 8
@@ -76,6 +83,7 @@ Use the comprehensive guides:
    - Adjust as needed
 
 ### Phase 2: Replicate to Remaining Projects
+
 **Time:** ~7-10 hours total
 
 Once Project #8 is working, replicate the pattern:
@@ -94,7 +102,7 @@ Or configure one project at a time during breaks.
 
 ### Example: Board View for Project #8
 
-1. Go to: https://github.com/orgs/ivviiviivvi/projects/8
+1. Go to: <https://github.com/orgs/ivviiviivvi/projects/8>
 2. Click "+ New view" → Select "Board"
 3. Configure:
    - **Name:** Board
@@ -122,7 +130,7 @@ Or configure one project at a time during breaks.
 
 ### Example: "New items → Planned status" (Project #8)
 
-1. Go to: https://github.com/orgs/ivviiviivvi/projects/8/settings
+1. Go to: <https://github.com/orgs/ivviiviivvi/projects/8/settings>
 2. Click "Workflows" in sidebar
 3. Click "+ New workflow"
 4. Configure:
@@ -174,6 +182,7 @@ cat .github-projects-automation-progress.txt
 After configuring each project:
 
 ### Test Views
+
 1. Add a test issue to the project
 2. Check each view:
    - Board: Item appears in correct column
@@ -184,6 +193,7 @@ After configuring each project:
    - Status: Grouped by status
 
 ### Test Automation Rules
+
 1. Create a test pull request
 2. Verify:
    - New PR triggers status change
@@ -193,6 +203,7 @@ After configuring each project:
    - Closed items update status
 
 ### Clean Up
+
 ```bash
 # Remove test items after verification
 # (Do this manually in GitHub UI)
@@ -205,16 +216,19 @@ After configuring each project:
 ### Efficient Schedule
 
 **Day 1: Foundation (1.5 hours)**
+
 - Morning: Configure Project #8 views (45 min)
 - Afternoon: Configure Project #8 automation (30 min)
 - Evening: Test and refine (15 min)
 
 **Days 2-3: Bulk Configuration (6-8 hours total)**
+
 - Use interactive guides in auto-mode
 - Take breaks between projects
 - 1 hour per project (views + automation)
 
 **Day 4: Testing & Refinement (1-2 hours)**
+
 - Test all projects
 - Adjust configurations
 - Document any custom patterns
@@ -222,6 +236,7 @@ After configuring each project:
 **Total Time:** 9-11.5 hours over 4 days
 
 ### Alternative: Spread Over 2 Weeks
+
 - 1 project per day (45-60 min each)
 - More manageable chunks
 - Less fatigue, better quality
@@ -231,6 +246,7 @@ After configuring each project:
 ## 🎯 Tips for Success
 
 ### Do's ✅
+
 - **Start with Project #8** - Establish patterns first
 - **Use the interactive guides** - Progress tracking helps
 - **Test each project** before moving to the next
@@ -239,6 +255,7 @@ After configuring each project:
 - **Save progress frequently** - The guides auto-save
 
 ### Don'ts ❌
+
 - **Don't skip testing** - Catch issues early
 - **Don't rush** - Quality over speed
 - **Don't configure all at once** - Fatigue leads to errors
@@ -250,17 +267,20 @@ After configuring each project:
 ## 🆘 Troubleshooting
 
 ### Views not displaying correctly
+
 - Check grouping/sorting settings
 - Verify field visibility configuration
 - Refresh browser cache (Ctrl+Shift+R)
 
 ### Automation rules not triggering
+
 - Verify trigger conditions match events
 - Check filter criteria aren't too restrictive
 - Test with simple rules first
 - Look for conflicts with other rules
 
 ### Progress tracking issues
+
 ```bash
 # Reset progress if needed
 rm .github-projects-views-progress.txt
@@ -285,6 +305,7 @@ rm .github-projects-automation-progress.txt
 After completing all configuration:
 
 1. **Verify everything works:**
+
    ```bash
    # Add items to test all projects
    python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo .github

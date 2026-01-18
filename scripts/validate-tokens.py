@@ -10,12 +10,13 @@ Usage:
 """
 
 import argparse
+import os
 import sys
 from datetime import datetime
 from typing import Dict, List, Optional
 
 import requests
-from secret_manager import get_secret
+from secret_manager import get_github_token
 
 # Add parent directory to path for imports
 sys.path.insert(0, "automation/scripts")
@@ -70,18 +71,26 @@ def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict
     }
 
     try:
-        # Skip planned tokens
-        if config.get("status") == "planned":
+        # Skip planned tokens (unless we have env var)
+        env_var_name = token_name.upper().replace("-", "_")
+        token = os.getenv(env_var_name)
+        
+        if not token and config.get("status") == "planned":
             result["error"] = "Token not yet created"
             return result
 
-        # Get token from 1Password
+        # Get token from environment variable or 1Password
         if verbose:
-            print(f"  → Retrieving from 1Password...")
+            if token:
+                print(f"  → Using token from environment variable")
+            else:
+                print(f"  → Retrieving from 1Password...")
 
-        token = get_secret(token_name, "password")
         if not token:
-            result["error"] = "Token not found in 1Password"
+            token = get_secret(token_name, "password")
+            
+        if not token:
+            result["error"] = "Token not found in 1Password or environment"
             return result
 
         if verbose:

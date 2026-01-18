@@ -82,7 +82,8 @@ def get_secret(
         if vault != "Private":
             cmd.extend(["--vault", vault])
 
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, check=True)
         secret = result.stdout.strip()
         return secret if secret else None
 
@@ -126,7 +127,9 @@ def ensure_secret(
 
 def get_github_token(item_name: str) -> Optional[str]:
     """
-    Get GitHub token from 1Password CLI.
+    Get GitHub token from environment variable or 1Password CLI.
+
+    Checks environment variables first (for dev containers), then 1Password.
 
     Args:
         item_name: REQUIRED. Name of 1Password item containing the token.
@@ -147,6 +150,15 @@ def get_github_token(item_name: str) -> Optional[str]:
             "  - org-repo-analysis-token: For read-only analysis\n"
             "  - org-onboarding-token: For repository onboarding"
         )
+
+    # Check environment variable first (dev container friendly)
+    import os
+    env_var_name = item_name.upper().replace("-", "_")
+    env_token = os.getenv(env_var_name)
+    if env_token:
+        return env_token
+
+    # Fall back to 1Password CLI
     return get_secret(item_name, "password")
 
 
