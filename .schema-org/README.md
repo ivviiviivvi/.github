@@ -158,8 +158,8 @@ Schema validation is integrated into CI/CD:
 For questions or issues:
 
 - 📖 See [SCHEMA_ORG_SEMVER_GUIDE.md](../docs/SCHEMA_ORG_SEMVER_GUIDE.md)
-- 💬 [Start a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Open an Issue](https://github.com/ivviiviivvi/.github/issues)
+- 💬 [Start a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 [Open an Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

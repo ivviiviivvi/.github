@@ -102,7 +102,7 @@ Examples:
 ### Conventional Commits
 
 All commits should follow the
-[Conventional Commits](https://www.conventionalcommits.org/) specification:
+[Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits --> specification:
 
 ```bash
 # Format
@@ -607,8 +607,8 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [Semantic Versioning Specification](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Versioning Specification](https://semver.org/)<!-- link:standards.semver -->
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Schema.org Developer Guide](https://schema.org/docs/developers.html)
 - [Schema.org SoftwareSourceCode](https://schema.org/SoftwareSourceCode)
 - [Schema.org Organization](https://schema.org/Organization)
@@ -624,7 +624,7 @@ ______________________________________________________________________
 
 ### Tools
 
-- [semver.org](https://semver.org/) - Semantic versioning specification
+- [semver.org](https://semver.org/)<!-- link:standards.semver --> - Semantic versioning specification
 - [schema.org](https://schema.org/) - Schema.org vocabulary
 - [JSON-LD Playground](https://json-ld.org/playground/) - Test JSON-LD
 - [Schema.org Validator](https://validator.schema.org/) - Validate schemas
@@ -648,8 +648,8 @@ ______________________________________________________________________
 Need help?
 
 - 📖 Check [CONTRIBUTING.md](../CONTRIBUTING.md)
-- 💬 Start a [Discussion](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 Open an [Issue](https://github.com/ivviiviivvi/.github/issues)
+- 💬 Start a [Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 Open an [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - 📧 Contact maintainers via GitHub
 
 ______________________________________________________________________

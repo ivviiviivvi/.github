@@ -258,16 +258,16 @@ ______________________________________________________________________
 
 ### External Resources
 
-- [Semantic Versioning Spec](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Versioning Spec](https://semver.org/)<!-- link:standards.semver -->
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Schema.org Documentation](https://schema.org/)
 - [JSON-LD Playground](https://json-ld.org/playground/)
 
 ### Support
 
 - 📖 [CONTRIBUTING.md](CONTRIBUTING.md)
-- 💬 [Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬 [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 
@@ -349,8 +349,8 @@ Questions or issues?
 
 - 📖 Check the [Complete Guide](docs/SCHEMA_ORG_SEMVER_GUIDE.md)
 - 🔍 Review [Quick Reference](QUICK_REFERENCE_SCHEMA_SEMVER.md)
-- 💬 [Start a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Open an Issue](https://github.com/ivviiviivvi/.github/issues)
+- 💬 [Start a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 [Open an Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

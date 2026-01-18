@@ -8,7 +8,7 @@
 **Review
 Schedule:** Quarterly (next: 2026-04-18)
 
-______________________________________________________________________
+---
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ ______________________________________________________________________
 - [Compliance](#compliance)
 - [Audit Log](#audit-log)
 
-______________________________________________________________________
+---
 
 ## Active Tokens
 
@@ -57,7 +57,7 @@ use.
 1Password, allowing for a clean implementation of security best practices from
 day one.
 
-______________________________________________________________________
+---
 
 ### ⚠️ Legacy Token (Deprecated)
 
@@ -69,7 +69,7 @@ ______________________________________________________________________
 but never created or stored in 1Password. This discovery led to implementing
 purpose-specific tokens following the principle of least privilege.
 
-______________________________________________________________________
+---
 
 ## Usage Guidelines
 
@@ -110,7 +110,7 @@ Use the **automatically-provided GitHub Actions token** when:
 **Note:** `secrets.GITHUB_TOKEN` is automatically provided and rotated by
 GitHub. Never store it in 1Password or pass it between systems.
 
-______________________________________________________________________
+---
 
 ## Token Selection Guide
 
@@ -178,7 +178,7 @@ Development/testing                      → Your personal development token
                  └───────────────┘  └────────────┘  └─────────────┘
 ```
 
-______________________________________________________________________
+---
 
 ## Rotation Process
 
@@ -287,7 +287,7 @@ The script will:
 - Prompt for old token revocation
 - Update this registry file
 
-______________________________________________________________________
+---
 
 ## Emergency Procedures
 
@@ -345,26 +345,22 @@ ______________________________________________________________________
 
 **Follow-up actions (within 24 hours):**
 
-6. **Investigate root cause**
-
+1. **Investigate root cause**
    - How was token exposed?
    - Where was it stored/transmitted insecurely?
    - Who had access?
 
 1. **Generate permanent replacement**
-
    - Use original token name
    - Standard rotation schedule
    - Replace emergency token
 
 1. **Implement preventions**
-
    - Fix root cause
    - Update security procedures
    - Additional monitoring if needed
 
 1. **Document incident**
-
    - Update audit log (below)
    - Lessons learned
    - Prevention measures
@@ -529,7 +525,7 @@ ______________________________________________________________________
    # See MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md
    ```
 
-______________________________________________________________________
+---
 
 ## Compliance
 
@@ -555,17 +551,14 @@ ______________________________________________________________________
 All token operations are logged:
 
 - **GitHub Audit Log**: All API calls made with each token
-
-  - View at: https://github.com/organizations/ivviiviivvi/settings/audit-log
+  - View at: <https://github.com/organizations/ivviiviivvi/settings/audit-log>
   - Retention: 90 days (GitHub Team), 180 days (GitHub Enterprise)
 
 - **1Password Activity Log**: All secret retrievals
-
   - View in 1Password app → Settings → Activity
   - Shows: Who accessed which item, when
 
 - **Script Logs**: Application-level logging
-
   - Location: `logs/` directory in each script's output
   - Retention: 30 days
 
@@ -578,7 +571,7 @@ All token operations are logged:
 | **ISO 27001 A.9.2.3** | Privileged access management | 🔄 Implementing |
 | **NIST 800-53 IA-5**  | Authenticator management     | ✅ Compliant    |
 
-______________________________________________________________________
+---
 
 ## Audit Log
 
@@ -608,7 +601,7 @@ ______________________________________________________________________
 | ---- | -------- | ----- | -------- | ---------- | ---------- |
 | -    | -        | -     | -        | -          | -          |
 
-______________________________________________________________________
+---
 
 ## Related Documentation
 
@@ -620,14 +613,14 @@ ______________________________________________________________________
 - `scripts/rotate-token.sh` - Automated token rotation script
 - `scripts/validate-tokens.py` - Token health validation script
 
-______________________________________________________________________
+---
 
 ## Contact & Support
 
 **Questions about tokens?**
 
 - 💬 Slack: #security-engineering
-- 📧 Email: security@ivviiviivvi.org
+- 📧 Email: <security@ivviiviivvi.org>
 - 📝 Issues:
   [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
@@ -637,7 +630,7 @@ ______________________________________________________________________
 - 📋 Non-urgent: Create ticket with Security Team
 - 📖 Documentation: Update this registry and submit PR
 
-______________________________________________________________________
+---
 
 **Registry maintained by:** Organization Security Team\
 **Next review:**

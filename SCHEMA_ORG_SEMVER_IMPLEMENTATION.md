@@ -401,16 +401,16 @@ ______________________________________________________________________
 
 ### External Resources
 
-- [Semantic Versioning](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Versioning](https://semver.org/)<!-- link:standards.semver -->
+- [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Schema.org](https://schema.org/)
 - [JSON-LD Playground](https://json-ld.org/playground/)
 
 ### Support
 
 - 📖 [CONTRIBUTING.md](CONTRIBUTING.md)
-- 💬 [Discussions](https://github.com/orgs/ivviiviivvi/discussions)
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬 [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 
