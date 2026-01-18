@@ -26,34 +26,40 @@ Schedule:** Quarterly (next: 2026-04-18)
 
 ### ⚠️ Legacy Token (Being Deprecated)
 
-| Token Name                   | Purpose                    | Scopes                      | Location                                    | Owner | Created    | Expiration | Status                         |
-| ---------------------------- | -------------------------- | --------------------------- | ------------------------------------------- | ----- | ---------- | ---------- | ------------------------------ |
-| ⚠️ `master-org-token-011726` | **Legacy universal token** | Unknown (likely all scopes) | 1Password: Personal/master-org-token-011726 | Admin | 2026-01-17 | Unknown    | 🔄 **Deprecation in progress** |
+| Token Name                   | Purpose                    | Scopes                         | Location                                    | Owner | Created | Expiration | Status                             |
+| ---------------------------- | -------------------------- | ------------------------------ | ------------------------------------------- | ----- | ------- | ---------- | ---------------------------------- |
+| ⚠️ `master-org-token-011726` | **Legacy universal token** | Unknown (not yet in 1Password) | 1Password: Personal/master-org-token-011726 | Admin | Unknown | Unknown    | 🔴 **NOT FOUND - Skip to Phase 1** |
 
-**⏰ Deprecation Timeline:**
+**⚠️ DISCOVERY:** The master-org-token-011726 does not currently exist in
+1Password. Analysis shows it was referenced in scripts but never stored. This
+validates the need for token segmentation.
 
-- **Phase 1 (Week 1):** Create and test purpose-specific tokens ← **IN
-  PROGRESS**
-- **Phase 2 (Week 2):** Update all script references
-- **Phase 3 (Week 3):** Monitor for issues, verify all migrations
-- **Phase 4 (Week 4):** Revoke master token (Target: 2026-02-18)
+**📋 REVISED APPROACH:** Skip legacy token migration, proceed directly to Phase 1
+(create purpose-specific tokens)
 
-**Current Usage:**
+**⏰ Implementation Timeline:**
 
-- ⏳ `scripts/complete-project-setup.sh` - Project deployment → Migrate to
-  `org-project-admin-token`
-- ⏳ `automation/scripts/web_crawler.py` - Org analysis → Migrate to
-  `org-repo-analysis-token`
-- ⏳ `automation/scripts/sync_labels.py` - Label sync → Migrate to
-  `org-label-sync-token`
-- ⏳ `automation/scripts/secret_manager.py` - Default token → Remove default
-  (require explicit)
-- ⏳ `automation/scripts/utils.py` - HTTP client auth → Use token parameter
-- ⏳ `DEPLOY_PHASE*.sh` - Deployment scripts → Migrate to `org-onboarding-token`
+- **Phase 1 (This Week):** Create and test purpose-specific tokens ← **READY TO
+  START**
+- **Phase 2 (This Week):** Update all script references to use new tokens
+- **Phase 3 (Next Week):** Monitor for issues, verify all migrations
+- **Phase 4 (Not Needed):** ~~Revoke master token~~ (doesn't exist)
 
-**Migration Status:** 🟡 **Migration Script Ready**
+**Scripts to Update (Currently No Authentication):**
 
-- Run: `/workspace/scripts/token-segmentation-migration.sh`
+- ✏️ `scripts/complete-project-setup.sh` - Add `org-project-admin-token`
+- ✏️ `automation/scripts/web_crawler.py` - Add `org-repo-analysis-token`
+- ✏️ `automation/scripts/sync_labels.py` - Add `org-label-sync-token`
+- ✏️ `automation/scripts/secret_manager.py` - Remove default, require explicit
+  token name
+- ✏️ `automation/scripts/utils.py` - Add token parameter (use provided or
+  default to gh CLI)
+- ℹ️ `DEPLOY_PHASE*.sh` - Documentation only (no code changes needed)
+
+**Migration Status:** 🟢 **Ready to Start - No Legacy Token to Migrate**
+
+- Run: `/workspace/scripts/token-segmentation-migration.sh` (Option 1: Create
+  all tokens)
 - See:
   [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
 
@@ -628,7 +634,8 @@ All token operations are logged:
 
 - 💬 Slack: #security-engineering
 - 📧 Email: security@ivviiviivvi.org
-- 📝 Issues: [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+- 📝 Issues:
+  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 **Token issues?**
 
