@@ -289,6 +289,10 @@ jobs:
                   EOF_CLOSE_NOTASKS
                   gh pr close $PR_NUMBER --comment-file /tmp/pr_close.md
 
+                  # Log branch metadata before deletion (for recovery)
+                  echo "📝 Logging branch deletion metadata..."
+                  ./.github/scripts/log-branch-deletion.sh "$BRANCH" "$PR_NUMBER" "stale-pr-no-tasks" || echo "Warning: Failed to log branch metadata"
+
                   # Delete branch
                   git push origin --delete "$BRANCH" || echo "Branch may already be deleted"
                 fi
@@ -335,6 +339,11 @@ jobs:
           echo "$MERGED_BRANCHES" | while read -r branch; do
             if [ -n "$branch" ]; then
               echo "Deleting merged branch: $branch"
+              
+              # Log branch metadata before deletion (for recovery)
+              echo "📝 Logging branch deletion metadata..."
+              ./.github/scripts/log-branch-deletion.sh "$branch" "unknown" "merged-into-develop" || echo "Warning: Failed to log branch metadata"
+              
               git push origin --delete "$branch" || echo "Failed to delete $branch (may already be deleted)"
             fi
           done

@@ -1,0 +1,2 @@
+# This directory stores branch deletion audit logs
+# The directory structure is tracked in git to ensure audit logs are preserved

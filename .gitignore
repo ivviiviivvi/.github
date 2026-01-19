@@ -60,3 +60,10 @@ Desktop.ini
 # Case sensitivity: prevent uppercase Jules directory
 .Jules/
 node_modules/
+
+# Branch deletion audit logs
+# Keep audit logs but exclude temporary files
+.github/branch-deletion-audit/*.tmp
+!.github/branch-deletion-audit/*.jsonl
+!.github/branch-deletion-audit/README.md
+!.github/branch-deletion-audit/.gitkeep
