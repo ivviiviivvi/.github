@@ -32,3 +32,8 @@ message. Grouping them by category significantly improves readability.
 **Action:** When generating reports with potential duplicate or categorical
 alerts, implement a grouping logic to display the category once as a header and
 list individual items underneath.
+
+## 2025-12-22 - [Accessibility for Custom Progress Bars]
+
+**Learning:** Custom progress bars implemented with `div`s are invisible to screen readers, leaving users unaware of the status.
+**Action:** Always apply `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, and a descriptive `aria-label` to the container element.

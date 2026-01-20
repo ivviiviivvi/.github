@@ -108,7 +108,13 @@ const PredictiveWidget: React.FC = () => {
       <div className="predictive-widget error">
         <h3>⚠️ Error Loading Predictions</h3>
         <p>{error}</p>
-        <button onClick={fetchPredictions}>Retry</button>
+        <button
+          onClick={fetchPredictions}
+          disabled={isRefreshing}
+          aria-busy={isRefreshing}
+        >
+          {isRefreshing ? "Retrying..." : "Retry"}
+        </button>
       </div>
     );
   }
@@ -166,7 +172,16 @@ const PredictiveWidget: React.FC = () => {
                 </div>
               </div>
 
-              <div className="progress-bar">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                aria-valuenow={Math.round(pred.failure_probability * 100)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Failure probability: ${(
+                  pred.failure_probability * 100
+                ).toFixed(1)}%`}
+              >
                 <div
                   className={`progress-fill ${getRiskClass(pred.risk_color)}`}
                   style={{ width: `${pred.failure_probability * 100}%` }}
