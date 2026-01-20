@@ -105,6 +105,61 @@ Documentation improvements are always welcome! Use our
 [Documentation template](../../.github/ISSUE_TEMPLATE/documentation.yml) for doc
 issues.
 
+## Repository Organization Guidelines
+
+When contributing files, follow our
+[Repository Structure Standards](../reference/REPOSITORY_STRUCTURE.md):
+
+### File Placement
+
+- **Documentation**: Place in `docs/` with appropriate subdirectory
+  - Guides → `docs/guides/`
+  - Reference → `docs/reference/`
+  - Architecture → `docs/architecture/`
+- **Tests**: Place in `tests/` with subdirectories for unit/integration/e2e
+- **Scripts**: Place in `scripts/` with descriptive names
+- **Configuration**: Keep at root (dotfiles) or in `.github/`
+- **Reports**: Place in `reports/` or `docs/reports/` (avoid root)
+
+### Naming Conventions
+
+- **Documentation files**: Use `kebab-case.md` (e.g., `getting-started.md`)
+- **Important docs**: Use `ALL_CAPS.md` (e.g., `README.md`, `CONTRIBUTING.md`)
+- **Python modules**: Use `snake_case.py` (e.g., `data_processor.py`)
+- **TypeScript/JS**: Use `camelCase` or `PascalCase` as appropriate
+- **No spaces**: Use hyphens or underscores instead
+
+### Root Directory
+
+Keep the root directory clean. **Only include**:
+
+- Essential discovery files (README.md, LICENSE)
+- Core policies (SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md)
+- Version files (VERSION, CHANGELOG.md)
+- Configuration files (dotfiles, package manifests)
+
+**Avoid** placing these at root:
+
+- Status reports (use `reports/status/`)
+- Deployment logs (use `docs/deployment/`)
+- Temporary files (gitignore them)
+- Test results (use `reports/` or gitignore)
+
+### Validation
+
+Before submitting your PR:
+
+```bash
+# Validate repository structure
+./scripts/validate-repository-structure.sh
+
+# Check for common issues
+git status | grep -E "test-results|STATUS|COMPLETE"
+```
+
+See [Repository Organization Quick Reference](../reference/REPOSITORY_ORGANIZATION_QUICK_REF.md)
+for more details.
+
 ## Code Style Guidelines
 
 ### Python

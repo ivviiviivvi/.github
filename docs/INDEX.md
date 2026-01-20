@@ -198,6 +198,23 @@ New to this repository? Start here:
 
 **Location:** [`reference/`](reference/)
 
+### Repository Organization ⭐ NEW
+
+- [REPOSITORY_STRUCTURE.md](reference/REPOSITORY_STRUCTURE.md) - ⭐ Complete organizational standards (18KB)
+  - Standard directory structure for all repositories
+  - File naming conventions
+  - Content placement guidelines
+  - Language-specific layouts (Python, Node.js, Go, Java)
+  - Best practices and anti-patterns
+  - Automated validation
+- [REPOSITORY_ORGANIZATION_QUICK_REF.md](reference/REPOSITORY_ORGANIZATION_QUICK_REF.md) - ⭐ Quick reference guide (9KB)
+  - Fast lookup and decision trees
+  - Essential checklists
+  - Common cleanup commands
+  - Validation scripts
+
+### Standards & Policies
+
 - [ARCHIVAL_STRATEGY.md](reference/ARCHIVAL_STRATEGY.md) - Archival strategy
 - [SECURITY_ADVANCED.md](reference/SECURITY_ADVANCED.md) - Advanced security
 - [SEMANTIC_VERSIONING.md](reference/SEMANTIC_VERSIONING.md) - Versioning
