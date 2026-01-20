@@ -50,9 +50,11 @@ check_file_recommended() {
     
     if [ -f "$REPO_ROOT/$file" ]; then
         echo -e "${GREEN}✓${NC} $description: $file"
+        return 0
     else
         echo -e "${YELLOW}!${NC} $description: $file (recommended)"
         WARNINGS=$((WARNINGS + 1))
+        return 1
     fi
 }
 
@@ -95,8 +97,10 @@ check_artifacts() {
     CHECKS=$((CHECKS + 1))
     
     if [ -d "$REPO_ROOT/$dir" ]; then
-        if grep -q "^$dir/\?" "$REPO_ROOT/.gitignore" 2>/dev/null || \
-           grep -q "^/$dir/\?" "$REPO_ROOT/.gitignore" 2>/dev/null; then
+        if grep -q "^$dir/\?$" "$REPO_ROOT/.gitignore" 2>/dev/null || \
+           grep -q "^/$dir/\?$" "$REPO_ROOT/.gitignore" 2>/dev/null || \
+           grep -q "^$dir/$" "$REPO_ROOT/.gitignore" 2>/dev/null || \
+           grep -q "^/$dir/$" "$REPO_ROOT/.gitignore" 2>/dev/null; then
             echo -e "${GREEN}✓${NC} $description properly gitignored: $dir/"
         else
             echo -e "${YELLOW}!${NC} $description should be in .gitignore: $dir/"
