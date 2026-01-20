@@ -1,6 +1,9 @@
 ---
-
-## name: Power Apps Code Apps description: Collection for Power Apps Code Apps. tags: \[\] updated: 2026-01-13
+name: Power Apps Code Apps
+description: Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Platform integration.
+tags: []
+updated: 2026-01-13
+---
 
 # Power Apps Code Apps Development
 

@@ -1,6 +1,9 @@
 ---
-
-## name: Devops Oncall description: Collection for Devops Oncall. tags: \[\] updated: 2026-01-13
+name: Devops Oncall
+description: A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.
+tags: []
+updated: 2026-01-13
+---
 
 # DevOps On-Call
 

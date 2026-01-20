@@ -1,6 +1,9 @@
 ---
-
-## name: Awesome Copilot description: Collection for Awesome Copilot. tags: \[\] updated: 2026-01-13
+name: Awesome Copilot
+description: Meta prompts that help you discover and generate curated GitHub Copilot chat modes, collections, instructions, prompts, and agents.
+tags: []
+updated: 2026-01-13
+---
 
 # Awesome Copilot
 

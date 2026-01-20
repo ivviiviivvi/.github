@@ -1,6 +1,9 @@
 ---
-
-## name: Power Bi Development description: Collection for Power Bi Development. tags: \[\] updated: 2026-01-13
+name: Power Bi Development
+description: Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance for building enterprise-grade Power BI solutions.
+tags: []
+updated: 2026-01-13
+---
 
 # Power BI Development
 

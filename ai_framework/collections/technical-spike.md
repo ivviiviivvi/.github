@@ -1,6 +1,9 @@
 ---
-
-## name: Technical Spike description: Collection for Technical Spike. tags: \[\] updated: 2026-01-13
+name: Technical Spike
+description: Tools for creation, management and research of technical spikes to reduce unknowns and assumptions before proceeding to specification and implementation of solutions.
+tags: []
+updated: 2026-01-13
+---
 
 # Technical Spike
 
