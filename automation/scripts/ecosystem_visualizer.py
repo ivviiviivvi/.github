@@ -54,6 +54,15 @@ class EcosystemVisualizer:
         ("💓", re.compile(r"health|check|monitor|metrics|dashboard|report")),
     ]
 
+    # Optimization: Combined regex for O(1) matching vs O(N) loop
+    # NOTE: This logic relies on each pattern being wrapped in exactly one capturing group.
+    # Future patterns MUST NOT contain their own capturing groups '(...)' as this
+    # will break the match.lastindex logic. Use non-capturing groups '(?:...)' instead.
+    _PRIORITY_ORDER = [e for e, _ in WORKFLOW_PATTERNS]
+    _WORKFLOW_REGEX = re.compile(
+        "|".join(f"({p.pattern})" for _, p in WORKFLOW_PATTERNS)
+    )
+
     # Technology icons (extendable)
     TECHNOLOGY_ICONS: Dict[str, str] = {}
 
@@ -262,9 +271,12 @@ graph TD
         regex patterns. Returns tuple of (emoji, category_name).
         """
         name = workflow_name.lower()
-        for emoji, pattern in self.WORKFLOW_PATTERNS:
-            if pattern.search(name):
-                return emoji, self.WORKFLOW_CATEGORIES[emoji]
+        # Optimization: Use single regex pass with capturing groups
+        match = self._WORKFLOW_REGEX.search(name)
+        if match:
+            # lastindex is 1-based index of the matching group
+            emoji = self._PRIORITY_ORDER[match.lastindex - 1]
+            return emoji, self.WORKFLOW_CATEGORIES[emoji]
         return "⚙️", self.WORKFLOW_CATEGORIES["⚙️"]
 
     def generate_dashboard_markdown(self, output_path: Optional[Path] = None) -> str:
@@ -576,6 +588,13 @@ graph TD
                 grouped: Dict[str, List[str]] = {}
                 for emoji in self.WORKFLOW_CATEGORIES.keys():
                     grouped[f"{emoji} {self.WORKFLOW_CATEGORIES[emoji]}"] = []
+
+                # Populate grouped workflows
+                for workflow in workflows:
+                    emoji, category = self._classify_workflow(workflow)
+                    key = f"{emoji} {category}"
+                    if key in grouped:
+                        grouped[key].append(workflow)
 
                 # Count active categories
                 active_categories = sum(
