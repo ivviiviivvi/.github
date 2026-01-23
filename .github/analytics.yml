@@ -1,0 +1,325 @@
+# Enhanced Analytics ML Configuration
+# Provides advanced machine learning for workflow optimization predictions
+
+# ML Model Configuration
+ml:
+  # Enable ML-based predictions
+  enabled: true
+
+  # Default model to use
+  default_model: random_forest # Options: random_forest, gradient_boosting, neural_network
+
+  # Training configuration
+  training:
+    # Minimum training samples required
+    min_samples: 20
+
+    # Training data lookback period (days)
+    lookback_days: 90
+
+    # Automatic retraining schedule
+    retrain_schedule: weekly # Options: daily, weekly, monthly, manual
+
+    # Test set split ratio
+    test_size: 0.2
+
+    # Enable cross-validation
+    cross_validation: true
+    cv_folds: 5
+
+  # Model-specific hyperparameters
+  models:
+    random_forest:
+      n_estimators: 100
+      max_depth: 10
+      min_samples_split: 2
+      min_samples_leaf: 1
+      random_state: 42
+
+    gradient_boosting:
+      n_estimators: 100
+      max_depth: 5
+      learning_rate: 0.1
+      random_state: 42
+
+    neural_network:
+      hidden_layer_sizes: [64, 32]
+      activation: relu
+      max_iter: 500
+      early_stopping: true
+      random_state: 42
+
+# Feature Engineering
+features:
+  # Feature groups to include
+  enabled_groups:
+    - basic_metrics # lines, files, commits
+    - code_metrics # complexity, coverage
+    - author_metrics # experience, success rate
+    - timing_metrics # time of day, day of week
+    - review_metrics # reviewers, comments, approvals
+    - repository_metrics # context about repo state
+    - branch_metrics # branch type indicators
+    - label_metrics # PR labels analysis
+
+  # Feature scaling
+  scaling:
+    method: standard # Options: standard, minmax, robust
+
+  # Feature selection
+  selection:
+    # Enable automatic feature selection
+    enabled: true
+
+    # Method to use
+    method: importance # Options: importance, correlation, recursive
+
+    # Keep top N features
+    top_features: 30
+
+# Prediction Configuration
+prediction:
+  # Minimum confidence threshold for predictions
+  min_confidence: 0.6
+
+  # Prediction outcomes
+  outcomes:
+    - merge # PR will be merged
+    - close # PR will be closed without merge
+    - uncertain # Confidence below threshold
+
+  # Action thresholds
+  thresholds:
+    high_confidence: 0.8 # Take automated actions
+    medium_confidence: 0.6 # Show suggestions
+    low_confidence: 0.4 # No action
+
+  # Automatic actions based on predictions
+  actions:
+    high_confidence_merge:
+      - add_label: likely-merge
+      - notify_reviewers: true
+      - priority_boost: 0.2
+
+    high_confidence_close:
+      - add_label: needs-attention
+      - notify_author: true
+      - request_changes: true
+
+# Performance Monitoring
+monitoring:
+  # Track prediction accuracy
+  track_accuracy: true
+
+  # Minimum accuracy threshold
+  min_accuracy: 0.85 # 85% target
+
+  # Alert when accuracy drops below threshold
+  accuracy_alerts:
+    enabled: true
+    threshold: 0.80
+    channels:
+      - type: slack
+        webhook: ${SLACK_WEBHOOK_URL}
+      - type: email
+        recipients: [ml-team@example.com]
+
+  # Model performance metrics
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - confusion_matrix
+
+  # A/B testing configuration
+  ab_testing:
+    enabled: false
+    models: [random_forest, gradient_boosting]
+    split_ratio: 0.5 # 50/50 split
+    duration_days: 30
+
+# Model Versioning
+versioning:
+  # Keep history of trained models
+  enabled: true
+
+  # Number of model versions to retain
+  keep_versions: 5
+
+  # Model storage location
+  storage_path: .github/models/
+
+  # Include metadata with each version
+  metadata:
+    - training_date
+    - training_samples
+    - accuracy_metrics
+    - feature_names
+    - hyperparameters
+
+# Feature Importance Analysis
+importance:
+  # Calculate feature importance
+  enabled: true
+
+  # Update frequency
+  update_schedule: weekly
+
+  # Export format
+  export_format: json # Options: json, csv, markdown
+
+  # Top features to highlight
+  top_n: 15
+
+  # Visualization
+  visualization:
+    enabled: true
+    chart_type: bar # Options: bar, tree, heatmap
+
+# Data Quality
+data_quality:
+  # Minimum data quality score (0-1)
+  min_quality_score: 0.8
+
+  # Checks to perform
+  checks:
+    - missing_values # Check for missing feature values
+    - outliers # Detect and handle outliers
+    - class_balance # Ensure balanced training data
+    - feature_correlation # Identify highly correlated features
+
+  # Handling strategies
+  missing_values_strategy: median # Options: mean, median, mode, drop
+  outliers_strategy: clip # Options: clip, remove, transform
+
+  # Class imbalance handling
+  class_balance:
+    # Resampling strategy
+    strategy: smote # Options: smote, undersample, oversample, none
+
+    # Target ratio
+    target_ratio: 0.7 # 70/30 split
+
+# Explainability
+explainability:
+  # Enable model explainability features
+  enabled: true
+
+  # Methods to use
+  methods:
+    - feature_importance # Show which features influenced prediction
+    - decision_path # Show decision tree path (for tree models)
+    - confidence_breakdown # Break down confidence by feature groups
+
+  # Include in prediction output
+  include_in_output: true
+
+  # Explanation detail level
+  detail_level: medium # Options: low, medium, high
+
+# Audit and Compliance
+audit:
+  # Log all predictions
+  log_predictions: true
+
+  # Retention period (days)
+  retention_days: 365
+
+  # Include in logs
+  log_fields:
+    - timestamp
+    - pr_number
+    - prediction
+    - confidence
+    - model_name
+    - features_used
+    - accuracy_score
+
+  # Export location
+  export_path: .github/audit/analytics/
+
+  # Export format
+  export_format: json
+
+# Integration with Other Systems
+integrations:
+  # Intelligent routing
+  routing:
+    enabled: true
+    # Use predictions to influence routing decisions
+    weight: 0.15
+
+  # Self-healing
+  self_healing:
+    enabled: true
+    # Use predictions to anticipate failures
+
+  # Proactive maintenance
+  maintenance:
+    enabled: true
+    # Use predictions for maintenance scheduling
+
+# Notifications
+notifications:
+  # Model training completion
+  training_complete:
+    enabled: true
+    channels:
+      - type: slack
+        channel: "#ml-alerts"
+      - type: email
+        recipients: [ml-team@example.com]
+
+    # Include in notification
+    include:
+      - accuracy_metrics
+      - training_duration
+      - samples_used
+
+  # Low accuracy alerts
+  low_accuracy:
+    enabled: true
+    threshold: 0.80
+    channels:
+      - type: slack
+        channel: "#ml-alerts"
+        priority: high
+
+  # Prediction insights
+  prediction_insights:
+    # Send weekly summary
+    enabled: true
+    frequency: weekly
+    include:
+      - total_predictions
+      - accuracy_rate
+      - top_features
+      - model_performance
+
+# Advanced Options
+advanced:
+  # Ensemble predictions (combine multiple models)
+  ensemble:
+    enabled: false
+    method: voting # Options: voting, stacking, weighted
+    models: [random_forest, gradient_boosting, neural_network]
+    weights: [0.4, 0.4, 0.2]
+
+  # Online learning (update models with new data)
+  online_learning:
+    enabled: false
+    batch_size: 10
+    update_frequency: daily
+
+  # Transfer learning (use pre-trained models)
+  transfer_learning:
+    enabled: false
+    base_model: organization_wide_model
+    fine_tune_epochs: 50
+
+  # Auto-ML (automatic hyperparameter tuning)
+  auto_ml:
+    enabled: false
+    search_method: grid # Options: grid, random, bayesian
+    max_iterations: 100

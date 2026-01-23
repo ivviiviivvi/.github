@@ -1,0 +1,274 @@
+# Self-Healing Workflow Configuration
+#
+# Configures automatic failure detection, classification, and recovery.
+# The self-healing system analyzes workflow failures and applies appropriate
+# strategies based on failure type:
+# - Transient failures: Automatic retry with exponential backoff
+# - Dependency failures: Wait for upstream fixes, then retry
+# - Permanent failures: Alert and escalate to team
+
+self_healing:
+  # Enable or disable self-healing
+  enabled: true
+
+  # Enable automatic retry (if false, only classify and alert)
+  enable_auto_retry: true
+
+  # Maximum retry attempts before giving up
+  # Default: 3 attempts
+  max_retry_attempts: 3
+
+  # Initial retry delay in seconds
+  # Each subsequent retry uses exponential backoff
+  # Default: 60 seconds (1 minute)
+  initial_retry_delay: 60
+
+  # Exponential backoff multiplier
+  # Retry N delay = initial_delay * (multiplier ^ N)
+  # Example: 60s, 120s, 240s with multiplier=2.0
+  # Default: 2.0
+  retry_backoff_multiplier: 2.0
+
+  # Number of consecutive failures before marking as permanent
+  # If a workflow fails this many times in a row, classify as permanent
+  # Default: 3 failures
+  max_consecutive_failures: 3
+
+  # Wait time for dependency failures (seconds)
+  # How long to wait before retrying dependency failures
+  # Default: 300 seconds (5 minutes)
+  dependency_wait_time: 300
+
+  # Create GitHub issues for tracking failures
+  # Issues include classification, priority, and suggested actions
+  create_issues_for_failures: true
+
+  # Send notifications for failures
+  # Integrates with configured notification channels
+  send_notifications: true
+
+  # Failure classification patterns
+  classification:
+    # Transient failure indicators (network, timeouts, rate limits)
+    transient_patterns:
+      - timeout
+      - timed out
+      - connection reset
+      - temporary failure
+      - rate limit
+      - service unavailable
+      - 502 bad gateway
+      - 503 service unavailable
+      - network
+      - ECONNRESET
+      - ETIMEDOUT
+      - EHOSTUNREACH
+      - ECONNREFUSED
+
+    # Dependency failure indicators
+    dependency_patterns:
+      - dependency
+      - required check
+      - blocked by
+      - waiting for
+      - upstream
+      - prerequisite
+
+    # Permanent failure indicators (syntax, tests, compilation)
+    permanent_patterns:
+      - syntax error
+      - compilation failed
+      - test failed
+      - assertion
+      - type error
+      - undefined
+      - not found
+      - permission denied
+      - authentication failed
+      - invalid
+      - cannot resolve
+
+# Priority configuration
+priority:
+  # P0: Critical - immediate attention required
+  p0_keywords:
+    - production
+    - prod
+    - deploy
+    - release
+    - security
+
+  # P1: High - attention within hours
+  p1_keywords:
+    - main
+    - master
+    - critical
+
+  # P2: Medium - attention within day
+  p2_keywords:
+    - develop
+    - staging
+
+  # P3: Low - attention when convenient
+  # (default for all others)
+
+# Notification configuration
+notifications:
+  # Notification channels
+  channels:
+    slack:
+      enabled: true
+      webhook_url_env: SLACK_WEBHOOK_URL
+      channels:
+        p0: "#incidents"
+        p1: "#engineering"
+        p2: "#engineering"
+        p3: "#bot-alerts"
+
+    email:
+      enabled: false
+      smtp_server: smtp.example.com
+      from_email: workflows@example.com
+      to_emails:
+        p0: [oncall@example.com]
+        p1: [engineering@example.com]
+
+    pagerduty:
+      enabled: false
+      api_key_env: PAGERDUTY_API_KEY
+      service_key: YOUR_SERVICE_KEY  # pragma: allowlist secret
+      trigger_on: [P0, P1]
+
+  # Notification templates
+  templates:
+    transient:
+      title: "🔄 Workflow Retry: {{ workflow_name }}"
+      message: |
+        Transient failure detected in {{ workflow_name }}.
+        Attempting automatic retry {{ retry_count }}/{{ max_retries }}.
+
+        **Repository:** {{ repository }}
+        **Run ID:** {{ run_id }}
+        **Branch:** {{ branch }}
+        **Confidence:** {{ confidence }}%
+
+        [View Run]({{ run_url }})
+
+    dependency:
+      title: "⏳ Workflow Waiting: {{ workflow_name }}"
+      message: |
+        Dependency failure detected in {{ workflow_name }}.
+        Waiting for upstream dependencies before retry.
+
+        **Repository:** {{ repository }}
+        **Run ID:** {{ run_id }}
+        **Wait Time:** {{ wait_time }}s
+
+        [View Run]({{ run_url }})
+
+    permanent:
+      title: "🚨 Workflow Failure: {{ workflow_name }} ({{ priority }})"
+      message: |
+        Permanent failure detected in {{ workflow_name }}.
+        Manual intervention required.
+
+        **Repository:** {{ repository }}
+        **Run ID:** {{ run_id }}
+        **Branch:** {{ branch }}
+        **Priority:** {{ priority }}
+        **Confidence:** {{ confidence }}%
+
+        **Reason:** {{ reason }}
+
+        **Failed Jobs:**
+        {{ failed_jobs }}
+
+        [View Run]({{ run_url }})
+        [View Issue]({{ issue_url }})
+
+    healed:
+      title: "✅ Workflow Recovered: {{ workflow_name }}"
+      message: |
+        Workflow {{ workflow_name }} recovered after {{ retry_count }} retries.
+
+        **Repository:** {{ repository }}
+        **Run ID:** {{ run_id }}
+        **Strategy:** {{ strategy }}
+
+        [View Run]({{ run_url }})
+
+# Issue tracking configuration
+issue_tracking:
+  # Issue labels to apply
+  labels:
+    all: [workflow-failure, auto-generated]
+    transient: [transient-failure]
+    dependency: [dependency-failure]
+    permanent: [permanent-failure]
+
+  # Issue assignment
+  auto_assign: true
+  assign_to:
+    p0: [oncall-engineer]
+    p1: [team-lead]
+    p2: [] # No auto-assign
+    p3: [] # No auto-assign
+
+  # Issue templates
+  title_template: "🔧 Workflow Failure: {{ workflow_name }} ({{ failure_type }})"
+
+  # Auto-close issues when workflow succeeds
+  auto_close_on_success: true
+
+# Advanced options
+advanced:
+  # Minimum confidence threshold for classification
+  # If confidence is below this, mark as uncertain and alert
+  min_classification_confidence: 0.6
+
+  # Enable machine learning for failure pattern learning
+  ml_enabled: false
+  ml_model_path: .github/models/failure_classifier.pkl
+
+  # Audit logging
+  audit_log:
+    enabled: true
+    path: .github/audit/self-healing/
+    retention_days: 90
+
+  # Cooldown period between retries (seconds)
+  # Prevents rapid-fire retries that could cause issues
+  cooldown_period: 30
+
+  # Max total retry time (seconds)
+  # Give up after this much total time spent retrying
+  max_total_retry_time: 3600 # 1 hour
+
+  # Jitter for retry delays
+  # Adds randomness to prevent thundering herd
+  retry_jitter: true
+  jitter_factor: 0.1 # ±10% randomness
+
+# Workflow-specific overrides
+workflow_overrides:
+  # Critical production workflows
+  production-deploy:
+    max_retry_attempts: 5
+    initial_retry_delay: 30
+    create_issues_for_failures: true
+    send_notifications: true
+    notify_priority: P0
+
+  # Less critical workflows
+  nightly-build:
+    max_retry_attempts: 2
+    initial_retry_delay: 120
+    create_issues_for_failures: false
+    send_notifications: false
+
+  # Security scans - never auto-retry
+  security-scan:
+    enable_auto_retry: false
+    create_issues_for_failures: true
+    send_notifications: true
+    notify_priority: P1

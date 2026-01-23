@@ -1,0 +1,138 @@
+# Auto-Merge Configuration
+#
+# This configuration file defines the safety requirements and settings
+# for automatic pull request merging.
+#
+# All criteria must be met for a PR to be eligible for auto-merge:
+# - All CI/CD tests must pass
+# - Required number of approving reviews
+# - No merge conflicts
+# - Branch must be up-to-date with base
+# - Code coverage must meet minimum threshold
+
+auto_merge:
+  # Enable/disable auto-merge globally
+  enabled: true
+
+  # Merge requirements
+  requirements:
+    # Minimum number of approving reviews (excludes change requests)
+    min_reviews: 1
+
+    # Minimum code coverage percentage (0-100)
+    # Set to 0 to disable coverage checks
+    coverage_threshold: 80
+
+    # Required CI/CD checks that must pass
+    # List the exact names of checks as they appear in GitHub
+    required_checks:
+      - test-suite
+      - lint
+      - security-scan
+      - integration-tests
+
+  # Git merge strategy
+  # Options: merge, squash, rebase
+  merge_strategy: squash
+
+  # Automatically delete branch after successful merge
+  delete_branch: true
+
+  # Notification settings
+  notify:
+    # Post comment when auto-merge succeeds
+    on_merge: true
+
+    # Post comment when auto-merge fails or PR is ineligible
+    on_failure: true
+
+    # Slack channels for notifications (requires SLACK_WEBHOOK_URL secret)
+    channels:
+      - deployments
+      - engineering
+
+  # Labels to add/remove
+  labels:
+    # Add these labels when auto-merge is triggered
+    add_on_merge:
+      - auto-merged
+      - deployed
+
+    # Remove these labels after merge
+    remove_on_merge:
+      - needs-review
+      - in-progress
+
+  # Auto-merge bypass rules
+  bypass:
+    # Skip auto-merge for PRs with these labels
+    skip_labels:
+      - skip-auto-merge
+      - manual-review-required
+      - wip
+
+    # Skip auto-merge for PRs from these authors
+    # Useful for bot accounts that need manual verification
+    skip_authors:
+      - dependabot[bot]
+
+    # Skip auto-merge for PRs affecting these file patterns
+    skip_paths:
+      - .github/workflows/**
+      - automation/deployment/**
+      - docs/security/**
+
+  # Advanced options
+  advanced:
+    # Wait time (seconds) after all checks pass before merging
+    # Gives reviewers a final chance to block merge
+    merge_delay: 60
+
+    # Automatically update branch before checking eligibility
+    auto_update_branch: true
+
+    # Require linear history (only allow squash/rebase, not merge commits)
+    require_linear_history: true
+
+    # Maximum PR age (days) before auto-merge is disabled
+    # Set to 0 to disable this check
+    max_pr_age_days: 30
+
+    # Maximum number of commits in PR
+    # Large PRs should be reviewed manually
+    # Set to 0 to disable this check
+    max_commits: 20
+
+    # Maximum number of files changed
+    # Large changes should be reviewed manually
+    # Set to 0 to disable this check
+    max_files_changed: 15
+
+# Security settings
+security:
+  # Audit logging
+  audit_log:
+    enabled: true
+    # Log file path (relative to repository root)
+    path: automation/logs/auto-merge-audit.json
+
+  # Token scope validation
+  # Verify GitHub token has minimum required permissions
+  validate_token_scopes: true
+  required_scopes:
+    - repo
+    - workflow
+# Example: Stricter settings for production branches
+# Uncomment to use different settings per branch
+# branch_overrides:
+#   main:
+#     requirements:
+#       min_reviews: 2
+#       coverage_threshold: 90
+#     advanced:
+#       merge_delay: 300  # 5 minutes
+#
+#   develop:
+#     requirements:
+#       min_reviews: 1
+#       coverage_threshold: 75
