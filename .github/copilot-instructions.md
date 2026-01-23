@@ -1,6 +1,7 @@
-______________________________________________________________________
-
-## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
+---
+description: AI rules derived by SpecStory from the project AI interaction history
+globs: *
+---
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
@@ -452,6 +453,30 @@ ______________________________________________________________________
         - name: Notify manual review
     ```
 
+- **GitHub Actions Output Formatting Errors with Heredocs**
+
+  - **Issue:** The "Extract Tasks from PR Body" action fails because of an invalid format error during multiline variable output using heredocs. This occurs when the variable is empty or contains special characters.
+  - **Solution:** Ensure proper formatting is used for multiline outputs, and avoid bare "0" values that can conflict with the heredoc format. Use unique delimiters that do not conflict with the content, and ensure the variable is properly formatted.
+  - **Example:**
+    Instead of:
+    ```yaml
+    echo "unchecked_tasks<<EOF" >> $GITHUB_OUTPUT
+    echo "$UNCHECKED_TASKS" >> $GITHUB_OUTPUT
+    echo "EOF" >> $GITHUB_OUTPUT
+    ```
+    Use a different delimiter and ensure proper formatting, such as:
+    ```yaml
+    echo "tasks_summary<<TASK_SUMMARY_EOF"
+    cat comment_tasks.md
+    echo "TASK_SUMMARY_EOF"
+    ```
+    or
+    ```yaml
+    echo "unchecked_tasks<<TASK_LIST_EOF"
+    printf '%s\n' "$UNCHECKED_TASKS"
+    echo "TASK_LIST_EOF"
+    ```
+
 ## FINAL DOs AND DON'Ts
 
 - Since the GitHub CLI token (`GITHUB_TOKEN`) lacks the \`project\` scope needed
@@ -713,25 +738,4 @@ ______________________________________________________________________
        ```
     1. **Selective Type Checking**: If type checking is desired, use
        `"python.analysis.typeCheckingMode": "basic"` in conjunction with
-       `"python.analysis.diagnosticMode": "openFilesOnly"` for a balanced
-       approach.
-  - **Resolution Summary**:
-    1. **Critical Syntax Errors**: All E9, F63, F7, F82 errors must be fixed.
-    1. **Indentation errors**: Ensure all indentation errors are resolved,
-       especially in `evaluate_repository.py`.
-    1. **Missing imports**: Check and add missing imports, e.g., `Optional` to
-       `generate_pilot_workflows.py`, `get_secret` to `validate-tokens.py`.
-    1. **Line length violations**: Use Black formatter to reformat code and
-       resolve line length issues.
-    1. **Unused imports and variables**: Remove unused imports and variables.
-    1. **Pylance Optimization**: Apply optimized Pylance settings to reduce
-       resource consumption.
-  - **Comprehensive Code Cleanup and Formatting**:
-    1. **Apply Black Formatter**: Use Black with a line length of 79 characters
-       to automatically format Python code and fix line length violations.
-    1. **Address F-string Issues**: Remove the `f` prefix from f-strings that do
-       not contain placeholders.
-    1. **Remove Unused Imports and Variables**: Eliminate unnecessary imports
-       and variables to improve code cleanliness.
-
-- \*\*
+       `"python

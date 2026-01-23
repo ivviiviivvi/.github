@@ -381,13 +381,13 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const runs = await github.rest.actions.listWorkflowRunsForRepo({{
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100
-            }});
+            });
 
-            const metrics = {{
+            const metrics = {
               total_runs: runs.data.total_count,
               success_count: runs.data.workflow_runs.filter(
                 r => r.conclusion === 'success'
@@ -395,7 +395,7 @@ jobs:
               failure_count: runs.data.workflow_runs.filter(
                 r => r.conclusion === 'failure'
               ).length
-            }};
+            };
 
             console.log(JSON.stringify(metrics, null, 2));
 
@@ -403,7 +403,7 @@ jobs:
         if: failure()
         uses: ./.github/actions/slack-notify
         with:
-          webhook-url: ${{{{ secrets.SLACK_WEBHOOK_ALERTS }}}}
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_ALERTS }}
           priority: P3
           title: "Metrics Collection Failed"
           message: The metrics collection workflow failed.

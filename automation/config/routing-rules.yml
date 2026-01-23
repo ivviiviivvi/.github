@@ -84,13 +84,13 @@ routing:
 teams:
   security:
     expertise_weights:
-      security_issues: 0.50
+      issues_handled: 0.50
       commits: 0.30
-      reviews: 0.20
+      pr_reviews: 0.20
     exempt_from_load_balance: true
 
   docs:
     expertise_weights:
       documentation: 0.60
       commits: 0.25
-      reviews: 0.15
+      pr_reviews: 0.15

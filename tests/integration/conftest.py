@@ -44,13 +44,13 @@ class MockGitHubAPIClient:
             "collect-metrics.yml",
         ]
 
-        for workflow in workflows:
+        for workflow_index, workflow in enumerate(workflows):
             runs = []
             for i in range(25):
                 run_time = now - timedelta(days=i)
                 runs.append(
                     {
-                        "id": 1000 + i,
+                        "id": workflow_index * 1000 + i,
                         "name": workflow.replace(".yml", "").replace("-", " ").title(),
                         "status": "completed",
                         "conclusion": "success",
@@ -111,7 +111,8 @@ class MockGitHubAPIClient:
         if state:
             issue["state"] = state
         if labels is not None:
-            issue["labels"] = [{"name": lbl, "color": "ededed"} for lbl in labels]
+            issue["labels"] = [{"name": lbl, "color": "ededed"}
+                               for lbl in labels]
 
         issue["updated_at"] = datetime.now(timezone.utc).isoformat()
         return issue
@@ -191,7 +192,8 @@ class MockGitHubAPIClient:
                     new_labels.append("documentation")
 
             # Update issue labels
-            issue["labels"] = [{"name": lbl, "color": "ededed"} for lbl in new_labels]
+            issue["labels"] = [{"name": lbl, "color": "ededed"}
+                               for lbl in new_labels]
 
     def _process_auto_assign(self) -> None:
         """Simulate auto-assignment workflow."""
@@ -254,7 +256,8 @@ class MockGitHubAPIClient:
         """Remove a label from a mock issue."""
         if issue_number in self._issues:
             issue = self._issues[issue_number]
-            issue["labels"] = [lbl for lbl in issue["labels"] if lbl["name"] != label]
+            issue["labels"] = [
+                lbl for lbl in issue["labels"] if lbl["name"] != label]
 
 
 @pytest.fixture
