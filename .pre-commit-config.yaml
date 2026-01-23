@@ -90,11 +90,14 @@ repos:
   - id: isort
     args: [--profile=black]
 
-- repo: https://github.com/pycqa/flake8
-  rev: 7.3.0
+  # Note: flake8 removed - using ruff from pyproject.toml instead (faster, more comprehensive)
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.9.1
   hooks:
-  - id: flake8
-    args: [--max-line-length=88, --extend-ignore=E203]
+  - id: ruff
+    args: [--fix]
+  - id: ruff-format
 
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v1.19.1

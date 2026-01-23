@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Generate Customized Workflow Files for Pilot Repository
+"""Generate Customized Workflow Files for Pilot Repository
 
 Takes pilot-repo-config.yml and generates customized workflow files.
 
@@ -20,7 +19,7 @@ class WorkflowGenerator:
 
     def __init__(self, config_path: str):
         """Initialize generator with configuration file."""
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             self.config = yaml.safe_load(f)
 
         self.repo = self.config["repository"]
@@ -41,10 +40,7 @@ class WorkflowGenerator:
 
             # Convert to workflow conditions
             title_conditions = " || ".join(
-                [
-                    f"contains(github.event.issue.title, '{term}')"
-                    for term in conditions[0].get("titleContains", [])
-                ]
+                [f"contains(github.event.issue.title, '{term}')" for term in conditions[0].get("titleContains", [])]
             )
 
             body_conditions = " || ".join(
@@ -381,14 +377,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const runs = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: context.repo.owner,
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100
             });
 
-            const metrics = {
-              total_runs: runs.data.total_count,
+            const metrics = {total_runs: runs.data.total_count,
               success_count: runs.data.workflow_runs.filter(
                 r => r.conclusion === 'success'
               ).length,

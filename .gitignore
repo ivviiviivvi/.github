@@ -25,6 +25,11 @@ __pycache__/
 htmlcov/
 *.egg
 
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+
 # Jekyll
 _site/
 .jekyll-cache/
