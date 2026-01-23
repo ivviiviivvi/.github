@@ -3,7 +3,7 @@
 > **Complete reference to all documentation in the ivviiviivvi/.github
 > repository**
 
-**Last Updated:** 2026-01-14
+**Last Updated:** 2026-01-21
 
 ---
 
@@ -210,6 +210,13 @@ New to this repository? Start here:
 - [ISSUE_TAXONOMY.md](ISSUE_TAXONOMY.md) - Issue classification
 - [PROJECTS_GUIDE.md](PROJECTS_GUIDE.md) - GitHub Projects
 - [DISCUSSION_GUIDE.md](DISCUSSION_GUIDE.md) - Discussions
+
+### Repository Standards ⭐ NEW
+
+- [standards/ABOUT_SECTION_STANDARDS.md](standards/ABOUT_SECTION_STANDARDS.md) - ⭐ Repository About section requirements
+- [standards/README_TEMPLATE_STANDARDS.md](standards/README_TEMPLATE_STANDARDS.md) - ⭐ Problem → Approach → Outcome narrative
+- [templates/README-minimal.md](templates/README-minimal.md) - Minimal README template
+- [REPOSITORY_SETUP_CHECKLIST.md](REPOSITORY_SETUP_CHECKLIST.md) - Repository setup checklist (updated)
 
 ### Team
 

@@ -8,9 +8,12 @@ with best practices.
 ### Basic Configuration
 
 - [ ] Repository created with descriptive name
-- [ ] Repository description added
-- [ ] Topics/tags added for discoverability
-- [ ] README.md created with project overview
+- [ ] Repository description added (50-160 characters, clear and keyword-rich)
+- [ ] Topics/tags added for discoverability (5-10 relevant topics)
+- [ ] Website URL set (documentation, demo, or homepage)
+- [ ] Social preview image configured (for public repos)
+- [ ] Ontological title defined (see [About Section Standards](standards/ABOUT_SECTION_STANDARDS.md))
+- [ ] README.md created with problem → approach → outcome narrative (see [README Standards](standards/README_TEMPLATE_STANDARDS.md))
 - [ ] LICENSE file added (MIT or organization standard)
 - [ ] .gitignore configured for language/framework
 
