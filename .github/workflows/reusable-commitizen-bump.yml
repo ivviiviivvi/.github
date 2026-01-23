@@ -1,0 +1,148 @@
+# Reusable workflow for Commitizen-based version bumping
+# Analyzes conventional commits to determine version bump type
+name: "Reusable: Commitizen Bump"
+
+on:
+  workflow_call:
+    inputs:
+      bump_type:
+        required: false
+        type: string
+        default: auto
+        description: "Bump type: auto, patch, minor, major"
+      dry_run:
+        required: false
+        type: boolean
+        default: false
+        description: Dry run mode - don't create commits or tags
+      changelog:
+        required: false
+        type: boolean
+        default: true
+        description: Update changelog on bump
+    secrets:
+      github-token:
+        required: true
+    outputs:
+      version:
+        description: New version number
+        value: ${{ jobs.bump.outputs.version }}
+      tag:
+        description: New tag name
+        value: ${{ jobs.bump.outputs.tag }}
+      bumped:
+        description: Whether a bump was performed
+        value: ${{ jobs.bump.outputs.bumped }}
+
+permissions:
+  contents: read
+
+jobs:
+  bump:
+    name: Commitizen Version Bump
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      tag: ${{ steps.bump.outputs.tag }}
+      bumped: ${{ steps.bump.outputs.bumped }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.github-token }}
+
+      - name: Setup Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.11"
+
+      - name: Install Commitizen
+        run: pip install commitizen
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check for Bumpable Commits
+        id: check
+        run: |
+          # Check if there are commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "No previous tags found, will create initial version"
+            echo "has_commits=true" >> "$GITHUB_OUTPUT"
+          else
+            COMMIT_COUNT=$(git rev-list "${LAST_TAG}..HEAD" --count)
+            if [ "$COMMIT_COUNT" -gt 0 ]; then
+              echo "Found $COMMIT_COUNT commits since $LAST_TAG"
+              echo "has_commits=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "No new commits since $LAST_TAG"
+              echo "has_commits=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Determine Bump Arguments
+        id: args
+        if: steps.check.outputs.has_commits == 'true'
+        run: |
+          ARGS=""
+
+          # Bump type
+          if [ "${{ inputs.bump_type }}" != "auto" ]; then
+            ARGS="$ARGS --increment ${{ inputs.bump_type }}"
+          fi
+
+          # Dry run
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          # Changelog
+          if [ "${{ inputs.changelog }}" == "true" ]; then
+            ARGS="$ARGS --changelog"
+          else
+            ARGS="$ARGS --no-changelog"
+          fi
+
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Run Commitizen Bump
+        id: bump
+        if: steps.check.outputs.has_commits == 'true'
+        run: |
+          set +e
+          OUTPUT=$(cz bump ${{ steps.args.outputs.args }} 2>&1)
+          EXIT_CODE=$?
+          set -e
+
+          echo "$OUTPUT"
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            # Extract version from output
+            VERSION=$(echo "$OUTPUT" | grep -oP 'bump: version .+ → \K[\d.]+' || echo "")
+            if [ -z "$VERSION" ]; then
+              VERSION=$(cz version --project 2>/dev/null || echo "unknown")
+            fi
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+            echo "bumped=true" >> "$GITHUB_OUTPUT"
+          elif [ $EXIT_CODE -eq 21 ]; then
+            # Exit code 21 = no commits to bump
+            echo "No commits found that would trigger a bump"
+            echo "bumped=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Commitizen bump failed with exit code $EXIT_CODE"
+            exit $EXIT_CODE
+          fi
+
+      - name: Push Changes
+        if: steps.bump.outputs.bumped == 'true' && inputs.dry_run == false
+        run: |
+          git push origin HEAD
+          git push origin --tags

@@ -1,0 +1,67 @@
+[project]
+name = "ivviiviivvi-github"
+version = "1.0.0"
+description = "Organization-wide GitHub configuration and community health files"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.0"
+tag_format = "v$version"
+version_scheme = "semver"
+version_files = [
+    "pyproject.toml:version",
+    "VERSION",
+    "package.json:version",
+]
+update_changelog_on_bump = true
+changelog_file = "CHANGELOG.md"
+changelog_incremental = true
+annotated_tag = true
+bump_message = "chore(release): bump version $current_version -> $new_version"
+
+# Conventional commit types with descriptions
+[tool.commitizen.customize]
+message_template = "{{change_type}}{% if scope %}({{scope}}){% endif %}: {{message}}{% if body %}\n\n{{body}}{% endif %}{% if footer %}\n\n{{footer}}{% endif %}"
+example = "feat(workflows): add auto-labeling for new PRs"
+schema = "<type>(<scope>): <subject>\n\n<body>\n\n<footer>"
+schema_pattern = "^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\\(.+\\))?!?: .+"
+
+[tool.commitizen.customize.questions]
+change_type = { type = "list", name = "change_type", message = "Select the type of change:", choices = [
+    { value = "feat", name = "feat: A new feature" },
+    { value = "fix", name = "fix: A bug fix" },
+    { value = "docs", name = "docs: Documentation changes" },
+    { value = "style", name = "style: Code style changes" },
+    { value = "refactor", name = "refactor: Code refactoring" },
+    { value = "perf", name = "perf: Performance improvements" },
+    { value = "test", name = "test: Test additions/changes" },
+    { value = "build", name = "build: Build system changes" },
+    { value = "ci", name = "ci: CI configuration changes" },
+    { value = "chore", name = "chore: Other changes" },
+    { value = "revert", name = "revert: Revert a commit" },
+]}
+scope = { type = "input", name = "scope", message = "Scope (optional, e.g., workflows, docs):" }
+message = { type = "input", name = "message", message = "Short description:" }
+body = { type = "input", name = "body", message = "Longer description (optional):" }
+footer = { type = "input", name = "footer", message = "Footer (e.g., BREAKING CHANGE, Closes #123):" }
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "D", "UP", "B", "C4", "SIM"]
+ignore = ["D100", "D104"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "node_modules"]
+skips = ["B101"]  # Allow assert statements in tests
