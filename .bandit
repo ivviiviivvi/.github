@@ -1,6 +1,6 @@
 ---
 exclude_dirs:
-  - /tests/
-  - /test/
-  - .venv/
-  - venv/
+  - tests
+  - test
+  - .venv
+  - venv

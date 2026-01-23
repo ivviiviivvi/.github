@@ -107,7 +107,8 @@ urgent.
 
 ### Multiple orchestrations per day
 
-Check `.github/task_state.json` for stale timestamps in `tasks` or an old `last_orchestration`. Reset if corrupted:
+Check `.github/task_state.json` for stale timestamps in `tasks` or an old
+`last_orchestration`. Reset if corrupted:
 
 ```bash
 echo '{"tasks":{},"active_prs":[],"last_orchestration":null,"last_cleanup":null}' > .github/task_state.json
@@ -126,7 +127,7 @@ echo '{"tasks":{},"active_prs":[],"last_orchestration":null,"last_cleanup":null}
 Actions tab\
 💬 **Questions:** Create an issue
 
----
+______________________________________________________________________
 
 **Remember:** The system runs daily at 1 AM UTC. Check your repos each morning
 for ONE consolidated PR to review!

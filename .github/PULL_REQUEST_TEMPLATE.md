@@ -9,13 +9,20 @@
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
 - [ ] ✨ New feature (non-breaking change which adds functionality)
 - [ ] 💥 Breaking change (fix or feature that would cause existing functionality
-      to not work as expected)
+  to not work as expected)
 - [ ] 📚 Documentation update
 - [ ] ♻️ Code refactor (no functional changes)
 - [ ] ⚡ Performance improvement
 - [ ] ✅ Test update
 - [ ] 🔧 Configuration change
 - [ ] 🎨 Style/UI change
+
+## Ticket / Issue
+
+<!-- Provide the primary tracking ticket or issue. If none, add N/A with a brief reason. -->
+
+- Ticket:
+- Related Issue(s):
 
 ## Related Issues
 
@@ -25,6 +32,14 @@
 
 - Closes #
 - Related to #
+
+## Compliance Context
+
+<!-- Summarize relevant compliance context for reviewers -->
+
+- Codebase context:
+- Security considerations:
+- Error handling / edge cases:
 
 ## Changes Made
 
@@ -112,7 +127,7 @@
 
 <!-- Delete this section if not applicable -->
 
----
+______________________________________________________________________
 
 ### Conventional Commit Reminder
 
@@ -142,14 +157,14 @@ Includes token refresh logic and secure session management.
 Closes #123
 ```
 
----
+______________________________________________________________________
 
 ### Contributing Guidelines
 
 Please review our [CONTRIBUTING.md](../CONTRIBUTING.md) for code standards,
 branch naming conventions, and the full contribution workflow.
 
----
+______________________________________________________________________
 
 **For Reviewers:**
 

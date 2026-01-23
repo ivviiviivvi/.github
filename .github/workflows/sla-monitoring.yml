@@ -3,7 +3,7 @@ name: SLA Monitoring
 on:
   schedule:
     # Run every 30 minutes
-    - cron: "*/30 * * * *"
+  - cron: '*/30 * * * *'
 
   workflow_dispatch:
     inputs:
@@ -17,10 +17,10 @@ on:
         required: false
         type: choice
         options:
-          - all
-          - response_time
-          - resolution_time
-          - success_rate
+        - all
+        - response_time
+        - resolution_time
+        - success_rate
         default: all
 
 permissions:
@@ -41,101 +41,101 @@ jobs:
       metrics: ${{ steps.check.outputs.metrics }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install pyyaml requests pydantic
+    - name: Install dependencies
+      run: |
+        pip install pyyaml requests pydantic
 
-      - name: Load SLA thresholds
-        id: config
-        run: |
-          # Parse SLA config
-          python3 << 'EOF'
-          import yaml
-          import json
+    - name: Load SLA thresholds
+      id: config
+      run: |
+        # Parse SLA config
+        python3 << 'EOF'
+        import yaml
+        import json
 
-          with open('${{ env.SLA_CONFIG_PATH }}') as f:
-              config = yaml.safe_load(f)
+        with open('${{ env.SLA_CONFIG_PATH }}') as f:
+            config = yaml.safe_load(f)
 
-          # Extract thresholds
-          thresholds = {
-              'response_time': config['sla']['response_time'],
-              'resolution_time': config['sla']['resolution_time'],
-              'success_rate': config['sla']['success_rate']
-          }
+        # Extract thresholds
+        thresholds = {
+            'response_time': config['sla']['response_time'],
+            'resolution_time': config['sla']['resolution_time'],
+            'success_rate': config['sla']['success_rate']
+        }
 
-          import os
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f"thresholds={json.dumps(thresholds)}\n")
-          EOF
+        import os
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"thresholds={json.dumps(thresholds)}\n")
+        EOF
 
-      - name: Check SLA metrics
-        id: check
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python3 << 'EOF'
-          import os
-          import json
-          from datetime import datetime, timedelta
+    - name: Check SLA metrics
+      id: check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python3 << 'EOF'
+        import os
+        import json
+        from datetime import datetime, timedelta
 
-          # Initialize metrics
-          metrics = {
-              'response_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
-              'resolution_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
-              'success_rate': {'current': 0, 'target': 95},
-              'checked_at': datetime.now().isoformat()
-          }
+        # Initialize metrics
+        metrics = {
+            'response_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
+            'resolution_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
+            'success_rate': {'current': 0, 'target': 95},
+            'checked_at': datetime.now().isoformat()
+        }
 
-          breaches = []
-          status = 'compliant'
+        breaches = []
+        status = 'compliant'
 
-          # Check response time SLA
-          # (In production, this would query actual issue/PR data)
-          response_time_avg = 2  # hours (simulated)
-          if response_time_avg > 4:  # P1 threshold
-              breaches.append({
-                  'metric': 'response_time',
-                  'current': response_time_avg,
-                  'threshold': 4,
-                  'severity': 'warning'
-              })
-              status = 'at_risk'
+        # Check response time SLA
+        # (In production, this would query actual issue/PR data)
+        response_time_avg = 2  # hours (simulated)
+        if response_time_avg > 4:  # P1 threshold
+            breaches.append({
+                'metric': 'response_time',
+                'current': response_time_avg,
+                'threshold': 4,
+                'severity': 'warning'
+            })
+            status = 'at_risk'
 
-          # Check success rate
-          success_rate = 96  # percentage (simulated)
-          metrics['success_rate']['current'] = success_rate
-          if success_rate < 95:
-              breaches.append({
-                  'metric': 'success_rate',
-                  'current': success_rate,
-                  'threshold': 95,
-                  'severity': 'critical' if success_rate < 80 else 'warning'
-              })
-              status = 'breached' if success_rate < 80 else 'at_risk'
+        # Check success rate
+        success_rate = 96  # percentage (simulated)
+        metrics['success_rate']['current'] = success_rate
+        if success_rate < 95:
+            breaches.append({
+                'metric': 'success_rate',
+                'current': success_rate,
+                'threshold': 95,
+                'severity': 'critical' if success_rate < 80 else 'warning'
+            })
+            status = 'breached' if success_rate < 80 else 'at_risk'
 
-          # Output results
-          import os
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f"status={status}\n")
-              f.write(f"breaches={json.dumps(breaches)}\n")
-              f.write(f"metrics={json.dumps(metrics)}\n")
+        # Output results
+        import os
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"status={status}\n")
+            f.write(f"breaches={json.dumps(breaches)}\n")
+            f.write(f"metrics={json.dumps(metrics)}\n")
 
-          # Log summary
-          print(f"SLA Status: {status}")
-          print(f"Breaches: {len(breaches)}")
-          EOF
+        # Log summary
+        print(f"SLA Status: {status}")
+        print(f"Breaches: {len(breaches)}")
+        EOF
 
-      - name: Track SLA metric
-        run: |
-          echo "::notice title=SLA Check::Status: ${{ steps.check.outputs.status }}"
+    - name: Track SLA metric
+      run: |
+        echo "::notice title=SLA Check::Status: ${{ steps.check.outputs.status }}"
 
   alert-on-breach:
     name: Alert on SLA Breach
@@ -147,83 +147,105 @@ jobs:
       PAGERDUTY_INTEGRATION_KEY: ${{ secrets.PAGERDUTY_INTEGRATION_KEY }}
 
     steps:
-      - name: Parse breach details
-        id: parse
-        run: |
-          BREACHES='${{ needs.check-sla-compliance.outputs.breaches }}'
-          CRITICAL_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "critical")] | length')
-          WARNING_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "warning")] | length')
+    - name: Parse breach details
+      id: parse
+      run: |
+        BREACHES='${{ needs.check-sla-compliance.outputs.breaches }}'
+        CRITICAL_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "critical")] | length')
+        WARNING_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "warning")] | length')
 
-          echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
-          echo "warning_count=$WARNING_COUNT" >> $GITHUB_OUTPUT
+        echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+        echo "warning_count=$WARNING_COUNT" >> $GITHUB_OUTPUT
 
-      - name: Send Slack alert
-        if: env.SLACK_WEBHOOK_URL != ''
-        run: |
-          STATUS="${{ needs.check-sla-compliance.outputs.compliance_status }}"
-          EMOJI="⚠️"
-          if [[ "$STATUS" == "breached" ]]; then
-            EMOJI="🚨"
-          fi
+    - name: Validate notification secrets
+      id: validate-notify
+      shell: bash
+      run: |
+        slack_valid=false
+        pagerduty_valid=false
 
-          curl -X POST -H 'Content-type: application/json' \
-            --data "{
-              \"text\": \"$EMOJI SLA Alert: $STATUS\",
-              \"blocks\": [
-                {
-                  \"type\": \"section\",
-                  \"text\": {
-                    \"type\": \"mrkdwn\",
-                    \"text\": \"*SLA Monitoring Alert*\n\n*Status:* $STATUS\n*Critical Breaches:* ${{ steps.parse.outputs.critical_count }}\n*Warnings:* ${{ steps.parse.outputs.warning_count }}\"
-                  }
+        if [[ -n "${SLACK_WEBHOOK_URL}" && "${SLACK_WEBHOOK_URL}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+
+        if [[ -n "${PAGERDUTY_INTEGRATION_KEY}" && "${PAGERDUTY_INTEGRATION_KEY}" =~ ^[A-Za-z0-9]{32}$ ]]; then
+          pagerduty_valid=true
+        fi
+
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+        echo "pagerduty_valid=$pagerduty_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Send Slack alert
+      if: steps.validate-notify.outputs.slack_valid == 'true'
+      run: |
+        STATUS="${{ needs.check-sla-compliance.outputs.compliance_status }}"
+        EMOJI="⚠️"
+        if [[ "$STATUS" == "breached" ]]; then
+          EMOJI="🚨"
+        fi
+
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"$EMOJI SLA Alert: $STATUS\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*SLA Monitoring Alert*\n\n*Status:* $STATUS\n*Critical Breaches:* ${{ steps.parse.outputs.critical_count }}\n*Warnings:* ${{ steps.parse.outputs.warning_count }}\"
                 }
-              ]
-            }" \
-            $SLACK_WEBHOOK_URL || true
-
-      - name: Notify via PagerDuty
-        if: steps.parse.outputs.critical_count > 0 && env.PAGERDUTY_INTEGRATION_KEY != ''
-        run: |
-          curl -X POST https://events.pagerduty.com/v2/enqueue \
-            -H 'Content-Type: application/json' \
-            -d "{
-              \"routing_key\": \"$PAGERDUTY_INTEGRATION_KEY\",
-              \"event_action\": \"trigger\",
-              \"payload\": {
-                \"summary\": \"SLA Breach Detected\",
-                \"severity\": \"critical\",
-                \"source\": \"${{ github.repository }}\"
               }
-            }" || true
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::SLA alert notification failed"
+        fi
 
-      - name: Create issue for breach
-        if: needs.check-sla-compliance.outputs.compliance_status == 'breached'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Check if there's already an open SLA breach issue
-          EXISTING=$(gh issue list --label "sla-breach" --state open --json number --jq '.[0].number' || echo "")
+    - name: Notify via PagerDuty
+      if: steps.parse.outputs.critical_count > 0 && steps.validate-notify.outputs.pagerduty_valid == 'true'
+      run: |
+        if ! curl --fail --silent --show-error -X POST https://events.pagerduty.com/v2/enqueue \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"routing_key\": \"$PAGERDUTY_INTEGRATION_KEY\",
+            \"event_action\": \"trigger\",
+            \"payload\": {
+              \"summary\": \"SLA Breach Detected\",
+              \"severity\": \"critical\",
+              \"source\": \"${{ github.repository }}\"
+            }
+          }"; then
+          echo "::warning title=PagerDuty notification failed::SLA PagerDuty trigger failed"
+        fi
 
-          if [[ -z "$EXISTING" ]]; then
-            gh issue create \
-              --title "🚨 SLA Breach Detected" \
-              --body "## SLA Compliance Alert
+    - name: Create issue for breach
+      if: needs.check-sla-compliance.outputs.compliance_status == 'breached'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Check if there's already an open SLA breach issue
+        EXISTING=$(gh issue list --label "sla-breach" --state open --json number --jq '.[0].number' || echo "")
 
-          **Status:** Breached
-          **Detected At:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        if [[ -z "$EXISTING" ]]; then
+          gh issue create \
+            --title "🚨 SLA Breach Detected" \
+            --body "## SLA Compliance Alert
 
-          ### Breach Details
-          \`\`\`json
-          ${{ needs.check-sla-compliance.outputs.breaches }}
-          \`\`\`
+        **Status:** Breached
+        **Detected At:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
 
-          ### Action Required
-          Please investigate and address the SLA violations immediately.
+        ### Breach Details
+        \`\`\`json
+        ${{ needs.check-sla-compliance.outputs.breaches }}
+        \`\`\`
 
-          ---
-          *This issue was automatically created by SLA monitoring.*" \
-              --label "sla-breach,urgent,automation"
-          fi
+        ### Action Required
+        Please investigate and address the SLA violations immediately.
+
+        ---
+        *This issue was automatically created by SLA monitoring.*" \
+            --label "sla-breach,urgent,automation"
+        fi
 
   generate-report:
     name: Generate SLA Report
@@ -232,43 +254,43 @@ jobs:
     if: github.event.inputs.force_report == 'true' || github.event.schedule != ''
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Generate report
-        run: |
-          METRICS='${{ needs.check-sla-compliance.outputs.metrics }}'
-          STATUS='${{ needs.check-sla-compliance.outputs.compliance_status }}'
+    - name: Generate report
+      run: |
+        METRICS='${{ needs.check-sla-compliance.outputs.metrics }}'
+        STATUS='${{ needs.check-sla-compliance.outputs.compliance_status }}'
 
-          cat << EOF > sla-report.md
-          # SLA Compliance Report
+        cat << EOF > sla-report.md
+        # SLA Compliance Report
 
-          **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          **Status:** $STATUS
+        **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Status:** $STATUS
 
-          ## Metrics Summary
+        ## Metrics Summary
 
-          \`\`\`json
-          $METRICS
-          \`\`\`
+        \`\`\`json
+        $METRICS
+        \`\`\`
 
-          ## Compliance Status
+        ## Compliance Status
 
-          | Metric | Status |
-          |--------|--------|
-          | Response Time | ✅ Compliant |
-          | Resolution Time | ✅ Compliant |
-          | Success Rate | $([ "$STATUS" == "compliant" ] && echo "✅ Compliant" || echo "⚠️ At Risk") |
+        | Metric | Status |
+        |--------|--------|
+        | Response Time | ✅ Compliant |
+        | Resolution Time | ✅ Compliant |
+        | Success Rate | $([ "$STATUS" == "compliant" ] && echo "✅ Compliant" || echo "⚠️ At Risk") |
 
-          ---
-          *Report generated by SLA Monitoring workflow*
-          EOF
+        ---
+        *Report generated by SLA Monitoring workflow*
+        EOF
 
-          cat sla-report.md
+        cat sla-report.md
 
-      - name: Upload report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: sla-report-${{ github.run_id }}
-          path: sla-report.md
-          retention-days: 30
+    - name: Upload report artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sla-report-${{ github.run_id }}
+        path: sla-report.md
+        retention-days: 30

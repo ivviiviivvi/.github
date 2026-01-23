@@ -16,16 +16,10 @@ NOTE: These integration tests require specific configurations and API access
       that may not be fully implemented.
 """
 
-import json
 import os
-import subprocess
-import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
-import requests
 
 # Month 2 integration tests - features are now fully implemented
 
@@ -49,7 +43,7 @@ class TestSlackIntegration:
     def test_daily_summary_workflow_configured(self):
         """Verify daily summary workflow is configured."""
         workflow_file = ".github/workflows/slack-daily-summary.yml"
-        assert os.path.exists(workflow_file), f"Daily summary workflow not found"
+        assert os.path.exists(workflow_file), "Daily summary workflow not found"
 
         with open(workflow_file) as f:
             content = f.read()
@@ -239,7 +233,7 @@ class TestABTesting:
             group2 = assign_group(repo)
 
             assert group1 == group2, "Assignment should be deterministic"
-            assert group1 in ["control", "treatment"]
+            assert group1 in ["control", "experiment"]
         except ImportError:
             pytest.skip("Could not import assignment script")
 
@@ -261,12 +255,12 @@ class TestABTesting:
             assignments = [assign_group(repo) for repo in test_repos]
 
             control_count = assignments.count("control")
-            treatment_count = assignments.count("treatment")
+            experiment_count = assignments.count("experiment")
 
             # Should be close to 50/50 (allow 40-60% range)
             assert (
                 40 <= control_count <= 60
-            ), f"Imbalanced: {control_count} control, {treatment_count} treatment"
+            ), f"Imbalanced: {control_count} control, {experiment_count} experiment"
         except ImportError:
             pytest.skip("Could not import assignment script")
 

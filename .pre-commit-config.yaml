@@ -12,211 +12,200 @@ default_language_version:
 
 repos:
   # General file checks
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    hooks:
-      - id: trailing-whitespace
-        args: [--markdown-linebreak-ext=md]
-      - id: end-of-file-fixer
-      - id: check-yaml
-        args: [--allow-multiple-documents]
-      - id: check-json
-      - id: check-toml
-      - id: check-added-large-files
-        args: [--maxkb=1000]
-      - id: check-merge-conflict
-      - id: check-case-conflict
-      - id: check-symlinks
-      - id: destroyed-symlinks
-      - id: mixed-line-ending
-        args: [--fix=lf]
-      - id: detect-private-key
-      - id: check-executables-have-shebangs
-      - id:
-          check-shebang-scripts-are-executable
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: trailing-whitespace
+    args: [--markdown-linebreak-ext=md]
+  - id: end-of-file-fixer
+  - id: check-yaml
+    args: [--allow-multiple-documents]
+  - id: check-json
+  - id: check-toml
+  - id: check-added-large-files
+    args: [--maxkb=1000]
+  - id: check-merge-conflict
+  - id: check-case-conflict
+  - id: check-symlinks
+  - id: destroyed-symlinks
+  - id: mixed-line-ending
+    args: [--fix=lf]
+  - id: detect-private-key
+  - id: check-executables-have-shebangs
+  - id: check-shebang-scripts-are-executable
           # Prevent committing build artifacts
-      - id: no-commit-to-branch
-        args: [--pattern, __pycache__, --pattern, "*.pyc", --pattern, "*.pyo"]
-        always_run: false
-      - id: check-added-large-files
-        args: [--maxkb=1000]
-        exclude: |
-          (?x)^(
-              .*\.(pyc|pyo|egg-info|pytest_cache|mypy_cache|DS_Store|swp|swo)$
-          )
+  - id: no-commit-to-branch
+    args: [--branch, main, --branch, master, --branch, develop]
+    always_run: false
+  - id: check-added-large-files
+    args: [--maxkb=1000]
+    exclude: |
+      (?x)^(
+          .*\.(pyc|pyo|egg-info|pytest_cache|mypy_cache|DS_Store|swp|swo)$
+      )
 
-    # Git commit message checks
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.3.0
-    hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
-        args:
-          [--strict]
+        # Git commit message checks
+- repo: https://github.com/compilerla/conventional-pre-commit
+  rev: v4.3.0
+  hooks:
+  - id: conventional-pre-commit
+    stages: [commit-msg]
+    args: [--strict]
 
           # YAML formatting
-  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-    rev: v2.16.0
-    hooks:
-      - id: pretty-format-yaml
-        args:
-          [--autofix, --indent, "2"]
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.16.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
 
           # Markdown formatting
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17 # Compatible with gfm plugins
-    hooks:
-      - id: mdformat
-        additional_dependencies:
-          - mdformat-gfm>=0.3.5
-          - mdformat-tables
-          - mdformat-toc
-        args:
-          [--wrap=80]
+- repo: https://github.com/executablebooks/mdformat
+  rev: 0.7.17   # Compatible with gfm plugins
+  hooks:
+  - id: mdformat
+    additional_dependencies:
+    - mdformat-gfm>=0.3.5
+    - mdformat-tables
+    - mdformat-toc
+    args: [--wrap=80]
 
           # Shell script checks
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
-    hooks:
-      - id: shellcheck
-        args:
-          [--severity=warning]
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.11.0.1
+  hooks:
+  - id: shellcheck
+    args: [--severity=warning]
 
           # Python hooks
-  - repo: https://github.com/psf/black
-    rev: 25.12.0
-    hooks:
-      - id: black
-        language_version: python3.11
+- repo: https://github.com/psf/black
+  rev: 25.12.0
+  hooks:
+  - id: black
+    language_version: python3.11
 
-  - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
-    hooks:
-      - id: isort
-        args: [--profile=black]
+- repo: https://github.com/pycqa/isort
+  rev: 7.0.0
+  hooks:
+  - id: isort
+    args: [--profile=black]
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.3.0
-    hooks:
-      - id: flake8
-        args: [--max-line-length=88, --extend-ignore=E203]
+- repo: https://github.com/pycqa/flake8
+  rev: 7.3.0
+  hooks:
+  - id: flake8
+    args: [--max-line-length=88, --extend-ignore=E203]
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
-    hooks:
-      - id: mypy
-        args:
-          [--ignore-missing-imports]
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.19.1
+  hooks:
+  - id: mypy
+    args: [--ignore-missing-imports]
 
           # JavaScript/TypeScript hooks
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
-        types_or: [javascript, jsx, ts, tsx, json, yaml, markdown]
-        exclude: ^(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$
+- repo: https://github.com/pre-commit/mirrors-prettier
+  rev: v4.0.0-alpha.8
+  hooks:
+  - id: prettier
+    types_or: [javascript, jsx, ts, tsx, json]
+    exclude: ^(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$
 
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.0.0-rc.0
-    hooks:
-      - id: eslint
-        files: \.[jt]sx?$
-        types: [file]
-        additional_dependencies:
-          - eslint@8.56.0
-          - eslint-config-prettier@9.1.0
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: v10.0.0-rc.0
+  hooks:
+  - id: eslint
+    files: \.[jt]sx?$
+    types: [file]
+    additional_dependencies:
+    - eslint@8.56.0
+    - eslint-config-prettier@9.1.0
 
             # Docker
-  - repo: https://github.com/hadolint/hadolint
-    rev: v2.14.0
-    hooks:
-      - id: hadolint-docker
-        args:
-          [--ignore, DL3008, --ignore, DL3009]
+- repo: https://github.com/hadolint/hadolint
+  rev: v2.14.0
+  hooks:
+  - id: hadolint-docker
+    args: [--ignore, DL3008, --ignore, DL3009]
 
           # Secrets detection
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
-    hooks:
-      - id: detect-secrets
-        args: [--baseline, .secrets.baseline]
-        exclude:
-          package-lock.json
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.5.0
+  hooks:
+  - id: detect-secrets
+    args: [--baseline, .secrets.baseline]
+    exclude: package-lock.json
 
           # Security checks for Python
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.9.2
-    hooks:
-      - id: bandit
-        args: [-c, .bandit]
-        files: \.py$
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.9.2
+  hooks:
+  - id: bandit
+    args: [-c, .bandit]
+    files: \.py$
 
-    # Dependency security checks
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.4.2
-    hooks:
-      - id: python-safety-dependencies-check
-        files: requirements.*\.txt$
+          # Dependency security checks
+- repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+  rev: v1.4.2
+  hooks:
+  - id: python-safety-dependencies-check
+    files: requirements.*\.txt$
 
-    # Python testing (Phase 8)
-  - repo: local
-    hooks:
-      - id: resolve-managed-links
-        name: resolve-managed-links
-        entry: python automation/scripts/resolve_link_placeholders.py --write --annotate
-        language: system
-        pass_filenames: false
-        files: \.md$
-      - id: pytest-check
-        name: pytest-check
-        entry: pytest
-        language: system
-        pass_filenames: false
-        always_run: false
-        args: [tests/, -v, --tb=short, --maxfail=1]
-        stages: [pre-push]
+          # Python testing (Phase 8)
+- repo: local
+  hooks:
+  - id: resolve-managed-links
+    name: resolve-managed-links
+    entry: python automation/scripts/resolve_link_placeholders.py --write --annotate
+    language: system
+    pass_filenames: false
+    files: \.md$
+  - id: pytest-check
+    name: pytest-check
+    entry: pytest
+    language: system
+    pass_filenames: false
+    always_run: false
+    args: [tests/, -v, --tb=short, --maxfail=1]
+    stages: [pre-push]
 
-    # Terraform (if used)
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.105.0
-    hooks:
-      - id: terraform_fmt
-      - id: terraform_validate
-      - id:
-          terraform_docs
+          # Terraform (if used)
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.105.0
+  hooks:
+  - id: terraform_fmt
+  - id: terraform_validate
+  - id: terraform_docs
 
           # Dockerfile linting
-  - repo: https://github.com/AleksaC/hadolint-py
-    rev: v2.14.0
-    hooks:
-      - id:
-          hadolint
+- repo: https://github.com/AleksaC/hadolint-py
+  rev: v2.14.0
+  hooks:
+  - id: hadolint
 
           # Go formatting (if used)
-  - repo: https://github.com/dnephin/pre-commit-golang
-    rev: v0.5.1
-    hooks:
-      - id: go-fmt
-      - id: go-vet
-      - id: go-imports
-      - id: go-cyclo
-        args: [-over=15]
-      - id:
-          golangci-lint
+- repo: https://github.com/dnephin/pre-commit-golang
+  rev: v0.5.1
+  hooks:
+  - id: go-fmt
+  - id: go-vet
+  - id: go-imports
+  - id: go-cyclo
+    args: [-over=15]
+  - id: golangci-lint
 
           # Rust formatting (if used)
-  - repo: https://github.com/doublify/pre-commit-rust
-    rev: v1.0
-    hooks:
-      - id: fmt
-      - id: cargo-check
-      - id: clippy
+- repo: https://github.com/doublify/pre-commit-rust
+  rev: v1.0
+  hooks:
+  - id: fmt
+  - id: cargo-check
+  - id: clippy
 
 # CI-specific configuration
 ci:
-  autofix_commit_msg: "style: auto fixes from pre-commit hooks"
+  autofix_commit_msg: 'style: auto fixes from pre-commit hooks'
   autofix_prs: true
-  autoupdate_commit_msg: "chore: pre-commit autoupdate"
+  autoupdate_commit_msg: 'chore: pre-commit autoupdate'
   autoupdate_schedule: weekly
   skip: []
   submodules: false

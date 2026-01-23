@@ -13,7 +13,7 @@ github:
   security_vulnerability: https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml
   security_advisory: https://github.com/ivviiviivvi/.github/security/advisories/new
   dependabot: https://github.com/dependabot
-  detect_secrets: https://github.com/Yelp/detect-secrets
+  detect_secrets: https://github.com/Yelp/detect-secrets # pragma: allowlist secret
   pip_audit: https://github.com/pypa/pip-audit
   ratchet: https://github.com/sethvargo/ratchet
   awesome_copilot: https://github.com/github/awesome-copilot
@@ -44,6 +44,8 @@ standards:
   semver_spec: https://semver.org/spec/v2.0.0.html
   keepachangelog: https://keepachangelog.com/en/1.0.0/
 badges:
+  version: https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge
+  schema_org: https://img.shields.io/badge/schema.org-enabled-orange?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4em0tMi0xM2gzdjZoLTN6bTAgOGgzdjNoLTN6Ii8+PC9zdmc+
   vs_code_install: https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white
   vs_code_insiders_install: https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white
   install_vs_code: https://img.shields.io/badge/Install-VS_Code-0098FF?style=flat-square
