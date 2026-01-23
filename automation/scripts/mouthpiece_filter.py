@@ -44,6 +44,22 @@ class MouthpieceFilter:
     _TECHNICAL_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
     _TECHNICAL_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")
 
+    # Intent patterns
+    _INTENT_PATTERNS = {
+        "creation": re.compile(r"create|build|implement|make|develop", re.IGNORECASE),
+        "problem_solving": re.compile(
+            r"fix|repair|solve|debug|resolve", re.IGNORECASE
+        ),
+        "understanding": re.compile(
+            r"explain|understand|learn|how|why|what", re.IGNORECASE
+        ),
+        "improvement": re.compile(
+            r"improve|optimize|enhance|better|refactor", re.IGNORECASE
+        ),
+        "design": re.compile(r"design|architect|plan|structure", re.IGNORECASE),
+        "analysis": re.compile(r"analyze|review|examine|inspect", re.IGNORECASE),
+    }
+
     _METAPHOR_INDICATORS = [
         "like",
         "as if",
@@ -73,12 +89,6 @@ class MouthpieceFilter:
         re.IGNORECASE,
     )
     _PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
-    # Questions
-    _QUESTIONS = re.compile(r"([^.!?]*\?)")
-    # Steps
-    _STEPS = re.compile(
-        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
-    )
 
     def __init__(self, config: Optional[Dict] = None):
         """Initialize the filter with optional configuration."""
@@ -147,36 +157,18 @@ class MouthpieceFilter:
 
     def _detect_intent(self, text: str) -> str:
         """Detect the primary intent of the text."""
-        text_lower = text.lower()
-
-        # Intent patterns
-        if any(
-            word in text_lower
-            for word in ["create", "build", "implement", "make", "develop"]
-        ):
+        # Check intents in priority order using pre-compiled regex
+        if self._INTENT_PATTERNS["creation"].search(text):
             return "creation"
-        elif any(
-            word in text_lower
-            for word in ["fix", "repair", "solve", "debug", "resolve"]
-        ):
+        elif self._INTENT_PATTERNS["problem_solving"].search(text):
             return "problem_solving"
-        elif any(
-            word in text_lower
-            for word in ["explain", "understand", "learn", "how", "why", "what"]
-        ):
+        elif self._INTENT_PATTERNS["understanding"].search(text):
             return "understanding"
-        elif any(
-            word in text_lower
-            for word in ["improve", "optimize", "enhance", "better", "refactor"]
-        ):
+        elif self._INTENT_PATTERNS["improvement"].search(text):
             return "improvement"
-        elif any(
-            word in text_lower for word in ["design", "architect", "plan", "structure"]
-        ):
+        elif self._INTENT_PATTERNS["design"].search(text):
             return "design"
-        elif any(
-            word in text_lower for word in ["analyze", "review", "examine", "inspect"]
-        ):
+        elif self._INTENT_PATTERNS["analysis"].search(text):
             return "analysis"
         else:
             return "general"
@@ -197,12 +189,6 @@ class MouthpieceFilter:
         # Technical-looking terms (contains underscores, dots, or mixed case)
         concepts.extend(self._TECHNICAL_TERMS_MIXED.findall(text))
         concepts.extend(self._TECHNICAL_TERMS_CAMEL.findall(text))
-        concepts.extend(self._DOUBLE_QUOTES.findall(text))
-        concepts.extend(self._SINGLE_QUOTES.findall(text))
-
-        # Technical-looking terms (contains underscores, dots, or mixed case)
-        concepts.extend(self._TECHNICAL_TERMS_DOT_UNDERSCORE.findall(text))
-        concepts.extend(self._CAMEL_CASE.findall(text))
 
         return list(set(concepts))  # Remove duplicates
 
@@ -210,7 +196,6 @@ class MouthpieceFilter:
         """Extract metaphorical language that adds color and meaning."""
         metaphors = []
         sentences = self._SENTENCE_SPLIT.split(text)
-        sentences = self._SENTENCE_SPLITTER.split(text)
 
         for sentence in sentences:
             if self._METAPHOR_PATTERN.search(sentence):
@@ -313,7 +298,6 @@ class MouthpieceFilter:
         """Extract questions from the text."""
         # Find sentences ending with question marks
         questions = self._QUESTIONS_PATTERN.findall(text)
-        questions = self._QUESTIONS.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
     def _extract_structure(self, text: str, analysis: Dict) -> Dict[str, any]:
@@ -367,7 +351,6 @@ class MouthpieceFilter:
         """Check if the text contains step-by-step information."""
         # Look for numbered lists or step indicators
         return bool(self._STEPS_PATTERN.search(text))
-        return bool(self._STEPS.search(text.lower()))
 
     def _identify_sections(self, text: str) -> List[str]:
         """Identify logical sections in the text."""
@@ -375,7 +358,6 @@ class MouthpieceFilter:
 
         # Split by double newlines or paragraph indicators
         paragraphs = self._PARAGRAPH_SPLIT.split(text)
-        paragraphs = self._PARAGRAPHS.split(text)
 
         for i, para in enumerate(paragraphs):
             if para.strip():
