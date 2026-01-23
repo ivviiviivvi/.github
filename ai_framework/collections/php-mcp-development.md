@@ -1,6 +1,9 @@
 ---
-
-## name: Php MCP Development description: Collection for Php MCP Development. tags: \[\] updated: 2026-01-13
+name: Php MCP Development
+description: Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and expert assistance
+tags: []
+updated: 2026-01-13
+---
 
 # PHP MCP Server Development
 

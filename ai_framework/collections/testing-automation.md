@@ -1,6 +1,9 @@
 ---
-
-## name: Testing Automation description: Collection for Testing Automation. tags: \[\] updated: 2026-01-13
+name: Testing Automation
+description: Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies.
+tags: []
+updated: 2026-01-13
+---
 
 # Testing & Test Automation
 

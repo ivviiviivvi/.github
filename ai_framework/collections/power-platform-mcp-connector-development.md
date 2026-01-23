@@ -1,6 +1,9 @@
 ---
-
-## name: Power Platform MCP Connector Development description: Collection for Power Platform MCP Connector Development. tags: \[\] updated: 2026-01-13
+name: Power Platform MCP Connector Development
+description: Complete toolkit for developing Power Platform custom connectors with Model Context Protocol integration for Microsoft Copilot Studio
+tags: []
+updated: 2026-01-13
+---
 
 # Power Platform MCP Connector Development
 

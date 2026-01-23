@@ -1,6 +1,9 @@
 ---
-
-## name: Security Best Practices description: Collection for Security Best Practices. tags: \[\] updated: 2026-01-13
+name: Security Best Practices
+description: Security frameworks, accessibility guidelines, performance optimization, and code quality best practices for building secure, maintainable, and high-performance applications.
+tags: []
+updated: 2026-01-13
+---
 
 # Security & Code Quality
 
