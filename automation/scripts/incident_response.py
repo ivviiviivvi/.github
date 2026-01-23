@@ -282,7 +282,7 @@ class IncidentResponseEngine:
                 RunbookStep(
                     name="Log incident",
                     action="update_status",
-                    params={"status": "triaging"},
+                    params={"status": "acknowledged"},  # Valid IncidentStatus
                 ),
             ]
 

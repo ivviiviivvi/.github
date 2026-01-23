@@ -286,7 +286,7 @@ The README.md should reflect About section information:
 ### Examples
 
 See these repositories for reference:
-- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github) - Organization policies
+- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub --> - Organization policies
 - [Example compliance-complete repo](https://github.com/ivviiviivvi/) - Full example
 
 ---
@@ -294,4 +294,4 @@ See these repositories for reference:
 **Version**: 1.0.0  
 **Last Updated**: 2026-01-21  
 **Maintained By**: Organization Governance Team  
-**Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
+**Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->

@@ -507,7 +507,7 @@ See [docs/templates/README-comprehensive.md](../templates/README-comprehensive.m
 
 ### Real-World Examples
 
-- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github) - Organization policies (comprehensive)
+- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub --> - Organization policies (comprehensive)
 - [Example: python-toolkit](link) - Python library (standard)
 - [Example: microservice](link) - Service/application (service-focused)
 
@@ -560,4 +560,4 @@ npm run create:readme [template-type]
 **Version**: 1.0.0  
 **Last Updated**: 2026-01-21  
 **Maintained By**: Organization Governance Team  
-**Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
+**Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->

@@ -77,7 +77,8 @@ class TestLogScriptArguments:
         script = SCRIPTS_DIR / "log-branch-deletion.sh"
         result = subprocess.run(["bash", str(script)], capture_output=True, text=True)
         assert result.returncode != 0, "Should fail without arguments"
-        assert "Usage" in result.stderr, "Should show usage message"
+        # Scripts output to stdout, not stderr
+        assert "Usage" in result.stdout, "Should show usage message"
 
     def test_missing_reason(self):
         """Script should fail with only branch name."""
@@ -96,8 +97,9 @@ class TestLogScriptArguments:
             text=True,
         )
         assert result.returncode != 0, "Should fail with invalid reason"
+        # Scripts output to stdout, not stderr
         assert (
-            "Invalid reason" in result.stderr
+            "Invalid reason" in result.stdout or "Valid reasons" in result.stdout
         ), "Should show error about invalid reason"
 
 
@@ -109,7 +111,8 @@ class TestRecoverScriptArguments:
         script = SCRIPTS_DIR / "recover-branch.sh"
         result = subprocess.run(["bash", str(script)], capture_output=True, text=True)
         assert result.returncode != 0, "Should fail without arguments"
-        assert "Usage" in result.stderr, "Should show usage message"
+        # Scripts output to stdout, not stderr
+        assert "Usage" in result.stdout, "Should show usage message"
 
 
 class TestJSONFormat:

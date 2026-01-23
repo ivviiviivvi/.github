@@ -1,10 +1,12 @@
 # Organ Migration Decision Matrix
 
-**Date:** January 19, 2026\
-**Status:** Draft - Awaiting Your
-Decisions\
-**Purpose:** Visual representation and decision checklist for
-repository redistribution
+**Date:** January 23, 2026 (Updated with new repos)\
+**Status:** Draft -
+Awaiting Your Decisions\
+**Purpose:** Visual representation and decision
+checklist for repository redistribution
+
+**📊 UPDATE:** 10 new repositories discovered since Jan 18, 2026
 
 ---
 
@@ -31,8 +33,8 @@ repository redistribution
 │  └─ Purpose: Revenue-generating applications                         │
 │                                                                      │
 │  🔬  4444J99 (Personal Incubation)                                   │
-│  ├─ 56 repositories, ~8.7 GB                                        │
-│  ├─ Status: ACTIVE (8 original + 48 forks)                          │
+│  ├─ 66 repositories, ~12.7 GB (+10 new repos!)                     │
+│  ├─ Status: ACTIVE (15 original + 51 forks)                         │
 │  └─ Contains: Experiments, learning forks, personal tools           │
 │                                                                      │
 └─────────────────────────────────────────────────────────────────────┘
@@ -86,7 +88,21 @@ repository redistribution
 | ⬜     | **skills**                           | ivviiviivvi | `STAY`    | 3.1 MB  | GitHub skills - meta-learning       |
 | ⬜     | **log-commit-preserve**              | ivviiviivvi | `STAY`    | 18.8 MB | Commitizen - semantic versioning    |
 
-**Total Theory Repos: 17 (~9.7 GB)**
+### 🆕 NEW Theory Candidates (from Jan 20-23 discoveries)
+
+| Status | Repo Name                                | Current | Suggested | Size    | Rationale                                                                      | Your Decision                     |
+| ------ | ---------------------------------------- | ------- | --------- | ------- | ------------------------------------------------------------------------------ | --------------------------------- |
+| ✅     | **call-function--ontological**           | 4444J99 | `MOVE`    | 53 KB   | Ontological naming convention - pure theory, self-documenting metadata         | ⬜ MOVE / ⬜ STAY                 |
+| ✅     | **organon-noumenon--ontogenetic-morphe** | 4444J99 | `MOVE`    | 274 KB  | Philosophical framework (Aristotle + Kant + ontogenesis)                       | ⬜ MOVE / ⬜ STAY                 |
+| ✅     | **sema-metra--alchemica-mundi**          | 4444J99 | `MOVE`    | 162 KB  | Signal-Matrix/World-Alchemy - connects to solve-et-coagula                     | ⬜ MOVE / ⬜ STAY                 |
+| 🟨     | **linguistic-atomization-framework**     | 4444J99 | `MOVE?`   | 34.1 MB | LARGE! Linguistic theory - needs inspection to confirm content                 | ⬜ MOVE / ⬜ STAY                 |
+| 🟨     | **agentic-titan**                        | 4444J99 | `MOVE?`   | 224 KB  | "Polymorphic Agent Swarm" - Theory (architecture) OR Commerce (framework)?     | ⬜ THEORY / ⬜ COMMERCE / ⬜ STAY |
+| 🟨     | **recursive-engine--generative-entity**  | 4444J99 | `MOVE?`   | 452 KB  | "Symbolic OS for myth/ritual" - Theory (symbolic system) OR Art (performance)? | ⬜ THEORY / ⬜ ART / ⬜ STAY      |
+
+**New Theory Candidates: 6 repos (~35.3 MB)**
+
+**Total Theory Repos: 17 existing (~9.7 GB) + 4-6 new (~35 MB) = 21-23 repos
+(~9.7 GB)**
 
 ---
 
@@ -112,6 +128,15 @@ repository redistribution
 | ⬜     | **artist-toolkits-templates**       | omni-dromenon-machina | `STAY/DELETE?` | 0 KB   | Dec 2025 | Empty - delete or merge? |
 
 **Total Currently in omni: 14 repos (~645 KB)**
+
+### 🆕 NEW Candidates (from Jan 20-23 discoveries)
+
+| Status | Repo Name                               | Current | Suggested | Size   | Rationale                                                                                      | Your Decision                 |
+| ------ | --------------------------------------- | ------- | --------- | ------ | ---------------------------------------------------------------------------------------------- | ----------------------------- |
+| ✅     | **multi-camera--livestream--framework** | 4444J99 | `MOVE`    | 187 KB | 4K livestream + Dante audio. Connects to performance-sdk + audio-synthesis-bridge              | ⬜ MOVE / ⬜ STAY             |
+| 🟨     | **recursive-engine--generative-entity** | 4444J99 | `MOVE?`   | 452 KB | "Symbolic OS for myth/ritual" - could be Art (ritual enactment) or Theory (symbolic framework) | ⬜ MOVE / ⬜ THEORY / ⬜ STAY |
+
+**Total NEW Candidates: 2 repos (~640 KB)**
 
 ### Suggested Migrations TO omni-dromenon-machina
 
@@ -163,6 +188,15 @@ repository redistribution
 
 **Total Commerce Candidates: 17 (~1.4 GB)**
 
+### 🆕 NEW Commerce Candidates (from Jan 20-23 discoveries)
+
+| Status | Repo Name                      | Current | Suggested | Size   | Rationale                                                         | Your Decision                     |
+| ------ | ------------------------------ | ------- | --------- | ------ | ----------------------------------------------------------------- | --------------------------------- |
+| 🟨     | **agentic-titan**              | 4444J99 | `MOVE?`   | 224 KB | Agent swarm framework - could be productizable OR stay Theory     | ⬜ MOVE / ⬜ THEORY / ⬜ STAY     |
+| 🟨     | **universal-mail--automation** | 4444J99 | `MOVE?`   | 123 KB | Email automation - service/API OR personal tool. Needs inspection | ⬜ MOVE / ⬜ PERSONAL / ⬜ DELETE |
+
+**New Commerce Candidates: 2 repos (~350 KB)**
+
 **Question:** Is **solve-et-coagula** pure theory (alchemical transformation) or
 applied commerce (data consulting)?
 
@@ -174,12 +208,23 @@ applied commerce (data consulting)?
 
 | Status | Repo Name                  | Current | Suggested     | Size   | Last Updated | Graduation Path?                                          |
 | ------ | -------------------------- | ------- | ------------- | ------ | ------------ | --------------------------------------------------------- |
-| 🟨     | **life-my--midst--in**     | 4444J99 | `STAY/REVIEW` | 2.5 MB | Jan 18, 2026 | What is this? Personal life management or something else? |
+| 🟨     | **life-my--midst--in**     | 4444J99 | `STAY/REVIEW` | 2.9 MB | Jan 20, 2026 | What is this? Personal life management or something else? |
 | ⬜     | **my-knowledge-base**      | 4444J99 | `STAY`        | 616 KB | Jan 15, 2026 | Personal - stays in incubation                            |
 | ⬜     | **intake**                 | 4444J99 | `STAY`        | 2 KB   | Jan 12, 2026 | Experimental - stays personal                             |
-| ⬜     | **dotfiles**               | 4444J99 | `STAY`        | 83 KB  | Jan 9, 2026  | Personal dev environment                                  |
 | ⬜     | **awesome-pokemongo**      | 4444J99 | `STAY`        | 158 KB | Jan 11, 2026 | Personal interest project                                 |
 | ⬜     | **adaptiveDEVlearningHub** | 4444J99 | `STAY`        | 248 KB | Dec 11, 2025 | Learning/tutorial                                         |
+
+### 🆕 NEW Original Projects (from Jan 20-23 discoveries)
+
+| Status | Repo Name                     | Current | Suggested | Size   | Last Updated | Classification Needed                                          |
+| ------ | ----------------------------- | ------- | --------- | ------ | ------------ | -------------------------------------------------------------- |
+| ✅     | **my--father-mother**         | 4444J99 | `STAY`    | 64 KB  | Jan 20, 2026 | Clipboard memory tool - personal utility                       |
+| ✅     | **domus-semper-palingenesis** | 4444J99 | `STAY`    | 160 KB | Jan 23, 2026 | Dotfiles (renamed) - personal dev environment                  |
+| 🟨     | See NEW Theory Candidates     | 4444J99 | Various   | ~35 MB | Jan 20-22    | 4 clear Theory + 2 ambiguous (agentic-titan, recursive-engine) |
+| 🟨     | See NEW Art Candidates        | 4444J99 | Art       | 187 KB | Jan 20       | multi-camera--livestream--framework                            |
+| 🟨     | See NEW Commerce Candidates   | 4444J99 | Commerce? | 123 KB | Jan 20       | universal-mail--automation (needs inspection)                  |
+
+**Note:** domus-semper-palingenesis was renamed from "dotfiles" on Jan 23, 2026
 
 **Empty Repos (Suggested Deletion):**
 
@@ -190,17 +235,21 @@ applied commerce (data consulting)?
 
 **Learning Forks (All Stay in Personal):**
 
-| Status | Category          | Count   | Purpose                                                 | Decision                   |
-| ------ | ----------------- | ------- | ------------------------------------------------------- | -------------------------- |
-| ⬜     | AI/MCP Tools      | 9 repos | Learning MCP protocol, AI clients                       | ⬜ STAY / ⬜ GRADUATE SOME |
-| ⬜     | AI Cookbooks      | 5 repos | Reference material (Anthropic, OpenAI, Gemini, xAI, JS) | ⬜ STAY                    |
-| ⬜     | Development Tools | 8 repos | Terminal tools, version control, linting                | ⬜ STAY                    |
-| ⬜     | Documentation     | 3 repos | GitHub docs, Obsidian, training materials               | ⬜ STAY                    |
-| ⬜     | Infrastructure    | 7 repos | Automation, deployment, cloud tools                     | ⬜ STAY                    |
-| ⬜     | Creative/Games    | 7 repos | Pokémon, game dev, creative coding                      | ⬜ STAY                    |
-| ⬜     | Other Forks       | 9 repos | Misc learning material                                  | ⬜ STAY                    |
+| Status | Category          | Count    | Purpose                                                 | Decision                   |
+| ------ | ----------------- | -------- | ------------------------------------------------------- | -------------------------- |
+| ⬜     | AI/MCP Tools      | 10 repos | Learning MCP protocol, AI clients (added: serena)       | ⬜ STAY / ⬜ GRADUATE SOME |
+| ⬜     | AI Cookbooks      | 5 repos  | Reference material (Anthropic, OpenAI, Gemini, xAI, JS) | ⬜ STAY                    |
+| ⬜     | Development Tools | 8 repos  | Terminal tools, version control, linting                | ⬜ STAY                    |
+| ⬜     | Documentation     | 3 repos  | GitHub docs, Obsidian, training materials               | ⬜ STAY                    |
+| ⬜     | Infrastructure    | 7 repos  | Automation, deployment, cloud tools                     | ⬜ STAY                    |
+| ⬜     | Creative/Games    | 7 repos  | Pokémon, game dev, creative coding                      | ⬜ STAY                    |
+| ⬜     | Other Forks       | 9 repos  | Misc learning material                                  | ⬜ STAY                    |
 
-**Total Personal: 54 repos after deletions (~8.7 GB)**
+**Total Personal: 62 repos after deletions (~12.7 GB)**
+
+- Was 54 repos (~8.7 GB) on Jan 18, 2026
+- Added 10 new repos (+2 cleared for migration, +2 stay personal, +6 ambiguous)
+- After migrations: 58-61 repos (~8-9 GB)
 
 ---
 
@@ -225,19 +274,23 @@ applied commerce (data consulting)?
 
 ### Proposed Redistribution
 
-| Organ                               | Current            | After Migration       | Change     | Character                    |
-| ----------------------------------- | ------------------ | --------------------- | ---------- | ---------------------------- |
-| **ivviiviivvi (Theory)**            | 47 repos, 5.2 GB   | 17 repos, ~9.7 GB     | -30 repos  | Pure conceptual work         |
-| **omni-dromenon-machina (Art)**     | 14 repos, 645 KB   | 19 repos?, ~889 MB?   | +5? repos  | Performance & temporal works |
-| **labores-profani-crux (Commerce)** | 0 repos, 0 GB      | 17 repos?, ~1.4 GB    | +17? repos | Revenue-generating           |
-| **4444J99 (Personal)**              | 56 repos, 8.7 GB   | 54 repos, ~8.7 GB     | -2 repos   | Incubation & learning        |
-| **Total Ecosystem**                 | 117 repos, 14.5 GB | 107 repos?, ~20.7 GB? | -10 repos  | Distributed by purpose       |
+| Organ                               | Original (Jan 18)  | Current (Jan 23)   | After Migration         | Change     | Character                    |
+| ----------------------------------- | ------------------ | ------------------ | ----------------------- | ---------- | ---------------------------- |
+| **ivviiviivvi (Theory)**            | 47 repos, 5.2 GB   | 47 repos, 5.2 GB   | 21-23 repos, ~9.7 GB    | -24 to -26 | Pure conceptual work         |
+| **omni-dromenon-machina (Art)**     | 14 repos, 645 KB   | 14 repos, 645 KB   | 20-21 repos?, ~1.3 MB?  | +6 to +7   | Performance & temporal works |
+| **labores-profani-crux (Commerce)** | 0 repos, 0 GB      | 0 repos, 0 GB      | 17-19 repos?, ~1.4 GB   | +17 to +19 | Revenue-generating           |
+| **4444J99 (Personal)**              | 56 repos, 8.7 GB   | 66 repos, 12.7 GB  | 58-61 repos, ~8-9 GB    | -5 to -8   | Incubation & learning        |
+| **Total Ecosystem**                 | 117 repos, 14.5 GB | 127 repos, 18.6 GB | 116-124 repos?, ~20+ GB | -3 to -11  | Distributed by purpose       |
 
 **Notes:**
 
-- Question marks indicate pending your decisions
-- Size calculations approximate (need to account for large forks)
-- 8 repos marked for review (unclear purpose)
+- **+10 new repos discovered** since Jan 18 (8 originals + 1 fork + 1 renamed)
+- Question marks indicate pending your decisions on ambiguous repos
+- Size calculations approximate (need to account for large forks like
+  linguistic-atomization-framework: 34 MB!)
+- 11 repos marked for review (was 8, now +3 new ambiguous: agentic-titan,
+  recursive-engine--generative-entity, universal-mail--automation)
+- 2 empty repos to delete (Z, for-the-record)
 
 ---
 
@@ -324,8 +377,8 @@ with omni's audio-synthesis-bridge?
 ### 5. **life-my--midst--in** - What is this?
 
 **Current:** 4444J99 (Personal)\
-**Status:** Updated TODAY (Jan 18, 2026)\
-**Size:** 2.5 MB
+**Status:** Updated Jan 20, 2026 (was Jan 18)\
+**Size:** 2.9 MB (+400 KB growth since Jan 18!)
 
 **Need to know:**
 
@@ -333,9 +386,124 @@ with omni's audio-synthesis-bridge?
 - Is it personal life management?
 - Is it related to any organ's work?
 - Should it graduate somewhere, or stay personal?
+- Why did it grow by 400 KB in 2 days?
 
 **Your Answer:**
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+---
+
+### 6. **agentic-titan** - Theory or Commerce?
+
+**Current:** 4444J99 (Personal)\
+**Created:** Jan 19, 2026\
+**Size:** 224
+KB\
+**Description:** "Polymorphic Agent Swarm Architecture - Model-agnostic,
+self-organizing multi-agent system"
+
+**Option A:** Theory (ivviiviivvi)
+
+- Reason: Architectural/conceptual model
+- "Polymorphic" and "model-agnostic" suggest design patterns
+- Upstream architecture thinking
+
+**Option B:** Commerce (labores-profani-crux)
+
+- Reason: Agent framework could be productizable
+- Swarm architecture = potential SaaS product
+- Enterprise agent system sales
+
+**Your Decision:** ⬜ Theory / ⬜ Commerce / ⬜ Stay Personal
+
+---
+
+### 7. **recursive-engine--generative-entity** - Theory, Art, or Both?
+
+**Current:** 4444J99 (Personal)\
+**Created:** Jan 22, 2026\
+**Size:** 452
+KB\
+**Description:** "RE:GE - Recursive Engine: Generative Entity - A symbolic
+OS for myth, identity, ritual, and recursive systems"
+
+**Option A:** Theory (ivviiviivvi)
+
+- Reason: "Symbolic OS" = conceptual framework
+- Recursive systems theory
+- Upstream of any enactment
+
+**Option B:** Art (omni-dromenon-machina)
+
+- Reason: "Myth, identity, ritual" = performance/enactment
+- Could use performance-sdk
+- Experiential/performative system
+
+**Option C:** Both (Orchestration Required)
+
+- Reason: Theory provides the "OS", Art enacts the ritual
+- May need to split: model (theory) + implementation (art)
+
+**Your Decision:** ⬜ Theory / ⬜ Art / ⬜ Both / ⬜ Stay Personal
+
+---
+
+### 8. **linguistic-atomization-framework** - Move or Inspect?
+
+**Current:** 4444J99 (Personal)\
+**Created:** Jan 20, 2026\
+**Size:** 34.1 MB
+(LARGEST NEW REPO!)\
+**Description:** None yet
+
+**Need to know:**
+
+- What is this large 34 MB content?
+- Dataset? Research corpus? Framework + examples?
+- Is it theoretical linguistics or applied NLP?
+
+**Option A:** Theory (ivviiviivvi)
+
+- Reason: "Linguistic atomization" = breaking language into fundamental units
+- Theoretical framework for language analysis
+
+**Option B:** Stay Personal
+
+- Reason: No description yet, may be incomplete/experimental
+
+**Your Decision:** ⬜ Theory / ⬜ Stay Personal / ⬜ Need to inspect first
+
+---
+
+### 9. **universal-mail--automation** - Commerce, Personal, or Delete?
+
+**Current:** 4444J99 (Personal)\
+**Created:** Jan 20, 2026\
+**Size:** 123
+KB\
+**Description:** None yet
+
+**Need to know:**
+
+- What does this automate?
+- Personal email management tool?
+- Or email service/API for commerce?
+
+**Option A:** Commerce (labores-profani-crux)
+
+- Reason: Email automation service/API
+- Could be productized
+
+**Option B:** Personal
+
+- Reason: Manage own email
+- Personal productivity tool
+
+**Option C:** Delete
+
+- Reason: No description, may be abandoned experiment
+
+**Your Decision:** ⬜ Commerce / ⬜ Personal / ⬜ Delete / ⬜ Need to inspect first
 
 ---
 
@@ -344,8 +512,9 @@ with omni's audio-synthesis-bridge?
 ### Phase 1: Decision Making (This Document)
 
 - [ ] Review all suggested migrations
-- [ ] Make decisions on unclear repos (8 repos marked 🟨)
-- [ ] Answer critical decision points (5 questions)
+- [ ] Make decisions on unclear repos (11 repos marked 🟨 - was 8, now +3 new
+      ambiguous)
+- [ ] Answer critical decision points (9 questions - was 5, now +4 new)
 - [ ] Approve or modify the distribution plan
 
 ### Phase 2: Theory Purification
@@ -381,8 +550,12 @@ Go through each table and mark checkboxes:
 
 ### Step 2: Answer Critical Questions
 
-Fill in the 5 critical decision points (solve-et-coagula, a-i-council--coliseum,
-etc.)
+Fill in the 9 critical decision points:
+
+- Original 5: solve-et-coagula, a-i-council--coliseum, classroom-rpg-aetheria,
+  supercollider/quarks, life-my--midst--in
+- **NEW 4:** agentic-titan, recursive-engine--generative-entity,
+  linguistic-atomization-framework, universal-mail--automation
 
 ### Step 3: Review Summary
 

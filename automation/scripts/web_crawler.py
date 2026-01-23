@@ -22,8 +22,8 @@ import urllib3
 from requests.adapters import HTTPAdapter
 from secret_manager import get_secret
 
-# Disable warnings globally
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# Note: SSL warnings are NOT disabled globally for security.
+# The PoolManager below uses CERT_REQUIRED for proper verification.
 
 
 class OrganizationCrawler:
@@ -631,7 +631,7 @@ class OrganizationCrawler:
 
     def _generate_markdown_report(self) -> str:
         """Generate markdown summary report"""
-        report = """# Organization Health Report
+        report = f"""# Organization Health Report
 Generated: {self.results['timestamp']}
 Organization: {self.results['organization']}
 
@@ -641,7 +641,7 @@ Organization: {self.results['organization']}
 
         if "link_validation" in self.results and self.results["link_validation"]:
             lv = self.results["link_validation"]
-            report += """- **Total Links**: {lv.get('total_links', 0)}
+            report += f"""- **Total Links**: {lv.get('total_links', 0)}
 - **Valid**: {lv.get('valid', 0)}
 - **Broken**: {lv.get('broken', 0)}
 - **Warnings**: {len(lv.get('warnings', []))}
@@ -655,8 +655,8 @@ Organization: {self.results['organization']}
         report += "\n## 🏥 Repository Health\n\n"
 
         if "repository_health" in self.results and self.results["repository_health"]:
-            self.results["repository_health"]
-            report += """- **Total Repositories**: {rh.get('total_repos', 0)}
+            rh = self.results["repository_health"]
+            report += f"""- **Total Repositories**: {rh.get('total_repos', 0)}
 - **Active** (updated within 90 days): {rh.get('active_repos', 0)}
 - **Stale** (90+ days): {rh.get('stale_repos', 0)}
 """
@@ -664,8 +664,8 @@ Organization: {self.results['organization']}
         report += "\n## 🗺️  Ecosystem Map\n\n"
 
         if "ecosystem_map" in self.results and self.results["ecosystem_map"]:
-            self.results["ecosystem_map"]
-            report += """- **GitHub Actions Workflows**: {len(em.get('workflows', []))}  # noqa: E501
+            em = self.results["ecosystem_map"]
+            report += f"""- **GitHub Actions Workflows**: {len(em.get('workflows', []))}
 - **Copilot Agents**: {len(em.get('copilot_agents', []))}
 - **Copilot Instructions**: {len(em.get('copilot_instructions', []))}
 - **Copilot Prompts**: {len(em.get('copilot_prompts', []))}
@@ -793,13 +793,13 @@ def main():
     if "ecosystem_map" in results:
         em = results["ecosystem_map"]
         print(f"Workflows: {len(em.get('workflows', []))}")
-    copilot_count = (
-        len(em.get("copilot_agents", []))
-        + len(em.get("copilot_instructions", []))
-        + len(em.get("copilot_prompts", []))
-        + len(em.get("copilot_chatmodes", []))
-    )
-    print(f"Copilot Customizations: {copilot_count}")
+        copilot_count = (
+            len(em.get("copilot_agents", []))
+            + len(em.get("copilot_instructions", []))
+            + len(em.get("copilot_prompts", []))
+            + len(em.get("copilot_chatmodes", []))
+        )
+        print(f"Copilot Customizations: {copilot_count}")
 
     if "repository_health" in results and "total_repos" in results["repository_health"]:
         rh = results["repository_health"]

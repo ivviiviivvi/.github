@@ -128,7 +128,13 @@ def get_github_token(item_name: str) -> Optional[str]:
     """
     Get GitHub token from environment variable or 1Password CLI.
 
-    Checks environment variables first (for dev containers), then 1Password.
+    Checks environment variables first (for dev containers and CI/CD
+    environments where 1Password may not be available), then falls back
+    to 1Password CLI.
+
+    Note: While get_secret() is 1Password-only for maximum security,
+    this function allows environment variable fallback for GitHub tokens
+    to support development containers and CI environments.
 
     Args:
         item_name: REQUIRED. Name of 1Password item containing the token.
@@ -140,6 +146,12 @@ def get_github_token(item_name: str) -> Optional[str]:
 
     Returns:
         The GitHub token, or None if not found
+
+    Environment Variable Lookup:
+        The item_name is converted to an environment variable by:
+        1. Converting to uppercase
+        2. Replacing hyphens with underscores
+        Example: 'org-label-sync-token' -> ORG_LABEL_SYNC_TOKEN
     """
     if not item_name:
         raise ValueError(

@@ -53,7 +53,7 @@ LABEL_DEFINITIONS = {
         "description": "Something isn't working",
     },  # Red
     "enhancement": {
-        "color": "a2eee",  # Light blue
+        "color": "a2eeef",  # Light blue
         "description": "New feature or request",
     },
     "documentation": {
@@ -86,7 +86,7 @@ LABEL_DEFINITIONS = {
     },
     # Category Labels
     "category: github-actions": {
-        "color": "2088f",  # GitHub Actions blue
+        "color": "2088ff",  # GitHub Actions blue
         "description": "Related to GitHub Actions workflows",
     },
     "category: configuration": {
@@ -103,7 +103,7 @@ LABEL_DEFINITIONS = {
     },
     # Additional useful labels
     "good first issue": {
-        "color": "7057f",  # Purple
+        "color": "7057ff",  # Purple
         "description": "Good for newcomers",
     },
     "help wanted": {
@@ -111,7 +111,7 @@ LABEL_DEFINITIONS = {
         "description": "Extra attention is needed",
     },
     "wontfix": {
-        "color": "fffff",  # White
+        "color": "ffffff",  # White
         "description": "This will not be worked on",
     },
     "duplicate": {

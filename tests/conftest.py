@@ -177,19 +177,20 @@ def pytest_configure(config):
 
 
 # Performance tracking
+import time as _time
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_runtest_setup(item):
     """Track test performance"""
-    item.start_time = pytest.time.time() if hasattr(pytest, "time") else 0
+    item.start_time = _time.time()
 
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_runtest_teardown(item):
     """Mark slow tests"""
     if hasattr(item, "start_time"):
-        duration = (
-            pytest.time.time() if hasattr(pytest, "time") else 0
-        ) - item.start_time
+        duration = _time.time() - item.start_time
         if duration > 1.0 and "slow" not in [m.name for m in item.iter_markers()]:
             print(
                 f"\n⚠️  Test {item.nodeid} took {duration:.2f}s (consider marking as slow)"

@@ -36,6 +36,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from models import (
+    ItemMetrics,
     Priority,
     SLABreach,
     SLAConfig,
@@ -72,7 +73,7 @@ class SLAMonitor:
         self.breaches_dir.mkdir(parents=True, exist_ok=True)
         self.reports_dir.mkdir(parents=True, exist_ok=True)
 
-    def monitor_repository(self, owner: str, repo: str) -> Dict[str, SLAMetrics]:
+    def monitor_repository(self, owner: str, repo: str) -> Dict[str, ItemMetrics]:
         """
         Monitor SLAs for all active items in repository.
 
@@ -103,7 +104,7 @@ class SLAMonitor:
 
         return metrics
 
-    def _monitor_issues(self, owner: str, repo: str) -> SLAMetrics:
+    def _monitor_issues(self, owner: str, repo: str) -> ItemMetrics:
         """Monitor SLAs for issues."""
         logger.info("Monitoring issues...")
 
@@ -114,7 +115,7 @@ class SLAMonitor:
         )
 
         if not issues:
-            return SLAMetrics(
+            return ItemMetrics(
                 item_type="issues",
                 total_items=0,
                 within_sla=0,
@@ -124,8 +125,8 @@ class SLAMonitor:
                 success_rate_percentage=100.0,
             )
 
-        # Filter out pull requests
-        issues = [i for i in issues if not i.get("pull_request")]
+        # Filter out pull requests (GitHub returns issues that are PRs with "pull_request" key)
+        issues = [i for i in issues if "pull_request" not in i]
 
         total = len(issues)
         within_sla = 0
@@ -209,7 +210,7 @@ class SLAMonitor:
             sum(resolution_times) / len(resolution_times) if resolution_times else 0
         )
 
-        return SLAMetrics(
+        return ItemMetrics(
             item_type="issues",
             total_items=total,
             within_sla=within_sla,
@@ -219,10 +220,9 @@ class SLAMonitor:
             success_rate_percentage=(
                 (within_sla / total * 100) if total > 0 else 100.0
             ),
-            breaches=breaches,
         )
 
-    def _monitor_pull_requests(self, owner: str, repo: str) -> SLAMetrics:
+    def _monitor_pull_requests(self, owner: str, repo: str) -> ItemMetrics:
         """Monitor SLAs for pull requests."""
         logger.info("Monitoring pull requests...")
 
@@ -233,7 +233,7 @@ class SLAMonitor:
         )
 
         if not prs:
-            return SLAMetrics(
+            return ItemMetrics(
                 item_type="pull_requests",
                 total_items=0,
                 within_sla=0,
@@ -331,7 +331,7 @@ class SLAMonitor:
             sum(resolution_times) / len(resolution_times) if resolution_times else 0
         )
 
-        return SLAMetrics(
+        return ItemMetrics(
             item_type="pull_requests",
             total_items=total,
             within_sla=within_sla,
@@ -342,7 +342,7 @@ class SLAMonitor:
             breaches=breaches,
         )
 
-    def _monitor_workflows(self, owner: str, repo: str) -> SLAMetrics:
+    def _monitor_workflows(self, owner: str, repo: str) -> ItemMetrics:
         """Monitor SLAs for workflow runs."""
         logger.info("Monitoring workflows...")
 
@@ -352,7 +352,7 @@ class SLAMonitor:
         )
 
         if not runs or not runs.get("workflow_runs"):
-            return SLAMetrics(
+            return ItemMetrics(
                 item_type="workflows",
                 total_items=0,
                 within_sla=0,
@@ -419,7 +419,7 @@ class SLAMonitor:
             sum(execution_times) / len(execution_times) if execution_times else 0
         )
 
-        return SLAMetrics(
+        return ItemMetrics(
             item_type="workflows",
             total_items=total,
             within_sla=within_sla,

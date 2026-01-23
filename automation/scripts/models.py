@@ -407,6 +407,21 @@ class AvailabilityMetric(BaseModel):
     downtime_minutes: float = Field(..., ge=0.0)
 
 
+class ItemMetrics(BaseModel):
+    """Simple metrics for a single item type (issues, PRs, workflows)."""
+
+    item_type: str = Field(..., description="Type of items (issues, prs, workflows)")
+    total_items: int = Field(default=0, ge=0)
+    within_sla: int = Field(default=0, ge=0)
+    breached: int = Field(default=0, ge=0)
+    avg_response_time_minutes: float = Field(default=0.0, ge=0.0)
+    avg_resolution_time_hours: float = Field(default=0.0, ge=0.0)
+    success_rate_percentage: float = Field(default=100.0, ge=0.0, le=100.0)
+    breaches: List["SLABreach"] = Field(
+        default_factory=list, description="SLA breaches"
+    )
+
+
 class SLAMetrics(BaseModel):
     """Complete SLA metrics for a repository."""
 

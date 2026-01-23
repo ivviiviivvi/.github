@@ -13,7 +13,6 @@ Usage:
 
 import argparse
 import json
-import pickle
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -28,6 +27,18 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
 )
 from sklearn.model_selection import train_test_split
+
+try:
+    import joblib
+except ImportError:
+    # Fallback to pickle if joblib not available (with security warning)
+    import pickle as joblib
+    import warnings
+
+    warnings.warn(
+        "joblib not available, using pickle. Install joblib for safer serialization.",
+        UserWarning,
+    )
 
 
 class WorkflowPredictor:
@@ -347,7 +358,7 @@ class WorkflowPredictor:
         }
 
         with open(self.model_path, "wb") as f:
-            pickle.dump(model_data, f)
+            joblib.dump(model_data, f)
 
         print(f"\nModel saved to {self.model_path}")
 
@@ -357,7 +368,7 @@ class WorkflowPredictor:
             raise FileNotFoundError(f"Model not found: {self.model_path}")
 
         with open(self.model_path, "rb") as f:
-            model_data = pickle.load(f)
+            model_data = joblib.load(f)
 
         self.model = model_data["model"]
         self.feature_columns = model_data["feature_columns"]

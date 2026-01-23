@@ -288,8 +288,8 @@ Managing organization-wide policies and community health files across...
 
 ## 🆘 Need Help?
 
-- **Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)
-- **Issues?** [Report a Problem](https://github.com/ivviiviivvi/.github/issues)
+- **Questions?** [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- **Issues?** [Report a Problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Documentation**: See [Full Standards](standards/)
 
 ---

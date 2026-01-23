@@ -18,6 +18,7 @@ Environment Variables:
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
 from typing import Dict
@@ -286,8 +287,6 @@ class AutoMergeChecker:
                     # Try to extract percentage from description
                     # Common formats: "Coverage: 85.5%", "85.5% coverage",
                     # "Coverage is 85.5%"
-                    import re
-
                     match = re.search(r"(\d+(?:\.\d+)?)\s*%", description)
                     if match:
                         coverage = float(match.group(1))
@@ -305,9 +304,6 @@ class AutoMergeChecker:
                 if "coverage" in name or "codecov" in name:
                     output = run.get("output", {})
                     summary = output.get("summary", "")
-
-                    import re
-
                     match = re.search(r"(\d+(?:\.\d+)?)\s*%", summary)
                     if match:
                         coverage = float(match.group(1))

@@ -257,7 +257,11 @@ class IntelligentRouter:
             current_count = len(open_issues)
 
             # Normalize based on max assignments (inverted)
-            normalized = current_count / self.config.max_assignments_per_user
+            # Guard against division by zero
+            max_assignments = self.config.max_assignments_per_user
+            if max_assignments <= 0:
+                max_assignments = 10  # Default fallback
+            normalized = current_count / max_assignments
 
             # Score is inverse of workload (more work = lower score)
             score = max(0.0, 1.0 - normalized)

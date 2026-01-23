@@ -2,8 +2,6 @@
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
-## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
-
 ## PROJECT OVERVIEW
 
 ## CODE STYLE
@@ -701,12 +699,4 @@
                       {"name": "📦 Collection", "color": "ORANGE", "description": ""},
                       {"name": "🔧 Framework Enhancement", "color": "YELLOW", "description": ""},
                       {"name": "🐛 Bug Fix", "color": "RED", "description": ""}
-                  ]
-              },
-              "Language": {
-                  "type": "single_select",
-                  "options": [
-                      {"name": "Python", "color": "BLUE", "description": ""},
-                      {"name": "TypeScript", "color": "BLUE", "description": ""},
-                      {"name
   ```

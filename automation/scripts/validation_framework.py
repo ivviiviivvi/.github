@@ -408,9 +408,9 @@ class ValidationFramework:
 
     def _send_validation_notification(self, suite: ValidationSuite):
         """Send validation results notification."""
-        _status_emoji = "✅" if suite.failed == 0 else "⚠️"  # noqa: F841
+        status_emoji = "✅" if suite.failed == 0 else "⚠️"
 
-        message = """
+        message = f"""
 {status_emoji} **Week 9 Validation Results**
 
 Repository: {suite.repository}
@@ -463,7 +463,7 @@ Capabilities:
         """
         logger.info(f"Generating {days}-day validation report")
 
-        cutoff = datetime.now() - timedelta(days=days)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         validation_files = sorted(self.validation_dir.glob("validation_*.json"))
 
         # Load recent validations

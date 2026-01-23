@@ -133,7 +133,7 @@ class ConfigLoader:
 
 
 class RateLimiter:
-    """Rate limiter for GitHub API requests."""
+    """Thread-safe rate limiter for GitHub API requests."""
 
     def __init__(self, max_requests: int = 5000, window: int = 3600):
         """
@@ -143,45 +143,50 @@ class RateLimiter:
             max_requests: Maximum requests per window
             window: Time window in seconds (default: 1 hour)
         """
+        import threading
+
         self.max_requests = max_requests
         self.window = window
         self.requests: list = []
+        self._lock = threading.Lock()
         self.logger = setup_logger(__name__)
 
     def acquire(self) -> bool:
         """
-        Check if request can proceed.
+        Check if request can proceed (thread-safe).
 
         Returns:
             True if request can proceed, False if rate limited
         """
         now = time.time()
 
-        # Remove old requests outside the window
-        self.requests = [r for r in self.requests if r > now - self.window]
+        with self._lock:
+            # Remove old requests outside the window
+            self.requests = [r for r in self.requests if r > now - self.window]
 
-        if len(self.requests) < self.max_requests:
-            self.requests.append(now)
-            return True
+            if len(self.requests) < self.max_requests:
+                self.requests.append(now)
+                return True
 
-        self.logger.warning(
-            f"Rate limit reached: {len(self.requests)}/{self.max_requests} requests"  # noqa: E501
-        )
-        return False
+            self.logger.warning(
+                f"Rate limit reached: {len(self.requests)}/{self.max_requests} requests"  # noqa: E501
+            )
+            return False
 
     def wait_time(self) -> float:
         """
-        Calculate wait time until next request can proceed.
+        Calculate wait time until next request can proceed (thread-safe).
 
         Returns:
             Wait time in seconds (0 if can proceed now)
         """
-        if not self.requests:
-            return 0.0
+        with self._lock:
+            if not self.requests:
+                return 0.0
 
-        now = time.time()
-        oldest_request = self.requests[0]
-        return max(0, self.window - (now - oldest_request))
+            now = time.time()
+            oldest_request = self.requests[0]
+            return max(0, self.window - (now - oldest_request))
 
     def wait(self) -> None:
         """Wait until next request can proceed."""
@@ -484,6 +489,25 @@ def write_yaml(filepath: Path, data: Dict[str, Any]) -> None:
 
     with open(filepath, "w", encoding="utf-8") as f:
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
+
+
+def load_config(
+    config_path: str, default: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    Load configuration from YAML file with fallback to default.
+
+    Args:
+        config_path: Path to configuration file (relative or absolute)
+        default: Default configuration if file doesn't exist
+
+    Returns:
+        Configuration dictionary
+    """
+    path = Path(config_path)
+    if path.exists():
+        return read_yaml(path)
+    return default or {}
 
 
 # =============================================================================
