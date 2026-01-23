@@ -29,14 +29,14 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.test_dir.cleanup()
 
     def test_workflow_linking_default_depth(self):
-        """Test that workflows are correctly linked in the dashboard with default depth"""
+        """Test that workflows are correctly linked in the dashboard with default depth"""  # noqa: E501
         # Use relative path as it would be used in real scenarios
         output_path = Path("reports/DASHBOARD.md")
-        # Don't pass output_path to generate_dashboard_markdown to avoid file writing in tests
+        # Don't pass output_path to generate_dashboard_markdown to avoid file writing in tests  # noqa: E501
         # Just check the links are generated correctly
 
         # Mock the output by not writing to file
-        dashboard = self.visualizer.generate_dashboard_markdown(
+        _dashboard = self.visualizer.generate_dashboard_markdown(  # noqa: F841
             None
         )  # Will write to a temp file but we check logic separately
 
@@ -54,7 +54,7 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.assertIn(".github/workflows/test-workflow.yml", expected_link_template)
 
     def test_workflow_linking_custom_depth(self):
-        """Test that workflows are correctly linked with custom output path depth"""
+        """Test that workflows are correctly linked with custom output path depth"""  # noqa: E501
         output_path = Path("my/custom/path/DASHBOARD.md")
         workflow_path = self.visualizer._calculate_relative_path(
             output_path, ".github/workflows/"
@@ -63,7 +63,7 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.assertEqual(workflow_path, expected_path)
 
     def test_workflow_linking_root_level(self):
-        """Test that workflows are correctly linked when output is at root level"""
+        """Test that workflows are correctly linked when output is at root level"""  # noqa: E501
         output_path = Path("DASHBOARD.md")
         workflow_path = self.visualizer._calculate_relative_path(
             output_path, ".github/workflows/"
@@ -72,14 +72,12 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.assertEqual(workflow_path, expected_path)
 
     def test_mermaid_clicks_default_depth(self):
-        """Test that mermaid diagram includes click events with default depth"""
+        """Test that mermaid diagram includes click events with default depth"""  # noqa: E501
         output_path = Path("reports/DASHBOARD.md")
         diagram = self.visualizer.generate_mermaid_diagram(output_path)
 
         # Check for click event with correct relative path
-        expected_click = (
-            'click WF0 "../.github/workflows/test-workflow.yml" "View Workflow"'
-        )
+        expected_click = 'click WF0 "../.github/workflows/test-workflow.yml" "View Workflow"'  # noqa: E501
         self.assertIn(expected_click, diagram)
 
     def test_mermaid_clicks_custom_depth(self):
@@ -88,9 +86,7 @@ class TestEcosystemVisualizer(unittest.TestCase):
         diagram = self.visualizer.generate_mermaid_diagram(output_path)
 
         # Check for click event with correct relative path (3 levels deep)
-        expected_click = (
-            'click WF0 "../../../.github/workflows/test-workflow.yml" "View Workflow"'
-        )
+        expected_click = 'click WF0 "../../../.github/workflows/test-workflow.yml" "View Workflow"'  # noqa: E501
         self.assertIn(expected_click, diagram)
 
     def test_mermaid_clicks_root_level(self):
@@ -167,7 +163,7 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.assertIn("active workflows", dashboard.lower())
 
     def test_no_workflow_limit_note_when_under_limit(self):
-        """Test that no limit note appears when workflow count is under limit"""
+        """Test that no limit note appears when workflow count is under limit"""  # noqa: E501
         # Use default report with just 1 workflow
         visualizer = EcosystemVisualizer(self.report_path)
         dashboard = visualizer.generate_dashboard_markdown(Path("reports/DASHBOARD.md"))
@@ -176,7 +172,7 @@ class TestEcosystemVisualizer(unittest.TestCase):
         self.assertNotIn("first 10 workflows", dashboard.lower())
 
     def test_all_workflows_listed_in_active_section(self):
-        """Test that all workflows are listed in Active Workflows section regardless of diagram limit"""
+        """Test that all workflows are listed in Active Workflows section regardless of diagram limit"""  # noqa: E501
         # Create report with more than MAX_DIAGRAM_WORKFLOWS
         workflows = [f"workflow-{i}.yml" for i in range(15)]
 

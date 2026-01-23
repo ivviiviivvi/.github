@@ -3,11 +3,11 @@
 Validate that required labels exist in target repositories before deployment.
 
 This script checks if all required labels (from a config file) exist in the
-specified repositories, providing a pre-flight check before workflow deployment.
+specified repositories, providing a pre-flight check before workflow deployment.  # noqa: E501
 
 Usage:
     python3 validate_labels.py --config batch-onboard-week11-phase1-pilot.yml
-    python3 validate_labels.py --config batch-onboard-week11-phase1-pilot.yml --fix
+    python3 validate_labels.py --config batch-onboard-week11-phase1-pilot.yml --fix  # noqa: E501
 """
 
 import argparse
@@ -49,7 +49,7 @@ class LabelValidator:
                     {
                         "name": name,
                         "color": props.get("color", ""),
-                        "description": props.get("description", "")
+                        "description": props.get("description", ""),
                     }
                     for name, props in labels_dict.items()
                 ]
@@ -71,8 +71,15 @@ class LabelValidator:
         """
         try:
             result = subprocess.run(
-                ["gh", "label", "list", "--repo", repo,
-                    "--json", "name,color,description"],
+                [
+                    "gh",
+                    "label",
+                    "list",
+                    "--repo",
+                    repo,
+                    "--json",
+                    "name,color,description",
+                ],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -98,18 +105,22 @@ class LabelValidator:
         """
         try:
             cmd = [
-                "gh", "label", "create",
+                "gh",
+                "label",
+                "create",
                 label["name"],
-                "--repo", repo,
-                "--color", label["color"],
-                "--description", label.get("description", ""),
-                "--force"  # Update if exists
+                "--repo",
+                repo,
+                "--color",
+                label["color"],
+                "--description",
+                label.get("description", ""),
+                "--force",  # Update if exists
             ]
             subprocess.run(cmd, capture_output=True, text=True, check=True)
             return True
         except subprocess.CalledProcessError as e:
-            print(
-                f"❌ Error creating label {label['name']} in {repo}: {e.stderr}")
+            print(f"❌ Error creating label {label['name']} in {repo}: {e.stderr}")
             return False
 
     def _normalize_color(self, color: str) -> str:
@@ -127,10 +138,9 @@ class LabelValidator:
         Returns:
             True if labels match (name and color)
         """
-        return (
-            existing["name"] == required["name"]
-            and self._normalize_color(existing["color"]) == self._normalize_color(required["color"])
-        )
+        return existing["name"] == required["name"] and self._normalize_color(
+            existing["color"]
+        ) == self._normalize_color(required["color"])
 
     def validate_repository(self, repo: str) -> Tuple[bool, List[Dict], List[Dict]]:
         """
@@ -157,7 +167,11 @@ class LabelValidator:
         for required in required_labels:
             # Find matching label by name
             existing = next(
-                (label for label in existing_labels if label["name"] == required["name"]),
+                (
+                    label
+                    for label in existing_labels
+                    if label["name"] == required["name"]
+                ),
                 None,
             )
 
@@ -169,7 +183,7 @@ class LabelValidator:
                 print(
                     f"  ⚠️  Mismatch: {required['name']} "
                     f"(expected #{required['color']}, found #{existing['color']})"
-                )
+                )  # noqa: E501
             else:
                 print(f"  ✅ Found: {required['name']}")
 
@@ -182,7 +196,9 @@ class LabelValidator:
             print(f"❌ {total_issues} label issues found in {repo}")
             return False, missing_labels, mismatched_labels
 
-    def fix_repository(self, repo: str, missing: List[Dict], mismatched: List[Dict]) -> bool:
+    def fix_repository(
+        self, repo: str, missing: List[Dict], mismatched: List[Dict]
+    ) -> bool:
         """
         Fix label issues in a repository by creating/updating labels.
 
@@ -236,8 +252,11 @@ class LabelValidator:
             return False
 
         print(
-            f"📋 Validating {len(required_labels)} labels across {len(repositories)} repositories")
-        print(f"{'🔧 FIX MODE ENABLED' if self.fix_mode else '👀 VALIDATION MODE'}\n")
+            f"📋 Validating {len(required_labels)} labels across {len(repositories)} repositories"  # noqa: E501
+        )
+        print(
+            f"{'🔧 FIX MODE ENABLED' if self.fix_mode else '👀 VALIDATION MODE'}\n"  # noqa: E501
+        )
 
         all_success = True
         results = {}
@@ -276,20 +295,23 @@ class LabelValidator:
         else:
             failed_count = sum(1 for r in results.values() if not r["success"])
             print(
-                f"❌ {failed_count}/{len(repositories)} repositories have label issues")
+                f"❌ {failed_count}/{len(repositories)} repositories have label issues"  # noqa: E501
+            )
             if not self.fix_mode:
-                print("\n💡 Tip: Run with --fix to automatically create/update labels")
+                print(
+                    "\n💡 Tip: Run with --fix to automatically create/update labels"  # noqa: E501
+                )
             return False
 
 
 def main():
     """Main entry point."""
     # Ensure GitHub token is available (from 1Password or env)
-    _ = ensure_github_token()  # noqa: F841
+    _ = ensure_github_token("org-label-sync-token")  # noqa: F841
 
     parser = argparse.ArgumentParser(
         description="Validate labels in repositories before workflow deployment"
-    )
+    )  # noqa: E501
     parser.add_argument(
         "--config",
         type=Path,
@@ -299,7 +321,7 @@ def main():
     parser.add_argument(
         "--fix",
         action="store_true",
-        help="Create/update missing or mismatched labels instead of just reporting",
+        help="Create/update missing or mismatched labels instead of just reporting",  # noqa: E501
     )
 
     args = parser.parse_args()

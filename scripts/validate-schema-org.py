@@ -7,7 +7,7 @@ Validates schema.org JSON-LD files against schema.org specifications
 import json
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 from urllib.parse import urlparse
 
 
@@ -127,7 +127,7 @@ class SchemaOrgValidator:
         version = data.get("version")
         if version and not self._is_valid_semver(version):
             self.warnings.append(
-                f"Version '{version}' does not follow semantic versioning (MAJOR.MINOR.PATCH)"
+                f"Version '{version}' does not follow semantic versioning (MAJOR.MINOR.PATCH)"  # noqa: E501
             )
 
     @staticmethod

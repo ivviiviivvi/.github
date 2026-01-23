@@ -26,7 +26,13 @@ from secret_manager import ensure_github_token
 class CheckResult:
     """Result of a single check."""
 
-    def __init__(self, name: str, passed: bool, message: str, details: Optional[str] = None):
+    def __init__(
+        self,
+        name: str,
+        passed: bool,
+        message: str,
+        details: Optional[str] = None,
+    ):
         self.name = name
         self.passed = passed
         self.message = message
@@ -80,9 +86,7 @@ class PreDeploymentChecker:
             Tuple of (success, stdout, stderr)
         """
         try:
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=10
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
             return result.returncode == 0, result.stdout, result.stderr
         except subprocess.TimeoutExpired:
             return False, "", "Command timed out"
@@ -127,10 +131,13 @@ class PreDeploymentChecker:
                 "Configuration Valid",
                 True,
                 "Configuration parsed successfully",
-                f"Repositories: {len(self.config['repositories'])}, "
-                f"Workflows: {len(self.config['workflows'])}, "
-                f"Labels: {len(self.config['labels'])}"
-                if self.verbose else None,
+                (
+                    f"Repositories: {len(self.config['repositories'])}, "
+                    f"Workflows: {len(self.config['workflows'])}, "
+                    f"Labels: {len(self.config['labels'])}"
+                    if self.verbose
+                    else None
+                ),
             )
         except yaml.YAMLError as e:
             return CheckResult(
@@ -180,6 +187,7 @@ class PreDeploymentChecker:
         """Check if required Python packages are installed."""
         try:
             import yaml  # noqa: F401
+
             return CheckResult(
                 "Python Dependencies",
                 True,
@@ -257,7 +265,7 @@ class PreDeploymentChecker:
             return CheckResult(
                 "Repository Access",
                 False,
-                f"{len(inaccessible)}/{len(repositories)} repositories inaccessible",
+                f"{len(inaccessible)}/{len(repositories)} repositories inaccessible",  # noqa: E501
                 f"Cannot access: {', '.join(inaccessible)}",
             )
         else:
@@ -328,21 +336,21 @@ class PreDeploymentChecker:
                             f"{repo} (missing {len(missing)} labels)"
                         )
                 else:
-                    repos_missing_labels.append(
-                        f"{repo} (invalid format)"
-                    )
-            except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as e:
-                repos_missing_labels.append(
-                    f"{repo} (error: {type(e).__name__})"
-                )
+                    repos_missing_labels.append(f"{repo} (invalid format)")
+            except (
+                json.JSONDecodeError,
+                KeyError,
+                TypeError,
+                AttributeError,
+            ) as e:
+                repos_missing_labels.append(f"{repo} (error: {type(e).__name__})")
 
         if repos_missing_labels:
             return CheckResult(
                 "Label Deployment",
                 False,
-                f"{len(repos_missing_labels)}/{len(repositories)} repositories missing labels",
-                "\n   ".join(
-                    [""] + repos_missing_labels) if self.verbose else None,
+                f"{len(repos_missing_labels)}/{len(repositories)} repositories missing labels",  # noqa: E501
+                ("\n   ".join([""] + repos_missing_labels) if self.verbose else None),
             )
         else:
             return CheckResult(
@@ -363,7 +371,7 @@ class PreDeploymentChecker:
 
         # For Phase 2 and 3, check previous phase
         previous_phase = self.phase - 1
-        previous_config_path = self._get_config_path()
+        self._get_config_path()
 
         # This is a placeholder - in real implementation, would check
         # previous phase deployment status from logs/state files
@@ -425,7 +433,7 @@ class PreDeploymentChecker:
             print(f"🚀 Phase {self.phase} is READY FOR DEPLOYMENT!")
             print()
             print("Next step:")
-            print(f"  python3 batch_onboard_repositories.py \\")
+            print("  python3 batch_onboard_repositories.py \\")
             print(f"    --config {self.config_path.name} \\")
             print(f"    --output week11-phase{self.phase}-production.json")
             return True
@@ -437,13 +445,13 @@ class PreDeploymentChecker:
 
             # Provide helpful suggestions
             if not self.skip_labels:
-                label_check = next(
-                    (r for r in self.results if "Label" in r.name), None)
+                label_check = next((r for r in self.results if "Label" in r.name), None)
                 if label_check and not label_check.passed:
                     print()
                     print("💡 To deploy labels automatically:")
                     print(
-                        f"   python3 validate_labels.py --config {self.config_path.name} --fix")
+                        f"   python3 validate_labels.py --config {self.config_path.name} --fix"  # noqa: E501
+                    )
 
             return False
 
@@ -451,7 +459,7 @@ class PreDeploymentChecker:
 def main():
     """Main entry point."""
     # Ensure GitHub token is available (from 1Password or env)
-    _ = ensure_github_token()  # noqa: F841
+    _ = ensure_github_token("org-onboarding-token")  # noqa: F841
 
     parser = argparse.ArgumentParser(
         description="Pre-deployment checklist for Week 11 deployment"

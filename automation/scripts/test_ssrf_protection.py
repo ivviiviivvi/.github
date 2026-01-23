@@ -4,10 +4,10 @@ import sys
 import unittest
 from unittest.mock import MagicMock, patch
 
+from web_crawler import OrganizationCrawler
+
 # Add scripts directory to path to import web_crawler
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from web_crawler import OrganizationCrawler
 
 
 class TestSSRFProtection(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestSSRFProtection(unittest.TestCase):
         print(f"\nTesting URL: {url} (resolves to private IP)")
 
         # Call the method
-        status = self.crawler._check_link(url)
+        self.crawler._check_link(url)
 
         if mock_request.called:
             print("❌ VULNERABLE: Request was attempted to private IP!")
@@ -45,7 +45,7 @@ class TestSSRFProtection(unittest.TestCase):
     @patch("socket.getaddrinfo")
     @patch("urllib3.PoolManager.request")
     def test_blocks_mixed_ips(self, mock_request, mock_getaddrinfo):
-        """Test that if a domain resolves to multiple IPs (safe and unsafe), it is blocked."""
+        """Test that if a domain resolves to multiple IPs (safe and unsafe), it is blocked."""  # noqa: E501
         # Mock DNS resolution to return one public and one private IP
         mock_getaddrinfo.return_value = [
             (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 80)),
@@ -59,10 +59,12 @@ class TestSSRFProtection(unittest.TestCase):
         url = "http://mixed-records.local"
         print(f"\nTesting URL: {url} (resolves to mixed IPs)")
 
-        status = self.crawler._check_link(url)
+        self.crawler._check_link(url)
 
         if mock_request.called:
-            print("❌ VULNERABLE: Request was attempted to mixed IPs (one private)!")
+            print(
+                "❌ VULNERABLE: Request was attempted to mixed IPs (one private)!"  # noqa: E501
+            )
             self.fail("SSRF Vulnerability detected: Request attempted to mixed IPs")
         else:
             print("✅ SECURE: Mixed IP request was blocked.")
@@ -82,7 +84,7 @@ class TestSSRFProtection(unittest.TestCase):
         url = "http://google.com"
         print(f"\nTesting URL: {url} (resolves to public IP)")
 
-        status = self.crawler._check_link(url)
+        self.crawler._check_link(url)
 
         if mock_request.called:
             print("✅ CORRECT: Request was allowed for public IP.")

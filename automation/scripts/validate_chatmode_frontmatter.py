@@ -54,7 +54,7 @@ def main() -> int:
     parser.add_argument(
         "--fix",
         action="store_true",
-        help="Remove legacy '## description:' lines when frontmatter is present.",
+        help="Remove legacy '## description:' lines when frontmatter is present.",  # noqa: E501
     )
     args = parser.parse_args()
 

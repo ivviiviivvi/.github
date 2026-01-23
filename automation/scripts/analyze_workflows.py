@@ -6,10 +6,9 @@ This script analyzes all GitHub Actions workflows in .github/workflows/
 and generates a detailed inventory report.
 """
 
-import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import yaml
 
@@ -91,7 +90,7 @@ def main():
     print("=" * 80)
     print("WORKFLOW INVENTORY ANALYSIS")
     print("=" * 80)
-    print(f"\n📊 SUMMARY STATISTICS")
+    print("\n📊 SUMMARY STATISTICS")
     print(f"  Total Workflows: {total}")
     print(f"  With Errors: {with_errors}")
     print(f"  Scheduled (cron): {scheduled}")
@@ -99,13 +98,13 @@ def main():
     print(f"  Push Triggers: {push_triggers}")
     print(f"  Pull Request Triggers: {pr_triggers}")
 
-    print(f"\n🔄 TRIGGER DISTRIBUTION")
+    print("\n🔄 TRIGGER DISTRIBUTION")
     for trigger, files in sorted(
         trigger_groups.items(), key=lambda x: len(x[1]), reverse=True
     ):
         print(f"  {trigger}: {len(files)} workflows")
 
-    print(f"\n📋 DETAILED INVENTORY")
+    print("\n📋 DETAILED INVENTORY")
     print("-" * 80)
 
     for w in sorted(workflows, key=lambda x: x.get("complexity", 0), reverse=True):
@@ -116,10 +115,10 @@ def main():
             print(f"\n📄 {w['file']}")
             print(f"   Name: {w['name']}")
             print(
-                f"   Triggers: {', '.join(w['triggers']) if w['triggers'] else 'None'}"
+                f"   Triggers: {', '.join(w['triggers']) if w['triggers'] else 'None'}"  # noqa: E501
             )
             print(
-                f"   Jobs: {w['job_count']} ({', '.join(w['jobs'][:3])}{'...' if len(w['jobs']) > 3 else ''})"
+                f"   Jobs: {w['job_count']} ({', '.join(w['jobs'][:3])}{'...' if len(w['jobs']) > 3 else ''})"  # noqa: E501
             )
             print(f"   Complexity Score: {w['complexity']}")
 
@@ -133,7 +132,7 @@ def main():
 
     duplicates = {name: files for name, files in name_groups.items() if len(files) > 1}
     if duplicates:
-        print(f"\n⚠️  POTENTIAL DUPLICATES (Same Workflow Name)")
+        print("\n⚠️  POTENTIAL DUPLICATES (Same Workflow Name)")
         for name, files in duplicates.items():
             print(f"   '{name}': {', '.join(files)}")
 
@@ -142,7 +141,7 @@ def main():
         w for w in workflows if w.get("complexity", 0) > 15000 and "error" not in w
     ]
     if high_complexity:
-        print(f"\n🔴 HIGH COMPLEXITY WORKFLOWS (>15KB)")
+        print("\n🔴 HIGH COMPLEXITY WORKFLOWS (>15KB)")
         for w in sorted(high_complexity, key=lambda x: x["complexity"], reverse=True)[
             :10
         ]:
@@ -154,7 +153,7 @@ def main():
     ]
     if no_dispatch:
         print(f"\n💡 WORKFLOWS WITHOUT MANUAL DISPATCH: {len(no_dispatch)}")
-        print(f"   (Consider adding workflow_dispatch for testing)")
+        print("   (Consider adding workflow_dispatch for testing)")
 
 
 if __name__ == "__main__":

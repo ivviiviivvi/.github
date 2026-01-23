@@ -28,12 +28,11 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional
 
 import yaml
 
 try:
-    import aiohttp
     from github import Auth, Github, GithubException
     from secret_manager import ensure_github_token
 except ImportError:
@@ -43,7 +42,8 @@ except ImportError:
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -74,8 +74,7 @@ class OnboardingResult:
     steps_completed: List[str] = field(default_factory=list)
     error: Optional[str] = None
     duration_seconds: float = 0.0
-    timestamp: str = field(
-        default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
 class BatchOnboardingOrchestrator:
@@ -85,7 +84,10 @@ class BatchOnboardingOrchestrator:
     """
 
     def __init__(
-        self, github_token: str, config: OnboardingConfig, dry_run: bool = False
+        self,
+        github_token: str,
+        config: OnboardingConfig,
+        dry_run: bool = False,
     ):
         # Use Auth.Token to avoid deprecation warning
         auth = Auth.Token(github_token)
@@ -103,7 +105,7 @@ class BatchOnboardingOrchestrator:
             List of OnboardingResult objects for each repository
         """
         logger.info(
-            f"Starting batch onboarding for {len(self.config.repositories)} repositories"
+            f"Starting batch onboarding for {len(self.config.repositories)} repositories"  # noqa: E501
         )
         if self.dry_run:
             logger.info("DRY RUN MODE - No changes will be made")
@@ -112,8 +114,7 @@ class BatchOnboardingOrchestrator:
         if self.config.validate_before:
             validation_errors = await self._validate_configuration()
             if validation_errors:
-                logger.error(
-                    f"Configuration validation failed: {validation_errors}")
+                logger.error(f"Configuration validation failed: {validation_errors}")
                 return []
 
         # Resolve dependencies
@@ -141,8 +142,7 @@ class BatchOnboardingOrchestrator:
         if self.config.rollback_on_failure and not self.dry_run:
             failed = [r for r in self.results if not r.success]
             if failed:
-                logger.warning(
-                    f"Rolling back {len(failed)} failed onboardings")
+                logger.warning(f"Rolling back {len(failed)} failed onboardings")
                 await self._rollback_failed(failed)
 
         return self.results
@@ -164,7 +164,8 @@ class BatchOnboardingOrchestrator:
                 errors.append(f"Repository {repo_name} not found: {e}")
 
         # Check workflow files exist
-        # Look in multiple possible locations (absolute paths from workspace root)
+        # Look in multiple possible locations (absolute paths from workspace
+        # root)
         workspace_root = Path(__file__).parent.parent.parent
         workflow_dirs = [
             workspace_root / "automation" / "workflow-templates",
@@ -184,7 +185,7 @@ class BatchOnboardingOrchestrator:
                 errors.append(
                     f"Workflow file not found: {workflow} "
                     f"(searched in: {', '.join(str(d) for d in workflow_dirs)})"
-                )
+                )  # noqa: E501
 
         # Validate secrets are available (if specified)
         for secret_name in self.config.secrets.keys():
@@ -267,8 +268,7 @@ class BatchOnboardingOrchestrator:
             finally:
                 # Calculate duration
                 end_time = datetime.utcnow()
-                result.duration_seconds = (
-                    end_time - start_time).total_seconds()
+                result.duration_seconds = (end_time - start_time).total_seconds()
 
         return result
 
@@ -276,7 +276,7 @@ class BatchOnboardingOrchestrator:
         """Deploy workflow files to repository"""
         step = "deploy_workflows"
         logger.info(
-            f"  [{repo.full_name}] Deploying {len(self.config.workflows)} workflows"
+            f"  [{repo.full_name}] Deploying {len(self.config.workflows)} workflows"  # noqa: E501
         )
 
         if self.dry_run:
@@ -301,16 +301,14 @@ class BatchOnboardingOrchestrator:
                         break
 
                 if not workflow_path:
-                    raise FileNotFoundError(
-                        f"Workflow file not found: {workflow_file}")
+                    raise FileNotFoundError(f"Workflow file not found: {workflow_file}")
 
                 with open(workflow_path, "r") as f:
                     content = f.read()
 
                 # Check if file already exists
                 try:
-                    existing = repo.get_contents(
-                        f".github/workflows/{workflow_file}")
+                    existing = repo.get_contents(f".github/workflows/{workflow_file}")
                     # Update existing file
                     repo.update_file(
                         path=f".github/workflows/{workflow_file}",
@@ -343,7 +341,7 @@ class BatchOnboardingOrchestrator:
         """Configure repository labels"""
         step = "configure_labels"
         logger.info(
-            f"  [{repo.full_name}] Configuring {len(self.config.labels)} labels"
+            f"  [{repo.full_name}] Configuring {len(self.config.labels)} labels"  # noqa: E501
         )
 
         if self.dry_run:
@@ -351,8 +349,7 @@ class BatchOnboardingOrchestrator:
             return
 
         try:
-            existing_labels = {
-                label.name: label for label in repo.get_labels()}
+            existing_labels = {label.name: label for label in repo.get_labels()}
 
             for label_name, label_config in self.config.labels.items():
                 color = label_config.get("color", "cccccc")
@@ -380,10 +377,9 @@ class BatchOnboardingOrchestrator:
     async def _setup_branch_protection(self, repo, result: OnboardingResult) -> None:
         """Set up branch protection rules"""
         step = "setup_branch_protection"
-        branch_name = self.config.branch_protection.get(
-            "branch", repo.default_branch)
+        branch_name = self.config.branch_protection.get("branch", repo.default_branch)
         logger.info(
-            f"  [{repo.full_name}] Setting up branch protection for {branch_name}"
+            f"  [{repo.full_name}] Setting up branch protection for {branch_name}"  # noqa: E501
         )
 
         if self.dry_run:
@@ -423,17 +419,17 @@ class BatchOnboardingOrchestrator:
         """Configure repository secrets"""
         step = "configure_secrets"
         logger.info(
-            f"  [{repo.full_name}] Configuring {len(self.config.secrets)} secrets"
+            f"  [{repo.full_name}] Configuring {len(self.config.secrets)} secrets"  # noqa: E501
         )
 
         if self.dry_run:
             result.steps_completed.append(f"{step} (dry-run)")
             return
 
-        # Note: GitHub API doesn't allow reading secrets, only creating/updating
+        # Note: GitHub API doesn't allow reading secrets, only creating/updating  # noqa: E501
         # This is a placeholder for actual implementation
         logger.warning(
-            "    Secret configuration requires GitHub App or PAT with admin:org scope"
+            "    Secret configuration requires GitHub App or PAT with admin:org scope"  # noqa: E501
         )
         result.steps_completed.append(
             f"{step} (skipped - requires elevated permissions)"
@@ -443,7 +439,7 @@ class BatchOnboardingOrchestrator:
         """Create repository environments"""
         step = "create_environments"
         logger.info(
-            f"  [{repo.full_name}] Creating {len(self.config.environments)} environments"
+            f"  [{repo.full_name}] Creating {len(self.config.environments)} environments"  # noqa: E501
         )
 
         if self.dry_run:
@@ -462,8 +458,7 @@ class BatchOnboardingOrchestrator:
         Args:
             failed_results: List of failed OnboardingResult objects
         """
-        logger.info(
-            f"Starting rollback for {len(failed_results)} repositories")
+        logger.info(f"Starting rollback for {len(failed_results)} repositories")
 
         for result in failed_results:
             try:
@@ -485,8 +480,7 @@ class BatchOnboardingOrchestrator:
                                     sha=contents.sha,
                                     branch=repo.default_branch,
                                 )
-                                logger.info(
-                                    f"  Removed workflow: {workflow_file}")
+                                logger.info(f"  Removed workflow: {workflow_file}")
                             except GithubException:
                                 pass  # File doesn't exist or already removed
 
@@ -511,7 +505,7 @@ class BatchOnboardingOrchestrator:
         logger.info(f"Failed: {failed}")
         logger.info(f"Total duration: {total_duration:.2f} seconds")
         logger.info(
-            f"Average duration: {total_duration / len(self.results):.2f} seconds"
+            f"Average duration: {total_duration / len(self.results):.2f} seconds"  # noqa: E501
         )
 
         if failed > 0:
@@ -552,14 +546,17 @@ async def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
         description="Batch onboard multiple repositories with validation and rollback"
-    )
-    parser.add_argument("--config", type=str,
-                        help="Path to configuration YAML file")
+    )  # noqa: E501
+    parser.add_argument("--config", type=str, help="Path to configuration YAML file")
     parser.add_argument(
-        "--repos", nargs="+", help="List of repositories to onboard (owner/repo format)"
+        "--repos",
+        nargs="+",
+        help="List of repositories to onboard (owner/repo format)",
     )
     parser.add_argument(
-        "--dry-run", action="store_true", help="Run in dry-run mode (no changes made)"
+        "--dry-run",
+        action="store_true",
+        help="Run in dry-run mode (no changes made)",
     )
     parser.add_argument(
         "--output",
@@ -568,13 +565,16 @@ async def main():
         help="Output file for results (JSON)",
     )
     parser.add_argument(
-        "--max-concurrent", type=int, default=5, help="Maximum concurrent onboardings"
+        "--max-concurrent",
+        type=int,
+        default=5,
+        help="Maximum concurrent onboardings",
     )
 
     args = parser.parse_args()
 
     # Get GitHub token securely from 1Password CLI (or fallback to env)
-    github_token = ensure_github_token()
+    github_token = ensure_github_token("org-onboarding-token")
     if not github_token:
         logger.error("Could not retrieve GitHub token")
         sys.exit(1)

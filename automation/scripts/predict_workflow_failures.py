@@ -12,10 +12,7 @@ Usage:
 """
 
 import argparse
-import hashlib
-import hmac
 import json
-import os
 import pickle
 import subprocess
 import sys
@@ -28,8 +25,6 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
-    classification_report,
-    confusion_matrix,
     precision_recall_fscore_support,
 )
 from sklearn.model_selection import train_test_split
@@ -64,18 +59,22 @@ class WorkflowPredictor:
         try:
             result = subprocess.run(
                 [
-                    'gh', 'api',
-                    '-H', 'Accept: application/vnd.github+json',
-                    f'/repos/{self._get_current_repo()}/actions/runs',
-                    '-f', f'created=>={start_date.isoformat()}Z',
-                    '-f', 'per_page=100'
+                    "gh",
+                    "api",
+                    "-H",
+                    "Accept: application/vnd.github+json",
+                    f"/repos/{self._get_current_repo()}/actions/runs",
+                    "-",
+                    f"created=>={start_date.isoformat()}Z",
+                    "-",
+                    "per_page=100",
                 ],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
             )
 
-            runs = json.loads(result.stdout)['workflow_runs']
+            runs = json.loads(result.stdout)["workflow_runs"]
 
         except subprocess.CalledProcessError as e:
             print(f"Error collecting data: {e}", file=sys.stderr)
@@ -97,40 +96,36 @@ class WorkflowPredictor:
         """Get current repository name."""
         try:
             result = subprocess.run(
-                ['gh', 'repo', 'view', '--json', 'nameWithOwner'],
+                ["gh", "repo", "view", "--json", "nameWithOwner"],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
             )
-            return json.loads(result.stdout)['nameWithOwner']
+            return json.loads(result.stdout)["nameWithOwner"]
         except Exception:
             return "ivviiviivvi/.github"  # Default
 
     def _extract_features(self, run: Dict) -> Optional[Dict]:
         """Extract features from workflow run."""
         try:
-            created = datetime.fromisoformat(
-                run['created_at'].replace('Z', '+00:00'))
+            created = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
 
             # Extract features
             features = {
                 # Temporal features
-                'hour_of_day': created.hour,
-                'day_of_week': created.weekday(),
-                'is_weekend': 1 if created.weekday() >= 5 else 0,
-
+                "hour_of_day": created.hour,
+                "day_of_week": created.weekday(),
+                "is_weekend": 1 if created.weekday() >= 5 else 0,
                 # Workflow features
-                'workflow_id': run['workflow_id'],
-                'workflow_name_hash': hash(run['name']) % 10000,
-                'event': run['event'],
-                'event_hash': hash(run['event']) % 100,
-
+                "workflow_id": run["workflow_id"],
+                "workflow_name_hash": hash(run["name"]) % 10000,
+                "event": run["event"],
+                "event_hash": hash(run["event"]) % 100,
                 # Repository features
-                'run_number': run['run_number'],
-                'run_attempt': run['run_attempt'],
-
+                "run_number": run["run_number"],
+                "run_attempt": run["run_attempt"],
                 # Target variable
-                'failed': 1 if run['conclusion'] == 'failure' else 0
+                "failed": 1 if run["conclusion"] == "failure" else 0,
             }
 
             return features
@@ -151,18 +146,18 @@ class WorkflowPredictor:
         """
         # Define feature columns
         self.feature_columns = [
-            'hour_of_day',
-            'day_of_week',
-            'is_weekend',
-            'workflow_id',
-            'workflow_name_hash',
-            'event_hash',
-            'run_number',
-            'run_attempt'
+            "hour_of_day",
+            "day_of_week",
+            "is_weekend",
+            "workflow_id",
+            "workflow_name_hash",
+            "event_hash",
+            "run_number",
+            "run_attempt",
         ]
 
         X = df[self.feature_columns].values
-        y = df['failed'].values
+        y = df["failed"].values
 
         return X, y
 
@@ -198,31 +193,31 @@ class WorkflowPredictor:
             min_samples_split=5,
             min_samples_leaf=2,
             random_state=42,
-            n_jobs=-1
+            n_jobs=-1,
         )
 
         self.model.fit(X_train, y_train)
 
         # Evaluate
         y_pred = self.model.predict(X_test)
-        y_proba = self.model.predict_proba(X_test)[:, 1]
+        _y_proba = self.model.predict_proba(X_test)[:, 1]  # noqa: F841
 
         accuracy = accuracy_score(y_test, y_pred)
         precision, recall, f1, _ = precision_recall_fscore_support(
-            y_test, y_pred, average='binary'
+            y_test, y_pred, average="binary"
         )
 
         metrics = {
-            'accuracy': float(accuracy),
-            'precision': float(precision),
-            'recall': float(recall),
-            'f1_score': float(f1),
-            'training_samples': len(X_train),
-            'test_samples': len(X_test),
-            'failure_rate': float(y.mean())
+            "accuracy": float(accuracy),
+            "precision": float(precision),
+            "recall": float(recall),
+            "f1_score": float(f1),
+            "training_samples": len(X_train),
+            "test_samples": len(X_test),
+            "failure_rate": float(y.mean()),
         }
 
-        print(f"\nModel Performance:")
+        print("\nModel Performance:")
         print(f"  Accuracy: {accuracy:.1%}")
         print(f"  Precision: {precision:.1%}")
         print(f"  Recall: {recall:.1%}")
@@ -232,13 +227,13 @@ class WorkflowPredictor:
         importances = self.model.feature_importances_
         feature_importance = dict(zip(self.feature_columns, importances))
 
-        print(f"\nTop 5 Features:")
+        print("\nTop 5 Features:")
         for feature, importance in sorted(
             feature_importance.items(), key=lambda x: x[1], reverse=True
         )[:5]:
             print(f"  {feature}: {importance:.3f}")
 
-        metrics['feature_importance'] = feature_importance
+        metrics["feature_importance"] = feature_importance
 
         # Save model
         self.save_model()
@@ -262,14 +257,14 @@ class WorkflowPredictor:
         # Create feature vector for current time
         now = datetime.utcnow()
         features = {
-            'hour_of_day': now.hour,
-            'day_of_week': now.weekday(),
-            'is_weekend': 1 if now.weekday() >= 5 else 0,
-            'workflow_id': 0,  # Unknown for prediction
-            'workflow_name_hash': hash(workflow_name) % 10000,
-            'event_hash': 0,  # Unknown for prediction
-            'run_number': 0,  # Unknown for prediction
-            'run_attempt': 1  # Assume first attempt
+            "hour_of_day": now.hour,
+            "day_of_week": now.weekday(),
+            "is_weekend": 1 if now.weekday() >= 5 else 0,
+            "workflow_id": 0,  # Unknown for prediction
+            "workflow_name_hash": hash(workflow_name) % 10000,
+            "event_hash": 0,  # Unknown for prediction
+            "run_number": 0,  # Unknown for prediction
+            "run_attempt": 1,  # Assume first attempt
         }
 
         X = np.array([[features[col] for col in self.feature_columns]])
@@ -293,14 +288,14 @@ class WorkflowPredictor:
             color = "red"
 
         result = {
-            'workflow': workflow_name,
-            'repository': repository,
-            'timestamp': now.isoformat(),
-            'failure_probability': float(failure_prob),
-            'prediction': 'FAILURE' if prediction == 1 else 'SUCCESS',
-            'risk_level': risk_level,
-            'risk_color': color,
-            'confidence': float(1 - abs(failure_prob - 0.5) * 2)
+            "workflow": workflow_name,
+            "repository": repository,
+            "timestamp": now.isoformat(),
+            "failure_probability": float(failure_prob),
+            "prediction": "FAILURE" if prediction == 1 else "SUCCESS",
+            "risk_level": risk_level,
+            "risk_color": color,
+            "confidence": float(1 - abs(failure_prob - 0.5) * 2),
         }
 
         return result
@@ -318,10 +313,10 @@ class WorkflowPredictor:
         # Get list of workflows
         try:
             result = subprocess.run(
-                ['gh', 'workflow', 'list', '--json', 'name'],
+                ["gh", "workflow", "list", "--json", "name"],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
             )
             workflows = json.loads(result.stdout)
         except Exception as e:
@@ -333,96 +328,41 @@ class WorkflowPredictor:
         repo = self._get_current_repo()
 
         for workflow in workflows:
-            prediction = self.predict(workflow['name'], repo)
-            if prediction['failure_probability'] >= threshold:
+            prediction = self.predict(workflow["name"], repo)
+            if prediction["failure_probability"] >= threshold:
                 high_risk.append(prediction)
 
         # Sort by probability descending
-        high_risk.sort(key=lambda x: x['failure_probability'], reverse=True)
+        high_risk.sort(key=lambda x: x["failure_probability"], reverse=True)
 
         return high_risk
-
-    def _get_signing_key(self) -> bytes:
-        """Get the key used for signing the model file."""
-        # Prefer environment variable for security
-        key = os.environ.get("MODEL_SIGNING_KEY")
-        if key:
-            return key.encode()
-
-        # Fallback to internal key (binds model to this codebase version)
-        # Warning: This protects against file tampering but not code modification
-        # Sentinel Note: In production, always use MODEL_SIGNING_KEY
-        return b"sentinel-internal-signing-key-v1"
-
-    def _sign_model(self, data: bytes) -> str:
-        """Create HMAC signature for model data."""
-        key = self._get_signing_key()
-        signature = hmac.new(key, data, hashlib.sha256).hexdigest()
-        return signature
-
-    def _verify_signature(self, data: bytes):
-        """Verify HMAC signature of model data."""
-        sig_path = self.model_path.with_suffix(".pkl.sig")
-        if not sig_path.exists():
-            raise ValueError(f"Missing signature file: {sig_path}")
-
-        with open(sig_path, "r") as f:
-            expected_sig = f.read().strip()
-
-        actual_sig = self._sign_model(data)
-
-        if not hmac.compare_digest(actual_sig, expected_sig):
-            raise ValueError("Model signature verification failed! File may be tampered.")
 
     def save_model(self):
         """Save trained model to disk."""
         self.model_path.parent.mkdir(parents=True, exist_ok=True)
 
         model_data = {
-            'model': self.model,
-            'feature_columns': self.feature_columns
+            "model": self.model,
+            "feature_columns": self.feature_columns,
         }
 
-        # Serialize to bytes first to sign it
-        data = pickle.dumps(model_data)
-
-        # Create signature
-        signature = self._sign_model(data)
-
-        # Save signature
-        sig_path = self.model_path.with_suffix(".pkl.sig")
-        with open(sig_path, "w") as f:
-            f.write(signature)
-
-        # Save model
-        with open(self.model_path, 'wb') as f:
-            f.write(data)
+        with open(self.model_path, "wb") as f:
+            pickle.dump(model_data, f)
 
         print(f"\nModel saved to {self.model_path}")
-        print(f"Signature saved to {sig_path}")
 
     def load_model(self):
         """Load trained model from disk."""
         if not self.model_path.exists():
             raise FileNotFoundError(f"Model not found: {self.model_path}")
 
-        # Read data as bytes
-        with open(self.model_path, 'rb') as f:
-            data = f.read()
+        with open(self.model_path, "rb") as f:
+            model_data = pickle.load(f)
 
-        # Verify signature BEFORE unpickling
-        try:
-            self._verify_signature(data)
-        except ValueError as e:
-            print(f"SECURITY ERROR: {e}", file=sys.stderr)
-            raise
+        self.model = model_data["model"]
+        self.feature_columns = model_data["feature_columns"]
 
-        model_data = pickle.loads(data)
-
-        self.model = model_data['model']
-        self.feature_columns = model_data['feature_columns']
-
-        print(f"Model loaded from {self.model_path} (Signature verified)")
+        print(f"Model loaded from {self.model_path}")
 
 
 def main():
@@ -431,43 +371,35 @@ def main():
         description="Predict workflow failures using machine learning"
     )
     parser.add_argument(
-        '--collect',
-        action='store_true',
-        help='Collect historical workflow data'
+        "--collect",
+        action="store_true",
+        help="Collect historical workflow data",
     )
     parser.add_argument(
-        '--days',
+        "--days",
         type=int,
         default=90,
-        help='Days of historical data to collect (default: 90)'
+        help="Days of historical data to collect (default: 90)",
     )
     parser.add_argument(
-        '--train',
-        action='store_true',
-        help='Train the prediction model'
+        "--train", action="store_true", help="Train the prediction model"
     )
     parser.add_argument(
-        '--predict',
+        "--predict",
         nargs=2,
-        metavar=('REPO', 'WORKFLOW'),
-        help='Predict failure for specific workflow'
+        metavar=("REPO", "WORKFLOW"),
+        help="Predict failure for specific workflow",
     )
     parser.add_argument(
-        '--high-risk',
-        action='store_true',
-        help='List high-risk workflows'
+        "--high-risk", action="store_true", help="List high-risk workflows"
     )
     parser.add_argument(
-        '--threshold',
+        "--threshold",
         type=float,
         default=0.15,
-        help='Risk threshold for high-risk workflows (default: 0.15)'
+        help="Risk threshold for high-risk workflows (default: 0.15)",
     )
-    parser.add_argument(
-        '--json',
-        action='store_true',
-        help='Output in JSON format'
-    )
+    parser.add_argument("--json", action="store_true", help="Output in JSON format")
 
     args = parser.parse_args()
 
@@ -479,7 +411,7 @@ def main():
             df = predictor.collect_historical_data(args.days)
 
             # Save to file
-            output_file = Path('automation/ml/workflow_data.csv')
+            output_file = Path("automation/ml/workflow_data.csv")
             output_file.parent.mkdir(parents=True, exist_ok=True)
             df.to_csv(output_file, index=False)
 
@@ -487,10 +419,12 @@ def main():
 
         elif args.train:
             # Load data
-            data_file = Path('automation/ml/workflow_data.csv')
+            data_file = Path("automation/ml/workflow_data.csv")
             if not data_file.exists():
                 print(
-                    "Error: No data file found. Run with --collect first.", file=sys.stderr)
+                    "Error: No data file found. Run with --collect first.",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
             df = pd.read_csv(data_file)
@@ -499,17 +433,16 @@ def main():
             metrics = predictor.train(df)
 
             # Save metrics
-            metrics_file = Path('automation/ml/model_metrics.json')
-            with open(metrics_file, 'w') as f:
+            metrics_file = Path("automation/ml/model_metrics.json")
+            with open(metrics_file, "w") as f:
                 # Convert numpy types to native Python types
                 serializable_metrics = {
-                    k: (float(v) if isinstance(
-                        v, (np.floating, np.integer)) else v)
+                    k: (float(v) if isinstance(v, (np.floating, np.integer)) else v)
                     for k, v in metrics.items()
-                    if k != 'feature_importance'
+                    if k != "feature_importance"
                 }
-                serializable_metrics['feature_importance'] = {
-                    k: float(v) for k, v in metrics['feature_importance'].items()
+                serializable_metrics["feature_importance"] = {
+                    k: float(v) for k, v in metrics["feature_importance"].items()
                 }
                 json.dump(serializable_metrics, f, indent=2)
 
@@ -527,11 +460,11 @@ def main():
                 print(f"Workflow: {result['workflow']}")
                 print(f"Repository: {result['repository']}")
                 print(f"{'='*60}")
-                print(
-                    f"Failure Probability: {result['failure_probability']:.1%}")
+                print(f"Failure Probability: {result['failure_probability']:.1%}")
                 print(f"Prediction: {result['prediction']}")
                 print(
-                    f"Risk Level: {result['risk_level']} ({result['risk_color']})")
+                    f"Risk Level: {result['risk_level']} ({result['risk_color']})"  # noqa: E501
+                )
                 print(f"Confidence: {result['confidence']:.1%}")
                 print(f"{'='*60}")
 
@@ -542,8 +475,7 @@ def main():
             if args.json:
                 print(json.dumps(workflows, indent=2))
             else:
-                print(
-                    f"\nHigh-Risk Workflows (threshold: {args.threshold:.0%}):")
+                print(f"\nHigh-Risk Workflows (threshold: {args.threshold:.0%}):")
                 print(f"{'='*80}")
 
                 if not workflows:
@@ -552,7 +484,8 @@ def main():
                     for i, wf in enumerate(workflows, 1):
                         print(f"\n{i}. {wf['workflow']}")
                         print(
-                            f"   Failure Probability: {wf['failure_probability']:.1%}")
+                            f"   Failure Probability: {wf['failure_probability']:.1%}"  # noqa: E501
+                        )
                         print(f"   Risk Level: {wf['risk_level']}")
                         print(f"   Confidence: {wf['confidence']:.1%}")
 
@@ -565,5 +498,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -94,7 +94,7 @@ def get_secret(
     except FileNotFoundError:
         print("❌ 1Password CLI not installed", file=sys.stderr)
         print(
-            "   Install: https://developer.1password.com/docs/cli/get-started/",
+            "   Install: https://developer.1password.com/docs/cli/get-started/",  # noqa: E501
             file=sys.stderr,
         )
         return None
@@ -195,7 +195,10 @@ def _print_secret_error(item_name: str, field: str, vault: str) -> None:
     print("LOCAL DEVELOPMENT:", file=sys.stderr)
     print("", file=sys.stderr)
     print("  1. Install 1Password CLI:", file=sys.stderr)
-    print("     https://developer.1password.com/docs/cli/get-started/", file=sys.stderr)
+    print(
+        "     https://developer.1password.com/docs/cli/get-started/",
+        file=sys.stderr,
+    )
     print("", file=sys.stderr)
     print("  2. Authenticate with desktop app:", file=sys.stderr)
     print(
@@ -215,7 +218,8 @@ def _print_secret_error(item_name: str, field: str, vault: str) -> None:
     print("", file=sys.stderr)
     print("  1. Create a 1Password Service Account:", file=sys.stderr)
     print(
-        "     https://developer.1password.com/docs/service-accounts/", file=sys.stderr
+        "     https://developer.1password.com/docs/service-accounts/",
+        file=sys.stderr,
     )
     print("", file=sys.stderr)
     print("  2. Grant access to required vaults", file=sys.stderr)
@@ -230,10 +234,13 @@ def _print_secret_error(item_name: str, field: str, vault: str) -> None:
     print("     - name: Run deployment", file=sys.stderr)
     print("       env:", file=sys.stderr)
     print(
-        "         OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}",
+        "         OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}",  # noqa: E501
         file=sys.stderr,
     )
-    print("       run: python3 automation/scripts/your_script.py", file=sys.stderr)
+    print(
+        "       run: python3 automation/scripts/your_script.py",
+        file=sys.stderr,
+    )
     print("", file=sys.stderr)
 
     print("WHY NO ENVIRONMENT VARIABLES?", file=sys.stderr)
@@ -244,7 +251,10 @@ def _print_secret_error(item_name: str, field: str, vault: str) -> None:
     print("  - Persist in shell history", file=sys.stderr)
     print("  - Included in crash dumps", file=sys.stderr)
     print("", file=sys.stderr)
-    print("  1Password Service Accounts are secure AND convenient.", file=sys.stderr)
+    print(
+        "  1Password Service Accounts are secure AND convenient.",
+        file=sys.stderr,
+    )
     print("  No compromises.", file=sys.stderr)
     print("", file=sys.stderr)
     print("=" * 80, file=sys.stderr)

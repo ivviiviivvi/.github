@@ -1,5 +1,4 @@
 import os
-import sys
 import threading
 import time
 import unittest
@@ -7,7 +6,7 @@ import unittest
 from scripts.quota_manager import LOCK_DIR, LOCK_FILE, acquire_lock
 
 try:
-    import fcntl
+    pass
 
     HAS_FCNTL = True
 except ImportError:

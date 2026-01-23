@@ -10,7 +10,7 @@ Usage:
 
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Optional
 
 import yaml
 
@@ -92,7 +92,7 @@ jobs:
 
         # Add label logic
         for rule in label_rules:
-            workflow += f"""
+            workflow += """
             // Check for {rule['label']} label
             if ({rule['condition']}) {{
               labels.push('{rule['label']}');
@@ -116,8 +116,8 @@ jobs:
 
         # Add auto-assign if enabled
         if config["autoAssign"]["enabled"]:
-            teams = config["autoAssign"]["teams"]
-            workflow += f"""
+            config["autoAssign"]["teams"]
+            workflow += """
       - name: Auto-assign to team
         uses: actions/github-script@v7
         with:
@@ -131,7 +131,7 @@ jobs:
 """
 
         # Add Slack notification
-        workflow += f"""
+        workflow += """
       - name: Notify Slack on Failure
         if: failure()
         uses: ./.github/actions/slack-notify
@@ -191,11 +191,11 @@ jobs:
 
         # Add path-based rules
         for rule in config["rules"]:
-            paths = rule["paths"]
-            rule_reviewers = rule["reviewers"]
-            count = rule["count"]
+            rule["paths"]
+            rule["reviewers"]
+            rule["count"]
 
-            workflow += f"""
+            workflow += """
             // Check paths: {', '.join(paths)}
             if (changedPaths.some(p => {
                 ' || '.join([f"p.startsWith('{path}')" for path in paths])
@@ -218,7 +218,7 @@ jobs:
 """
 
         # Add Slack notification
-        workflow += f"""
+        workflow += """
       - name: Notify Slack on Failure
         if: failure()
         uses: ./.github/actions/slack-notify
@@ -244,9 +244,9 @@ jobs:
         if not config["enabled"]:
             return None
 
-        stale_config = self.customization["stale"]
+        self.customization["stale"]
 
-        workflow = f"""name: Stale Management
+        workflow = """name: Stale Management
 
 on:
   schedule:
@@ -319,7 +319,8 @@ jobs:
         print("\n📝 Next steps:")
         print(f"1. Review generated workflows in {output_path}")
         print(
-            f"2. Copy to {self.repo['owner']}/{self.repo['name']}/.github/workflows/")
+            f"2. Copy to {self.repo['owner']}/{self.repo['name']}/.github/workflows/"  # noqa: E501
+        )
         print("3. Test in passive mode (dry-run)")
         print("4. Activate gradually per deployment plan")
 

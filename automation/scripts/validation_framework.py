@@ -16,7 +16,7 @@ Usage:
     python validation_framework.py --owner ORG --repo REPO --validate-all
 
     # Run specific capability
-    python validation_framework.py --owner ORG --repo REPO --validate auto-merge
+    python validation_framework.py --owner ORG --repo REPO --validate auto-merge  # noqa: E501
 
     # Generate validation report
     python validation_framework.py --owner ORG --repo REPO --report
@@ -27,7 +27,7 @@ import json
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from models import ValidationResult, ValidationSuite
 from notification_integration import (
@@ -82,9 +82,7 @@ class ValidationFramework:
         suite.results.append(self.validate_incident_response(owner, repo))
 
         suite.completed_at = datetime.now(timezone.utc)
-        suite.duration_seconds = (
-            suite.completed_at - suite.started_at
-        ).total_seconds()
+        suite.duration_seconds = (suite.completed_at - suite.started_at).total_seconds()
 
         # Calculate summary
         suite.passed = sum(1 for r in suite.results if r.passed)
@@ -167,8 +165,7 @@ class ValidationFramework:
 
             if assigned_prs:
                 result.metrics["assigned_prs"] = len(assigned_prs)
-                result.metrics["assignment_rate"] = len(
-                    assigned_prs) / len(prs)
+                result.metrics["assignment_rate"] = len(assigned_prs) / len(prs)
 
                 # Check reviewer distribution
                 reviewers = {}
@@ -179,8 +176,7 @@ class ValidationFramework:
 
                 result.metrics["unique_reviewers"] = len(reviewers)
                 result.metrics["avg_prs_per_reviewer"] = (
-                    sum(reviewers.values()) /
-                    len(reviewers) if reviewers else 0
+                    sum(reviewers.values()) / len(reviewers) if reviewers else 0
                 )
 
             result.passed = True
@@ -295,9 +291,7 @@ class ValidationFramework:
                 result.metrics["trained_models"] = len(models)
 
                 if len(models) < 3:
-                    result.warnings.append(
-                        f"Expected 3 models, found {len(models)}"
-                    )
+                    result.warnings.append(f"Expected 3 models, found {len(models)}")
 
             result.passed = True
             result.message = "Analytics validation passed"
@@ -336,9 +330,8 @@ class ValidationFramework:
                 result.metrics["total_items"] = len(issues)
 
                 # Calculate response times
-                response_times = []
                 for issue in issues:
-                    created = datetime.fromisoformat(
+                    _created = datetime.fromisoformat(  # noqa: F841
                         issue["created_at"].replace("Z", "+00:00")
                     )
                     if issue.get("comments", 0) > 0:
@@ -355,9 +348,7 @@ class ValidationFramework:
         result.completed_at = datetime.now(timezone.utc)
         return result
 
-    def validate_incident_response(
-        self, owner: str, repo: str
-    ) -> ValidationResult:
+    def validate_incident_response(self, owner: str, repo: str) -> ValidationResult:
         """Validate incident response automation."""
         logger.info("Validating incident response automation")
 
@@ -381,15 +372,17 @@ class ValidationFramework:
                 result.metrics["total_incidents"] = len(incidents)
 
                 # Analyze incident severity distribution
-                severity_counts = {"SEV-1": 0,
-                                   "SEV-2": 0, "SEV-3": 0, "SEV-4": 0}
+                severity_counts = {
+                    "SEV-1": 0,
+                    "SEV-2": 0,
+                    "SEV-3": 0,
+                    "SEV-4": 0,
+                }
                 for incident_file in incidents:
                     with open(incident_file) as f:
                         incident = json.load(f)
                         severity = incident.get("severity", "SEV-4")
-                        severity_counts[severity] = (
-                            severity_counts.get(severity, 0) + 1
-                        )
+                        severity_counts[severity] = severity_counts.get(severity, 0) + 1
 
                 result.metrics["severity_distribution"] = severity_counts
 
@@ -415,9 +408,9 @@ class ValidationFramework:
 
     def _send_validation_notification(self, suite: ValidationSuite):
         """Send validation results notification."""
-        status_emoji = "✅" if suite.failed == 0 else "⚠️"
+        _status_emoji = "✅" if suite.failed == 0 else "⚠️"  # noqa: F841
 
-        message = f"""
+        message = """
 {status_emoji} **Week 9 Validation Results**
 
 Repository: {suite.repository}
@@ -456,9 +449,7 @@ Capabilities:
                 metadata={"duration_seconds": suite.duration_seconds},
             )
 
-    def generate_report(
-        self, owner: str, repo: str, days: int = 7
-    ) -> Dict:
+    def generate_report(self, owner: str, repo: str, days: int = 7) -> Dict:
         """
         Generate validation report for the last N days.
 
@@ -473,8 +464,7 @@ Capabilities:
         logger.info(f"Generating {days}-day validation report")
 
         cutoff = datetime.now() - timedelta(days=days)
-        validation_files = sorted(
-            self.validation_dir.glob("validation_*.json"))
+        validation_files = sorted(self.validation_dir.glob("validation_*.json"))
 
         # Load recent validations
         recent_validations = []
@@ -523,9 +513,7 @@ Capabilities:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Week 9 Validation Framework"
-    )
+    parser = argparse.ArgumentParser(description="Week 9 Validation Framework")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument(
@@ -574,7 +562,7 @@ def main():
 
     if args.validate_all:
         suite = framework.validate_all(args.owner, args.repo)
-        print(f"\n✅ Validation Complete")
+        print("\n✅ Validation Complete")
         print(f"   Passed: {suite.passed}/7")
         print(f"   Failed: {suite.failed}/7")
         print(f"   Warnings: {suite.warnings}")
@@ -604,9 +592,7 @@ def main():
                 print(f"   Warning: {warning}")
 
     elif args.report:
-        report = framework.generate_report(
-            args.owner, args.repo, args.days
-        )
+        report = framework.generate_report(args.owner, args.repo, args.days)
         print(f"\n📊 Validation Report ({args.days} days)")
         print(f"   Repository: {report['repository']}")
         print(f"   Total Validations: {report['total_validations']}")

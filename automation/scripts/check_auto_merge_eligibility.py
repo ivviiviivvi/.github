@@ -11,22 +11,23 @@ Implements comprehensive validation including:
 - Code coverage thresholds
 
 Usage:
-    python check_auto_merge_eligibility.py --owner ORG --repo REPO --pr PR_NUMBER
-    
+    python check_auto_merge_eligibility.py --owner ORG --repo REPO --pr PR_NUMBER  # noqa: E501
+
 Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo access
 """
 
-from utils import ConfigLoader, GitHubAPIClient, setup_logger
+import argparse
+import sys
+from pathlib import Path
+from typing import Dict
+
 from models import (
     AutoMergeConfig,
     AutoMergeEligibility,
     AutoMergeSafetyChecks,
 )
-import argparse
-import sys
-from pathlib import Path
-from typing import Dict, List
+from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -62,7 +63,8 @@ class AutoMergeChecker:
             Auto-merge eligibility result
         """
         self.logger.info(
-            f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}")
+            f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}"
+        )
 
         # Get PR details
         pr = self._get_pull_request(owner, repo, pr_number)
@@ -95,7 +97,7 @@ class AutoMergeChecker:
             reasons.append("Branch is not up-to-date with base")
         if not checks.coverage_threshold_met:
             reasons.append(
-                f"Code coverage below threshold ({self.config.coverage_threshold}%)"
+                f"Code coverage below threshold ({self.config.coverage_threshold}%)"  # noqa: E501
             )
 
         # Calculate confidence score
@@ -111,7 +113,7 @@ class AutoMergeChecker:
         )
 
         self.logger.info(
-            f"Eligibility check complete: eligible={eligible}, confidence={confidence:.2f}"
+            f"Eligibility check complete: eligible={eligible}, confidence={confidence:.2f}"  # noqa: E501
         )
         return result
 
@@ -120,15 +122,16 @@ class AutoMergeChecker:
         endpoint = f"/repos/{owner}/{repo}/pulls/{pr_number}"
         return self.client.get(endpoint)
 
-    def _run_safety_checks(self, owner: str, repo: str, pr: Dict) -> AutoMergeSafetyChecks:
+    def _run_safety_checks(
+        self, owner: str, repo: str, pr: Dict
+    ) -> AutoMergeSafetyChecks:
         """Run all safety checks on PR."""
         return AutoMergeSafetyChecks(
             all_tests_passed=self._check_tests_passed(owner, repo, pr),
             reviews_approved=self._check_reviews_approved(owner, repo, pr),
             no_conflicts=self._check_no_conflicts(pr),
             branch_up_to_date=self._check_branch_up_to_date(pr),
-            coverage_threshold_met=self._check_coverage_threshold(
-                owner, repo, pr),
+            coverage_threshold_met=self._check_coverage_threshold(owner, repo, pr),
         )
 
     def _check_tests_passed(self, owner: str, repo: str, pr: Dict) -> bool:
@@ -159,17 +162,18 @@ class AutoMergeChecker:
             endpoint = f"/repos/{owner}/{repo}/commits/{head_sha}/check-runs"
             check_runs = self.client.get(endpoint)
 
-            check_names = {run["name"]: run["conclusion"]
-                           for run in check_runs.get("check_runs", [])}
+            check_names = {
+                run["name"]: run["conclusion"]
+                for run in check_runs.get("check_runs", [])
+            }
 
             for required_check in self.config.required_checks:
                 if required_check not in check_names:
-                    self.logger.debug(
-                        f"Required check '{required_check}' not found")
+                    self.logger.debug(f"Required check '{required_check}' not found")
                     return False
                 if check_names[required_check] != "success":
                     self.logger.debug(
-                        f"Required check '{required_check}' status: {check_names[required_check]}"
+                        f"Required check '{required_check}' status: {check_names[required_check]}"  # noqa: E501
                     )
                     return False
 
@@ -199,10 +203,11 @@ class AutoMergeChecker:
             reviewer_states[reviewer] = review["state"]
 
         approved_count = sum(
-            1 for state in reviewer_states.values() if state == "APPROVED")
+            1 for state in reviewer_states.values() if state == "APPROVED"
+        )
 
         self.logger.debug(
-            f"Reviews: {approved_count} approved (need {self.config.min_reviews})"
+            f"Reviews: {approved_count} approved (need {self.config.min_reviews})"  # noqa: E501
         )
         return approved_count >= self.config.min_reviews
 
@@ -250,8 +255,7 @@ class AutoMergeChecker:
         acceptable_states = ["clean", "unstable", "has_hooks"]
         is_current = mergeable_state in acceptable_states
 
-        self.logger.debug(
-            f"Mergeable state: {mergeable_state}, current: {is_current}")
+        self.logger.debug(f"Mergeable state: {mergeable_state}, current: {is_current}")
         return is_current
 
     def _check_coverage_threshold(self, owner: str, repo: str, pr: Dict) -> bool:
@@ -280,14 +284,15 @@ class AutoMergeChecker:
                     description = status_check.get("description", "")
 
                     # Try to extract percentage from description
-                    # Common formats: "Coverage: 85.5%", "85.5% coverage", "Coverage is 85.5%"
+                    # Common formats: "Coverage: 85.5%", "85.5% coverage",
+                    # "Coverage is 85.5%"
                     import re
 
                     match = re.search(r"(\d+(?:\.\d+)?)\s*%", description)
                     if match:
                         coverage = float(match.group(1))
                         self.logger.debug(
-                            f"Coverage: {coverage}% (threshold: {self.config.coverage_threshold}%)"
+                            f"Coverage: {coverage}% (threshold: {self.config.coverage_threshold}%)"  # noqa: E501
                         )
                         return coverage >= self.config.coverage_threshold
 
@@ -307,7 +312,7 @@ class AutoMergeChecker:
                     if match:
                         coverage = float(match.group(1))
                         self.logger.debug(
-                            f"Coverage: {coverage}% (threshold: {self.config.coverage_threshold}%)"
+                            f"Coverage: {coverage}% (threshold: {self.config.coverage_threshold}%)"  # noqa: E501
                         )
                         return coverage >= self.config.coverage_threshold
 
@@ -360,10 +365,8 @@ class AutoMergeChecker:
         # PR age (older = more confident, up to 7 days)
         from datetime import datetime, timezone
 
-        created_at = datetime.fromisoformat(
-            pr["created_at"].replace("Z", "+00:00"))
-        age_hours = (datetime.now(timezone.utc) -
-                     created_at).total_seconds() / 3600
+        created_at = datetime.fromisoformat(pr["created_at"].replace("Z", "+00:00"))
+        age_hours = (datetime.now(timezone.utc) - created_at).total_seconds() / 3600
         age_score = min(1.0, age_hours / (7 * 24))  # Max confidence at 7 days
         confidence += age_score * 0.2  # 20% weight for age
 
@@ -375,8 +378,7 @@ class AutoMergeChecker:
 
         # Changed files (fewer = more confident)
         changed_files = pr.get("changed_files", 0)
-        files_score = max(0.0, 1.0 - (changed_files / 10)
-                          )  # Penalty after 10 files
+        files_score = max(0.0, 1.0 - (changed_files / 10))  # Penalty after 10 files
         confidence += files_score * 0.15  # 15% weight for files
 
         return min(1.0, confidence)
@@ -384,21 +386,16 @@ class AutoMergeChecker:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Check PR eligibility for auto-merge"
-    )
+    parser = argparse.ArgumentParser(description="Check PR eligibility for auto-merge")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
-    parser.add_argument("--pr", required=True, type=int,
-                        help="Pull request number")
+    parser.add_argument("--pr", required=True, type=int, help="Pull request number")
     parser.add_argument(
         "--config",
         default=".github/auto-merge.yml",
         help="Path to auto-merge config file",
     )
-    parser.add_argument(
-        "--debug", action="store_true", help="Enable debug logging"
-    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -425,7 +422,7 @@ def main():
 
         # Output result
         print(f"\n{'='*60}")
-        print(f"Auto-Merge Eligibility Check")
+        print("Auto-Merge Eligibility Check")
         print(f"{'='*60}")
         print(f"Repository: {result.repository}")
         print(f"PR Number: {result.pr_number}")
@@ -433,20 +430,25 @@ def main():
         print(f"\nEligible: {'✅ YES' if result.eligible else '❌ NO'}")
         print(f"Confidence: {result.confidence:.1%}")
 
-        print(f"\nSafety Checks:")
+        print("\nSafety Checks:")
         print(
-            f"  • All tests passed: {'✅' if result.checks_passed.all_tests_passed else '❌'}")
+            f"  • All tests passed: {'✅' if result.checks_passed.all_tests_passed else '❌'}"  # noqa: E501
+        )
         print(
-            f"  • Reviews approved: {'✅' if result.checks_passed.reviews_approved else '❌'}")
+            f"  • Reviews approved: {'✅' if result.checks_passed.reviews_approved else '❌'}"  # noqa: E501
+        )
         print(
-            f"  • No conflicts: {'✅' if result.checks_passed.no_conflicts else '❌'}")
+            f"  • No conflicts: {'✅' if result.checks_passed.no_conflicts else '❌'}"  # noqa: E501
+        )
         print(
-            f"  • Branch up-to-date: {'✅' if result.checks_passed.branch_up_to_date else '❌'}")
+            f"  • Branch up-to-date: {'✅' if result.checks_passed.branch_up_to_date else '❌'}"  # noqa: E501
+        )
         print(
-            f"  • Coverage threshold met: {'✅' if result.checks_passed.coverage_threshold_met else '❌'}")
+            f"  • Coverage threshold met: {'✅' if result.checks_passed.coverage_threshold_met else '❌'}"  # noqa: E501
+        )
 
         if result.reasons:
-            print(f"\nReasons for ineligibility:")
+            print("\nReasons for ineligibility:")
             for reason in result.reasons:
                 print(f"  • {reason}")
 

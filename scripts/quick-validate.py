@@ -23,7 +23,7 @@ for env_var, name in tokens.items():
     print(f"Checking {name}... ", end="", flush=True)
 
     if not token:
-        print(f"❌ Not found in environment")
+        print("❌ Not found in environment")
         failed_count += 1
         continue
 
@@ -54,7 +54,7 @@ else:
     print("⚠️  Some tokens failed. Export them first:\n")
     print("  In host terminal (outside VS Code):")
     print(
-        "    op read 'op://Personal/org-label-sync-token/password' | xargs -I {} echo \"export ORG_LABEL_SYNC_TOKEN='{}'\""
+        "    op read 'op://Personal/org-label-sync-token/password' | xargs -I {} echo \"export ORG_LABEL_SYNC_TOKEN='{}'\""  # noqa: E501
     )
     print("    # ... repeat for other tokens ...")
     print("\n  Then paste the export commands here.\n")

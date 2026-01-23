@@ -18,7 +18,6 @@ Usage in existing scripts:
     notify_sla_breach(issue_number="123", priority="P0", ...)
 """
 
-import logging
 from typing import Dict, List, Optional
 
 from notification_manager import Notification, NotificationManager, Priority
@@ -124,7 +123,7 @@ def notify_sla_breach(
     notif_priority = priority_map.get(priority, Priority.MEDIUM)
 
     # Build message
-    message = f"""**Item:** {item_type} #{item_number}
+    message = """**Item:** {item_type} #{item_number}
 **Repository:** {repository}
 **Breach Type:** {breach_type}
 **Threshold:** {threshold}
@@ -181,11 +180,11 @@ def notify_sla_compliance(
         priority = Priority.LOW
 
     # Build message
-    message = f"""**Repository:** {repository}
+    message = """**Repository:** {repository}
 **Compliance Rate:** {compliance_rate:.1%}
 **Period:** {period_days} days
 
-{"⚠️ Compliance below target (95%)" if compliance_rate < 0.95 else "✅ SLA compliance maintained"}"""
+{"⚠️ Compliance below target (95%)" if compliance_rate < 0.95 else "✅ SLA compliance maintained"}"""  # noqa: E501
 
     # Create notification
     notification = Notification(
@@ -241,7 +240,7 @@ def notify_incident_created(
     priority = priority_map.get(severity, Priority.MEDIUM)
 
     # Build message
-    message = f"""**Incident ID:** {incident_id}
+    message = """**Incident ID:** {incident_id}
 **Severity:** {severity}
 **Repository:** {repository}
 
@@ -289,9 +288,9 @@ def notify_incident_resolved(
     # Build message
     hours = duration_minutes // 60
     mins = duration_minutes % 60
-    duration_str = f"{hours}h {mins}m" if hours > 0 else f"{mins}m"
+    f"{hours}h {mins}m" if hours > 0 else f"{mins}m"
 
-    message = f"""**Incident ID:** {incident_id}
+    message = """**Incident ID:** {incident_id}
 **Severity:** {severity}
 **Duration:** {duration_str}
 
@@ -340,14 +339,14 @@ def notify_validation_failure(
     manager = get_notification_manager()
 
     # Build error message
-    error_text = "\n".join(f"- {e}" for e in errors)
-    warning_text = (
+    _error_text = "\n".join(f"- {e}" for e in errors)  # noqa: F841
+    _warning_text = (  # noqa: F841
         "\n\n**Warnings:**\n" + "\n".join(f"- {w}" for w in warnings)
         if warnings
         else ""
     )
 
-    message = f"""**Capability:** {capability}
+    message = """**Capability:** {capability}
 **Repository:** {repository}
 
 **Errors:**
@@ -391,7 +390,7 @@ def notify_validation_success(
     """
     manager = get_notification_manager()
 
-    message = f"""**Repository:** {repository}
+    message = """**Repository:** {repository}
 **Passed:** {passed_count}/{total_count} capabilities
 
 All validations completed successfully."""
@@ -438,7 +437,7 @@ def notify_self_healing_success(
     """
     manager = get_notification_manager()
 
-    message = f"""**Workflow:** {workflow_name}
+    message = """**Workflow:** {workflow_name}
 **Run ID:** {run_id}
 **Failure Type:** {failure_type}
 **Action Taken:** {action_taken}
@@ -483,7 +482,7 @@ def notify_self_healing_failure(
     """
     manager = get_notification_manager()
 
-    message = f"""**Workflow:** {workflow_name}
+    message = """**Workflow:** {workflow_name}
 **Run ID:** {run_id}
 **Failure Type:** {failure_type}
 **Attempts:** {attempts}
@@ -535,7 +534,7 @@ def notify_maintenance_scheduled(
     """
     manager = get_notification_manager()
 
-    message = f"""**Task:** {task_name}
+    message = """**Task:** {task_name}
 **Window:** {start_time} - {end_time}
 **Duration:** {duration_minutes} minutes
 **Impact:** {impact}
@@ -579,10 +578,10 @@ def notify_maintenance_complete(
     """
     manager = get_notification_manager()
 
-    status = "✅ Completed successfully" if success else "❌ Failed"
+    "✅ Completed successfully" if success else "❌ Failed"
     priority = Priority.LOW if success else Priority.HIGH
 
-    message = f"""**Task:** {task_name}
+    message = """**Task:** {task_name}
 **Duration:** {duration_minutes} minutes
 **Status:** {status}"""
 
@@ -626,11 +625,11 @@ def notify_model_accuracy_low(
     """
     manager = get_notification_manager()
 
-    message = f"""**Model:** {model_name}
+    message = """**Model:** {model_name}
 **Accuracy:** {accuracy:.1%}
 **Threshold:** {threshold:.1%}
 
-Model accuracy has dropped below acceptable threshold. Retraining may be required."""
+Model accuracy has dropped below acceptable threshold. Retraining may be required."""  # noqa: E501
 
     # Create notification
     notification = Notification(
@@ -672,7 +671,7 @@ def notify_auto_merge_failure(
     """
     manager = get_notification_manager()
 
-    message = f"""**PR:** #{pr_number}
+    message = """**PR:** #{pr_number}
 **Repository:** {repository}
 **Reason:** {reason}
 

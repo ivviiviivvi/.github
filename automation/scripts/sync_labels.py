@@ -2,7 +2,7 @@
 """
 GitHub Label Sync Script
 
-Synchronizes standardized labels across all repositories in a GitHub organization
+Synchronizes standardized labels across all repositories in a GitHub organization  # noqa: E501
 using the PyGithub library.
 
 Usage:
@@ -16,7 +16,6 @@ Requirements:
 """
 
 import argparse
-import os
 import sys
 from typing import Dict, List, Optional
 
@@ -49,9 +48,12 @@ LABEL_DEFINITIONS = {
     # Green
     "priority: low": {"color": "0e8a16", "description": "Low priority"},
     # Type Labels (without prefix)
-    "bug": {"color": "d73a4a", "description": "Something isn't working"},  # Red
+    "bug": {
+        "color": "d73a4a",
+        "description": "Something isn't working",
+    },  # Red
     "enhancement": {
-        "color": "a2eeef",  # Light blue
+        "color": "a2eee",  # Light blue
         "description": "New feature or request",
     },
     "documentation": {
@@ -60,7 +62,10 @@ LABEL_DEFINITIONS = {
     },
     # Orange-red
     "security": {"color": "d93f0b", "description": "Security related"},
-    "task": {"color": "d4c5f9", "description": "General task or work item"},  # Purple
+    "task": {
+        "color": "d4c5f9",
+        "description": "General task or work item",
+    },  # Purple
     "question": {
         "color": "d876e3",  # Pink
         "description": "Further information is requested",
@@ -69,7 +74,10 @@ LABEL_DEFINITIONS = {
     "triage": {"color": "fbca04", "description": "Needs triage"},  # Yellow
     # Blue
     "in-progress": {"color": "0052cc", "description": "Work in progress"},
-    "blocked": {"color": "b60205", "description": "Blocked by dependency"},  # Red
+    "blocked": {
+        "color": "b60205",
+        "description": "Blocked by dependency",
+    },  # Red
     # Purple
     "needs-review": {"color": "6f42c1", "description": "Ready for review"},
     "approved": {
@@ -78,7 +86,7 @@ LABEL_DEFINITIONS = {
     },
     # Category Labels
     "category: github-actions": {
-        "color": "2088ff",  # GitHub Actions blue
+        "color": "2088f",  # GitHub Actions blue
         "description": "Related to GitHub Actions workflows",
     },
     "category: configuration": {
@@ -95,7 +103,7 @@ LABEL_DEFINITIONS = {
     },
     # Additional useful labels
     "good first issue": {
-        "color": "7057ff",  # Purple
+        "color": "7057f",  # Purple
         "description": "Good for newcomers",
     },
     "help wanted": {
@@ -103,7 +111,7 @@ LABEL_DEFINITIONS = {
         "description": "Extra attention is needed",
     },
     "wontfix": {
-        "color": "ffffff",  # White
+        "color": "fffff",  # White
         "description": "This will not be worked on",
     },
     "duplicate": {
@@ -124,7 +132,7 @@ class LabelSyncManager:
 
         Args:
             github_token: GitHub personal access token
-            dry_run: If True, only show what would be done without making changes
+            dry_run: If True, only show what would be done without making changes  # noqa: E501
         """
         self.github = Github(github_token)
         self.dry_run = dry_run
@@ -276,7 +284,7 @@ class LabelSyncManager:
                     and stats["updated"] == 0
                     and stats["errors"] == 0
                 ):
-                    print(f"  ✓ All labels up to date")
+                    print("  ✓ All labels up to date")
 
             except Exception as e:
                 print(f"  ✗ Error processing repository: {e}")
@@ -301,7 +309,7 @@ class LabelSyncManager:
 def main() -> None:
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
-        description="Sync GitHub labels across repositories in an organization",
+        description="Sync GitHub labels across repositories in an organization",  # noqa: E501
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -335,11 +343,16 @@ Examples:
     )
 
     parser.add_argument(
-        "--exclude", nargs="+", default=[], help="Repository names to exclude from sync"
+        "--exclude",
+        nargs="+",
+        default=[],
+        help="Repository names to exclude from sync",
     )
 
     parser.add_argument(
-        "--list-labels", action="store_true", help="List all label definitions and exit"
+        "--list-labels",
+        action="store_true",
+        help="List all label definitions and exit",
     )
 
     args = parser.parse_args()
@@ -357,7 +370,9 @@ Examples:
     # Validate token
     if not args.token:
         print("Error: GitHub token is required.")
-        print("Provide it with --token or set the GITHUB_TOKEN environment variable.")
+        print(
+            "Provide it with --token or set the GITHUB_TOKEN environment variable."  # noqa: E501
+        )
         sys.exit(1)
 
     # Run sync

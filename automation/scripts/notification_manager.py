@@ -15,7 +15,7 @@ Features:
 - Channel health monitoring
 
 Usage:
-    from notification_manager import NotificationManager, Notification, Priority
+    from notification_manager import NotificationManager, Notification, Priority  # noqa: E501
 
     # Initialize
     manager = NotificationManager()
@@ -35,7 +35,7 @@ import json
 import logging
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -81,8 +81,7 @@ class Notification(BaseModel):
     source: str  # sla-monitor, incident-response, validation, etc.
     channels: List[str] = Field(default_factory=list)
     metadata: Dict = Field(default_factory=dict)
-    timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     notification_id: Optional[str] = None
 
 
@@ -142,7 +141,8 @@ class NotificationManager:
         # Check deduplication
         if self._is_duplicate(notification):
             logger.info(
-                f"Duplicate notification {notification.notification_id}, skipping")
+                f"Duplicate notification {notification.notification_id}, skipping"  # noqa: E501
+            )
             return {}
 
         # Determine channels based on priority if not specified
@@ -220,9 +220,11 @@ class NotificationManager:
         if ":" in channel:
             # Channel-specific: slack:#incidents
             channel_name = channel.split(":", 1)[1]
-            webhook_url = slack_config.get("channels", {}).get(
-                channel_name, {}
-            ).get("webhook_url")
+            webhook_url = (
+                slack_config.get("channels", {})
+                .get(channel_name, {})
+                .get("webhook_url")
+            )
         else:
             # Default webhook
             webhook_url = slack_config.get("webhook_url")
@@ -247,7 +249,7 @@ class NotificationManager:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": f"{emoji} {notification.title}",
+                        "text": f"{emoji} {notification.title}",  # noqa: E501
                     },
                 },
                 {
@@ -255,11 +257,11 @@ class NotificationManager:
                     "fields": [
                         {
                             "type": "mrkdwn",
-                            "text": f"*Priority:*\n{notification.priority.value}",
+                            "text": f"*Priority:*\n{notification.priority.value}",  # noqa: E501
                         },
                         {
                             "type": "mrkdwn",
-                            "text": f"*Source:*\n{notification.source}",
+                            "text": f"*Source:*\n{notification.source}",  # noqa: E501
                         },
                     ],
                 },
@@ -289,7 +291,7 @@ class NotificationManager:
                 "elements": [
                     {
                         "type": "mrkdwn",
-                        "text": f"_{notification.timestamp.strftime('%Y-%m-%d %H:%M:%S UTC')}_",
+                        "text": f"_{notification.timestamp.strftime('%Y-%m-%d %H:%M:%S UTC')}_",  # noqa: E501
                     }
                 ],
             }
@@ -307,9 +309,7 @@ class NotificationManager:
         if ":" in channel:
             # email:team or email:management
             recipient_group = channel.split(":", 1)[1]
-            recipients = email_config.get("recipients", {}).get(
-                recipient_group, []
-            )
+            recipients = email_config.get("recipients", {}).get(recipient_group, [])
         else:
             recipients = email_config.get("default_recipients", [])
 
@@ -317,9 +317,7 @@ class NotificationManager:
             raise ValueError(f"No recipients configured for {channel}")
 
         # Build email (simplified - would use proper SMTP in production)
-        logger.info(
-            f"Would send email to {recipients}: {notification.title}"
-        )
+        logger.info(f"Would send email to {recipients}: {notification.title}")
 
     def _send_pagerduty(self, notification: Notification):
         """Send notification to PagerDuty."""
@@ -378,9 +376,7 @@ class NotificationManager:
 
         # Clean old entries (older than 1 minute)
         cutoff = time.time() - 60
-        self.rate_limits[channel] = [
-            t for t in self.rate_limits[channel] if t > cutoff
-        ]
+        self.rate_limits[channel] = [t for t in self.rate_limits[channel] if t > cutoff]
 
         return len(self.rate_limits[channel]) >= max_per_minute
 
@@ -466,8 +462,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Notification Manager")
     parser.add_argument("--title", required=True, help="Notification title")
-    parser.add_argument("--message", required=True,
-                        help="Notification message")
+    parser.add_argument("--message", required=True, help="Notification message")
     parser.add_argument(
         "--priority",
         choices=["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"],

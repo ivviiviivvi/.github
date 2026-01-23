@@ -6,8 +6,8 @@ Mouthpiece Filter System
 Transforms natural, human writing into polished AI prompts while preserving
 the essence and poetry of the original expression.
 
-This filter allows you to write in your natural voice - with all its imperfections,
-metaphors, and humanity - and transforms it into structured prompts optimized for
+This filter allows you to write in your natural voice - with all its imperfections,  # noqa: E501
+metaphors, and humanity - and transforms it into structured prompts optimized for  # noqa: E501
 AI interaction.
 
 Usage:
@@ -20,12 +20,12 @@ import argparse
 import json
 import re
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 
 class MouthpieceFilter:
     """
-    The Mouthpiece Filter transforms natural human writing into AI-optimized prompts.
+    The Mouthpiece Filter transforms natural human writing into AI-optimized prompts.  # noqa: E501
 
     It analyzes:
     - Intent and purpose
@@ -44,28 +44,12 @@ class MouthpieceFilter:
     _TECHNICAL_TERMS_MIXED = re.compile(r"\b\w+[._]\w+\b")
     _TECHNICAL_TERMS_CAMEL = re.compile(r"\b[a-z]+[A-Z]\w+\b")
 
-    # Intent patterns
-    _INTENT_PATTERNS = {
-        "creation": re.compile(r"create|build|implement|make|develop", re.IGNORECASE),
-        "problem_solving": re.compile(
-            r"fix|repair|solve|debug|resolve", re.IGNORECASE
-        ),
-        "understanding": re.compile(
-            r"explain|understand|learn|how|why|what", re.IGNORECASE
-        ),
-        "improvement": re.compile(
-            r"improve|optimize|enhance|better|refactor", re.IGNORECASE
-        ),
-        "design": re.compile(r"design|architect|plan|structure", re.IGNORECASE),
-        "analysis": re.compile(r"analyze|review|examine|inspect", re.IGNORECASE),
-    }
-
     _METAPHOR_INDICATORS = [
         "like",
-        "as if",
+        "as i",
         "seems",
         "feels like",
-        "reminds me of",
+        "reminds me o",
         "poetry",
         "blossomed",
         "flowers",
@@ -89,6 +73,12 @@ class MouthpieceFilter:
         re.IGNORECASE,
     )
     _PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
+    # Questions
+    _QUESTIONS = re.compile(r"([^.!?]*\?)")
+    # Steps
+    _STEPS = re.compile(
+        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
+    )
 
     def __init__(self, config: Optional[Dict] = None):
         """Initialize the filter with optional configuration."""
@@ -157,25 +147,57 @@ class MouthpieceFilter:
 
     def _detect_intent(self, text: str) -> str:
         """Detect the primary intent of the text."""
-        # Check intents in priority order using pre-compiled regex
-        if self._INTENT_PATTERNS["creation"].search(text):
+        text_lower = text.lower()
+
+        # Intent patterns
+        if any(
+            word in text_lower
+            for word in ["create", "build", "implement", "make", "develop"]
+        ):
             return "creation"
-        elif self._INTENT_PATTERNS["problem_solving"].search(text):
+        elif any(
+            word in text_lower
+            for word in ["fix", "repair", "solve", "debug", "resolve"]
+        ):
             return "problem_solving"
-        elif self._INTENT_PATTERNS["understanding"].search(text):
+        elif any(
+            word in text_lower
+            for word in [
+                "explain",
+                "understand",
+                "learn",
+                "how",
+                "why",
+                "what",
+            ]
+        ):
             return "understanding"
-        elif self._INTENT_PATTERNS["improvement"].search(text):
+        elif any(
+            word in text_lower
+            for word in [
+                "improve",
+                "optimize",
+                "enhance",
+                "better",
+                "refactor",
+            ]
+        ):
             return "improvement"
-        elif self._INTENT_PATTERNS["design"].search(text):
+        elif any(
+            word in text_lower for word in ["design", "architect", "plan", "structure"]
+        ):
             return "design"
-        elif self._INTENT_PATTERNS["analysis"].search(text):
+        elif any(
+            word in text_lower for word in ["analyze", "review", "examine", "inspect"]
+        ):
             return "analysis"
         else:
             return "general"
 
     def _extract_concepts(self, text: str) -> List[str]:
         """Extract key concepts from the text."""
-        # Simple concept extraction - looks for capitalized words, quoted terms, and technical terms
+        # Simple concept extraction - looks for capitalized words, quoted
+        # terms, and technical terms
         concepts = []
 
         # Optimization: Use pre-compiled regex patterns
@@ -189,6 +211,12 @@ class MouthpieceFilter:
         # Technical-looking terms (contains underscores, dots, or mixed case)
         concepts.extend(self._TECHNICAL_TERMS_MIXED.findall(text))
         concepts.extend(self._TECHNICAL_TERMS_CAMEL.findall(text))
+        concepts.extend(self._DOUBLE_QUOTES.findall(text))
+        concepts.extend(self._SINGLE_QUOTES.findall(text))
+
+        # Technical-looking terms (contains underscores, dots, or mixed case)
+        concepts.extend(self._TECHNICAL_TERMS_DOT_UNDERSCORE.findall(text))
+        concepts.extend(self._CAMEL_CASE.findall(text))
 
         return list(set(concepts))  # Remove duplicates
 
@@ -196,6 +224,7 @@ class MouthpieceFilter:
         """Extract metaphorical language that adds color and meaning."""
         metaphors = []
         sentences = self._SENTENCE_SPLIT.split(text)
+        sentences = self._SENTENCE_SPLITTER.split(text)
 
         for sentence in sentences:
             if self._METAPHOR_PATTERN.search(sentence):
@@ -210,7 +239,13 @@ class MouthpieceFilter:
         # Simple tone detection
         if any(
             word in text_lower
-            for word in ["urgent", "immediately", "asap", "critical", "emergency"]
+            for word in [
+                "urgent",
+                "immediately",
+                "asap",
+                "critical",
+                "emergency",
+            ]
         ):
             return "urgent"
         elif any(
@@ -298,6 +333,7 @@ class MouthpieceFilter:
         """Extract questions from the text."""
         # Find sentences ending with question marks
         questions = self._QUESTIONS_PATTERN.findall(text)
+        questions = self._QUESTIONS.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
     def _extract_structure(self, text: str, analysis: Dict) -> Dict[str, any]:
@@ -351,6 +387,7 @@ class MouthpieceFilter:
         """Check if the text contains step-by-step information."""
         # Look for numbered lists or step indicators
         return bool(self._STEPS_PATTERN.search(text))
+        return bool(self._STEPS.search(text.lower()))
 
     def _identify_sections(self, text: str) -> List[str]:
         """Identify logical sections in the text."""
@@ -358,6 +395,7 @@ class MouthpieceFilter:
 
         # Split by double newlines or paragraph indicators
         paragraphs = self._PARAGRAPH_SPLIT.split(text)
+        paragraphs = self._PARAGRAPHS.split(text)
 
         for i, para in enumerate(paragraphs):
             if para.strip():
@@ -395,25 +433,22 @@ class MouthpieceFilter:
 
         # Header
         if self.config["preserve_poetry"] and analysis["metaphors"]:
+            prompt_parts.append(f"# {title}: {text.split('.')[0].strip()}...\n")
             prompt_parts.append(
-                f"# {title}: {text.split('.')[0].strip()}...\n")
-            prompt_parts.append(
-                f"_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else ""
+                "_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else ""
             )
         else:
             prompt_parts.append(f"# {title}\n")
 
         # Main objective
         prompt_parts.append("## Objective\n")
-        prompt_parts.append(
-            f"{self._extract_main_objective(text, analysis)}\n")
+        prompt_parts.append(f"{self._extract_main_objective(text, analysis)}\n")
 
         # Key requirements
         if analysis["key_verbs"]:
             prompt_parts.append("\n## Requirements\n")
             for verb in analysis["key_verbs"][:5]:  # Top 5 verbs
-                prompt_parts.append(
-                    f"- {verb.capitalize()} the relevant components\n")
+                prompt_parts.append(f"- {verb.capitalize()} the relevant components\n")
 
         # Concepts and context
         if analysis["concepts"]:
@@ -496,8 +531,7 @@ class MouthpieceFilter:
                 output.append("Metadata:")
                 output.append(f"  Intent: {result['metadata']['intent']}")
                 output.append(f"  Tone: {result['metadata']['tone']}")
-                output.append(
-                    f"  Complexity: {result['metadata']['complexity']}")
+                output.append(f"  Complexity: {result['metadata']['complexity']}")
                 output.append(
                     f"  Concepts found: {result['metadata']['concept_count']}"
                 )
@@ -526,7 +560,7 @@ class MouthpieceFilter:
 def main():
     """Main CLI interface for the mouthpiece filter."""
     parser = argparse.ArgumentParser(
-        description="Transform natural human writing into AI-optimized prompts",
+        description="Transform natural human writing into AI-optimized prompts",  # noqa: E501
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -540,9 +574,8 @@ Examples:
     # Input options
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("text", nargs="?", help="Text to transform")
-    input_group.add_argument("--file", "-f", help="Read text from file")
-    input_group.add_argument(
-        "--stdin", action="store_true", help="Read from stdin")
+    input_group.add_argument("--file", "-", help="Read text from file")
+    input_group.add_argument("--stdin", action="store_true", help="Read from stdin")
 
     # Configuration options
     parser.add_argument("--config", "-c", help="Path to config JSON file")
@@ -553,7 +586,9 @@ Examples:
         help="Output format",
     )
     parser.add_argument(
-        "--no-poetry", action="store_true", help="Don't preserve poetic elements"
+        "--no-poetry",
+        action="store_true",
+        help="Don't preserve poetic elements",
     )
     parser.add_argument(
         "--no-voice", action="store_true", help="Don't maintain original voice"

@@ -5,11 +5,9 @@ Validates all organization tokens are working correctly
 Based on MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md recommendations
 """
 
-import json
-import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 import requests
 
@@ -50,7 +48,7 @@ def get_token_from_1password(token_name: str) -> Optional[str]:
             check=True,
         )
         return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         return None
     except FileNotFoundError:
         print("✗ 1Password CLI not found")
@@ -139,12 +137,14 @@ def main():
 
         if result["valid"]:
             rate_info = result["rate_limit"]
-            print(f"✓ Valid (rate: {rate_info['remaining']}/{rate_info['limit']})")
+            print(
+                f"✓ Valid (rate: {rate_info['remaining']}/{rate_info['limit']})"  # noqa: E501
+            )
 
             if "warning" in result:
                 print(f"  ⚠ {result['warning']}")
         else:
-            print(f"✗ Failed")
+            print("✗ Failed")
             print(f"  Error: {result['error']}")
             all_valid = False
 

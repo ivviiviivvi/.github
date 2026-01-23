@@ -127,7 +127,7 @@ def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict
 
             if verbose:
                 print(
-                    f"  → Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"
+                    f"  → Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )
                 print(f"  → Scopes: {', '.join(result['scopes'])}")
 
@@ -197,12 +197,12 @@ def print_summary(results: List[Dict], verbose: bool = False):
             if result["valid"]:
                 print(f"    Scopes: {', '.join(result['scopes'])}")
                 print(
-                    f"    Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"
+                    f"    Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )
                 if result.get("warning"):
                     print(f"    {YELLOW}Warning: {result['warning']}{NC}")
             elif result["status"] == "planned":
-                print(f"    Status: Not yet created")
+                print("    Status: Not yet created")
             else:
                 print(f"    Error: {result['error']}")
             print()
@@ -212,8 +212,7 @@ def print_summary(results: List[Dict], verbose: bool = False):
 
 def main():
     """Main validation function"""
-    parser = argparse.ArgumentParser(
-        description="Validate organization GitHub tokens")
+    parser = argparse.ArgumentParser(description="Validate organization GitHub tokens")
     parser.add_argument(
         "--token",
         help="Validate specific token only",
@@ -236,10 +235,7 @@ def main():
     print(f"{BLUE}🔍 Validating organization tokens...{NC}\n")
 
     # Select tokens to validate
-    if args.token:
-        tokens_to_validate = {args.token: TOKENS[args.token]}
-    else:
-        tokens_to_validate = TOKENS
+    tokens_to_validate = {args.token: TOKENS[args.token]} if args.token else TOKENS
 
     results = []
     for token_name, config in tokens_to_validate.items():
@@ -267,11 +263,13 @@ def main():
     if not all_valid and not args.ignore_planned:
         print(f"\n{RED}⚠️  Some tokens failed validation!{NC}")
         print("Review docs/TOKEN_REGISTRY.md and rotate failed tokens.")
-        print("Or create planned tokens: see " "docs/MASTER_ORG_TOKEN_QUICK_ACTION.md")
+        print(
+            "Or create planned tokens: see docs/MASTER_ORG_TOKEN_QUICK_ACTION.md"  # noqa: E501
+        )
         sys.exit(1)
     elif planned_count := sum(1 for r in results if r["status"] == "planned"):
         print(
-            f"\n{YELLOW}⏳ {planned_count} token(s) " f"planned but not yet created{NC}"
+            f"\n{YELLOW}⏳ {planned_count} token(s) planned but not yet created{NC}"  # noqa: E501
         )
         print("See docs/MASTER_ORG_TOKEN_QUICK_ACTION.md for next steps")
         sys.exit(0)

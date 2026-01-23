@@ -9,7 +9,7 @@ import json
 import os
 import sys
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import requests
 
@@ -17,7 +17,13 @@ import requests
 PROJECT_MAPPINGS = {
     8: {  # AI Framework Development
         "labels": ["ai", "agent", "mcp", "copilot", "ai-framework"],
-        "keywords": ["agent", "mcp server", "copilot", "ai framework", "prompt"],
+        "keywords": [
+            "agent",
+            "mcp server",
+            "copilot",
+            "ai framework",
+            "prompt",
+        ],
         "paths": ["ai_framework/", "agents/", "prompts/", "chatmodes/"],
     },
     9: {  # Documentation & Knowledge
@@ -37,7 +43,13 @@ PROJECT_MAPPINGS = {
     },
     12: {  # Infrastructure & DevOps
         "labels": ["infrastructure", "devops", "deployment"],
-        "keywords": ["infrastructure", "devops", "deployment", "terraform", "docker"],
+        "keywords": [
+            "infrastructure",
+            "devops",
+            "deployment",
+            "terraform",
+            "docker",
+        ],
         "paths": [".devcontainer/", "infrastructure/"],
     },
     13: {  # Community & Support

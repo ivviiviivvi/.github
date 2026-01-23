@@ -53,7 +53,7 @@ class TestLinkExtraction(unittest.TestCase):
 
     def test_deduplication(self):
         """Test that duplicate URLs are removed"""
-        content = "[Link1](https://example.com) and [Link2](https://example.com) and https://example.com"
+        content = "[Link1](https://example.com) and [Link2](https://example.com) and https://example.com"  # noqa: E501
         urls = self.crawler._extract_links(content)
         self.assertEqual(len(urls), 1)
         self.assertEqual(urls, ["https://example.com"])
@@ -76,8 +76,8 @@ class TestLinkExtraction(unittest.TestCase):
         self.assertEqual(urls, ["https://example.com"])
 
     def test_url_with_trailing_punctuation(self):
-        """Test that bare URLs may include some trailing punctuation in the match"""
-        content = "Visit https://example.com, https://github.com. and https://test.com!"
+        """Test that bare URLs may include some trailing punctuation in the match"""  # noqa: E501
+        content = "Visit https://example.com, https://github.com. and https://test.com!"  # noqa: E501
         urls = self.crawler._extract_links(content)
         # Note: Current regex may capture some trailing punctuation
         # The validation phase will handle these appropriately
@@ -88,7 +88,7 @@ class TestLinkExtraction(unittest.TestCase):
 
     def test_markdown_url_with_parentheses(self):
         """Test markdown links correctly handle URLs with parentheses"""
-        content = "[Wikipedia](https://en.wikipedia.org/wiki/Example_(disambiguation))"
+        content = "[Wikipedia](https://en.wikipedia.org/wiki/Example_(disambiguation))"  # noqa: E501
         urls = self.crawler._extract_links(content)
         # Markdown syntax should preserve parens in URL
         # Note: May be truncated at closing paren - this is a known limitation
@@ -121,9 +121,9 @@ class TestWebCrawlerSecurity(unittest.TestCase):
     def test_ssrf_protection_multicast(self):
         """Verify that multicast IPs are blocked."""
         # 224.0.0.1 is All Hosts multicast group
-        # We need to mock resolution because this might not resolve in all envs or be routable
+        # We need to mock resolution because this might not resolve in all envs or be routable  # noqa: E501
         # But _check_link calls _resolve_hostname.
-        # Let's rely on the fact that if we pass an IP as host, it resolves to itself?
+        # Let's rely on the fact that if we pass an IP as host, it resolves to itself?  # noqa: E501
         # No, _resolve_hostname uses socket.getaddrinfo.
 
         with patch.object(
@@ -171,7 +171,8 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         """
         crawler = OrganizationCrawler(github_token="dummy", org_name="dummy")
 
-        # Mock external dependencies - use public IP (example.com) for realistic scenario
+        # Mock external dependencies - use public IP (example.com) for
+        # realistic scenario
         crawler._resolve_hostname = MagicMock(return_value=["93.184.216.34"])
         crawler._is_hostname_safe = MagicMock(return_value=True)
 
@@ -192,7 +193,8 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         mock_response_get.status = 200
         mock_response_get.headers = {}
 
-        # Configure side_effect to return different responses for sequential calls
+        # Configure side_effect to return different responses for sequential
+        # calls
         mock_pool.request.side_effect = [mock_response_head, mock_response_get]
 
         # Run _check_link

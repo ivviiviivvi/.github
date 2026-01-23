@@ -14,12 +14,17 @@ Uses historical data to predict:
 
 Usage:
     python proactive_maintenance.py --owner ORG --repo REPO --task-type TYPE
-    
+
 Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo access
 """
 
-from utils import ConfigLoader, GitHubAPIClient, setup_logger
+import argparse
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Dict, List
+
 from models import (
     MaintenanceConfig,
     MaintenanceTask,
@@ -27,11 +32,7 @@ from models import (
     Priority,
     RiskLevel,
 )
-import argparse
-import sys
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -65,9 +66,7 @@ class MaintenanceScheduler:
         Returns:
             Optimal maintenance window with alternatives
         """
-        self.logger.info(
-            f"Scheduling maintenance: {task_type} for {owner}/{repo}"
-        )
+        self.logger.info(f"Scheduling maintenance: {task_type} for {owner}/{repo}")
 
         # Analyze repository activity patterns
         activity_data = self._analyze_activity_patterns(owner, repo)
@@ -94,9 +93,7 @@ class MaintenanceScheduler:
 
         return best_window
 
-    def _analyze_activity_patterns(
-        self, owner: str, repo: str
-    ) -> Dict:
+    def _analyze_activity_patterns(self, owner: str, repo: str) -> Dict:
         """
         Analyze repository activity patterns over time.
 
@@ -139,8 +136,7 @@ class MaintenanceScheduler:
     def _get_commit_activity(self, owner: str, repo: str) -> List[Dict]:
         """Get recent commit activity."""
         try:
-            since = (datetime.now(timezone.utc) -
-                     timedelta(days=28)).isoformat()
+            since = (datetime.now(timezone.utc) - timedelta(days=28)).isoformat()
             endpoint = f"/repos/{owner}/{repo}/commits"
             params = {"since": since, "per_page": 100}
             commits = self.client.get(endpoint, params=params)
@@ -163,8 +159,7 @@ class MaintenanceScheduler:
     def _get_issue_activity(self, owner: str, repo: str) -> List[Dict]:
         """Get recent issue/PR activity."""
         try:
-            since = (datetime.now(timezone.utc) -
-                     timedelta(days=28)).isoformat()
+            since = (datetime.now(timezone.utc) - timedelta(days=28)).isoformat()
             endpoint = f"/repos/{owner}/{repo}/issues"
             params = {"since": since, "state": "all", "per_page": 100}
             issues = self.client.get(endpoint, params=params)
@@ -191,18 +186,14 @@ class MaintenanceScheduler:
         # Weight workflow runs
         for run in workflows:
             if run.get("created_at"):
-                dt = datetime.fromisoformat(
-                    run["created_at"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
                 hour = dt.hour
                 hourly_activity[hour] += 2.0  # Workflows are more disruptive
 
         # Weight issues/PRs
         for issue in issues:
             if issue.get("created_at"):
-                dt = datetime.fromisoformat(
-                    issue["created_at"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
                 hour = dt.hour
                 hourly_activity[hour] += 0.5
 
@@ -233,18 +224,14 @@ class MaintenanceScheduler:
         # Weight workflow runs
         for run in workflows:
             if run.get("created_at"):
-                dt = datetime.fromisoformat(
-                    run["created_at"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
                 day = dt.weekday()
                 daily_activity[day] += 2.0
 
         # Weight issues/PRs
         for issue in issues:
             if issue.get("created_at"):
-                dt = datetime.fromisoformat(
-                    issue["created_at"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
                 day = dt.weekday()
                 daily_activity[day] += 0.5
 
@@ -289,12 +276,14 @@ class MaintenanceScheduler:
                     tasks.append(
                         MaintenanceTask(
                             task_type="dependency_update",
-                            description=f"Merge dependency update: {pr['title']}",
+                            description=f"Merge dependency update: {pr['title']}",  # noqa: E501
                             priority=Priority.P2,
                             estimated_duration=10,
                             risk_level=RiskLevel.LOW,
                             details={
-                                "pr_number": pr["number"], "title": pr["title"]},
+                                "pr_number": pr["number"],
+                                "title": pr["title"],
+                            },
                         )
                     )
 
@@ -303,9 +292,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_cleanup_tasks(
-        self, owner: str, repo: str
-    ) -> List[MaintenanceTask]:
+    def _get_cleanup_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
         """Identify cleanup tasks needed."""
         tasks = []
 
@@ -325,11 +312,10 @@ class MaintenanceScheduler:
 
                 # Get branch last commit
                 try:
-                    commit_endpoint = f"/repos/{owner}/{repo}/commits/{branch['commit']['sha']}"
+                    commit_endpoint = f"/repos/{owner}/{repo}/commits/{branch['commit']['sha']}"  # noqa: E501
                     commit = self.client.get(commit_endpoint)
                     commit_date = datetime.fromisoformat(
-                        commit["commit"]["author"]["date"].replace(
-                            "Z", "+00:00")
+                        commit["commit"]["author"]["date"].replace("Z", "+00:00")
                     )
 
                     if commit_date < cutoff:
@@ -342,7 +328,7 @@ class MaintenanceScheduler:
                 tasks.append(
                     MaintenanceTask(
                         task_type="cleanup",
-                        description=f"Delete {len(stale_branches)} stale branches",
+                        description=f"Delete {len(stale_branches)} stale branches",  # noqa: E501
                         priority=Priority.P3,
                         estimated_duration=5,
                         risk_level=RiskLevel.LOW,
@@ -355,9 +341,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_optimization_tasks(
-        self, owner: str, repo: str
-    ) -> List[MaintenanceTask]:
+    def _get_optimization_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
         """Identify optimization tasks."""
         # Placeholder for optimization tasks
         # In production, would check for cache warming, index rebuilding, etc.
@@ -407,9 +391,7 @@ class MaintenanceScheduler:
                 )
 
                 # Calculate confidence based on data quality
-                confidence = self._calculate_confidence(
-                    activity_data, window_start
-                )
+                confidence = self._calculate_confidence(activity_data, window_start)
 
                 # Estimate duration
                 duration = sum(task.estimated_duration for task in tasks) or 30
@@ -601,8 +583,7 @@ def main():
         action="store_true",
         help="Actually schedule the maintenance (default: dry run)",
     )
-    parser.add_argument("--debug", action="store_true",
-                        help="Enable debug logging")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -625,26 +606,25 @@ def main():
 
         # Schedule maintenance
         scheduler = MaintenanceScheduler(client, config)
-        window = scheduler.schedule_maintenance(
-            args.owner, args.repo, args.task_type
-        )
+        window = scheduler.schedule_maintenance(args.owner, args.repo, args.task_type)
 
         # Output result
         print(f"\n{'='*70}")
-        print(f"Optimal Maintenance Window")
+        print("Optimal Maintenance Window")
         print(f"{'='*70}")
         print(f"Repository: {args.owner}/{args.repo}")
         print(f"Task Type: {args.task_type}")
         print(f"\n{'='*70}")
-        print(f"Scheduled Window")
+        print("Scheduled Window")
         print(f"{'='*70}")
         print(
-            f"Start Time: {window.scheduled_time.strftime('%Y-%m-%d %H:%M UTC')}")
+            f"Start Time: {window.scheduled_time.strftime('%Y-%m-%d %H:%M UTC')}"  # noqa: E501
+        )
         print(f"Duration: {window.duration_minutes} minutes")
         print(f"Impact Score: {window.impact_score:.2f} (lower is better)")
         print(f"Confidence: {window.confidence:.0%}")
         print(f"\n{'='*70}")
-        print(f"Reasoning")
+        print("Reasoning")
         print(f"{'='*70}")
         print(f"{window.reasoning}")
 
@@ -654,13 +634,15 @@ def main():
             print(f"{'='*70}")
             for i, task in enumerate(window.tasks[:5], 1):
                 print(f"{i}. {task.description}")
-                print(f"   Priority: {task.priority.value}, "
-                      f"Duration: {task.estimated_duration}min, "
-                      f"Risk: {task.risk_level.value}")
+                print(
+                    f"   Priority: {task.priority.value}, "
+                    f"Duration: {task.estimated_duration}min, "
+                    f"Risk: {task.risk_level.value}"
+                )
 
         if window.alternatives:
             print(f"\n{'='*70}")
-            print(f"Alternative Windows")
+            print("Alternative Windows")
             print(f"{'='*70}")
             for i, alt in enumerate(window.alternatives, 1):
                 alt_time = datetime.fromisoformat(alt["time"])
@@ -674,9 +656,11 @@ def main():
 
         if args.schedule:
             logger.info("Scheduling maintenance window...")
-            # In production, would create calendar event, send notifications, etc.
+            # In production, would create calendar event, send notifications,
+            # etc.
             print(
-                f"✅ Maintenance scheduled for {window.scheduled_time.isoformat()}")
+                f"✅ Maintenance scheduled for {window.scheduled_time.isoformat()}"  # noqa: E501
+            )
 
         sys.exit(0)
 

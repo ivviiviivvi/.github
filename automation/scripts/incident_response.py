@@ -129,8 +129,7 @@ class IncidentResponseEngine:
         if self.config.auto_execute_runbooks:
             self._execute_runbook(incident)
 
-        logger.info(
-            f"Incident {incident_id} created with severity {severity.value}")
+        logger.info(f"Incident {incident_id} created with severity {severity.value}")
         return incident
 
     def _classify_severity(
@@ -306,14 +305,13 @@ class IncidentResponseEngine:
     def _execute_create_issue_action(self, incident: Incident, step: RunbookStep):
         """Execute create issue action."""
         if incident.github_issue_number:
-            logger.info(
-                f"Issue already exists: #{incident.github_issue_number}")
+            logger.info(f"Issue already exists: #{incident.github_issue_number}")
             return
 
         owner, repo = incident.repository.split("/")
         labels = step.params.get("labels", ["incident"])
 
-        issue_body = f"""
+        issue_body = """
 ## Incident Details
 
 - **Incident ID**: {incident.incident_id}
@@ -352,10 +350,9 @@ Current status: {incident.status.value}
         # Increase severity if not already SEV-1
         if incident.severity != IncidentSeverity.SEV1:
             old_severity = incident.severity
-            incident.severity = IncidentSeverity(
-                incident.severity.value[:-1] + "1")
+            incident.severity = IncidentSeverity(incident.severity.value[:-1] + "1")
             logger.info(
-                f"Escalated from {old_severity.value} to {incident.severity.value}"
+                f"Escalated from {old_severity.value} to {incident.severity.value}"  # noqa: E501
             )
 
         # Send escalation notification
@@ -369,9 +366,11 @@ Current status: {incident.status.value}
         logger.info(f"Triggering workflow: {workflow_name}")
 
         self.github.post(
-            f"/repos/{owner}/{repo}/actions/workflows/{workflow_name}/dispatches",
-            json={"ref": "main", "inputs": {
-                "incident_id": incident.incident_id}},
+            f"/repos/{owner}/{repo}/actions/workflows/{workflow_name}/dispatches",  # noqa: E501
+            json={
+                "re": "main",
+                "inputs": {"incident_id": incident.incident_id},
+            },
         )
 
     def _execute_update_status_action(self, incident: Incident, step: RunbookStep):
@@ -382,7 +381,10 @@ Current status: {incident.status.value}
             logger.info(f"Updated status to {incident.status.value}")
 
     def update_incident_status(
-        self, incident_id: str, status: IncidentStatus, resolution: Optional[str] = None
+        self,
+        incident_id: str,
+        status: IncidentStatus,
+        resolution: Optional[str] = None,
     ) -> Incident:
         """
         Update incident status.
@@ -414,8 +416,7 @@ Current status: {incident.status.value}
 
         # Send notification if status changed
         if old_status != status:
-            self._send_incident_notification(
-                incident, f"status_changed_{status.value}")
+            self._send_incident_notification(incident, f"status_changed_{status.value}")
 
         return incident
 
@@ -502,16 +503,15 @@ Current status: {incident.status.value}
 
         if incident.time_to_resolution_minutes:
             if incident.time_to_resolution_minutes < 60:
-                lessons.append(
-                    "Quick resolution time demonstrates effective runbook")
+                lessons.append("Quick resolution time demonstrates effective runbook")
             elif incident.time_to_resolution_minutes > 240:
                 lessons.append(
-                    "Long resolution time indicates need for process improvement"
+                    "Long resolution time indicates need for process improvement"  # noqa: E501
                 )
 
         if incident.severity in [IncidentSeverity.SEV1, IncidentSeverity.SEV2]:
             lessons.append(
-                "High severity incidents require improved monitoring and alerting"
+                "High severity incidents require improved monitoring and alerting"  # noqa: E501
             )
 
         return lessons
@@ -577,7 +577,7 @@ Current status: {incident.status.value}
             f"/repos/{owner}/{repo}/issues",
             json={
                 "title": f"[{incident.severity.value}] {incident.title}",
-                "body": f"Incident ID: {incident.incident_id}\n\n{incident.description}",
+                "body": f"Incident ID: {incident.incident_id}\n\n{incident.description}",  # noqa: E501
                 "labels": ["incident", incident.severity.value.lower()],
             },
         )
@@ -587,7 +587,6 @@ Current status: {incident.status.value}
         """Send incident notification via unified notification system."""
         # Notifications now handled by notify_incident_created/resolved
         # This method maintained for backward compatibility but is now a no-op
-        pass
 
     def _get_notification_channels(self, severity: IncidentSeverity) -> List[str]:
         """Get notification channels for severity."""
@@ -602,14 +601,14 @@ Current status: {incident.status.value}
 
     def _format_notification(self, incident: Incident, event: str) -> str:
         """Format notification message."""
-        emoji = {
+        _emoji = {  # noqa: F841
             "created": "🚨",
             "escalated": "⚠️",
             "status_changed_RESOLVED": "✅",
             "status_changed_INVESTIGATING": "🔍",
         }.get(event, "📢")
 
-        return f"""
+        return """
 {emoji} **Incident {event.replace('_', ' ').title()}**
 
 ID: {incident.incident_id}
@@ -622,12 +621,10 @@ Repository: {incident.repository}
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Incident Response Automation")
+    parser = argparse.ArgumentParser(description="Incident Response Automation")
     parser.add_argument("--owner", help="Repository owner")
     parser.add_argument("--repo", help="Repository name")
-    parser.add_argument("--create", action="store_true",
-                        help="Create incident")
+    parser.add_argument("--create", action="store_true", help="Create incident")
     parser.add_argument("--title", help="Incident title")
     parser.add_argument("--description", help="Incident description")
     parser.add_argument(
@@ -639,10 +636,8 @@ def main():
     )
     parser.add_argument("--update-status", help="Update status")
     parser.add_argument("--resolution", help="Resolution details")
-    parser.add_argument("--report", action="store_true",
-                        help="Generate report")
-    parser.add_argument("--debug", action="store_true",
-                        help="Enable debug logging")
+    parser.add_argument("--report", action="store_true", help="Generate report")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 

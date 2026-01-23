@@ -18,7 +18,7 @@ Usage:
     python enhanced_analytics.py --owner ORG --repo REPO --train --days 90
 
     # Make predictions for a PR
-    python enhanced_analytics.py --owner ORG --repo REPO --predict --pr-number 123
+    python enhanced_analytics.py --owner ORG --repo REPO --predict --pr-number 123  # noqa: E501
 
     # Evaluate model performance
     python enhanced_analytics.py --owner ORG --repo REPO --evaluate
@@ -33,28 +33,30 @@ import logging
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict
 
 import numpy as np
-import yaml
 
 # ML libraries
 try:
     import joblib
-    from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+    from sklearn.ensemble import (
+        GradientBoostingClassifier,
+        RandomForestClassifier,
+    )
     from sklearn.metrics import (
         accuracy_score,
-        classification_report,
-        confusion_matrix,
         f1_score,
         precision_score,
         recall_score,
     )
-    from sklearn.model_selection import cross_val_score, train_test_split
+    from sklearn.model_selection import train_test_split
     from sklearn.neural_network import MLPClassifier
     from sklearn.preprocessing import StandardScaler
 except ImportError:
-    print("ERROR: Required ML libraries not installed. Run: pip install scikit-learn joblib numpy")
+    print(
+        "ERROR: Required ML libraries not installed. Run: pip install scikit-learn joblib numpy"  # noqa: E501
+    )
     sys.exit(1)
 
 from models import AnalyticsConfig, AnalyticsPrediction, FeatureImportance
@@ -62,7 +64,8 @@ from utils import GitHubAPIClient, load_config
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -118,16 +121,10 @@ class EnhancedAnalyticsEngine:
             raise ValueError(f"PR #{pr_number} not found")
 
         # Fetch additional data
-        commits = self.github.get(
-            f"/repos/{owner}/{repo}/pulls/{pr_number}/commits"
-        )
-        files = self.github.get(
-            f"/repos/{owner}/{repo}/pulls/{pr_number}/files")
-        reviews = self.github.get(
-            f"/repos/{owner}/{repo}/pulls/{pr_number}/reviews")
-        comments = self.github.get(
-            f"/repos/{owner}/{repo}/issues/{pr_number}/comments"
-        )
+        commits = self.github.get(f"/repos/{owner}/{repo}/pulls/{pr_number}/commits")
+        files = self.github.get(f"/repos/{owner}/{repo}/pulls/{pr_number}/files")
+        reviews = self.github.get(f"/repos/{owner}/{repo}/pulls/{pr_number}/reviews")
+        comments = self.github.get(f"/repos/{owner}/{repo}/issues/{pr_number}/comments")
 
         # Initialize features
         features = {}
@@ -135,8 +132,7 @@ class EnhancedAnalyticsEngine:
         # Basic metrics
         features["lines_added"] = pr.get("additions", 0)
         features["lines_deleted"] = pr.get("deletions", 0)
-        features["lines_changed"] = features["lines_added"] + \
-            features["lines_deleted"]
+        features["lines_changed"] = features["lines_added"] + features["lines_deleted"]
         features["files_changed"] = pr.get("changed_files", 0)
         features["commits_count"] = len(commits) if commits else 0
 
@@ -240,39 +236,37 @@ class EnhancedAnalyticsEngine:
 
         # Branch metrics
         features["is_main_branch"] = (
-            1.0 if pr.get("base", {}).get("ref", "") == "main" else 0.0
+            1.0 if pr.get("base", {}).get("re", "") == "main" else 0.0
         )
         features["is_feature_branch"] = (
-            1.0 if "feature" in pr.get("head", {}).get(
-                "ref", "").lower() else 0.0
+            1.0 if "feature" in pr.get("head", {}).get("re", "").lower() else 0.0
         )
         features["is_bugfix_branch"] = (
-            1.0 if "bugfix" in pr.get("head", {}).get(
-                "ref", "").lower() else 0.0
+            1.0 if "bugfix" in pr.get("head", {}).get("re", "").lower() else 0.0
         )
 
         # Label analysis
         labels = pr.get("labels", [])
         features["has_breaking_change"] = (
             1.0
-            if any("breaking" in l.get("name", "").lower() for l in labels)
+            if any("breaking" in label.get("name", "").lower() for label in labels)
             else 0.0
         )
         features["has_security_label"] = (
-            1.0 if any("security" in l.get("name", "").lower()
-                       for l in labels) else 0.0
+            1.0
+            if any("security" in label.get("name", "").lower() for label in labels)
+            else 0.0
         )
         features["has_documentation_label"] = (
-            1.0 if any("documentation" in l.get("name", "").lower()
-                       for l in labels) else 0.0
+            1.0
+            if any("documentation" in label.get("name", "").lower() for label in labels)
+            else 0.0
         )
 
         logger.info(f"Extracted {len(features)} features")
         return features
 
-    def _get_author_stats(
-        self, owner: str, repo: str, author: str
-    ) -> Dict[str, float]:
+    def _get_author_stats(self, owner: str, repo: str, author: str) -> Dict[str, float]:
         """Get statistics about the PR author."""
         # Fetch author's commits in the last 90 days
         since = (datetime.now() - timedelta(days=90)).isoformat()
@@ -305,8 +299,7 @@ class EnhancedAnalyticsEngine:
                     merged = datetime.fromisoformat(
                         pr["merged_at"].replace("Z", "+00:00")
                     )
-                    review_times.append(
-                        (merged - created).total_seconds() / 3600)
+                    review_times.append((merged - created).total_seconds() / 3600)
 
             avg_review_time = np.mean(review_times) if review_times else 24.0
         else:
@@ -324,11 +317,12 @@ class EnhancedAnalyticsEngine:
         """Get current repository statistics."""
         # Fetch open PRs
         open_prs = self.github.get(
-            f"/repos/{owner}/{repo}/pulls", params={"state": "open", "per_page": 100}
+            f"/repos/{owner}/{repo}/pulls",
+            params={"state": "open", "per_page": 100},
         )
 
         # Fetch recent closed PRs (last 30 days)
-        since = (datetime.now() - timedelta(days=30)).isoformat()
+        # Note: GitHub API doesn't filter by since for pull requests
         closed_prs = self.github.get(
             f"/repos/{owner}/{repo}/pulls",
             params={"state": "closed", "per_page": 100},
@@ -378,7 +372,7 @@ class EnhancedAnalyticsEngine:
         logger.info(f"Training models on {lookback_days} days of data")
 
         # Fetch historical PRs
-        since = (datetime.now() - timedelta(days=lookback_days)).isoformat()
+        # Note: GitHub API doesn't filter by since for pull requests
         prs = self.github.get(
             f"/repos/{owner}/{repo}/pulls",
             params={"state": "closed", "per_page": 100},
@@ -386,7 +380,7 @@ class EnhancedAnalyticsEngine:
 
         if not prs or len(prs) < 20:
             raise ValueError(
-                f"Insufficient training data: {len(prs) if prs else 0} PRs found"
+                f"Insufficient training data: {len(prs) if prs else 0} PRs found"  # noqa: E501
             )
 
         # Extract features and labels
@@ -403,14 +397,16 @@ class EnhancedAnalyticsEngine:
                     self.feature_names = list(features.keys())
             except Exception as e:
                 logger.warning(
-                    f"Failed to extract features for PR #{pr['number']}: {e}")
+                    f"Failed to extract features for PR #{pr['number']}: {e}"
+                )
                 continue
 
         X = np.array(X)
         y = np.array(y)
 
         logger.info(
-            f"Training on {len(X)} samples with {len(self.feature_names)} features")
+            f"Training on {len(X)} samples with {len(self.feature_names)} features"  # noqa: E501
+        )
 
         # Split data
         X_train, X_test, y_train, y_test = train_test_split(
@@ -441,9 +437,7 @@ class EnhancedAnalyticsEngine:
 
         # Gradient Boosting
         logger.info("Training Gradient Boosting...")
-        gb = GradientBoostingClassifier(
-            n_estimators=100, max_depth=5, random_state=42
-        )
+        gb = GradientBoostingClassifier(n_estimators=100, max_depth=5, random_state=42)
         gb.fit(X_train_scaled, y_train)
         gb_pred = gb.predict(X_test_scaled)
         results["gradient_boosting"] = {
@@ -482,7 +476,11 @@ class EnhancedAnalyticsEngine:
         return results
 
     def predict(
-        self, owner: str, repo: str, pr_number: int, model_name: str = "random_forest"
+        self,
+        owner: str,
+        repo: str,
+        pr_number: int,
+        model_name: str = "random_forest",
     ) -> AnalyticsPrediction:
         """
         Predict outcome for a pull request.
@@ -545,9 +543,9 @@ class EnhancedAnalyticsEngine:
         if hasattr(model, "feature_importances_"):
             importances = model.feature_importances_
         else:
-            # For models without feature_importances_, use permutation importance
-            importances = np.ones(len(self.feature_names)
-                                  ) / len(self.feature_names)
+            # For models without feature_importances_, use permutation
+            # importance
+            importances = np.ones(len(self.feature_names)) / len(self.feature_names)
 
         # Create sorted list
         importance_dict = dict(zip(self.feature_names, importances))
@@ -582,7 +580,11 @@ class EnhancedAnalyticsEngine:
     def _load_models(self):
         """Load latest trained models from disk."""
         # Find latest models
-        for model_name in ["random_forest", "gradient_boosting", "neural_network"]:
+        for model_name in [
+            "random_forest",
+            "gradient_boosting",
+            "neural_network",
+        ]:
             pattern = f"{model_name}_*.joblib"
             model_files = sorted(self.models_dir.glob(pattern), reverse=True)
 
@@ -591,14 +593,12 @@ class EnhancedAnalyticsEngine:
                 logger.info(f"Loaded {model_name} from {model_files[0]}")
 
         # Load scaler
-        scaler_files = sorted(self.models_dir.glob(
-            "scaler_*.joblib"), reverse=True)
+        scaler_files = sorted(self.models_dir.glob("scaler_*.joblib"), reverse=True)
         if scaler_files:
             self.scaler = joblib.load(scaler_files[0])
 
         # Load feature names
-        feature_files = sorted(self.models_dir.glob(
-            "features_*.json"), reverse=True)
+        feature_files = sorted(self.models_dir.glob("features_*.json"), reverse=True)
         if feature_files:
             with open(feature_files[0]) as f:
                 self.feature_names = json.load(f)
@@ -606,26 +606,21 @@ class EnhancedAnalyticsEngine:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Enhanced Analytics ML Engine")
+    parser = argparse.ArgumentParser(description="Enhanced Analytics ML Engine")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument("--train", action="store_true", help="Train models")
-    parser.add_argument("--predict", action="store_true",
-                        help="Make prediction")
-    parser.add_argument("--pr-number", type=int,
-                        help="PR number for prediction")
-    parser.add_argument("--evaluate", action="store_true",
-                        help="Evaluate models")
+    parser.add_argument("--predict", action="store_true", help="Make prediction")
+    parser.add_argument("--pr-number", type=int, help="PR number for prediction")
+    parser.add_argument("--evaluate", action="store_true", help="Evaluate models")
     parser.add_argument(
-        "--feature-importance", action="store_true", help="Show feature importance"
+        "--feature-importance",
+        action="store_true",
+        help="Show feature importance",
     )
-    parser.add_argument("--days", type=int, default=90,
-                        help="Training lookback days")
-    parser.add_argument("--model", default="random_forest",
-                        help="Model to use")
-    parser.add_argument("--debug", action="store_true",
-                        help="Enable debug logging")
+    parser.add_argument("--days", type=int, default=90, help="Training lookback days")
+    parser.add_argument("--model", default="random_forest", help="Model to use")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -652,8 +647,7 @@ def main():
             print("ERROR: --pr-number required for prediction")
             sys.exit(1)
 
-        prediction = engine.predict(
-            args.owner, args.repo, args.pr_number, args.model)
+        prediction = engine.predict(args.owner, args.repo, args.pr_number, args.model)
         print("\n=== Prediction ===")
         print(f"PR #{prediction.pr_number}")
         print(f"Prediction: {prediction.prediction}")

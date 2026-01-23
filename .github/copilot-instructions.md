@@ -1,7 +1,6 @@
 ---
-description: AI rules derived by SpecStory from the project AI interaction history
-globs: *
----
+
+## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
 ## description: AI rules derived by SpecStory from the project AI interaction history globs: \*
 
@@ -11,8 +10,10 @@ globs: *
 
 ## FOLDER ORGANIZATION
 
-- When cleaning up a repository, create an `archive/` directory to move obsolete files, scripts, and reports.
-- Within `archive/`, create subdirectories such as `deployment/`, `monitoring/`, `status-reports/`, `github-projects/`, and `test-results/` to categorize archived items.
+- To prevent future merge conflicts, standardize directory casing.
+- Consolidate directories to lowercase. Example: Consolidate `Jules` to `jules`.
+- Update all workflow references to use the lowercase directory name.
+- Add the uppercase directory name to `.gitignore`.
 
 ## TECH STACK
 
@@ -50,7 +51,7 @@ globs: *
   implementation:
   - VERSION file as source of truth (currently: 1.0.0)
   - package.json with version and scripts
-  - Automated version sync via `scripts/sync_version.js`
+  - Automated version sync via `scripts/sync-version.js`
   - Version bump workflows in GitHub Actions
   - Follows MAJOR.MINOR.PATCH format
   - Conventional commits for version determination
@@ -259,18 +260,75 @@ globs: *
     - **Migration Plan:** Replace single master token with purpose-specific
       tokens by 2026-02-18
     - GitHub Personal Access Tokens (Classic) REQUIRE the Web UI.
-    - **1Password Authentication Troubleshooting:**
-      - **Issue**: 1Password CLI shows as signed in, but still cannot access the
-        vault and requires re-authentication.
-      - **Root Cause**: Likely due to a missing integration between the
-        1Password CLI and the desktop app, or biometric lock settings.
-      - **Solution**:
-        1. **Open 1Password Desktop App:** Ensure the 1Password desktop
-           application is running.
-        1. **Enable CLI Integration:** Go to Settings -> Developer -> "Integrate
-           with 1Password CLI" and ensure this option is turned ON.
-        1. **Enable Biometric Unlock (Optional):** Enable "Connect with
-           1Password CLI" biometric unlock for added convenience.
+
+- **1Password Authentication Troubleshooting:**
+  - **Issue**: 1Password CLI shows as signed in, but still cannot access the
+    vault and requires re-authentication.
+  - **Root Cause**: Likely due to a missing integration between the 1Password
+    CLI and the desktop app, or biometric lock settings.
+  - **Solution**:
+    1. **Open 1Password Desktop App:** Ensure the 1Password desktop application
+       is running.
+    1. **Enable CLI Integration:** Go to Settings -> Developer -> "Integrate
+       with 1Password CLI" and ensure this option is turned ON.
+    1. **Enable Biometric Unlock (Optional):** Enable "Connect with 1Password
+       CLI" biometric unlock for added convenience.
+
+- **Pylance Performance Issues**:
+  - **Issue**: Pylance language server is continually running and consuming
+    excessive resources.
+  - **Troubleshooting**:
+    1. **Check for Errors**: Use the `copilot_getErrors` tool to identify any
+       errors or issues reported by Pylance. High number of errors (e.g. > 500)
+       can indicate a configuration or code quality issue.
+    1. **Optimize Pylance Settings**: Adjust Pylance settings in
+       `.vscode/settings.json` to reduce analysis overhead. The following
+       settings are recommended:
+       ```json
+       {
+         "python.analysis.typeCheckingMode": "off", // Disable type checking to reduce overhead
+         "python.analysis.diagnosticMode": "openFilesOnly", // Only analyze open files
+         "python.analysis.exclude": [
+           // Exclude common directories
+           "**/node_modules/**",
+           "**/__pycache__/**",
+           "**/.venv/**",
+           "**/dist/**",
+           "**/build/**",
+           "**/archive/**"
+         ],
+         "python.analysis.ignore": [
+           // Ignore additional paths
+           "**/archive/**",
+           "**/node_modules/**"
+         ],
+         "python.analysis.autoSearchPaths": false, // Prevent automatic path searching
+         "python.analysis.indexing": true, // Enable indexing
+         "python.analysis.memory.keepLibraryAst": false // Reduce memory usage
+       }
+       ```
+    1. **Selective Type Checking**: If type checking is desired, use
+       `"python.analysis.typeCheckingMode": "basic"` in conjunction with
+       `"python.analysis.diagnosticMode": "openFilesOnly"` for a balanced
+       approach.
+  - **Resolution Summary**:
+    1. **Critical Syntax Errors**: All E9, F63, F7, F82 errors must be fixed.
+    1. **Indentation errors**: Ensure all indentation errors are resolved,
+       especially in `evaluate_repository.py`.
+    1. **Missing imports**: Check and add missing imports, e.g., `Optional` to
+       `generate_pilot_workflows.py`, `get_secret` to `validate-tokens.py`.
+    1. **Line length violations**: Use Black formatter to reformat code and
+       resolve line length issues.
+    1. **Unused imports and variables**: Remove unused imports and variables.
+    1. **Pylance Optimization**: Apply optimized Pylance settings to reduce
+       resource consumption.
+  - **Comprehensive Code Cleanup and Formatting**:
+    1. **Apply Black Formatter**: Use Black with a line length of 79 characters
+       to automatically format Python code and fix line length violations.
+    1. **Address F-string Issues**: Remove the `f` prefix from f-strings that do
+       not contain placeholders.
+    1. **Remove Unused Imports and Variables**: Eliminate unnecessary imports
+       and variables to improve code cleanliness.
 
 ## FINAL DOs AND DON'Ts
 
@@ -284,7 +342,7 @@ globs: *
 
 - When working with the GraphQL API and GitHub Projects, the "Name cannot have a
   reserved value" error can occur if you attempt to create fields that have
-  names that are already reserved by GitHub. Avoid creating fields named
+  names that are already pre-defined or reserved. Avoid creating fields named
   "Status" or "Type" as these are often pre-defined or reserved.
 
 - To avoid the error where custom field creation fails with "Variable $input of
@@ -460,7 +518,6 @@ globs: *
           }
       }
   }
-
   ```
 
 - **Master Org Token Security and Contextual Awareness:**
@@ -496,64 +553,160 @@ globs: *
     - **Migration Plan:** Replace single master token with purpose-specific
       tokens by 2026-02-18
     - GitHub Personal Access Tokens (Classic) REQUIRE the Web UI.
-  - **1Password Authentication Troubleshooting:**
-    - **Issue**: 1Password CLI shows as signed in, but still cannot access the
-      vault and requires re-authentication.
-    - **Root Cause**: Likely due to a missing integration between the 1Password
-      CLI and the desktop app, or biometric lock settings.
-    - **Solution**:
-      1. **Open 1Password Desktop App:** Ensure the 1Password desktop
-         application is running.
-      1. **Enable CLI Integration:** Go to Settings -> Developer -> "Integrate
-         with 1Password CLI" and ensure this option is turned ON.
-      1. **Enable Biometric Unlock (Optional):** Enable "Connect with 1Password
-         CLI" biometric unlock for added convenience.
 
-- **Repository Cleanup and Archiving:**
-  - When cleaning up a repository:
-    1.  Create an organized archive structure for historical documentation.
-    2.  Relocate deployment artifacts, monitoring documentation, status reports, GitHub Projects documentation, and test results to their respective archive directories.
-    3.  Ensure the root directory contains only essential files such as `README.md`, `CHANGELOG.md`, schema implementation guides, version files, configuration files, and license files.
-    4.  Enhance documentation by creating a comprehensive `archive/README.md` explaining the archive structure, purpose of each category, archival policy, and links to active documentation.
-    5.  Update the `.gitignore` file to ignore future temporary files like test results and status files.
+- **Pylance Performance Issues**:
+  - **Issue**: Pylance language server is continually running and consuming
+    excessive resources.
+  - **Troubleshooting**:
+    1. **Check for Errors**: Use the `copilot_getErrors` tool to identify any
+       errors or issues reported by Pylance. High number of errors (e.g. > 500)
+       can indicate a configuration or code quality issue.
+    1. **Optimize Pylance Settings**: Adjust Pylance settings in
+       `.vscode/settings.json` to reduce analysis overhead. The following
+       settings are recommended:
+       ```json
+       {
+         "python.analysis.typeCheckingMode": "off", // Disable type checking to reduce overhead
+         "python.analysis.diagnosticMode": "openFilesOnly", // Only analyze open files
+         "python.analysis.exclude": [
+           // Exclude common directories
+           "**/node_modules/**",
+           "**/__pycache__/**",
+           "**/.venv/**",
+           "**/dist/**",
+           "**/build/**",
+           "**/archive/**"
+         ],
+         "python.analysis.ignore": [
+           // Ignore additional paths
+           "**/archive/**",
+           "**/node_modules/**"
+         ],
+         "python.analysis.autoSearchPaths": false, // Prevent automatic path searching
+         "python.analysis.indexing": true, // Enable indexing
+         "python.analysis.memory.keepLibraryAst": false // Reduce memory usage
+       }
+       ```
+    1. **Selective Type Checking**: If type checking is desired, use
+       `"python.analysis.typeCheckingMode": "basic"` in conjunction with
+       `"python.analysis.diagnosticMode": "openFilesOnly"` for a balanced
+       approach.
+  - **Resolution Summary**:
+    1. **Critical Syntax Errors**: All E9, F63, F7, F82 errors must be fixed.
+    1. **Indentation errors**: Ensure all indentation errors are resolved,
+       especially in `evaluate_repository.py`.
+    1. **Missing imports**: Check and add missing imports, e.g., `Optional` to
+       `generate_pilot_workflows.py`, `get_secret` to `validate-tokens.py`.
+    1. **Line length violations**: Use Black formatter to reformat code and
+       resolve line length issues.
+    1. **Unused imports and variables**: Remove unused imports and variables.
+    1. **Pylance Optimization**: Apply optimized Pylance settings to reduce
+       resource consumption.
+  - **Comprehensive Code Cleanup and Formatting**:
+    1. **Apply Black Formatter**: Use Black with a line length of 79 characters
+       to automatically format Python code and fix line length violations.
+    1. **Address F-string Issues**: Remove the `f` prefix from f-strings that do
+       not contain placeholders.
+    1. **Remove Unused Imports and Variables**: Eliminate unnecessary imports
+       and variables to improve code cleanliness.
 
-- **Multi-Organization Ecosystem Strategy:**
-  - The organization ecosystem consists of four entities:
-    1. **ivviiviivvi:** Core infrastructure, AI framework, production systems.
-    2. **labores-profani-crux:** _Purpose to be determined_.
-    3. **omni-dromenon-machina:** _Purpose to be determined_.
-    4. **4444J99:** Personal learning, experiments, knowledge base, forks.
-  - Repository distribution should align with the purpose of each organization.
-  - "Money-making" repositories should be placed in their logical, business-focused organization.
-  - Repositories for personal use should remain in the personal account (4444J99).
-  - **Action:** Create a `MULTI_ORG_DISTRIBUTION_STRATEGY.md` document that:
-    1. Categorizes all repositories by recommended organization.
-    2. Defines each organization's purpose and repository criteria.
-    3. Creates migration plans for moving repositories between organizations.
-    4. Establishes cross-organization integration patterns (shared .github infrastructure, common workflows, cross-org automation).
-    5. Documents the "macro level interactions" architecture.
+## FINAL DOs AND DON'Ts
 
-- **Multi-Organization Ecosystem Strategy (Revised):**
-  - The organization ecosystem consists of four entities, each with a defined function:
-    1. **ivviiviivvi:** Conceptual / Symbolic Engine - Generates, tests, and preserves formal thinking (rules, grammars, symbolic models, ontologies). It is upstream of all other organs.
-    2. **omni-dromenon-machina:** Art / Enactment / Experiential Systems - Turns symbolic structures into events, experiences, performances, and temporal works.
-    3. **labores-profani-crux:** Commerce / Applied Labor / Survival Surface - Performs work in the world under constraint, acknowledging the necessity of income, clients, and deadlines.
-    4. **Orchestration Layer:**  Governance / Flow Control / System Integrity - Coordinates, enforces boundaries, decides what moves between organs, and maintains documentation. This is not a separate GitHub organization but a function.
-    5. **Public Process:** Translucent Visibility / Attention Filtering - Makes process visible without resolving it, releasing essays, fragments, and partial thoughts.
-    6. **Community:** Reciprocal Continuity - Exists only for people who have already demonstrated sustained interest, focusing on conversation and shared reference.
-    7. **Marketing:** Attention Routing - Exists purely to route attention through announcements and templates.
-    8. **4444J99 (Personal Profile):** Liminal Incubation Zone - A transitional space for drafts, experiments, and volatile ideas.
+- Since the GitHub CLI token (`GITHUB_TOKEN`) lacks the \`project\` scope needed
+  to create organization projects, use a Personal Access Token (PAT) instead.
 
-  - **Repository Distribution:** Repository distribution should align with the purpose of each organization. "Money-making" repositories should be placed in their logical, business-focused organization. Repositories for personal use should remain in the personal account (4444J99).
+- Single select options in GitHub Projects require a non-null "description"
+  field in the GraphQL API request. Ensure that the script populating the single
+  select options include this field. See `configure-github-projects.py` for an
+  example.
 
-  - **Key Principles:**
-    - Each organ has a defined purpose, permissions, prohibitions, cadence, and interfaces.
-    - The Orchestration Layer (function) governs the flow and boundaries between organs.
-    - Personal profiles (like 4444J99) serve as liminal incubation zones.
+- When working with the GraphQL API and GitHub Projects, the "Name cannot have a
+  reserved value" error can occur if you attempt to create fields that have
+  names that are already pre-defined or reserved. Avoid creating fields named
+  "Status" or "Type" as these are often pre-defined or reserved.
 
-  - **Action:** Create a `MULTI_ORG_DISTRIBUTION_STRATEGY.md` document that:
-    1. Categorizes all repositories by recommended organization, based on the organ functions defined above.
-    2. Defines each organization's purpose and repository criteria (as outlined in the organ descriptions).
-    3. Creates migration plans for moving repositories between organizations.
-    4. Establishes cross-organization integration patterns (shared .github infrastructure, common workflows, cross-org automation).
-    5. Documents the "macro level interactions" architecture.
+- To avoid the error where custom field creation fails with "Variable $input of
+  type CreateProjectV2FieldInput! was provided invalid value for
+  singleSelectOptions.X.description (Expected value to not be null)", ensure
+  that the python script includes logic to add an empty description to each
+  options: e.g.,
+
+  ```python
+  # Add empty description to each option (required by API)
+  options_with_desc = [
+      {**opt, "description": ""} for opt in options
+  ]
+
+  variables = {
+      "input": {
+          "projectId": project_id,
+          "dataType": "SINGLE_SELECT",
+          "name": name,
+          "singleSelectOptions": options_with_desc
+  ```
+
+- Here's the updated `PROJECTS_CONFIG` section in the
+  `configure-github-projects.py` file:
+
+  ```python
+  # Project configurations
+  PROJECTS_CONFIG = {
+      "ai-framework": {
+          "title": "🤖 AI Framework Development",
+          "description": """Development and maintenance of the AI framework including:
+  - 26+ specialized agents
+  - MCP servers for 11 programming languages
+  - 100+ custom instructions
+  - Chat modes and collections
+  - Automated tracking of agent lifecycle, testing, and deployment
+
+  **Key Areas:**
+  - Agent development and testing
+  - MCP server implementation
+  - Custom instructions authoring
+  - Chat mode configuration
+  - Framework enhancements and bug fixes""",
+          "fields": {
+              "Status": {
+                  "type": "single_select",
+                  "options": [
+                      {"name": "🎯 Planned", "color": "GRAY", "description": ""},
+                      {"name": "🔬 Research", "color": "BLUE", "description": ""},
+                      {"name": "🏗️ In Development", "color": "YELLOW", "description": ""},
+                      {"name": "🧪 Testing", "color": "ORANGE", "description": ""},
+                      {"name": "👀 Code Review", "color": "PURPLE", "description": ""},
+                      {"name": "✅ Ready to Deploy", "color": "GREEN", "description": ""},
+                      {"name": "🚀 Deployed", "color": "GREEN", "description": ""},
+                      {"name": "📝 Documentation", "color": "BLUE", "description": ""},
+                      {"name": "⏸️ On Hold", "color": "GRAY", "description": ""},
+                      {"name": "✔️ Completed", "color": "GREEN", "description": ""}
+                  ]
+              },
+              "Priority": {
+                  "type": "single_select",
+                  "options": [
+                      {"name": "🔥 Critical", "color": "RED", "description": ""},
+                      {"name": "⚡ High", "color": "ORANGE", "description": ""},
+                      {"name": "📊 Medium", "color": "YELLOW", "description": ""},
+                      {"name": "🔽 Low", "color": "GRAY", "description": ""}
+                  ]
+              },
+              "Type": {
+                  "type": "single_select",
+                  "options": [
+                      {"name": "🤖 Agent", "color": "PURPLE", "description": ""},
+                      {"name": "🔌 MCP Server", "color": "BLUE", "description": ""},
+                      {"name": "📋 Custom Instructions", "color": "GREEN", "description": ""},
+                      {"name": "💬 Chat Mode", "color": "PINK", "description": ""},
+                      {"name": "📦 Collection", "color": "ORANGE", "description": ""},
+                      {"name": "🔧 Framework Enhancement", "color": "YELLOW", "description": ""},
+                      {"name": "🐛 Bug Fix", "color": "RED", "description": ""}
+                  ]
+              },
+              "Language": {
+                  "type": "single_select",
+                  "options": [
+                      {"name": "Python", "color": "BLUE", "description": ""},
+                      {"name": "TypeScript", "color": "BLUE", "description": ""},
+                      {"name
+  ```

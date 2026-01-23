@@ -39,7 +39,7 @@ def _parse_frontmatter(lines: list[str]) -> tuple[dict[str, str], int]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate collection frontmatter.")
-    args = parser.parse_args()
+    parser.parse_args()
 
     if not COLLECTIONS_DIR.exists():
         print("Missing ai_framework/collections directory.")

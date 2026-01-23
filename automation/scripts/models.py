@@ -1,7 +1,7 @@
 """
 Data models for Month 3 advanced automation features.
 
-This module defines the core data structures used across all Month 3 components:
+This module defines the core data structures used across all Month 3 components:  # noqa: E501
 - Auto-merge configuration and results
 - Routing scores and decisions
 - Self-healing classifications
@@ -61,13 +61,10 @@ class MergeStrategy(str, Enum):
 class AutoMergeSafetyChecks(BaseModel):
     """Safety check results for auto-merge eligibility."""
 
-    all_tests_passed: bool = Field(...,
-                                   description="All CI tests passed successfully")
-    reviews_approved: bool = Field(...,
-                                   description="Required reviews approved")
+    all_tests_passed: bool = Field(..., description="All CI tests passed successfully")
+    reviews_approved: bool = Field(..., description="Required reviews approved")
     no_conflicts: bool = Field(..., description="No merge conflicts present")
-    branch_up_to_date: bool = Field(...,
-                                    description="Branch is up-to-date with base")
+    branch_up_to_date: bool = Field(..., description="Branch is up-to-date with base")
     coverage_threshold_met: bool = Field(
         ..., description="Code coverage meets minimum threshold"
     )
@@ -80,8 +77,7 @@ class AutoMergeEligibility(BaseModel):
     repository: str = Field(..., description="Repository full name")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
-    eligible: bool = Field(...,
-                           description="Whether PR is eligible for auto-merge")
+    eligible: bool = Field(..., description="Whether PR is eligible for auto-merge")
     checks_passed: AutoMergeSafetyChecks
     reasons: List[str] = Field(
         default_factory=list, description="Reasons if not eligible"
@@ -124,15 +120,11 @@ class AutoMergeConfig(BaseModel):
 class RoutingFactorScores(BaseModel):
     """Individual routing factor scores."""
 
-    expertise: float = Field(..., ge=0.0, le=1.0,
-                             description="Expertise score")
+    expertise: float = Field(..., ge=0.0, le=1.0, description="Expertise score")
     workload: float = Field(..., ge=0.0, le=1.0, description="Workload score")
-    response_time: float = Field(..., ge=0.0, le=1.0,
-                                 description="Response time score")
-    availability: float = Field(..., ge=0.0, le=1.0,
-                                description="Availability score")
-    performance: float = Field(..., ge=0.0, le=1.0,
-                               description="Performance score")
+    response_time: float = Field(..., ge=0.0, le=1.0, description="Response time score")
+    availability: float = Field(..., ge=0.0, le=1.0, description="Availability score")
+    performance: float = Field(..., ge=0.0, le=1.0, description="Performance score")
 
 
 class RoutingDecision(BaseModel):
@@ -143,12 +135,9 @@ class RoutingDecision(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     assignee: str = Field(..., description="Selected assignee username")
-    score: float = Field(..., ge=0.0, le=1.0,
-                         description="Overall assignment score")
-    scores: RoutingFactorScores = Field(...,
-                                        description="Individual factor scores")
-    confidence: float = Field(..., ge=0.0, le=1.0,
-                              description="Decision confidence")
+    score: float = Field(..., ge=0.0, le=1.0, description="Overall assignment score")
+    scores: RoutingFactorScores = Field(..., description="Individual factor scores")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Decision confidence")
     fallback_used: bool = Field(
         default=False, description="Whether fallback was triggered"
     )
@@ -184,8 +173,7 @@ class RoutingConfig(BaseModel):
         """Validate routing weights sum to 1.0."""
         total = sum(v.values())
         if not (0.99 <= total <= 1.01):  # Allow small floating point error
-            raise ValueError(
-                f"Routing factor weights must sum to 1.0, got {total}")
+            raise ValueError(f"Routing factor weights must sum to 1.0, got {total}")
         return v
 
 
@@ -270,11 +258,9 @@ class MaintenanceTask(BaseModel):
     task_type: str = Field(..., description="Type of task")
     description: str = Field(..., description="Task description")
     priority: Priority = Field(..., description="Task priority")
-    estimated_duration: int = Field(..., ge=1,
-                                    description="Duration in minutes")
+    estimated_duration: int = Field(..., ge=1, description="Duration in minutes")
     risk_level: RiskLevel = Field(..., description="Risk level")
-    details: Dict = Field(default_factory=dict,
-                          description="Additional details")
+    details: Dict = Field(default_factory=dict, description="Additional details")
 
 
 class MaintenanceWindow(BaseModel):
@@ -286,8 +272,7 @@ class MaintenanceWindow(BaseModel):
     impact_score: float = Field(
         ..., ge=0.0, le=1.0, description="Impact score (lower is better)"
     )
-    confidence: float = Field(..., ge=0.0, le=1.0,
-                              description="Prediction confidence")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Prediction confidence")
     alternatives: List[Dict] = Field(
         default_factory=list, description="Alternative time windows"
     )
@@ -312,8 +297,7 @@ class MaintenanceConfig(BaseModel):
 
     # Preferred windows
     preferred_hours: List[int] = Field(default=[2, 3, 4], description="2-4 AM")
-    preferred_days: List[int] = Field(
-        default=[6, 0], description="Saturday, Sunday")
+    preferred_days: List[int] = Field(default=[6, 0], description="Saturday, Sunday")
     avoid_dates: List[str] = Field(default_factory=list)
 
     # Task configuration
@@ -367,8 +351,7 @@ class WorkflowPrediction(BaseModel):
         ..., ge=0, description="Estimated duration in seconds"
     )
     risk_level: RiskLevel = Field(..., description="Risk classification")
-    confidence: float = Field(..., ge=0.0, le=1.0,
-                              description="Model confidence")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence")
     factors: Dict[str, float] = Field(
         default_factory=dict, description="Feature importance scores"
     )
@@ -428,8 +411,7 @@ class SLAMetrics(BaseModel):
     """Complete SLA metrics for a repository."""
 
     repository: str = Field(..., description="Repository full name")
-    time_window: str = Field(...,
-                             description="Time window (e.g., '24h', '7d')")
+    time_window: str = Field(..., description="Time window (e.g., '24h', '7d')")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     overall_compliance: float = Field(
@@ -441,8 +423,7 @@ class SLAMetrics(BaseModel):
     success_rate: SuccessRateMetric
     availability: AvailabilityMetric
 
-    breaches: List[Dict] = Field(
-        default_factory=list, description="SLA breach details")
+    breaches: List[Dict] = Field(default_factory=list, description="SLA breach details")
     trend: str = Field(..., description="improving, stable, or degrading")
 
     class Config:
@@ -545,8 +526,7 @@ class AnalyticsPrediction(BaseModel):
     """Prediction result from ML model."""
 
     pr_number: int
-    prediction: str = Field(...,
-                            description="Prediction outcome (merge/close)")
+    prediction: str = Field(..., description="Prediction outcome (merge/close)")
     confidence: float = Field(..., ge=0.0, le=1.0)
     model_name: str
     features: Dict[str, float] = Field(default_factory=dict)
@@ -563,8 +543,7 @@ class FeatureImportance(BaseModel):
 
     model_name: str
     features: Dict[str, float] = Field(..., description="Feature scores")
-    top_features: List[str] = Field(
-        default_factory=list, description="Top N features")
+    top_features: List[str] = Field(default_factory=list, description="Top N features")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:

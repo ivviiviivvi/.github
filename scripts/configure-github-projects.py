@@ -2,7 +2,7 @@
 """
 GitHub Projects V2 Configuration Script
 
-This script creates and configures comprehensive GitHub Projects using the GraphQL API.
+This script creates and configures comprehensive GitHub Projects using the GraphQL API.  # noqa: E501
 It handles project creation, field configuration, view setup, and automation rules.
 
 Prerequisites:
@@ -191,7 +191,11 @@ class GitHubProjectsManager:
         """
 
         variables = {
-            "input": {"projectId": project_id, "dataType": "TEXT", "name": name}
+            "input": {
+                "projectId": project_id,
+                "dataType": "TEXT",
+                "name": name,
+            }
         }
 
         result = self.execute_query(mutation, variables)
@@ -213,7 +217,11 @@ class GitHubProjectsManager:
         """
 
         variables = {
-            "input": {"projectId": project_id, "dataType": "NUMBER", "name": name}
+            "input": {
+                "projectId": project_id,
+                "dataType": "NUMBER",
+                "name": name,
+            }
         }
 
         result = self.execute_query(mutation, variables)
@@ -235,7 +243,11 @@ class GitHubProjectsManager:
         """
 
         variables = {
-            "input": {"projectId": project_id, "dataType": "DATE", "name": name}
+            "input": {
+                "projectId": project_id,
+                "dataType": "DATE",
+                "name": name,
+            }
         }
 
         result = self.execute_query(mutation, variables)
@@ -246,7 +258,7 @@ class GitHubProjectsManager:
 PROJECTS_CONFIG = {
     "ai-framework": {
         "title": "🤖 AI Framework Development",
-        "description": """Development and maintenance of the AI framework including:
+        "description": """Development and maintenance of the AI framework including:  # noqa: E501
 - 26+ specialized agents
 - MCP servers for 11 programming languages
 - 100+ custom instructions

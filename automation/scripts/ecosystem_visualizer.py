@@ -297,7 +297,7 @@ graph TD
             pass
 
         parts.append(
-            f"""# 🎯 Organization Ecosystem Dashboard
+            """# 🎯 Organization Ecosystem Dashboard
 
 {self.generate_health_badge()}
 
@@ -327,7 +327,7 @@ graph TD
         if "ecosystem_map" in self.report_data:
             em = self.report_data["ecosystem_map"]
             parts.append(
-                f"""| Category | Count |
+                """| Category | Count |
 |----------|-------|
 | ⚡ GitHub Actions Workflows | {len(em.get('workflows', []))} |
 | 🤖 Copilot Agents | {len(em.get('copilot_agents', []))} |
@@ -349,17 +349,17 @@ graph TD
             rh = self.report_data["repository_health"]
             total = rh.get("total_repos", 0)
             active = rh.get("active_repos", 0)
-            stale = rh.get("stale_repos", 0)
+            rh.get("stale_repos", 0)
 
             active_pct = (active / total * 100) if total > 0 else 0
 
             # Create progress bar
             bar_length = 20
             filled_length = int(bar_length * active_pct / 100)
-            bar = "█" * filled_length + "░" * (bar_length - filled_length)
+            "█" * filled_length + "░" * (bar_length - filled_length)
 
             parts.append(
-                f"""{bar} {active_pct:.1f}%
+                """{bar} {active_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -396,10 +396,10 @@ graph TD
             # Create progress bar
             bar_length = 20
             filled_length = int(bar_length * valid_pct / 100)
-            bar = "█" * filled_length + "░" * (bar_length - filled_length)
+            "█" * filled_length + "░" * (bar_length - filled_length)
 
             parts.append(
-                f"""{bar} {valid_pct:.1f}%
+                """{bar} {valid_pct:.1f}%
 
 | Status | Count | Percentage |
 |--------|-------|------------|
@@ -480,15 +480,15 @@ graph TD
             workflows = em.get("workflows", [])
             if len(workflows) > self.MAX_DIAGRAM_WORKFLOWS:
                 msg1 = (
-                    f"ℹ️  *The diagram below displays the first "
+                    "ℹ️  *The diagram below displays the first "
                     f"{self.MAX_DIAGRAM_WORKFLOWS} workflows for "
-                    f"readability. "
+                    "readability. "
                 )
                 parts.append(msg1)
                 msg2 = (
                     f"All {len(workflows)} workflows are listed in "
-                    f"the [Active Workflows](#-active-workflows) "
-                    f"section.*\n\n"
+                    "the [Active Workflows](#-active-workflows) "
+                    "section.*\n\n"
                 )
                 parts.append(msg2)
 
@@ -719,7 +719,7 @@ graph TD
             status = "critical"
 
         badge_url = (
-            f"![Health](https://img.shields.io/badge/"
+            "![Health](https://img.shields.io/badge/"
             f"health-{health_pct}%25_{status}-{color})"
         )
         return badge_url

@@ -165,7 +165,7 @@ class RateLimiter:
             return True
 
         self.logger.warning(
-            f"Rate limit reached: {len(self.requests)}/{self.max_requests} requests"
+            f"Rate limit reached: {len(self.requests)}/{self.max_requests} requests"  # noqa: E501
         )
         return False
 
@@ -208,7 +208,10 @@ class GitHubAPIClient:
                 import subprocess
 
                 result = subprocess.run(
-                    ["gh", "auth", "token"], capture_output=True, text=True, check=True
+                    ["gh", "auth", "token"],
+                    capture_output=True,
+                    text=True,
+                    check=True,
                 )
                 token = result.stdout.strip()
             except (subprocess.CalledProcessError, FileNotFoundError):
@@ -312,13 +315,13 @@ class GitHubAPIClient:
                             delay = 2**attempt + random.uniform(0, 1)
 
                         self.logger.warning(
-                            f"HTTP {e.response.status_code} (attempt {attempt}/{max_attempts}). "
+                            f"HTTP {e.response.status_code} (attempt {attempt}/{max_attempts}). "  # noqa: E501
                             f"Retrying in {delay:.1f}s..."
                         )
                         time.sleep(delay)
                     else:
                         self.logger.error(
-                            f"HTTP {e.response.status_code} after {max_attempts} attempts"
+                            f"HTTP {e.response.status_code} after {max_attempts} attempts"  # noqa: E501
                         )
                         raise
                 else:
@@ -364,25 +367,17 @@ class GitHubAPIClient:
 class AutomationError(Exception):
     """Base exception for automation errors."""
 
-    pass
-
 
 class ValidationError(AutomationError):
     """Validation error."""
-
-    pass
 
 
 class ConfigurationError(AutomationError):
     """Configuration error."""
 
-    pass
-
 
 class APIError(AutomationError):
     """GitHub API error."""
-
-    pass
 
 
 def safe_get(data: Dict, path: str, default: Any = None) -> Any:
@@ -535,7 +530,8 @@ def retry_with_backoff(
 
             if attempt < max_attempts:
                 delay = min(
-                    max_delay, initial_delay * (backoff_factor ** (attempt - 1))
+                    max_delay,
+                    initial_delay * (backoff_factor ** (attempt - 1)),
                 )
                 if jitter:
                     delay += random.uniform(0, 1)

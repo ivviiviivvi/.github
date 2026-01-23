@@ -1,23 +1,23 @@
-import ipaddress
 import os
-import socket
 import sys
 import unittest
-import urllib.parse
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-# Add scripts directory to path to handle imports correctly regardless of where test is run
+import web_crawler
+
+# Add scripts directory to path to handle imports correctly regardless of
+# where test is run
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 # Import the module under test
-import web_crawler
 
 
 class TestSSRFLogic(unittest.TestCase):
     def setUp(self):
-        # Initialize crawler with dummy values to avoid API calls or env var issues
+        # Initialize crawler with dummy values to avoid API calls or env var
+        # issues
         self.crawler = web_crawler.OrganizationCrawler(
             github_token="dummy", org_name="dummy"
         )

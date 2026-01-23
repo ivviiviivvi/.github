@@ -26,7 +26,7 @@ def acquire_lock(timeout=60):
     """
     Acquires a lock to prevent concurrent modifications.
     Uses fcntl (flock) on Unix-like systems for robust process-based locking.
-    Falls back to atomic directory creation on Windows or if fcntl is unavailable.
+    Falls back to atomic directory creation on Windows or if fcntl is unavailable.  # noqa: E501
     """
     start_time = time.time()
 
@@ -36,7 +36,7 @@ def acquire_lock(timeout=60):
         if not os.path.exists(LOCK_FILE):
             try:
                 # Create empty file
-                with open(LOCK_FILE, "w") as f:
+                with open(LOCK_FILE, "w") as _f:  # noqa: F841
                     pass
             except OSError:
                 pass  # Might be created by another process concurrently

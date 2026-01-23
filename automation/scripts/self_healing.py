@@ -9,7 +9,7 @@ Automatically detects, classifies, and resolves workflow failures:
 
 Usage:
     python self_healing.py --owner ORG --repo REPO --run-id RUN_ID
-    
+
 Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo and workflow access
 """
@@ -17,9 +17,9 @@ Environment Variables:
 import argparse
 import sys
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 from models import (
     FailureClassification,
@@ -52,9 +52,7 @@ class SelfHealingEngine:
         self.config = config
         self.logger = setup_logger(__name__)
 
-    def analyze_and_heal(
-        self, owner: str, repo: str, run_id: int
-    ) -> SelfHealingResult:
+    def analyze_and_heal(self, owner: str, repo: str, run_id: int) -> SelfHealingResult:
         """
         Analyze workflow failure and attempt healing.
 
@@ -66,9 +64,7 @@ class SelfHealingEngine:
         Returns:
             Self-healing result with actions taken
         """
-        self.logger.info(
-            f"Analyzing workflow failure: {owner}/{repo} run {run_id}"
-        )
+        self.logger.info(f"Analyzing workflow failure: {owner}/{repo} run {run_id}")
 
         # Get workflow run details
         run = self._get_workflow_run(owner, repo, run_id)
@@ -98,8 +94,7 @@ class SelfHealingEngine:
         strategy = self._determine_strategy(classification)
 
         # Execute healing strategy
-        result = self._execute_strategy(
-            owner, repo, run, classification, strategy)
+        result = self._execute_strategy(owner, repo, run, classification, strategy)
 
         self.logger.info(
             f"Healing {'successful' if result.healed else 'unsuccessful'}: "
@@ -119,9 +114,7 @@ class SelfHealingEngine:
         response = self.client.get(endpoint)
         return response.get("jobs", [])
 
-    def _classify_failure(
-        self, run: Dict, jobs: List[Dict]
-    ) -> FailureClassification:
+    def _classify_failure(self, run: Dict, jobs: List[Dict]) -> FailureClassification:
         """
         Classify failure type based on error patterns.
 
@@ -133,18 +126,16 @@ class SelfHealingEngine:
             Failure classification with confidence score
         """
         # Collect error messages from failed jobs
-        error_messages = []
         failed_steps = []
 
         for job in jobs:
             if job["conclusion"] == "failure":
                 for step in job.get("steps", []):
                     if step["conclusion"] == "failure":
-                        failed_steps.append(
-                            {"job": job["name"], "step": step["name"]}
-                        )
+                        failed_steps.append({"job": job["name"], "step": step["name"]})
                         # Note: GitHub API doesn't expose step logs directly
-                        # In production, would parse logs from job logs endpoint
+                        # In production, would parse logs from job logs
+                        # endpoint
 
         # Pattern matching for failure classification
         failure_type = FailureType.TRANSIENT
@@ -190,7 +181,7 @@ class SelfHealingEngine:
         ]
 
         # Analyze workflow name and job names for patterns
-        workflow_name = run.get("name", "").lower()
+        run.get("name", "").lower()
 
         # Check run conclusion and duration
         if run["conclusion"] == "timed_out":
@@ -223,7 +214,7 @@ class SelfHealingEngine:
                 elif any(p in step_name for p in permanent_patterns):
                     failure_type = FailureType.PERMANENT
                     confidence = 0.8
-                    reason = f"Permanent failure pattern in step: {step_info['step']}"
+                    reason = f"Permanent failure pattern in step: {step_info['step']}"  # noqa: E501
                     break
 
         # Determine priority based on workflow and failure type
@@ -236,8 +227,7 @@ class SelfHealingEngine:
             confidence=confidence,
             reason=reason,
             priority=priority,
-            failed_jobs=[job["name"]
-                         for job in jobs if job["conclusion"] == "failure"],
+            failed_jobs=[job["name"] for job in jobs if job["conclusion"] == "failure"],
             timestamp=datetime.now(timezone.utc),
         )
 
@@ -270,9 +260,7 @@ class SelfHealingEngine:
             self.logger.warning(f"Error checking consecutive failures: {e}")
             return False
 
-    def _determine_priority(
-        self, run: Dict, failure_type: FailureType
-    ) -> Priority:
+    def _determine_priority(self, run: Dict, failure_type: FailureType) -> Priority:
         """Determine priority based on workflow and failure type."""
         workflow_name = run.get("name", "").lower()
 
@@ -296,9 +284,7 @@ class SelfHealingEngine:
         # P3: Everything else
         return Priority.P3
 
-    def _determine_strategy(
-        self, classification: FailureClassification
-    ) -> str:
+    def _determine_strategy(self, classification: FailureClassification) -> str:
         """
         Determine healing strategy based on classification.
 
@@ -372,7 +358,7 @@ class SelfHealingEngine:
 
         if retry_count >= self.config.max_retry_attempts:
             self.logger.warning(
-                f"Max retry attempts ({self.config.max_retry_attempts}) reached"
+                f"Max retry attempts ({self.config.max_retry_attempts}) reached"  # noqa: E501
             )
             return SelfHealingResult(
                 run_id=run["id"],
@@ -391,7 +377,7 @@ class SelfHealingEngine:
 
         # Calculate backoff delay
         delay = self.config.initial_retry_delay * (
-            self.config.retry_backoff_multiplier ** retry_count
+            self.config.retry_backoff_multiplier**retry_count
         )
 
         self.logger.info(
@@ -404,38 +390,38 @@ class SelfHealingEngine:
             success = self._rerun_workflow(owner, repo, run["id"])
 
             actions = [
-                f"Classified as transient failure (confidence: {classification.confidence:.2f})",
-                f"Retry attempt {retry_count + 1}/{self.config.max_retry_attempts}",
-                f"Applied {delay}s exponential backoff",
-                f"Workflow {'re-run successfully' if success else 're-run failed'}",
+                f"Classified as transient failure (confidence: {classification.confidence:.2f})",  # noqa: E501
+                f"Retry attempt {retry_count + 1}/{self.config.max_retry_attempts}",  # noqa: E501
+                f"Applied {delay}s exponential backof",
+                f"Workflow {'re-run successfully' if success else 're-run failed'}",  # noqa: E501
             ]
 
             # Send notification about healing result
             if self.config.send_notifications:
                 if success:
                     notify_self_healing_success(
-                        workflow_name=run['name'],
-                        run_id=run['id'],
+                        workflow_name=run["name"],
+                        run_id=run["id"],
                         failure_type=classification.failure_type.value,
                         action_taken=f"Retry {retry_count + 1} succeeded",
                         metadata={
-                            'repository': f"{owner}/{repo}",
-                            'retry_count': retry_count + 1,
-                            'delay': delay,
-                            'confidence': classification.confidence,
-                        }
+                            "repository": f"{owner}/{repo}",
+                            "retry_count": retry_count + 1,
+                            "delay": delay,
+                            "confidence": classification.confidence,
+                        },
                     )
                 else:
                     notify_self_healing_failure(
-                        workflow_name=run['name'],
-                        run_id=run['id'],
+                        workflow_name=run["name"],
+                        run_id=run["id"],
                         failure_type=classification.failure_type.value,
                         attempts=retry_count + 1,
                         metadata={
-                            'repository': f"{owner}/{repo}",
-                            'reason': 'Retry failed',
-                            'confidence': classification.confidence,
-                        }
+                            "repository": f"{owner}/{repo}",
+                            "reason": "Retry failed",
+                            "confidence": classification.confidence,
+                        },
                     )
                 actions.append("Sent notification")
 
@@ -445,7 +431,9 @@ class SelfHealingEngine:
                 classification=classification,
                 strategy="retry_exponential",
                 healed=success,
-                resolution="Workflow re-run initiated" if success else "Re-run failed",
+                resolution=(
+                    "Workflow re-run initiated" if success else "Re-run failed"
+                ),
                 retry_count=retry_count + 1,
                 actions_taken=actions,
                 timestamp=datetime.now(timezone.utc),
@@ -484,12 +472,10 @@ class SelfHealingEngine:
         """
         wait_time = self.config.dependency_wait_time
 
-        self.logger.info(
-            f"Waiting {wait_time}s for dependencies before retry"
-        )
+        self.logger.info(f"Waiting {wait_time}s for dependencies before retry")
 
         actions = [
-            f"Classified as dependency failure (confidence: {classification.confidence:.2f})",
+            f"Classified as dependency failure (confidence: {classification.confidence:.2f})",  # noqa: E501
             f"Waiting {wait_time}s for upstream dependencies",
         ]
 
@@ -501,34 +487,34 @@ class SelfHealingEngine:
             success = self._rerun_workflow(owner, repo, run["id"])
 
             actions.append(
-                f"Workflow {'re-run successfully' if success else 're-run failed'}"
+                f"Workflow {'re-run successfully' if success else 're-run failed'}"  # noqa: E501
             )
 
             # Send notification about healing result
             if self.config.send_notifications:
                 if success:
                     notify_self_healing_success(
-                        workflow_name=run['name'],
-                        run_id=run['id'],
+                        workflow_name=run["name"],
+                        run_id=run["id"],
                         failure_type=classification.failure_type.value,
-                        action_taken=f"Dependency resolved, retry succeeded",
+                        action_taken="Dependency resolved, retry succeeded",
                         metadata={
-                            'repository': f"{owner}/{repo}",
-                            'wait_time': wait_time,
-                            'confidence': classification.confidence,
-                        }
+                            "repository": f"{owner}/{repo}",
+                            "wait_time": wait_time,
+                            "confidence": classification.confidence,
+                        },
                     )
                 else:
                     notify_self_healing_failure(
-                        workflow_name=run['name'],
-                        run_id=run['id'],
+                        workflow_name=run["name"],
+                        run_id=run["id"],
                         failure_type=classification.failure_type.value,
                         attempts=1,
                         metadata={
-                            'repository': f"{owner}/{repo}",
-                            'reason': 'Dependency retry failed',
-                            'wait_time': wait_time,
-                        }
+                            "repository": f"{owner}/{repo}",
+                            "reason": "Dependency retry failed",
+                            "wait_time": wait_time,
+                        },
                     )
                 actions.append("Sent notification")
 
@@ -538,7 +524,9 @@ class SelfHealingEngine:
                 classification=classification,
                 strategy="wait_and_retry",
                 healed=success,
-                resolution="Waited for dependencies and retried" if success else "Retry failed",
+                resolution=(
+                    "Waited for dependencies and retried" if success else "Retry failed"
+                ),
                 retry_count=1,
                 actions_taken=actions,
                 timestamp=datetime.now(timezone.utc),
@@ -576,38 +564,35 @@ class SelfHealingEngine:
         Returns:
             Healing result
         """
-        self.logger.warning(
-            f"Permanent failure detected: {classification.reason}"
-        )
+        self.logger.warning(f"Permanent failure detected: {classification.reason}")
 
         actions = [
-            f"Classified as permanent failure (confidence: {classification.confidence:.2f})",
+            f"Classified as permanent failure (confidence: {classification.confidence:.2f})",  # noqa: E501
             f"Priority: {classification.priority.value}",
             f"Reason: {classification.reason}",
         ]
 
         # Create issue for tracking
         if self.config.create_issues_for_failures:
-            issue_number = self._create_failure_issue(
-                owner, repo, run, classification)
+            issue_number = self._create_failure_issue(owner, repo, run, classification)
             if issue_number:
                 actions.append(f"Created tracking issue #{issue_number}")
 
         # Send notifications
         if self.config.send_notifications:
             notify_self_healing_failure(
-                workflow_name=run['name'],
-                run_id=run['id'],
+                workflow_name=run["name"],
+                run_id=run["id"],
                 failure_type=classification.failure_type.value,
                 attempts=0,  # Permanent failure - no retry attempted
                 metadata={
-                    'repository': f"{owner}/{repo}",
-                    'classification': classification.failure_type.value,
-                    'priority': classification.priority.value,
-                    'confidence': classification.confidence,
-                    'reason': classification.reason,
-                    'requires_manual_intervention': True,
-                }
+                    "repository": f"{owner}/{repo}",
+                    "classification": classification.failure_type.value,
+                    "priority": classification.priority.value,
+                    "confidence": classification.confidence,
+                    "reason": classification.reason,
+                    "requires_manual_intervention": True,
+                },
             )
             actions.append("Sent notification to team")
 
@@ -678,7 +663,7 @@ class SelfHealingEngine:
                 f"({classification.failure_type.value})"
             )
 
-            body = f"""## Workflow Failure Report
+            body = """## Workflow Failure Report
 
 **Workflow:** {run['name']}
 **Run ID:** {run['id']}
@@ -699,7 +684,7 @@ class SelfHealingEngine:
 - Priority: {classification.priority.value}
 
 ### Next Steps
-{'- Automatic retry will be attempted' if classification.failure_type == FailureType.TRANSIENT else '- Manual investigation required'}
+{'- Automatic retry will be attempted' if classification.failure_type == FailureType.TRANSIENT else '- Manual investigation required'}  # noqa: E501
 
 [View Workflow Run]({run['html_url']})
 
@@ -742,7 +727,6 @@ class SelfHealingEngine:
         This method maintained for backward compatibility.
         """
         # Notifications now sent via notify_self_healing_success/failure
-        pass
 
 
 def main():
@@ -752,16 +736,13 @@ def main():
     )
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
-    parser.add_argument(
-        "--run-id", required=True, type=int, help="Workflow run ID"
-    )
+    parser.add_argument("--run-id", required=True, type=int, help="Workflow run ID")
     parser.add_argument(
         "--config",
         default=".github/self-healing.yml",
         help="Configuration file path",
     )
-    parser.add_argument("--debug", action="store_true",
-                        help="Enable debug logging")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -788,27 +769,27 @@ def main():
 
         # Output result
         print(f"\n{'='*70}")
-        print(f"Self-Healing Analysis Result")
+        print("Self-Healing Analysis Result")
         print(f"{'='*70}")
         print(f"Repository: {result.repository}")
         print(f"Run ID: {result.run_id}")
         print(f"Timestamp: {result.timestamp.isoformat()}")
         print(f"\n{'='*70}")
-        print(f"Classification")
+        print("Classification")
         print(f"{'='*70}")
         print(f"Failure Type: {result.classification.failure_type.value}")
         print(f"Confidence: {result.classification.confidence:.0%}")
         print(f"Priority: {result.classification.priority.value}")
         print(f"Reason: {result.classification.reason}")
         print(f"\n{'='*70}")
-        print(f"Healing Attempt")
+        print("Healing Attempt")
         print(f"{'='*70}")
         print(f"Strategy: {result.strategy}")
         print(f"Healed: {'✅ Yes' if result.healed else '❌ No'}")
         print(f"Resolution: {result.resolution}")
         print(f"Retry Count: {result.retry_count}")
         print(f"\n{'='*70}")
-        print(f"Actions Taken")
+        print("Actions Taken")
         print(f"{'='*70}")
         for i, action in enumerate(result.actions_taken, 1):
             print(f"{i}. {action}")

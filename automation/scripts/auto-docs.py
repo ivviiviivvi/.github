@@ -22,7 +22,7 @@ Usage:
     python scripts/auto-docs.py --src-dir src --update-readme
 
     # Generate docs and update README
-    python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme
+    python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
 
 Requirements:
     Python 3.11+
@@ -260,7 +260,7 @@ class DocumentationGenerator:
 
             # Warn about missing docstrings
             if not extractor.modules:
-                print(f"    ⚠️  Warning: No module docstring")
+                print("    ⚠️  Warning: No module docstring")
 
         except SyntaxError as e:
             print(f"    ❌ Error parsing file: {e}")
@@ -295,7 +295,7 @@ class DocumentationGenerator:
         for module_info in self.modules_info:
             self._generate_module_doc(module_info)
 
-        print(f"✅ Documentation generated successfully!")
+        print("✅ Documentation generated successfully!")
 
     def _generate_index(self) -> None:
         """Generate index.md with table of contents."""
@@ -303,7 +303,9 @@ class DocumentationGenerator:
 
         with open(index_path, "w", encoding="utf-8") as f:
             f.write("# API Documentation\n\n")
-            f.write(f"> Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write(
+                f"> Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"  # noqa: E501
+            )
             f.write("## Modules\n\n")
 
             for module_info in sorted(self.modules_info, key=lambda x: x["name"]):
@@ -397,7 +399,9 @@ class DocumentationGenerator:
         )
         returns = func.get("returns", "None")
 
-        f.write(f"{indent}`{async_prefix}{func['name']}({args_str}) -> {returns}`\n\n")
+        f.write(
+            f"{indent}`{async_prefix}{func['name']}({args_str}) -> {returns}`\n\n"  # noqa: E501
+        )
 
         # Docstring
         if func["docstring"]:
@@ -494,7 +498,7 @@ Examples:
   python scripts/auto-docs.py --src-dir src --update-readme
 
   # Both
-  python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme
+  python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
         """,
     )
 
@@ -506,7 +510,9 @@ Examples:
     )
 
     parser.add_argument(
-        "--output-dir", type=Path, help="Output directory for generated documentation"
+        "--output-dir",
+        type=Path,
+        help="Output directory for generated documentation",
     )
 
     parser.add_argument(

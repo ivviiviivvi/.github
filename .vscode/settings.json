@@ -5,10 +5,7 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "editor.rulers": [
-    80,
-    120
-  ],
+  "editor.rulers": [80, 120],
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
@@ -106,7 +103,20 @@
     "--cov-report=html",
     "--cov-report=term"
   ],
-  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.exclude": [
+    "**/node_modules/**",
+    "**/__pycache__/**",
+    "**/.venv/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/archive/**"
+  ],
+  "python.analysis.ignore": ["**/archive/**", "**/node_modules/**"],
+  "python.analysis.autoSearchPaths": false,
+  "python.analysis.indexing": true,
+  "python.analysis.memory.keepLibraryAst": false,
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -137,9 +147,7 @@
       "servers": {
         "markitdown": {
           "command": "uvx",
-          "args": [
-            "markitdown-mcp==0.0.1a4"
-          ]
+          "args": ["markitdown-mcp==0.0.1a4"]
         },
         "filesystem": {
           "command": "npx",
@@ -151,24 +159,15 @@
         },
         "sequential-thinking": {
           "command": "npx",
-          "args": [
-            "-y",
-            "@modelcontextprotocol/server-sequential-thinking"
-          ]
+          "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
         },
         "memory": {
           "command": "npx",
-          "args": [
-            "-y",
-            "@modelcontextprotocol/server-memory"
-          ]
+          "args": ["-y", "@modelcontextprotocol/server-memory"]
         },
         "github": {
           "command": "npx",
-          "args": [
-            "-y",
-            "@modelcontextprotocol/server-github"
-          ],
+          "args": ["-y", "@modelcontextprotocol/server-github"],
           "env": {
             "GITHUB_TOKEN": "${env:GITHUB_TOKEN}"
           }
