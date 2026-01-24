@@ -44,7 +44,7 @@ class GitHubAPIClient:
     def create_issue(self, title: str, body: str, labels: Optional[list[str]] = None) -> dict[str, Any]:
         """Create a test issue."""
         url = f"{self.base_url}/repos/{self.repo}/issues"
-        data = {"title": title, "body": body}
+        data: dict[str, Any] = {"title": title, "body": body}
         if labels:
             data["labels"] = labels
 
@@ -67,7 +67,7 @@ class GitHubAPIClient:
     ) -> dict[str, Any]:
         """Update an issue."""
         url = f"{self.base_url}/repos/{self.repo}/issues/{issue_number}"
-        data = {}
+        data: dict[str, Any] = {}
         if state:
             data["state"] = state
         if labels is not None:

@@ -27,11 +27,12 @@ def extract_inline_frontmatter(line: str) -> dict[str, Any]:
 
     # Parse tags - they're in the format \[\] or with actual values
     tags_str = tags.strip()
+    tags_list: list[str] = []
     if tags_str == r"\[\]" or tags_str == "[]":
-        tags_list = []
+        pass  # tags_list already initialized
     else:
         # Try to parse as list
-        tags_list = []
+        pass  # tags_list already initialized
 
     return {
         "name": name.strip(),

@@ -87,8 +87,8 @@ class ContextValidator:
         """
         self.context_file = Path(context_file)
         self.context = self._load_context()
-        self.errors = []
-        self.warnings = []
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
 
     def _load_context(self) -> dict[str, Any]:
         """Load context from JSON file.
