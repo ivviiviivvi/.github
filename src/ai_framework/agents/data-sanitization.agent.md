@@ -1,6 +1,7 @@
-______________________________________________________________________
-
-## name: "Data Sanitization" description: "Data Sanitization Agent - Cleans and sanitizes data, removes PII, ensures compliance, and prepares data for safe sharing or disposal"
+---
+name: "Data Sanitization"
+description: "Data Sanitization Agent - Cleans and sanitizes data, removes PII, ensures compliance, and prepares data for safe sharing or disposal"
+---
 
 # Data Sanitization Agent
 

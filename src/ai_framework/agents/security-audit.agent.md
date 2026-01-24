@@ -1,6 +1,7 @@
-______________________________________________________________________
-
-## name: "security-audit" description: "Security Audit Agent - Performs comprehensive security audits of repositories, workflows, and organizational settings following security best practices" tools: \[\]
+---
+name: "security-audit"
+description: "Security Audit Agent - Performs comprehensive security audits of repositories, workflows, and organizational settings following security best practices"
+---
 
 # Security Audit Agent
 
