@@ -28,18 +28,18 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
       with:
         fetch-depth: 0
 
     - name: Generate changelog
       id: changelog
-      uses: metcalfc/changelog-generator@52d4e2264db60fe4ef8e17ac3f61f8fddaf7d31b   # ratchet:metcalfc/changelog-generator@v4.3.1
+      uses: metcalfc/changelog-generator@52d4e2264db60fe4ef8e17ac3f61f8fddaf7d31b  # ratchet:metcalfc/changelog-generator@v4.3.1
       with:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
-      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564   # ratchet:softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564  # ratchet:softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.version || github.ref_name }}
         name: Release ${{ github.event.inputs.version || github.ref_name }}
@@ -78,13 +78,13 @@ jobs:
     needs: create-release
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update Changelog
-      uses: rhysd/changelog-from-release@78b335bb7d059f35ad04c5428d50711726feee50   # ratchet:rhysd/changelog-from-release@v3
+      uses: rhysd/changelog-from-release@78b335bb7d059f35ad04c5428d50711726feee50  # ratchet:rhysd/changelog-from-release@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         file: CHANGELOG.md
@@ -97,7 +97,7 @@ jobs:
           and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
     - name: Commit updated CHANGELOG
-      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842   # ratchet:stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842  # ratchet:stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: 'docs: update CHANGELOG for ${{ github.event.inputs.version || github.ref_name }}'
         file_pattern: CHANGELOG.md

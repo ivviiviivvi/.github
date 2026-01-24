@@ -24,10 +24,10 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
     - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
     - name: Run Labeler
-      uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9   # ratchet:actions/labeler@v5.0.0
+      uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9  # ratchet:actions/labeler@v5.0.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         configuration-path: .github/labeler.yml
@@ -40,7 +40,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
     - name: Label PR Size
-      uses: codelytv/pr-size-labeler@bc6c5583d69c7e0e8e7c26f66af5e3a69a4fcbd2   # ratchet:codelytv/pr-size-labeler@v1
+      uses: codelytv/pr-size-labeler@bc6c5583d69c7e0e8e7c26f66af5e3a69a4fcbd2  # ratchet:codelytv/pr-size-labeler@v1
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         xs_label: size/xs
@@ -63,7 +63,7 @@ jobs:
     steps:
     - name: Check for Bug Keywords
       if: contains(github.event.issue.body, 'bug') || contains(github.event.issue.title, 'bug') || contains(github.event.issue.body, 'error') || contains(github.event.issue.title, 'error')
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           github.rest.issues.addLabels({
@@ -75,7 +75,7 @@ jobs:
 
     - name: Check for Feature Keywords
       if: contains(github.event.issue.body, 'feature') || contains(github.event.issue.title, 'feature') || contains(github.event.issue.body, 'enhancement') || contains(github.event.issue.title, 'enhancement')
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           github.rest.issues.addLabels({
@@ -87,7 +87,7 @@ jobs:
 
     - name: Check for Documentation Keywords
       if: contains(github.event.issue.body, 'documentation') || contains(github.event.issue.title, 'documentation') || contains(github.event.issue.body, 'docs') || contains(github.event.issue.title, 'docs')
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           github.rest.issues.addLabels({
@@ -99,7 +99,7 @@ jobs:
 
     - name: Check for Question Keywords
       if: contains(github.event.issue.body, 'question') || contains(github.event.issue.title, 'question') || contains(github.event.issue.body, 'help') || contains(github.event.issue.title, 'help')
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           github.rest.issues.addLabels({

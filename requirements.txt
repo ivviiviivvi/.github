@@ -1,0 +1,14 @@
+# Runtime Dependencies for Automation Scripts
+# These are required for scripts in the .github/scripts directory
+
+# YAML parsing for workflow and configuration files
+PyYAML>=6.0.1
+
+# HTTP requests for GitHub API and external services
+requests>=2.31.0
+
+# GitHub API client
+PyGithub>=2.1.1
+
+# JSON schema validation
+jsonschema>=4.19.0

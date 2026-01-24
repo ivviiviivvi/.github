@@ -48,18 +48,18 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@f09c1c0a94de965c15400f5634aa42fac8fb8f88   # ratchet:github/codeql-action/init@v3.27.5
+      uses: github/codeql-action/init@f09c1c0a94de965c15400f5634aa42fac8fb8f88  # ratchet:github/codeql-action/init@v3.27.5
       with:
         languages: ${{ matrix.language }}
 
     - name: Autobuild
-      uses: github/codeql-action/autobuild@f09c1c0a94de965c15400f5634aa42fac8fb8f88   # ratchet:github/codeql-action/autobuild@v3.27.5
+      uses: github/codeql-action/autobuild@f09c1c0a94de965c15400f5634aa42fac8fb8f88  # ratchet:github/codeql-action/autobuild@v3.27.5
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88   # ratchet:github/codeql-action/analyze@v3.27.5
+      uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88  # ratchet:github/codeql-action/analyze@v3.27.5
       with:
         category: /language:${{matrix.language}}
 
@@ -69,9 +69,9 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2   # ratchet:aquasecurity/trivy-action@0.28.0
+      uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2  # ratchet:aquasecurity/trivy-action@0.28.0
       with:
         scan-type: fs
         scan-ref: .
@@ -79,7 +79,7 @@ jobs:
         output: trivy-results.sarif
 
     - name: Upload Trivy results to GitHub Security tab
-      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34   # ratchet:github/codeql-action@v3
+      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34  # ratchet:github/codeql-action@v3
       if: always()
       with:
         sarif_file: trivy-results.sarif

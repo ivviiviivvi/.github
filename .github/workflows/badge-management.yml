@@ -51,7 +51,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -326,7 +326,7 @@ jobs:
 
     - name: Create pull request with badge updates
       if: steps.check-changes.outputs.has_changes == 'true' && github.event_name == 'pull_request'
-      uses: peter-evans/create-pull-request@8867c4aba1b742c39f8d0ba387c70f678c12193f   # ratchet:peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@8867c4aba1b742c39f8d0ba387c70f678c12193f  # ratchet:peter-evans/create-pull-request@v6
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: 'feat: update repository badges'

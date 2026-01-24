@@ -24,7 +24,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
     - name: Auto-assign PR to author
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           // Assign PR to the author
@@ -36,7 +36,7 @@ jobs:
           })
 
     - name: Request review from @copilot
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           // Request review from @copilot with retries
@@ -69,7 +69,7 @@ jobs:
 
     - name: Assign copilot as fallback
       if: always()
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           // Try to assign copilot as assignee as well
@@ -93,7 +93,7 @@ jobs:
     if: github.event_name == 'issues'
     steps:
     - name: Auto-assign issue to maintainers
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           // Uncomment and customize to auto-assign issues to specific users

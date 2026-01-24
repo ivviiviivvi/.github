@@ -18,6 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: github/combine-prs@75478ffc3411703ac6176d818d49d3aa5635db2d # ratchet:github/combine-prs@v5.0.0
+      - uses: github/combine-prs@75478ffc3411703ac6176d818d49d3aa5635db2d  # ratchet:github/combine-prs@v5.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

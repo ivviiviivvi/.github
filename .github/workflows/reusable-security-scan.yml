@@ -59,10 +59,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
     - name: Run Trivy vulnerability scanner
       if: inputs.scan_type == 'trivy' || inputs.scan_type == 'all'
-      uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2   # ratchet:aquasecurity/trivy-action@0.28.0
+      uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2  # ratchet:aquasecurity/trivy-action@0.28.0
       with:
         scan-type: fs
         scan-ref: ${{ inputs.scan_path }}
@@ -73,7 +73,7 @@ jobs:
 
     - name: Run Semgrep scanner
       if: inputs.scan_type == 'semgrep' || inputs.scan_type == 'all'
-      uses: returntocorp/semgrep-action@c4d42fa70dc79e81e6fa15c67d3bf3cf0d4fe9de   # ratchet:returntocorp/semgrep-action@v1
+      uses: returntocorp/semgrep-action@c4d42fa70dc79e81e6fa15c67d3bf3cf0d4fe9de  # ratchet:returntocorp/semgrep-action@v1
       with:
         config: >-
           p/security-audit
@@ -160,7 +160,7 @@ jobs:
 
     - name: Upload Trivy SARIF to GitHub Security
       if: inputs.upload_sarif && always()
-      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34   # ratchet:github/codeql-action@v3
+      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34  # ratchet:github/codeql-action@v3
       with:
         sarif_file: trivy-results.sarif
         category: trivy
@@ -191,7 +191,7 @@ jobs:
 
     - name: Upload scan artifacts
       if: always()
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882   # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
       with:
         name: security-scan-results
         path: |

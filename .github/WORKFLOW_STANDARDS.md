@@ -47,6 +47,42 @@ docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
 docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
 ```
 
+### SHA Pinning with Ratchet Comments
+
+All actions must be pinned to full commit SHAs with a `# ratchet:` comment indicating the human-readable version:
+
+```yaml
+# Format: owner/repo@<40-char-sha>  # ratchet:owner/repo@<version-tag>
+uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+```
+
+**Why this format?**
+- **SHA pinning**: Ensures reproducible builds and prevents supply chain attacks
+- **Ratchet comment**: Documents the intended version for humans and tools like [ratchet](https://github.com/sethvargo/ratchet)
+
+### Updating Action Pins
+
+Use the provided script to update action SHAs:
+
+```bash
+# Dry run - see what would change
+python scripts/update-action-pins.py --dry-run --verbose
+
+# Apply updates
+python scripts/update-action-pins.py
+
+# Update specific workflow
+python scripts/update-action-pins.py --workflow ci.yml
+```
+
+The script resolves canonical version tags to their commit SHAs while preserving ratchet comments.
+
+### Common SHA Issues
+
+1. **Duplicate ratchet comments**: Each line should have exactly one `# ratchet:` comment
+2. **Outdated SHAs**: Run `update-action-pins.py` regularly
+3. **Missing ratchet comments**: Always add when pinning to SHA
+
 ## Required Workflow Elements
 
 ### 1. Permissions (Security)

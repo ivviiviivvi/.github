@@ -59,14 +59,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Get PR details
       id: pr-details
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           let prNumber;
@@ -98,7 +98,7 @@ jobs:
     - name: Check auto-merge eligibility
       id: check-eligibility
       if: steps.pr-details.outputs.number
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -157,7 +157,7 @@ jobs:
     - name: Check merge conflicts
       id: check-conflicts
       if: steps.check-eligibility.outputs.eligible == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -184,7 +184,7 @@ jobs:
     - name: Auto-fix merge conflicts
       id: fix-conflicts
       if: steps.check-conflicts.outputs.has-conflicts == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -227,7 +227,7 @@ jobs:
       if: |
         steps.check-eligibility.outputs.eligible == 'true' &&
         (steps.check-conflicts.outputs.has-conflicts == 'false' || steps.fix-conflicts.outputs.fixed == 'true')
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -273,7 +273,7 @@ jobs:
     - name: Check required approvals
       id: check-approvals
       if: steps.check-status.outputs.all-passed == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -328,7 +328,7 @@ jobs:
         steps.check-eligibility.outputs.eligible == 'true' &&
         steps.check-status.outputs.all-passed == 'true' &&
         steps.check-approvals.outputs.approved == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const prNumber = ${{ steps.pr-details.outputs.number }};
@@ -380,7 +380,7 @@ jobs:
 
     - name: Cleanup merged branch
       if: steps.enable-auto-merge.outputs.merged == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
       with:
         script: |
           const headBranch = '${{ steps.pr-details.outputs.head }}';

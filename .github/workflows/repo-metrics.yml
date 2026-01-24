@@ -22,10 +22,10 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
     - name: Generate Issue Metrics
-      uses: github/issue-metrics@dccfbd8308c9f1b8db83c2e5962d23c74b4c437e   # ratchet:github/issue-metrics@v3
+      uses: github/issue-metrics@dccfbd8308c9f1b8db83c2e5962d23c74b4c437e  # ratchet:github/issue-metrics@v3
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
@@ -34,7 +34,7 @@ jobs:
       run: mv issue_metrics.md issue_metrics_report.md
 
     - name: Generate PR Metrics
-      uses: github/issue-metrics@dccfbd8308c9f1b8db83c2e5962d23c74b4c437e   # ratchet:github/issue-metrics@v3
+      uses: github/issue-metrics@dccfbd8308c9f1b8db83c2e5962d23c74b4c437e  # ratchet:github/issue-metrics@v3
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:pr created:>=${{ github.event.repository.created_at }}
@@ -43,7 +43,7 @@ jobs:
       run: mv issue_metrics.md pr_metrics_report.md
 
     - name: Create Metrics Summary
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const fs = require('fs');
@@ -93,7 +93,7 @@ jobs:
           fs.writeFileSync('repository_metrics.md', report);
 
     - name: Upload Metrics Artifact
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882   # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
       with:
         name: repository-metrics-${{ github.run_number }}
         path: |
@@ -103,7 +103,7 @@ jobs:
         retention-days: 90
 
     - name: Commit Metrics to Repository
-      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842   # ratchet:stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842  # ratchet:stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: 'docs: update repository metrics [skip ci]'
         file_pattern: reports/metrics-*.md
@@ -115,12 +115,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Generate Statistics
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const fs = require('fs');
@@ -201,7 +201,7 @@ jobs:
           console.log('Statistics generated successfully');
 
     - name: Commit Statistics
-      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842   # ratchet:stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842  # ratchet:stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: 'docs: update repository statistics [skip ci]'
         file_pattern: REPOSITORY_STATS.md

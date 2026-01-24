@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Parse Issue
-      uses: github/issue-parser@87d5fddc632816aeb4b84c40e20fd37e09a80b28   # ratchet:github/issue-parser@v3
+      uses: github/issue-parser@87d5fddc632816aeb4b84c40e20fd37e09a80b28  # ratchet:github/issue-parser@v3
       id: issue-parser
       with:
         template-path: .github/ISSUE_TEMPLATE/bug_report.md   # Optional: Adjust based on actual templates

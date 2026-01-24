@@ -37,11 +37,11 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
     - name: Find Automated PRs
       id: find-prs
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           console.log('🔍 Finding automated PRs to batch...');
@@ -191,7 +191,7 @@ jobs:
 
     - name: Apply Batch Labels
       if: steps.find-prs.outputs.total > 0
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
@@ -237,7 +237,7 @@ jobs:
 
     - name: Comment on Batches
       if: steps.find-prs.outputs.total > 0
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
@@ -279,7 +279,7 @@ jobs:
     - name: Check Batch Readiness
       id: check-ready
       if: steps.find-prs.outputs.total > 0 && github.event.inputs.auto_merge != 'false'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
@@ -345,7 +345,7 @@ jobs:
 
     - name: Trigger Batch Merge
       if: steps.check-ready.outputs.has-ready == 'true'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7.0.1
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7.0.1
       with:
         script: |
           const readyBatches = JSON.parse('${{ steps.check-ready.outputs.ready-batches }}');
