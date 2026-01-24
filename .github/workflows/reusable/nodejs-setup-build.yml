@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       node-version:
-        description: Node.js version to use
+        description: Node.js version to use (falls back to vars.NODE_VERSION_DEFAULT, then 20)
         required: false
         type: string
-        default: '18'
+        default: ''  # Empty triggers fallback logic
       package-manager:
         description: Package manager (npm, yarn, pnpm)
         required: false
@@ -50,10 +50,29 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup Node.js ${{ inputs.node-version }}
-      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af   # v4.1.0
+    - name: Determine Node.js version
+      id: node-version
+      run: |
+        # Priority: input > repository variable > default
+        INPUT_VERSION="${{ inputs.node-version }}"
+        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        DEFAULT_VERSION="20"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Using Node.js version: $VERSION"
+
+    - name: Setup Node.js ${{ steps.node-version.outputs.version }}
+      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
       with:
-        node-version: ${{ inputs.node-version }}
+        node-version: ${{ steps.node-version.outputs.version }}
         cache: ${{ inputs.package-manager }}
         cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
 

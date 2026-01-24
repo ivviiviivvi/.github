@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/workflow-registry.schema.json",
+  "title": "Workflow Registry",
+  "description": "Registry of GitHub Actions workflows with FUNCTIONcalled metadata",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Schema reference"
+    },
+    "generated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when the registry was generated"
+    },
+    "generator": {
+      "type": "string",
+      "description": "Name of the tool that generated this registry"
+    },
+    "root": {
+      "type": "string",
+      "description": "Root directory that was scanned"
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "total_workflows": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of workflows in registry"
+        },
+        "with_metadata": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of workflows with metadata sidecars"
+        },
+        "orphans": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of workflows without metadata"
+        },
+        "by_layer": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "description": "Count of workflows by FUNCTIONcalled layer"
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Workflow name"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path to workflow file"
+          },
+          "meta": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "description": "Relative path to metadata sidecar (null if orphan)"
+          },
+          "hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA256 hash of workflow file"
+          },
+          "version": {
+            "type": "string",
+            "description": "Semantic version from metadata"
+          },
+          "profile": {
+            "type": "string",
+            "enum": ["light", "full"],
+            "description": "Metadata profile level"
+          },
+          "functioncalled": {
+            "type": "object",
+            "properties": {
+              "canonical": {
+                "type": "string",
+                "description": "Canonical FUNCTIONcalled name"
+              },
+              "layer": {
+                "type": "string",
+                "enum": ["core", "interface", "logic", "application"]
+              },
+              "role": {
+                "type": "string"
+              },
+              "domain": {
+                "type": "string"
+              }
+            }
+          },
+          "orphan": {
+            "type": "boolean",
+            "description": "True if workflow has no metadata sidecar"
+          }
+        },
+        "required": ["name", "path"]
+      }
+    }
+  },
+  "required": ["resources"]
+}

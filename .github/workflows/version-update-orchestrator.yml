@@ -1,0 +1,213 @@
+name: Version Update Orchestrator
+
+on:
+  schedule:
+    # Run weekly on Monday at 3 AM UTC to check status
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - status
+          - trigger-all
+          - cleanup-stale
+        default: status
+      cleanup_days:
+        description: 'Days before PR is considered stale (for cleanup action)'
+        required: false
+        type: number
+        default: 30
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
+jobs:
+  status-dashboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      action_pins_pr: ${{ steps.check.outputs.action_pins_pr }}
+      python_pr: ${{ steps.check.outputs.python_pr }}
+      nodejs_pr: ${{ steps.check.outputs.nodejs_pr }}
+      pending_count: ${{ steps.check.outputs.pending_count }}
+
+    steps:
+      - name: Check pending update PRs
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PENDING=0
+
+          # Check for action pins PR
+          ACTION_PR=$(gh pr list --repo "${{ github.repository }}" \
+            --head "auto/update-action-pins" \
+            --json number,title,createdAt \
+            --jq '.[0] // empty' 2>/dev/null || echo "")
+          if [ -n "$ACTION_PR" ]; then
+            echo "action_pins_pr=$ACTION_PR" >> $GITHUB_OUTPUT
+            PENDING=$((PENDING + 1))
+          else
+            echo "action_pins_pr=" >> $GITHUB_OUTPUT
+          fi
+
+          # Check for Python version PR
+          PYTHON_PR=$(gh pr list --repo "${{ github.repository }}" \
+            --head "auto/update-python-version" \
+            --json number,title,createdAt \
+            --jq '.[0] // empty' 2>/dev/null || echo "")
+          if [ -n "$PYTHON_PR" ]; then
+            echo "python_pr=$PYTHON_PR" >> $GITHUB_OUTPUT
+            PENDING=$((PENDING + 1))
+          else
+            echo "python_pr=" >> $GITHUB_OUTPUT
+          fi
+
+          # Check for Node.js version PR
+          NODE_PR=$(gh pr list --repo "${{ github.repository }}" \
+            --head "auto/update-nodejs-version" \
+            --json number,title,createdAt \
+            --jq '.[0] // empty' 2>/dev/null || echo "")
+          if [ -n "$NODE_PR" ]; then
+            echo "nodejs_pr=$NODE_PR" >> $GITHUB_OUTPUT
+            PENDING=$((PENDING + 1))
+          else
+            echo "nodejs_pr=" >> $GITHUB_OUTPUT
+          fi
+
+          echo "pending_count=$PENDING" >> $GITHUB_OUTPUT
+
+      - name: Generate status summary
+        env:
+          ACTION_PR: ${{ steps.check.outputs.action_pins_pr }}
+          PYTHON_PR: ${{ steps.check.outputs.python_pr }}
+          NODEJS_PR: ${{ steps.check.outputs.nodejs_pr }}
+          PENDING: ${{ steps.check.outputs.pending_count }}
+        run: |
+          echo "## Version Update Status Dashboard" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pending Update PRs:** $PENDING" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Update Type | Status | PR |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------------|--------|-----|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -n "$ACTION_PR" ]; then
+            PR_NUM=$(echo "$ACTION_PR" | jq -r '.number')
+            echo "| Action Pins | Pending | [#$PR_NUM](${{ github.server_url }}/${{ github.repository }}/pull/$PR_NUM) |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Action Pins | Up to date | - |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -n "$PYTHON_PR" ]; then
+            PR_NUM=$(echo "$PYTHON_PR" | jq -r '.number')
+            echo "| Python Version | Pending | [#$PR_NUM](${{ github.server_url }}/${{ github.repository }}/pull/$PR_NUM) |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Python Version | Up to date | - |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -n "$NODEJS_PR" ]; then
+            PR_NUM=$(echo "$NODEJS_PR" | jq -r '.number')
+            echo "| Node.js Version | Pending | [#$PR_NUM](${{ github.server_url }}/${{ github.repository }}/pull/$PR_NUM) |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Node.js Version | Up to date | - |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Current Versions" >> $GITHUB_STEP_SUMMARY
+          echo "| Runtime | Default Version |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-----------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Python | \`${{ vars.PYTHON_VERSION_DEFAULT || '3.12 (hardcoded)' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node.js | \`${{ vars.NODE_VERSION_DEFAULT || '20 (hardcoded)' }}\` |" >> $GITHUB_STEP_SUMMARY
+
+  trigger-all-updates:
+    if: inputs.action == 'trigger-all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Trigger Action Pins Update
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run update-action-pins-scheduled.yml \
+            --repo "${{ github.repository }}" \
+            --field dry_run=false
+
+      - name: Trigger Python Version Update
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run update-python-version.yml \
+            --repo "${{ github.repository }}" \
+            --field dry_run=false
+
+      - name: Trigger Node.js Version Update
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run update-nodejs-version.yml \
+            --repo "${{ github.repository }}" \
+            --field dry_run=false
+
+      - name: Summary
+        run: |
+          echo "## Triggered All Update Workflows" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Action Pins Update" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Python Version Update" >> $GITHUB_STEP_SUMMARY
+          echo "- [x] Node.js Version Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the [Actions tab](${{ github.server_url }}/${{ github.repository }}/actions) for progress." >> $GITHUB_STEP_SUMMARY
+
+  cleanup-stale-prs:
+    if: inputs.action == 'cleanup-stale'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Find and close stale update PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STALE_DAYS: ${{ inputs.cleanup_days }}
+        run: |
+          CUTOFF_DATE=$(date -d "-${STALE_DAYS} days" +%Y-%m-%d 2>/dev/null || date -v-${STALE_DAYS}d +%Y-%m-%d)
+          CLOSED=0
+
+          echo "Looking for PRs older than $CUTOFF_DATE ($STALE_DAYS days)"
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Stale PR Cleanup" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          for branch in "auto/update-action-pins" "auto/update-python-version" "auto/update-nodejs-version"; do
+            PR_INFO=$(gh pr list --repo "${{ github.repository }}" \
+              --head "$branch" \
+              --json number,title,createdAt \
+              --jq '.[0] // empty' 2>/dev/null || echo "")
+
+            if [ -n "$PR_INFO" ]; then
+              PR_NUM=$(echo "$PR_INFO" | jq -r '.number')
+              PR_DATE=$(echo "$PR_INFO" | jq -r '.createdAt[:10]')
+              PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
+
+              if [[ "$PR_DATE" < "$CUTOFF_DATE" ]]; then
+                echo "Closing stale PR #$PR_NUM ($PR_DATE): $PR_TITLE"
+                gh pr close "$PR_NUM" --repo "${{ github.repository }}" \
+                  --comment "Closing as stale (created $PR_DATE, threshold: $STALE_DAYS days). Re-run the update workflow to create a fresh PR with latest changes."
+                gh pr delete-branch --repo "${{ github.repository }}" "$PR_NUM" 2>/dev/null || true
+                CLOSED=$((CLOSED + 1))
+                echo "- Closed [#$PR_NUM](${{ github.server_url }}/${{ github.repository }}/pull/$PR_NUM): $PR_TITLE (created $PR_DATE)" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done
+
+          if [ $CLOSED -eq 0 ]; then
+            echo "No stale PRs found" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Total closed:** $CLOSED" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -77,6 +77,19 @@ python scripts/update-action-pins.py --workflow ci.yml
 
 The script resolves canonical version tags to their commit SHAs while preserving ratchet comments.
 
+### Automated Updates
+
+Version updates are automated via scheduled workflows:
+
+| Workflow | Schedule | Description |
+|----------|----------|-------------|
+| `update-action-pins-scheduled.yml` | Weekly (Tue 4am UTC) | Updates action SHA pins |
+| `update-python-version.yml` | Monthly (15th) | Updates default Python version |
+| `update-nodejs-version.yml` | Monthly (20th) | Updates default Node.js version |
+| `version-update-orchestrator.yml` | Weekly (Mon 3am UTC) | Status dashboard & management |
+
+See [VERSION_MANAGEMENT.md](VERSION_MANAGEMENT.md) for detailed documentation.
+
 ### Common SHA Issues
 
 1. **Duplicate ratchet comments**: Each line should have exactly one `# ratchet:` comment
@@ -151,7 +164,48 @@ jobs:
       ${{ runner.os }}-pip-
 ```
 
-### 5. Path Filters (Cost Reduction)
+### 5. Centralized Version Management
+
+**PREFER** using repository variables and composite actions for runtime versions:
+
+#### Using Composite Actions (Recommended)
+
+```yaml
+# Python - uses vars.PYTHON_VERSION_DEFAULT with fallback to 3.12
+- uses: ./.github/actions/setup-python-standard
+  with:
+    python-version: ''  # Empty = use repository default
+
+# Node.js - uses vars.NODE_VERSION_DEFAULT with fallback to 20
+- uses: ./.github/actions/setup-node-standard
+  with:
+    node-version: ''  # Empty = use repository default
+```
+
+#### Using Repository Variables Directly
+
+```yaml
+- uses: actions/setup-python@v5
+  with:
+    python-version: ${{ vars.PYTHON_VERSION_DEFAULT || '3.12' }}
+
+- uses: actions/setup-node@v4
+  with:
+    node-version: ${{ vars.NODE_VERSION_DEFAULT || '20' }}
+```
+
+#### Repository Variables
+
+Configure in **Settings > Secrets and variables > Actions > Variables**:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PYTHON_VERSION_DEFAULT` | `3.12` | Default Python version |
+| `NODE_VERSION_DEFAULT` | `20` | Default Node.js LTS version |
+
+See [VERSION_MANAGEMENT.md](VERSION_MANAGEMENT.md) for complete documentation.
+
+### 6. Path Filters (Cost Reduction)
 
 Use path filters to avoid unnecessary runs:
 
@@ -384,9 +438,38 @@ echo "foo=bar" >> $GITHUB_OUTPUT
 - [ ] Monitor workflow costs
 - [ ] Update this document with new standards
 
+## FUNCTIONcalled Workflow Metadata
+
+Workflows can have metadata sidecars (`.meta.json` files) for structured classification:
+
+### Layer Classification
+
+| Layer | Purpose | Example Workflows |
+|-------|---------|-------------------|
+| `core` | Foundation, CI, reusable | `ci.yml`, `reusable-*.yml` |
+| `interface` | User-facing, interaction | `welcome.yml`, `auto-assign.yml` |
+| `logic` | Validation, processing | `pr-title-lint.yml`, `validate-*.yml` |
+| `application` | Deployment, release | `release.yml`, `deployment.yml` |
+
+### Adding Metadata
+
+Create `<workflow>.yml.meta.json` alongside your workflow:
+
+```json
+{
+  "profile": "light",
+  "name": "My Workflow",
+  "identifier": "urn:uuid:<uuid>",
+  "version": "1.0.0"
+}
+```
+
+See [VERSION_MANAGEMENT.md](VERSION_MANAGEMENT.md#functioncalled-workflow-metadata) for complete schema and examples.
+
 ## References
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)<!-- link:docs.github_actions -->
 - [Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)<!-- link:docs.github_actions_hardening -->
 - [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)<!-- link:docs.github_actions_workflow_syntax -->
 - [Action Pinning](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions)
+- [Version Management](VERSION_MANAGEMENT.md)

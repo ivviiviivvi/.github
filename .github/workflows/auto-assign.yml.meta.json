@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Auto Assign",
+  "identifier": "urn:uuid:c3d4e5f6-7890-1234-cdef-456789012345",
+  "version": "1.0.0",
+  "description": "Automatically assigns reviewers and assignees to pull requests",
+  "functioncalled": {
+    "canonical": "interface.assign.contributor.yml",
+    "layer": "interface",
+    "role": "assign",
+    "domain": "contributor"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2025-01-24T00:00:00Z",
+  "dc:subject": ["automation", "reviewers", "assignment", "interface", "pull-request"]
+}

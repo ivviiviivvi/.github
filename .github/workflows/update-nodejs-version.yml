@@ -1,0 +1,252 @@
+name: Update Node.js Version
+
+on:
+  schedule:
+    # Run monthly on the 20th at 5 AM UTC
+    - cron: '0 5 20 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (show available updates without making changes)'
+        required: false
+        type: boolean
+        default: false
+      target_version:
+        description: 'Target Node.js LTS version (leave empty for auto-detect current LTS)'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      current_version: ${{ steps.current.outputs.version }}
+      latest_lts: ${{ steps.latest.outputs.version }}
+      latest_lts_codename: ${{ steps.latest.outputs.codename }}
+      should_update: ${{ steps.compare.outputs.should_update }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+      - name: Get current default version
+        id: current
+        run: |
+          # Check repository variable first, then fallback to hardcoded default
+          CURRENT="${{ vars.NODE_VERSION_DEFAULT }}"
+          if [ -z "$CURRENT" ]; then
+            CURRENT="20"
+          fi
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current default Node.js version: $CURRENT"
+
+      - name: Detect latest LTS Node.js version
+        id: latest
+        run: |
+          if [ -n "${{ inputs.target_version }}" ]; then
+            LATEST="${{ inputs.target_version }}"
+            CODENAME="manual"
+            echo "Using manually specified version: $LATEST"
+          else
+            # Query Node.js release schedule
+            SCHEDULE=$(curl -s "https://raw.githubusercontent.com/nodejs/Release/main/schedule.json")
+
+            # Find the current active LTS version
+            # LTS versions are even numbers (18, 20, 22, etc.)
+            CURRENT_DATE=$(date +%Y-%m-%d)
+
+            # Parse schedule to find active LTS
+            LATEST=$(echo "$SCHEDULE" | jq -r --arg date "$CURRENT_DATE" '
+              to_entries |
+              map(select(
+                .value.start <= $date and
+                .value.end >= $date and
+                .value.lts != null and
+                .value.lts <= $date
+              )) |
+              sort_by(.key) |
+              last |
+              .key // empty
+            ' | sed 's/^v//')
+
+            if [ -z "$LATEST" ]; then
+              # Fallback to known stable LTS
+              LATEST="20"
+              CODENAME="iron"
+            else
+              CODENAME=$(echo "$SCHEDULE" | jq -r --arg v "v$LATEST" '.[$v].codename // "unknown"')
+            fi
+
+            echo "Detected latest LTS version: $LATEST ($CODENAME)"
+          fi
+
+          echo "version=$LATEST" >> $GITHUB_OUTPUT
+          echo "codename=$CODENAME" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        id: compare
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          LATEST="${{ steps.latest.outputs.version }}"
+
+          echo "Comparing: current=$CURRENT vs latest LTS=$LATEST"
+
+          if [ "$CURRENT" = "$LATEST" ]; then
+            echo "Already on latest LTS version"
+            echo "should_update=false" >> $GITHUB_OUTPUT
+          else
+            # Check if latest is newer
+            if [ "$LATEST" -gt "$CURRENT" ] 2>/dev/null; then
+              echo "Update available: $CURRENT -> $LATEST"
+              echo "should_update=true" >> $GITHUB_OUTPUT
+            else
+              echo "Current version is same or newer"
+              echo "should_update=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  validate-version:
+    needs: check-version
+    if: needs.check-version.outputs.should_update == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+      - name: Test new Node.js version
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
+        with:
+          node-version: ${{ needs.check-version.outputs.latest_lts }}
+
+      - name: Validate npm works
+        run: |
+          node --version
+          npm --version
+
+          # Test npm install if package.json exists
+          if [ -f "package.json" ]; then
+            npm ci || npm install
+            echo "Dependencies installed successfully"
+          fi
+
+      - name: Run basic tests
+        run: |
+          # Ensure Node.js works correctly
+          node -e "console.log('Node.js', process.version)"
+          node -e "require('fs'); require('path'); require('crypto'); console.log('Core modules OK')"
+
+  update-workflows:
+    needs: [check-version, validate-version]
+    if: needs.check-version.outputs.should_update == 'true' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update workflow files
+        id: update
+        env:
+          NEW_VERSION: ${{ needs.check-version.outputs.latest_lts }}
+          OLD_VERSION: ${{ needs.check-version.outputs.current_version }}
+        run: |
+          cd .github
+
+          # Count files to update
+          COUNT=0
+
+          # Update workflow files that have hardcoded Node versions
+          for file in workflows/*.yml workflows/**/*.yml; do
+            if [ -f "$file" ]; then
+              # Update node-version inputs with the old default
+              if grep -q "node-version.*['\"]$OLD_VERSION['\"]" "$file" 2>/dev/null; then
+                sed -i "s/node-version: '$OLD_VERSION'/node-version: '$NEW_VERSION'/g" "$file"
+                sed -i "s/node-version: \"$OLD_VERSION\"/node-version: \"$NEW_VERSION\"/g" "$file"
+                COUNT=$((COUNT + 1))
+                echo "Updated: $file"
+              fi
+            fi
+          done
+
+          echo "updated_count=$COUNT" >> $GITHUB_OUTPUT
+          echo "Updated $COUNT workflow files"
+
+      - name: Update package.json engines
+        run: |
+          if [ -f "package.json" ]; then
+            # Update engines.node if present
+            if grep -q '"node":' package.json; then
+              sed -i 's/"node": ">=[0-9]\+"/"node": ">=${{ needs.check-version.outputs.latest_lts }}.0.0"/g' package.json
+              echo "Updated package.json engines"
+            fi
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f  # ratchet:peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore(deps): update default Node.js version to ${{ needs.check-version.outputs.latest_lts }} LTS
+
+            Update from ${{ needs.check-version.outputs.current_version }} to ${{ needs.check-version.outputs.latest_lts }} (${{ needs.check-version.outputs.latest_lts_codename }}).
+
+            Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          branch: auto/update-nodejs-version
+          delete-branch: true
+          title: 'chore(deps): update default Node.js version to ${{ needs.check-version.outputs.latest_lts }} LTS'
+          body: |
+            ## Summary
+            Update default Node.js version from **${{ needs.check-version.outputs.current_version }}** to **${{ needs.check-version.outputs.latest_lts }}** LTS (${{ needs.check-version.outputs.latest_lts_codename }}).
+
+            ## Changes
+            - Updated ${{ steps.update.outputs.updated_count }} workflow files
+            - Consider updating `vars.NODE_VERSION_DEFAULT` repository variable
+
+            ## Validation
+            - [x] New Node.js version is available in GitHub Actions
+            - [x] npm install succeeds
+            - [ ] CI passes with new version
+
+            ## Manual Steps Required
+            After merging, update the repository variable:
+            1. Go to Settings > Secrets and variables > Actions > Variables
+            2. Update `NODE_VERSION_DEFAULT` to `${{ needs.check-version.outputs.latest_lts }}`
+
+            ---
+            Generated by [Update Node.js Version workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          labels: |
+            dependencies
+            automated
+            nodejs
+
+  summary:
+    needs: [check-version, validate-version]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## Node.js Version Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Current Version | ${{ needs.check-version.outputs.current_version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Latest LTS | ${{ needs.check-version.outputs.latest_lts }} (${{ needs.check-version.outputs.latest_lts_codename }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Update Available | ${{ needs.check-version.outputs.should_update }} |" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "> **Note:** This was a dry run. No changes were made." >> $GITHUB_STEP_SUMMARY
+          fi

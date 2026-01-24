@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Release",
+  "identifier": "urn:uuid:e5f67890-1234-5678-ef01-678901234567",
+  "version": "1.0.0",
+  "description": "Manages releases, changelog generation, and version tagging",
+  "functioncalled": {
+    "canonical": "application.deploy.release.yml",
+    "layer": "application",
+    "role": "deploy",
+    "domain": "release"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "workflow_dispatch", "release"],
+  "outputs": [
+    {
+      "name": "version",
+      "description": "The released version number"
+    },
+    {
+      "name": "release-url",
+      "description": "URL to the GitHub release"
+    }
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2025-01-24T00:00:00Z",
+  "dc:subject": ["release", "deployment", "changelog", "versioning", "application"]
+}

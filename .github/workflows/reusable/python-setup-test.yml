@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       python-version:
-        description: Python version to use
+        description: Python version to use (falls back to vars.PYTHON_VERSION_DEFAULT, then 3.12)
         required: false
         type: string
-        default: '3.11'
+        default: ''  # Empty triggers fallback logic
       requirements-file:
         description: Path to requirements file
         required: false
@@ -59,10 +59,29 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b   # v5.3.0
+    - name: Determine Python version
+      id: python-version
+      run: |
+        # Priority: input > repository variable > default
+        INPUT_VERSION="${{ inputs.python-version }}"
+        REPO_VAR_VERSION="${{ vars.PYTHON_VERSION_DEFAULT }}"
+        DEFAULT_VERSION="3.12"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Using Python version: $VERSION"
+
+    - name: Set up Python ${{ steps.python-version.outputs.version }}
+      uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b  # ratchet:actions/setup-python@v5
       with:
-        python-version: ${{ inputs.python-version }}
+        python-version: ${{ steps.python-version.outputs.version }}
         cache: pip
         cache-dependency-path: ${{ inputs.cache-dependency-path }}
 

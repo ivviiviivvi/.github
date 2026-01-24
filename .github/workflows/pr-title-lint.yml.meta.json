@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "PR Title Lint",
+  "identifier": "urn:uuid:d4e5f678-9012-3456-def0-567890123456",
+  "version": "1.0.0",
+  "description": "Validates pull request titles against conventional commit format",
+  "functioncalled": {
+    "canonical": "logic.validate.title.yml",
+    "layer": "logic",
+    "role": "validate",
+    "domain": "title"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "pull_request_target"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2025-01-24T00:00:00Z",
+  "dc:subject": ["validation", "linting", "conventional-commits", "pr-title", "logic"]
+}

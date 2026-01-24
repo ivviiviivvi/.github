@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "CI Pipeline",
+  "identifier": "urn:uuid:b1a2c3d4-e5f6-7890-abcd-ef1234567890",
+  "version": "1.0.0",
+  "description": "Core continuous integration pipeline for build, test, and validation",
+  "functioncalled": {
+    "canonical": "core.ci.build.yml",
+    "layer": "core",
+    "role": "ci",
+    "domain": "build"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2025-01-24T00:00:00Z",
+  "dc:subject": ["ci", "continuous-integration", "build", "test", "core"]
+}
