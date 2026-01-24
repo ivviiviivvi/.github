@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Maintenance Scheduler with ML-Based Timing Prediction
+"""Maintenance Scheduler with ML-Based Timing Prediction.
 
 This module provides ML-based prediction of optimal maintenance windows
 to minimize disruption and maximize efficiency. It analyzes repository

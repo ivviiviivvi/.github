@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enhanced Analytics ML Model
+"""Enhanced Analytics ML Model.
 
 Provides advanced machine learning capabilities for workflow optimization with
 expanded feature set and improved accuracy (target: 85%+).
@@ -32,7 +32,6 @@ import logging
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict
 
 import numpy as np
 
@@ -90,7 +89,7 @@ class EnhancedAnalyticsEngine:
         self.models_dir = Path(".github/models")
         self.models_dir.mkdir(parents=True, exist_ok=True)
 
-    def extract_features(self, owner: str, repo: str, pr_number: int) -> Dict[str, float]:
+    def extract_features(self, owner: str, repo: str, pr_number: int) -> dict[str, float]:
         """Extract comprehensive feature set from a pull request.
 
         Features extracted:
@@ -173,7 +172,7 @@ class EnhancedAnalyticsEngine:
 
         # Review metrics
         if reviews:
-            features["reviewers_count"] = len(set(r.get("user", {}).get("login", "") for r in reviews))
+            features["reviewers_count"] = len({r.get("user", {}).get("login", "") for r in reviews})
             features["reviews_count"] = len(reviews)
             features["approvals_count"] = sum(1 for r in reviews if r.get("state") == "APPROVED")
             features["changes_requested_count"] = sum(1 for r in reviews if r.get("state") == "CHANGES_REQUESTED")
@@ -221,7 +220,7 @@ class EnhancedAnalyticsEngine:
         logger.info(f"Extracted {len(features)} features")
         return features
 
-    def _get_author_stats(self, owner: str, repo: str, author: str) -> Dict[str, float]:
+    def _get_author_stats(self, owner: str, repo: str, author: str) -> dict[str, float]:
         """Get statistics about the PR author."""
         # Fetch author's commits in the last 90 days
         since = (datetime.now() - timedelta(days=90)).isoformat()
@@ -264,7 +263,7 @@ class EnhancedAnalyticsEngine:
             "avg_review_time_hours": avg_review_time,
         }
 
-    def _get_repository_stats(self, owner: str, repo: str) -> Dict[str, float]:
+    def _get_repository_stats(self, owner: str, repo: str) -> dict[str, float]:
         """Get current repository statistics."""
         # Fetch open PRs
         open_prs = self.github.get(
@@ -302,7 +301,7 @@ class EnhancedAnalyticsEngine:
             "ci_success_rate": ci_success_rate,
         }
 
-    def train_models(self, owner: str, repo: str, lookback_days: int = 90) -> Dict[str, float]:
+    def train_models(self, owner: str, repo: str, lookback_days: int = 90) -> dict[str, float]:
         """Train ML models on historical PR data.
 
         Args:
@@ -490,7 +489,7 @@ class EnhancedAnalyticsEngine:
 
         return FeatureImportance(
             model_name=model_name,
-            features={k: v for k, v in sorted_features},
+            features=dict(sorted_features),
             top_features=[k for k, v in sorted_features[:10]],
         )
 

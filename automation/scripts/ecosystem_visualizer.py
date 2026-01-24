@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Ecosystem Visualizer - Creates visual maps of the organization ecosystem
-Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring
+Implements AI-GH-06: Ecosystem Integration & Architecture Monitoring.
 """
 
 import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 
 class EcosystemVisualizer:
-    """Generate visual representations of the ecosystem"""
+    """Generate visual representations of the ecosystem."""
 
     _WORKFLOW_BASE_PATH = "../.github/workflows/"
 
@@ -59,7 +59,7 @@ class EcosystemVisualizer:
     _WORKFLOW_REGEX = re.compile("|".join(f"({p.pattern})" for _, p in WORKFLOW_PATTERNS))
 
     # Technology icons (extendable)
-    TECHNOLOGY_ICONS: Dict[str, str] = {}
+    TECHNOLOGY_ICONS: dict[str, str] = {}
 
     def __init__(self, report_path: Optional[Path] = None):
         self.report_path = report_path
@@ -112,7 +112,7 @@ class EcosystemVisualizer:
             return f"{parent_refs}{target_path}"
 
     def generate_mermaid_diagram(self, output_path: Optional[Path] = None) -> str:
-        """Generate Mermaid diagram of the ecosystem"""
+        """Generate Mermaid diagram of the ecosystem."""
         if not self.report_data or "ecosystem_map" not in self.report_data:
             return "No ecosystem data available"
 
@@ -120,10 +120,7 @@ class EcosystemVisualizer:
 
         # Calculate the correct relative path for workflow links
         workflow_dir = ".github/workflows/"
-        if output_path:
-            workflow_path = self._calculate_relative_path(output_path, workflow_dir)
-        else:
-            workflow_path = workflow_dir
+        workflow_path = self._calculate_relative_path(output_path, workflow_dir) if output_path else workflow_dir
 
         # Use a list for efficient string concatenation
         parts = []
@@ -213,12 +210,12 @@ graph TD
 
         return "".join(parts)
 
-    def _render_grouped_section(self, items: List[Dict[str, Any]]) -> List[str]:
-        """Helper to render grouped alerts/points"""
+    def _render_grouped_section(self, items: list[dict[str, Any]]) -> list[str]:
+        """Helper to render grouped alerts/points."""
         parts = []
 
         # Group items by category
-        grouped: Dict[str, List[Dict[str, Any]]] = {}
+        grouped: dict[str, list[dict[str, Any]]] = {}
         for item in items:
             cat = item.get("category", "Unknown")
             if cat not in grouped:
@@ -257,7 +254,7 @@ graph TD
 
         return parts
 
-    def _classify_workflow(self, workflow_name: str) -> Tuple[str, str]:
+    def _classify_workflow(self, workflow_name: str) -> tuple[str, str]:
         """Classify a workflow based on its name using pre-compiled
         regex patterns. Returns tuple of (emoji, category_name).
         """
@@ -271,7 +268,7 @@ graph TD
         return "⚙️", self.WORKFLOW_CATEGORIES["⚙️"]
 
     def generate_dashboard_markdown(self, output_path: Optional[Path] = None) -> str:
-        """Generate a comprehensive dashboard in Markdown"""
+        """Generate a comprehensive dashboard in Markdown."""
         if not self.report_data:
             return "No report data available"
 
@@ -555,8 +552,8 @@ graph TD
 
                 # Assign workflows to categories (first match wins)
                 # Grouping is now done efficiently
-                grouped: Dict[str, List[str]] = {}
-                for emoji in self.WORKFLOW_CATEGORIES.keys():
+                grouped: dict[str, list[str]] = {}
+                for emoji in self.WORKFLOW_CATEGORIES:
                     grouped[f"{emoji} {self.WORKFLOW_CATEGORIES[emoji]}"] = []
 
                 # Populate grouped workflows
@@ -602,7 +599,7 @@ graph TD
         return dashboard
 
     def generate_health_badge(self) -> str:
-        """Generate a health badge in Shields.io format"""
+        """Generate a health badge in Shields.io format."""
         if not self.report_data:
             badge_url = "![Health](https://img.shields.io/badge/health-unknown-lightgrey)"
             return badge_url
@@ -647,10 +644,7 @@ graph TD
         max_score += 30
 
         # Calculate percentage
-        if max_score > 0:
-            health_pct = int((score / max_score) * 100)
-        else:
-            health_pct = 0
+        health_pct = int(score / max_score * 100) if max_score > 0 else 0
 
         # Determine color
         if health_pct >= 80:
@@ -674,7 +668,7 @@ graph TD
 
 
 def main() -> None:
-    """Main entry point"""
+    """Main entry point."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Ecosystem Visualizer")

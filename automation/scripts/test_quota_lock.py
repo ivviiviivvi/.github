@@ -1,3 +1,4 @@
+import contextlib
 import os
 import threading
 import time
@@ -17,15 +18,11 @@ class TestQuotaLock(unittest.TestCase):
     def setUp(self):
         # Clean up any existing locks
         if os.path.exists(LOCK_FILE):
-            try:
+            with contextlib.suppress(OSError):
                 os.remove(LOCK_FILE)
-            except OSError:
-                pass
         if os.path.exists(LOCK_DIR):
-            try:
+            with contextlib.suppress(OSError):
                 os.rmdir(LOCK_DIR)
-            except OSError:
-                pass
 
     def tearDown(self):
         self.setUp()
@@ -69,7 +66,7 @@ class TestQuotaLock(unittest.TestCase):
 
     @unittest.skipUnless(HAS_FCNTL, "fcntl not available on this platform")
     def test_fcntl_used_on_unix(self):
-        """Test that fcntl mechanism is used when available"""
+        """Test that fcntl mechanism is used when available."""
         with acquire_lock():
             self.assertTrue(os.path.exists(LOCK_FILE))
 

@@ -54,7 +54,19 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "D", "UP", "B", "C4", "SIM"]
-ignore = ["D100", "D104"]
+ignore = ["D100", "D101", "D102", "D103", "D104", "D105", "D107", "D205", "D401"]
+
+[tool.ruff.lint.per-file-ignores]
+# JavaScript embedded in Python strings causes false positives
+"automation/scripts/generate_pilot_workflows.py" = ["F821"]
+# ML code uses X, X_train, X_test by convention
+"automation/scripts/enhanced_analytics.py" = ["N806"]
+"automation/scripts/predict_workflow_failures.py" = ["N806"]
+"tests/unit/test_predict_workflow_failures.py" = ["N806"]
+# Test files with sys.path manipulation need late imports
+"tests/unit/test_*.py" = ["E402"]
+# LRU cache on crawler methods is intentional (short-lived instances)
+"automation/scripts/web_crawler.py" = ["B019"]
 
 [tool.mypy]
 python_version = "3.9"

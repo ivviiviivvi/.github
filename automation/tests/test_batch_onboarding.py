@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch Onboarding Validation Test Suite
+"""Batch Onboarding Validation Test Suite.
 
 Validates the batch onboarding system with comprehensive tests:
 - Configuration validation
@@ -17,7 +17,6 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 # Test configuration
 TEST_CONFIG = "automation/config/batch-onboard-test.yml"
@@ -26,7 +25,7 @@ TEST_OUTPUT_REAL = "test-results-real.json"
 
 
 class Colors:
-    """ANSI color codes for terminal output"""
+    """ANSI color codes for terminal output."""
 
     GREEN = "\033[92m"
     YELLOW = "\033[93m"
@@ -37,28 +36,28 @@ class Colors:
 
 
 def print_header(message: str):
-    """Print formatted test header"""
+    """Print formatted test header."""
     print(f"\n{Colors.BOLD}{Colors.BLUE}{'=' * 60}{Colors.END}")
     print(f"{Colors.BOLD}{Colors.BLUE}{message}{Colors.END}")
     print(f"{Colors.BOLD}{Colors.BLUE}{'=' * 60}{Colors.END}\n")
 
 
 def print_success(message: str):
-    """Print success message"""
+    """Print success message."""
     print(f"{Colors.GREEN}✓ {message}{Colors.END}")
 
 
 def print_warning(message: str):
-    """Print warning message"""
+    """Print warning message."""
     print(f"{Colors.YELLOW}⚠ {message}{Colors.END}")
 
 
 def print_error(message: str):
-    """Print error message"""
+    """Print error message."""
     print(f"{Colors.RED}✗ {message}{Colors.END}")
 
 
-def run_command(cmd: List[str], description: str) -> Tuple[bool, str]:
+def run_command(cmd: list[str], description: str) -> tuple[bool, str]:
     """Run a command and return success status and output.
 
     Args:
@@ -92,7 +91,7 @@ def run_command(cmd: List[str], description: str) -> Tuple[bool, str]:
 
 
 def test_prerequisites() -> bool:
-    """Test that all prerequisites are met"""
+    """Test that all prerequisites are met."""
     print_header("TEST 1: Prerequisites Check")
 
     all_passed = True
@@ -126,7 +125,7 @@ def test_prerequisites() -> bool:
 
 
 def test_config_validation() -> bool:
-    """Test configuration file validation"""
+    """Test configuration file validation."""
     print_header("TEST 2: Configuration Validation")
 
     try:
@@ -149,7 +148,7 @@ def test_config_validation() -> bool:
 
 
 def test_dryrun() -> bool:
-    """Test dry-run mode"""
+    """Test dry-run mode."""
     print_header("TEST 3: Dry-Run Mode")
 
     cmd = [
@@ -193,7 +192,7 @@ def test_dryrun() -> bool:
 
 
 def test_results_format() -> bool:
-    """Test that results JSON has correct format"""
+    """Test that results JSON has correct format."""
     print_header("TEST 4: Results Format Validation")
 
     if not Path(TEST_OUTPUT_DRYRUN).exists():
@@ -227,7 +226,7 @@ def test_results_format() -> bool:
 
 
 def test_performance() -> bool:
-    """Test performance metrics"""
+    """Test performance metrics."""
     print_header("TEST 5: Performance Validation")
 
     if not Path(TEST_OUTPUT_DRYRUN).exists():
@@ -261,8 +260,8 @@ def test_performance() -> bool:
         return False
 
 
-def generate_test_report(test_results: Dict[str, bool]):
-    """Generate summary test report"""
+def generate_test_report(test_results: dict[str, bool]):
+    """Generate summary test report."""
     print_header("TEST SUMMARY")
 
     total = len(test_results)
@@ -289,7 +288,7 @@ def generate_test_report(test_results: Dict[str, bool]):
 
 
 def main():
-    """Run all validation tests"""
+    """Run all validation tests."""
     print(f"{Colors.BOLD}Batch Onboarding Validation Test Suite{Colors.END}")
     print(f"Testing configuration: {TEST_CONFIG}")
     print()

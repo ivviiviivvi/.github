@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Self-Healing Workflow System
+"""Self-Healing Workflow System.
 
 Automatically detects, classifies, and resolves workflow failures:
 - Transient failures: Retry with exponential backoff
@@ -18,7 +18,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 from models import (
     FailureClassification,
@@ -97,18 +97,18 @@ class SelfHealingEngine:
 
         return result
 
-    def _get_workflow_run(self, owner: str, repo: str, run_id: int) -> Dict:
+    def _get_workflow_run(self, owner: str, repo: str, run_id: int) -> dict:
         """Get workflow run details."""
         endpoint = f"/repos/{owner}/{repo}/actions/runs/{run_id}"
         return self.client.get(endpoint)
 
-    def _get_workflow_jobs(self, owner: str, repo: str, run_id: int) -> List[Dict]:
+    def _get_workflow_jobs(self, owner: str, repo: str, run_id: int) -> list[dict]:
         """Get workflow jobs for run."""
         endpoint = f"/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
         response = self.client.get(endpoint)
         return response.get("jobs", [])
 
-    def _classify_failure(self, run: Dict, jobs: List[Dict]) -> FailureClassification:
+    def _classify_failure(self, run: dict, jobs: list[dict]) -> FailureClassification:
         """Classify failure type based on error patterns.
 
         Args:
@@ -225,7 +225,7 @@ class SelfHealingEngine:
             timestamp=datetime.now(timezone.utc),
         )
 
-    def _has_consecutive_failures(self, run: Dict) -> bool:
+    def _has_consecutive_failures(self, run: dict) -> bool:
         """Check if this workflow has multiple consecutive failures."""
         try:
             owner, repo = run["repository"]["full_name"].split("/")
@@ -254,7 +254,7 @@ class SelfHealingEngine:
             self.logger.warning(f"Error checking consecutive failures: {e}")
             return False
 
-    def _determine_priority(self, run: Dict, failure_type: FailureType) -> Priority:
+    def _determine_priority(self, run: dict, failure_type: FailureType) -> Priority:
         """Determine priority based on workflow and failure type."""
         workflow_name = run.get("name", "").lower()
 
@@ -298,7 +298,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
         strategy: str,
     ) -> SelfHealingResult:
@@ -330,7 +330,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> SelfHealingResult:
         """Retry with exponential backoff for transient failures.
@@ -439,7 +439,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> SelfHealingResult:
         """Wait for dependencies and retry.
@@ -531,7 +531,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> SelfHealingResult:
         """Alert team and escalate for permanent failures.
@@ -594,7 +594,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> SelfHealingResult:
         """Fallback: Manual intervention required."""
@@ -635,7 +635,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> Optional[int]:
         """Create GitHub issue for failure tracking."""
@@ -697,7 +697,7 @@ class SelfHealingEngine:
         self,
         owner: str,
         repo: str,
-        run: Dict,
+        run: dict,
         classification: FailureClassification,
     ) -> None:
         """Send notification about failure.

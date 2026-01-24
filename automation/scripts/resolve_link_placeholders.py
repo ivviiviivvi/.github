@@ -15,7 +15,6 @@ import re
 import sys
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Dict, Tuple
 
 try:
     import yaml  # type: ignore
@@ -48,9 +47,9 @@ DEFAULT_EXCLUDES = {
 }
 
 
-def _parse_simple_yaml(text: str) -> Dict[str, object]:
-    root: Dict[str, object] = {}
-    stack: list[Tuple[int, Dict[str, object]]] = [(-1, root)]
+def _parse_simple_yaml(text: str) -> dict[str, object]:
+    root: dict[str, object] = {}
+    stack: list[tuple[int, dict[str, object]]] = [(-1, root)]
 
     for raw_line in text.splitlines():
         line = raw_line.rstrip()
@@ -66,7 +65,7 @@ def _parse_simple_yaml(text: str) -> Dict[str, object]:
             stack.pop()
         parent = stack[-1][1]
         if value == "":
-            new_node: Dict[str, object] = {}
+            new_node: dict[str, object] = {}
             parent[key] = new_node
             stack.append((indent, new_node))
         else:
@@ -75,7 +74,7 @@ def _parse_simple_yaml(text: str) -> Dict[str, object]:
     return root
 
 
-def _flatten_map(prefix: str, node: object, out: Dict[str, str]) -> None:
+def _flatten_map(prefix: str, node: object, out: dict[str, str]) -> None:
     if isinstance(node, dict):
         for key, value in node.items():
             new_prefix = f"{prefix}.{key}" if prefix else str(key)
@@ -84,13 +83,10 @@ def _flatten_map(prefix: str, node: object, out: Dict[str, str]) -> None:
         out[prefix] = str(node)
 
 
-def load_link_map(path: Path) -> Dict[str, str]:
+def load_link_map(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
-    if yaml:
-        data = yaml.safe_load(text) or {}
-    else:
-        data = _parse_simple_yaml(text)
-    flat: Dict[str, str] = {}
+    data = yaml.safe_load(text) or {} if yaml else _parse_simple_yaml(text)
+    flat: dict[str, str] = {}
     _flatten_map("", data, flat)
     return flat
 
@@ -110,10 +106,10 @@ def iter_markdown_files(root: Path, excludes: Iterable[str]) -> Iterable[Path]:
 
 def replace_links(
     text: str,
-    link_map: Dict[str, str],
-    reverse_map: Dict[str, str],
+    link_map: dict[str, str],
+    reverse_map: dict[str, str],
     annotate: bool,
-) -> Tuple[str, int, int, int]:
+) -> tuple[str, int, int, int]:
     updated = 0
     annotated = 0
     missing = 0

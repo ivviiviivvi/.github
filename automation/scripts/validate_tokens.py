@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Token Validation Script
 Validates all organization tokens are working correctly
-Based on MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md recommendations
+Based on MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md recommendations.
 """
 
 import sys
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import requests
 
@@ -55,7 +55,7 @@ def get_token_from_1password(token_name: str) -> Optional[str]:
         sys.exit(1)
 
 
-def validate_token(token_name: str, config: Dict) -> Dict:
+def validate_token(token_name: str, config: dict) -> dict:
     """Validate a single token."""
     result = {
         "token": token_name,

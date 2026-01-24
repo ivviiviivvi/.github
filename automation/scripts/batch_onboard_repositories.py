@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch Repository Onboarding Automation
+"""Batch Repository Onboarding Automation.
 
 Enables parallel onboarding of multiple repositories with validation,
 dependency resolution, and automatic rollback on failures.
@@ -27,7 +27,7 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 import yaml
 
@@ -49,15 +49,15 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class OnboardingConfig:
-    """Configuration for batch onboarding"""
+    """Configuration for batch onboarding."""
 
-    repositories: List[str]
-    workflows: List[str] = field(default_factory=list)
-    labels: Dict[str, str] = field(default_factory=dict)
-    branch_protection: Dict = field(default_factory=dict)
-    secrets: Dict[str, str] = field(default_factory=dict)
-    environments: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    repositories: list[str]
+    workflows: list[str] = field(default_factory=list)
+    labels: dict[str, str] = field(default_factory=dict)
+    branch_protection: dict = field(default_factory=dict)
+    secrets: dict[str, str] = field(default_factory=dict)
+    environments: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     max_concurrent: int = 5
     timeout_seconds: int = 300
     validate_before: bool = True
@@ -66,11 +66,11 @@ class OnboardingConfig:
 
 @dataclass
 class OnboardingResult:
-    """Result of onboarding a single repository"""
+    """Result of onboarding a single repository."""
 
     repository: str
     success: bool
-    steps_completed: List[str] = field(default_factory=list)
+    steps_completed: list[str] = field(default_factory=list)
     error: Optional[str] = None
     duration_seconds: float = 0.0
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
@@ -92,10 +92,10 @@ class BatchOnboardingOrchestrator:
         self.github = Github(auth=auth)
         self.config = config
         self.dry_run = dry_run
-        self.results: List[OnboardingResult] = []
+        self.results: list[OnboardingResult] = []
         self.semaphore = asyncio.Semaphore(config.max_concurrent)
 
-    async def onboard_repositories(self) -> List[OnboardingResult]:
+    async def onboard_repositories(self) -> list[OnboardingResult]:
         """Onboard all configured repositories in parallel.
 
         Returns:
@@ -145,7 +145,7 @@ class BatchOnboardingOrchestrator:
 
         return self.results
 
-    async def _validate_configuration(self) -> List[str]:
+    async def _validate_configuration(self) -> list[str]:
         """Validate configuration before processing.
 
         Returns:
@@ -185,13 +185,13 @@ class BatchOnboardingOrchestrator:
                 )  # noqa: E501
 
         # Validate secrets are available (if specified)
-        for secret_name in self.config.secrets.keys():
+        for secret_name in self.config.secrets:
             if secret_name not in os.environ:
                 errors.append(f"Required secret not found in environment: {secret_name}")
 
         return errors
 
-    def _resolve_dependencies(self) -> List[str]:
+    def _resolve_dependencies(self) -> list[str]:
         """Resolve repository dependencies to determine processing order.
 
         Returns:
@@ -268,7 +268,7 @@ class BatchOnboardingOrchestrator:
         return result
 
     async def _deploy_workflows(self, repo, result: OnboardingResult) -> None:
-        """Deploy workflow files to repository"""
+        """Deploy workflow files to repository."""
         step = "deploy_workflows"
         logger.info(
             f"  [{repo.full_name}] Deploying {len(self.config.workflows)} workflows"  # noqa: E501
@@ -333,7 +333,7 @@ class BatchOnboardingOrchestrator:
             raise
 
     async def _configure_labels(self, repo, result: OnboardingResult) -> None:
-        """Configure repository labels"""
+        """Configure repository labels."""
         step = "configure_labels"
         logger.info(
             f"  [{repo.full_name}] Configuring {len(self.config.labels)} labels"  # noqa: E501
@@ -366,7 +366,7 @@ class BatchOnboardingOrchestrator:
             raise
 
     async def _setup_branch_protection(self, repo, result: OnboardingResult) -> None:
-        """Set up branch protection rules"""
+        """Set up branch protection rules."""
         step = "setup_branch_protection"
         branch_name = self.config.branch_protection.get("branch", repo.default_branch)
         logger.info(
@@ -401,7 +401,7 @@ class BatchOnboardingOrchestrator:
             raise
 
     async def _configure_secrets(self, repo, result: OnboardingResult) -> None:
-        """Configure repository secrets"""
+        """Configure repository secrets."""
         step = "configure_secrets"
         logger.info(
             f"  [{repo.full_name}] Configuring {len(self.config.secrets)} secrets"  # noqa: E501
@@ -419,7 +419,7 @@ class BatchOnboardingOrchestrator:
         result.steps_completed.append(f"{step} (skipped - requires elevated permissions)")
 
     async def _create_environments(self, repo, result: OnboardingResult) -> None:
-        """Create repository environments"""
+        """Create repository environments."""
         step = "create_environments"
         logger.info(
             f"  [{repo.full_name}] Creating {len(self.config.environments)} environments"  # noqa: E501
@@ -434,7 +434,7 @@ class BatchOnboardingOrchestrator:
         logger.warning("    Environment creation requires REST API v3")
         result.steps_completed.append(f"{step} (skipped - requires REST API)")
 
-    async def _rollback_failed(self, failed_results: List[OnboardingResult]) -> None:
+    async def _rollback_failed(self, failed_results: list[OnboardingResult]) -> None:
         """Rollback changes for failed onboardings.
 
         Args:
@@ -473,7 +473,7 @@ class BatchOnboardingOrchestrator:
                 logger.error(f"✗ Failed to rollback {result.repository}: {e}")
 
     def _log_summary(self) -> None:
-        """Log summary of onboarding results"""
+        """Log summary of onboarding results."""
         successful = sum(1 for r in self.results if r.success)
         failed = len(self.results) - successful
         total_duration = sum(r.duration_seconds for r in self.results)
@@ -496,7 +496,7 @@ class BatchOnboardingOrchestrator:
                     logger.info(f"  - {result.repository}: {result.error}")
 
     def save_results(self, output_file: str) -> None:
-        """Save results to JSON file"""
+        """Save results to JSON file."""
         results_dict = [
             {
                 "repository": r.repository,
@@ -516,7 +516,7 @@ class BatchOnboardingOrchestrator:
 
 
 def load_config(config_file: str) -> OnboardingConfig:
-    """Load onboarding configuration from YAML file"""
+    """Load onboarding configuration from YAML file."""
     with open(config_file) as f:
         config_dict = yaml.safe_load(f)
 
@@ -524,7 +524,7 @@ def load_config(config_file: str) -> OnboardingConfig:
 
 
 async def main():
-    """Main entry point"""
+    """Main entry point."""
     parser = argparse.ArgumentParser(description="Batch onboard multiple repositories with validation and rollback")  # noqa: E501
     parser.add_argument("--config", type=str, help="Path to configuration YAML file")
     parser.add_argument(

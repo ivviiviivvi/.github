@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for web_crawler.py
-Focus: SSRF protection, link extraction, security validation
+Focus: SSRF protection, link extraction, security validation.
 """
 
 import ipaddress
@@ -19,11 +19,11 @@ from web_crawler import OrganizationCrawler
 
 
 class TestSSRFProtection:
-    """Test SSRF (Server-Side Request Forgery) protection mechanisms"""
+    """Test SSRF (Server-Side Request Forgery) protection mechanisms."""
 
     @pytest.fixture
     def crawler(self):
-        """Create crawler instance for testing"""
+        """Create crawler instance for testing."""
         return OrganizationCrawler(github_token="test_token", org_name="test_org")
 
     @pytest.mark.security
@@ -40,7 +40,7 @@ class TestSSRFProtection:
         ],
     )
     def test_blocks_private_ips(self, crawler, private_ip):
-        """Verify SSRF protection blocks private IPs"""
+        """Verify SSRF protection blocks private IPs."""
         url = f"http://{private_ip}/test"
 
         # Test the _is_safe_url method if it exists
@@ -67,7 +67,7 @@ class TestSSRFProtection:
         ],
     )
     def test_allows_public_urls(self, crawler, safe_url):
-        """Verify legitimate public URLs are allowed"""
+        """Verify legitimate public URLs are allowed."""
         # This should not raise exception
         parsed = urlparse(safe_url)
         assert parsed.scheme in ["http", "https"]
@@ -75,7 +75,7 @@ class TestSSRFProtection:
 
     @pytest.mark.security
     def test_dns_rebinding_protection(self, crawler):
-        """Test protection against DNS rebinding attacks"""
+        """Test protection against DNS rebinding attacks."""
         # Test that even if DNS resolves to private IP, it's blocked
         with patch.object(crawler, "_resolve_hostname") as mock_resolve:
             mock_resolve.return_value = ["127.0.0.1"]
@@ -97,14 +97,14 @@ class TestSSRFProtection:
 
 
 class TestLinkExtraction:
-    """Test link extraction from markdown content"""
+    """Test link extraction from markdown content."""
 
     @pytest.fixture
     def crawler(self):
         return OrganizationCrawler()
 
     def test_extracts_markdown_links(self, crawler):
-        """Test extraction of [text](url) format links"""
+        """Test extraction of [text](url) format links."""
         content = """
         Check out [GitHub](https://github.com) for more.
         Also see [docs](https://example.com/docs).
@@ -116,7 +116,7 @@ class TestLinkExtraction:
         assert "https://example.com/docs" in links
 
     def test_extracts_bare_urls(self, crawler):
-        """Test extraction of bare URLs"""
+        """Test extraction of bare URLs."""
         content = """
         Visit https://github.com for code.
         API at https://api.github.com
@@ -128,7 +128,7 @@ class TestLinkExtraction:
         assert "https://api.github.com" in links
 
     def test_handles_malformed_links(self, crawler):
-        """Test handling of malformed or invalid links"""
+        """Test handling of malformed or invalid links."""
         content = """
         Broken [link](not-a-url)
         Empty [](https://example.com)
@@ -141,7 +141,7 @@ class TestLinkExtraction:
         assert "https://example.com" in links or "https://test.com" in links
 
     def test_deduplicates_links(self, crawler):
-        """Test that duplicate links are deduplicated"""
+        """Test that duplicate links are deduplicated."""
         content = """
         Link to [GitHub](https://github.com)
         Another [link](https://github.com)
@@ -153,7 +153,7 @@ class TestLinkExtraction:
         assert links.count("https://github.com") <= len(set(links))
 
     def test_preserves_url_fragments_and_query_params(self, crawler):
-        """Test that URL fragments and query params are preserved"""
+        """Test that URL fragments and query params are preserved."""
         content = """
         [Section](https://example.com/page#section)
         [API](https://api.example.com?key=value&foo=bar)
@@ -165,7 +165,7 @@ class TestLinkExtraction:
 
 
 class TestLinkValidation:
-    """Test link validation and health checking"""
+    """Test link validation and health checking."""
 
     @pytest.fixture
     def crawler(self):
@@ -173,7 +173,7 @@ class TestLinkValidation:
 
     @pytest.mark.unit
     def test_validates_https_urls(self, crawler):
-        """Test HTTPS URL validation"""
+        """Test HTTPS URL validation."""
         url = "https://github.com/test"
 
         # _check_link uses urllib3 pools, not requests.Session
@@ -192,7 +192,7 @@ class TestLinkValidation:
 
     @pytest.mark.unit
     def test_handles_404_errors(self, crawler):
-        """Test handling of 404 Not Found errors"""
+        """Test handling of 404 Not Found errors."""
         url = "https://github.com/nonexistent"
 
         mock_response = MagicMock()
@@ -210,7 +210,7 @@ class TestLinkValidation:
 
     @pytest.mark.unit
     def test_handles_timeouts(self, crawler):
-        """Test handling of connection timeouts"""
+        """Test handling of connection timeouts."""
         url = "https://slow-server.example.com"
 
         mock_pool = MagicMock()
@@ -225,7 +225,7 @@ class TestLinkValidation:
 
     @pytest.mark.unit
     def test_handles_connection_errors(self, crawler):
-        """Test handling of connection errors"""
+        """Test handling of connection errors."""
         url = "https://unreachable.example.com"
 
         mock_pool = MagicMock()
@@ -240,32 +240,32 @@ class TestLinkValidation:
 
 
 class TestConcurrency:
-    """Test concurrent processing"""
+    """Test concurrent processing."""
 
     @pytest.fixture
     def crawler(self):
         return OrganizationCrawler(max_workers=5)
 
     def test_respects_max_workers_limit(self, crawler):
-        """Test that max_workers setting is respected"""
+        """Test that max_workers setting is respected."""
         assert crawler.max_workers == 5
 
     def test_connection_pool_matches_workers(self, crawler):
-        """Test that connection pool is sized appropriately"""
+        """Test that connection pool is sized appropriately."""
         # Verify adapter is configured
         adapter = crawler.session.get_adapter("https://")
         assert isinstance(adapter, requests.adapters.HTTPAdapter)
 
 
 class TestResultsStructure:
-    """Test results data structure and validation"""
+    """Test results data structure and validation."""
 
     @pytest.fixture
     def crawler(self):
         return OrganizationCrawler(org_name="test_org")
 
     def test_results_initialized_correctly(self, crawler):
-        """Test results dictionary is properly initialized"""
+        """Test results dictionary is properly initialized."""
         assert "timestamp" in crawler.results
         assert "organization" in crawler.results
         assert crawler.results["organization"] == "test_org"
@@ -274,7 +274,7 @@ class TestResultsStructure:
         assert isinstance(crawler.results["blind_spots"], list)
 
     def test_timestamp_is_iso_format(self, crawler):
-        """Test timestamp is in ISO format"""
+        """Test timestamp is in ISO format."""
         timestamp = crawler.results["timestamp"]
         # Should parse without error
         from datetime import datetime
@@ -284,7 +284,7 @@ class TestResultsStructure:
 
 
 class TestMarkdownCrawling:
-    """Test markdown file crawling functionality"""
+    """Test markdown file crawling functionality."""
 
     @pytest.fixture
     def crawler(self):
@@ -292,42 +292,42 @@ class TestMarkdownCrawling:
 
     @pytest.fixture
     def temp_markdown_dir(self, tmp_path):
-        """Create temporary markdown files for testing"""
+        """Create temporary markdown files for testing."""
         (tmp_path / "test1.md").write_text("Check [GitHub](https://github.com)\nAlso https://example.com\n")
         (tmp_path / "subdir").mkdir()
         (tmp_path / "subdir" / "test2.md").write_text("[Link](https://test.com)\n")
         return tmp_path
 
     def test_crawls_all_markdown_files(self, crawler, temp_markdown_dir):
-        """Test that all markdown files are crawled"""
+        """Test that all markdown files are crawled."""
         links_by_file = crawler.crawl_markdown_files(temp_markdown_dir)
 
         assert len(links_by_file) >= 2
-        assert any("test1.md" in path for path in links_by_file.keys())
-        assert any("test2.md" in path for path in links_by_file.keys())
+        assert any("test1.md" in path for path in links_by_file)
+        assert any("test2.md" in path for path in links_by_file)
 
     def test_handles_empty_directory(self, crawler, tmp_path):
-        """Test handling of empty directory"""
+        """Test handling of empty directory."""
         links_by_file = crawler.crawl_markdown_files(tmp_path)
         assert links_by_file == {}
 
     def test_handles_invalid_encoding(self, crawler, tmp_path):
-        """Test handling of files with invalid encoding"""
+        """Test handling of files with invalid encoding."""
         # Create file with invalid UTF-8
         bad_file = tmp_path / "bad.md"
         bad_file.write_bytes(b"\x80\x81\x82")
 
         # Should not crash
-        links_by_file = crawler.crawl_markdown_files(tmp_path)
+        crawler.crawl_markdown_files(tmp_path)
         # May or may not include the bad file depending on error handling
 
 
 @pytest.mark.integration
 class TestEndToEnd:
-    """Integration tests for full crawler workflow"""
+    """Integration tests for full crawler workflow."""
 
     def test_basic_crawl_workflow(self, tmp_path):
-        """Test complete crawl workflow"""
+        """Test complete crawl workflow."""
         # Setup
         (tmp_path / "README.md").write_text("# Test\nVisit [GitHub](https://github.com)\n")
 

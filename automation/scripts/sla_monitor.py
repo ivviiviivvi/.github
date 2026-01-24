@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SLA Monitoring Workflow
+"""SLA Monitoring Workflow.
 
 Provides real-time monitoring of Service Level Agreements for workflows,
 issues, and pull requests with automated breach detection and alerting.
@@ -32,7 +32,7 @@ import json
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 from models import (
     ItemMetrics,
@@ -71,7 +71,7 @@ class SLAMonitor:
         self.breaches_dir.mkdir(parents=True, exist_ok=True)
         self.reports_dir.mkdir(parents=True, exist_ok=True)
 
-    def monitor_repository(self, owner: str, repo: str) -> Dict[str, ItemMetrics]:
+    def monitor_repository(self, owner: str, repo: str) -> dict[str, ItemMetrics]:
         """Monitor SLAs for all active items in repository.
 
         Args:
@@ -92,7 +92,7 @@ class SLAMonitor:
 
         # Check for breaches
         breaches = []
-        for item_type, item_metrics in metrics.items():
+        for _item_type, item_metrics in metrics.items():
             if item_metrics.breaches:
                 breaches.extend(item_metrics.breaches)
 
@@ -422,7 +422,7 @@ class SLAMonitor:
 
         return None
 
-    def _determine_priority(self, item: Dict) -> Priority:
+    def _determine_priority(self, item: dict) -> Priority:
         """Determine priority based on labels and context."""
         labels = [label.get("name", "").lower() for label in item.get("labels", [])]
 
@@ -451,7 +451,7 @@ class SLAMonitor:
             availability_percentage=95.0,
         )
 
-    def _handle_breaches(self, owner: str, repo: str, breaches: List[SLABreach]):
+    def _handle_breaches(self, owner: str, repo: str, breaches: list[SLABreach]):
         """Handle SLA breaches with notifications and logging."""
         logger.warning(f"Found {len(breaches)} SLA breaches")
 
@@ -470,7 +470,7 @@ class SLAMonitor:
         # Log breaches
         self._log_breaches(owner, repo, breaches)
 
-    def _send_breach_notification(self, owner: str, repo: str, priority: str, breaches: List[SLABreach]):
+    def _send_breach_notification(self, owner: str, repo: str, priority: str, breaches: list[SLABreach]):
         """Send notification for SLA breaches."""
         _breach_list = "\n".join(  # noqa: F841
             [
@@ -495,7 +495,7 @@ class SLAMonitor:
                 },
             )
 
-    def _log_breaches(self, owner: str, repo: str, breaches: List[SLABreach]):
+    def _log_breaches(self, owner: str, repo: str, breaches: list[SLABreach]):
         """Log SLA breaches to file."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         log_file = self.breaches_dir / f"breach_{timestamp}.json"

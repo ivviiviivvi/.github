@@ -13,7 +13,7 @@ import logging
 import random
 import time
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional, cast
 
 import requests
 import yaml
@@ -71,7 +71,7 @@ class ConfigLoader:
         self.config_dir = config_dir
         self.logger = setup_logger(__name__)
 
-    def load(self, filename: str) -> Dict[str, Any]:
+    def load(self, filename: str) -> dict[str, Any]:
         """Load configuration from YAML file.
 
         Args:
@@ -185,7 +185,7 @@ class RateLimiter:
 
             now = time.time()
             oldest_request = self.requests[0]
-            return max(0, self.window - (now - oldest_request))
+            return float(max(0, self.window - (now - oldest_request)))
 
     def wait(self) -> None:
         """Wait until next request can proceed."""
@@ -248,10 +248,10 @@ class GitHubAPIClient:
         self,
         method: str,
         endpoint: str,
-        params: Optional[Dict] = None,
-        json_data: Optional[Dict] = None,
+        params: Optional[dict] = None,
+        json_data: Optional[dict] = None,
         retry: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a GitHub API request with rate limiting and retries.
 
         Args:
@@ -336,23 +336,23 @@ class GitHubAPIClient:
         # Should never reach here
         raise RuntimeError("Unexpected end of retry loop")
 
-    def get(self, endpoint: str, params: Optional[Dict] = None) -> Dict[str, Any]:
+    def get(self, endpoint: str, params: Optional[dict] = None) -> dict[str, Any]:
         """Make a GET request."""
         return self.request("GET", endpoint, params=params)
 
-    def post(self, endpoint: str, json_data: Dict) -> Dict[str, Any]:
+    def post(self, endpoint: str, json_data: dict) -> dict[str, Any]:
         """Make a POST request."""
         return self.request("POST", endpoint, json_data=json_data)
 
-    def put(self, endpoint: str, json_data: Dict) -> Dict[str, Any]:
+    def put(self, endpoint: str, json_data: dict) -> dict[str, Any]:
         """Make a PUT request."""
         return self.request("PUT", endpoint, json_data=json_data)
 
-    def patch(self, endpoint: str, json_data: Dict) -> Dict[str, Any]:
+    def patch(self, endpoint: str, json_data: dict) -> dict[str, Any]:
         """Make a PATCH request."""
         return self.request("PATCH", endpoint, json_data=json_data)
 
-    def delete(self, endpoint: str) -> Dict[str, Any]:
+    def delete(self, endpoint: str) -> dict[str, Any]:
         """Make a DELETE request."""
         return self.request("DELETE", endpoint)
 
@@ -378,7 +378,7 @@ class APIError(AutomationError):
     """GitHub API error."""
 
 
-def safe_get(data: Dict, path: str, default: Any = None) -> Any:
+def safe_get(data: dict, path: str, default: Any = None) -> Any:
     """Safely get nested dictionary value using dot notation.
 
     Args:
@@ -398,7 +398,7 @@ def safe_get(data: Dict, path: str, default: Any = None) -> Any:
 
     """
     keys = path.split(".")
-    value = data
+    value: Any = data
 
     for key in keys:
         if isinstance(value, dict):
@@ -417,7 +417,7 @@ def safe_get(data: Dict, path: str, default: Any = None) -> Any:
 # =============================================================================
 
 
-def read_json(filepath: Path) -> Dict[str, Any]:
+def read_json(filepath: Path) -> dict[str, Any]:
     """Read and parse JSON file.
 
     Args:
@@ -432,10 +432,10 @@ def read_json(filepath: Path) -> Dict[str, Any]:
 
     """
     with open(filepath, encoding="utf-8") as f:
-        return json.load(f)
+        return cast(dict[str, Any], json.load(f))
 
 
-def write_json(filepath: Path, data: Dict[str, Any], indent: int = 2) -> None:
+def write_json(filepath: Path, data: dict[str, Any], indent: int = 2) -> None:
     """Write data to JSON file.
 
     Args:
@@ -451,7 +451,7 @@ def write_json(filepath: Path, data: Dict[str, Any], indent: int = 2) -> None:
         json.dump(data, f, indent=indent, default=str)
 
 
-def read_yaml(filepath: Path) -> Dict[str, Any]:
+def read_yaml(filepath: Path) -> dict[str, Any]:
     """Read and parse YAML file.
 
     Args:
@@ -469,7 +469,7 @@ def read_yaml(filepath: Path) -> Dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
-def write_yaml(filepath: Path, data: Dict[str, Any]) -> None:
+def write_yaml(filepath: Path, data: dict[str, Any]) -> None:
     """Write data to YAML file.
 
     Args:
@@ -484,7 +484,7 @@ def write_yaml(filepath: Path, data: Dict[str, Any]) -> None:
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
 
-def load_config(config_path: str, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def load_config(config_path: str, default: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     """Load configuration from YAML file with fallback to default.
 
     Args:

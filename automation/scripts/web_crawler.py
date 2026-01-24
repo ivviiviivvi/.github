@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Web Crawler for GitHub Organization Health Monitoring
-Implements AI-GH-06, AI-GH-07, and AI-GH-08 modules
+Implements AI-GH-06, AI-GH-07, and AI-GH-08 modules.
 """
 
 import concurrent.futures
@@ -14,7 +14,7 @@ import ssl
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 import requests
 import urllib3
@@ -26,7 +26,7 @@ from secret_manager import get_secret
 
 
 class OrganizationCrawler:
-    """Crawls and analyzes organization repositories and documentation"""
+    """Crawls and analyzes organization repositories and documentation."""
 
     # Compile regex pattern once for better performance
     # Match both [text](url) and bare URLs using a single pass to avoid
@@ -85,8 +85,8 @@ class OrganizationCrawler:
             "recommendations": [],
         }
 
-    def crawl_markdown_files(self, directory: Path) -> Dict[str, List[str]]:
-        """Extract all links from markdown files"""
+    def crawl_markdown_files(self, directory: Path) -> dict[str, list[str]]:
+        """Extract all links from markdown files."""
         print(f"🔍 Crawling markdown files in {directory}")
         links_by_file = {}
 
@@ -101,16 +101,16 @@ class OrganizationCrawler:
 
         return links_by_file
 
-    def _extract_links(self, content: str) -> List[str]:
-        """Extract URLs from markdown content"""
+    def _extract_links(self, content: str) -> list[str]:
+        """Extract URLs from markdown content."""
         matches = self.LINK_PATTERN.findall(content)
 
         # Extract all non-empty URLs from both capture groups
         urls = {url for m in matches for url in m if url}
         return list(urls)
 
-    def validate_links(self, links_by_file: Dict[str, List[str]]) -> Dict:
-        """Validate all extracted links"""
+    def validate_links(self, links_by_file: dict[str, list[str]]) -> dict:
+        """Validate all extracted links."""
         print("\n🌐 Validating links...")
 
         results = {
@@ -164,19 +164,19 @@ class OrganizationCrawler:
         return results
 
     @functools.lru_cache(maxsize=1024)
-    def _resolve_hostname(self, hostname: str) -> List[str]:
-        """Resolve hostname to list of IPs with caching"""
+    def _resolve_hostname(self, hostname: str) -> list[str]:
+        """Resolve hostname to list of IPs with caching."""
         # getaddrinfo returns list of (family, type, proto, canonname, sockaddr)  # noqa: E501
         # We want sockaddr[0] (the IP address)
         try:
             results = socket.getaddrinfo(hostname, None)
-            return list(set(item[4][0] for item in results))
+            return list({item[4][0] for item in results})
         except socket.gaierror:
             return []
 
     @functools.lru_cache(maxsize=1024)
     def _is_hostname_safe(self, hostname: str) -> bool:
-        """Check if hostname resolves to safe IPs (cached)"""
+        """Check if hostname resolves to safe IPs (cached)."""
         ips = self._resolve_hostname(hostname)
         if not ips:
             return True  # Empty IPs handled by _check_link
@@ -205,7 +205,7 @@ class OrganizationCrawler:
         return True
 
     def _is_safe_url(self, url: str) -> bool:
-        """Check if URL resolves to a safe (non-local) IP address"""
+        """Check if URL resolves to a safe (non-local) IP address."""
         try:
             parsed = urllib.parse.urlparse(url)
             hostname = parsed.hostname
@@ -235,7 +235,7 @@ class OrganizationCrawler:
 
     @functools.lru_cache(maxsize=1024)
     def _get_pinned_pool(self, scheme: str, safe_ip: str, port: int, hostname: str) -> urllib3.HTTPConnectionPool:
-        """Get a cached connection pool for a specific (IP, hostname) tuple
+        """Get a cached connection pool for a specific (IP, hostname) tuple.
 
         This enables TCP Keep-Alive and SSL Session reuse across multiple
         requests to the same pinned IP, improving performance for crawlers.
@@ -256,7 +256,7 @@ class OrganizationCrawler:
             return urllib3.HTTPConnectionPool(host=safe_ip, port=port, maxsize=self.max_workers)
 
     def _check_link(self, url: str, timeout: int = 10) -> int:
-        """Check if a link is accessible with SSRF protection"""
+        """Check if a link is accessible with SSRF protection."""
         target = url
         for _ in range(5):  # Limit redirects
             try:
@@ -409,8 +409,8 @@ class OrganizationCrawler:
 
         return 310  # Too many redirects
 
-    def analyze_repository_health(self) -> Dict:
-        """Analyze health metrics across organization repositories (AI-GH-07)"""  # noqa: E501
+    def analyze_repository_health(self) -> dict:
+        """Analyze health metrics across organization repositories (AI-GH-07)."""  # noqa: E501
         print("\n🏥 Analyzing repository health...")
 
         if not self.github_token:
@@ -455,8 +455,8 @@ class OrganizationCrawler:
 
         return health_metrics
 
-    def _analyze_single_repo(self, repo: Dict) -> Dict:
-        """Analyze health of a single repository"""
+    def _analyze_single_repo(self, repo: dict) -> dict:
+        """Analyze health of a single repository."""
         name = repo["name"]
         print(f"  📊 Analyzing {name}...")
 
@@ -485,8 +485,8 @@ class OrganizationCrawler:
             "visibility": repo.get("visibility", "public"),
         }
 
-    def map_ecosystem(self, base_dir: Path) -> Dict:
-        """Map the technology ecosystem (AI-GH-06)"""
+    def map_ecosystem(self, base_dir: Path) -> dict:
+        """Map the technology ecosystem (AI-GH-06)."""
         print("\n🗺️  Mapping ecosystem...")
 
         ecosystem = {
@@ -530,13 +530,13 @@ class OrganizationCrawler:
                 ecosystem["copilot_chatmodes"].append(chatmode_file.stem)
 
         # Convert sets to lists for JSON serialization
-        ecosystem["technologies"] = sorted(list(ecosystem["technologies"]))
-        ecosystem["integrations"] = sorted(list(ecosystem["integrations"]))
+        ecosystem["technologies"] = sorted(ecosystem["technologies"])
+        ecosystem["integrations"] = sorted(ecosystem["integrations"])
 
         return ecosystem
 
-    def identify_blind_spots(self, ecosystem: Dict, health: Dict) -> List[Dict]:
-        """Identify blind spots and risks (AI-GH-08-A)"""
+    def identify_blind_spots(self, ecosystem: dict, health: dict) -> list[dict]:
+        """Identify blind spots and risks (AI-GH-08-A)."""
         print("\n🔦 Identifying blind spots...")
 
         blind_spots = []
@@ -570,8 +570,8 @@ class OrganizationCrawler:
 
         return blind_spots
 
-    def identify_shatter_points(self, ecosystem: Dict) -> List[Dict]:
-        """Identify single points of failure (AI-GH-08-B)"""
+    def identify_shatter_points(self, ecosystem: dict) -> list[dict]:
+        """Identify single points of failure (AI-GH-08-B)."""
         print("\n💥 Identifying shatter points...")
 
         shatter_points = []
@@ -594,7 +594,7 @@ class OrganizationCrawler:
         return shatter_points
 
     def generate_report(self, output_dir: Path) -> Path:
-        """Generate comprehensive analysis report"""
+        """Generate comprehensive analysis report."""
         print("\n📝 Generating report...")
 
         report_filename = f"org_health_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"  # noqa: E501
@@ -616,7 +616,7 @@ class OrganizationCrawler:
         return report_path
 
     def _generate_markdown_report(self) -> str:
-        """Generate markdown summary report"""
+        """Generate markdown summary report."""
         report = f"""# Organization Health Report
 Generated: {self.results["timestamp"]}
 Organization: {self.results["organization"]}
@@ -689,7 +689,7 @@ Organization: {self.results["organization"]}
         return report
 
     def run_full_analysis(self, base_dir: Path, validate_external_links: bool = False):
-        """Run complete organization analysis"""
+        """Run complete organization analysis."""
         print("🚀 Starting full organization analysis...\n")
 
         # 1. Map ecosystem (AI-GH-06)
@@ -727,7 +727,7 @@ Organization: {self.results["organization"]}
 
 
 def main():
-    """Main entry point"""
+    """Main entry point."""
     import argparse
 
     parser = argparse.ArgumentParser(description="GitHub Organization Health Crawler")

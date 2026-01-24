@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/models.py
-Focus: Pydantic models, validators, enums, field constraints
+Focus: Pydantic models, validators, enums, field constraints.
 """
 
 import sys
@@ -50,43 +50,43 @@ from models import (  # Enums; Auto-merge models; Routing models; Self-healing m
 
 
 class TestEnums:
-    """Test enum definitions"""
+    """Test enum definitions."""
 
     def test_risk_level_values(self):
-        """Test RiskLevel enum has expected values"""
+        """Test RiskLevel enum has expected values."""
         assert RiskLevel.LOW == "LOW"
         assert RiskLevel.MEDIUM == "MEDIUM"
         assert RiskLevel.HIGH == "HIGH"
         assert RiskLevel.CRITICAL == "CRITICAL"
 
     def test_failure_type_values(self):
-        """Test FailureType enum has expected values"""
+        """Test FailureType enum has expected values."""
         assert FailureType.TRANSIENT == "transient"
         assert FailureType.PERMANENT == "permanent"
         assert FailureType.DEPENDENCY == "dependency"
 
     def test_priority_values(self):
-        """Test Priority enum has expected values"""
+        """Test Priority enum has expected values."""
         assert Priority.P0 == "P0"
         assert Priority.P1 == "P1"
         assert Priority.P2 == "P2"
         assert Priority.P3 == "P3"
 
     def test_merge_strategy_values(self):
-        """Test MergeStrategy enum has expected values"""
+        """Test MergeStrategy enum has expected values."""
         assert MergeStrategy.MERGE == "merge"
         assert MergeStrategy.SQUASH == "squash"
         assert MergeStrategy.REBASE == "rebase"
 
     def test_incident_severity_values(self):
-        """Test IncidentSeverity enum has expected values"""
+        """Test IncidentSeverity enum has expected values."""
         assert IncidentSeverity.SEV1 == "SEV-1"
         assert IncidentSeverity.SEV2 == "SEV-2"
         assert IncidentSeverity.SEV3 == "SEV-3"
         assert IncidentSeverity.SEV4 == "SEV-4"
 
     def test_incident_status_values(self):
-        """Test IncidentStatus enum has expected values"""
+        """Test IncidentStatus enum has expected values."""
         assert IncidentStatus.OPEN == "OPEN"
         assert IncidentStatus.ACKNOWLEDGED == "ACKNOWLEDGED"
         assert IncidentStatus.INVESTIGATING == "INVESTIGATING"
@@ -97,10 +97,10 @@ class TestEnums:
 
 
 class TestAutoMergeModels:
-    """Test auto-merge related models"""
+    """Test auto-merge related models."""
 
     def test_safety_checks_all_required(self):
-        """Test AutoMergeSafetyChecks requires all fields"""
+        """Test AutoMergeSafetyChecks requires all fields."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -112,7 +112,7 @@ class TestAutoMergeModels:
         assert checks.reviews_approved is True
 
     def test_safety_checks_missing_field_raises(self):
-        """Test AutoMergeSafetyChecks raises on missing field"""
+        """Test AutoMergeSafetyChecks raises on missing field."""
         with pytest.raises(ValidationError):
             AutoMergeSafetyChecks(
                 all_tests_passed=True,
@@ -121,7 +121,7 @@ class TestAutoMergeModels:
             )
 
     def test_eligibility_confidence_bounds(self):
-        """Test confidence must be between 0 and 1"""
+        """Test confidence must be between 0 and 1."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -161,7 +161,7 @@ class TestAutoMergeModels:
             )
 
     def test_eligibility_timestamp_default(self):
-        """Test eligibility timestamp has default"""
+        """Test eligibility timestamp has default."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -180,7 +180,7 @@ class TestAutoMergeModels:
         assert isinstance(eligibility.timestamp, datetime)
 
     def test_config_defaults(self):
-        """Test AutoMergeConfig has sensible defaults"""
+        """Test AutoMergeConfig has sensible defaults."""
         config = AutoMergeConfig()
         assert config.enabled is True
         assert config.min_reviews == 1
@@ -189,7 +189,7 @@ class TestAutoMergeModels:
         assert config.delete_branch is True
 
     def test_config_coverage_validator(self):
-        """Test coverage threshold validator"""
+        """Test coverage threshold validator."""
         # Valid coverage
         config = AutoMergeConfig(coverage_threshold=75.0)
         assert config.coverage_threshold == 75.0
@@ -200,10 +200,10 @@ class TestAutoMergeModels:
 
 
 class TestRoutingModels:
-    """Test routing related models"""
+    """Test routing related models."""
 
     def test_factor_scores_bounds(self):
-        """Test factor scores must be 0-1"""
+        """Test factor scores must be 0-1."""
         scores = RoutingFactorScores(
             expertise=0.8,
             workload=0.6,
@@ -224,7 +224,7 @@ class TestRoutingModels:
             )
 
     def test_routing_decision_structure(self):
-        """Test RoutingDecision structure"""
+        """Test RoutingDecision structure."""
         scores = RoutingFactorScores(
             expertise=0.8,
             workload=0.6,
@@ -245,7 +245,7 @@ class TestRoutingModels:
         assert decision.fallback_used is False
 
     def test_routing_config_weight_validation(self):
-        """Test routing factors must sum to 1.0"""
+        """Test routing factors must sum to 1.0."""
         # Valid weights
         config = RoutingConfig(
             factors={
@@ -273,10 +273,10 @@ class TestRoutingModels:
 
 
 class TestSelfHealingModels:
-    """Test self-healing related models"""
+    """Test self-healing related models."""
 
     def test_failure_classification(self):
-        """Test FailureClassification structure"""
+        """Test FailureClassification structure."""
         classification = FailureClassification(
             run_id=12345,
             workflow_name="CI",
@@ -289,7 +289,7 @@ class TestSelfHealingModels:
         assert classification.failure_type == FailureType.TRANSIENT
 
     def test_self_healing_result(self):
-        """Test SelfHealingResult structure"""
+        """Test SelfHealingResult structure."""
         classification = FailureClassification(
             run_id=12345,
             workflow_name="CI",
@@ -311,7 +311,7 @@ class TestSelfHealingModels:
         assert result.retry_count == 2
 
     def test_self_healing_config_bounds(self):
-        """Test SelfHealingConfig field bounds"""
+        """Test SelfHealingConfig field bounds."""
         config = SelfHealingConfig(max_retry_attempts=5)
         assert config.max_retry_attempts == 5
 
@@ -325,10 +325,10 @@ class TestSelfHealingModels:
 
 
 class TestMaintenanceModels:
-    """Test maintenance related models"""
+    """Test maintenance related models."""
 
     def test_maintenance_task(self):
-        """Test MaintenanceTask structure"""
+        """Test MaintenanceTask structure."""
         task = MaintenanceTask(
             task_type="dependency_update",
             description="Update npm packages",
@@ -340,7 +340,7 @@ class TestMaintenanceModels:
         assert task.estimated_duration == 30
 
     def test_maintenance_window(self):
-        """Test MaintenanceWindow structure"""
+        """Test MaintenanceWindow structure."""
         window = MaintenanceWindow(
             task_type="cleanup",
             scheduled_time=datetime.now(timezone.utc),
@@ -353,7 +353,7 @@ class TestMaintenanceModels:
         assert window.impact_score == 0.2
 
     def test_maintenance_config_defaults(self):
-        """Test MaintenanceConfig defaults"""
+        """Test MaintenanceConfig defaults."""
         config = MaintenanceConfig()
         assert config.enabled is True
         assert config.preferred_hours == [2, 3, 4]
@@ -362,10 +362,10 @@ class TestMaintenanceModels:
 
 
 class TestSLAModels:
-    """Test SLA related models"""
+    """Test SLA related models."""
 
     def test_response_time_metric(self):
-        """Test ResponseTimeMetric structure"""
+        """Test ResponseTimeMetric structure."""
         metric = ResponseTimeMetric(
             target_minutes=15,
             actual_minutes=12.5,
@@ -376,7 +376,7 @@ class TestSLAModels:
         assert metric.actual_minutes < metric.target_minutes
 
     def test_sla_metrics_structure(self):
-        """Test SLAMetrics structure"""
+        """Test SLAMetrics structure."""
         metrics = SLAMetrics(
             repository="owner/repo",
             time_window="24h",
@@ -396,7 +396,7 @@ class TestSLAModels:
         assert metrics.trend == "improving"
 
     def test_sla_thresholds_by_priority(self):
-        """Test SLAThresholds with different priorities"""
+        """Test SLAThresholds with different priorities."""
         p0_threshold = SLAThresholds(
             priority=Priority.P0,
             response_time_minutes=5,
@@ -417,10 +417,10 @@ class TestSLAModels:
 
 
 class TestIncidentModels:
-    """Test incident response models"""
+    """Test incident response models."""
 
     def test_runbook_step(self):
-        """Test RunbookStep structure"""
+        """Test RunbookStep structure."""
         step = RunbookStep(
             name="Notify team",
             action="notify",
@@ -430,7 +430,7 @@ class TestIncidentModels:
         assert step.executed_at is None
 
     def test_incident_structure(self):
-        """Test Incident structure"""
+        """Test Incident structure."""
         incident = Incident(
             incident_id="INC-001",
             title="Production API Down",
@@ -446,7 +446,7 @@ class TestIncidentModels:
         assert incident.acknowledged_at is None
 
     def test_incident_dict_serialization(self):
-        """Test Incident dict() handles enums"""
+        """Test Incident dict() handles enums."""
         incident = Incident(
             incident_id="INC-001",
             title="Test",
@@ -462,7 +462,7 @@ class TestIncidentModels:
         assert d["status"] == "INVESTIGATING"
 
     def test_incident_config_defaults(self):
-        """Test IncidentConfig defaults"""
+        """Test IncidentConfig defaults."""
         config = IncidentConfig()
         assert config.enabled is True
         assert config.create_github_issues is True
@@ -470,10 +470,10 @@ class TestIncidentModels:
 
 
 class TestValidationModels:
-    """Test validation framework models"""
+    """Test validation framework models."""
 
     def test_validation_result(self):
-        """Test ValidationResult structure"""
+        """Test ValidationResult structure."""
         result = ValidationResult(
             capability="auto-merge",
             started_at=datetime.now(timezone.utc),
@@ -484,7 +484,7 @@ class TestValidationModels:
         assert result.errors == []
 
     def test_validation_suite(self):
-        """Test ValidationSuite structure"""
+        """Test ValidationSuite structure."""
         suite = ValidationSuite(
             repository="owner/repo",
             started_at=datetime.now(timezone.utc),
@@ -495,10 +495,10 @@ class TestValidationModels:
 
 
 class TestAuditModels:
-    """Test audit logging models"""
+    """Test audit logging models."""
 
     def test_audit_log_entry(self):
-        """Test AuditLogEntry structure"""
+        """Test AuditLogEntry structure."""
         entry = AuditLogEntry(
             action="pr_merged",
             actor="github-bot",
@@ -511,7 +511,7 @@ class TestAuditModels:
         assert entry.timestamp is not None
 
     def test_audit_log_optional_fields(self):
-        """Test AuditLogEntry optional security fields"""
+        """Test AuditLogEntry optional security fields."""
         entry = AuditLogEntry(
             action="api_call",
             actor="user",
@@ -526,10 +526,10 @@ class TestAuditModels:
 
 
 class TestAnalyticsModels:
-    """Test analytics ML models"""
+    """Test analytics ML models."""
 
     def test_workflow_prediction(self):
-        """Test WorkflowPrediction structure"""
+        """Test WorkflowPrediction structure."""
         prediction = WorkflowPrediction(
             workflow_id="ci-pipeline",
             run_id="12345",
@@ -554,7 +554,7 @@ class TestAnalyticsModels:
         assert prediction.risk_level == RiskLevel.LOW
 
     def test_analytics_config_defaults(self):
-        """Test AnalyticsConfig defaults"""
+        """Test AnalyticsConfig defaults."""
         config = AnalyticsConfig()
         assert config.enabled is True
         assert config.default_model == "random_forest"
@@ -562,7 +562,7 @@ class TestAnalyticsModels:
         assert config.min_accuracy == 0.85
 
     def test_feature_importance(self):
-        """Test FeatureImportance structure"""
+        """Test FeatureImportance structure."""
         importance = FeatureImportance(
             model_name="random_forest",
             features={
@@ -577,10 +577,10 @@ class TestAnalyticsModels:
 
 
 class TestDatetimeSerialization:
-    """Test datetime serialization in models"""
+    """Test datetime serialization in models."""
 
     def test_eligibility_json_encoding(self):
-        """Test AutoMergeEligibility JSON encoding"""
+        """Test AutoMergeEligibility JSON encoding."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -600,7 +600,7 @@ class TestDatetimeSerialization:
         assert "T" in json_data  # ISO format contains T
 
     def test_sla_metrics_json_encoding(self):
-        """Test SLAMetrics JSON encoding"""
+        """Test SLAMetrics JSON encoding."""
         metrics = SLAMetrics(
             repository="owner/repo",
             time_window="24h",

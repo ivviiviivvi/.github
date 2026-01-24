@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Advanced Deployment Automation
+"""Advanced Deployment Automation.
 
 Orchestrates deployment of Month 1-3 workflows with:
 - Environment validation
@@ -20,7 +20,7 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import requests
 import yaml
@@ -56,7 +56,7 @@ class DeploymentOrchestrator:
         self.deployment_id = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.deployment_log = []
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """Load environment-specific configuration."""
         config_path = Path("automation/deployment/environments.yml")
 
@@ -69,7 +69,7 @@ class DeploymentOrchestrator:
 
         return all_configs.get(self.environment, self._default_config())
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config(self) -> dict[str, Any]:
         """Provide default configuration."""
         return {
             "repositories": [],
@@ -165,7 +165,7 @@ class DeploymentOrchestrator:
 
         return True
 
-    def deploy_workflows(self, month: int, canary_repos: Optional[List[str]] = None) -> bool:
+    def deploy_workflows(self, month: int, canary_repos: Optional[list[str]] = None) -> bool:
         """Deploy workflows with phased rollout.
 
         Args:
@@ -200,7 +200,7 @@ class DeploymentOrchestrator:
         print(f"\n✅ Deployment {self.deployment_id} completed successfully!")
         return True
 
-    def _canary_deployment(self, month: int, canary_repos: Optional[List[str]]) -> bool:
+    def _canary_deployment(self, month: int, canary_repos: Optional[list[str]]) -> bool:
         """Deploy to canary repositories."""
         print("\n📍 Phase 1: Canary Deployment")
 
@@ -337,7 +337,7 @@ class DeploymentOrchestrator:
             print(f"\n         Error pushing workflow: {e}")
             return False
 
-    def _health_check(self, repos: List[str], duration: int) -> bool:
+    def _health_check(self, repos: list[str], duration: int) -> bool:
         """Perform health checks on deployed repositories.
 
         Args:
@@ -397,7 +397,7 @@ class DeploymentOrchestrator:
         except Exception:
             return False
 
-    def _get_workflows_for_month(self, month: int) -> List[Path]:
+    def _get_workflows_for_month(self, month: int) -> list[Path]:
         """Get workflow files for specific month."""
         workflow_dir = Path(".github/workflows")
 
@@ -435,14 +435,14 @@ class DeploymentOrchestrator:
         workflow_names = workflow_map.get(month, [])
         return [workflow_dir / name for name in workflow_names if (workflow_dir / name).exists()]
 
-    def _select_canary_repos(self) -> List[str]:
+    def _select_canary_repos(self) -> list[str]:
         """Select repositories for canary deployment."""
         repos = self.config.get("repositories", [])
         percentage = self.config.get("canary_percentage", 10)
         count = max(1, int(len(repos) * percentage / 100))
         return repos[:count]
 
-    def _select_progressive_repos(self, percentage: int) -> List[str]:
+    def _select_progressive_repos(self, percentage: int) -> list[str]:
         """Select repositories for progressive deployment."""
         repos = self.config.get("repositories", [])
         count = int(len(repos) * percentage / 100)

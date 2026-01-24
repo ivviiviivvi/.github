@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """Schema.org Validator
-Validates schema.org JSON-LD files against schema.org specifications
+Validates schema.org JSON-LD files against schema.org specifications.
 """
 
 import json
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple
 from urllib.parse import urlparse
 
 
 class SchemaOrgValidator:
-    """Validates schema.org JSON-LD documents"""
+    """Validates schema.org JSON-LD documents."""
 
     REQUIRED_FIELDS = {
         "Organization": ["@context", "@type", "name", "url"],
@@ -35,11 +34,11 @@ class SchemaOrgValidator:
     VALID_CONTEXTS = ["https://schema.org", "http://schema.org"]
 
     def __init__(self):
-        self.errors: List[str] = []
-        self.warnings: List[str] = []
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
 
-    def validate_file(self, filepath: Path) -> Tuple[bool, List[str], List[str]]:
-        """Validate a single JSON-LD file"""
+    def validate_file(self, filepath: Path) -> tuple[bool, list[str], list[str]]:
+        """Validate a single JSON-LD file."""
         self.errors = []
         self.warnings = []
 
@@ -63,24 +62,24 @@ class SchemaOrgValidator:
 
         return len(self.errors) == 0, self.errors, self.warnings
 
-    def _validate_context(self, data: Dict) -> None:
-        """Validate @context field"""
+    def _validate_context(self, data: dict) -> None:
+        """Validate @context field."""
         context = data.get("@context")
         if not context:
             self.errors.append("Missing required field: @context")
         elif context not in self.VALID_CONTEXTS:
             self.errors.append(f"Invalid @context: {context}. Expected one of: {', '.join(self.VALID_CONTEXTS)}")
 
-    def _validate_type(self, data: Dict) -> None:
-        """Validate @type field"""
+    def _validate_type(self, data: dict) -> None:
+        """Validate @type field."""
         schema_type = data.get("@type")
         if not schema_type:
             self.errors.append("Missing required field: @type")
         elif schema_type not in self.REQUIRED_FIELDS:
             self.warnings.append(f"Unknown @type: {schema_type}. Known types: {', '.join(self.REQUIRED_FIELDS.keys())}")
 
-    def _validate_required_fields(self, data: Dict) -> None:
-        """Validate required fields for the type"""
+    def _validate_required_fields(self, data: dict) -> None:
+        """Validate required fields for the type."""
         schema_type = data.get("@type")
         if not schema_type or schema_type not in self.REQUIRED_FIELDS:
             return
@@ -90,8 +89,8 @@ class SchemaOrgValidator:
             if field not in data:
                 self.errors.append(f"Missing required field for {schema_type}: {field}")
 
-    def _validate_urls(self, data: Dict, path: str = "") -> None:
-        """Validate URL fields"""
+    def _validate_urls(self, data: dict, path: str = "") -> None:
+        """Validate URL fields."""
         for key, value in data.items():
             current_path = f"{path}.{key}" if path else key
 
@@ -107,14 +106,13 @@ class SchemaOrgValidator:
                 for i, item in enumerate(value):
                     if isinstance(item, dict):
                         self._validate_urls(item, f"{current_path}[{i}]")
-                    elif isinstance(item, str) and key == "sameAs":
-                        if not self._is_valid_url(item):
-                            self.errors.append(f"Invalid URL at {current_path}[{i}]: {item}")
+                    elif isinstance(item, str) and key == "sameAs" and not self._is_valid_url(item):
+                        self.errors.append(f"Invalid URL at {current_path}[{i}]: {item}")
             elif isinstance(value, dict):
                 self._validate_urls(value, current_path)
 
-    def _validate_version(self, data: Dict) -> None:
-        """Validate version field if present"""
+    def _validate_version(self, data: dict) -> None:
+        """Validate version field if present."""
         version = data.get("version")
         if version and not self._is_valid_semver(version):
             self.warnings.append(
@@ -123,7 +121,7 @@ class SchemaOrgValidator:
 
     @staticmethod
     def _is_valid_url(url: str) -> bool:
-        """Check if string is a valid URL"""
+        """Check if string is a valid URL."""
         try:
             result = urlparse(url)
             return all([result.scheme, result.netloc])
@@ -132,7 +130,7 @@ class SchemaOrgValidator:
 
     @staticmethod
     def _is_valid_semver(version: str) -> bool:
-        """Check if version follows semantic versioning"""
+        """Check if version follows semantic versioning."""
         parts = version.split(".")
         if len(parts) != 3:
             return False
@@ -146,7 +144,7 @@ class SchemaOrgValidator:
 
 
 def main():
-    """Main validation function"""
+    """Main validation function."""
     schema_dir = Path(__file__).parent.parent / ".schema-org"
 
     if not schema_dir.exists():

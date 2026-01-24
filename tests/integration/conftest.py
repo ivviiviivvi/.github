@@ -5,7 +5,7 @@ mock implementations and sample data.
 """
 
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import pytest
 
@@ -23,11 +23,11 @@ class MockGitHubAPIClient:
             "Accept": "application/vnd.github.v3+json",
         }
         # Internal storage for mock issues and PRs
-        self._issues: Dict[int, Dict[str, Any]] = {}
-        self._prs: Dict[int, Dict[str, Any]] = {}
+        self._issues: dict[int, dict[str, Any]] = {}
+        self._prs: dict[int, dict[str, Any]] = {}
         self._issue_counter = 100
         # Store workflow runs
-        self._workflow_runs: Dict[str, List[Dict[str, Any]]] = {}
+        self._workflow_runs: dict[str, list[dict[str, Any]]] = {}
         self._setup_default_workflow_runs()
 
     def _setup_default_workflow_runs(self):
@@ -61,7 +61,7 @@ class MockGitHubAPIClient:
                 )
             self._workflow_runs[workflow] = runs
 
-    def create_issue(self, title: str, body: str, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def create_issue(self, title: str, body: str, labels: Optional[list[str]] = None) -> dict[str, Any]:
         """Create a mock test issue."""
         self._issue_counter += 1
         issue_number = self._issue_counter
@@ -87,7 +87,7 @@ class MockGitHubAPIClient:
         self._issues[issue_number] = issue
         return issue
 
-    def get_issue(self, issue_number: int) -> Dict[str, Any]:
+    def get_issue(self, issue_number: int) -> dict[str, Any]:
         """Get mock issue details."""
         if issue_number not in self._issues:
             raise ValueError(f"Issue {issue_number} not found")
@@ -97,8 +97,8 @@ class MockGitHubAPIClient:
         self,
         issue_number: int,
         state: Optional[str] = None,
-        labels: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
+        labels: Optional[list[str]] = None,
+    ) -> dict[str, Any]:
         """Update a mock issue."""
         if issue_number not in self._issues:
             raise ValueError(f"Issue {issue_number} not found")
@@ -113,7 +113,7 @@ class MockGitHubAPIClient:
         issue["updated_at"] = datetime.now(timezone.utc).isoformat()
         return issue
 
-    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> Dict[str, Any]:
+    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> dict[str, Any]:
         """Create a mock test pull request."""
         self._issue_counter += 1
         pr_number = self._issue_counter
@@ -133,7 +133,7 @@ class MockGitHubAPIClient:
         self._prs[pr_number] = pr
         return pr
 
-    def get_pr(self, pr_number: int) -> Dict[str, Any]:
+    def get_pr(self, pr_number: int) -> dict[str, Any]:
         """Get mock pull request details."""
         if pr_number not in self._prs:
             # Return a default mock PR if not found
@@ -164,7 +164,7 @@ class MockGitHubAPIClient:
 
     def _process_triage(self) -> None:
         """Simulate issue triage workflow."""
-        for issue_number, issue in self._issues.items():
+        for _issue_number, issue in self._issues.items():
             labels = [lbl["name"] for lbl in issue.get("labels", [])]
             new_labels = labels.copy()
             title_lower = issue["title"].lower()
@@ -176,9 +176,8 @@ class MockGitHubAPIClient:
             if is_bug:
                 if "priority:high" not in labels:
                     new_labels.append("priority:high")
-            elif is_enhancement:
-                if not any("priority:" in lbl for lbl in labels):
-                    new_labels.append("priority:medium")
+            elif is_enhancement and not any("priority:" in lbl for lbl in labels):
+                new_labels.append("priority:medium")
 
             # Add category labels based on title
             if "documentation" in title_lower or "readme" in title_lower:
@@ -190,7 +189,7 @@ class MockGitHubAPIClient:
 
     def _process_auto_assign(self) -> None:
         """Simulate auto-assignment workflow."""
-        for issue_number, issue in self._issues.items():
+        for _issue_number, issue in self._issues.items():
             # Auto-assign unassigned issues
             if issue.get("assignee") is None:
                 labels = [lbl["name"] for lbl in issue.get("labels", [])]
@@ -213,7 +212,7 @@ class MockGitHubAPIClient:
 
     def _process_stale_management(self) -> None:
         """Simulate stale management workflow."""
-        for issue_number, issue in self._issues.items():
+        for _issue_number, issue in self._issues.items():
             labels = [lbl["name"] for lbl in issue.get("labels", [])]
 
             # Don't mark pinned issues as stale
@@ -223,13 +222,13 @@ class MockGitHubAPIClient:
             # Stale logic would check last update time
             # For testing, we don't add stale label automatically
 
-    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> list[dict[str, Any]]:
         """Get mock recent workflow runs."""
         if workflow_id not in self._workflow_runs:
             return []
         return self._workflow_runs[workflow_id][:limit]
 
-    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> Dict[str, Any]:
+    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> dict[str, Any]:
         """Mock wait for a workflow run to complete."""
         return {
             "id": run_id,

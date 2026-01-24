@@ -54,10 +54,7 @@ def main() -> None:
         name = str(fm.get("name", ""))
         description = str(fm.get("description", ""))
         tags = fm.get("tags", [])
-        if isinstance(tags, str):
-            tags_list = [tags]
-        else:
-            tags_list = list(tags)
+        tags_list = [tags] if isinstance(tags, str) else list(tags)
         tags_text = ", ".join(tags_list)
         rows.append((path.name, name, description, tags_text))
 

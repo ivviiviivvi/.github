@@ -16,7 +16,7 @@ import json
 import subprocess  # nosec B404
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import yaml
 from secret_manager import ensure_github_token
@@ -60,9 +60,9 @@ class PreDeploymentChecker:
         self.phase = phase
         self.skip_labels = skip_labels
         self.verbose = verbose
-        self.results: List[CheckResult] = []
+        self.results: list[CheckResult] = []
         self.config_path = self._get_config_path()
-        self.config: Optional[Dict] = None
+        self.config: Optional[dict] = None
 
     def _get_config_path(self) -> Path:
         """Get configuration file path for the specified phase."""
@@ -74,7 +74,7 @@ class PreDeploymentChecker:
         config_dir = Path(__file__).parent.parent / "config"
         return config_dir / phase_names[self.phase]
 
-    def _run_command(self, cmd: List[str]) -> Tuple[bool, str, str]:
+    def _run_command(self, cmd: list[str]) -> tuple[bool, str, str]:
         """Run a shell command and return result.
 
         Args:

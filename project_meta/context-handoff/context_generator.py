@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Context Payload Generator for Orchestrator State
-Generates token-optimized context for AI session handoffs
+Generates token-optimized context for AI session handoffs.
 
 This module provides a production-ready framework for seamless context transfer
 across AI sessions in complex multi-phase projects, achieving 500-2,000 token
@@ -18,11 +18,11 @@ import json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 
 class CompressionLevel(Enum):
-    """Compression levels for context generation"""
+    """Compression levels for context generation."""
 
     MINIMAL = "minimal"  # ~500 tokens - Critical state only
     STANDARD = "standard"  # ~1200 tokens - Recommended for most cases
@@ -30,7 +30,7 @@ class CompressionLevel(Enum):
 
 
 class ContextPayloadGenerator:
-    """Generate context payloads from orchestrator state
+    """Generate context payloads from orchestrator state.
 
     This class reads orchestrator state from a JSON file and generates
     token-optimized context payloads suitable for AI session handoffs.
@@ -48,7 +48,7 @@ class ContextPayloadGenerator:
     """
 
     def __init__(self, state_file: str = ".orchestrator_state.json"):
-        """Initialize the context payload generator
+        """Initialize the context payload generator.
 
         Args:
             state_file: Path to the orchestrator state JSON file
@@ -60,8 +60,8 @@ class ContextPayloadGenerator:
         self.state_file = Path(state_file)
         self.state = self._load_state()
 
-    def _load_state(self) -> Dict[str, Any]:
-        """Load orchestrator state from JSON file
+    def _load_state(self) -> dict[str, Any]:
+        """Load orchestrator state from JSON file.
 
         Returns:
             Dictionary containing the orchestrator state
@@ -76,8 +76,8 @@ class ContextPayloadGenerator:
         with open(self.state_file, encoding="utf-8") as f:
             return json.load(f)
 
-    def generate_context(self, level: CompressionLevel = CompressionLevel.STANDARD) -> Dict[str, Any]:
-        """Generate context payload at specified compression level
+    def generate_context(self, level: CompressionLevel = CompressionLevel.STANDARD) -> dict[str, Any]:
+        """Generate context payload at specified compression level.
 
         Args:
             level: Compression level (MINIMAL, STANDARD, or FULL)
@@ -97,8 +97,8 @@ class ContextPayloadGenerator:
         else:
             return self._generate_full()
 
-    def _generate_minimal(self) -> Dict[str, Any]:
-        """Generate minimal context (~500 tokens)
+    def _generate_minimal(self) -> dict[str, Any]:
+        """Generate minimal context (~500 tokens).
 
         Includes only critical state for immediate resumption:
         - Current phase and task
@@ -130,8 +130,8 @@ class ContextPayloadGenerator:
             "next": self._get_eligible_tasks()[:3],
         }
 
-    def _generate_standard(self) -> Dict[str, Any]:
-        """Generate standard context (~1200 tokens)
+    def _generate_standard(self) -> dict[str, Any]:
+        """Generate standard context (~1200 tokens).
 
         Includes comprehensive state for robust resumption:
         - Summary with progress metrics
@@ -175,8 +175,8 @@ class ContextPayloadGenerator:
             },
         }
 
-    def _generate_full(self) -> Dict[str, Any]:
-        """Generate full context (~2000 tokens)
+    def _generate_full(self) -> dict[str, Any]:
+        """Generate full context (~2000 tokens).
 
         Includes all standard context plus:
         - File state (artifacts, required files, disk usage)
@@ -199,8 +199,8 @@ class ContextPayloadGenerator:
         }
         return standard
 
-    def _get_eligible_tasks(self) -> List[str]:
-        """Get tasks eligible for execution
+    def _get_eligible_tasks(self) -> list[str]:
+        """Get tasks eligible for execution.
 
         A task is eligible if:
         - Status is "pending"
@@ -220,8 +220,8 @@ class ContextPayloadGenerator:
                     eligible.append(tid)
         return sorted(eligible)
 
-    def _get_blocked_tasks(self) -> List[str]:
-        """Get tasks blocked by failed dependencies
+    def _get_blocked_tasks(self) -> list[str]:
+        """Get tasks blocked by failed dependencies.
 
         A task is blocked if:
         - Status is "pending"
@@ -232,7 +232,7 @@ class ContextPayloadGenerator:
 
         """
         tasks = self.state.get("tasks", {})
-        completed = set(self.state.get("context", {}).get("completed_tasks", []))
+        set(self.state.get("context", {}).get("completed_tasks", []))
         failed = set(self.state.get("context", {}).get("failed_tasks", []))
         blocked = []
         for tid, task in tasks.items():
@@ -242,8 +242,8 @@ class ContextPayloadGenerator:
                     blocked.append(tid)
         return blocked
 
-    def _format_errors(self) -> List[Dict[str, Any]]:
-        """Format recent errors for context payload
+    def _format_errors(self) -> list[dict[str, Any]]:
+        """Format recent errors for context payload.
 
         Returns:
             List of error dictionaries with task_id, type, and message
@@ -259,8 +259,8 @@ class ContextPayloadGenerator:
             for e in errors
         ]
 
-    def _get_recent_decisions(self, limit: int) -> List[Dict[str, Any]]:
-        """Get recent user decisions
+    def _get_recent_decisions(self, limit: int) -> list[dict[str, Any]]:
+        """Get recent user decisions.
 
         Args:
             limit: Maximum number of decisions to return
@@ -279,8 +279,8 @@ class ContextPayloadGenerator:
             )[:limit]
         ]
 
-    def _get_warnings(self) -> List[str]:
-        """Get environment warnings
+    def _get_warnings(self) -> list[str]:
+        """Get environment warnings.
 
         Checks for:
         - Python version compatibility
@@ -300,8 +300,8 @@ class ContextPayloadGenerator:
             warnings.append(f"{len(missing)} missing dependencies")
         return warnings
 
-    def _get_completed_phases(self) -> List[str]:
-        """Get list of completed phases
+    def _get_completed_phases(self) -> list[str]:
+        """Get list of completed phases.
 
         A phase is completed if all its tasks are successful.
 
@@ -317,8 +317,8 @@ class ContextPayloadGenerator:
                 completed.append(pid)
         return completed
 
-    def _get_phase_progress(self) -> Dict[str, Any]:
-        """Get current phase progress
+    def _get_phase_progress(self) -> dict[str, Any]:
+        """Get current phase progress.
 
         Returns:
             Dictionary with total, complete, and percentage
@@ -337,8 +337,8 @@ class ContextPayloadGenerator:
             "pct": int(completed / len(phase_tasks) * 100) if phase_tasks else 0,
         }
 
-    def _get_critical_path(self) -> List[str]:
-        """Identify critical path tasks
+    def _get_critical_path(self) -> list[str]:
+        """Identify critical path tasks.
 
         Uses number of dependents as priority metric.
 
@@ -353,8 +353,8 @@ class ContextPayloadGenerator:
         priority.sort(key=lambda x: x[1], reverse=True)
         return [tid for tid, _ in priority]
 
-    def _get_artifacts(self) -> List[Dict[str, str]]:
-        """Get produced artifacts
+    def _get_artifacts(self) -> list[dict[str, str]]:
+        """Get produced artifacts.
 
         Returns:
             List of artifact dictionaries with path and producer
@@ -365,8 +365,8 @@ class ContextPayloadGenerator:
             {"path": path, "by": info.get("produced_by")} for path, info in files.items() if info.get("produced_by")
         ]
 
-    def _get_required_files(self) -> List[str]:
-        """Get required files that exist
+    def _get_required_files(self) -> list[str]:
+        """Get required files that exist.
 
         Returns:
             List of file paths
@@ -376,7 +376,7 @@ class ContextPayloadGenerator:
         return [p for p, i in files.items() if i.get("required_by") and i.get("exists")]
 
     def _calculate_disk_usage(self) -> int:
-        """Calculate disk usage in MB
+        """Calculate disk usage in MB.
 
         Returns:
             Disk usage in megabytes
@@ -386,7 +386,7 @@ class ContextPayloadGenerator:
         return int(usage / (1024 * 1024))
 
     def _get_os_info(self) -> str:
-        """Get OS information
+        """Get OS information.
 
         Returns:
             OS type and version string
@@ -396,7 +396,7 @@ class ContextPayloadGenerator:
         return f"{os.get('type')} {os.get('version')}"
 
     def _get_python_version(self) -> str:
-        """Get Python version
+        """Get Python version.
 
         Returns:
             Python version string
@@ -409,8 +409,8 @@ class ContextPayloadGenerator:
             .get("version", "unknown")
         )
 
-    def _get_key_packages(self) -> Dict[str, str]:
-        """Get key package versions
+    def _get_key_packages(self) -> dict[str, str]:
+        """Get key package versions.
 
         Includes common data science and ML packages:
         - numpy
@@ -434,7 +434,7 @@ class ContextPayloadGenerator:
         output: str = "context_payload.json",
         level: CompressionLevel = CompressionLevel.STANDARD,
     ) -> Path:
-        """Save context to file
+        """Save context to file.
 
         Args:
             output: Output file path
@@ -456,8 +456,8 @@ class ContextPayloadGenerator:
             f.write("\n")
         return output_path
 
-    def get_token_count(self, context: Dict[str, Any]) -> int:
-        """Estimate token count for context
+    def get_token_count(self, context: dict[str, Any]) -> int:
+        """Estimate token count for context.
 
         Uses approximation of 4 characters per token, which is
         accurate for JSON payloads.
@@ -479,7 +479,7 @@ class ContextPayloadGenerator:
 
 
 def main():
-    """Command-line interface for context generation"""
+    """Command-line interface for context generation."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate AI session handoff context from orchestrator state")

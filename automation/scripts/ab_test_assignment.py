@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A/B Test Assignment Script for Stale Grace Period Optimization
+"""A/B Test Assignment Script for Stale Grace Period Optimization.
 
 Assigns repositories to control or experiment groups using consistent hashing.
 Ensures 50/50 split and deterministic assignment based on repository name.
@@ -15,7 +15,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Optional, cast  # noqa: UP035
 
 try:
     import yaml
@@ -33,13 +33,13 @@ class ABTestAssigner:
         self.config = self._load_config()
         self.seed = self.config["split"]["seed"]
 
-    def _load_config(self) -> Dict:
+    def _load_config(self) -> dict:
         """Load A/B test configuration from YAML."""
         if not self.config_path.exists():
             raise FileNotFoundError(f"Config file not found: {self.config_path}")
 
         with open(self.config_path) as f:
-            return yaml.safe_load(f)
+            return cast(dict[Any, Any], yaml.safe_load(f))
 
     def _hash_repository(self, repo_name: str) -> int:
         """Generate consistent hash for repository name."""
@@ -87,11 +87,11 @@ class ABTestAssigner:
 
         return False
 
-    def get_group_config(self, group: str) -> Optional[Dict]:
+    def get_group_config(self, group: str) -> Optional[dict]:
         """Get configuration for a specific group."""
         if group == "excluded":
             return None
-        return self.config["groups"].get(group)
+        return cast(Optional[dict[Any, Any]], self.config["groups"].get(group))
 
     def get_grace_period(self, repo_name: str) -> int:
         """Get grace period in days for a repository.
@@ -108,9 +108,11 @@ class ABTestAssigner:
             return 7  # Default to control value
 
         group_config = self.get_group_config(group)
-        return group_config["gracePeriod"]
+        if group_config is None:
+            return 7
+        return cast(int, group_config["gracePeriod"])
 
-    def generate_workflow_config(self, repo_name: str) -> Dict:
+    def generate_workflow_config(self, repo_name: str) -> dict:
         """Generate workflow configuration for a repository.
 
         Args:
@@ -132,17 +134,25 @@ class ABTestAssigner:
             }
 
         group_config = self.get_group_config(group)
+        if group_config is None:
+            return {
+                "repository": repo_name,
+                "group": "unknown",
+                "reason": "No configuration found",
+                "gracePeriod": 7,
+                "closeAfter": 7,
+            }
 
         return {
             "repository": repo_name,
             "group": group,
-            "groupName": group_config["name"],
-            "gracePeriod": group_config["gracePeriod"],
-            "closeAfter": group_config["closeAfter"],
-            "percentage": group_config["percentage"],
+            "groupName": str(group_config["name"]),
+            "gracePeriod": int(group_config["gracePeriod"]),
+            "closeAfter": int(group_config["closeAfter"]),
+            "percentage": int(group_config["percentage"]),
         }
 
-    def list_all_repositories(self) -> List[str]:
+    def list_all_repositories(self) -> list[str]:
         """List all repositories in the organization using GitHub CLI."""
         try:
             result = subprocess.run(  # nosec B603 B607
@@ -170,7 +180,7 @@ class ABTestAssigner:
             print(f"Error parsing repository list: {e}", file=sys.stderr)
             return []
 
-    def assign_all_repositories(self) -> Dict[str, List[str]]:
+    def assign_all_repositories(self) -> dict[str, list[str]]:
         """Assign all repositories to groups.
 
         Returns:
@@ -180,7 +190,11 @@ class ABTestAssigner:
         """
         repos = self.list_all_repositories()
 
-        assignments = {"control": [], "experiment": [], "excluded": []}
+        assignments: dict[str, list[str]] = {
+            "control": [],
+            "experiment": [],
+            "excluded": [],
+        }
 
         for repo in repos:
             group = self.assign_group(repo)
@@ -188,7 +202,7 @@ class ABTestAssigner:
 
         return assignments
 
-    def generate_report(self) -> Dict:
+    def generate_report(self) -> dict:
         """Generate A/B test assignment report."""
         assignments = self.assign_all_repositories()
 
@@ -223,7 +237,7 @@ class ABTestAssigner:
         return report
 
 
-def print_table(data: List[List[str]], headers: List[str]):
+def print_table(data: list[list[str]], headers: list[str]):
     """Print data in table format."""
     # Calculate column widths
     widths = [len(h) for h in headers]

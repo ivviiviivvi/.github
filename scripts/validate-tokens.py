@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Token Health Check
-Validates all organization tokens are working correctly
+Validates all organization tokens are working correctly.
 
 Usage:
     python3 scripts/validate-tokens.py
@@ -12,7 +12,6 @@ import argparse
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List
 
 import requests
 
@@ -57,8 +56,8 @@ TOKENS = {
 }
 
 
-def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict:
-    """Validate a single token"""
+def validate_token(token_name: str, config: dict, verbose: bool = False) -> dict:
+    """Validate a single token."""
     result = {
         "token": token_name,
         "valid": False,
@@ -131,12 +130,11 @@ def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict
             actual = set(result["scopes"])
 
             # Skip scope validation if expected is "unknown"
-            if "unknown" not in expected:
-                if not expected.issubset(actual):
-                    missing = expected - actual
-                    result["warning"] = f"Missing scopes: {', '.join(missing)}"
-                    if verbose:
-                        print(f"  {YELLOW}⚠{NC}  Warning: {result['warning']}")
+            if "unknown" not in expected and not expected.issubset(actual):
+                missing = expected - actual
+                result["warning"] = f"Missing scopes: {', '.join(missing)}"
+                if verbose:
+                    print(f"  {YELLOW}⚠{NC}  Warning: {result['warning']}")
         elif response.status_code == 401:
             result["error"] = "Invalid or expired token"
         elif response.status_code == 403:
@@ -154,8 +152,8 @@ def validate_token(token_name: str, config: Dict, verbose: bool = False) -> Dict
     return result
 
 
-def print_summary(results: List[Dict], verbose: bool = False):
-    """Print validation summary"""
+def print_summary(results: list[dict], verbose: bool = False):
+    """Print validation summary."""
     print("\n" + "=" * 80)
     print(f"{BLUE}Token Validation Summary{NC}")
     print("=" * 80 + "\n")
@@ -196,7 +194,7 @@ def print_summary(results: List[Dict], verbose: bool = False):
 
 
 def main():
-    """Main validation function"""
+    """Main validation function."""
     parser = argparse.ArgumentParser(description="Validate organization GitHub tokens")
     parser.add_argument(
         "--token",

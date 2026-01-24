@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enhanced ML Predictions for Workflow Optimization
+"""Enhanced ML Predictions for Workflow Optimization.
 
 This module provides advanced machine learning capabilities for predicting
 workflow outcomes with a target accuracy of 85% or higher.

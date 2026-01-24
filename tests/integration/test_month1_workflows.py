@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Integration Tests for Month 1 Core Workflows
+"""Integration Tests for Month 1 Core Workflows.
 
 Tests all 5 production workflows:
 - Issue triage
@@ -16,10 +16,11 @@ NOTE: These integration tests require specific GitHub API access and workflow
       configurations that may not be available in all environments.
 """
 
+import contextlib
 import os
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import pytest
 import requests
@@ -40,7 +41,7 @@ class GitHubAPIClient:
             "Accept": "application/vnd.github.v3+json",
         }
 
-    def create_issue(self, title: str, body: str, labels: Optional[List[str]] = None) -> Dict[str, Any]:
+    def create_issue(self, title: str, body: str, labels: Optional[list[str]] = None) -> dict[str, Any]:
         """Create a test issue."""
         url = f"{self.base_url}/repos/{self.repo}/issues"
         data = {"title": title, "body": body}
@@ -51,7 +52,7 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()
 
-    def get_issue(self, issue_number: int) -> Dict[str, Any]:
+    def get_issue(self, issue_number: int) -> dict[str, Any]:
         """Get issue details."""
         url = f"{self.base_url}/repos/{self.repo}/issues/{issue_number}"
         response = requests.get(url, headers=self.headers)
@@ -62,8 +63,8 @@ class GitHubAPIClient:
         self,
         issue_number: int,
         state: Optional[str] = None,
-        labels: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
+        labels: Optional[list[str]] = None,
+    ) -> dict[str, Any]:
         """Update an issue."""
         url = f"{self.base_url}/repos/{self.repo}/issues/{issue_number}"
         data = {}
@@ -76,7 +77,7 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()
 
-    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> Dict[str, Any]:
+    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> dict[str, Any]:
         """Create a test pull request."""
         url = f"{self.base_url}/repos/{self.repo}/pulls"
         data = {"title": title, "body": body, "head": head, "base": base}
@@ -85,7 +86,7 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()
 
-    def get_pr(self, pr_number: int) -> Dict[str, Any]:
+    def get_pr(self, pr_number: int) -> dict[str, Any]:
         """Get pull request details."""
         url = f"{self.base_url}/repos/{self.repo}/pulls/{pr_number}"
         response = requests.get(url, headers=self.headers)
@@ -100,7 +101,7 @@ class GitHubAPIClient:
         response = requests.post(url, headers=self.headers, json=data)
         response.raise_for_status()
 
-    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> list[dict[str, Any]]:
         """Get recent workflow runs."""
         url = f"{self.base_url}/repos/{self.repo}/actions/workflows/{workflow_id}/runs"
         params = {"per_page": limit}
@@ -109,7 +110,7 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()["workflow_runs"]
 
-    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> Dict[str, Any]:
+    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> dict[str, Any]:
         """Wait for a workflow run to complete."""
         url = f"{self.base_url}/repos/{self.repo}/actions/runs/{run_id}"
         start_time = time.time()
@@ -354,7 +355,7 @@ class TestStaleManagement:
             time.sleep(0.1)
 
             updated_issue = github_client.get_issue(issue["number"])
-            labels = [label["name"] for label in updated_issue["labels"]]
+            [label["name"] for label in updated_issue["labels"]]
 
             # May or may not be stale depending on actual age
             # Just verify workflow runs successfully
@@ -513,10 +514,8 @@ class TestMonth1Integration:
                 assert len(updated["labels"]) > 0 or updated.get("assignee") is not None
         finally:
             for issue in issues:
-                try:
+                with contextlib.suppress(BaseException):
                     github_client.close_issue(issue["number"])
-                except:
-                    pass
 
     def test_month1_success_metrics(self, github_client):
         """Validate that Month 1 meets its success criteria."""

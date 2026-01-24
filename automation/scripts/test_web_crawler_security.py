@@ -9,74 +9,74 @@ class TestLinkExtraction(unittest.TestCase):
         self.crawler = OrganizationCrawler()
 
     def test_extract_markdown_links(self):
-        """Test extraction of URLs from markdown link syntax"""
+        """Test extraction of URLs from markdown link syntax."""
         content = "[GitHub](https://github.com) and [Example](https://example.com)"
         urls = self.crawler._extract_links(content)
         self.assertEqual(set(urls), {"https://github.com", "https://example.com"})
 
     def test_extract_bare_urls(self):
-        """Test extraction of bare URLs"""
+        """Test extraction of bare URLs."""
         content = "Check out https://github.com and https://example.com for more"
         urls = self.crawler._extract_links(content)
         self.assertEqual(set(urls), {"https://github.com", "https://example.com"})
 
     def test_mixed_markdown_and_bare_urls(self):
-        """Test extraction of both markdown and bare URLs in same content"""
+        """Test extraction of both markdown and bare URLs in same content."""
         content = "[Link](https://github.com) and bare https://example.com"
         urls = self.crawler._extract_links(content)
         self.assertEqual(set(urls), {"https://github.com", "https://example.com"})
 
     def test_trailing_parenthesis_not_included(self):
-        """Test that trailing parentheses in bare URLs are not included"""
+        """Test that trailing parentheses in bare URLs are not included."""
         content = "See https://example.com/path) for details"
         urls = self.crawler._extract_links(content)
         self.assertEqual(urls, ["https://example.com/path"])
 
     def test_markdown_url_with_special_chars(self):
-        """Test markdown links with special characters in URL"""
+        """Test markdown links with special characters in URL."""
         content = "[API Docs](https://api.example.com/v1/users?id=123&active=true)"
         urls = self.crawler._extract_links(content)
         self.assertEqual(urls, ["https://api.example.com/v1/users?id=123&active=true"])
 
     def test_markdown_url_without_spaces(self):
-        """Test that markdown URLs with spaces are excluded"""
+        """Test that markdown URLs with spaces are excluded."""
         content = "[Bad Link](https://example.com/path with spaces)"
         urls = self.crawler._extract_links(content)
         # Should extract only the part before the space
         self.assertEqual(urls, ["https://example.com/path"])
 
     def test_nested_parentheses_in_bare_url(self):
-        """Test that bare URLs don't capture closing parentheses"""
+        """Test that bare URLs don't capture closing parentheses."""
         content = "(see https://example.com/page)"
         urls = self.crawler._extract_links(content)
         self.assertEqual(urls, ["https://example.com/page"])
 
     def test_deduplication(self):
-        """Test that duplicate URLs are removed"""
+        """Test that duplicate URLs are removed."""
         content = "[Link1](https://example.com) and [Link2](https://example.com) and https://example.com"  # noqa: E501
         urls = self.crawler._extract_links(content)
         self.assertEqual(len(urls), 1)
         self.assertEqual(urls, ["https://example.com"])
 
     def test_empty_content(self):
-        """Test extraction from empty content"""
+        """Test extraction from empty content."""
         urls = self.crawler._extract_links("")
         self.assertEqual(urls, [])
 
     def test_no_urls(self):
-        """Test extraction when no URLs present"""
+        """Test extraction when no URLs present."""
         content = "This is just plain text with no URLs"
         urls = self.crawler._extract_links(content)
         self.assertEqual(urls, [])
 
     def test_markdown_with_brackets_in_text(self):
-        """Test markdown links with brackets in link text"""
+        """Test markdown links with brackets in link text."""
         content = "[Text [with] brackets](https://example.com)"
         urls = self.crawler._extract_links(content)
         self.assertEqual(urls, ["https://example.com"])
 
     def test_url_with_trailing_punctuation(self):
-        """Test that bare URLs may include some trailing punctuation in the match"""  # noqa: E501
+        """Test that bare URLs may include some trailing punctuation in the match."""  # noqa: E501
         content = "Visit https://example.com, https://github.com. and https://test.com!"  # noqa: E501
         urls = self.crawler._extract_links(content)
         # Note: Current regex may capture some trailing punctuation
@@ -87,7 +87,7 @@ class TestLinkExtraction(unittest.TestCase):
         self.assertTrue(any("test.com" in url for url in urls))
 
     def test_markdown_url_with_parentheses(self):
-        """Test markdown links correctly handle URLs with parentheses"""
+        """Test markdown links correctly handle URLs with parentheses."""
         content = "[Wikipedia](https://en.wikipedia.org/wiki/Example_(disambiguation))"  # noqa: E501
         urls = self.crawler._extract_links(content)
         # Markdown syntax should preserve parens in URL

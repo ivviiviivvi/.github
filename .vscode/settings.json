@@ -185,5 +185,8 @@
   "security.workspace.trust.enabled": true,
   "python-envs.defaultEnvManager": "ms-python.python:system",
   "python-envs.pythonProjects": [],
-  "chatgpt.openOnStartup": true
+  "chatgpt.openOnStartup": true,
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  }
 }

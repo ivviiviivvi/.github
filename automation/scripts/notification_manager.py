@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unified Notification Manager
+"""Unified Notification Manager.
 
 Centralized notification system for all Week 9 automation capabilities.
 Supports multiple channels (Slack, Email, PagerDuty) with templating,
@@ -37,7 +37,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 import requests
 import yaml
@@ -78,8 +78,8 @@ class Notification(BaseModel):
     message: str
     priority: Priority = Priority.MEDIUM
     source: str  # sla-monitor, incident-response, validation, etc.
-    channels: List[str] = Field(default_factory=list)
-    metadata: Dict = Field(default_factory=dict)
+    channels: list[str] = Field(default_factory=list)
+    metadata: dict = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     notification_id: Optional[str] = None
 
@@ -111,14 +111,14 @@ class NotificationManager:
         self.delivery_log.mkdir(parents=True, exist_ok=True)
 
         # Rate limiting tracking
-        self.rate_limits: Dict[str, List[float]] = defaultdict(list)
+        self.rate_limits: dict[str, list[float]] = defaultdict(list)
 
         # Deduplication cache
-        self.sent_cache: Dict[str, datetime] = {}
+        self.sent_cache: dict[str, datetime] = {}
 
         logger.info("Notification manager initialized")
 
-    def send(self, notification: Notification) -> Dict[str, DeliveryRecord]:
+    def send(self, notification: Notification) -> dict[str, DeliveryRecord]:
         """Send notification to configured channels.
 
         Args:
@@ -395,7 +395,7 @@ class NotificationManager:
         key = f"{notification.source}:{notification.title}"
         self.sent_cache[key] = datetime.now(timezone.utc)
 
-    def _get_channels_for_priority(self, priority: Priority) -> List[str]:
+    def _get_channels_for_priority(self, priority: Priority) -> list[str]:
         """Get default channels for priority level."""
         routing = self.config.get("priority_routing", {})
         return routing.get(priority.value, ["slack"])
@@ -411,7 +411,7 @@ class NotificationManager:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         return f"NOTIF-{timestamp}-{time.time_ns() % 1000:03d}"
 
-    def _load_config(self, path: str) -> Dict:
+    def _load_config(self, path: str) -> dict:
         """Load notification configuration."""
         config_path = Path(path)
         if not config_path.exists():
@@ -421,7 +421,7 @@ class NotificationManager:
         with open(config_path) as f:
             return yaml.safe_load(f)
 
-    def _default_config(self) -> Dict:
+    def _default_config(self) -> dict:
         """Default configuration."""
         return {
             "channels": {

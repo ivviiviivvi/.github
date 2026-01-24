@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Daily task orchestrator script
-Identifies tasks that should run today based on cron schedules
+Identifies tasks that should run today based on cron schedules.
 """
 
 import json
@@ -8,15 +8,15 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from croniter import croniter  # type: ignore[import-untyped]
 
 
 def get_daily_tasks(
     orchestration_file: str = ".github/orchestration_tasks.json",
-) -> List[Dict[str, Any]]:
-    """Get tasks scheduled for today"""
+) -> list[dict[str, Any]]:
+    """Get tasks scheduled for today."""
     now = datetime.now()
 
     try:
@@ -67,11 +67,8 @@ def get_daily_tasks(
 
 
 def main() -> None:
-    """Main entry point"""
-    if len(sys.argv) > 1:
-        orchestration_file = sys.argv[1]
-    else:
-        orchestration_file = ".github/orchestration_tasks.json"
+    """Main entry point."""
+    orchestration_file = sys.argv[1] if len(sys.argv) > 1 else ".github/orchestration_tasks.json"
 
     daily_tasks = get_daily_tasks(orchestration_file)
 

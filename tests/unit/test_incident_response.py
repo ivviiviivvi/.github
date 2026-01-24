@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/incident_response.py
-Focus: Incident creation, severity classification, runbook execution, status updates
+Focus: Incident creation, severity classification, runbook execution, status updates.
 """
 
 import json
@@ -26,16 +26,16 @@ from models import (
 
 
 class TestIncidentResponseEngine:
-    """Test IncidentResponseEngine class"""
+    """Test IncidentResponseEngine class."""
 
     @pytest.fixture
     def mock_github(self):
-        """Create mock GitHub client"""
+        """Create mock GitHub client."""
         return MagicMock()
 
     @pytest.fixture
     def config(self):
-        """Create test config"""
+        """Create test config."""
         return IncidentConfig(
             enabled=True,
             create_github_issues=True,
@@ -44,7 +44,7 @@ class TestIncidentResponseEngine:
 
     @pytest.fixture
     def engine(self, mock_github, config, tmp_path):
-        """Create engine with temporary directories"""
+        """Create engine with temporary directories."""
         engine = IncidentResponseEngine(config, mock_github)
         engine.incidents_dir = tmp_path / "incidents"
         engine.incidents_dir.mkdir(parents=True, exist_ok=True)
@@ -53,7 +53,7 @@ class TestIncidentResponseEngine:
         return engine
 
     def test_initialization(self, mock_github, config, tmp_path):
-        """Test engine initializes correctly"""
+        """Test engine initializes correctly."""
         with patch.object(Path, "mkdir"):
             engine = IncidentResponseEngine(config, mock_github)
 
@@ -62,7 +62,7 @@ class TestIncidentResponseEngine:
 
 
 class TestSeverityClassification:
-    """Test incident severity classification"""
+    """Test incident severity classification."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -73,27 +73,27 @@ class TestSeverityClassification:
         return engine
 
     def test_sev1_production_down(self, engine):
-        """Test SEV-1 classification for production down"""
+        """Test SEV-1 classification for production down."""
         severity = engine._classify_severity("Production API Down", "All users affected by outage", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev1_security_breach(self, engine):
-        """Test SEV-1 classification for security breach"""
+        """Test SEV-1 classification for security breach."""
         severity = engine._classify_severity("Security Breach Detected", "Unauthorized access to data", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev1_data_loss(self, engine):
-        """Test SEV-1 classification for data loss"""
+        """Test SEV-1 classification for data loss."""
         severity = engine._classify_severity("Database Corruption", "Critical data loss detected", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev2_major_failure(self, engine):
-        """Test SEV-2 classification for major failure"""
+        """Test SEV-2 classification for major failure."""
         severity = engine._classify_severity("Major Feature Broken", "Main feature affecting multiple users", "manual")
         assert severity == IncidentSeverity.SEV2
 
     def test_sev2_from_sla_breach(self, engine):
-        """Test SEV-2 classification from SLA breach source"""
+        """Test SEV-2 classification from SLA breach source."""
         severity = engine._classify_severity(
             "Response Time SLA Breach",
             "Issue response exceeded threshold",
@@ -102,23 +102,23 @@ class TestSeverityClassification:
         assert severity == IncidentSeverity.SEV2
 
     def test_sev3_minor_issue(self, engine):
-        """Test SEV-3 classification for minor issue"""
+        """Test SEV-3 classification for minor issue."""
         severity = engine._classify_severity("Minor Bug", "Minor issue with workaround available", "manual")
         assert severity == IncidentSeverity.SEV3
 
     def test_sev3_from_workflow(self, engine):
-        """Test SEV-3 classification from workflow source"""
+        """Test SEV-3 classification from workflow source."""
         severity = engine._classify_severity("Build Failed", "CI pipeline test failure", "workflow")
         assert severity == IncidentSeverity.SEV3
 
     def test_sev4_default(self, engine):
-        """Test SEV-4 as default classification"""
+        """Test SEV-4 as default classification."""
         severity = engine._classify_severity("Cosmetic Issue", "Button color is wrong", "manual")
         assert severity == IncidentSeverity.SEV4
 
 
 class TestRunbookExecution:
-    """Test runbook execution"""
+    """Test runbook execution."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -130,7 +130,7 @@ class TestRunbookExecution:
         return engine
 
     def test_sev1_runbook_steps(self, engine):
-        """Test SEV-1 runbook has correct steps"""
+        """Test SEV-1 runbook has correct steps."""
         runbook = engine._get_runbook(IncidentSeverity.SEV1)
 
         assert len(runbook) == 3
@@ -140,7 +140,7 @@ class TestRunbookExecution:
         assert "war-room" in runbook[1].params.get("labels", [])
 
     def test_sev2_runbook_steps(self, engine):
-        """Test SEV-2 runbook has correct steps"""
+        """Test SEV-2 runbook has correct steps."""
         runbook = engine._get_runbook(IncidentSeverity.SEV2)
 
         assert len(runbook) == 2
@@ -148,7 +148,7 @@ class TestRunbookExecution:
         assert runbook[0].params.get("priority") == "high"
 
     def test_sev3_runbook_steps(self, engine):
-        """Test SEV-3 runbook has correct steps"""
+        """Test SEV-3 runbook has correct steps."""
         runbook = engine._get_runbook(IncidentSeverity.SEV3)
 
         assert len(runbook) == 1
@@ -156,14 +156,14 @@ class TestRunbookExecution:
         assert runbook[0].params.get("priority") == "normal"
 
     def test_sev4_runbook_steps(self, engine):
-        """Test SEV-4 runbook has correct steps"""
+        """Test SEV-4 runbook has correct steps."""
         runbook = engine._get_runbook(IncidentSeverity.SEV4)
 
         assert len(runbook) == 1
         assert runbook[0].action == "update_status"
 
     def test_runbook_execution_marks_steps_completed(self, engine):
-        """Test runbook execution marks steps as completed"""
+        """Test runbook execution marks steps as completed."""
         incident = Incident(
             incident_id="INC-001",
             title="Test Incident",
@@ -183,7 +183,7 @@ class TestRunbookExecution:
         assert steps[0].executed_at is not None
 
     def test_runbook_handles_step_failure(self, engine):
-        """Test runbook handles step failure gracefully"""
+        """Test runbook handles step failure gracefully."""
         incident = Incident(
             incident_id="INC-001",
             title="Test Incident",
@@ -197,13 +197,15 @@ class TestRunbookExecution:
 
         # Mock notification to fail - the runbook continues with subsequent steps
         # Only successful steps are returned in the executed_steps list
-        with patch.object(
-            engine,
-            "_execute_notify_action",
-            side_effect=Exception("Notification failed"),
+        with (
+            patch.object(
+                engine,
+                "_execute_notify_action",
+                side_effect=Exception("Notification failed"),
+            ),
+            patch.object(engine, "_save_incident"),
         ):
-            with patch.object(engine, "_save_incident"):
-                steps = engine._execute_runbook(incident)
+            steps = engine._execute_runbook(incident)
 
         # Failed notify step is not included in returned steps
         # Only successful steps (like create_issue) are returned
@@ -214,7 +216,7 @@ class TestRunbookExecution:
 
 
 class TestIncidentCreation:
-    """Test incident creation"""
+    """Test incident creation."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -229,7 +231,7 @@ class TestIncidentCreation:
         return engine
 
     def test_creates_incident_with_id(self, engine):
-        """Test creates incident with unique ID"""
+        """Test creates incident with unique ID."""
         with patch.object(engine, "_send_incident_notification"):
             incident = engine.create_incident("owner", "repo", "Test Incident", "Test description", "manual")
 
@@ -238,21 +240,21 @@ class TestIncidentCreation:
         assert incident.repository == "owner/repo"
 
     def test_creates_incident_with_correct_severity(self, engine):
-        """Test creates incident with classified severity"""
+        """Test creates incident with classified severity."""
         with patch.object(engine, "_send_incident_notification"):
             incident = engine.create_incident("owner", "repo", "Production Outage", "All users affected", "manual")
 
         assert incident.severity == IncidentSeverity.SEV1
 
     def test_creates_incident_with_open_status(self, engine):
-        """Test creates incident with OPEN status"""
+        """Test creates incident with OPEN status."""
         with patch.object(engine, "_send_incident_notification"):
             incident = engine.create_incident("owner", "repo", "Test", "Test", "manual")
 
         assert incident.status == IncidentStatus.OPEN
 
     def test_saves_incident_to_disk(self, engine, tmp_path):
-        """Test saves incident to disk"""
+        """Test saves incident to disk."""
         with patch.object(engine, "_send_incident_notification"):
             incident = engine.create_incident("owner", "repo", "Test", "Test", "manual")
 
@@ -264,7 +266,7 @@ class TestIncidentCreation:
         assert data["title"] == "Test"
 
     def test_creates_github_issue_when_enabled(self, tmp_path):
-        """Test creates GitHub issue when configured"""
+        """Test creates GitHub issue when configured."""
         config = IncidentConfig(
             create_github_issues=True,
             auto_execute_runbooks=False,
@@ -284,7 +286,7 @@ class TestIncidentCreation:
 
 
 class TestStatusUpdates:
-    """Test incident status updates"""
+    """Test incident status updates."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -296,7 +298,7 @@ class TestStatusUpdates:
 
     @pytest.fixture
     def existing_incident(self, engine):
-        """Create existing incident for updates"""
+        """Create existing incident for updates."""
         incident = Incident(
             incident_id="INC-TEST-001",
             title="Test Incident",
@@ -311,7 +313,7 @@ class TestStatusUpdates:
         return incident
 
     def test_updates_status(self, engine, existing_incident):
-        """Test updates incident status"""
+        """Test updates incident status."""
         with patch.object(engine, "_send_incident_notification"):
             updated = engine.update_incident_status(
                 existing_incident.incident_id,
@@ -321,7 +323,7 @@ class TestStatusUpdates:
         assert updated.status == IncidentStatus.INVESTIGATING
 
     def test_resolved_sets_timestamp(self, engine, existing_incident):
-        """Test resolved status sets timestamp"""
+        """Test resolved status sets timestamp."""
         with patch.object(engine, "_send_incident_notification"):
             updated = engine.update_incident_status(
                 existing_incident.incident_id,
@@ -334,7 +336,7 @@ class TestStatusUpdates:
         assert updated.resolution == "Fixed the issue"
 
     def test_resolved_calculates_ttr(self, engine, existing_incident):
-        """Test resolved status calculates time to resolution"""
+        """Test resolved status calculates time to resolution."""
         with patch.object(engine, "_send_incident_notification"):
             updated = engine.update_incident_status(
                 existing_incident.incident_id,
@@ -347,7 +349,7 @@ class TestStatusUpdates:
 
 
 class TestPostIncidentReport:
-    """Test post-incident report generation"""
+    """Test post-incident report generation."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -359,7 +361,7 @@ class TestPostIncidentReport:
 
     @pytest.fixture
     def resolved_incident(self, engine):
-        """Create resolved incident for report"""
+        """Create resolved incident for report."""
         incident = Incident(
             incident_id="INC-REPORT-001",
             title="Test Incident",
@@ -377,7 +379,7 @@ class TestPostIncidentReport:
         return incident
 
     def test_generates_report(self, engine, resolved_incident):
-        """Test generates post-incident report"""
+        """Test generates post-incident report."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         assert report.incident_id == resolved_incident.incident_id
@@ -385,21 +387,21 @@ class TestPostIncidentReport:
         assert report.generated_at is not None
 
     def test_report_includes_timeline(self, engine, resolved_incident):
-        """Test report includes timeline"""
+        """Test report includes timeline."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         assert len(report.timeline) >= 2  # At least created and resolved
         assert report.timeline[0]["event"] == "Incident created"
 
     def test_report_includes_root_cause(self, engine, resolved_incident):
-        """Test report includes root cause analysis"""
+        """Test report includes root cause analysis."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         assert report.root_cause is not None
         assert len(report.root_cause) > 0
 
     def test_report_includes_action_items(self, engine, resolved_incident):
-        """Test report includes action items"""
+        """Test report includes action items."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         assert len(report.action_items) >= 1
@@ -407,13 +409,13 @@ class TestPostIncidentReport:
         assert any("monitoring" in item["action"].lower() for item in report.action_items)
 
     def test_report_includes_lessons_learned(self, engine, resolved_incident):
-        """Test report includes lessons learned"""
+        """Test report includes lessons learned."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         assert len(report.lessons_learned) >= 1
 
     def test_saves_report_to_disk(self, engine, resolved_incident):
-        """Test saves report to disk"""
+        """Test saves report to disk."""
         report = engine.generate_post_incident_report(resolved_incident.incident_id)
 
         report_file = engine.incidents_dir / f"{report.incident_id}_report.json"
@@ -421,7 +423,7 @@ class TestPostIncidentReport:
 
 
 class TestNotificationChannels:
-    """Test notification channel selection"""
+    """Test notification channel selection."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -432,7 +434,7 @@ class TestNotificationChannels:
         return engine
 
     def test_sev1_uses_all_channels(self, engine):
-        """Test SEV-1 uses all notification channels"""
+        """Test SEV-1 uses all notification channels."""
         channels = engine._get_notification_channels(IncidentSeverity.SEV1)
 
         assert "slack" in channels
@@ -440,7 +442,7 @@ class TestNotificationChannels:
         assert "email" in channels
 
     def test_sev2_uses_slack_and_email(self, engine):
-        """Test SEV-2 uses Slack and email"""
+        """Test SEV-2 uses Slack and email."""
         channels = engine._get_notification_channels(IncidentSeverity.SEV2)
 
         assert "slack" in channels
@@ -448,20 +450,20 @@ class TestNotificationChannels:
         assert "pagerduty" not in channels
 
     def test_sev3_uses_slack_only(self, engine):
-        """Test SEV-3 uses Slack only"""
+        """Test SEV-3 uses Slack only."""
         channels = engine._get_notification_channels(IncidentSeverity.SEV3)
 
         assert channels == ["slack"]
 
     def test_sev4_uses_no_channels(self, engine):
-        """Test SEV-4 uses no notification channels"""
+        """Test SEV-4 uses no notification channels."""
         channels = engine._get_notification_channels(IncidentSeverity.SEV4)
 
         assert channels == []
 
 
 class TestIncidentIdGeneration:
-    """Test incident ID generation"""
+    """Test incident ID generation."""
 
     @pytest.fixture
     def engine(self, tmp_path):
@@ -472,7 +474,7 @@ class TestIncidentIdGeneration:
         return engine
 
     def test_generates_unique_ids(self, engine):
-        """Test generates unique incident IDs"""
+        """Test generates unique incident IDs."""
         id1 = engine._generate_incident_id()
         # Create a file to simulate existing incident
         (engine.incidents_dir / f"{id1}.json").write_text("{}")
@@ -483,14 +485,14 @@ class TestIncidentIdGeneration:
         assert id2.startswith("INC-")
 
     def test_id_includes_date(self, engine):
-        """Test ID includes current date"""
+        """Test ID includes current date."""
         incident_id = engine._generate_incident_id()
 
         today = datetime.now().strftime("%Y%m%d")
         assert today in incident_id
 
     def test_id_increments_sequence(self, engine):
-        """Test ID sequence number increments"""
+        """Test ID sequence number increments."""
         # Create some existing incidents
         today = datetime.now().strftime("%Y%m%d")
         (engine.incidents_dir / f"INC-{today}-001.json").write_text("{}")

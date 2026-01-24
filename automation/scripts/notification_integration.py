@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Notification Integration Helper
+"""Notification Integration Helper.
 
 Provides backward-compatible notification wrapper that integrates existing
 Week 9 systems with the unified notification manager.
@@ -17,7 +17,7 @@ Usage in existing scripts:
     notify_sla_breach(issue_number="123", priority="P0", ...)
 """
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 from notification_manager import Notification, NotificationManager, Priority
 
@@ -95,7 +95,7 @@ def notify_sla_breach(
     threshold: str,
     actual: str,
     priority: str,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about SLA breach.
 
@@ -157,7 +157,7 @@ def notify_sla_compliance(
     repository: str,
     compliance_rate: float,
     period_days: int,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about SLA compliance status.
 
@@ -214,7 +214,7 @@ def notify_incident_created(
     repository: str,
     description: str,
     status: str = "OPEN",
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about new incident.
 
@@ -271,7 +271,7 @@ def notify_incident_resolved(
     incident_id: str,
     severity: str,
     duration_minutes: int,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about resolved incident.
 
@@ -285,9 +285,8 @@ def notify_incident_resolved(
     manager = get_notification_manager()
 
     # Build message
-    hours = duration_minutes // 60
-    mins = duration_minutes % 60
-    f"{hours}h {mins}m" if hours > 0 else f"{mins}m"
+    duration_minutes // 60
+    duration_minutes % 60
 
     message = """**Incident ID:** {incident_id}
 **Severity:** {severity}
@@ -321,9 +320,9 @@ Incident has been resolved."""
 def notify_validation_failure(
     capability: str,
     repository: str,
-    errors: List[str],
-    warnings: List[str] = None,
-    metadata: Optional[Dict] = None,
+    errors: list[str],
+    warnings: list[str] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about validation failure.
 
@@ -374,7 +373,7 @@ def notify_validation_success(
     repository: str,
     passed_count: int,
     total_count: int,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about successful validation run.
 
@@ -420,7 +419,7 @@ def notify_self_healing_success(
     run_id: int,
     failure_type: str,
     action_taken: str,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about successful self-healing.
 
@@ -465,7 +464,7 @@ def notify_self_healing_failure(
     run_id: int,
     failure_type: str,
     attempts: int,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about self-healing failure.
 
@@ -516,7 +515,7 @@ def notify_maintenance_scheduled(
     end_time: str,
     duration_minutes: int,
     impact: str,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about scheduled maintenance.
 
@@ -562,7 +561,7 @@ def notify_maintenance_complete(
     task_name: str,
     duration_minutes: int,
     success: bool,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about completed maintenance.
 
@@ -575,7 +574,6 @@ def notify_maintenance_complete(
     """
     manager = get_notification_manager()
 
-    "✅ Completed successfully" if success else "❌ Failed"
     priority = Priority.LOW if success else Priority.HIGH
 
     message = """**Task:** {task_name}
@@ -609,7 +607,7 @@ def notify_model_accuracy_low(
     model_name: str,
     accuracy: float,
     threshold: float,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about low model accuracy.
 
@@ -655,7 +653,7 @@ def notify_auto_merge_failure(
     pr_number: int,
     repository: str,
     reason: str,
-    metadata: Optional[Dict] = None,
+    metadata: Optional[dict] = None,
 ):
     """Notify about auto-merge failure.
 

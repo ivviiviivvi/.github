@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Quick token validator using environment variables"""
+"""Quick token validator using environment variables."""
 
 import os
 import sys

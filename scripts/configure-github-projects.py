@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GitHub Projects V2 Configuration Script
+"""GitHub Projects V2 Configuration Script.
 
 This script creates and configures comprehensive GitHub Projects using the GraphQL API.  # noqa: E501
 It handles project creation, field configuration, view setup, and automation rules.
@@ -19,7 +19,7 @@ import json
 import os
 import sys
 import time
-from typing import Dict, List, Optional
+from typing import Any, Optional, cast
 
 import requests
 
@@ -63,9 +63,9 @@ class GitHubProjectsManager:
             "Content-Type": "application/json",
         }
 
-    def execute_query(self, query: str, variables: Optional[Dict] = None) -> Dict:
+    def execute_query(self, query: str, variables: Optional[dict] = None) -> dict:
         """Execute a GraphQL query."""
-        payload = {"query": query}
+        payload: dict[str, Any] = {"query": query}
         if variables:
             payload["variables"] = variables
 
@@ -77,15 +77,13 @@ class GitHubProjectsManager:
         )
 
         if response.status_code != 200:
-            raise Exception(
-                f"Query failed: {response.status_code} - {response.text}")
+            raise Exception(f"Query failed: {response.status_code} - {response.text}")
 
         data = response.json()
         if "errors" in data:
-            raise Exception(
-                f"GraphQL errors: {json.dumps(data['errors'], indent=2)}")
+            raise Exception(f"GraphQL errors: {json.dumps(data['errors'], indent=2)}")
 
-        return data
+        return cast(dict[Any, Any], data)
 
     def get_org_id(self) -> str:
         """Get organization node ID."""
@@ -97,9 +95,9 @@ class GitHubProjectsManager:
         }
         """
         result = self.execute_query(query, {"login": self.org})
-        return result["data"]["organization"]["id"]
+        return cast(str, result["data"]["organization"]["id"])
 
-    def create_project(self, title: str, description: str) -> Dict:
+    def create_project(self, title: str, description: str) -> dict:
         """Create a new project."""
         org_id = self.get_org_id()
 
@@ -129,7 +127,7 @@ class GitHubProjectsManager:
         # Update with description (separate API call)
         self.update_project_description(project["id"], description)
 
-        return project
+        return cast(dict[Any, Any], project)
 
     def update_project_description(self, project_id: str, description: str):
         """Update project description."""
@@ -150,7 +148,7 @@ class GitHubProjectsManager:
 
         self.execute_query(mutation, variables)
 
-    def create_single_select_field(self, project_id: str, name: str, options: List[Dict[str, str]]) -> str:
+    def create_single_select_field(self, project_id: str, name: str, options: list[dict[str, str]]) -> str:
         """Create a single select field."""
         mutation = """
         mutation($input: CreateProjectV2FieldInput!) {
@@ -178,7 +176,8 @@ class GitHubProjectsManager:
         }
 
         result = self.execute_query(mutation, variables)
-        return result["data"]["createProjectV2Field"]["projectV2Field"]["id"]
+        field_id = result["data"]["createProjectV2Field"]["projectV2Field"]["id"]
+        return cast(str, field_id)
 
     def create_text_field(self, project_id: str, name: str) -> str:
         """Create a text field."""
@@ -204,7 +203,7 @@ class GitHubProjectsManager:
         }
 
         result = self.execute_query(mutation, variables)
-        return result["data"]["createProjectV2Field"]["projectV2Field"]["id"]
+        return cast(str, result["data"]["createProjectV2Field"]["projectV2Field"]["id"])
 
     def create_number_field(self, project_id: str, name: str) -> str:
         """Create a number field."""
@@ -230,7 +229,7 @@ class GitHubProjectsManager:
         }
 
         result = self.execute_query(mutation, variables)
-        return result["data"]["createProjectV2Field"]["projectV2Field"]["id"]
+        return cast(str, result["data"]["createProjectV2Field"]["projectV2Field"]["id"])
 
     def create_date_field(self, project_id: str, name: str) -> str:
         """Create a date field."""
@@ -256,7 +255,7 @@ class GitHubProjectsManager:
         }
 
         result = self.execute_query(mutation, variables)
-        return result["data"]["createProjectV2Field"]["projectV2Field"]["id"]
+        return cast(str, result["data"]["createProjectV2Field"]["projectV2Field"]["id"])
 
 
 # Project configurations
@@ -702,10 +701,8 @@ PROJECTS_CONFIG = {
 
 def main():
     """Main execution function."""
-    parser = argparse.ArgumentParser(
-        description="Configure GitHub Projects V2")
-    parser.add_argument("--org", required=True,
-                        help="GitHub organization name")
+    parser = argparse.ArgumentParser(description="Configure GitHub Projects V2")
+    parser.add_argument("--org", required=True, help="GitHub organization name")
     parser.add_argument(
         "--projects",
         nargs="+",
@@ -745,10 +742,8 @@ def main():
 
         try:
             # Create project
-            project = manager.create_project(
-                config["title"], config["description"])
-            log_success(
-                f"Created project #{project['number']}: {project['title']}")
+            project = manager.create_project(config["title"], config["description"])
+            log_success(f"Created project #{project['number']}: {project['title']}")
             log_info(f"  URL: {project['url']}")
 
             # Create fields
@@ -757,8 +752,7 @@ def main():
 
                 try:
                     if field_config["type"] == "single_select":
-                        manager.create_single_select_field(
-                            project["id"], field_name, field_config["options"])
+                        manager.create_single_select_field(project["id"], field_name, field_config["options"])
                     elif field_config["type"] == "text":
                         manager.create_text_field(project["id"], field_name)
                     elif field_config["type"] == "number":

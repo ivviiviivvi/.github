@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Universal Secret Manager for GitHub Copilot Automation
+"""Universal Secret Manager for GitHub Copilot Automation.
 
 Securely retrieves secrets from 1Password CLI ONLY.
 No environment variable fallback - proper security, no compromises.

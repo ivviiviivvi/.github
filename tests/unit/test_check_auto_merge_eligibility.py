@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/check_auto_merge_eligibility.py
-Focus: AutoMergeChecker safety checks, eligibility determination, confidence calculation
+Focus: AutoMergeChecker safety checks, eligibility determination, confidence calculation.
 """
 
 import sys
@@ -17,33 +17,33 @@ from models import AutoMergeConfig, AutoMergeSafetyChecks
 
 
 class TestAutoMergeChecker:
-    """Test AutoMergeChecker class"""
+    """Test AutoMergeChecker class."""
 
     @pytest.fixture
     def mock_client(self):
-        """Create mock GitHub client"""
+        """Create mock GitHub client."""
         client = MagicMock()
         return client
 
     @pytest.fixture
     def default_config(self):
-        """Create default config"""
+        """Create default config."""
         return AutoMergeConfig()
 
     @pytest.fixture
     def checker(self, mock_client, default_config):
-        """Create checker instance"""
+        """Create checker instance."""
         return AutoMergeChecker(mock_client, default_config)
 
     def test_initialization(self, mock_client, default_config):
-        """Test checker initializes correctly"""
+        """Test checker initializes correctly."""
         checker = AutoMergeChecker(mock_client, default_config)
         assert checker.client == mock_client
         assert checker.config == default_config
 
 
 class TestSafetyChecks:
-    """Test individual safety check methods"""
+    """Test individual safety check methods."""
 
     @pytest.fixture
     def mock_client(self):
@@ -59,7 +59,7 @@ class TestSafetyChecks:
         return AutoMergeChecker(mock_client, config)
 
     def test_check_tests_passed_success(self, checker, mock_client):
-        """Test _check_tests_passed returns True when all pass"""
+        """Test _check_tests_passed returns True when all pass."""
         # Mock commit status
         mock_client.get.side_effect = [
             {"state": "success"},  # commit status
@@ -77,7 +77,7 @@ class TestSafetyChecks:
         assert result is True
 
     def test_check_tests_passed_failure(self, checker, mock_client):
-        """Test _check_tests_passed returns False when status fails"""
+        """Test _check_tests_passed returns False when status fails."""
         mock_client.get.return_value = {"state": "failure"}
 
         pr = {"head": {"sha": "abc123"}}
@@ -86,7 +86,7 @@ class TestSafetyChecks:
         assert result is False
 
     def test_check_tests_passed_missing_required(self, checker, mock_client):
-        """Test _check_tests_passed returns False when required check missing"""
+        """Test _check_tests_passed returns False when required check missing."""
         mock_client.get.side_effect = [
             {"state": "success"},
             {
@@ -103,7 +103,7 @@ class TestSafetyChecks:
         assert result is False
 
     def test_check_reviews_approved_success(self, checker, mock_client):
-        """Test _check_reviews_approved returns True with enough approvals"""
+        """Test _check_reviews_approved returns True with enough approvals."""
         mock_client.get.return_value = [
             {"user": {"login": "user1"}, "state": "APPROVED"},
             {"user": {"login": "user2"}, "state": "APPROVED"},
@@ -115,7 +115,7 @@ class TestSafetyChecks:
         assert result is True
 
     def test_check_reviews_approved_insufficient(self, checker, mock_client):
-        """Test _check_reviews_approved returns False with insufficient approvals"""
+        """Test _check_reviews_approved returns False with insufficient approvals."""
         mock_client.get.return_value = [
             {"user": {"login": "user1"}, "state": "APPROVED"},
             {"user": {"login": "user2"}, "state": "CHANGES_REQUESTED"},
@@ -127,7 +127,7 @@ class TestSafetyChecks:
         assert result is False
 
     def test_check_reviews_keeps_latest_per_reviewer(self, checker, mock_client):
-        """Test only latest review per reviewer is counted"""
+        """Test only latest review per reviewer is counted."""
         mock_client.get.return_value = [
             {"user": {"login": "user1"}, "state": "CHANGES_REQUESTED"},
             {"user": {"login": "user1"}, "state": "APPROVED"},  # Latest
@@ -140,51 +140,51 @@ class TestSafetyChecks:
         assert result is True
 
     def test_check_no_conflicts_mergeable(self, checker):
-        """Test _check_no_conflicts returns True when mergeable"""
+        """Test _check_no_conflicts returns True when mergeable."""
         pr = {"mergeable": True}
         result = checker._check_no_conflicts(pr)
         assert result is True
 
     def test_check_no_conflicts_not_mergeable(self, checker):
-        """Test _check_no_conflicts returns False when not mergeable"""
+        """Test _check_no_conflicts returns False when not mergeable."""
         pr = {"mergeable": False}
         result = checker._check_no_conflicts(pr)
         assert result is False
 
     def test_check_no_conflicts_unknown(self, checker):
-        """Test _check_no_conflicts returns False when mergeable is None"""
+        """Test _check_no_conflicts returns False when mergeable is None."""
         pr = {"mergeable": None}
         result = checker._check_no_conflicts(pr)
         assert result is False
 
     def test_check_branch_up_to_date_clean(self, checker):
-        """Test _check_branch_up_to_date returns True for clean state"""
+        """Test _check_branch_up_to_date returns True for clean state."""
         pr = {"mergeable_state": "clean"}
         result = checker._check_branch_up_to_date(pr)
         assert result is True
 
     def test_check_branch_up_to_date_behind(self, checker):
-        """Test _check_branch_up_to_date returns False for behind state"""
+        """Test _check_branch_up_to_date returns False for behind state."""
         pr = {"mergeable_state": "behind"}
         result = checker._check_branch_up_to_date(pr)
         assert result is False
 
     def test_check_branch_up_to_date_dirty(self, checker):
-        """Test _check_branch_up_to_date returns False for dirty state"""
+        """Test _check_branch_up_to_date returns False for dirty state."""
         pr = {"mergeable_state": "dirty"}
         result = checker._check_branch_up_to_date(pr)
         assert result is False
 
 
 class TestCoverageThreshold:
-    """Test coverage threshold checking"""
+    """Test coverage threshold checking."""
 
     @pytest.fixture
     def mock_client(self):
         return MagicMock()
 
     def test_coverage_from_status(self, mock_client):
-        """Test extracts coverage from commit status"""
+        """Test extracts coverage from commit status."""
         config = AutoMergeConfig(coverage_threshold=80.0)
         checker = AutoMergeChecker(mock_client, config)
 
@@ -199,7 +199,7 @@ class TestCoverageThreshold:
         assert result is True
 
     def test_coverage_below_threshold(self, mock_client):
-        """Test returns False when coverage below threshold"""
+        """Test returns False when coverage below threshold."""
         config = AutoMergeConfig(coverage_threshold=80.0)
         checker = AutoMergeChecker(mock_client, config)
 
@@ -214,7 +214,7 @@ class TestCoverageThreshold:
         assert result is False
 
     def test_coverage_from_check_runs(self, mock_client):
-        """Test extracts coverage from check runs"""
+        """Test extracts coverage from check runs."""
         config = AutoMergeConfig(coverage_threshold=80.0)
         checker = AutoMergeChecker(mock_client, config)
 
@@ -236,7 +236,7 @@ class TestCoverageThreshold:
         assert result is True
 
     def test_coverage_zero_threshold_passes(self, mock_client):
-        """Test zero coverage threshold always passes"""
+        """Test zero coverage threshold always passes."""
         config = AutoMergeConfig(coverage_threshold=0)
         checker = AutoMergeChecker(mock_client, config)
 
@@ -251,7 +251,7 @@ class TestCoverageThreshold:
         assert result is True
 
     def test_coverage_handles_api_error(self, mock_client):
-        """Test handles API error gracefully"""
+        """Test handles API error gracefully."""
         config = AutoMergeConfig(coverage_threshold=80.0)
         checker = AutoMergeChecker(mock_client, config)
 
@@ -265,7 +265,7 @@ class TestCoverageThreshold:
 
 
 class TestConfidenceCalculation:
-    """Test confidence score calculation"""
+    """Test confidence score calculation."""
 
     @pytest.fixture
     def mock_client(self):
@@ -276,7 +276,7 @@ class TestConfidenceCalculation:
         return AutoMergeChecker(mock_client, AutoMergeConfig())
 
     def test_confidence_all_checks_passed(self, checker):
-        """Test confidence with all checks passed"""
+        """Test confidence with all checks passed."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -299,7 +299,7 @@ class TestConfidenceCalculation:
         assert confidence <= 1.0
 
     def test_confidence_no_checks_passed(self, checker):
-        """Test confidence with no checks passed"""
+        """Test confidence with no checks passed."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=False,
             reviews_approved=False,
@@ -320,7 +320,7 @@ class TestConfidenceCalculation:
         assert confidence < 0.5
 
     def test_confidence_increases_with_age(self, checker):
-        """Test confidence increases with PR age"""
+        """Test confidence increases with PR age."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -349,7 +349,7 @@ class TestConfidenceCalculation:
         assert old_confidence > recent_confidence
 
     def test_confidence_decreases_with_commits(self, checker):
-        """Test confidence decreases with more commits"""
+        """Test confidence decreases with more commits."""
         checks = AutoMergeSafetyChecks(
             all_tests_passed=True,
             reviews_approved=True,
@@ -377,7 +377,7 @@ class TestConfidenceCalculation:
 
 
 class TestCheckEligibility:
-    """Test full eligibility check flow"""
+    """Test full eligibility check flow."""
 
     @pytest.fixture
     def mock_client(self):
@@ -389,7 +389,7 @@ class TestCheckEligibility:
         return AutoMergeChecker(mock_client, config)
 
     def test_eligible_pr(self, checker, mock_client):
-        """Test PR that passes all checks is eligible"""
+        """Test PR that passes all checks is eligible."""
         # Mock all API calls in order they are made
         # Note: check_runs not fetched since required_checks is empty
         mock_client.get.side_effect = [
@@ -419,7 +419,7 @@ class TestCheckEligibility:
         assert len(result.reasons) == 0
 
     def test_ineligible_pr_failing_tests(self, checker, mock_client):
-        """Test PR with failing tests is not eligible"""
+        """Test PR with failing tests is not eligible."""
         mock_client.get.side_effect = [
             # PR details
             {
@@ -446,7 +446,7 @@ class TestCheckEligibility:
         assert "CI tests have not all passed" in result.reasons
 
     def test_ineligible_pr_missing_reviews(self, checker, mock_client):
-        """Test PR with missing reviews is not eligible"""
+        """Test PR with missing reviews is not eligible."""
         # Note: check_runs not fetched since required_checks is empty
         mock_client.get.side_effect = [
             # PR details
@@ -473,7 +473,7 @@ class TestCheckEligibility:
         assert any("Missing required approvals" in r for r in result.reasons)
 
     def test_ineligible_pr_with_conflicts(self, checker, mock_client):
-        """Test PR with merge conflicts is not eligible"""
+        """Test PR with merge conflicts is not eligible."""
         # Note: check_runs not fetched since required_checks is empty
         mock_client.get.side_effect = [
             # PR details - has conflicts
@@ -500,7 +500,7 @@ class TestCheckEligibility:
         assert "PR has merge conflicts" in result.reasons
 
     def test_multiple_failure_reasons(self, checker, mock_client):
-        """Test PR with multiple issues reports all reasons"""
+        """Test PR with multiple issues reports all reasons."""
         mock_client.get.side_effect = [
             # PR details - conflicts and behind
             {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GitHub Label Sync Script
+"""GitHub Label Sync Script.
 
 Synchronizes standardized labels across all repositories in a GitHub organization  # noqa: E501
 using the PyGithub library.
@@ -16,7 +16,7 @@ Requirements:
 
 import argparse
 import sys
-from typing import Dict, List, Optional
+from typing import Optional
 
 from secret_manager import get_secret
 
@@ -136,7 +136,7 @@ class LabelSyncManager:
         self.github = Github(github_token)
         self.dry_run = dry_run
 
-    def get_repositories(self, org_name: str) -> List[Repository]:
+    def get_repositories(self, org_name: str) -> list[Repository]:
         """Get all repositories for an organization.
 
         Args:
@@ -155,7 +155,7 @@ class LabelSyncManager:
             print(f"Error accessing organization '{org_name}': {e}")
             sys.exit(1)
 
-    def get_existing_labels(self, repo: Repository) -> Dict[str, Label]:
+    def get_existing_labels(self, repo: Repository) -> dict[str, Label]:
         """Get existing labels from a repository.
 
         Args:
@@ -172,7 +172,7 @@ class LabelSyncManager:
             print(f"  ⚠️  Error getting labels from {repo.name}: {e}")
             return {}
 
-    def sync_labels(self, repo: Repository) -> Dict[str, int]:
+    def sync_labels(self, repo: Repository) -> dict[str, int]:
         """Sync labels for a single repository.
 
         Args:
@@ -230,7 +230,7 @@ class LabelSyncManager:
 
         return stats
 
-    def sync_organization(self, org_name: str, exclude_repos: Optional[List[str]] = None) -> None:
+    def sync_organization(self, org_name: str, exclude_repos: Optional[list[str]] = None) -> None:
         """Sync labels across all repositories in an organization.
 
         Args:

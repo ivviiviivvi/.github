@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rollback Automation
+"""Rollback Automation.
 
 Quickly rollback deployments to previous working state.
 
@@ -15,7 +15,6 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
 
 import requests
 
@@ -41,7 +40,7 @@ class RollbackManager:
             }
         )
 
-    def load_deployment_log(self, deployment_id: str) -> Dict:
+    def load_deployment_log(self, deployment_id: str) -> dict:
         """Load deployment log file.
 
         Args:
@@ -245,7 +244,7 @@ class RollbackManager:
             print(f"   ❌ Error: {e}")
             return False
 
-    def _get_workflows_for_month(self, month: int) -> List[str]:
+    def _get_workflows_for_month(self, month: int) -> list[str]:
         """Get workflow files for specific month."""
         # Month 1 workflows
         month1_workflows = [
@@ -280,7 +279,7 @@ class RollbackManager:
 
         return workflow_map.get(month, [])
 
-    def _save_rollback_log(self, deployment_id: str, deployments: List[Dict], success_count: int):
+    def _save_rollback_log(self, deployment_id: str, deployments: list[dict], success_count: int):
         """Save rollback log."""
         log_file = Path(f"automation/deployment/logs/rollback_{deployment_id}.json")
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Auto-Merge Eligibility Checker
+"""Auto-Merge Eligibility Checker.
 
 Checks if a pull request meets all safety criteria for automatic merging.
 Implements comprehensive validation including:
@@ -27,7 +27,6 @@ import argparse
 import re
 import sys
 from pathlib import Path
-from typing import Dict
 
 from models import (
     AutoMergeConfig,
@@ -118,12 +117,12 @@ class AutoMergeChecker:
         )
         return result
 
-    def _get_pull_request(self, owner: str, repo: str, pr_number: int) -> Dict:
+    def _get_pull_request(self, owner: str, repo: str, pr_number: int) -> dict:
         """Get pull request details from GitHub API."""
         endpoint = f"/repos/{owner}/{repo}/pulls/{pr_number}"
         return self.client.get(endpoint)
 
-    def _run_safety_checks(self, owner: str, repo: str, pr: Dict) -> AutoMergeSafetyChecks:
+    def _run_safety_checks(self, owner: str, repo: str, pr: dict) -> AutoMergeSafetyChecks:
         """Run all safety checks on PR."""
         return AutoMergeSafetyChecks(
             all_tests_passed=self._check_tests_passed(owner, repo, pr),
@@ -133,7 +132,7 @@ class AutoMergeChecker:
             coverage_threshold_met=self._check_coverage_threshold(owner, repo, pr),
         )
 
-    def _check_tests_passed(self, owner: str, repo: str, pr: Dict) -> bool:
+    def _check_tests_passed(self, owner: str, repo: str, pr: dict) -> bool:
         """Check if all required tests have passed.
 
         Args:
@@ -175,7 +174,7 @@ class AutoMergeChecker:
 
         return True
 
-    def _check_reviews_approved(self, owner: str, repo: str, pr: Dict) -> bool:
+    def _check_reviews_approved(self, owner: str, repo: str, pr: dict) -> bool:
         """Check if PR has required number of approvals.
 
         Args:
@@ -192,7 +191,7 @@ class AutoMergeChecker:
         reviews = self.client.get(endpoint)
 
         # Count unique approved reviews (latest per reviewer)
-        reviewer_states: Dict[str, str] = {}
+        reviewer_states: dict[str, str] = {}
         for review in reviews:
             reviewer = review["user"]["login"]
             # Keep only the latest review state per reviewer
@@ -205,7 +204,7 @@ class AutoMergeChecker:
         )
         return approved_count >= self.config.min_reviews
 
-    def _check_no_conflicts(self, pr: Dict) -> bool:
+    def _check_no_conflicts(self, pr: dict) -> bool:
         """Check if PR has no merge conflicts.
 
         Args:
@@ -223,7 +222,7 @@ class AutoMergeChecker:
 
         return mergeable is True
 
-    def _check_branch_up_to_date(self, pr: Dict) -> bool:
+    def _check_branch_up_to_date(self, pr: dict) -> bool:
         """Check if PR branch is up-to-date with base.
 
         Args:
@@ -252,7 +251,7 @@ class AutoMergeChecker:
         self.logger.debug(f"Mergeable state: {mergeable_state}, current: {is_current}")
         return is_current
 
-    def _check_coverage_threshold(self, owner: str, repo: str, pr: Dict) -> bool:
+    def _check_coverage_threshold(self, owner: str, repo: str, pr: dict) -> bool:
         """Check if code coverage meets minimum threshold.
 
         Args:
@@ -320,7 +319,7 @@ class AutoMergeChecker:
             # Fail safe - if we can't check, assume not met
             return False
 
-    def _calculate_confidence(self, pr: Dict, checks: AutoMergeSafetyChecks) -> float:
+    def _calculate_confidence(self, pr: dict, checks: AutoMergeSafetyChecks) -> float:
         """Calculate confidence score for auto-merge decision.
 
         Factors:

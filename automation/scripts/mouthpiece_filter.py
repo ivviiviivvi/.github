@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mouthpiece Filter System
+"""Mouthpiece Filter System.
 ========================
 
 Transforms natural, human writing into polished AI prompts while preserving
@@ -19,11 +19,11 @@ import argparse
 import json
 import re
 import sys
-from typing import Dict, List, Optional
+from typing import Optional
 
 
 class MouthpieceFilter:
-    """The Mouthpiece Filter transforms natural human writing into AI-optimized prompts.  # noqa: E501
+    """The Mouthpiece Filter transforms natural human writing into AI-optimized prompts.  # noqa: E501.
 
     It analyzes:
     - Intent and purpose
@@ -74,11 +74,11 @@ class MouthpieceFilter:
     # Steps
     _STEPS = re.compile(r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b")
 
-    def __init__(self, config: Optional[Dict] = None):
+    def __init__(self, config: Optional[dict] = None):
         """Initialize the filter with optional configuration."""
         self.config = config or self._default_config()
 
-    def _default_config(self) -> Dict:
+    def _default_config(self) -> dict:
         """Default configuration for the filter."""
         return {
             "preserve_poetry": True,
@@ -89,7 +89,7 @@ class MouthpieceFilter:
             "style": "conversational",  # conversational, technical, hybrid
         }
 
-    def transform(self, text: str) -> Dict[str, any]:
+    def transform(self, text: str) -> dict[str, any]:
         """Transform natural text into an AI prompt.
 
         Args:
@@ -119,7 +119,7 @@ class MouthpieceFilter:
             "structure": structure,
         }
 
-    def _analyze_text(self, text: str) -> Dict[str, any]:
+    def _analyze_text(self, text: str) -> dict[str, any]:
         """Analyze the text to understand intent and content."""
         # Calculate concepts once to reuse in complexity assessment
         concepts = self._extract_concepts(text)
@@ -174,7 +174,7 @@ class MouthpieceFilter:
         else:
             return "general"
 
-    def _extract_concepts(self, text: str) -> List[str]:
+    def _extract_concepts(self, text: str) -> list[str]:
         """Extract key concepts from the text."""
         # Simple concept extraction - looks for capitalized words, quoted
         # terms, and technical terms
@@ -200,7 +200,7 @@ class MouthpieceFilter:
 
         return list(set(concepts))  # Remove duplicates
 
-    def _extract_metaphors(self, text: str) -> List[str]:
+    def _extract_metaphors(self, text: str) -> list[str]:
         """Extract metaphorical language that adds color and meaning."""
         metaphors = []
         sentences = self._SENTENCE_SPLIT.split(text)
@@ -237,7 +237,7 @@ class MouthpieceFilter:
         else:
             return "neutral"
 
-    def _assess_complexity(self, text: str, concepts: List[str] = None) -> str:
+    def _assess_complexity(self, text: str, concepts: list[str] = None) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
         sentences = self._SENTENCE_SPLIT.split(text)
@@ -255,7 +255,7 @@ class MouthpieceFilter:
         else:
             return "simple"
 
-    def _extract_key_verbs(self, text: str) -> List[str]:
+    def _extract_key_verbs(self, text: str) -> list[str]:
         """Extract action verbs that indicate what should be done."""
         # Common action verbs in technical contexts
         action_verbs = [
@@ -300,14 +300,14 @@ class MouthpieceFilter:
 
         return found_verbs
 
-    def _extract_questions(self, text: str) -> List[str]:
+    def _extract_questions(self, text: str) -> list[str]:
         """Extract questions from the text."""
         # Find sentences ending with question marks
         questions = self._QUESTIONS_PATTERN.findall(text)
         questions = self._QUESTIONS.findall(text)
         return [q.strip() for q in questions if q.strip()]
 
-    def _extract_structure(self, text: str, analysis: Dict) -> Dict[str, any]:
+    def _extract_structure(self, text: str, analysis: dict) -> dict[str, any]:
         """Extract structural elements from the text."""
         structure = {
             "has_context": self._has_context(text),
@@ -360,7 +360,7 @@ class MouthpieceFilter:
         return bool(self._STEPS_PATTERN.search(text))
         return bool(self._STEPS.search(text.lower()))
 
-    def _identify_sections(self, text: str) -> List[str]:
+    def _identify_sections(self, text: str) -> list[str]:
         """Identify logical sections in the text."""
         sections = []
 
@@ -374,7 +374,7 @@ class MouthpieceFilter:
 
         return sections
 
-    def _build_prompt(self, text: str, analysis: Dict, structure: Dict) -> str:
+    def _build_prompt(self, text: str, analysis: dict, structure: dict) -> str:
         """Build the optimized AI prompt from the analyzed text."""
         if self.config["output_format"] == "json":
             return self._build_json_prompt(text, analysis, structure)
@@ -383,7 +383,7 @@ class MouthpieceFilter:
         else:
             return self._build_structured_prompt(text, analysis, structure)
 
-    def _build_structured_prompt(self, text: str, analysis: Dict, structure: Dict) -> str:
+    def _build_structured_prompt(self, text: str, analysis: dict, structure: dict) -> str:
         """Build a structured prompt format."""
         prompt_parts = []
 
@@ -435,11 +435,11 @@ class MouthpieceFilter:
 
         return "".join(prompt_parts)
 
-    def _build_markdown_prompt(self, text: str, analysis: Dict, structure: Dict) -> str:
+    def _build_markdown_prompt(self, text: str, analysis: dict, structure: dict) -> str:
         """Build a markdown-formatted prompt."""
         return self._build_structured_prompt(text, analysis, structure)
 
-    def _build_json_prompt(self, text: str, analysis: Dict, structure: Dict) -> str:
+    def _build_json_prompt(self, text: str, analysis: dict, structure: dict) -> str:
         """Build a JSON-formatted prompt."""
         prompt_data = {
             "intent": analysis["intent"],
@@ -453,7 +453,7 @@ class MouthpieceFilter:
         }
         return json.dumps(prompt_data, indent=2)
 
-    def _extract_main_objective(self, text: str, analysis: Dict) -> str:
+    def _extract_main_objective(self, text: str, analysis: dict) -> str:
         """Extract the main objective from the text."""
         # Get the first sentence or up to first period
         sentences = self._SENTENCE_SPLIT.split(text)
@@ -468,7 +468,7 @@ class MouthpieceFilter:
 
         return main_sentence
 
-    def _create_metadata(self, text: str, analysis: Dict) -> Dict[str, any]:
+    def _create_metadata(self, text: str, analysis: dict) -> dict[str, any]:
         """Create metadata about the transformation."""
         return {
             "input_length": len(text),
@@ -480,7 +480,7 @@ class MouthpieceFilter:
             "concept_count": len(analysis["concepts"]),
         }
 
-    def format_output(self, result: Dict, format_type: str = "full") -> str:
+    def format_output(self, result: dict, format_type: str = "full") -> str:
         """Format the result for display."""
         if format_type == "prompt_only":
             return result["prompt"]

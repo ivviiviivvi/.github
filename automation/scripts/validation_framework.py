@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Week 9 Validation Framework
+"""Week 9 Validation Framework.
 
 Validates all 7 advanced automation capabilities through comprehensive testing:
 - Auto-merge eligibility
@@ -26,7 +26,6 @@ import json
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Dict, List
 
 from models import ValidationResult, ValidationSuite
 from notification_integration import (
@@ -49,7 +48,7 @@ class ValidationFramework:
     def __init__(self, github_client: GitHubAPIClient):
         """Initialize validation framework."""
         self.github = github_client
-        self.results: List[ValidationResult] = []
+        self.results: list[ValidationResult] = []
         self.validation_dir = Path(".github/validation")
         self.validation_dir.mkdir(parents=True, exist_ok=True)
 
@@ -442,7 +441,7 @@ Capabilities:
                 metadata={"duration_seconds": suite.duration_seconds},
             )
 
-    def generate_report(self, owner: str, repo: str, days: int = 7) -> Dict:
+    def generate_report(self, owner: str, repo: str, days: int = 7) -> dict:
         """Generate validation report for the last N days.
 
         Args:

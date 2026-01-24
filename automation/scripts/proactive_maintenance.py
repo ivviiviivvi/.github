@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Proactive Maintenance Scheduler
+"""Proactive Maintenance Scheduler.
 
 Predicts optimal maintenance windows using ML and usage patterns:
 - Dependency updates: Automated package updates
@@ -22,7 +22,6 @@ import argparse
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Dict, List
 
 from models import (
     MaintenanceConfig,
@@ -88,7 +87,7 @@ class MaintenanceScheduler:
 
         return best_window
 
-    def _analyze_activity_patterns(self, owner: str, repo: str) -> Dict:
+    def _analyze_activity_patterns(self, owner: str, repo: str) -> dict:
         """Analyze repository activity patterns over time.
 
         Args:
@@ -124,7 +123,7 @@ class MaintenanceScheduler:
             "issue_activity": issue_activity,
         }
 
-    def _get_commit_activity(self, owner: str, repo: str) -> List[Dict]:
+    def _get_commit_activity(self, owner: str, repo: str) -> list[dict]:
         """Get recent commit activity."""
         try:
             since = (datetime.now(timezone.utc) - timedelta(days=28)).isoformat()
@@ -136,7 +135,7 @@ class MaintenanceScheduler:
             self.logger.warning(f"Error fetching commits: {e}")
             return []
 
-    def _get_workflow_activity(self, owner: str, repo: str) -> List[Dict]:
+    def _get_workflow_activity(self, owner: str, repo: str) -> list[dict]:
         """Get recent workflow runs."""
         try:
             endpoint = f"/repos/{owner}/{repo}/actions/runs"
@@ -147,7 +146,7 @@ class MaintenanceScheduler:
             self.logger.warning(f"Error fetching workflow runs: {e}")
             return []
 
-    def _get_issue_activity(self, owner: str, repo: str) -> List[Dict]:
+    def _get_issue_activity(self, owner: str, repo: str) -> list[dict]:
         """Get recent issue/PR activity."""
         try:
             since = (datetime.now(timezone.utc) - timedelta(days=28)).isoformat()
@@ -159,9 +158,9 @@ class MaintenanceScheduler:
             self.logger.warning(f"Error fetching issues: {e}")
             return []
 
-    def _calculate_hourly_patterns(self, commits: List, workflows: List, issues: List) -> Dict[int, float]:
+    def _calculate_hourly_patterns(self, commits: list, workflows: list, issues: list) -> dict[int, float]:
         """Calculate activity score by hour of day (0-23)."""
-        hourly_activity = {hour: 0.0 for hour in range(24)}
+        hourly_activity = dict.fromkeys(range(24), 0.0)
 
         # Weight commits
         for commit in commits:
@@ -191,9 +190,9 @@ class MaintenanceScheduler:
 
         return hourly_activity
 
-    def _calculate_daily_patterns(self, commits: List, workflows: List, issues: List) -> Dict[int, float]:
+    def _calculate_daily_patterns(self, commits: list, workflows: list, issues: list) -> dict[int, float]:
         """Calculate activity score by day of week (0=Monday, 6=Sunday)."""
-        daily_activity = {day: 0.0 for day in range(7)}
+        daily_activity = dict.fromkeys(range(7), 0.0)
 
         # Weight commits
         for commit in commits:
@@ -223,7 +222,7 @@ class MaintenanceScheduler:
 
         return daily_activity
 
-    def _get_pending_tasks(self, owner: str, repo: str, task_type: str) -> List[MaintenanceTask]:
+    def _get_pending_tasks(self, owner: str, repo: str, task_type: str) -> list[MaintenanceTask]:
         """Get pending maintenance tasks."""
         tasks = []
 
@@ -236,7 +235,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_dependency_update_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
+    def _get_dependency_update_tasks(self, owner: str, repo: str) -> list[MaintenanceTask]:
         """Identify dependency updates needed."""
         tasks = []
 
@@ -267,7 +266,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_cleanup_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
+    def _get_cleanup_tasks(self, owner: str, repo: str) -> list[MaintenanceTask]:
         """Identify cleanup tasks needed."""
         tasks = []
 
@@ -314,7 +313,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_optimization_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
+    def _get_optimization_tasks(self, owner: str, repo: str) -> list[MaintenanceTask]:
         """Identify optimization tasks."""
         # Placeholder for optimization tasks
         # In production, would check for cache warming, index rebuilding, etc.
@@ -325,9 +324,9 @@ class MaintenanceScheduler:
         owner: str,
         repo: str,
         task_type: str,
-        activity_data: Dict,
-        tasks: List[MaintenanceTask],
-    ) -> List[MaintenanceWindow]:
+        activity_data: dict,
+        tasks: list[MaintenanceTask],
+    ) -> list[MaintenanceWindow]:
         """Predict optimal maintenance windows.
 
         Args:
@@ -403,7 +402,7 @@ class MaintenanceScheduler:
 
         return top_windows
 
-    def _calculate_impact_score(self, window_start: datetime, activity_data: Dict, task_type: str) -> float:
+    def _calculate_impact_score(self, window_start: datetime, activity_data: dict, task_type: str) -> float:
         """Calculate impact score for maintenance window.
 
         Lower score = better window (less disruption)
@@ -452,7 +451,7 @@ class MaintenanceScheduler:
 
         return min(1.0, max(0.0, base_impact))
 
-    def _calculate_confidence(self, activity_data: Dict, window_start: datetime) -> float:
+    def _calculate_confidence(self, activity_data: dict, window_start: datetime) -> float:
         """Calculate prediction confidence."""
         # More historical data = higher confidence
         commit_count = len(activity_data.get("commit_activity", []))
@@ -478,7 +477,7 @@ class MaintenanceScheduler:
 
         return confidence
 
-    def _generate_reasoning(self, window_start: datetime, impact_score: float, activity_data: Dict) -> str:
+    def _generate_reasoning(self, window_start: datetime, impact_score: float, activity_data: dict) -> str:
         """Generate human-readable reasoning for window selection."""
         hour = window_start.hour
         day = window_start.weekday()

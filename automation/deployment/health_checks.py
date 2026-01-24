@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Post-Deployment Health Checks
+"""Post-Deployment Health Checks.
 
 Validates that deployed workflows are functioning correctly.
 
@@ -15,7 +15,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 import requests
 
@@ -41,7 +41,7 @@ class HealthChecker:
             }
         )
 
-    def check_repository(self, repo: str, workflows: Optional[List[str]] = None) -> Dict:
+    def check_repository(self, repo: str, workflows: Optional[list[str]] = None) -> dict:
         """Check health of workflows in repository.
 
         Args:
@@ -118,7 +118,7 @@ class HealthChecker:
             print(f"   ❌ Error: {e}")
             return results
 
-    def _analyze_workflow_health(self, workflow_name: str, runs: List[Dict]) -> Dict:
+    def _analyze_workflow_health(self, workflow_name: str, runs: list[dict]) -> dict:
         """Analyze health of a single workflow."""
         if not runs:
             return {
@@ -161,7 +161,7 @@ class HealthChecker:
             "avg_duration_seconds": round(avg_duration, 1),
         }
 
-    def _calculate_metrics(self, runs: List[Dict]) -> Dict:
+    def _calculate_metrics(self, runs: list[dict]) -> dict:
         """Calculate overall metrics from runs."""
         if not runs:
             return {
@@ -192,7 +192,7 @@ class HealthChecker:
             "avg_duration_seconds": round(avg_duration, 1),
         }
 
-    def _display_results(self, results: Dict):
+    def _display_results(self, results: dict):
         """Display health check results."""
         overall = results["overall_health"]
 
@@ -224,7 +224,7 @@ class HealthChecker:
                 print(f"      {emoji} {name}")
                 print(f"         {health['runs']} runs, {health['success_rate']:.1%} success")
 
-    def check_all_repositories(self, repos: List[str]) -> Dict[str, Dict]:
+    def check_all_repositories(self, repos: list[str]) -> dict[str, dict]:
         """Check health of multiple repositories.
 
         Args:
@@ -262,7 +262,7 @@ class HealthChecker:
 
         return results
 
-    def save_results(self, results: Dict, output_file: str):
+    def save_results(self, results: dict, output_file: str):
         """Save health check results to file."""
         with open(output_file, "w") as f:
             json.dump(results, f, indent=2)

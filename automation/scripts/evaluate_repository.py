@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Repository Evaluation Script
-Evaluates potential pilot repositories for workflow deployment
+Evaluates potential pilot repositories for workflow deployment.
 
 Usage:
     python3 evaluate_repository.py <owner/repo>
@@ -11,7 +11,7 @@ import json
 import subprocess  # nosec B404
 import sys
 from dataclasses import asdict, dataclass
-from typing import Dict, List, Optional
+from typing import Any, Optional, cast  # noqa: UP035
 
 
 @dataclass
@@ -61,14 +61,14 @@ class RepositoryEvaluator:
         self.repo = repo
         self.owner, self.repo_name = repo.split("/")
 
-    def run_gh_command(self, args: List[str]) -> Optional[Dict]:
+    def run_gh_command(self, args: list[str]) -> Optional[dict]:
         """Run gh CLI command and return JSON result."""
         try:
             cmd = ["gh"] + args
             result = subprocess.run(  # nosec B603
                 cmd, capture_output=True, text=True, check=True
             )
-            return json.loads(result.stdout)
+            return cast(Optional[dict[Any, Any]], json.loads(result.stdout))
         except subprocess.CalledProcessError as e:
             print(f"Error running command: {e}", file=sys.stderr)
             return None
@@ -76,7 +76,7 @@ class RepositoryEvaluator:
             print(f"Error parsing JSON: {e}", file=sys.stderr)
             return None
 
-    def get_repository_info(self) -> Optional[Dict]:
+    def get_repository_info(self) -> Optional[dict]:
         """Get basic repository information."""
         return self.run_gh_command(
             [
@@ -141,16 +141,16 @@ class RepositoryEvaluator:
         week_ago = datetime.now() - timedelta(days=7)
         return week_ago.isoformat()
 
-    def calculate_activity_score(self, info: Dict, weekly_commits: int) -> float:
+    def calculate_activity_score(self, info: dict, weekly_commits: int) -> float:
         """Calculate activity score (0-100)."""
         # Factors: commits, PRs, issues
         commit_score = min(weekly_commits * 5, 40)  # Max 40 points
         pr_score = min(info.get("openPRs", 0) * 3, 30)  # Max 30 points
         issue_score = min(info.get("openIssues", 0) * 2, 30)  # Max 30 points
 
-        return commit_score + pr_score + issue_score
+        return cast(float, commit_score + pr_score + issue_score)
 
-    def calculate_complexity_score(self, info: Dict) -> float:
+    def calculate_complexity_score(self, info: dict) -> float:
         """Calculate repository complexity score (0-100).
 
         Lower complexity is better for pilot repositories.
@@ -178,7 +178,7 @@ class RepositoryEvaluator:
             score += 50  # CONTRIBUTING.md indicates team processes
         return score
 
-    def calculate_maintenance_score(self, info: Dict) -> float:
+    def calculate_maintenance_score(self, info: dict) -> float:
         """Calculate maintenance burden score (0-100).
 
         Higher score means more manageable maintenance burden.
@@ -200,7 +200,8 @@ class RepositoryEvaluator:
         elif open_prs < 2:
             pr_score = 40  # Low activity
         else:
-            pr_score = max(0, 50 - (open_prs - 15) * 2)  # Penalize high backlog
+            # Penalize high backlog
+            pr_score = max(0, 50 - (open_prs - 15) * 2)
 
         return issue_score + pr_score
 
@@ -221,7 +222,7 @@ class RepositoryEvaluator:
 
         return score
 
-    def calculate_health_score(self, info: Dict) -> float:
+    def calculate_health_score(self, info: dict) -> float:
         """Calculate repository health score (0-100)."""
         stars = info.get("stargazerCount", 0)
         forks = info.get("forkCount", 0)
@@ -238,9 +239,9 @@ class RepositoryEvaluator:
         else:
             return 0
 
-    def calculate_total_score(self, scores: Dict[str, float]) -> float:
+    def calculate_total_score(self, scores: dict[str, float]) -> float:
         """Calculate weighted total score."""
-        total = 0
+        total: float = 0.0
         for category, score in scores.items():
             weight = self.WEIGHTS.get(category, 0)
             total += score * weight
@@ -314,7 +315,7 @@ class RepositoryEvaluator:
         self.print_results(metrics, scores)
         return metrics
 
-    def print_results(self, metrics: RepositoryMetrics, scores: Dict[str, float]):
+    def print_results(self, metrics: RepositoryMetrics, scores: dict[str, float]):
         """Print evaluation results."""
         print("\n📊 Repository Metrics:")
         print(f"  Stars: {metrics.stars}")

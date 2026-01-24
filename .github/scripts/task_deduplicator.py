@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 class TaskDeduplicator:
-    """Manages task deduplication to prevent redundant work"""
+    """Manages task deduplication to prevent redundant work."""
 
     def __init__(self, state_file=".github/task_state.json"):
         self.state_file = Path(state_file)
@@ -49,7 +49,7 @@ class TaskDeduplicator:
         return state
 
     def _load_state(self):
-        """Load existing task state"""
+        """Load existing task state."""
         if self.state_file.exists():
             try:
                 with open(self.state_file) as f:
@@ -67,19 +67,19 @@ class TaskDeduplicator:
         return self._default_state()
 
     def _save_state(self):
-        """Save task state"""
+        """Save task state."""
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         with open(self.state_file, "w") as f:
             json.dump(self.state, f, indent=2)
 
     def _generate_task_hash(self, task_type, task_data):
-        """Generate unique hash for a task"""
+        """Generate unique hash for a task."""
         # Normalize task data
         normalized = f"{task_type}:{json.dumps(task_data, sort_keys=True)}"
         return hashlib.sha256(normalized.encode()).hexdigest()[:16]
 
     def _is_task_recent(self, task_hash, hours=24):
-        """Check if task was processed recently"""
+        """Check if task was processed recently."""
         if task_hash not in self.state["tasks"]:
             return False
 
@@ -91,7 +91,7 @@ class TaskDeduplicator:
         return datetime.now() - processed_time < timedelta(hours=hours)
 
     def should_process_task(self, task_type, task_data, dedupe_window_hours=24):
-        """Determine if task should be processed or is a duplicate
+        """Determine if task should be processed or is a duplicate.
 
         Args:
             task_type: Type of task (e.g., 'jules_issue', 'pr_review')
@@ -122,7 +122,7 @@ class TaskDeduplicator:
         return True, "Task is new and should be processed"
 
     def register_pr(self, pr_number, task_type, task_hash):
-        """Register a PR as created for a specific task"""
+        """Register a PR as created for a specific task."""
         pr_entry = {
             "pr_number": pr_number,
             "task_type": task_type,
@@ -134,7 +134,7 @@ class TaskDeduplicator:
         self._save_state()
 
     def get_active_prs_for_consolidation(self, max_age_hours=24):
-        """Get list of PRs that should be consolidated"""
+        """Get list of PRs that should be consolidated."""
         cutoff_time = datetime.now() - timedelta(hours=max_age_hours)
 
         active_prs = []
@@ -146,7 +146,7 @@ class TaskDeduplicator:
         return active_prs
 
     def cleanup_old_tasks(self, retention_days=7):
-        """Remove old task records"""
+        """Remove old task records."""
         cutoff_time = datetime.now() - timedelta(days=retention_days)
 
         # Clean up tasks
@@ -176,7 +176,7 @@ class TaskDeduplicator:
 
 
 def main():
-    """CLI interface for task deduplicator"""
+    """CLI interface for task deduplicator."""
     import sys
 
     if len(sys.argv) < 2:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Context Validation Utility
+"""Context Validation Utility.
 
 Validates generated context payloads against schema requirements
 and verifies token count targets are met.
@@ -11,11 +11,11 @@ Usage:
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 
 class ContextValidator:
-    """Validate context payloads against schema and token requirements"""
+    """Validate context payloads against schema and token requirements."""
 
     # Token count targets
     TARGETS = {"minimal": 500, "standard": 1200, "full": 2000}
@@ -79,7 +79,7 @@ class ContextValidator:
     }
 
     def __init__(self, context_file: str):
-        """Initialize validator with context file
+        """Initialize validator with context file.
 
         Args:
             context_file: Path to context payload JSON file
@@ -90,8 +90,8 @@ class ContextValidator:
         self.errors = []
         self.warnings = []
 
-    def _load_context(self) -> Dict[str, Any]:
-        """Load context from JSON file
+    def _load_context(self) -> dict[str, Any]:
+        """Load context from JSON file.
 
         Returns:
             Dictionary containing context payload
@@ -108,7 +108,7 @@ class ContextValidator:
             return json.load(f)
 
     def detect_level(self) -> str:
-        """Detect compression level from context structure
+        """Detect compression level from context structure.
 
         Returns:
             Detected compression level ('minimal', 'standard', or 'full')
@@ -121,7 +121,7 @@ class ContextValidator:
         return "minimal"
 
     def validate_schema(self, level: str) -> bool:
-        """Validate context against schema requirements
+        """Validate context against schema requirements.
 
         Args:
             level: Compression level to validate against
@@ -153,7 +153,7 @@ class ContextValidator:
         return valid
 
     def validate_token_count(self, level: str) -> bool:
-        """Validate token count against target
+        """Validate token count against target.
 
         Args:
             level: Compression level
@@ -172,7 +172,7 @@ class ContextValidator:
         return True
 
     def get_token_count(self) -> int:
-        """Estimate token count for context
+        """Estimate token count for context.
 
         Returns:
             Estimated token count (4 chars ≈ 1 token)
@@ -181,7 +181,7 @@ class ContextValidator:
         return len(json.dumps(self.context, separators=(",", ":"))) // 4
 
     def validate_data_types(self) -> bool:
-        """Validate data types of fields
+        """Validate data types of fields.
 
         Returns:
             True if all data types are correct, False otherwise
@@ -216,7 +216,7 @@ class ContextValidator:
         return valid
 
     def _get_nested_value(self, field_path: str) -> Any:
-        """Get nested value from context using dot notation
+        """Get nested value from context using dot notation.
 
         Args:
             field_path: Dot-separated field path (e.g., 'summary.progress')
@@ -234,8 +234,8 @@ class ContextValidator:
                 return None
         return value
 
-    def validate_all(self) -> Tuple[bool, List[str], List[str]]:
-        """Run all validations
+    def validate_all(self) -> tuple[bool, list[str], list[str]]:
+        """Run all validations.
 
         Returns:
             Tuple of (is_valid, errors, warnings)
@@ -249,7 +249,7 @@ class ContextValidator:
 
         # Run validations
         schema_valid = self.validate_schema(level)
-        token_valid = self.validate_token_count(level)
+        self.validate_token_count(level)
         types_valid = self.validate_data_types()
 
         is_valid = schema_valid and types_valid
@@ -257,7 +257,7 @@ class ContextValidator:
         return is_valid, self.errors, self.warnings
 
     def print_report(self):
-        """Print validation report"""
+        """Print validation report."""
         level = self.detect_level()
         token_count = self.get_token_count()
         target = self.TARGETS[level]
@@ -299,7 +299,7 @@ class ContextValidator:
 
 
 def main():
-    """Command-line interface"""
+    """Command-line interface."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Validate context payload against schema and token requirements")

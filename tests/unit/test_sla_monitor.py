@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/sla_monitor.py
-Focus: SLA monitoring, breach detection, metrics calculation, threshold enforcement
+Focus: SLA monitoring, breach detection, metrics calculation, threshold enforcement.
 """
 
 import sys
@@ -20,16 +20,16 @@ from sla_monitor import SLAMonitor
 
 
 class TestSLAMonitor:
-    """Test SLAMonitor class"""
+    """Test SLAMonitor class."""
 
     @pytest.fixture
     def mock_github(self):
-        """Create mock GitHub client"""
+        """Create mock GitHub client."""
         return MagicMock()
 
     @pytest.fixture
     def config(self):
-        """Create test config"""
+        """Create test config."""
         return SLAConfig(
             enabled=True,
             check_interval_minutes=15,
@@ -67,7 +67,7 @@ class TestSLAMonitor:
 
     @pytest.fixture
     def monitor(self, mock_github, config, tmp_path):
-        """Create monitor with temporary directories"""
+        """Create monitor with temporary directories."""
         monitor = SLAMonitor(config, mock_github)
         monitor.breaches_dir = tmp_path / "breaches"
         monitor.breaches_dir.mkdir(parents=True, exist_ok=True)
@@ -76,7 +76,7 @@ class TestSLAMonitor:
         return monitor
 
     def test_initialization(self, mock_github, config, tmp_path):
-        """Test monitor initializes correctly"""
+        """Test monitor initializes correctly."""
         with patch.object(Path, "mkdir"):
             monitor = SLAMonitor(config, mock_github)
 
@@ -85,7 +85,7 @@ class TestSLAMonitor:
 
 
 class TestPriorityDetermination:
-    """Test priority determination from labels"""
+    """Test priority determination from labels."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -96,44 +96,44 @@ class TestPriorityDetermination:
         return monitor
 
     def test_p0_from_label(self, monitor):
-        """Test P0 priority from label"""
+        """Test P0 priority from label."""
         issue = {"labels": [{"name": "p0"}, {"name": "bug"}]}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P0
 
     def test_p1_from_label(self, monitor):
-        """Test P1 priority from label"""
+        """Test P1 priority from label."""
         issue = {"labels": [{"name": "p1"}, {"name": "enhancement"}]}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P1
 
     def test_critical_label_maps_to_p0(self, monitor):
-        """Test critical label maps to P0"""
+        """Test critical label maps to P0."""
         issue = {"labels": [{"name": "critical"}]}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P0
 
     def test_high_priority_label_maps_to_p1(self, monitor):
-        """Test high priority label maps to P1"""
+        """Test high priority label maps to P1."""
         issue = {"labels": [{"name": "high"}]}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P1
 
     def test_default_priority_is_p3(self, monitor):
-        """Test default priority is P3"""
+        """Test default priority is P3."""
         issue = {"labels": [{"name": "documentation"}]}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P3
 
     def test_no_labels_returns_p3(self, monitor):
-        """Test no labels returns P3"""
+        """Test no labels returns P3."""
         issue = {"labels": []}
         priority = monitor._determine_priority(issue)
         assert priority == Priority.P3
 
 
 class TestThresholds:
-    """Test threshold retrieval"""
+    """Test threshold retrieval."""
 
     @pytest.fixture
     def config(self):
@@ -164,26 +164,26 @@ class TestThresholds:
         return monitor
 
     def test_get_p0_thresholds(self, monitor):
-        """Test retrieving P0 thresholds"""
+        """Test retrieving P0 thresholds."""
         thresholds = monitor._get_thresholds(Priority.P0)
         assert thresholds.response_time_minutes == 5
         assert thresholds.resolution_time_hours == 4
 
     def test_get_p1_thresholds(self, monitor):
-        """Test retrieving P1 thresholds"""
+        """Test retrieving P1 thresholds."""
         thresholds = monitor._get_thresholds(Priority.P1)
         assert thresholds.response_time_minutes == 30
         assert thresholds.resolution_time_hours == 24
 
     def test_missing_priority_returns_default(self, monitor):
-        """Test missing priority returns default thresholds"""
+        """Test missing priority returns default thresholds."""
         thresholds = monitor._get_thresholds(Priority.P3)
         # Should return some default
         assert thresholds is not None
 
 
 class TestIssueMonitoring:
-    """Test issue SLA monitoring"""
+    """Test issue SLA monitoring."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -205,7 +205,7 @@ class TestIssueMonitoring:
         return monitor
 
     def test_no_issues_returns_empty_metrics(self, monitor):
-        """Test no issues returns empty metrics"""
+        """Test no issues returns empty metrics."""
         monitor.github.get.return_value = []
 
         metrics = monitor._monitor_issues("owner", "repo")
@@ -214,7 +214,7 @@ class TestIssueMonitoring:
         assert metrics.success_rate_percentage == 100.0
 
     def test_filters_out_pull_requests(self, monitor):
-        """Test filters out pull requests from issues"""
+        """Test filters out pull requests from issues."""
         # Test the filtering logic directly rather than through _monitor_issues
         # to avoid complex multi-call mock scenarios
         issues = [
@@ -236,7 +236,7 @@ class TestIssueMonitoring:
         assert filtered[0]["number"] == 1
 
     def test_detects_response_time_breach(self, monitor):
-        """Test detects response time breach"""
+        """Test detects response time breach."""
         # Issue created 2 hours ago, no response
         created_time = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
         monitor.github.get.side_effect = [
@@ -256,7 +256,7 @@ class TestIssueMonitoring:
         assert metrics.breached >= 1
 
     def test_within_sla_when_responded(self, monitor):
-        """Test within SLA when responded in time"""
+        """Test within SLA when responded in time."""
         created_time = datetime.now(timezone.utc) - timedelta(hours=2)
         response_time = created_time + timedelta(minutes=30)
 
@@ -278,7 +278,7 @@ class TestIssueMonitoring:
 
 
 class TestPRMonitoring:
-    """Test pull request SLA monitoring"""
+    """Test pull request SLA monitoring."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -300,7 +300,7 @@ class TestPRMonitoring:
         return monitor
 
     def test_no_prs_returns_empty_metrics(self, monitor):
-        """Test no PRs returns empty metrics"""
+        """Test no PRs returns empty metrics."""
         monitor.github.get.return_value = []
 
         metrics = monitor._monitor_pull_requests("owner", "repo")
@@ -309,7 +309,7 @@ class TestPRMonitoring:
         assert metrics.success_rate_percentage == 100.0
 
     def test_detects_pr_review_breach(self, monitor):
-        """Test detects PR without review breaching SLA"""
+        """Test detects PR without review breaching SLA."""
         created_time = (datetime.now(timezone.utc) - timedelta(hours=3)).isoformat()
         monitor.github.get.side_effect = [
             [
@@ -329,7 +329,7 @@ class TestPRMonitoring:
 
 
 class TestWorkflowMonitoring:
-    """Test workflow SLA monitoring"""
+    """Test workflow SLA monitoring."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -351,7 +351,7 @@ class TestWorkflowMonitoring:
         return monitor
 
     def test_calculates_success_rate(self, monitor):
-        """Test calculates workflow success rate"""
+        """Test calculates workflow success rate."""
         # Workflow runs need created_at timestamps for 24h filtering
         recent_time = datetime.now(timezone.utc).isoformat()
         monitor.github.get.return_value = {
@@ -385,7 +385,7 @@ class TestWorkflowMonitoring:
         assert metrics.success_rate_percentage == 75.0
 
     def test_no_workflows_returns_empty_metrics(self, monitor):
-        """Test no workflows returns empty metrics"""
+        """Test no workflows returns empty metrics."""
         monitor.github.get.return_value = {"workflow_runs": []}
 
         metrics = monitor._monitor_workflows("owner", "repo")
@@ -395,7 +395,7 @@ class TestWorkflowMonitoring:
 
 
 class TestBreachHandling:
-    """Test breach handling and notifications"""
+    """Test breach handling and notifications."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -406,7 +406,7 @@ class TestBreachHandling:
         return monitor
 
     def test_saves_breaches_to_disk(self, monitor):
-        """Test breaches are saved to disk"""
+        """Test breaches are saved to disk."""
         from models import SLABreach
 
         breaches = [
@@ -428,7 +428,7 @@ class TestBreachHandling:
         assert len(breach_files) >= 1
 
     def test_sends_notification_for_breach(self, monitor):
-        """Test sends notification for breach"""
+        """Test sends notification for breach."""
         from models import SLABreach
 
         breaches = [
@@ -449,7 +449,7 @@ class TestBreachHandling:
 
 
 class TestReportGeneration:
-    """Test SLA report generation"""
+    """Test SLA report generation."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -463,7 +463,7 @@ class TestReportGeneration:
         return monitor
 
     def test_generates_report_structure(self, monitor):
-        """Test generates report with correct structure"""
+        """Test generates report with correct structure."""
         # Mock all monitoring methods
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
@@ -502,7 +502,7 @@ class TestReportGeneration:
         assert report.period_end is not None
 
     def test_saves_report_to_disk(self, monitor):
-        """Test saves report to disk"""
+        """Test saves report to disk."""
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
                 with patch.object(monitor, "_monitor_workflows") as mock_wf:
@@ -540,7 +540,7 @@ class TestReportGeneration:
 
 
 class TestMetricsCalculation:
-    """Test metrics calculation"""
+    """Test metrics calculation."""
 
     @pytest.fixture
     def monitor(self, tmp_path):
@@ -551,20 +551,20 @@ class TestMetricsCalculation:
         return monitor
 
     def test_average_response_time(self, monitor):
-        """Test average response time calculation"""
+        """Test average response time calculation."""
         response_times = [10, 20, 30, 40]
         avg = sum(response_times) / len(response_times)
         assert avg == 25.0
 
     def test_compliance_percentage(self, monitor):
-        """Test compliance percentage calculation"""
+        """Test compliance percentage calculation."""
         total = 10
         within_sla = 8
         compliance = (within_sla / total) * 100
         assert compliance == 80.0
 
     def test_zero_total_returns_100_percent(self, monitor):
-        """Test zero total items returns 100% compliance"""
+        """Test zero total items returns 100% compliance."""
         total = 0
         within_sla = 0
         compliance = (within_sla / total * 100) if total > 0 else 100.0

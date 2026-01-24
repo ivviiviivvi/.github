@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Customized Workflow Files for Pilot Repository
+"""Generate Customized Workflow Files for Pilot Repository.
 
 Takes pilot-repo-config.yml and generates customized workflow files.
 

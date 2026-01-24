@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/predict_workflow_failures.py
-Focus: Feature extraction, model training, prediction, safe serialization
+Focus: Feature extraction, model training, prediction, safe serialization.
 """
 
 import json
@@ -20,16 +20,16 @@ from predict_workflow_failures import WorkflowPredictor
 
 
 class TestWorkflowPredictor:
-    """Test WorkflowPredictor class"""
+    """Test WorkflowPredictor class."""
 
     @pytest.fixture
     def predictor(self, tmp_path):
-        """Create predictor with temp path"""
+        """Create predictor with temp path."""
         model_path = tmp_path / "model.joblib"
         return WorkflowPredictor(str(model_path))
 
     def test_initialization(self, tmp_path):
-        """Test predictor initializes correctly"""
+        """Test predictor initializes correctly."""
         model_path = tmp_path / "model.joblib"
         predictor = WorkflowPredictor(str(model_path))
 
@@ -39,14 +39,14 @@ class TestWorkflowPredictor:
 
 
 class TestFeatureExtraction:
-    """Test feature extraction from workflow runs"""
+    """Test feature extraction from workflow runs."""
 
     @pytest.fixture
     def predictor(self, tmp_path):
         return WorkflowPredictor(str(tmp_path / "model.joblib"))
 
     def test_extracts_temporal_features(self, predictor):
-        """Test extracts temporal features correctly"""
+        """Test extracts temporal features correctly."""
         run = {
             "created_at": "2024-01-15T14:30:00Z",  # Monday, 2:30 PM
             "workflow_id": 12345,
@@ -64,7 +64,7 @@ class TestFeatureExtraction:
         assert features["is_weekend"] == 0
 
     def test_extracts_weekend_flag(self, predictor):
-        """Test weekend flag is set correctly"""
+        """Test weekend flag is set correctly."""
         run = {
             "created_at": "2024-01-13T10:00:00Z",  # Saturday
             "workflow_id": 12345,
@@ -80,7 +80,7 @@ class TestFeatureExtraction:
         assert features["is_weekend"] == 1
 
     def test_extracts_failure_target(self, predictor):
-        """Test extracts failure target correctly"""
+        """Test extracts failure target correctly."""
         success_run = {
             "created_at": "2024-01-15T14:30:00Z",
             "workflow_id": 12345,
@@ -107,7 +107,7 @@ class TestFeatureExtraction:
         assert failed_features["failed"] == 1
 
     def test_handles_missing_fields_gracefully(self, predictor):
-        """Test handles missing fields gracefully"""
+        """Test handles missing fields gracefully."""
         incomplete_run = {
             "created_at": "2024-01-15T14:30:00Z",
         }
@@ -118,7 +118,7 @@ class TestFeatureExtraction:
         assert features is None
 
     def test_extracts_workflow_features(self, predictor):
-        """Test extracts workflow-specific features"""
+        """Test extracts workflow-specific features."""
         run = {
             "created_at": "2024-01-15T14:30:00Z",
             "workflow_id": 98765,
@@ -137,7 +137,7 @@ class TestFeatureExtraction:
 
 
 class TestPrepareFeatures:
-    """Test feature preparation for training"""
+    """Test feature preparation for training."""
 
     @pytest.fixture
     def predictor(self, tmp_path):
@@ -145,7 +145,7 @@ class TestPrepareFeatures:
 
     @pytest.fixture
     def sample_df(self):
-        """Create sample dataframe"""
+        """Create sample dataframe."""
         return pd.DataFrame(
             [
                 {
@@ -174,14 +174,14 @@ class TestPrepareFeatures:
         )
 
     def test_prepare_features_returns_arrays(self, predictor, sample_df):
-        """Test prepare_features returns numpy arrays"""
+        """Test prepare_features returns numpy arrays."""
         X, y = predictor.prepare_features(sample_df)
 
         assert isinstance(X, np.ndarray)
         assert isinstance(y, np.ndarray)
 
     def test_prepare_features_correct_shapes(self, predictor, sample_df):
-        """Test arrays have correct shapes"""
+        """Test arrays have correct shapes."""
         X, y = predictor.prepare_features(sample_df)
 
         assert X.shape[0] == 2  # 2 samples
@@ -189,7 +189,7 @@ class TestPrepareFeatures:
         assert y.shape[0] == 2  # 2 labels
 
     def test_sets_feature_columns(self, predictor, sample_df):
-        """Test sets feature_columns attribute"""
+        """Test sets feature_columns attribute."""
         predictor.prepare_features(sample_df)
 
         assert len(predictor.feature_columns) == 8
@@ -198,7 +198,7 @@ class TestPrepareFeatures:
 
 
 class TestTraining:
-    """Test model training"""
+    """Test model training."""
 
     @pytest.fixture
     def predictor(self, tmp_path):
@@ -206,7 +206,7 @@ class TestTraining:
 
     @pytest.fixture
     def training_df(self):
-        """Create larger training dataframe"""
+        """Create larger training dataframe."""
         np.random.seed(42)
         n_samples = 100
 
@@ -225,13 +225,13 @@ class TestTraining:
         )
 
     def test_train_creates_model(self, predictor, training_df):
-        """Test training creates model"""
+        """Test training creates model."""
         predictor.train(training_df)
 
         assert predictor.model is not None
 
     def test_train_returns_metrics(self, predictor, training_df):
-        """Test training returns metrics dictionary"""
+        """Test training returns metrics dictionary."""
         metrics = predictor.train(training_df)
 
         assert "accuracy" in metrics
@@ -240,7 +240,7 @@ class TestTraining:
         assert "f1" in metrics
 
     def test_train_metrics_in_valid_range(self, predictor, training_df):
-        """Test metrics are in valid range"""
+        """Test metrics are in valid range."""
         metrics = predictor.train(training_df)
 
         assert 0.0 <= metrics["accuracy"] <= 1.0
@@ -250,11 +250,11 @@ class TestTraining:
 
 
 class TestPrediction:
-    """Test model prediction"""
+    """Test model prediction."""
 
     @pytest.fixture
     def trained_predictor(self, tmp_path):
-        """Create trained predictor"""
+        """Create trained predictor."""
         predictor = WorkflowPredictor(str(tmp_path / "model.joblib"))
 
         # Train on sample data
@@ -277,7 +277,7 @@ class TestPrediction:
         return predictor
 
     def test_predict_returns_probability(self, trained_predictor):
-        """Test predict returns probability"""
+        """Test predict returns probability."""
         features = {
             "hour_of_day": 14,
             "day_of_week": 2,
@@ -294,7 +294,7 @@ class TestPrediction:
         assert 0.0 <= probability <= 1.0
 
     def test_predict_without_model_raises(self, tmp_path):
-        """Test predict without model raises error"""
+        """Test predict without model raises error."""
         predictor = WorkflowPredictor(str(tmp_path / "model.joblib"))
 
         features = {"hour_of_day": 14, "day_of_week": 2}
@@ -304,11 +304,11 @@ class TestPrediction:
 
 
 class TestModelPersistence:
-    """Test model save/load functionality"""
+    """Test model save/load functionality."""
 
     @pytest.fixture
     def trained_predictor(self, tmp_path):
-        """Create and train predictor"""
+        """Create and train predictor."""
         predictor = WorkflowPredictor(str(tmp_path / "model.joblib"))
 
         np.random.seed(42)
@@ -330,13 +330,13 @@ class TestModelPersistence:
         return predictor
 
     def test_save_model(self, trained_predictor):
-        """Test model can be saved"""
+        """Test model can be saved."""
         trained_predictor.save_model()
 
         assert trained_predictor.model_path.exists()
 
     def test_load_model(self, trained_predictor):
-        """Test model can be loaded"""
+        """Test model can be loaded."""
         trained_predictor.save_model()
 
         # Create new predictor and load
@@ -346,7 +346,7 @@ class TestModelPersistence:
         assert new_predictor.model is not None
 
     def test_load_preserves_feature_columns(self, trained_predictor):
-        """Test loading preserves feature columns"""
+        """Test loading preserves feature columns."""
         trained_predictor.save_model()
 
         new_predictor = WorkflowPredictor(str(trained_predictor.model_path))
@@ -356,7 +356,7 @@ class TestModelPersistence:
 
     @pytest.mark.security
     def test_uses_joblib_not_pickle(self, trained_predictor):
-        """Test uses joblib for safer serialization"""
+        """Test uses joblib for safer serialization."""
         trained_predictor.save_model()
 
         # Verify it's a joblib file (not raw pickle)
@@ -369,14 +369,14 @@ class TestModelPersistence:
 
 
 class TestDataCollection:
-    """Test data collection functionality"""
+    """Test data collection functionality."""
 
     @pytest.fixture
     def predictor(self, tmp_path):
         return WorkflowPredictor(str(tmp_path / "model.joblib"))
 
     def test_collect_handles_api_error(self, predictor):
-        """Test handles API error gracefully"""
+        """Test handles API error gracefully."""
         with patch("predict_workflow_failures.subprocess.run") as mock_run:
             mock_run.side_effect = Exception("API Error")
 
@@ -386,7 +386,7 @@ class TestDataCollection:
             assert isinstance(df, pd.DataFrame)
 
     def test_collect_parses_response(self, predictor):
-        """Test parses API response correctly"""
+        """Test parses API response correctly."""
         mock_response = {
             "workflow_runs": [
                 {
@@ -422,11 +422,11 @@ class TestDataCollection:
 
 
 class TestRiskAssessment:
-    """Test risk assessment functionality"""
+    """Test risk assessment functionality."""
 
     @pytest.fixture
     def trained_predictor(self, tmp_path):
-        """Create trained predictor"""
+        """Create trained predictor."""
         predictor = WorkflowPredictor(str(tmp_path / "model.joblib"))
 
         np.random.seed(42)
@@ -448,7 +448,7 @@ class TestRiskAssessment:
         return predictor
 
     def test_assess_risk_returns_level(self, trained_predictor):
-        """Test assess_risk returns risk level"""
+        """Test assess_risk returns risk level."""
         features = {
             "hour_of_day": 14,
             "day_of_week": 2,
@@ -466,7 +466,7 @@ class TestRiskAssessment:
         assert 0.0 <= risk["probability"] <= 1.0
 
     def test_high_probability_maps_to_high_risk(self, trained_predictor):
-        """Test high failure probability maps to high risk"""
+        """Test high failure probability maps to high risk."""
         with patch.object(trained_predictor, "predict", return_value=0.85):
             features = {"hour_of_day": 3}  # Minimal features
 
@@ -475,7 +475,7 @@ class TestRiskAssessment:
             assert risk["level"] in ["HIGH", "CRITICAL"]
 
     def test_low_probability_maps_to_low_risk(self, trained_predictor):
-        """Test low failure probability maps to low risk"""
+        """Test low failure probability maps to low risk."""
         with patch.object(trained_predictor, "predict", return_value=0.1):
             features = {"hour_of_day": 10}
 

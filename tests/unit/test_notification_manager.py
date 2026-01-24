@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/notification_manager.py
-Focus: Multi-channel notifications, rate limiting, deduplication, delivery tracking
+Focus: Multi-channel notifications, rate limiting, deduplication, delivery tracking.
 """
 
 import sys
@@ -23,10 +23,10 @@ from notification_manager import (
 
 
 class TestNotificationModel:
-    """Test Notification model"""
+    """Test Notification model."""
 
     def test_default_priority(self):
-        """Test default priority is MEDIUM"""
+        """Test default priority is MEDIUM."""
         notification = Notification(
             title="Test",
             message="Test message",
@@ -35,7 +35,7 @@ class TestNotificationModel:
         assert notification.priority == Priority.MEDIUM
 
     def test_default_timestamp(self):
-        """Test timestamp is set automatically"""
+        """Test timestamp is set automatically."""
         notification = Notification(
             title="Test",
             message="Test message",
@@ -45,7 +45,7 @@ class TestNotificationModel:
         assert isinstance(notification.timestamp, datetime)
 
     def test_empty_channels_default(self):
-        """Test empty channels list by default"""
+        """Test empty channels list by default."""
         notification = Notification(
             title="Test",
             message="Test message",
@@ -54,7 +54,7 @@ class TestNotificationModel:
         assert notification.channels == []
 
     def test_metadata_default(self):
-        """Test empty metadata dict by default"""
+        """Test empty metadata dict by default."""
         notification = Notification(
             title="Test",
             message="Test message",
@@ -64,10 +64,10 @@ class TestNotificationModel:
 
 
 class TestPriorityEnum:
-    """Test Priority enum"""
+    """Test Priority enum."""
 
     def test_priority_values(self):
-        """Test all priority values exist"""
+        """Test all priority values exist."""
         assert Priority.CRITICAL == "CRITICAL"
         assert Priority.HIGH == "HIGH"
         assert Priority.MEDIUM == "MEDIUM"
@@ -76,11 +76,11 @@ class TestPriorityEnum:
 
 
 class TestNotificationManager:
-    """Test NotificationManager class"""
+    """Test NotificationManager class."""
 
     @pytest.fixture
     def manager(self, tmp_path):
-        """Create manager with mocked config"""
+        """Create manager with mocked config."""
         with patch.object(NotificationManager, "_load_config") as mock_load:
             mock_load.return_value = {
                 "channels": {
@@ -111,7 +111,7 @@ class TestNotificationManager:
 
 
 class TestChannelSelection:
-    """Test channel selection based on priority"""
+    """Test channel selection based on priority."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -130,32 +130,32 @@ class TestChannelSelection:
             return manager
 
     def test_critical_uses_all_channels(self, manager):
-        """Test CRITICAL priority uses all channels"""
+        """Test CRITICAL priority uses all channels."""
         channels = manager._get_channels_for_priority(Priority.CRITICAL)
         assert "slack" in channels
         assert "pagerduty" in channels
         assert "email" in channels
 
     def test_high_uses_slack_and_email(self, manager):
-        """Test HIGH priority uses slack and email"""
+        """Test HIGH priority uses slack and email."""
         channels = manager._get_channels_for_priority(Priority.HIGH)
         assert "slack" in channels
         assert "email" in channels
         assert "pagerduty" not in channels
 
     def test_medium_uses_slack_only(self, manager):
-        """Test MEDIUM priority uses slack only"""
+        """Test MEDIUM priority uses slack only."""
         channels = manager._get_channels_for_priority(Priority.MEDIUM)
         assert channels == ["slack"]
 
     def test_info_uses_no_channels(self, manager):
-        """Test INFO priority uses no channels"""
+        """Test INFO priority uses no channels."""
         channels = manager._get_channels_for_priority(Priority.INFO)
         assert channels == []
 
 
 class TestRateLimiting:
-    """Test rate limiting functionality"""
+    """Test rate limiting functionality."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -172,11 +172,11 @@ class TestRateLimiting:
             return manager
 
     def test_under_limit_allows_request(self, manager):
-        """Test requests under limit are allowed"""
+        """Test requests under limit are allowed."""
         assert manager._is_rate_limited("slack") is False
 
     def test_at_limit_blocks_request(self, manager):
-        """Test requests at limit are blocked"""
+        """Test requests at limit are blocked."""
         # Simulate 3 requests in last minute
         now = time.time()
         manager.rate_limits["slack"] = [now - 30, now - 20, now - 10]
@@ -184,7 +184,7 @@ class TestRateLimiting:
         assert manager._is_rate_limited("slack") is True
 
     def test_old_requests_expire(self, manager):
-        """Test old requests outside window don't count"""
+        """Test old requests outside window don't count."""
         # Simulate old requests (> 60 seconds ago)
         old_time = time.time() - 120
         manager.rate_limits["slack"] = [old_time, old_time, old_time]
@@ -192,7 +192,7 @@ class TestRateLimiting:
         assert manager._is_rate_limited("slack") is False
 
     def test_update_rate_limit(self, manager):
-        """Test updating rate limit adds timestamp"""
+        """Test updating rate limit adds timestamp."""
         initial_count = len(manager.rate_limits["slack"])
         manager._update_rate_limit("slack")
 
@@ -200,7 +200,7 @@ class TestRateLimiting:
 
 
 class TestDeduplication:
-    """Test notification deduplication"""
+    """Test notification deduplication."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -214,7 +214,7 @@ class TestDeduplication:
             return manager
 
     def test_new_notification_not_duplicate(self, manager):
-        """Test new notification is not a duplicate"""
+        """Test new notification is not a duplicate."""
         notification = Notification(
             title="Test Alert",
             message="Test",
@@ -223,7 +223,7 @@ class TestDeduplication:
         assert manager._is_duplicate(notification) is False
 
     def test_recent_notification_is_duplicate(self, manager):
-        """Test recent notification is detected as duplicate"""
+        """Test recent notification is detected as duplicate."""
         # Cache a notification
         manager.sent_cache["test-source:Test Alert"] = datetime.now(timezone.utc)
 
@@ -235,7 +235,7 @@ class TestDeduplication:
         assert manager._is_duplicate(notification) is True
 
     def test_old_notification_not_duplicate(self, manager):
-        """Test old notification outside window is not duplicate"""
+        """Test old notification outside window is not duplicate."""
         # Cache an old notification
         manager.sent_cache["test-source:Test Alert"] = datetime.now(timezone.utc) - timedelta(seconds=400)
 
@@ -247,7 +247,7 @@ class TestDeduplication:
         assert manager._is_duplicate(notification) is False
 
     def test_cache_notification(self, manager):
-        """Test caching notification for deduplication"""
+        """Test caching notification for deduplication."""
         notification = Notification(
             title="Cache Test",
             message="Test",
@@ -259,7 +259,7 @@ class TestDeduplication:
 
 
 class TestIdGeneration:
-    """Test notification ID generation"""
+    """Test notification ID generation."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -268,7 +268,7 @@ class TestIdGeneration:
         return manager
 
     def test_generates_unique_ids(self, manager):
-        """Test generates unique notification IDs"""
+        """Test generates unique notification IDs."""
         id1 = manager._generate_id()
         time.sleep(0.001)  # Small delay to ensure uniqueness
         id2 = manager._generate_id()
@@ -278,7 +278,7 @@ class TestIdGeneration:
         assert id2.startswith("NOTIF-")
 
     def test_id_format(self, manager):
-        """Test ID follows expected format"""
+        """Test ID follows expected format."""
         notification_id = manager._generate_id()
 
         # Format: NOTIF-YYYYMMDD_HHMMSS-NNN
@@ -288,10 +288,10 @@ class TestIdGeneration:
 
 
 class TestDeliveryRecord:
-    """Test DeliveryRecord model"""
+    """Test DeliveryRecord model."""
 
     def test_default_values(self):
-        """Test default values for delivery record"""
+        """Test default values for delivery record."""
         record = DeliveryRecord(
             notification_id="NOTIF-001",
             channel="slack",
@@ -303,7 +303,7 @@ class TestDeliveryRecord:
         assert record.error is None
 
     def test_status_tracking(self):
-        """Test status can be updated"""
+        """Test status can be updated."""
         record = DeliveryRecord(
             notification_id="NOTIF-001",
             channel="slack",
@@ -317,7 +317,7 @@ class TestDeliveryRecord:
 
 
 class TestSlackFormatting:
-    """Test Slack message formatting"""
+    """Test Slack message formatting."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -332,7 +332,7 @@ class TestSlackFormatting:
             return manager
 
     def test_critical_emoji(self, manager):
-        """Test CRITICAL priority uses correct emoji"""
+        """Test CRITICAL priority uses correct emoji."""
         notification = Notification(
             title="Critical Alert",
             message="Test",
@@ -350,7 +350,7 @@ class TestSlackFormatting:
             assert "🚨" in message["text"]
 
     def test_low_emoji(self, manager):
-        """Test LOW priority uses correct emoji"""
+        """Test LOW priority uses correct emoji."""
         notification = Notification(
             title="Success",
             message="Test",
@@ -369,7 +369,7 @@ class TestSlackFormatting:
 
 
 class TestSendNotification:
-    """Test send notification workflow"""
+    """Test send notification workflow."""
 
     @pytest.fixture
     def manager(self, tmp_path):
@@ -396,7 +396,7 @@ class TestSendNotification:
             return manager
 
     def test_send_generates_id(self, manager):
-        """Test send generates notification ID"""
+        """Test send generates notification ID."""
         notification = Notification(
             title="Test",
             message="Test",
@@ -417,7 +417,7 @@ class TestSendNotification:
         assert notification.notification_id.startswith("NOTIF-")
 
     def test_send_skips_duplicate(self, manager):
-        """Test send skips duplicate notifications"""
+        """Test send skips duplicate notifications."""
         # Pre-cache the notification
         manager.sent_cache["test:Duplicate Test"] = datetime.now(timezone.utc)
 
@@ -435,7 +435,7 @@ class TestSendNotification:
         mock_send.assert_not_called()
 
     def test_send_returns_delivery_records(self, manager):
-        """Test send returns delivery records for each channel"""
+        """Test send returns delivery records for each channel."""
         notification = Notification(
             title="Test",
             message="Test",
@@ -457,7 +457,7 @@ class TestSendNotification:
 
 
 class TestDefaultConfig:
-    """Test default configuration"""
+    """Test default configuration."""
 
     @pytest.fixture
     def manager(self):
@@ -465,7 +465,7 @@ class TestDefaultConfig:
         return manager
 
     def test_default_config_structure(self, manager):
-        """Test default config has required structure"""
+        """Test default config has required structure."""
         config = manager._default_config()
 
         assert "channels" in config
@@ -474,7 +474,7 @@ class TestDefaultConfig:
         assert "deduplication" in config
 
     def test_default_channels(self, manager):
-        """Test default channels are configured"""
+        """Test default channels are configured."""
         config = manager._default_config()
 
         assert "slack" in config["channels"]
@@ -482,7 +482,7 @@ class TestDefaultConfig:
         assert "pagerduty" in config["channels"]
 
     def test_default_priority_routing(self, manager):
-        """Test default priority routing"""
+        """Test default priority routing."""
         config = manager._default_config()
 
         assert "CRITICAL" in config["priority_routing"]

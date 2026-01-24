@@ -14,7 +14,7 @@ import json
 import subprocess  # nosec B404
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Optional, cast
 
 import yaml
 from secret_manager import ensure_github_token
@@ -35,7 +35,7 @@ class LabelValidator:
         self.fix_mode = fix_mode
         self.config = self._load_config()
 
-    def _load_config(self) -> Dict:
+    def _load_config(self) -> dict:
         """Load and parse the configuration file."""
         try:
             with open(self.config_path) as f:
@@ -53,12 +53,12 @@ class LabelValidator:
                     for name, props in labels_dict.items()
                 ]
 
-            return config
+            return cast(dict[Any, Any], config)
         except Exception as e:
             print(f"❌ Error loading config: {e}")
             sys.exit(1)
 
-    def _get_repo_labels(self, repo: str) -> Optional[List[Dict]]:
+    def _get_repo_labels(self, repo: str) -> Optional[list[dict]]:
         """Fetch existing labels from a repository.
 
         Args:
@@ -83,7 +83,7 @@ class LabelValidator:
                 text=True,
                 check=True,
             )
-            return json.loads(result.stdout)
+            return cast(list[dict[Any, Any]], json.loads(result.stdout))
         except subprocess.CalledProcessError as e:
             print(f"❌ Error fetching labels from {repo}: {e.stderr}")
             return None
@@ -91,7 +91,7 @@ class LabelValidator:
             print(f"❌ Error parsing label data from {repo}: {e}")
             return None
 
-    def _create_label(self, repo: str, label: Dict) -> bool:
+    def _create_label(self, repo: str, label: dict) -> bool:
         """Create a label in a repository.
 
         Args:
@@ -127,7 +127,7 @@ class LabelValidator:
         """Remove # prefix from color if present."""
         return color.lstrip("#").lower()
 
-    def _labels_match(self, existing: Dict, required: Dict) -> bool:
+    def _labels_match(self, existing: dict, required: dict) -> bool:
         """Check if an existing label matches the required specification.
 
         Args:
@@ -142,7 +142,7 @@ class LabelValidator:
             existing["color"]
         ) == self._normalize_color(required["color"])
 
-    def validate_repository(self, repo: str) -> Tuple[bool, List[Dict], List[Dict]]:
+    def validate_repository(self, repo: str) -> tuple[bool, list[dict], list[dict]]:
         """Validate labels for a single repository.
 
         Args:
@@ -189,7 +189,7 @@ class LabelValidator:
             print(f"❌ {total_issues} label issues found in {repo}")
             return False, missing_labels, mismatched_labels
 
-    def fix_repository(self, repo: str, missing: List[Dict], mismatched: List[Dict]) -> bool:
+    def fix_repository(self, repo: str, missing: list[dict], mismatched: list[dict]) -> bool:
         """Fix label issues in a repository by creating/updating labels.
 
         Args:

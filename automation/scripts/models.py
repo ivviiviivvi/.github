@@ -13,7 +13,7 @@ All models use Pydantic for validation and serialization.
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field, validator
 
@@ -76,7 +76,7 @@ class AutoMergeEligibility(BaseModel):
 
     eligible: bool = Field(..., description="Whether PR is eligible for auto-merge")
     checks_passed: AutoMergeSafetyChecks
-    reasons: List[str] = Field(default_factory=list, description="Reasons if not eligible")
+    reasons: list[str] = Field(default_factory=list, description="Reasons if not eligible")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score (0.0-1.0)")
 
     class Config:
@@ -91,14 +91,14 @@ class AutoMergeConfig(BaseModel):
     enabled: bool = True
     min_reviews: int = Field(default=1, ge=0)
     coverage_threshold: float = Field(default=80.0, ge=0.0, le=100.0)
-    required_checks: List[str] = Field(default_factory=list)
+    required_checks: list[str] = Field(default_factory=list)
     merge_strategy: MergeStrategy = MergeStrategy.SQUASH
     delete_branch: bool = True
     notify_on_merge: bool = True
     notify_on_failure: bool = True
 
     @validator("coverage_threshold")
-    def validate_coverage(cls, v):
+    def validate_coverage(self, v):
         """Validate coverage threshold is reasonable."""
         if v < 0 or v > 100:
             raise ValueError("Coverage threshold must be between 0 and 100")
@@ -132,7 +132,7 @@ class RoutingDecision(BaseModel):
     scores: RoutingFactorScores = Field(..., description="Individual factor scores")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Decision confidence")
     fallback_used: bool = Field(default=False, description="Whether fallback was triggered")
-    alternatives: List[Dict[str, float]] = Field(default_factory=list, description="Alternative assignees and scores")
+    alternatives: list[dict[str, float]] = Field(default_factory=list, description="Alternative assignees and scores")
 
     class Config:
         """Pydantic configuration."""
@@ -144,7 +144,7 @@ class RoutingConfig(BaseModel):
     """Intelligent routing configuration."""
 
     enabled: bool = True
-    factors: Dict[str, float] = Field(
+    factors: dict[str, float] = Field(
         default={
             "expertise": 0.35,
             "workload": 0.25,
@@ -154,11 +154,11 @@ class RoutingConfig(BaseModel):
         }
     )
     max_assignments_per_user: int = Field(default=10, ge=1)
-    fallback_strategy: List[str] = Field(default=["round_robin", "random"])
-    exempt_labels: List[str] = Field(default_factory=list)
+    fallback_strategy: list[str] = Field(default=["round_robin", "random"])
+    exempt_labels: list[str] = Field(default_factory=list)
 
     @validator("factors")
-    def validate_weights(cls, v):
+    def validate_weights(self, v):
         """Validate routing weights sum to 1.0."""
         total = sum(v.values())
         if not (0.99 <= total <= 1.01):  # Allow small floating point error
@@ -180,7 +180,7 @@ class FailureClassification(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0, description="Classification confidence")
     reason: str = Field(..., description="Classification reason")
     priority: Priority = Field(..., description="Failure priority")
-    failed_jobs: List[str] = Field(default_factory=list, description="List of failed job names")
+    failed_jobs: list[str] = Field(default_factory=list, description="List of failed job names")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -199,7 +199,7 @@ class SelfHealingResult(BaseModel):
     healed: bool = Field(..., description="Whether healing was successful")
     resolution: str = Field(..., description="Resolution description")
     retry_count: int = Field(..., ge=0, description="Number of retries")
-    actions_taken: List[str] = Field(default_factory=list, description="List of actions taken")
+    actions_taken: list[str] = Field(default_factory=list, description="List of actions taken")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -235,7 +235,7 @@ class MaintenanceTask(BaseModel):
     priority: Priority = Field(..., description="Task priority")
     estimated_duration: int = Field(..., ge=1, description="Duration in minutes")
     risk_level: RiskLevel = Field(..., description="Risk level")
-    details: Dict = Field(default_factory=dict, description="Additional details")
+    details: dict = Field(default_factory=dict, description="Additional details")
 
 
 class MaintenanceWindow(BaseModel):
@@ -246,9 +246,9 @@ class MaintenanceWindow(BaseModel):
     duration_minutes: int = Field(..., ge=1, description="Estimated duration")
     impact_score: float = Field(..., ge=0.0, le=1.0, description="Impact score (lower is better)")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Prediction confidence")
-    alternatives: List[Dict] = Field(default_factory=list, description="Alternative time windows")
+    alternatives: list[dict] = Field(default_factory=list, description="Alternative time windows")
     reasoning: str = Field(..., description="Scheduling rationale")
-    tasks: List[MaintenanceTask] = Field(default_factory=list, description="Tasks to perform")
+    tasks: list[MaintenanceTask] = Field(default_factory=list, description="Tasks to perform")
 
     class Config:
         """Pydantic configuration."""
@@ -263,9 +263,9 @@ class MaintenanceConfig(BaseModel):
     timing_predictor: str = Field(default="ml", description="Timing method: ml or fixed")
 
     # Preferred windows
-    preferred_hours: List[int] = Field(default=[2, 3, 4], description="2-4 AM")
-    preferred_days: List[int] = Field(default=[6, 0], description="Saturday, Sunday")
-    avoid_dates: List[str] = Field(default_factory=list)
+    preferred_hours: list[int] = Field(default=[2, 3, 4], description="2-4 AM")
+    preferred_days: list[int] = Field(default=[6, 0], description="Saturday, Sunday")
+    avoid_dates: list[str] = Field(default_factory=list)
 
     # Task configuration
     dependency_updates_enabled: bool = True
@@ -315,7 +315,7 @@ class WorkflowPrediction(BaseModel):
     estimated_duration: int = Field(..., ge=0, description="Estimated duration in seconds")
     risk_level: RiskLevel = Field(..., description="Risk classification")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence")
-    factors: Dict[str, float] = Field(default_factory=dict, description="Feature importance scores")
+    factors: dict[str, float] = Field(default_factory=dict, description="Feature importance scores")
     recommendation: str = Field(..., description="Recommended action")
 
     # Actual outcome (for training)
@@ -378,7 +378,7 @@ class ItemMetrics(BaseModel):
     avg_response_time_minutes: float = Field(default=0.0, ge=0.0)
     avg_resolution_time_hours: float = Field(default=0.0, ge=0.0)
     success_rate_percentage: float = Field(default=100.0, ge=0.0, le=100.0)
-    breaches: List["SLABreach"] = Field(default_factory=list, description="SLA breaches")
+    breaches: list["SLABreach"] = Field(default_factory=list, description="SLA breaches")
 
 
 class SLAMetrics(BaseModel):
@@ -395,7 +395,7 @@ class SLAMetrics(BaseModel):
     success_rate: SuccessRateMetric
     availability: AvailabilityMetric
 
-    breaches: List[Dict] = Field(default_factory=list, description="SLA breach details")
+    breaches: list[dict] = Field(default_factory=list, description="SLA breach details")
     trend: str = Field(..., description="improving, stable, or degrading")
 
     class Config:
@@ -448,7 +448,7 @@ class AuditLogEntry(BaseModel):
     action: str = Field(..., description="Action performed")
     actor: str = Field(..., description="Actor (user or bot)")
     repository: str = Field(..., description="Repository affected")
-    details: Dict = Field(default_factory=dict, description="Action details")
+    details: dict = Field(default_factory=dict, description="Action details")
     success: bool = Field(..., description="Whether action succeeded")
 
     # Security context
@@ -499,7 +499,7 @@ class AnalyticsPrediction(BaseModel):
     prediction: str = Field(..., description="Prediction outcome (merge/close)")
     confidence: float = Field(..., ge=0.0, le=1.0)
     model_name: str
-    features: Dict[str, float] = Field(default_factory=dict)
+    features: dict[str, float] = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -512,8 +512,8 @@ class FeatureImportance(BaseModel):
     """Feature importance analysis from ML model."""
 
     model_name: str
-    features: Dict[str, float] = Field(..., description="Feature scores")
-    top_features: List[str] = Field(default_factory=list, description="Top N features")
+    features: dict[str, float] = Field(..., description="Feature scores")
+    top_features: list[str] = Field(default_factory=list, description="Top N features")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -532,7 +532,7 @@ class SLAConfig(BaseModel):
 
     enabled: bool = True
     check_interval_minutes: int = Field(15, ge=1)
-    thresholds: List["SLAThresholds"] = Field(default_factory=list)
+    thresholds: list["SLAThresholds"] = Field(default_factory=list)
 
     class Config:
         """Example SLA config."""
@@ -571,10 +571,10 @@ class SLAReport(BaseModel):
     repository: str
     period_start: datetime
     period_end: datetime
-    metrics: Dict[str, SLAMetrics] = Field(default_factory=dict)
+    metrics: dict[str, SLAMetrics] = Field(default_factory=dict)
     total_breaches: int = 0
     compliance_percentage: float = 100.0
-    trends: Dict[str, Any] = Field(default_factory=dict)
+    trends: dict[str, Any] = Field(default_factory=dict)
     generated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -612,7 +612,7 @@ class RunbookStep(BaseModel):
 
     name: str
     action: str  # notify, create_issue, escalate, run_workflow, update_status
-    params: Dict[str, Any] = Field(default_factory=dict)
+    params: dict[str, Any] = Field(default_factory=dict)
     executed: bool = False
     executed_at: Optional[datetime] = None
     error: Optional[str] = None
@@ -633,7 +633,7 @@ class Incident(BaseModel):
     resolved_at: Optional[datetime] = None
     resolution: Optional[str] = None
     time_to_resolution_minutes: Optional[float] = None
-    runbook_steps: List[RunbookStep] = Field(default_factory=list)
+    runbook_steps: list[RunbookStep] = Field(default_factory=list)
     github_issue_number: Optional[int] = None
 
     def dict(self, **kwargs):
@@ -650,9 +650,9 @@ class IncidentConfig(BaseModel):
     enabled: bool = True
     create_github_issues: bool = True
     auto_execute_runbooks: bool = True
-    severity_keywords: Dict[str, List[str]] = Field(default_factory=dict)
-    escalation_rules: Dict[str, Dict] = Field(default_factory=dict)
-    notification_channels: Dict[str, List[str]] = Field(default_factory=dict)
+    severity_keywords: dict[str, list[str]] = Field(default_factory=dict)
+    escalation_rules: dict[str, dict] = Field(default_factory=dict)
+    notification_channels: dict[str, list[str]] = Field(default_factory=dict)
 
 
 class PostIncidentReport(BaseModel):
@@ -660,10 +660,10 @@ class PostIncidentReport(BaseModel):
 
     incident_id: str
     incident: Incident
-    timeline: List[Dict[str, str]]
+    timeline: list[dict[str, str]]
     root_cause: str
-    lessons_learned: List[str]
-    action_items: List[Dict[str, str]]
+    lessons_learned: list[str]
+    action_items: list[dict[str, str]]
     generated_at: datetime
 
     class Config:
@@ -683,9 +683,9 @@ class ValidationResult(BaseModel):
     completed_at: Optional[datetime] = None
     passed: bool = False
     message: str = ""
-    errors: List[str] = Field(default_factory=list)
-    warnings: List[str] = Field(default_factory=list)
-    metrics: Dict[str, Any] = Field(default_factory=dict)
+    errors: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+    metrics: dict[str, Any] = Field(default_factory=dict)
 
 
 class ValidationSuite(BaseModel):
@@ -695,7 +695,7 @@ class ValidationSuite(BaseModel):
     started_at: datetime
     completed_at: Optional[datetime] = None
     duration_seconds: float = 0.0
-    results: List[ValidationResult] = Field(default_factory=list)
+    results: list[ValidationResult] = Field(default_factory=list)
     passed: int = 0
     failed: int = 0
     warnings: int = 0

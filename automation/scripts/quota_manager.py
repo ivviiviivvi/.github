@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import time
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from datetime import datetime
 
 SUBSCRIPTIONS_FILE = ".github/subscriptions.json"
@@ -25,7 +25,7 @@ except ImportError:
 def acquire_lock(timeout=60):
     """Acquires a lock to prevent concurrent modifications.
     Uses fcntl (flock) on Unix-like systems for robust process-based locking.
-    Falls back to atomic directory creation on Windows or if fcntl is unavailable.  # noqa: E501
+    Falls back to atomic directory creation on Windows or if fcntl is unavailable.  # noqa: E501.
     """
     start_time = time.time()
 
@@ -48,10 +48,10 @@ def acquire_lock(timeout=60):
                     # Try to acquire exclusive lock without blocking
                     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
                     break
-                except OSError:
+                except OSError as err:
                     # Lock held by another process
                     if time.time() - start_time >= timeout:
-                        raise TimeoutError(f"Could not acquire lock on {LOCK_FILE}")
+                        raise TimeoutError(f"Could not acquire lock on {LOCK_FILE}") from err
                     time.sleep(0.1)
 
             yield
@@ -59,10 +59,8 @@ def acquire_lock(timeout=60):
         finally:
             if fd:
                 # Release lock and close file
-                try:
+                with suppress(OSError):
                     fcntl.flock(fd, fcntl.LOCK_UN)
-                except OSError:
-                    pass
                 fd.close()
     else:
         # Fallback (Windows/Non-Unix) Implementation
@@ -70,17 +68,15 @@ def acquire_lock(timeout=60):
             try:
                 os.mkdir(LOCK_DIR)
                 break
-            except FileExistsError:
+            except FileExistsError as err:
                 if time.time() - start_time >= timeout:
-                    raise TimeoutError(f"Could not acquire lock on {LOCK_DIR}")
+                    raise TimeoutError(f"Could not acquire lock on {LOCK_DIR}") from err
                 time.sleep(0.5)
         try:
             yield
         finally:
-            try:
+            with suppress(OSError):
                 os.rmdir(LOCK_DIR)
-            except OSError:
-                pass
 
 
 def get_subscriptions():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Integration Tests for Month 2 Features
+"""Integration Tests for Month 2 Features.
 
 Tests all Month 2 implementations:
 - Week 5: Slack integration (notifications, daily summaries)
@@ -56,7 +56,7 @@ class TestSlackIntegration:
             mock_post.return_value.status_code = 200
 
             priorities = ["P0", "P1", "P2", "P3"]
-            for priority in priorities:
+            for _priority in priorities:
                 # Simulate notification with priority
                 # In real test, would trigger workflow with each priority
                 pass

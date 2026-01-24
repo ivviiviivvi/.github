@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Workflow Analyzer - Generate comprehensive workflow inventory and analysis
+"""Workflow Analyzer - Generate comprehensive workflow inventory and analysis.
 
 This script analyzes all GitHub Actions workflows in .github/workflows/
 and generates a detailed inventory report.
@@ -7,12 +7,12 @@ and generates a detailed inventory report.
 
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 
 
-def analyze_workflow(file_path: Path) -> Dict[str, Any]:
+def analyze_workflow(file_path: Path) -> dict[str, Any]:
     """Analyze a single workflow file."""
     try:
         with open(file_path) as f:

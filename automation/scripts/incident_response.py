@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Incident Response Automation
+"""Incident Response Automation.
 
 Provides automated incident response with severity classification, runbook
 execution, escalation workflows, and post-incident analysis.
@@ -32,7 +32,7 @@ import json
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 from models import (
     Incident,
@@ -185,7 +185,7 @@ class IncidentResponseEngine:
         # Default
         return IncidentSeverity.SEV4
 
-    def _execute_runbook(self, incident: Incident) -> List[RunbookStep]:
+    def _execute_runbook(self, incident: Incident) -> list[RunbookStep]:
         """Execute automated runbook for incident.
 
         Args:
@@ -232,7 +232,7 @@ class IncidentResponseEngine:
 
         return executed_steps
 
-    def _get_runbook(self, severity: IncidentSeverity) -> List[RunbookStep]:
+    def _get_runbook(self, severity: IncidentSeverity) -> list[RunbookStep]:
         """Get runbook steps for severity level."""
         if severity == IncidentSeverity.SEV1:
             return [
@@ -449,7 +449,7 @@ Current status: {incident.status.value}
 
         return report
 
-    def _build_timeline(self, incident: Incident) -> List[Dict]:
+    def _build_timeline(self, incident: Incident) -> list[dict]:
         """Build incident timeline."""
         timeline = [
             {
@@ -491,7 +491,7 @@ Current status: {incident.status.value}
         else:
             return "Root cause requires further investigation"
 
-    def _extract_lessons_learned(self, incident: Incident) -> List[str]:
+    def _extract_lessons_learned(self, incident: Incident) -> list[str]:
         """Extract lessons learned from incident."""
         lessons = []
 
@@ -510,7 +510,7 @@ Current status: {incident.status.value}
 
         return lessons
 
-    def _identify_action_items(self, incident: Incident) -> List[Dict]:
+    def _identify_action_items(self, incident: Incident) -> list[dict]:
         """Identify action items from incident."""
         actions = []
 
@@ -565,7 +565,7 @@ Current status: {incident.status.value}
             json.dump(report.dict(), f, indent=2, default=str)
         logger.info(f"Saved report to {report_file}")
 
-    def _create_github_issue(self, owner: str, repo: str, incident: Incident) -> Dict:
+    def _create_github_issue(self, owner: str, repo: str, incident: Incident) -> dict:
         """Create GitHub issue for incident."""
         issue = self.github.post(
             f"/repos/{owner}/{repo}/issues",
@@ -582,7 +582,7 @@ Current status: {incident.status.value}
         # Notifications now handled by notify_incident_created/resolved
         # This method maintained for backward compatibility but is now a no-op
 
-    def _get_notification_channels(self, severity: IncidentSeverity) -> List[str]:
+    def _get_notification_channels(self, severity: IncidentSeverity) -> list[str]:
         """Get notification channels for severity."""
         if severity == IncidentSeverity.SEV1:
             return ["slack", "pagerduty", "email"]

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for automation/scripts/validation_framework.py
-Focus: ValidationFramework class, capability validations, report generation
+Focus: ValidationFramework class, capability validations, report generation.
 """
 
 import json
@@ -21,17 +21,17 @@ from validation_framework import ValidationFramework
 
 
 class TestValidationFramework:
-    """Test ValidationFramework class"""
+    """Test ValidationFramework class."""
 
     @pytest.fixture
     def mock_github_client(self):
-        """Create mock GitHub client"""
+        """Create mock GitHub client."""
         client = MagicMock()
         return client
 
     @pytest.fixture
     def framework(self, mock_github_client, tmp_path):
-        """Create ValidationFramework instance"""
+        """Create ValidationFramework instance."""
         with patch.object(
             ValidationFramework,
             "__init__",
@@ -48,7 +48,7 @@ class TestValidationFramework:
 
 
 class TestAutoMergeValidation:
-    """Test auto-merge validation"""
+    """Test auto-merge validation."""
 
     @pytest.fixture
     def mock_client(self):
@@ -64,14 +64,14 @@ class TestAutoMergeValidation:
         return fw
 
     def test_fails_when_config_missing(self, framework):
-        """Test validation fails when config file is missing"""
+        """Test validation fails when config file is missing."""
         result = framework.validate_auto_merge("owner", "repo")
 
         assert result.passed is False
         assert "Configuration file not found" in result.errors
 
     def test_passes_with_config_and_prs(self, framework, mock_client, tmp_path):
-        """Test validation passes with config and merged PRs"""
+        """Test validation passes with config and merged PRs."""
         # Create config file
         config_path = Path(".github/auto-merge.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
@@ -95,7 +95,7 @@ class TestAutoMergeValidation:
         config_path.unlink()
 
     def test_warns_when_no_merged_prs(self, framework, mock_client):
-        """Test warns when no merged PRs found"""
+        """Test warns when no merged PRs found."""
         config_path = Path(".github/auto-merge.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -113,7 +113,7 @@ class TestAutoMergeValidation:
         config_path.unlink()
 
     def test_handles_api_error(self, framework, mock_client):
-        """Test handles API error gracefully"""
+        """Test handles API error gracefully."""
         config_path = Path(".github/auto-merge.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -129,7 +129,7 @@ class TestAutoMergeValidation:
 
 
 class TestRoutingValidation:
-    """Test intelligent routing validation"""
+    """Test intelligent routing validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -141,14 +141,14 @@ class TestRoutingValidation:
         return fw
 
     def test_fails_when_config_missing(self, framework):
-        """Test validation fails when config file is missing"""
+        """Test validation fails when config file is missing."""
         result = framework.validate_routing("owner", "repo")
 
         assert result.passed is False
         assert "Configuration file not found" in result.errors
 
     def test_passes_with_assigned_prs(self, framework):
-        """Test validation passes with assigned PRs"""
+        """Test validation passes with assigned PRs."""
         config_path = Path(".github/routing.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -171,7 +171,7 @@ class TestRoutingValidation:
 
 
 class TestSelfHealingValidation:
-    """Test self-healing validation"""
+    """Test self-healing validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -183,7 +183,7 @@ class TestSelfHealingValidation:
         return fw
 
     def test_calculates_failure_rate(self, framework):
-        """Test calculates failure rate from workflow runs"""
+        """Test calculates failure rate from workflow runs."""
         config_path = Path(".github/self-healing.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -209,7 +209,7 @@ class TestSelfHealingValidation:
 
 
 class TestMaintenanceValidation:
-    """Test maintenance validation"""
+    """Test maintenance validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -221,7 +221,7 @@ class TestMaintenanceValidation:
         return fw
 
     def test_counts_scheduled_tasks(self, framework):
-        """Test counts scheduled maintenance tasks"""
+        """Test counts scheduled maintenance tasks."""
         config_path = Path(".github/maintenance.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -244,7 +244,7 @@ class TestMaintenanceValidation:
 
 
 class TestAnalyticsValidation:
-    """Test analytics ML validation"""
+    """Test analytics ML validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -256,7 +256,7 @@ class TestAnalyticsValidation:
         return fw
 
     def test_counts_trained_models(self, framework):
-        """Test counts trained ML models"""
+        """Test counts trained ML models."""
         config_path = Path(".github/analytics.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -281,7 +281,7 @@ class TestAnalyticsValidation:
 
 
 class TestSLAValidation:
-    """Test SLA monitoring validation"""
+    """Test SLA monitoring validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -293,7 +293,7 @@ class TestSLAValidation:
         return fw
 
     def test_counts_issues(self, framework):
-        """Test counts issues for SLA analysis"""
+        """Test counts issues for SLA analysis."""
         config_path = Path(".github/sla.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -312,7 +312,7 @@ class TestSLAValidation:
 
 
 class TestIncidentResponseValidation:
-    """Test incident response validation"""
+    """Test incident response validation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -324,7 +324,7 @@ class TestIncidentResponseValidation:
         return fw
 
     def test_analyzes_incident_severity(self, framework):
-        """Test analyzes incident severity distribution"""
+        """Test analyzes incident severity distribution."""
         config_path = Path(".github/incident.yml")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text("enabled: true")
@@ -351,7 +351,7 @@ class TestIncidentResponseValidation:
 
 
 class TestValidateAll:
-    """Test validate_all method"""
+    """Test validate_all method."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -363,7 +363,7 @@ class TestValidateAll:
         return fw
 
     def test_runs_all_validations(self, framework):
-        """Test runs all 7 validations"""
+        """Test runs all 7 validations."""
         # Mock all validation methods to return passed results
         for capability in [
             "auto_merge",
@@ -401,7 +401,7 @@ class TestValidateAll:
         assert framework._send_validation_notification.called
 
     def test_counts_failures_correctly(self, framework):
-        """Test counts failures correctly in suite"""
+        """Test counts failures correctly in suite."""
         # Mock 4 pass, 3 fail
         results = []
         for i, capability in enumerate(
@@ -441,7 +441,7 @@ class TestValidateAll:
 
 
 class TestReportGeneration:
-    """Test report generation"""
+    """Test report generation."""
 
     @pytest.fixture
     def framework(self, tmp_path):
@@ -453,7 +453,7 @@ class TestReportGeneration:
         return fw
 
     def test_generates_report_from_files(self, framework, tmp_path):
-        """Test generates report from validation files"""
+        """Test generates report from validation files."""
         validation_dir = tmp_path / ".github" / "validation"
         validation_dir.mkdir(parents=True, exist_ok=True)
         framework.validation_dir = validation_dir
@@ -477,7 +477,7 @@ class TestReportGeneration:
         assert report["total_validations"] >= 1
 
     def test_empty_report_when_no_files(self, framework, tmp_path):
-        """Test generates empty report when no validation files"""
+        """Test generates empty report when no validation files."""
         validation_dir = tmp_path / ".github" / "validation"
         validation_dir.mkdir(parents=True, exist_ok=True)
         framework.validation_dir = validation_dir

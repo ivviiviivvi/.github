@@ -8,7 +8,7 @@ import json
 import os
 import sys
 import time
-from typing import Dict, List
+from typing import Any, Optional, cast
 
 import requests
 
@@ -74,7 +74,7 @@ class GitHubProjectManager:
             "Content-Type": "application/json",
         }
 
-    def execute_query(self, query: str, variables: Dict = None) -> Dict:
+    def execute_query(self, query: str, variables: Optional[dict] = None) -> dict:
         """Execute a GraphQL query."""
         response = requests.post(  # nosec B113
             self.api_url,
@@ -90,7 +90,7 @@ class GitHubProjectManager:
         if "errors" in result:
             raise Exception(f"GraphQL errors: {json.dumps(result['errors'], indent=2)}")
 
-        return result
+        return cast(dict[Any, Any], result)
 
     def get_project_id(self, project_number: int) -> str:
         """Get project ID by number."""
@@ -106,9 +106,9 @@ class GitHubProjectManager:
         """
 
         result = self.execute_query(query, {"org": self.org, "number": project_number})
-        return result["data"]["organization"]["projectV2"]["id"]
+        return cast(str, result["data"]["organization"]["projectV2"]["id"])
 
-    def get_repository_issues(self, repo: str, state: str = "open") -> List[Dict]:
+    def get_repository_issues(self, repo: str, state: str = "open") -> list[dict]:
         """Get issues from a repository."""
         query = """
         query($org: String!, $repo: String!, $states: [IssueState!]) {
@@ -133,9 +133,9 @@ class GitHubProjectManager:
         states = [state.upper()]
         result = self.execute_query(query, {"org": self.org, "repo": repo, "states": states})
 
-        return result["data"]["repository"]["issues"]["nodes"]
+        return cast(list[dict[Any, Any]], result["data"]["repository"]["issues"]["nodes"])
 
-    def get_repository_prs(self, repo: str, state: str = "open") -> List[Dict]:
+    def get_repository_prs(self, repo: str, state: str = "open") -> list[dict]:
         """Get pull requests from a repository."""
         query = """
         query($org: String!, $repo: String!, $states: [PullRequestState!]) {
@@ -165,7 +165,7 @@ class GitHubProjectManager:
         states = [state.upper()]
         result = self.execute_query(query, {"org": self.org, "repo": repo, "states": states})
 
-        return result["data"]["repository"]["pullRequests"]["nodes"]
+        return cast(list[dict[Any, Any]], result["data"]["repository"]["pullRequests"]["nodes"])
 
     def add_item_to_project(self, project_id: str, content_id: str) -> bool:
         """Add an item to a project."""
@@ -191,7 +191,7 @@ class GitHubProjectManager:
             print(f"  ✗ Error adding item: {e}")
             return False
 
-    def categorize_item(self, item: Dict) -> List[int]:
+    def categorize_item(self, item: dict) -> list[int]:
         """Determine which projects an item should be added to."""
         projects = []
 
