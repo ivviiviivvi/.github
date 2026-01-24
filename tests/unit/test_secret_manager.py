@@ -3,14 +3,6 @@
 Focus: 1Password CLI integration, secret retrieval, error handling
 """
 
-from secret_manager import (
-    _print_secret_error,
-    ensure_github_token,
-    ensure_secret,
-    get_github_token,
-    get_secret,
-)
-import secret_manager
 import importlib
 import subprocess
 import sys
@@ -18,6 +10,14 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+import secret_manager
+from secret_manager import (
+    _print_secret_error,
+    ensure_github_token,
+    ensure_secret,
+    get_github_token,
+    get_secret,
+)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "automation" / "scripts"))
 
