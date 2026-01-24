@@ -6,6 +6,9 @@ on:
     branches:
       - test-batch-onboarding
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     name: Validate Batch Onboarding

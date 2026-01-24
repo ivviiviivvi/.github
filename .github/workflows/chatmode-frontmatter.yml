@@ -33,6 +33,9 @@ on:
     - src/automation/scripts/validate_chatmode_frontmatter.py
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest

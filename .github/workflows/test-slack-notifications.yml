@@ -18,6 +18,9 @@ on:
         default: This is a test notification
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   test-notification:
     runs-on: ubuntu-latest
