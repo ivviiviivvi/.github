@@ -116,8 +116,7 @@ class LabelValidator:
                 label.get("description", ""),
                 "--force",  # Update if exists
             ]
-            # nosec B603 - gh CLI is trusted subprocess
-            subprocess.run(cmd, capture_output=True, text=True, check=True)
+            subprocess.run(cmd, capture_output=True, text=True, check=True)  # nosec B603
             return True
         except subprocess.CalledProcessError as e:
             print(f"❌ Error creating label {label['name']} in {repo}: {e.stderr}")

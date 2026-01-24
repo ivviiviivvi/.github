@@ -160,7 +160,7 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         mock_request.assert_called()
 
     @patch("urllib3.HTTPSConnectionPool")
-    def test_fallback_get_uses_safe_pool(self, MockHTTPSConnectionPool):
+    def test_fallback_get_uses_safe_pool(self, MockHTTPSConnectionPool):  # noqa: N803
         """Verify that the fallback GET request uses the same IP-pinned pool
         as the HEAD request to prevent SSRF bypass.
         """

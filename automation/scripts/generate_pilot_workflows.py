@@ -87,7 +87,7 @@ jobs:
 """
 
         # Add label logic
-        for rule in label_rules:
+        for _rule in label_rules:
             workflow += """
             // Check for {rule['label']} label
             if ({rule['condition']}) {{

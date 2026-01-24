@@ -311,8 +311,7 @@ class GitHubAPIClient:
                         if retry_after:
                             delay = int(retry_after)
                         else:
-                            # nosec B311 - Non-cryptographic jitter
-                            delay = 2**attempt + random.uniform(0, 1)
+                            delay = 2**attempt + random.uniform(0, 1)  # nosec B311
 
                         self.logger.warning(
                             f"HTTP {e.response.status_code} (attempt {attempt}/{max_attempts}). "  # noqa: E501
