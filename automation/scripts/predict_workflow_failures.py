@@ -30,13 +30,8 @@ from sklearn.model_selection import train_test_split
 try:
     import joblib
 except ImportError:
-    # Fallback to pickle if joblib not available (with security warning)
-    import pickle as joblib
-    import warnings
-
-    warnings.warn(
-        "joblib not available, using pickle. Install joblib for safer serialization.",
-        UserWarning,
+    raise SystemExit(
+        "joblib is required for model serialization. Install joblib to proceed."
     )
 
 
@@ -118,7 +113,8 @@ class WorkflowPredictor:
     def _extract_features(self, run: Dict) -> Optional[Dict]:
         """Extract features from workflow run."""
         try:
-            created = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
+            created = datetime.fromisoformat(
+                run["created_at"].replace("Z", "+00:00"))
 
             # Extract features
             features = {
@@ -188,7 +184,8 @@ class WorkflowPredictor:
         X, y = self.prepare_features(df)
 
         # Split data
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, stratify=y)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=42, stratify=y)
 
         print(f"Training set: {len(X_train)} samples")
         print(f"Test set: {len(X_test)} samples")
@@ -211,7 +208,8 @@ class WorkflowPredictor:
         _y_proba = self.model.predict_proba(X_test)[:, 1]  # noqa: F841
 
         accuracy = accuracy_score(y_test, y_pred)
-        precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average="binary")
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            y_test, y_pred, average="binary")
 
         metrics = {
             "accuracy": float(accuracy),
@@ -371,7 +369,8 @@ class WorkflowPredictor:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Predict workflow failures using machine learning")
+    parser = argparse.ArgumentParser(
+        description="Predict workflow failures using machine learning")
     parser.add_argument(
         "--collect",
         action="store_true",
@@ -383,21 +382,24 @@ def main():
         default=90,
         help="Days of historical data to collect (default: 90)",
     )
-    parser.add_argument("--train", action="store_true", help="Train the prediction model")
+    parser.add_argument("--train", action="store_true",
+                        help="Train the prediction model")
     parser.add_argument(
         "--predict",
         nargs=2,
         metavar=("REPO", "WORKFLOW"),
         help="Predict failure for specific workflow",
     )
-    parser.add_argument("--high-risk", action="store_true", help="List high-risk workflows")
+    parser.add_argument("--high-risk", action="store_true",
+                        help="List high-risk workflows")
     parser.add_argument(
         "--threshold",
         type=float,
         default=0.15,
         help="Risk threshold for high-risk workflows (default: 0.15)",
     )
-    parser.add_argument("--json", action="store_true", help="Output in JSON format")
+    parser.add_argument("--json", action="store_true",
+                        help="Output in JSON format")
 
     args = parser.parse_args()
 
@@ -435,7 +437,8 @@ def main():
             with open(metrics_file, "w") as f:
                 # Convert numpy types to native Python types
                 serializable_metrics = {
-                    k: (float(v) if isinstance(v, (np.floating, np.integer)) else v)
+                    k: (float(v) if isinstance(
+                        v, (np.floating, np.integer)) else v)
                     for k, v in metrics.items()
                     if k != "feature_importance"
                 }
@@ -458,7 +461,8 @@ def main():
                 print(f"Workflow: {result['workflow']}")
                 print(f"Repository: {result['repository']}")
                 print(f"{'=' * 60}")
-                print(f"Failure Probability: {result['failure_probability']:.1%}")
+                print(
+                    f"Failure Probability: {result['failure_probability']:.1%}")
                 print(f"Prediction: {result['prediction']}")
                 print(
                     f"Risk Level: {result['risk_level']} ({result['risk_color']})"  # noqa: E501
@@ -473,7 +477,8 @@ def main():
             if args.json:
                 print(json.dumps(workflows, indent=2))
             else:
-                print(f"\nHigh-Risk Workflows (threshold: {args.threshold:.0%}):")
+                print(
+                    f"\nHigh-Risk Workflows (threshold: {args.threshold:.0%}):")
                 print(f"{'=' * 80}")
 
                 if not workflows:

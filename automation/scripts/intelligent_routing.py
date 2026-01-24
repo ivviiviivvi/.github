@@ -55,7 +55,8 @@ class IntelligentRouter:
             Routing decision with selected assignee
 
         """
-        self.logger.info(f"Calculating assignment for {owner}/{repo}#{issue_number}")
+        self.logger.info(
+            f"Calculating assignment for {owner}/{repo}#{issue_number}")
 
         # Get issue/PR details
         issue = self._get_issue(owner, repo, issue_number)
@@ -75,7 +76,8 @@ class IntelligentRouter:
         # Calculate scores for each candidate
         candidate_scores = []
         for candidate in candidates:
-            scores = self._calculate_factor_scores(owner, repo, candidate, issue)
+            scores = self._calculate_factor_scores(
+                owner, repo, candidate, issue)
             overall_score = self._calculate_overall_score(scores)
             candidate_scores.append(
                 {
@@ -185,7 +187,8 @@ class IntelligentRouter:
 
         try:
             # Get user's commits in last 90 days
-            since = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
+            since = (datetime.now(timezone.utc) -
+                     timedelta(days=90)).isoformat()
             endpoint = f"/repos/{owner}/{repo}/commits"
             params = {"author": username, "since": since, "per_page": 100}
             commits = self.client.get(endpoint, params=params)
@@ -213,7 +216,8 @@ class IntelligentRouter:
             if issue_labels:
                 matching_labels = 0
                 for closed_issue in closed_issues[:20]:  # Check recent 20
-                    closed_labels = {label["name"] for label in closed_issue.get("labels", [])}
+                    closed_labels = {label["name"]
+                                     for label in closed_issue.get("labels", [])}
                     if issue_labels & closed_labels:  # Intersection
                         matching_labels += 1
 
@@ -223,7 +227,8 @@ class IntelligentRouter:
             return min(1.0, score)
 
         except Exception as e:
-            self.logger.warning(f"Error calculating expertise for {username}: {e}")
+            self.logger.warning(
+                f"Error calculating expertise for {username}: {e}")
             return 0.5  # Default middle score on error
 
     def _calculate_workload(self, owner: str, repo: str, username: str) -> float:
@@ -260,7 +265,8 @@ class IntelligentRouter:
             return score
 
         except Exception as e:
-            self.logger.warning(f"Error calculating workload for {username}: {e}")
+            self.logger.warning(
+                f"Error calculating workload for {username}: {e}")
             return 0.5
 
     def _calculate_response_time(self, owner: str, repo: str, username: str) -> float:
@@ -274,7 +280,8 @@ class IntelligentRouter:
         """
         try:
             # Get recent closed issues assigned to user
-            since = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+            since = (datetime.now(timezone.utc) -
+                     timedelta(days=30)).isoformat()
             endpoint = f"/repos/{owner}/{repo}/issues"
             params = {
                 "assignee": username,
@@ -291,26 +298,36 @@ class IntelligentRouter:
             count = 0
 
             for issue in issues[:10]:  # Sample recent 10
-                created = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
+                created = datetime.fromisoformat(
+                    issue["created_at"].replace("Z", "+00:00"))
 
                 # Get first comment by assignee
                 comments_endpoint = issue["comments_url"]
                 try:
-                    comments = self.client.get(comments_endpoint.replace(self.client.base_url, ""))
+                    comments = self.client.get(
+                        comments_endpoint.replace(self.client.base_url, ""))
+                except Exception as exc:
+                    self.logger.debug(
+                        "Failed to fetch comments for %s: %s",
+                        comments_endpoint,
+                        exc,
+                    )
+                    comments = None
 
-                    for comment in comments:
-                        if comment["user"]["login"] == username:
-                            commented = datetime.fromisoformat(comment["created_at"].replace("Z", "+00:00"))
-                            response_time = (
-                                # hours
-                                commented - created
-                            ).total_seconds() / 3600
-                            total_response_time += response_time
-                            count += 1
-                            break  # First comment only
-
-                except Exception:
+                if comments is None:
                     continue
+
+                for comment in comments:
+                    if comment["user"]["login"] == username:
+                        commented = datetime.fromisoformat(
+                            comment["created_at"].replace("Z", "+00:00"))
+                        response_time = (
+                            # hours
+                            commented - created
+                        ).total_seconds() / 3600
+                        total_response_time += response_time
+                        count += 1
+                        break  # First comment only
 
             if count == 0:
                 return 0.5
@@ -326,12 +343,14 @@ class IntelligentRouter:
             else:
                 score = max(0.0, 0.5 - ((avg_response_hours - 24) / 24) * 0.5)
 
-            self.logger.debug(f"Response time for {username}: {avg_response_hours:.1f}h (score: {score:.3f})")
+            self.logger.debug(
+                f"Response time for {username}: {avg_response_hours:.1f}h (score: {score:.3f})")
 
             return score
 
         except Exception as e:
-            self.logger.warning(f"Error calculating response time for {username}: {e}")
+            self.logger.warning(
+                f"Error calculating response time for {username}: {e}")
             return 0.5
 
     def _calculate_availability(self, owner: str, repo: str, username: str) -> float:
@@ -354,7 +373,8 @@ class IntelligentRouter:
 
             # Find most recent event
             latest_event = events[0]
-            latest_time = datetime.fromisoformat(latest_event["created_at"].replace("Z", "+00:00"))
+            latest_time = datetime.fromisoformat(
+                latest_event["created_at"].replace("Z", "+00:00"))
             now = datetime.now(timezone.utc)
             hours_since = (now - latest_time).total_seconds() / 3600
 
@@ -369,12 +389,14 @@ class IntelligentRouter:
             else:
                 score = 0.2
 
-            self.logger.debug(f"Availability for {username}: {hours_since:.1f}h ago (score: {score:.3f})")
+            self.logger.debug(
+                f"Availability for {username}: {hours_since:.1f}h ago (score: {score:.3f})")
 
             return score
 
         except Exception as e:
-            self.logger.warning(f"Error calculating availability for {username}: {e}")
+            self.logger.warning(
+                f"Error calculating availability for {username}: {e}")
             return 0.5
 
     def _calculate_performance(self, owner: str, repo: str, username: str) -> float:
@@ -388,7 +410,8 @@ class IntelligentRouter:
         """
         try:
             # Get issues closed by user in last 90 days
-            since = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
+            since = (datetime.now(timezone.utc) -
+                     timedelta(days=90)).isoformat()
             endpoint = f"/repos/{owner}/{repo}/issues"
             params = {
                 "assignee": username,
@@ -406,7 +429,8 @@ class IntelligentRouter:
             for issue in closed_issues[:30]:  # Sample recent 30
                 # Check if closed with resolution (not stale, not duplicate,
                 # etc.)
-                labels = {label["name"].lower() for label in issue.get("labels", [])}
+                labels = {label["name"].lower()
+                          for label in issue.get("labels", [])}
 
                 # Consider completed if no negative labels
                 negative_labels = {"wontfix", "duplicate", "invalid", "stale"}
@@ -416,12 +440,14 @@ class IntelligentRouter:
             total = min(len(closed_issues), 30)
             success_rate = completed / total if total > 0 else 0.5
 
-            self.logger.debug(f"Performance for {username}: {completed}/{total} (score: {success_rate:.3f})")
+            self.logger.debug(
+                f"Performance for {username}: {completed}/{total} (score: {success_rate:.3f})")
 
             return success_rate
 
         except Exception as e:
-            self.logger.warning(f"Error calculating performance for {username}: {e}")
+            self.logger.warning(
+                f"Error calculating performance for {username}: {e}")
             return 0.5
 
     def _calculate_overall_score(self, scores: RoutingFactorScores) -> float:
@@ -586,16 +612,19 @@ class IntelligentRouter:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Intelligent routing for issue/PR assignment")
+    parser = argparse.ArgumentParser(
+        description="Intelligent routing for issue/PR assignment")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
-    parser.add_argument("--issue", required=True, type=int, help="Issue number")
+    parser.add_argument("--issue", required=True,
+                        type=int, help="Issue number")
     parser.add_argument(
         "--assign",
         action="store_true",
         help="Actually assign the issue (default: dry run)",
     )
-    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    parser.add_argument("--debug", action="store_true",
+                        help="Enable debug logging")
 
     args = parser.parse_args()
 
@@ -611,7 +640,8 @@ def main():
         config_loader = ConfigLoader()
         try:
             config_dict = config_loader.load("routing.yml")
-            config = RoutingConfig(**config_dict.get("intelligent_routing", {}))
+            config = RoutingConfig(
+                **config_dict.get("intelligent_routing", {}))
         except FileNotFoundError:
             logger.warning("No routing config found, using defaults")
             config = RoutingConfig()

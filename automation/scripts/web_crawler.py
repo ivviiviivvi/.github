@@ -49,6 +49,7 @@ class OrganizationCrawler:
         self.org_name = org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
         self.max_workers = max_workers
         self.session = requests.Session()
+        self.request_timeout = 10
 
         # Optimize connection pool size to match workers
         # Default is 10, which bottlenecks if max_workers > 10
@@ -427,7 +428,11 @@ class OrganizationCrawler:
         try:
             # Get organization repositories
             api_url = f"https://api.github.com/orgs/{self.org_name}/repos"
-            response = self.session.get(api_url, params={"per_page": 100})
+            response = self.session.get(
+                api_url,
+                params={"per_page": 100},
+                timeout=self.request_timeout,
+            )
 
             if response.status_code != 200:
                 return {"error": f"API request failed: {response.status_code}"}

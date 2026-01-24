@@ -288,12 +288,14 @@ class MaintenanceScheduler:
                     commit_endpoint = f"/repos/{owner}/{repo}/commits/{branch['commit']['sha']}"  # noqa: E501
                     commit = self.client.get(commit_endpoint)
                     commit_date = datetime.fromisoformat(commit["commit"]["author"]["date"].replace("Z", "+00:00"))
-
-                    if commit_date < cutoff:
-                        stale_branches.append(branch["name"])
-
                 except Exception:
+                    commit_date = None
+
+                if commit_date is None:
                     continue
+
+                if commit_date < cutoff:
+                    stale_branches.append(branch["name"])
 
             if stale_branches:
                 tasks.append(

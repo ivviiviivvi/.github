@@ -57,6 +57,7 @@ class GitHubProjectsManager:
         self.token = token
         self.org = org
         self.api_url = "https://api.github.com/graphql"
+        self.timeout = 10
         self.headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -68,17 +69,21 @@ class GitHubProjectsManager:
         if variables:
             payload["variables"] = variables
 
-        # nosec B113 - Intentional internal API call
         response = requests.post(
-            self.api_url, headers=self.headers, json=payload
+            self.api_url,
+            headers=self.headers,
+            json=payload,
+            timeout=self.timeout,
         )
 
         if response.status_code != 200:
-            raise Exception(f"Query failed: {response.status_code} - {response.text}")
+            raise Exception(
+                f"Query failed: {response.status_code} - {response.text}")
 
         data = response.json()
         if "errors" in data:
-            raise Exception(f"GraphQL errors: {json.dumps(data['errors'], indent=2)}")
+            raise Exception(
+                f"GraphQL errors: {json.dumps(data['errors'], indent=2)}")
 
         return data
 
@@ -697,8 +702,10 @@ PROJECTS_CONFIG = {
 
 def main():
     """Main execution function."""
-    parser = argparse.ArgumentParser(description="Configure GitHub Projects V2")
-    parser.add_argument("--org", required=True, help="GitHub organization name")
+    parser = argparse.ArgumentParser(
+        description="Configure GitHub Projects V2")
+    parser.add_argument("--org", required=True,
+                        help="GitHub organization name")
     parser.add_argument(
         "--projects",
         nargs="+",
@@ -738,8 +745,10 @@ def main():
 
         try:
             # Create project
-            project = manager.create_project(config["title"], config["description"])
-            log_success(f"Created project #{project['number']}: {project['title']}")
+            project = manager.create_project(
+                config["title"], config["description"])
+            log_success(
+                f"Created project #{project['number']}: {project['title']}")
             log_info(f"  URL: {project['url']}")
 
             # Create fields
@@ -748,7 +757,8 @@ def main():
 
                 try:
                     if field_config["type"] == "single_select":
-                        manager.create_single_select_field(project["id"], field_name, field_config["options"])
+                        manager.create_single_select_field(
+                            project["id"], field_name, field_config["options"])
                     elif field_config["type"] == "text":
                         manager.create_text_field(project["id"], field_name)
                     elif field_config["type"] == "number":

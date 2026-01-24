@@ -133,6 +133,9 @@ def reset_quotas():
             try:
                 last_reset = datetime.strptime(sub["last_reset"], "%Y-%m-%d")
             except ValueError:
+                last_reset = None
+
+            if last_reset is None:
                 continue
 
             if sub["reset_cadence"] == "daily":
