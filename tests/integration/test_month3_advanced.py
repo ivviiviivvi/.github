@@ -72,7 +72,7 @@ class TestAutoMerge:
 
     def test_auto_merge_eligibility_criteria(self):
         """Verify PR eligibility criteria for auto-merge."""
-        script = "automation/scripts/check_auto_merge_eligibility.py"
+        script = "src/automation/scripts/check_auto_merge_eligibility.py"
         if not os.path.exists(script):
             pytest.skip("Auto-merge eligibility script not found")
 
@@ -95,12 +95,12 @@ class TestIntelligentRouting:
 
     def test_routing_algorithm_exists(self):
         """Verify intelligent routing script is present."""
-        script = "automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/intelligent_routing.py"
         assert os.path.exists(script), f"Routing script not found: {script}"
 
     def test_routing_factors_all_present(self):
         """Test that routing considers all 5 factors."""
-        script = "automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/intelligent_routing.py"
         with open(script) as f:
             content = f.read()
 
@@ -119,7 +119,7 @@ class TestIntelligentRouting:
 
     def test_routing_load_balancing(self):
         """Test that routing implements load balancing."""
-        script = "automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/intelligent_routing.py"
         with open(script) as f:
             content = f.read()
 
@@ -127,7 +127,7 @@ class TestIntelligentRouting:
 
     def test_routing_fallback_mechanism(self):
         """Verify fallback when no ideal assignee found."""
-        script = "automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/intelligent_routing.py"
         with open(script) as f:
             content = f.read()
 
@@ -135,7 +135,7 @@ class TestIntelligentRouting:
 
     def test_routing_configuration(self):
         """Test that routing configuration is comprehensive."""
-        config = "automation/config/routing-rules.yml"
+        config = "src/automation/config/routing-rules.yml"
         if not os.path.exists(config):
             pytest.skip("Routing config not found")
 
@@ -181,7 +181,7 @@ class TestSelfHealing:
 
     def test_self_healing_dependency_resolution(self):
         """Test dependency resolution on failure."""
-        script = "automation/scripts/resolve_dependencies.py"
+        script = "src/automation/scripts/resolve_dependencies.py"
         if not os.path.exists(script):
             pytest.skip("Dependency resolution script not found")
 
@@ -193,7 +193,7 @@ class TestSelfHealing:
 
     def test_self_healing_failure_classification(self):
         """Verify failures are classified by type."""
-        script = "automation/scripts/classify_failure.py"
+        script = "src/automation/scripts/classify_failure.py"
         if not os.path.exists(script):
             pytest.skip("Failure classification script not found")
 
@@ -224,12 +224,12 @@ class TestProactiveMaintenance:
 
     def test_maintenance_scheduler_exists(self):
         """Verify proactive maintenance scheduler is present."""
-        script = "automation/scripts/schedule_maintenance.py"
+        script = "src/automation/scripts/schedule_maintenance.py"
         assert os.path.exists(script), f"Maintenance scheduler not found: {script}"
 
     def test_maintenance_ml_timing(self):
         """Test that ML predicts optimal maintenance windows."""
-        script = "automation/scripts/schedule_maintenance.py"
+        script = "src/automation/scripts/schedule_maintenance.py"
         with open(script) as f:
             content = f.read()
 
@@ -238,7 +238,7 @@ class TestProactiveMaintenance:
 
     def test_maintenance_minimizes_disruption(self):
         """Verify maintenance scheduling minimizes disruption."""
-        script = "automation/scripts/schedule_maintenance.py"
+        script = "src/automation/scripts/schedule_maintenance.py"
         with open(script) as f:
             content = f.read()
 
@@ -278,12 +278,12 @@ class TestEnhancedAnalytics:
 
     def test_enhanced_ml_model_exists(self):
         """Verify enhanced ML model script is present."""
-        script = "automation/scripts/enhanced_ml_predictions.py"
+        script = "src/automation/scripts/enhanced_ml_predictions.py"
         assert os.path.exists(script), f"Enhanced ML script not found: {script}"
 
     def test_enhanced_ml_accuracy_target(self):
         """Test that model targets 85% accuracy."""
-        script = "automation/scripts/enhanced_ml_predictions.py"
+        script = "src/automation/scripts/enhanced_ml_predictions.py"
         with open(script) as f:
             content = f.read()
 
@@ -292,7 +292,7 @@ class TestEnhancedAnalytics:
 
     def test_enhanced_ml_additional_features(self):
         """Verify ML model uses expanded feature set."""
-        script = "automation/scripts/enhanced_ml_predictions.py"
+        script = "src/automation/scripts/enhanced_ml_predictions.py"
         with open(script) as f:
             content = f.read()
 
@@ -312,12 +312,12 @@ class TestEnhancedAnalytics:
 
     def test_contributor_dashboard_exists(self):
         """Verify contributor dashboard is present."""
-        dashboard = "automation/dashboard/contributor-dashboard.html"
+        dashboard = "src/automation/dashboard/contributor-dashboard.html"
         assert os.path.exists(dashboard), f"Contributor dashboard not found: {dashboard}"
 
     def test_contributor_dashboard_metrics(self):
         """Test that contributor dashboard shows key metrics."""
-        dashboard = "automation/dashboard/contributor-dashboard.html"
+        dashboard = "src/automation/dashboard/contributor-dashboard.html"
         with open(dashboard) as f:
             content = f.read()
 
@@ -335,7 +335,7 @@ class TestEnhancedAnalytics:
 
     def test_repository_health_scoring(self):
         """Verify repository health scoring system."""
-        script = "automation/scripts/calculate_health_score.py"
+        script = "src/automation/scripts/calculate_health_score.py"
         if not os.path.exists(script):
             pytest.skip("Health scoring script not found")
 
@@ -357,7 +357,7 @@ class TestEnhancedAnalytics:
 
     def test_predictive_analytics_dashboard(self):
         """Test that predictive analytics dashboard is enhanced."""
-        dashboard = "automation/dashboard/predictive-analytics.html"
+        dashboard = "src/automation/dashboard/predictive-analytics.html"
         if not os.path.exists(dashboard):
             pytest.skip("Predictive analytics dashboard not found")
 
@@ -379,7 +379,7 @@ class TestOperationalProcedures:
 
     def test_sla_thresholds_defined(self):
         """Test that SLA thresholds are configured."""
-        config = "automation/config/sla-thresholds.yml"
+        config = "src/automation/config/sla-thresholds.yml"
         if not os.path.exists(config):
             pytest.skip("SLA config not found")
 
@@ -447,7 +447,7 @@ class TestOperationalProcedures:
 
     def test_on_call_rotation_configured(self):
         """Test that on-call rotation is configured."""
-        config = "automation/config/on-call-rotation.yml"
+        config = "src/automation/config/on-call-rotation.yml"
         if not os.path.exists(config):
             pytest.skip("On-call config not found")
 
@@ -465,14 +465,14 @@ class TestMonth3Integration:
         """Test that auto-merge updates analytics."""
         # Auto-merge should trigger analytics updates
         auto_merge = ".github/workflows/auto-merge.yml"
-        analytics = "automation/scripts/enhanced_ml_predictions.py"
+        analytics = "src/automation/scripts/enhanced_ml_predictions.py"
 
         assert os.path.exists(auto_merge)
         assert os.path.exists(analytics)
 
     def test_intelligent_routing_uses_analytics(self):
         """Verify intelligent routing leverages analytics data."""
-        routing = "automation/scripts/intelligent_routing.py"
+        routing = "src/automation/scripts/intelligent_routing.py"
         if not os.path.exists(routing):
             pytest.skip("Routing script not found")
 
@@ -528,7 +528,7 @@ class TestMonth3Integration:
     def test_month3_scaling_capability(self):
         """Verify Month 3 systems support 15+ repositories."""
         # Check configuration supports multiple repos
-        routing_config = "automation/config/routing-rules.yml"
+        routing_config = "src/automation/config/routing-rules.yml"
         if not os.path.exists(routing_config):
             pytest.skip("Routing config not found")
 
@@ -543,13 +543,13 @@ class TestMonth3Integration:
         # Check that all Month 3 critical files are present
         month3_files = [
             ".github/workflows/auto-merge.yml",
-            "automation/scripts/check_auto_merge_eligibility.py",
-            "automation/scripts/intelligent_routing.py",
+            "src/automation/scripts/check_auto_merge_eligibility.py",
+            "src/automation/scripts/intelligent_routing.py",
             ".github/workflows/self-healing.yml",
-            "automation/scripts/schedule_maintenance.py",
+            "src/automation/scripts/schedule_maintenance.py",
             ".github/workflows/proactive-maintenance.yml",
-            "automation/scripts/enhanced_ml_predictions.py",
-            "automation/dashboard/contributor-dashboard.html",
+            "src/automation/scripts/enhanced_ml_predictions.py",
+            "src/automation/dashboard/contributor-dashboard.html",
             ".github/workflows/sla-monitoring.yml",
             ".github/workflows/incident-response.yml",
         ]

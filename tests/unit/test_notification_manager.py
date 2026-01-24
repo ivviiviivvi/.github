@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "automation" / "scripts"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from notification_manager import (
     DeliveryRecord,
@@ -270,7 +270,7 @@ class TestIdGeneration:
     def test_generates_unique_ids(self, manager):
         """Test generates unique notification IDs."""
         id1 = manager._generate_id()
-        time.sleep(0.001)  # Small delay to ensure uniqueness
+        time.sleep(1.1)  # Wait for timestamp to change (second-precision)
         id2 = manager._generate_id()
 
         assert id1 != id2

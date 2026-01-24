@@ -10,6 +10,15 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+
+# Force reimport of secret_manager to avoid test pollution from other tests
+# that mock the module at module level
+if "secret_manager" in sys.modules:
+    # Remove any mock that might have been set by other tests
+    del sys.modules["secret_manager"]
+
 import secret_manager
 from secret_manager import (
     _print_secret_error,
@@ -18,17 +27,6 @@ from secret_manager import (
     get_github_token,
     get_secret,
 )
-
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "automation" / "scripts"))
-
-# Force reimport of secret_manager to avoid test pollution from other tests
-# that mock the module at module level
-if "secret_manager" in sys.modules:
-    # Remove any mock that might have been set by other tests
-    del sys.modules["secret_manager"]
-
-
-importlib.reload(secret_manager)
 
 
 class TestGetSecret:

@@ -93,7 +93,7 @@ class TestSlackIntegration:
 
         # In real test, would trigger summary and verify content
         # For now, verify the script includes these metrics
-        summary_script = "automation/scripts/generate_email_digest.py"
+        summary_script = "src/automation/scripts/generate_email_digest.py"
         if os.path.exists(summary_script):
             with open(summary_script) as f:
                 content = f.read()
@@ -106,17 +106,17 @@ class TestRepositoryExpansion:
 
     def test_evaluation_script_exists(self):
         """Verify repository evaluation script is present."""
-        script = "automation/scripts/evaluate_repository.py"
+        script = "src/automation/scripts/evaluate_repository.py"
         assert os.path.exists(script), f"Evaluation script not found: {script}"
 
     def test_evaluation_script_executable(self):
         """Verify evaluation script has correct permissions."""
-        script = "automation/scripts/evaluate_repository.py"
+        script = "src/automation/scripts/evaluate_repository.py"
         assert os.access(script, os.X_OK), f"Script not executable: {script}"
 
     def test_evaluation_scoring_categories(self):
         """Test that evaluation covers all 6 categories."""
-        script = "automation/scripts/evaluate_repository.py"
+        script = "src/automation/scripts/evaluate_repository.py"
         with open(script) as f:
             content = f.read()
 
@@ -134,7 +134,7 @@ class TestRepositoryExpansion:
 
     def test_workflow_generator_exists(self):
         """Verify workflow generator script is present."""
-        script = "automation/scripts/generate_pilot_workflows.py"
+        script = "src/automation/scripts/generate_pilot_workflows.py"
         assert os.path.exists(script), f"Generator script not found: {script}"
 
     def test_workflow_generator_creates_all_workflows(self):
@@ -148,7 +148,7 @@ class TestRepositoryExpansion:
             "collect-metrics",
         ]
 
-        script = "automation/scripts/generate_pilot_workflows.py"
+        script = "src/automation/scripts/generate_pilot_workflows.py"
         with open(script) as f:
             content = f.read()
 
@@ -157,7 +157,7 @@ class TestRepositoryExpansion:
 
     def test_configuration_template_complete(self):
         """Verify configuration template has all required fields."""
-        template = "automation/config/pilot-repo-config-template.yml"
+        template = "src/automation/config/pilot-repo-config-template.yml"
         assert os.path.exists(template), f"Config template not found: {template}"
 
         with open(template) as f:
@@ -194,12 +194,12 @@ class TestABTesting:
 
     def test_ab_test_config_exists(self):
         """Verify A/B test configuration is present."""
-        config = "automation/config/ab-test-config.yml"
+        config = "src/automation/config/ab-test-config.yml"
         assert os.path.exists(config), f"A/B test config not found: {config}"
 
     def test_ab_test_variants_defined(self):
         """Test that both control and treatment variants are defined."""
-        config = "automation/config/ab-test-config.yml"
+        config = "src/automation/config/ab-test-config.yml"
         with open(config) as f:
             content = f.read()
 
@@ -210,14 +210,14 @@ class TestABTesting:
 
     def test_assignment_script_deterministic(self):
         """Test that repository assignment is deterministic."""
-        script_path = "automation/scripts/ab_test_assignment.py"
+        script_path = "src/automation/scripts/ab_test_assignment.py"
         if not os.path.exists(script_path):
             pytest.skip("Assignment script not found")
 
         # Import and test assignment function
         import sys
 
-        sys.path.insert(0, "automation/scripts")
+        sys.path.insert(0, "src/automation/scripts")
 
         try:
             from ab_test_assignment import assign_group
@@ -234,13 +234,13 @@ class TestABTesting:
 
     def test_assignment_distribution(self):
         """Test that assignment distributes repos 50/50."""
-        script_path = "automation/scripts/ab_test_assignment.py"
+        script_path = "src/automation/scripts/ab_test_assignment.py"
         if not os.path.exists(script_path):
             pytest.skip("Assignment script not found")
 
         import sys
 
-        sys.path.insert(0, "automation/scripts")
+        sys.path.insert(0, "src/automation/scripts")
 
         try:
             from ab_test_assignment import assign_group
@@ -275,12 +275,12 @@ class TestDashboardEnhancements:
 
     def test_dashboard_html_exists(self):
         """Verify dashboard HTML file is present."""
-        dashboard = "automation/dashboard/index.html"
+        dashboard = "src/automation/dashboard/index.html"
         assert os.path.exists(dashboard), f"Dashboard not found: {dashboard}"
 
     def test_dashboard_includes_chartjs(self):
         """Test that dashboard uses Chart.js for visualizations."""
-        dashboard = "automation/dashboard/index.html"
+        dashboard = "src/automation/dashboard/index.html"
         with open(dashboard) as f:
             content = f.read()
 
@@ -288,7 +288,7 @@ class TestDashboardEnhancements:
 
     def test_dashboard_has_required_charts(self):
         """Verify dashboard includes all 5 required visualizations."""
-        dashboard = "automation/dashboard/index.html"
+        dashboard = "src/automation/dashboard/index.html"
         with open(dashboard) as f:
             content = f.read()
 
@@ -308,7 +308,7 @@ class TestDashboardEnhancements:
 
     def test_dashboard_auto_refresh(self):
         """Test that dashboard has auto-refresh capability."""
-        dashboard = "automation/dashboard/index.html"
+        dashboard = "src/automation/dashboard/index.html"
         with open(dashboard) as f:
             content = f.read()
 
@@ -336,12 +336,12 @@ class TestEmailDigest:
 
     def test_email_generation_script_exists(self):
         """Verify email generation script is present."""
-        script = "automation/scripts/generate_email_digest.py"
+        script = "src/automation/scripts/generate_email_digest.py"
         assert os.path.exists(script), f"Email script not found: {script}"
 
     def test_email_includes_required_sections(self):
         """Test that email template includes all required sections."""
-        script = "automation/scripts/generate_email_digest.py"
+        script = "src/automation/scripts/generate_email_digest.py"
         with open(script) as f:
             content = f.read()
 
@@ -358,7 +358,7 @@ class TestEmailDigest:
 
     def test_email_html_formatting(self):
         """Test that email uses HTML formatting."""
-        script = "automation/scripts/generate_email_digest.py"
+        script = "src/automation/scripts/generate_email_digest.py"
         with open(script) as f:
             content = f.read()
 
@@ -372,12 +372,12 @@ class TestMLPredictiveAnalytics:
 
     def test_ml_script_exists(self):
         """Verify ML prediction script is present."""
-        script = "automation/scripts/predict_workflow_failures.py"
+        script = "src/automation/scripts/predict_workflow_failures.py"
         assert os.path.exists(script), f"ML script not found: {script}"
 
     def test_ml_script_has_required_modes(self):
         """Test that ML script supports all CLI modes."""
-        script = "automation/scripts/predict_workflow_failures.py"
+        script = "src/automation/scripts/predict_workflow_failures.py"
         with open(script) as f:
             content = f.read()
 
@@ -387,7 +387,7 @@ class TestMLPredictiveAnalytics:
 
     def test_ml_model_features(self):
         """Verify ML model uses expected features."""
-        script = "automation/scripts/predict_workflow_failures.py"
+        script = "src/automation/scripts/predict_workflow_failures.py"
         with open(script) as f:
             content = f.read()
 
@@ -415,12 +415,12 @@ class TestMLPredictiveAnalytics:
 
     def test_predictive_widget_exists(self):
         """Verify React predictive widget is present."""
-        widget = "automation/dashboard/PredictiveWidget.tsx"
+        widget = "src/automation/dashboard/PredictiveWidget.tsx"
         assert os.path.exists(widget), f"Predictive widget not found: {widget}"
 
     def test_predictive_widget_risk_levels(self):
         """Test that widget displays all risk levels."""
-        widget = "automation/dashboard/PredictiveWidget.tsx"
+        widget = "src/automation/dashboard/PredictiveWidget.tsx"
         with open(widget) as f:
             content = f.read()
 
@@ -430,7 +430,7 @@ class TestMLPredictiveAnalytics:
 
     def test_predictive_widget_styling(self):
         """Verify widget has associated CSS styling."""
-        css = "automation/dashboard/PredictiveWidget.css"
+        css = "src/automation/dashboard/PredictiveWidget.css"
         assert os.path.exists(css), f"Widget CSS not found: {css}"
 
         with open(css) as f:
@@ -468,15 +468,15 @@ class TestMonth2Integration:
     def test_ab_test_and_ml_predictions(self):
         """Test that A/B testing works with ML predictions."""
         # ML predictions should account for A/B test groups
-        ml_script = "automation/scripts/predict_workflow_failures.py"
-        ab_script = "automation/scripts/ab_test_assignment.py"
+        ml_script = "src/automation/scripts/predict_workflow_failures.py"
+        ab_script = "src/automation/scripts/ab_test_assignment.py"
 
         assert os.path.exists(ml_script)
         assert os.path.exists(ab_script)
 
     def test_dashboard_displays_month2_metrics(self):
         """Verify dashboard includes Month 2 specific metrics."""
-        dashboard = "automation/dashboard/index.html"
+        dashboard = "src/automation/dashboard/index.html"
         with open(dashboard) as f:
             content = f.read()
 
@@ -498,7 +498,7 @@ class TestMonth2Integration:
     def test_repository_expansion_with_slack(self):
         """Test that expanded repositories get Slack notifications."""
         # Verify config template includes Slack webhook
-        template = "automation/config/pilot-repo-config-template.yml"
+        template = "src/automation/config/pilot-repo-config-template.yml"
         if not os.path.exists(template):
             pytest.skip("Config template not found")
 
@@ -514,17 +514,17 @@ class TestMonth2Integration:
         month2_files = [
             ".github/actions/slack-notify/action.yml",
             ".github/workflows/slack-daily-summary.yml",
-            "automation/scripts/evaluate_repository.py",
-            "automation/scripts/generate_pilot_workflows.py",
-            "automation/config/ab-test-config.yml",
-            "automation/scripts/ab_test_assignment.py",
+            "src/automation/scripts/evaluate_repository.py",
+            "src/automation/scripts/generate_pilot_workflows.py",
+            "src/automation/config/ab-test-config.yml",
+            "src/automation/scripts/ab_test_assignment.py",
             ".github/workflows/stale-management-ab.yml",
-            "automation/dashboard/index.html",
+            "src/automation/dashboard/index.html",
             ".github/workflows/email-digest.yml",
-            "automation/scripts/generate_email_digest.py",
-            "automation/scripts/predict_workflow_failures.py",
-            "automation/dashboard/PredictiveWidget.tsx",
-            "automation/dashboard/PredictiveWidget.css",
+            "src/automation/scripts/generate_email_digest.py",
+            "src/automation/scripts/predict_workflow_failures.py",
+            "src/automation/dashboard/PredictiveWidget.tsx",
+            "src/automation/dashboard/PredictiveWidget.css",
         ]
 
         missing_files = [f for f in month2_files if not os.path.exists(f)]

@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "automation" / "scripts"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from models import (  # Enums; Auto-merge models; Routing models; Self-healing models; Maintenance models; Analytics models; SLA models; Incident models; Validation models; Audit models
     AnalyticsConfig,

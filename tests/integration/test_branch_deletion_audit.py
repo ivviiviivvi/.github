@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-# Get repository root
-REPO_ROOT = Path(__file__).parent.parent
+# Get repository root (repo contains nested .github/ for workflows)
+REPO_ROOT = Path(__file__).parent.parent.parent
 SCRIPTS_DIR = REPO_ROOT / ".github" / "scripts"
 AUDIT_DIR = REPO_ROOT / ".github" / "branch-deletion-audit"
 
