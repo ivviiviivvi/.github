@@ -98,7 +98,7 @@ class AutoMergeConfig(BaseModel):
     notify_on_failure: bool = True
 
     @validator("coverage_threshold")
-    def validate_coverage(self, v):
+    def validate_coverage(cls, v):
         """Validate coverage threshold is reasonable."""
         if v < 0 or v > 100:
             raise ValueError("Coverage threshold must be between 0 and 100")
@@ -158,7 +158,7 @@ class RoutingConfig(BaseModel):
     exempt_labels: list[str] = Field(default_factory=list)
 
     @validator("factors")
-    def validate_weights(self, v):
+    def validate_weights(cls, v):
         """Validate routing weights sum to 1.0."""
         total = sum(v.values())
         if not (0.99 <= total <= 1.01):  # Allow small floating point error
@@ -704,3 +704,7 @@ class ValidationSuite(BaseModel):
         """Override dict to handle datetime serialization."""
         d = super().dict(**kwargs)
         return d
+
+
+# Resolve forward references for Pydantic v1 compatibility
+ItemMetrics.update_forward_refs()
