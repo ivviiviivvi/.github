@@ -13,7 +13,7 @@ email: support@ivviiviivvi.dev
 organization:
   name: Ivviiviivvi
   github_url: https://github.com/ivviiviivvi
-  logo_url: ""
+  logo_url: ''
   tagline: Building innovative solutions through automation and AI
 
 # Build settings
@@ -33,10 +33,10 @@ kramdown:
 
 # Plugins
 plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-relative-links
+- jekyll-feed
+- jekyll-seo-tag
+- jekyll-sitemap
+- jekyll-relative-links
 
 # Collections
 collections:
@@ -46,44 +46,57 @@ collections:
 
 # Defaults
 defaults:
-  - scope:
-      path: ""
-      type: walkthroughs
-    values:
-      layout: walkthrough
-  - scope:
-      path: ""
-      type: pages
-    values:
-      layout: default
+- scope:
+    path: ''
+    type: walkthroughs
+  values:
+    layout: walkthrough
+- scope:
+    path: ''
+    type: pages
+  values:
+    layout: default
 
 # Exclude from build
 exclude:
-  - .git
-  - .github
-  - .gitignore
-  - .pre-commit-config.yaml
-  - .releaserc.json
-  - .semgrep
-  - .vscode
-  - node_modules
-  - vendor
-  - Gemfile
-  - Gemfile.lock
-  - package.json
-  - package-lock.json
-  - README.md
-  - LICENSE
-  - scripts
-  - tmp
-  - cache
+- .git
+- .github/workflows
+- .github/ISSUE_TEMPLATE
+- .gitignore
+- .pre-commit-config.yaml
+- .pre-commit-config-rapid.yaml
+- .releaserc.json
+- .semgrep
+- .vscode
+- .devcontainer
+- node_modules
+- vendor
+- Gemfile
+- Gemfile.lock
+- package.json
+- package-lock.json
+- pyproject.toml
+- pytest.ini
+- LICENSE
+- scripts
+- tests
+- tmp
+- cache
+- archive
+- results
+- __pycache__
 
 # Include in build
 include:
-  - _data
-  - _includes
-  - _layouts
-  - assets
+- _data
+- _includes
+- _layouts
+- assets
+- docs
+- ai_framework
+- automation
+- reports
+- project_meta
 
 # Gallery settings
 gallery:
@@ -114,10 +127,10 @@ gallery:
 search:
   # Search fields: title, description, repository, tags
   fields:
-    - title
-    - description
-    - repository
-    - tags
+  - title
+  - description
+  - repository
+  - tags
   # Minimum search length
   min_length: 2
   # Case sensitive
@@ -126,26 +139,26 @@ search:
 # Theme customization
 theme_customization:
   # Primary color
-  primary_color: "#2ea44f"
+  primary_color: '#2ea44f'
   # Secondary color
-  secondary_color: "#0969da"
+  secondary_color: '#0969da'
   # Background color
-  background_color: "#ffffff"
+  background_color: '#ffffff'
   # Text color
-  text_color: "#24292f"
+  text_color: '#24292f'
   # Header background (gradient)
-  header_gradient_start: "#2ea44f"
-  header_gradient_end: "#0969da"
+  header_gradient_start: '#2ea44f'
+  header_gradient_end: '#0969da'
   # Dark mode
   dark_mode:
     enabled: true
     # Auto-detect user preference
     auto_detect: true
     # Dark mode colors
-    background_color: "#0d1117"
-    text_color: "#c9d1d9"
-    primary_color: "#58a6ff"
-    secondary_color: "#238636"
+    background_color: '#0d1117'
+    text_color: '#c9d1d9'
+    primary_color: '#58a6ff'
+    secondary_color: '#238636'
 
 # Footer settings
 footer:
@@ -153,26 +166,26 @@ footer:
   show_copyright: true
   copyright_year: 2025
   links:
-    - title: GitHub
-      url: https://github.com/ivviiviivvi
-      icon: github
-    - title: Documentation
-      url: https://github.com/ivviiviivvi/.github/tree/main/docs
-      icon: book
-    - title: Support
-      url: https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md
-      icon: help
+  - title: GitHub
+    url: https://github.com/ivviiviivvi
+    icon: github
+  - title: Documentation
+    url: https://github.com/ivviiviivvi/.github/tree/main/docs
+    icon: book
+  - title: Support
+    url: https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md
+    icon: help
 
 # Analytics (optional)
 analytics:
   enabled: false
   provider: google
-  tracking_id: ""
+  tracking_id: ''
 
 # SEO settings
 seo:
   twitter_card: summary_large_image
-  twitter_creator: "@4444JPP"
+  twitter_creator: '@4444JPP'
   og_image: /assets/images/og-image.png
 
 # Performance settings

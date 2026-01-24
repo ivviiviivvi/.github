@@ -477,6 +477,46 @@ globs: *
     echo "TASK_LIST_EOF"
     ```
 
+- **Package.json Requires Lock File:**
+
+  - **Issue:** RHDA (Red Hat Dependency Analytics) reports an error indicating that `package.json` requires a lock file (e.g., `package-lock.json`, `yarn.lock`, or `pnpm-lock.yaml`).
+  - **Solution:** Use the preferred package manager (npm, yarn, or pnpm) to generate the appropriate lock file for the project.
+  - **Example:**
+    - For npm: `npm install` (This will generate or update `package-lock.json`)
+    - For yarn: `yarn install` (This will generate or update `yarn.lock`)
+    - For pnpm: `pnpm install` (This will generate or update `pnpm-lock.yaml`)
+
+- **GitHub Pages Build Failures:**
+
+  - **Issue:** GitHub Pages failing to deploy due to Jekyll build errors or misconfiguration. This often manifests as 404 errors on the live site.
+  - **Troubleshooting:**
+    1. **Check GitHub Pages Status:** Verify the GitHub Pages status in the repository settings. Look for "errored" states and any associated error messages.
+    2. **Examine Recent Builds:** Review recent GitHub Pages builds to identify specific failure causes (e.g., "Page build failed").
+    3. **Inspect Jekyll Configuration:** If using Jekyll, examine the `_config.yml` file for syntax errors or references to missing layouts/includes.
+    4. **Verify Index Page:** Ensure that either `index.html` or `index.md` exists in the root directory of the repository. This serves as the main entry point for the website.
+    5. **Review Deployment Workflows:** Check for any GitHub Actions workflows related to deployment or page builds.
+
+  - **Resolution Strategies:**
+    1. **Modern GitHub Pages with Actions:** Migrate away from legacy Jekyll builds to a modern approach using GitHub Actions for deployment. This offers greater flexibility and control.
+    2. **Create Index Page:** If missing, create an `index.html` or `index.md` file in the repository's root directory. This file should serve as the landing page for the website. Example `index.md`:
+       ```markdown
+       ---
+       layout: default
+       title: Ivviiviivvi Organization Hub
+       ---
+
+       # 🚀 Ivviiviivvi Organization Hub
+
+       [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](VERSION)
+       [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
+       [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](docs/INDEX.md)
+
+       > **AI-Driven Development Infrastructure for the Modern Organization**
+
+       ---
+       ```
+    3. **Disable Legacy Builds:** If not intending to use Jekyll, ensure that GitHub Pages is not configured to automatically build with Jekyll.
+
 ## FINAL DOs AND DON'Ts
 
 - Since the GitHub CLI token (`GITHUB_TOKEN`) lacks the \`project\` scope needed
@@ -678,64 +718,4 @@ globs: *
        referenced.
     1. **Usage Analysis:** Analyze how the token is being used across the
        organization, including in GitHub workflows, scripts, and documentation.
-    1. **Scope Determination:** Determine the scope of the issue by identifying
-       all affected repositories and resources.
-    1. **Secret Scanning:** Check for organization secrets or repository secrets
-       configured with the token.
-  - **Resolution Guidelines:**
-    - **Comprehensive Analysis Document:** Create a detailed analysis document
-      to address the contextual awareness issue, outlining the token's usage,
-      affected areas, and proposed solutions.
-    - **Token Rotation:** Rotate the "master-org-token-011726" PAT to mitigate
-      potential security risks.
-    - **Secure Token Storage:** Store tokens securely, preferably in 1Password,
-      and limit token scopes to only the necessary permissions.
-    - **Access Management Review:** Review and update access management policies
-      to ensure proper control over sensitive resources.
-  - **Reference Documentation:**
-    - See
-      [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../docs/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
-      for comprehensive analysis
-    - See [TOKEN_REGISTRY.md](../docs/TOKEN_REGISTRY.md) for token management
-      guidelines
-    - **Migration Plan:** Replace single master token with purpose-specific
-      tokens by 2026-02-18
-    - GitHub Personal Access Tokens (Classic) REQUIRE the Web UI.
-
-- **Pylance Performance Issues**:
-
-  - **Issue**: Pylance language server is continually running and consuming
-    excessive resources.
-  - **Troubleshooting**:
-    1. **Check for Errors**: Use the `copilot_getErrors` tool to identify any
-       errors or issues reported by Pylance. High number of errors (e.g. > 500)
-       can indicate a configuration or code quality issue.
-    1. **Optimize Pylance Settings**: Adjust Pylance settings in
-       `.vscode/settings.json` to reduce analysis overhead. The following
-       settings are recommended:
-       ```json
-       {
-         "python.analysis.typeCheckingMode": "off", // Disable type checking to reduce overhead
-         "python.analysis.diagnosticMode": "openFilesOnly", // Only analyze open files
-         "python.analysis.exclude": [
-           // Exclude common directories
-           "**/node_modules/**",
-           "**/__pycache__/**",
-           "**/.venv/**",
-           "**/dist/**",
-           "**/build/**",
-           "**/archive/**"
-         ],
-         "python.analysis.ignore": [
-           // Ignore additional paths
-           "**/archive/**",
-           "**/node_modules/**"
-         ],
-         "python.analysis.autoSearchPaths": false, // Prevent automatic path searching
-         "python.analysis.indexing": true, // Enable indexing
-         "python.analysis.memory.keepLibraryAst": false // Reduce memory usage
-       }
-       ```
-    1. **Selective Type Checking**: If type checking is desired, use
-       `"python.analysis.typeCheckingMode": "basic"` in conjunction with
-       `"python
+    1. **Scope Determination:**
