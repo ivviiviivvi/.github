@@ -35,6 +35,7 @@ jobs:
   check-sla-compliance:
     name: Check SLA Compliance
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       compliance_status: ${{ steps.check.outputs.status }}
       breaches: ${{ steps.check.outputs.breaches }}
@@ -140,6 +141,7 @@ jobs:
   alert-on-breach:
     name: Alert on SLA Breach
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: check-sla-compliance
     if: needs.check-sla-compliance.outputs.compliance_status != 'compliant'
     env:
@@ -253,6 +255,7 @@ jobs:
   generate-report:
     name: Generate SLA Report
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: check-sla-compliance
     if: github.event.inputs.force_report == 'true' || github.event.schedule != ''
 

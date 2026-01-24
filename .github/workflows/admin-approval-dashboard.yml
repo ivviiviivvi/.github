@@ -49,6 +49,7 @@ env:
 jobs:
   setup-directories:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Setup Approval Infrastructure
 
     steps:
@@ -88,6 +89,7 @@ jobs:
 
   review-pending:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Review Pending Approvals
     needs: setup-directories
     if: github.event.inputs.action == 'review-pending' || github.event_name == 'schedule' || github.event_name == 'repository_dispatch'
@@ -259,6 +261,7 @@ jobs:
 
   approve-item:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Approve Item(s)
     needs: setup-directories
     if: github.event.inputs.action == 'approve-all' || github.event.inputs.action == 'approve-specific'
@@ -352,6 +355,7 @@ jobs:
 
   reject-item:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Reject Item(s)
     needs: setup-directories
     if: github.event.inputs.action == 'reject-all' || github.event.inputs.action == 'reject-specific'

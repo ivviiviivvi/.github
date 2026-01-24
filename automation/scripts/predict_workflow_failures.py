@@ -105,7 +105,12 @@ class WorkflowPredictor:
                 check=True,
             )
             return json.loads(result.stdout)["nameWithOwner"]
-        except Exception:
+        except (subprocess.SubprocessError, json.JSONDecodeError, KeyError, OSError) as e:
+            # SubprocessError: gh command failed
+            # JSONDecodeError: invalid JSON response
+            # KeyError: missing expected field
+            # OSError: command not found or execution error
+            logging.debug(f"Could not detect repository: {e}")
             return "ivviiviivvi/.github"  # Default
 
     def _extract_features(self, run: dict) -> Optional[dict]:

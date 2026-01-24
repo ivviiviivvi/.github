@@ -27,6 +27,7 @@ jobs:
   validate:
     name: Validate Configuration
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       config-valid: ${{ steps.validate.outputs.valid }}
 
@@ -66,6 +67,7 @@ jobs:
   onboard:
     name: Batch Onboard Repositories
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: validate
     if: needs.validate.outputs.config-valid == 'true'
 
@@ -165,6 +167,7 @@ jobs:
   notify:
     name: Send Notification
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: onboard
     if: always()
 

@@ -31,6 +31,7 @@ jobs:
   create-issues:
     if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'issues' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Create Comprehensive Issues
     steps:
     - name: Checkout repository
@@ -149,6 +150,7 @@ jobs:
   create-discussion-content:
     if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'discussions' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Create Discussion Documentation
     steps:
     - name: Checkout repository
@@ -235,6 +237,7 @@ jobs:
   create-project-templates:
     if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'projects' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Create Project Templates
     steps:
     - name: Checkout repository
@@ -414,6 +417,7 @@ jobs:
   create-wiki-structure:
     if: ${{ github.event.inputs.content_type == 'all' || github.event.inputs.content_type == 'wiki' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Create Wiki Structure Documentation
     steps:
     - name: Checkout repository
@@ -583,6 +587,7 @@ jobs:
     needs: [create-issues, create-discussion-content, create-project-templates, create-wiki-structure]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Generate Summary
     steps:
     - name: Checkout repository

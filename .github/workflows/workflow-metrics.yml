@@ -17,6 +17,7 @@ permissions:
 jobs:
   collect-metrics:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Collect Workflow Metrics
     steps:
     - name: Checkout repository

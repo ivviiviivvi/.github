@@ -32,6 +32,7 @@ jobs:
   check-if-should-run:
     name: Check If Should Run Today
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
 
@@ -67,6 +68,7 @@ jobs:
   orchestrate-daily-tasks:
     name: Orchestrate Daily Tasks
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: check-if-should-run
     if: needs.check-if-should-run.outputs.should-run == 'true'
     outputs:
@@ -160,6 +162,7 @@ jobs:
   process-task-queue:
     name: Process Queued Tasks
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [check-if-should-run, orchestrate-daily-tasks]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
 
@@ -174,6 +177,7 @@ jobs:
   consolidate-prs:
     name: Consolidate All Open PRs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [check-if-should-run, orchestrate-daily-tasks, process-task-queue]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
 
@@ -195,6 +199,7 @@ jobs:
   cleanup:
     name: Cleanup Old Records
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [check-if-should-run, consolidate-prs]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
 
@@ -224,6 +229,7 @@ jobs:
   summary:
     name: Daily Orchestration Summary
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [check-if-should-run, orchestrate-daily-tasks, process-task-queue, consolidate-prs, cleanup]
     if: always()
 

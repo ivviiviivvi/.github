@@ -153,12 +153,94 @@ jobs:
         id: merge_order
         if: steps.validate.outputs.all_ready == 'true'
         run: |
-          echo "🔀 Determining optimal merge order..."
+          echo "🔀 Determining optimal merge order based on file dependencies..."
 
-          # For now, use creation order (oldest first)
-          # TODO: Add dependency detection (based on file changes overlap)
+          # Build dependency graph based on file changes overlap
+          # PRs that modify the same files should be merged in creation order to avoid conflicts
 
-          MERGE_ORDER=$(jq -r 'sort_by(.createdAt) | .[].number' batch_prs.json | tr '\n' ' ')
+          # Collect file changes for each PR
+          declare -A FILE_CHANGES
+          declare -A PR_DATES
+
+          for PR_NUM in $(jq -r '.[].number' batch_prs.json); do
+            # Get files changed by this PR
+            FILES=$(gh pr view "$PR_NUM" --json files -q '.files[].path' 2>/dev/null | sort | tr '\n' '|')
+            FILE_CHANGES[$PR_NUM]="$FILES"
+
+            # Get creation date for ordering
+            CREATED=$(jq -r --arg n "$PR_NUM" '.[] | select(.number == ($n|tonumber)) | .createdAt' batch_prs.json)
+            PR_DATES[$PR_NUM]="$CREATED"
+          done
+
+          # Build dependency list: if PR B modifies files that PR A also modifies,
+          # and A was created before B, then B depends on A (A should merge first)
+          declare -A DEPENDENCIES
+
+          for PR_A in $(jq -r '.[].number' batch_prs.json); do
+            for PR_B in $(jq -r '.[].number' batch_prs.json); do
+              if [ "$PR_A" != "$PR_B" ]; then
+                # Check for file overlap
+                FILES_A="${FILE_CHANGES[$PR_A]}"
+                FILES_B="${FILE_CHANGES[$PR_B]}"
+
+                # Find common files
+                OVERLAP=""
+                IFS='|' read -ra A_ARRAY <<< "$FILES_A"
+                for file in "${A_ARRAY[@]}"; do
+                  if [ -n "$file" ] && echo "$FILES_B" | grep -q "$file"; then
+                    OVERLAP="yes"
+                    break
+                  fi
+                done
+
+                if [ -n "$OVERLAP" ]; then
+                  # PRs have overlapping files - older PR should merge first
+                  DATE_A="${PR_DATES[$PR_A]}"
+                  DATE_B="${PR_DATES[$PR_B]}"
+
+                  if [[ "$DATE_A" < "$DATE_B" ]]; then
+                    # A is older, B depends on A
+                    DEPENDENCIES[$PR_B]+=" $PR_A"
+                    echo "  PR #$PR_B depends on PR #$PR_A (overlapping files)"
+                  fi
+                fi
+              fi
+            done
+          done
+
+          # Topological sort for merge order (dependencies first)
+          # Build input for tsort: "dependency dependent" pairs
+          TSORT_INPUT=""
+          for pr in "${!DEPENDENCIES[@]}"; do
+            for dep in ${DEPENDENCIES[$pr]}; do
+              TSORT_INPUT+="$dep $pr"$'\n'
+            done
+          done
+
+          # Add all PRs that have no dependencies (may not appear in tsort input)
+          ALL_PRS=$(jq -r '.[].number' batch_prs.json | tr '\n' ' ')
+
+          if [ -n "$TSORT_INPUT" ]; then
+            # Use tsort to determine order, fallback to creation order on cycle
+            SORTED_ORDER=$(echo "$TSORT_INPUT" | tsort 2>/dev/null || jq -r 'sort_by(.createdAt) | .[].number' batch_prs.json)
+
+            # tsort only outputs PRs that appear in dependencies, add remaining in creation order
+            MERGE_ORDER=""
+            for pr in $SORTED_ORDER; do
+              MERGE_ORDER+="$pr "
+            done
+
+            # Add any PRs not in sorted output
+            for pr in $ALL_PRS; do
+              if ! echo "$MERGE_ORDER" | grep -qw "$pr"; then
+                MERGE_ORDER+="$pr "
+              fi
+            done
+          else
+            # No dependencies found, use creation order
+            echo "  No file overlaps detected, using creation order"
+            MERGE_ORDER=$(jq -r 'sort_by(.createdAt) | .[].number' batch_prs.json | tr '\n' ' ')
+          fi
 
           echo "Merge order: $MERGE_ORDER"
           echo "order=$MERGE_ORDER" >> $GITHUB_OUTPUT

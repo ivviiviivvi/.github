@@ -44,6 +44,7 @@ jobs:
   analyze-prs:
     name: Analyze PR Landscape
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       draft-prs: ${{ steps.analyze.outputs.draft-prs }}
       ready-prs: ${{ steps.analyze.outputs.ready-prs }}
@@ -240,6 +241,7 @@ jobs:
   convert-drafts:
     name: Convert Draft PRs to Ready
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: analyze-prs
     if: |
       (github.event.inputs.action == 'draft-to-ready-all' ||
@@ -332,6 +334,7 @@ jobs:
   merge-ready-prs:
     name: Merge Ready PRs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [analyze-prs, convert-drafts]
     if: |
       always() &&
@@ -464,6 +467,7 @@ jobs:
   create-summary-issue:
     name: Create Summary Issue
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [analyze-prs, convert-drafts, merge-ready-prs]
     if: always() && github.event_name != 'schedule'
 
@@ -509,6 +513,7 @@ jobs:
   summary:
     name: Workflow Summary
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [analyze-prs, convert-drafts, merge-ready-prs]
     if: always()
 

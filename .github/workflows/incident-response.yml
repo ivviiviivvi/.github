@@ -54,6 +54,7 @@ jobs:
   detect-and-assess:
     name: Detect and Assess Incident
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     # Only process workflow failures to avoid alert fatigue
     if: github.event.workflow_run.conclusion == 'failure' || github.event_name != 'workflow_run'
     outputs:
@@ -137,6 +138,7 @@ jobs:
   mitigate:
     name: Mitigate Incident
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: detect-and-assess
     if: needs.detect-and-assess.outputs.is_incident == 'true'
 
@@ -188,6 +190,7 @@ jobs:
   notify-stakeholders:
     name: Notify Stakeholders
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [detect-and-assess, mitigate]
     if: needs.detect-and-assess.outputs.is_incident == 'true'
     env:
@@ -330,6 +333,7 @@ jobs:
   post-incident:
     name: Post-Incident Actions
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [detect-and-assess, mitigate, notify-stakeholders]
     if: always() && needs.detect-and-assess.outputs.is_incident == 'true'
 

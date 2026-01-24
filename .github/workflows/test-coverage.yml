@@ -25,6 +25,7 @@ jobs:
   test:
     name: Run Tests with Coverage
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
@@ -92,6 +93,7 @@ jobs:
   security-tests:
     name: Run Security-Focused Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - name: Checkout code
@@ -115,6 +117,7 @@ jobs:
   integration-tests:
     name: Run Integration Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 
     steps:

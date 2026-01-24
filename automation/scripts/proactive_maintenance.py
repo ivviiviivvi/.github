@@ -288,7 +288,11 @@ class MaintenanceScheduler:
                     commit_endpoint = f"/repos/{owner}/{repo}/commits/{branch['commit']['sha']}"  # noqa: E501
                     commit = self.client.get(commit_endpoint)
                     commit_date = datetime.fromisoformat(commit["commit"]["author"]["date"].replace("Z", "+00:00"))
-                except Exception:
+                except (KeyError, TypeError, ValueError, OSError) as e:
+                    # KeyError/TypeError: unexpected API response format
+                    # ValueError: invalid date format
+                    # OSError: network errors
+                    self.logger.debug(f"Could not get commit date for branch {branch.get('name', 'unknown')}: {e}")
                     commit_date = None
 
                 if commit_date is None:

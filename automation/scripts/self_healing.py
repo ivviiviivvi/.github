@@ -617,7 +617,10 @@ class SelfHealingEngine:
         try:
             run = self._get_workflow_run(owner, repo, run_id)
             return run.get("run_attempt", 1) - 1
-        except Exception:
+        except (KeyError, TypeError, OSError) as e:
+            # KeyError/TypeError: unexpected API response format
+            # OSError: network errors
+            self.logger.debug(f"Could not get retry count for run {run_id}: {e}")
             return 0
 
     def _rerun_workflow(self, owner: str, repo: str, run_id: int) -> bool:

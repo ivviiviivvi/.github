@@ -1,4 +1,4 @@
-name: Branch Lifecycle Management
+name: Branch Lifecycle (Core)
 
 on:
   schedule:

@@ -23,6 +23,7 @@ jobs:
   validate-devcontainer:
     name: Validate DevContainer Configurations
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
         template:
@@ -75,6 +76,7 @@ jobs:
   test-devcontainer-build:
     name: Test DevContainer Build
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
         template:
@@ -114,6 +116,7 @@ jobs:
   validate-scripts:
     name: Validate Workspace Scripts
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
@@ -144,6 +147,7 @@ jobs:
   validate-documentation:
     name: Validate Documentation
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
@@ -170,6 +174,7 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
@@ -202,6 +207,7 @@ jobs:
   summary:
     name: Validation Summary
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs:
     - validate-devcontainer
     - test-devcontainer-build

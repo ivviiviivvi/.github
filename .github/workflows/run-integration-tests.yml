@@ -41,6 +41,7 @@ jobs:
   test-month1:
     name: Month 1 Core Workflows
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name != 'workflow_dispatch' ||
       github.event.inputs.test_suite == 'all' ||
@@ -96,6 +97,7 @@ jobs:
   test-month2:
     name: Month 2 Features
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name != 'workflow_dispatch' ||
       github.event.inputs.test_suite == 'all' ||
@@ -152,6 +154,7 @@ jobs:
   test-month3:
     name: Month 3 Advanced Automation
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name != 'workflow_dispatch' ||
       github.event.inputs.test_suite == 'all' ||
@@ -208,6 +211,7 @@ jobs:
   test-critical:
     name: Critical Path Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name != 'workflow_dispatch' ||
       github.event.inputs.test_suite == 'all' ||
@@ -255,6 +259,7 @@ jobs:
   aggregate-results:
     name: Aggregate Test Results
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [test-month1, test-month2, test-month3, test-critical]
     if: always()
 

@@ -16,6 +16,7 @@ jobs:
   initial-triage:
     name: Initial Triage
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
     steps:
       - name: Add needs-triage label
@@ -56,6 +57,7 @@ jobs:
   auto-label:
     name: Auto-label Based on Content
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'issues' && github.event.action == 'opened'
     steps:
       - name: Analyze and label
@@ -122,6 +124,7 @@ jobs:
   check-triage-sla:
     name: Check Triage SLA
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Find untriaged issues
@@ -172,6 +175,7 @@ jobs:
   remove-triage-label:
     name: Remove Triage Label When Complete
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'issues' && github.event.action == 'labeled'
     steps:
       - name: Check if triage is complete

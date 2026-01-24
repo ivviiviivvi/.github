@@ -17,6 +17,7 @@ jobs:
   assign-reviewers:
     name: Assign Reviewers from CODEOWNERS
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event.pull_request.draft == false
     steps:
       - name: Checkout code
@@ -168,6 +169,7 @@ jobs:
   set-review-reminders:
     name: Set Review Reminder
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event.pull_request.draft == false
     steps:
       - name: Schedule review reminder

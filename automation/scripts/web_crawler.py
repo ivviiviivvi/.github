@@ -230,7 +230,9 @@ class OrganizationCrawler:
                     return False
 
             return True
-        except Exception:
+        except (ValueError, OSError):
+            # ValueError: invalid IP address format
+            # OSError: DNS resolution or socket errors
             return False
 
     @functools.lru_cache(maxsize=1024)

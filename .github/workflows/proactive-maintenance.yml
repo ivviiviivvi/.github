@@ -35,6 +35,7 @@ jobs:
   analyze-maintenance-needs:
     name: Analyze Maintenance Needs
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       needs_dependency_update: ${{ steps.analyze.outputs.needs_dependency_update }}
       needs_cleanup: ${{ steps.analyze.outputs.needs_cleanup }}
@@ -90,6 +91,7 @@ jobs:
   update-dependencies:
     name: Update Dependencies
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: analyze-maintenance-needs
     if: |
       (needs.analyze-maintenance-needs.outputs.needs_dependency_update == 'true' ||
@@ -167,6 +169,7 @@ jobs:
   perform-cleanup:
     name: Perform Cleanup
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: analyze-maintenance-needs
     if: |
       (needs.analyze-maintenance-needs.outputs.needs_cleanup == 'true' ||
@@ -220,6 +223,7 @@ jobs:
   run-optimization:
     name: Run Optimization
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: analyze-maintenance-needs
     if: |
       (needs.analyze-maintenance-needs.outputs.needs_optimization == 'true' ||
@@ -254,6 +258,7 @@ jobs:
   notify-completion:
     name: Notify Maintenance Completion
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [update-dependencies, perform-cleanup, run-optimization]
     if: always()
     env:

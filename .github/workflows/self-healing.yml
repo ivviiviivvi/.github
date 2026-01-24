@@ -30,6 +30,7 @@ jobs:
   classify-failure:
     name: Classify Failure
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch'
     outputs:
       failure_type: ${{ steps.classify.outputs.failure_type }}
@@ -126,6 +127,7 @@ jobs:
   retry-workflow:
     name: Retry Workflow (Attempt ${{ needs.classify-failure.outputs.attempt_number }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: classify-failure
     if: needs.classify-failure.outputs.should_retry == 'true'
 
@@ -157,6 +159,7 @@ jobs:
   notify-permanent-failure:
     name: Notify Permanent Failure
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: classify-failure
     if: |
       needs.classify-failure.outputs.failure_type == 'permanent' ||
@@ -226,6 +229,7 @@ jobs:
   resolve-dependencies:
     name: Resolve Dependencies
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: classify-failure
     if: needs.classify-failure.outputs.failure_type == 'dependency'
 

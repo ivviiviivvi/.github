@@ -20,6 +20,7 @@ jobs:
   stale-issues:
     name: Manage Stale Issues
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Mark and close stale issues
       uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e  # ratchet:actions/stale@v9
@@ -121,6 +122,7 @@ jobs:
   warn-inactive-assigned:
     name: Warn on Inactive Assigned Issues
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Check for inactive assigned issues
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
@@ -225,6 +227,7 @@ jobs:
   unassign-inactive:
     name: Unassign Long-Inactive Issues
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Unassign from very inactive issues
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7

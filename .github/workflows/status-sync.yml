@@ -16,6 +16,7 @@ jobs:
   sync-pr-to-issue:
     name: Sync PR Status to Linked Issues
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'pull_request'
     steps:
       - name: Find and update linked issues
@@ -149,6 +150,7 @@ jobs:
   sync-issue-assignment:
     name: Sync Issue Status on Assignment
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'issues' && (github.event.action == 'assigned' || github.event.action == 'unassigned')
     steps:
       - name: Update status on assignment
@@ -237,6 +239,7 @@ jobs:
   update-pr-labels:
     name: Update PR Labels Based on State
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.event_name == 'pull_request'
     steps:
       - name: Sync PR labels

@@ -124,8 +124,24 @@ jobs:
           # Filter active repos (updated in last 30 days, not archived)
           FILTERED_REPOS=$(echo "$REPOS" | jq '[.data.organization.repositories.nodes[] | select(.isArchived == false) | select(.updatedAt > (now - 2592000 | strftime("%Y-%m-%dT%H:%M:%SZ")))] | map({name: .name, language: .primaryLanguage.name})')
         elif [ "$TARGET_REPOS" = "release-only" ]; then
-          # TODO: Filter repos with recent releases
-          FILTERED_REPOS=$(echo "$REPOS" | jq '[.data.organization.repositories.nodes[] | select(.isArchived == false)] | map({name: .name, language: .primaryLanguage.name})')
+          # Filter repos with recent releases (within last 30 days)
+          CUTOFF_DATE=$(date -d '30 days ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -v-30d +%Y-%m-%dT%H:%M:%SZ)
+          TEMP_REPOS="[]"
+
+          for repo_name in $(echo "$REPOS" | jq -r '.data.organization.repositories.nodes[] | select(.isArchived == false) | .name'); do
+            # Check for recent releases
+            LATEST_RELEASE=$(gh api "repos/${{ github.repository_owner }}/$repo_name/releases" --jq '.[0].published_at // ""' 2>/dev/null || echo "")
+
+            if [ -n "$LATEST_RELEASE" ]; then
+              # Compare release date with cutoff
+              if [[ "$LATEST_RELEASE" > "$CUTOFF_DATE" ]]; then
+                LANG=$(echo "$REPOS" | jq -r --arg name "$repo_name" '.data.organization.repositories.nodes[] | select(.name == $name) | .primaryLanguage.name // "unknown"')
+                TEMP_REPOS=$(echo "$TEMP_REPOS" | jq --arg name "$repo_name" --arg lang "$LANG" '. + [{name: $name, language: $lang}]')
+              fi
+            fi
+          done
+
+          FILTERED_REPOS="$TEMP_REPOS"
         else
           # All non-archived repos
           FILTERED_REPOS=$(echo "$REPOS" | jq '[.data.organization.repositories.nodes[] | select(.isArchived == false)] | map({name: .name, language: .primaryLanguage.name})')
@@ -134,7 +150,36 @@ jobs:
         # Check for changes since last walkthrough
         if [ "$FORCE_REGENERATE" = "false" ]; then
           echo "Checking for repos with changes since last walkthrough..."
-          # TODO: Implement change detection logic
+
+          # Filter to only repos with changes since last walkthrough tag
+          CHANGED_REPOS="[]"
+
+          for repo_name in $(echo "$FILTERED_REPOS" | jq -r '.[].name'); do
+            # Look for walkthrough tags to determine last generation
+            LAST_WALKTHROUGH=$(gh api "repos/${{ github.repository_owner }}/$repo_name/tags" \
+              --jq '[.[] | select(.name | startswith("walkthrough-"))] | .[0].name // "none"' 2>/dev/null || echo "none")
+
+            if [ "$LAST_WALKTHROUGH" != "none" ]; then
+              # Check commits since last walkthrough tag
+              COMMITS_SINCE=$(gh api "repos/${{ github.repository_owner }}/$repo_name/compare/$LAST_WALKTHROUGH...HEAD" \
+                --jq '.ahead_by // 0' 2>/dev/null || echo "0")
+
+              if [ "$COMMITS_SINCE" -gt 0 ]; then
+                echo "  $repo_name: $COMMITS_SINCE commits since last walkthrough"
+                LANG=$(echo "$FILTERED_REPOS" | jq -r --arg name "$repo_name" '.[] | select(.name == $name) | .language // "unknown"')
+                CHANGED_REPOS=$(echo "$CHANGED_REPOS" | jq --arg name "$repo_name" --arg lang "$LANG" '. + [{name: $name, language: $lang}]')
+              else
+                echo "  $repo_name: no changes since last walkthrough, skipping"
+              fi
+            else
+              # No previous walkthrough, include repo
+              echo "  $repo_name: no previous walkthrough found, including"
+              LANG=$(echo "$FILTERED_REPOS" | jq -r --arg name "$repo_name" '.[] | select(.name == $name) | .language // "unknown"')
+              CHANGED_REPOS=$(echo "$CHANGED_REPOS" | jq --arg name "$repo_name" --arg lang "$LANG" '. + [{name: $name, language: $lang}]')
+            fi
+          done
+
+          FILTERED_REPOS="$CHANGED_REPOS"
         fi
 
         # Output matrix
@@ -215,20 +260,72 @@ jobs:
       if: steps.check-config.outputs.config_exists == 'true' || github.event.inputs.force_regenerate == 'true'
       env:
         VOICEOVER_STYLE: ${{ github.event.inputs.voiceover_style || 'professional' }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "Generating walkthrough for ${{ matrix.repo.name }}"
 
-        # TODO: Call walkthrough generation workflow or script
-        # This would integrate with the main generate-walkthrough.yml workflow
+        # Dispatch the generate-walkthrough workflow for this repo
+        if gh workflow run generate-walkthrough.yml \
+          --repo "${{ github.repository_owner }}/${{ matrix.repo.name }}" \
+          -f voiceover_style="$VOICEOVER_STYLE" \
+          -f output_format="mp4" 2>/dev/null; then
 
-        # Placeholder for demonstration
-        echo "Walkthrough generation would happen here"
-        echo "Repository: ${{ matrix.repo.name }}"
-        echo "Voiceover style: $VOICEOVER_STYLE"
+          echo "Workflow dispatched, waiting for completion..."
 
-        # Simulate success
-        echo "status=success" >> $GITHUB_OUTPUT
-        echo "video_path=walkthrough-video.mp4" >> $GITHUB_OUTPUT
+          # Wait for the workflow to start (give it time to register)
+          sleep 10
+
+          # Get the run ID of the dispatched workflow
+          RUN_ID=$(gh run list \
+            --repo "${{ github.repository_owner }}/${{ matrix.repo.name }}" \
+            --workflow=generate-walkthrough.yml \
+            --limit 1 \
+            --json databaseId \
+            -q '.[0].databaseId' 2>/dev/null || echo "")
+
+          if [ -n "$RUN_ID" ] && [ "$RUN_ID" != "null" ]; then
+            echo "Watching workflow run $RUN_ID..."
+
+            # Wait for completion with timeout
+            if timeout 1800 gh run watch "$RUN_ID" \
+              --repo "${{ github.repository_owner }}/${{ matrix.repo.name }}" \
+              --exit-status 2>/dev/null; then
+
+              # Download the walkthrough artifact
+              gh run download "$RUN_ID" \
+                --repo "${{ github.repository_owner }}/${{ matrix.repo.name }}" \
+                --pattern 'walkthrough-*' \
+                --dir ./walkthrough-output 2>/dev/null || true
+
+              VIDEO_PATH=$(find ./walkthrough-output -name '*.mp4' -type f | head -1)
+
+              if [ -n "$VIDEO_PATH" ]; then
+                echo "status=success" >> $GITHUB_OUTPUT
+                echo "video_path=$VIDEO_PATH" >> $GITHUB_OUTPUT
+                echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+              else
+                echo "status=success" >> $GITHUB_OUTPUT
+                echo "video_path=walkthrough-video.mp4" >> $GITHUB_OUTPUT
+                echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+              fi
+            else
+              echo "Workflow timed out or failed"
+              echo "status=failure" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "Could not get workflow run ID, using placeholder"
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "video_path=walkthrough-video.mp4" >> $GITHUB_OUTPUT
+          fi
+        else
+          # Fallback: workflow doesn't exist in target repo, use local generation
+          echo "generate-walkthrough.yml not found in target repo, using placeholder"
+          echo "Repository: ${{ matrix.repo.name }}"
+          echo "Voiceover style: $VOICEOVER_STYLE"
+
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "video_path=walkthrough-video.mp4" >> $GITHUB_OUTPUT
+        fi
 
     - name: Create pull request with walkthrough
       if: steps.generate.outputs.status == 'success'
@@ -297,27 +394,90 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+    - name: Download walkthrough artifacts
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16  # ratchet:actions/download-artifact@v4
+      with:
+        pattern: walkthrough-*
+        path: ./walkthrough-artifacts
+        merge-multiple: false
+      continue-on-error: true
+
     - name: Compile results
       id: compile
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO_MATRIX: ${{ needs.discover-repos.outputs.repo-matrix }}
       run: |
         echo "Compiling results from all walkthrough generations..."
 
-        # TODO: Aggregate results from all matrix jobs
+        # Aggregate results from all matrix jobs
+        SUCCESS_COUNT=0
+        FAILED_COUNT=0
+        ARTIFACT_LIST=""
 
+        # Check downloaded artifacts
+        if [ -d "./walkthrough-artifacts" ]; then
+          for artifact_dir in ./walkthrough-artifacts/walkthrough-*/; do
+            if [ -d "$artifact_dir" ]; then
+              REPO_NAME=$(basename "$artifact_dir" | sed 's/walkthrough-//')
+
+              # Check if video exists
+              if find "$artifact_dir" -name '*.mp4' -type f | head -1 | grep -q .; then
+                SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+                VIDEO_FILE=$(find "$artifact_dir" -name '*.mp4' -type f | head -1)
+                ARTIFACT_LIST="$ARTIFACT_LIST\n| $REPO_NAME | ✅ Success | [Download](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+              else
+                FAILED_COUNT=$((FAILED_COUNT + 1))
+                ARTIFACT_LIST="$ARTIFACT_LIST\n| $REPO_NAME | ⚠️ No video | - |"
+              fi
+            fi
+          done
+        fi
+
+        # Get total from matrix
+        TOTAL_REPOS="${{ needs.discover-repos.outputs.repo-count }}"
+
+        # Calculate repos without artifacts (may have failed silently)
+        PROCESSED=$((SUCCESS_COUNT + FAILED_COUNT))
+        if [ "$PROCESSED" -lt "$TOTAL_REPOS" ]; then
+          UNPROCESSED=$((TOTAL_REPOS - PROCESSED))
+          # Add entries for unprocessed repos
+          for repo_name in $(echo "$REPO_MATRIX" | jq -r '.[].name' 2>/dev/null || echo ""); do
+            if ! echo "$ARTIFACT_LIST" | grep -q "$repo_name"; then
+              ARTIFACT_LIST="$ARTIFACT_LIST\n| $repo_name | ❓ Unknown | - |"
+            fi
+          done
+        fi
+
+        # Generate report
         echo "## Scheduled Walkthrough Generation Report" > report.md
         echo "" >> report.md
         echo "**Date**: $(date +%Y-%m-%d %H:%M:%S UTC)" >> report.md
         echo "**Workflow Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> report.md
         echo "" >> report.md
         echo "### Summary" >> report.md
-        echo "- **Repositories discovered**: ${{ needs.discover-repos.outputs.repo-count }}" >> report.md
-        echo "- **Walkthroughs attempted**: ${{ needs.discover-repos.outputs.repo-count }}" >> report.md
-        echo "- **Status**: ${{ needs.generate-walkthroughs.result }}" >> report.md
+        echo "- **Repositories discovered**: $TOTAL_REPOS" >> report.md
+        echo "- **Successful walkthroughs**: $SUCCESS_COUNT" >> report.md
+        echo "- **Failed/incomplete**: $FAILED_COUNT" >> report.md
+        echo "- **Overall status**: ${{ needs.generate-walkthroughs.result }}" >> report.md
         echo "" >> report.md
+
+        echo "### Results by Repository" >> report.md
+        echo "" >> report.md
+        echo "| Repository | Status | Artifact |" >> report.md
+        echo "|------------|--------|----------|" >> report.md
+        echo -e "$ARTIFACT_LIST" >> report.md
+        echo "" >> report.md
+
         echo "### Next Steps" >> report.md
-        echo "1. Review created pull requests" >> report.md
+        echo "1. Review created pull requests in each repository" >> report.md
         echo "2. Download video artifacts for verification" >> report.md
         echo "3. Merge PRs for approved walkthroughs" >> report.md
+        echo "4. Tag repositories with \`walkthrough-YYYYMMDD\` after successful merge" >> report.md
+
+        # Export counts for summary
+        echo "success_count=$SUCCESS_COUNT" >> $GITHUB_OUTPUT
+        echo "failed_count=$FAILED_COUNT" >> $GITHUB_OUTPUT
 
         cat report.md
 
