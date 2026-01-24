@@ -51,9 +51,7 @@ class MaintenanceScheduler:
         self.config = config
         self.logger = setup_logger(__name__)
 
-    def schedule_maintenance(
-        self, owner: str, repo: str, task_type: str
-    ) -> MaintenanceWindow:
+    def schedule_maintenance(self, owner: str, repo: str, task_type: str) -> MaintenanceWindow:
         """Schedule optimal maintenance window for task.
 
         Args:
@@ -74,9 +72,7 @@ class MaintenanceScheduler:
         pending_tasks = self._get_pending_tasks(owner, repo, task_type)
 
         # Predict optimal windows
-        windows = self._predict_maintenance_windows(
-            owner, repo, task_type, activity_data, pending_tasks
-        )
+        windows = self._predict_maintenance_windows(owner, repo, task_type, activity_data, pending_tasks)
 
         if not windows:
             raise ValueError("No suitable maintenance windows found")
@@ -115,14 +111,10 @@ class MaintenanceScheduler:
         issue_activity = self._get_issue_activity(owner, repo)
 
         # Calculate hourly patterns
-        hourly_patterns = self._calculate_hourly_patterns(
-            commit_activity, workflow_activity, issue_activity
-        )
+        hourly_patterns = self._calculate_hourly_patterns(commit_activity, workflow_activity, issue_activity)
 
         # Calculate daily patterns
-        daily_patterns = self._calculate_daily_patterns(
-            commit_activity, workflow_activity, issue_activity
-        )
+        daily_patterns = self._calculate_daily_patterns(commit_activity, workflow_activity, issue_activity)
 
         return {
             "hourly_patterns": hourly_patterns,
@@ -167,18 +159,14 @@ class MaintenanceScheduler:
             self.logger.warning(f"Error fetching issues: {e}")
             return []
 
-    def _calculate_hourly_patterns(
-        self, commits: List, workflows: List, issues: List
-    ) -> Dict[int, float]:
+    def _calculate_hourly_patterns(self, commits: List, workflows: List, issues: List) -> Dict[int, float]:
         """Calculate activity score by hour of day (0-23)."""
         hourly_activity = {hour: 0.0 for hour in range(24)}
 
         # Weight commits
         for commit in commits:
             if commit.get("commit", {}).get("author", {}).get("date"):
-                dt = datetime.fromisoformat(
-                    commit["commit"]["author"]["date"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(commit["commit"]["author"]["date"].replace("Z", "+00:00"))
                 hour = dt.hour
                 hourly_activity[hour] += 1.0
 
@@ -199,24 +187,18 @@ class MaintenanceScheduler:
         # Normalize to 0-1 scale
         max_activity = max(hourly_activity.values()) if hourly_activity else 1
         if max_activity > 0:
-            hourly_activity = {
-                h: score / max_activity for h, score in hourly_activity.items()
-            }
+            hourly_activity = {h: score / max_activity for h, score in hourly_activity.items()}
 
         return hourly_activity
 
-    def _calculate_daily_patterns(
-        self, commits: List, workflows: List, issues: List
-    ) -> Dict[int, float]:
+    def _calculate_daily_patterns(self, commits: List, workflows: List, issues: List) -> Dict[int, float]:
         """Calculate activity score by day of week (0=Monday, 6=Sunday)."""
         daily_activity = {day: 0.0 for day in range(7)}
 
         # Weight commits
         for commit in commits:
             if commit.get("commit", {}).get("author", {}).get("date"):
-                dt = datetime.fromisoformat(
-                    commit["commit"]["author"]["date"].replace("Z", "+00:00")
-                )
+                dt = datetime.fromisoformat(commit["commit"]["author"]["date"].replace("Z", "+00:00"))
                 day = dt.weekday()
                 daily_activity[day] += 1.0
 
@@ -237,15 +219,11 @@ class MaintenanceScheduler:
         # Normalize to 0-1 scale
         max_activity = max(daily_activity.values()) if daily_activity else 1
         if max_activity > 0:
-            daily_activity = {
-                d: score / max_activity for d, score in daily_activity.items()
-            }
+            daily_activity = {d: score / max_activity for d, score in daily_activity.items()}
 
         return daily_activity
 
-    def _get_pending_tasks(
-        self, owner: str, repo: str, task_type: str
-    ) -> List[MaintenanceTask]:
+    def _get_pending_tasks(self, owner: str, repo: str, task_type: str) -> List[MaintenanceTask]:
         """Get pending maintenance tasks."""
         tasks = []
 
@@ -258,9 +236,7 @@ class MaintenanceScheduler:
 
         return tasks
 
-    def _get_dependency_update_tasks(
-        self, owner: str, repo: str
-    ) -> List[MaintenanceTask]:
+    def _get_dependency_update_tasks(self, owner: str, repo: str) -> List[MaintenanceTask]:
         """Identify dependency updates needed."""
         tasks = []
 
@@ -300,9 +276,7 @@ class MaintenanceScheduler:
             endpoint = f"/repos/{owner}/{repo}/branches"
             branches = self.client.get(endpoint)
 
-            cutoff = datetime.now(timezone.utc) - timedelta(
-                days=self.config.stale_branch_days
-            )
+            cutoff = datetime.now(timezone.utc) - timedelta(days=self.config.stale_branch_days)
 
             stale_branches = []
             for branch in branches[:20]:  # Check recent 20
@@ -313,9 +287,7 @@ class MaintenanceScheduler:
                 try:
                     commit_endpoint = f"/repos/{owner}/{repo}/commits/{branch['commit']['sha']}"  # noqa: E501
                     commit = self.client.get(commit_endpoint)
-                    commit_date = datetime.fromisoformat(
-                        commit["commit"]["author"]["date"].replace("Z", "+00:00")
-                    )
+                    commit_date = datetime.fromisoformat(commit["commit"]["author"]["date"].replace("Z", "+00:00"))
 
                     if commit_date < cutoff:
                         stale_branches.append(branch["name"])
@@ -376,18 +348,14 @@ class MaintenanceScheduler:
 
             # Try each hour of the day
             for hour in range(24):
-                window_start = target_date.replace(
-                    hour=hour, minute=0, second=0, microsecond=0
-                )
+                window_start = target_date.replace(hour=hour, minute=0, second=0, microsecond=0)
 
                 # Skip past times
                 if window_start < now:
                     continue
 
                 # Calculate impact score for this window
-                impact_score = self._calculate_impact_score(
-                    window_start, activity_data, task_type
-                )
+                impact_score = self._calculate_impact_score(window_start, activity_data, task_type)
 
                 # Calculate confidence based on data quality
                 confidence = self._calculate_confidence(activity_data, window_start)
@@ -396,9 +364,7 @@ class MaintenanceScheduler:
                 duration = sum(task.estimated_duration for task in tasks) or 30
 
                 # Generate reasoning
-                reasoning = self._generate_reasoning(
-                    window_start, impact_score, activity_data
-                )
+                reasoning = self._generate_reasoning(window_start, impact_score, activity_data)
 
                 # Generate alternatives
                 alternatives = []
@@ -435,9 +401,7 @@ class MaintenanceScheduler:
 
         return top_windows
 
-    def _calculate_impact_score(
-        self, window_start: datetime, activity_data: Dict, task_type: str
-    ) -> float:
+    def _calculate_impact_score(self, window_start: datetime, activity_data: Dict, task_type: str) -> float:
         """Calculate impact score for maintenance window.
 
         Lower score = better window (less disruption)
@@ -486,9 +450,7 @@ class MaintenanceScheduler:
 
         return min(1.0, max(0.0, base_impact))
 
-    def _calculate_confidence(
-        self, activity_data: Dict, window_start: datetime
-    ) -> float:
+    def _calculate_confidence(self, activity_data: Dict, window_start: datetime) -> float:
         """Calculate prediction confidence."""
         # More historical data = higher confidence
         commit_count = len(activity_data.get("commit_activity", []))
@@ -514,9 +476,7 @@ class MaintenanceScheduler:
 
         return confidence
 
-    def _generate_reasoning(
-        self, window_start: datetime, impact_score: float, activity_data: Dict
-    ) -> str:
+    def _generate_reasoning(self, window_start: datetime, impact_score: float, activity_data: Dict) -> str:
         """Generate human-readable reasoning for window selection."""
         hour = window_start.hour
         day = window_start.weekday()
@@ -561,9 +521,7 @@ class MaintenanceScheduler:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Proactive maintenance scheduling with ML-based timing"
-    )
+    parser = argparse.ArgumentParser(description="Proactive maintenance scheduling with ML-based timing")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument(

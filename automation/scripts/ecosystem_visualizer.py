@@ -43,9 +43,7 @@ class EcosystemVisualizer:
         ("♻️", re.compile(r"reusable")),
         (
             "🤖",
-            re.compile(
-                r"gemini|claude|openai|perplexity|grok|jules|" r"copilot|agent|ai\-"
-            ),
+            re.compile(r"gemini|claude|openai|perplexity|grok|jules|" r"copilot|agent|ai\-"),
         ),
         ("🚀", re.compile(r"ci|test|build|deploy|release|publish|docker")),
         ("🔀", re.compile(r"pr-|pull-request|merge")),
@@ -58,9 +56,7 @@ class EcosystemVisualizer:
     # Future patterns MUST NOT contain their own capturing groups '(...)' as this
     # will break the match.lastindex logic. Use non-capturing groups '(?:...)' instead.
     _PRIORITY_ORDER = [e for e, _ in WORKFLOW_PATTERNS]
-    _WORKFLOW_REGEX = re.compile(
-        "|".join(f"({p.pattern})" for _, p in WORKFLOW_PATTERNS)
-    )
+    _WORKFLOW_REGEX = re.compile("|".join(f"({p.pattern})" for _, p in WORKFLOW_PATTERNS))
 
     # Technology icons (extendable)
     TECHNOLOGY_ICONS: Dict[str, str] = {}
@@ -158,9 +154,7 @@ graph TD
             parts.append(f"        {workflow_id}[{workflow}]:::workflow\n")
             # Add click event to open workflow file
             click_target = f"{workflow_path}{workflow}"
-            parts.append(
-                f'        click {workflow_id} "{click_target}" "View Workflow"\n'
-            )
+            parts.append(f'        click {workflow_id} "{click_target}" "View Workflow"\n')
             parts.append(f"        ORG --> {workflow_id}\n")
 
         parts.append("    end\n\n")
@@ -338,10 +332,7 @@ graph TD
 
         # Repository health
         parts.append("## 🏥 Repository Health\n\n")
-        if (
-            "repository_health" in self.report_data
-            and self.report_data["repository_health"].get("total_repos", 0) > 0
-        ):
+        if "repository_health" in self.report_data and self.report_data["repository_health"].get("total_repos", 0) > 0:
             rh = self.report_data["repository_health"]
             total = rh.get("total_repos", 0)
             active = rh.get("active_repos", 0)
@@ -368,9 +359,7 @@ graph TD
 """
             )
         else:
-            error = self.report_data.get("repository_health", {}).get(
-                "error", "No data available"
-            )
+            error = self.report_data.get("repository_health", {}).get("error", "No data available")
             parts.append(f"⚠️ **Data Unavailable**: {error}\n\n")
 
         parts.append("[⬆️ Back to Top](#organization-ecosystem-dashboard)\n\n")
@@ -472,7 +461,9 @@ graph TD
             em = self.report_data["ecosystem_map"]
             workflows = em.get("workflows", [])
             if len(workflows) > self.MAX_DIAGRAM_WORKFLOWS:
-                msg1 = f"ℹ️  *The diagram below displays the first {self.MAX_DIAGRAM_WORKFLOWS} workflows for readability. "
+                msg1 = (
+                    f"ℹ️  *The diagram below displays the first {self.MAX_DIAGRAM_WORKFLOWS} workflows for readability. "
+                )
                 parts.append(msg1)
                 msg2 = (
                     f"All {len(workflows)} workflows are listed in "
@@ -520,9 +511,7 @@ graph TD
                         for t in row_techs:
                             if t:
                                 default_icon = "🔹"
-                                icon = self.TECHNOLOGY_ICONS.get(
-                                    t.lower(), default_icon
-                                )
+                                icon = self.TECHNOLOGY_ICONS.get(t.lower(), default_icon)
                                 formatted_cells.append(f"{icon} `{t}`")
                             else:
                                 formatted_cells.append("")
@@ -551,9 +540,7 @@ graph TD
             if workflows:
                 # Calculate the correct relative path for workflow links
                 if output_path:
-                    workflow_path = self._calculate_relative_path(
-                        output_path, ".github/workflows/"
-                    )
+                    workflow_path = self._calculate_relative_path(output_path, ".github/workflows/")
                 else:
                     workflow_path = ".github/workflows/"
 
@@ -562,10 +549,7 @@ graph TD
 
                 # UX Improvement: Single source of truth for legend,
                 # using interpunct for cleaner look
-                legend_items = [
-                    f"{emoji} {name}"
-                    for emoji, name in self.WORKFLOW_CATEGORIES.items()
-                ]
+                legend_items = [f"{emoji} {name}" for emoji, name in self.WORKFLOW_CATEGORIES.items()]
                 legend_string = " · ".join(legend_items)
                 parts.append(f"> **Legend:** {legend_string}\n\n")
 
@@ -583,9 +567,7 @@ graph TD
                         grouped[key].append(workflow)
 
                 # Count active categories
-                active_categories = sum(
-                    1 for items in grouped.values() if len(items) > 0
-                )
+                active_categories = sum(1 for items in grouped.values() if len(items) > 0)
 
                 summary = f"View all {len(workflows)} workflows across {active_categories} categories"
                 parts.append(f"<details>\n<summary>{summary}</summary>\n\n")
@@ -622,9 +604,7 @@ graph TD
     def generate_health_badge(self) -> str:
         """Generate a health badge in Shields.io format"""
         if not self.report_data:
-            badge_url = (
-                "![Health](https://img.shields.io/badge/health-unknown-lightgrey)"
-            )
+            badge_url = "![Health](https://img.shields.io/badge/health-unknown-lightgrey)"
             return badge_url
 
         # Calculate overall health score
@@ -643,10 +623,7 @@ graph TD
             max_score += 40
 
         # Link health (30 points)
-        if (
-            "link_validation" in self.report_data
-            and self.report_data["link_validation"]
-        ):
+        if "link_validation" in self.report_data and self.report_data["link_validation"]:
             lv = self.report_data["link_validation"]
             total_links = lv.get("total_links", 0)
             valid = lv.get("valid", 0)
@@ -660,15 +637,9 @@ graph TD
         blind_spots = self.report_data.get("blind_spots", [])
         shatter_points = self.report_data.get("shatter_points", [])
 
-        critical_count = sum(
-            1
-            for b in blind_spots
-            if b.get("severity") == "high" or b.get("severity") == "critical"
-        )
+        critical_count = sum(1 for b in blind_spots if b.get("severity") == "high" or b.get("severity") == "critical")
         critical_count += sum(
-            1
-            for s in shatter_points
-            if s.get("severity") == "high" or s.get("severity") == "critical"
+            1 for s in shatter_points if s.get("severity") == "high" or s.get("severity") == "critical"
         )
 
         alert_score = max(0, 30 - (critical_count * 10))

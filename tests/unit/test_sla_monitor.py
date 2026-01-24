@@ -480,15 +480,9 @@ class TestReportGeneration:
                         repository="owner/repo",
                         time_window="24h",
                         overall_compliance=95.0,
-                        response_time=ResponseTimeMetric(
-                            target_minutes=60, actual_minutes=30, met=True
-                        ),
-                        resolution_time=ResolutionTimeMetric(
-                            target_hours=24, actual_hours=12, met=True
-                        ),
-                        success_rate=SuccessRateMetric(
-                            target_percentage=95.0, actual_percentage=98.0, met=True
-                        ),
+                        response_time=ResponseTimeMetric(target_minutes=60, actual_minutes=30, met=True),
+                        resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
+                        success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
                         availability=AvailabilityMetric(
                             target_percentage=99.0,
                             actual_percentage=99.5,
@@ -524,15 +518,9 @@ class TestReportGeneration:
                         repository="owner/repo",
                         time_window="24h",
                         overall_compliance=95.0,
-                        response_time=ResponseTimeMetric(
-                            target_minutes=60, actual_minutes=30, met=True
-                        ),
-                        resolution_time=ResolutionTimeMetric(
-                            target_hours=24, actual_hours=12, met=True
-                        ),
-                        success_rate=SuccessRateMetric(
-                            target_percentage=95.0, actual_percentage=98.0, met=True
-                        ),
+                        response_time=ResponseTimeMetric(target_minutes=60, actual_minutes=30, met=True),
+                        resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
+                        success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
                         availability=AvailabilityMetric(
                             target_percentage=99.0,
                             actual_percentage=99.5,

@@ -150,7 +150,7 @@ ______________________________________________________________________
          - venv/
        ```
     1. **Create ESLint Configuration (if missing):** If ESLint reports a missing
-       configuration, create an `.eslintrc.eslintrc.json` file:
+       configuration, create an `.eslintrc.json` file:
        ```json
        {
          "env": {
@@ -546,30 +546,37 @@ ______________________________________________________________________
   - **Troubleshooting:**
     1. **Examine Pre-Commit Configuration:** Check `.pre-commit-config.yaml` and
        `.pre-commit-config-rapid.yaml` for misconfigurations or outdated hooks.
+
     1. **Run Pre-Commit Locally:** Execute `pre-commit run --all-files` to
        identify specific errors.
+
     1. **Address Identified Issues:**
-    - **Trailing Whitespace:** Resolve trailing whitespace errors reported by
-      the `trailing-whitespace` hook.
-    - **End-of-File Fixer:** Address end-of-file issues identified by the
-      `end-of-file-fixer` hook.
-    - **YAML Errors:** Correct YAML syntax errors reported by the `check-yaml`
-      hook.
-    - **TOML Errors:** Fix TOML syntax errors reported by the `check-toml` hook.
-    - **Shebang Executable Errors:** Ensure scripts with shebangs are executable
-      by using `chmod +x script_name.py`.
-    - **Gitleaks Errors:** Resolve errors reported by gitleaks, such as
-      duplicate `allowlist` sections in `.gitleaks.toml`.
-    4. **Systematic Fixes:**
-    - **Trailing Whitespace:** The `trailing-whitespace` hook automatically
-      fixes this, but you might need to stage the changes.
-    - **End of File:** The `end-of-file-fixer` hook automatically fixes this,
-      but you might need to stage the changes.
-    - **YAML Errors:** Carefully examine the YAML file and fix any syntax
-      errors.
-    - **TOML Errors:** Carefully examine the TOML file and fix any syntax
-      errors.
-    5. **Executable Permissions:** Ensure that scripts with shebangs are
+
+       - **YAML Errors:** Correct YAML syntax errors reported by the
+         `check-yaml` hook.
+       - **TOML Errors:** Fix TOML syntax errors reported by the `check-toml`
+         hook.
+       - **Shebang Executable Errors:** Ensure scripts with shebangs are
+         executable by using `chmod +x script_name.py`.
+       - **Gitleaks Errors:** Resolve errors reported by gitleaks, such as
+         duplicate `allowlist` sections in `.gitleaks.toml`.
+       - **Trailing Whitespace:** Resolve trailing whitespace errors reported by
+         the `trailing-whitespace` hook.
+       - **End-of-File Fixer:** Address end-of-file issues identified by the
+         `end-of-file-fixer` hook.
+
+    1. **Systematic Fixes:**
+
+       - **Trailing Whitespace:** The `trailing-whitespace` hook automatically
+         fixes this, but you might need to stage the changes.
+       - **End of File:** The `end-of-file-fixer` hook automatically fixes this,
+         but you might need to stage the changes.
+       - **YAML Errors:** Carefully examine the YAML file and fix any syntax
+         errors.
+       - **TOML Errors:** Carefully examine the TOML file and fix any syntax
+         errors.
+
+    1. **Executable Permissions:** Ensure that scripts with shebangs are
        executable:
 
        ```bash
@@ -579,6 +586,25 @@ ______________________________________________________________________
        chmod +x /workspace/project_meta/context-handoff/tests/validate_context.py
        chmod +x /workspace/tests/integration/test_agent_tracking.py
        chmod +x /workspace/tests/unit/test_ecosystem_visualizer.py
+       chmod +x /workspace/automation/scripts/bootstrap-walkthrough-org.sh
+       chmod +x /workspace/automation/scripts/enhanced_ml_predictions.py
+       chmod +x /workspace/automation/scripts/manage_lock.sh
+       chmod +x /workspace/tests/unit/test_incident_response.py
+       chmod +x /workspace/tests/unit/test_intelligent_routing.py
+       chmod +x /workspace/tests/unit/test_models.py
+       chmod +x /workspace/tests/unit/test_mouthpiece_filter.py
+       chmod +x /workspace/tests/unit/test_notification_manager.py
+       chmod +x /workspace/tests/unit/test_predict_workflow_failures.py
+       chmod +x /workspace/tests/unit/test_secret_manager.py
+       chmod +x /workspace/tests/unit/test_sla_monitor.py
+       chmod +x /workspace/tests/unit/test_validation_framework.py
+       chmod +x /workspace/automation/scripts/aicommit.sh
+       chmod +x /workspace/automation/scripts/commit_changes.sh
+       chmod +x /workspace/automation/scripts/validate-standards.sh
+       chmod +x /workspace/tests/unit/test_check_auto_merge_eligibility.py
+       chmod +x /workspace/tests/unit/test_sync_labels.py
+       chmod +x /workspace/tests/unit/test_utils.py
+       chmod +x /workspace/tests/unit/test_web_crawler.py
        ```
 
     1. **Gitleaks Configuration:**
@@ -629,7 +655,7 @@ ______________________________________________________________________
 - Here's the updated `PROJECTS_CONFIG` section in the
   `configure-github-projects.py` file:
 
-  ````python
+  ```python
   # Project configurations
   PROJECTS_CONFIG = {
       "ai-framework": {
@@ -698,42 +724,4 @@ ______________________________________________________________________
               "Complexity": {
                   "type": "single_select",
                   "options": [
-                      {"name": "🟢 Simple", "color": "GREEN", "description": ""},
-                      {"name": "🟡 Moderate", "color": "YELLOW", "description": ""},
-                      {"name": "🟠 Complex", "color": "ORANGE", "description": ""},
-                      {"name": "🔴 Major", "color": "RED", "description": ""}
-                  ]
-              },
-              "Dependencies": {"type": "text"},
-              "Testing Status": {
-                  "type": "single_select",
-                  "options": [
-                      {"name": "⏳ Not Started", "color": "GRAY", "description": ""},
-                      {"name": "🧪 Unit Tests", "color": "YELLOW", "description": ""},
-                      {"name": "🔗 Integration Tests", "color": "ORANGE", "description": ""},
-                      {"name": "✅ All Tests Passing", "color": "GREEN", "description": ""}
-                  ]
-              }
-          }
-      },
-      "documentation": {
-          "title": "📚 Documentation &amp; Knowledge",
-          "description": """Documentation ecosystem management across 133+ files:
-  - Setup guides and quick starts
-  - Architecture documentation
-  - API references and technical guides
-  - Tutorials and learning resources
-  - Policy documents
-
-  **Coverage:**
-  - Core organizational policies
-  - Workflow system documentation
-  - AI framework guides
-  - Development environment setup
-  - Security and compliance docs""",
-          "fields": {
-              "Status": {
-                  "type": "single_select",
-                  "options": [
-                      {"name": "📋 Backlog",```
-  ````
+  ```

@@ -469,9 +469,7 @@ class TestReportGeneration:
             ],
         }
 
-        (validation_dir / "validation_20240101_120000.json").write_text(
-            json.dumps(validation_data)
-        )
+        (validation_dir / "validation_20240101_120000.json").write_text(json.dumps(validation_data))
 
         report = framework.generate_report("owner", "repo", days=30)
 

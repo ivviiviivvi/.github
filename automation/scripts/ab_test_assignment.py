@@ -203,20 +203,12 @@ class ABTestAssigner:
             "assignments": {
                 "control": {
                     "count": control_count,
-                    "percentage": (
-                        round(control_count / total_active * 100, 1)
-                        if total_active > 0
-                        else 0
-                    ),
+                    "percentage": (round(control_count / total_active * 100, 1) if total_active > 0 else 0),
                     "repositories": sorted(assignments["control"]),
                 },
                 "experiment": {
                     "count": experiment_count,
-                    "percentage": (
-                        round(experiment_count / total_active * 100, 1)
-                        if total_active > 0
-                        else 0
-                    ),
+                    "percentage": (round(experiment_count / total_active * 100, 1) if total_active > 0 else 0),
                     "repositories": sorted(assignments["experiment"]),
                 },
                 "excluded": {
@@ -253,9 +245,7 @@ def main():
     """Main entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="A/B test assignment for stale grace period optimization"
-    )
+    parser = argparse.ArgumentParser(description="A/B test assignment for stale grace period optimization")
     parser.add_argument(
         "--config",
         default="automation/config/ab-test-config.yml",
@@ -319,18 +309,14 @@ def main():
                 for repo in report["assignments"]["control"]["repositories"][:10]:
                     print(f"  - {repo}")
                 if len(report["assignments"]["control"]["repositories"]) > 10:
-                    remaining = (
-                        len(report["assignments"]["control"]["repositories"]) - 10
-                    )
+                    remaining = len(report["assignments"]["control"]["repositories"]) - 10
                     print(f"  ... and {remaining} more")
 
                 print("\nExperiment Group Repositories:")
                 for repo in report["assignments"]["experiment"]["repositories"][:10]:
                     print(f"  - {repo}")
                 if len(report["assignments"]["experiment"]["repositories"]) > 10:
-                    remaining = (
-                        len(report["assignments"]["experiment"]["repositories"]) - 10
-                    )
+                    remaining = len(report["assignments"]["experiment"]["repositories"]) - 10
                     print(f"  ... and {remaining} more")
 
                 if report["assignments"]["excluded"]["count"] > 0:

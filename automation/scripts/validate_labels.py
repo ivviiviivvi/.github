@@ -166,11 +166,7 @@ class LabelValidator:
         for required in required_labels:
             # Find matching label by name
             existing = next(
-                (
-                    label
-                    for label in existing_labels
-                    if label["name"] == required["name"]
-                ),
+                (label for label in existing_labels if label["name"] == required["name"]),
                 None,
             )
 
@@ -179,9 +175,7 @@ class LabelValidator:
                 print(f"  ❌ Missing: {required['name']}")
             elif not self._labels_match(existing, required):
                 mismatched_labels.append(required)
-                print(
-                    f"  ⚠️  Mismatch: {required['name']} (expected #{required['color']}, found #{existing['color']})"
-                )  # noqa: E501
+                print(f"  ⚠️  Mismatch: {required['name']} (expected #{required['color']}, found #{existing['color']})")  # noqa: E501
             else:
                 print(f"  ✅ Found: {required['name']}")
 
@@ -194,9 +188,7 @@ class LabelValidator:
             print(f"❌ {total_issues} label issues found in {repo}")
             return False, missing_labels, mismatched_labels
 
-    def fix_repository(
-        self, repo: str, missing: List[Dict], mismatched: List[Dict]
-    ) -> bool:
+    def fix_repository(self, repo: str, missing: List[Dict], mismatched: List[Dict]) -> bool:
         """Fix label issues in a repository by creating/updating labels.
 
         Args:
@@ -307,9 +299,7 @@ def main():
     # Ensure GitHub token is available (from 1Password or env)
     _ = ensure_github_token("org-label-sync-token")  # noqa: F841
 
-    parser = argparse.ArgumentParser(
-        description="Validate labels in repositories before workflow deployment"
-    )  # noqa: E501
+    parser = argparse.ArgumentParser(description="Validate labels in repositories before workflow deployment")  # noqa: E501
     parser.add_argument(
         "--config",
         type=Path,

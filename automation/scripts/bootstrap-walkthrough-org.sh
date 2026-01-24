@@ -251,20 +251,18 @@ get_repositories() {
         filter_archived="--archived=false"
     fi
 
-    if [ "$SKIP_FORKS" = true ]; then
-        filter_forks="--no-forks"
-    fi
-
     # Get repositories using GitHub CLI with pagination support
     # Default limit is high but should handle most organizations
-    local repos=$(gh repo list "$ORG_NAME" \
+    local repos
+    repos=$(gh repo list "$ORG_NAME" \
         --limit 1000 \
         --json name,isArchived,isFork,isPrivate \
         $filter_archived \
         | jq -r '.[].name')
 
     # Warn if approaching limit
-    local count=$(echo "$repos" | wc -l)
+    local count
+    count=$(echo "$repos" | wc -l)
     if [ "$count" -ge 900 ]; then
         print_warning "Approaching repository limit (${count}/1000). Some repos may be missed."
         print_warning "Consider filtering by topic or other criteria."
@@ -337,7 +335,8 @@ create_pr() {
     git config user.email "github-actions[bot]@users.noreply.github.com"
 
     # Create branch
-    local branch_name="feature/add-video-walkthrough-$(date +%Y%m%d)"
+    local branch_name
+    branch_name="feature/add-video-walkthrough-$(date +%Y%m%d)"
     local unique_suffix=""
 
     if [ "$DRY_RUN" = true ]; then
@@ -511,7 +510,8 @@ main() {
     echo ""
 
     # Get repositories
-    local repos=$(get_repositories)
+    local repos
+    repos=$(get_repositories)
     TOTAL_REPOS=$(echo "$repos" | wc -l)
 
     if [ -z "$repos" ]; then
@@ -534,8 +534,9 @@ main() {
     fi
 
     # Create temporary directory
-    local temp_dir=$(mktemp -d)
-    trap "rm -rf $temp_dir" EXIT
+    local temp_dir
+    temp_dir=$(mktemp -d)
+    trap 'rm -rf "$temp_dir"' EXIT
 
     # Process repositories
     local count=0

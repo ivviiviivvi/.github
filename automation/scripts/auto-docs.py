@@ -179,20 +179,12 @@ class DocstringExtractor(ast.NodeVisitor):
 
         # *args
         if args.vararg:
-            arg_type = (
-                self._get_name(args.vararg.annotation)
-                if args.vararg.annotation
-                else "Any"
-            )
+            arg_type = self._get_name(args.vararg.annotation) if args.vararg.annotation else "Any"
             result.append({"name": f"*{args.vararg.arg}", "type": arg_type})
 
         # **kwargs
         if args.kwarg:
-            arg_type = (
-                self._get_name(args.kwarg.annotation)
-                if args.kwarg.annotation
-                else "Any"
-            )
+            arg_type = self._get_name(args.kwarg.annotation) if args.kwarg.annotation else "Any"
             result.append({"name": f"**{args.kwarg.arg}", "type": arg_type})
 
         return result
@@ -325,9 +317,7 @@ class DocumentationGenerator:
                 summary = "No description"
                 if module_info["modules"]:
                     docstring = module_info["modules"][0]["docstring"]
-                    summary = (
-                        docstring.split("\n")[0] if docstring else "No description"
-                    )
+                    summary = docstring.split("\n")[0] if docstring else "No description"
 
                 f.write(f"- [{module_name}]({doc_file}) - {summary}\n")
 
@@ -393,9 +383,7 @@ class DocumentationGenerator:
             for method in cls["methods"]:
                 self._write_function_doc(f, method, indent="#### ")
 
-    def _write_function_doc(
-        self, f: Any, func: dict[str, Any], indent: str = "### "
-    ) -> None:
+    def _write_function_doc(self, f: Any, func: dict[str, Any], indent: str = "### ") -> None:
         """Write function documentation to file.
 
         Args:
@@ -406,9 +394,7 @@ class DocumentationGenerator:
         """
         # Signature
         async_prefix = "async " if func.get("is_async") else ""
-        args_str = ", ".join(
-            f"{arg['name']}: {arg['type']}" for arg in func.get("args", [])
-        )
+        args_str = ", ".join(f"{arg['name']}: {arg['type']}" for arg in func.get("args", []))
         returns = func.get("returns", "None")
 
         f.write(

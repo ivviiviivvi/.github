@@ -237,9 +237,7 @@ class TestDeduplication:
     def test_old_notification_not_duplicate(self, manager):
         """Test old notification outside window is not duplicate"""
         # Cache an old notification
-        manager.sent_cache["test-source:Test Alert"] = datetime.now(
-            timezone.utc
-        ) - timedelta(seconds=400)
+        manager.sent_cache["test-source:Test Alert"] = datetime.now(timezone.utc) - timedelta(seconds=400)
 
         notification = Notification(
             title="Test Alert",

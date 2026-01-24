@@ -62,16 +62,12 @@ class TestLabelDefinitions:
 
     def test_priority_labels_exist(self):
         """Test priority labels are defined"""
-        priority_labels = [
-            k for k in LABEL_DEFINITIONS.keys() if "priority" in k.lower()
-        ]
+        priority_labels = [k for k in LABEL_DEFINITIONS.keys() if "priority" in k.lower()]
         assert len(priority_labels) >= 4  # critical, high, medium, low
 
     def test_category_labels_exist(self):
         """Test category labels are defined"""
-        category_labels = [
-            k for k in LABEL_DEFINITIONS.keys() if "category" in k.lower()
-        ]
+        category_labels = [k for k in LABEL_DEFINITIONS.keys() if "category" in k.lower()]
         assert len(category_labels) >= 3  # Multiple categories
 
     def test_standard_labels_exist(self):
@@ -304,9 +300,7 @@ class TestBatchOperations:
     def test_syncs_to_all_repositories(self, manager, mock_github, mock_org):
         """Test syncing labels to all repositories"""
         # Create mock repositories
-        repos = [
-            MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)
-        ]
+        repos = [MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)]
         for repo in repos:
             repo.get_labels.return_value = []
 
@@ -408,9 +402,7 @@ class TestErrorRecovery:
         """Test handling of GitHub API rate limiting"""
         mock_repo = MagicMock()
         # Use the mocked GithubException from test setup
-        mock_repo.get_labels.side_effect = mock_github_exception(
-            403, "Rate limit exceeded"
-        )
+        mock_repo.get_labels.side_effect = mock_github_exception(403, "Rate limit exceeded")
 
         # Manager's get_existing_labels catches errors and returns empty dict
         labels = manager.get_existing_labels(mock_repo)
@@ -421,9 +413,7 @@ class TestErrorRecovery:
         import requests
 
         mock_repo = MagicMock()
-        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError(
-            "Network error"
-        )
+        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError("Network error")
 
         # Network errors may propagate or be caught - test behavior
         try:

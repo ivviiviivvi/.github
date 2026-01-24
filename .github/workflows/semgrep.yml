@@ -4,24 +4,24 @@ on:
   push:
     branches: [main, master, develop]
     paths:
-      - src/**
-      - "**.py"
-      - "**.js"
-      - "**.ts"
-      - "**.go"
-      - "**.java"
+    - src/**
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - '**.go'
+    - '**.java'
   pull_request:
     branches: [main, master, develop]
     paths:
-      - src/**
-      - "**.py"
-      - "**.js"
-      - "**.ts"
-      - "**.go"
-      - "**.java"
+    - src/**
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - '**.go'
+    - '**.java'
   schedule:
     # Run daily at 3 AM UTC
-    - cron: 0 3 * * *
+  - cron: 0 3 * * *
   workflow_dispatch:
 
 concurrency:
@@ -42,39 +42,39 @@ jobs:
       image: returntocorp/semgrep
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4.2.2
+      with:
+        fetch-depth: 0
 
-      - name: Run Semgrep
-        run: semgrep ci
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-          SEMGREP_RULES: >-
-            p/security-audit
-            p/secrets
-            p/owasp-top-ten
-            p/cwe-top-25
-            p/default
+    - name: Run Semgrep
+      run: semgrep ci
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        SEMGREP_RULES: >-
+          p/security-audit
+          p/secrets
+          p/owasp-top-ten
+          p/cwe-top-25
+          p/default
 
           # Alternative: Run without Semgrep Cloud (free tier)
-      - name: Run Semgrep (Local)
-        if: env.SEMGREP_APP_TOKEN == ''
-        run: |
-          semgrep scan \
-            --config=auto \
-            --sarif \
-            --output=semgrep-results.sarif \
-            --severity=ERROR \
-            --severity=WARNING
+    - name: Run Semgrep (Local)
+      if: env.SEMGREP_APP_TOKEN == ''
+      run: |
+        semgrep scan \
+          --config=auto \
+          --sarif \
+          --output=semgrep-results.sarif \
+          --severity=ERROR \
+          --severity=WARNING
 
-      - name: Upload SARIF to GitHub
-        if: always()
-        uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34 # ratchet:github/codeql-action@v3
-        with:
-          sarif_file: semgrep-results.sarif
-          category: semgrep
+    - name: Upload SARIF to GitHub
+      if: always()
+      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34   # ratchet:github/codeql-action@v3
+      with:
+        sarif_file: semgrep-results.sarif
+        category: semgrep
 
   semgrep-custom-rules:
     name: Custom Semgrep Rules
@@ -83,24 +83,24 @@ jobs:
       image: returntocorp/semgrep
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-      - name: Run Custom Rules
-        run: |
-          # Run organization-specific rules if they exist
-          if [ -d ".semgrep" ]; then
-            semgrep scan \
-              --config=.semgrep/ \
-              --sarif \
-              --output=custom-rules.sarif
-          fi
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+    - name: Run Custom Rules
+      run: |
+        # Run organization-specific rules if they exist
+        if [ -d ".semgrep" ]; then
+          semgrep scan \
+            --config=.semgrep/ \
+            --sarif \
+            --output=custom-rules.sarif
+        fi
 
-      - name: Upload Custom Rules Results
-        if: always() && hashFiles('custom-rules.sarif') != ''
-        uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34 # ratchet:github/codeql-action@v3
-        with:
-          sarif_file: custom-rules.sarif
-          category: semgrep-custom
+    - name: Upload Custom Rules Results
+      if: always() && hashFiles('custom-rules.sarif') != ''
+      uses: github/codeql-action@c37a8b7cd97e31de3fcbd9d84c401870edeb8d34   # ratchet:github/codeql-action@v3
+      with:
+        sarif_file: custom-rules.sarif
+        category: semgrep-custom
 
   semgrep-supply-chain:
     name: Semgrep Supply Chain
@@ -109,13 +109,13 @@ jobs:
       image: returntocorp/semgrep
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-      - name: Semgrep Supply Chain Scan
-        run: semgrep ci --supply-chain
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-        continue-on-error: true
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+    - name: Semgrep Supply Chain Scan
+      run: semgrep ci --supply-chain
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      continue-on-error: true
 
   semgrep-diff:
     name: Semgrep Diff Scan (PR only)
@@ -125,50 +125,50 @@ jobs:
       image: returntocorp/semgrep
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - name: Semgrep Diff Scan
-        run: |
-          semgrep scan \
-            --config=auto \
-            --baseline-commit=${{ github.event.pull_request.base.sha }} \
-            --json \
-            --output=semgrep-diff.json
+    - name: Semgrep Diff Scan
+      run: |
+        semgrep scan \
+          --config=auto \
+          --baseline-commit=${{ github.event.pull_request.base.sha }} \
+          --json \
+          --output=semgrep-diff.json
 
-      - name: Comment on PR
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # ratchet:actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
+    - name: Comment on PR
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea   # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
 
-            if (fs.existsSync('semgrep-diff.json')) {
-              const results = JSON.parse(fs.readFileSync('semgrep-diff.json', 'utf8'));
+          if (fs.existsSync('semgrep-diff.json')) {
+            const results = JSON.parse(fs.readFileSync('semgrep-diff.json', 'utf8'));
 
-              if (results.results && results.results.length > 0) {
-                const findings = results.results.slice(0, 10);
+            if (results.results && results.results.length > 0) {
+              const findings = results.results.slice(0, 10);
 
-                let comment = '## 🔍 Semgrep Found Issues in This PR\n\n';
-                comment += `Found ${results.results.length} issue(s)\n\n`;
+              let comment = '## 🔍 Semgrep Found Issues in This PR\n\n';
+              comment += `Found ${results.results.length} issue(s)\n\n`;
 
-                findings.forEach(finding => {
-                  comment += `### ${finding.check_id}\n`;
-                  comment += `**Severity**: ${finding.extra.severity}\n`;
-                  comment += `**File**: ${finding.path}:${finding.start.line}\n`;
-                  comment += `**Message**: ${finding.extra.message}\n\n`;
-                });
+              findings.forEach(finding => {
+                comment += `### ${finding.check_id}\n`;
+                comment += `**Severity**: ${finding.extra.severity}\n`;
+                comment += `**File**: ${finding.path}:${finding.start.line}\n`;
+                comment += `**Message**: ${finding.extra.message}\n\n`;
+              });
 
-                if (results.results.length > 10) {
-                  comment += `\n... and ${results.results.length - 10} more issues\n`;
-                }
-
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  body: comment
-                });
+              if (results.results.length > 10) {
+                comment += `\n... and ${results.results.length - 10} more issues\n`;
               }
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
             }
+          }

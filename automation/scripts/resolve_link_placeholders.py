@@ -27,9 +27,7 @@ LINK_WITH_COMMENT_RE = re.compile(
     r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)"
     r"(?P<suffix>\)\s*<!--\s*link:(?P<key>[A-Za-z0-9._-]+)\s*-->)"
 )
-UNANNOTATED_LINK_RE = re.compile(
-    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)"
-)
+UNANNOTATED_LINK_RE = re.compile(r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)")
 PLACEHOLDER_RE = re.compile(r"^\[\[link:(?P<key>[A-Za-z0-9._-]+)\]\]$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 
@@ -246,9 +244,7 @@ def main() -> int:
 
     for md_file in iter_markdown_files(root, excludes):
         original = md_file.read_text(encoding="utf-8")
-        updated_text, updated, annotated, missing = replace_links(
-            original, link_map, reverse_map, args.annotate
-        )
+        updated_text, updated, annotated, missing = replace_links(original, link_map, reverse_map, args.annotate)
         total_updates += updated
         total_annotations += annotated
         total_missing += missing

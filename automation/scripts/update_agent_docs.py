@@ -27,9 +27,7 @@ def extract_metadata(filepath):
     title_match = re.search(r"^# (.*)", content, re.MULTILINE)
 
     name = name_match.group(1).strip() if name_match else os.path.basename(filepath)
-    description = (
-        desc_match.group(1).strip() if desc_match else "No description available."
-    )
+    description = desc_match.group(1).strip() if desc_match else "No description available."
     title = title_match.group(1).strip() if title_match else name
 
     return {

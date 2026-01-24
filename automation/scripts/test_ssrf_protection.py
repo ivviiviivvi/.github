@@ -19,9 +19,7 @@ class TestSSRFProtection(unittest.TestCase):
     def test_blocks_private_ips(self, mock_request, mock_getaddrinfo):
         # Mock DNS resolution to return a private IP
         # Format: list of (family, type, proto, canonname, sockaddr)
-        mock_getaddrinfo.return_value = [
-            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.168.1.1", 80))
-        ]
+        mock_getaddrinfo.return_value = [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.168.1.1", 80))]
 
         # Mock response
         mock_response = MagicMock()
@@ -73,9 +71,7 @@ class TestSSRFProtection(unittest.TestCase):
     @patch("urllib3.HTTPConnectionPool.request")
     def test_allows_public_ips(self, mock_request, mock_getaddrinfo):
         # Mock DNS resolution to return a public IP
-        mock_getaddrinfo.return_value = [
-            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 80))
-        ]
+        mock_getaddrinfo.return_value = [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 80))]
 
         mock_response = MagicMock()
         mock_response.status = 200

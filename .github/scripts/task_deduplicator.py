@@ -207,9 +207,7 @@ def main():
 
     elif command == "register_pr":
         if len(sys.argv) < 5:
-            print(
-                "Usage: task_deduplicator.py register_pr <pr_number> <task_type> <task_json>"
-            )
+            print("Usage: task_deduplicator.py register_pr <pr_number> <task_type> <task_json>")
             sys.exit(1)
 
         pr_number = int(sys.argv[2])

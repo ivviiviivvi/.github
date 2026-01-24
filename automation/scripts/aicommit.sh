@@ -30,9 +30,6 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Conventional commit types
-COMMIT_TYPES=("feat" "fix" "docs" "style" "refactor" "test" "chore" "security" "perf")
-
 # ============================================================================
 # Helper Functions
 # ============================================================================
@@ -179,16 +176,16 @@ determine_type() {
 # Generate commit message using templates
 generate_template_message() {
     local files="$1"
-    local diff_stats="$2"
 
     # Determine type and scope
-    local type=$(determine_type "$files" "$(git diff --cached)")
-    local scope=$(determine_scope "$files")
+    local type
+    type=$(determine_type "$files" "$(git diff --cached)")
+    local scope
+    scope=$(determine_scope "$files")
 
     # Count changes
-    local num_files=$(echo "$files" | wc -l)
-    local additions=$(git diff --cached --numstat | awk '{sum+=$1} END {print sum}')
-    local deletions=$(git diff --cached --numstat | awk '{sum+=$2} END {print sum}')
+    local num_files
+    num_files=$(echo "$files" | wc -l)
 
     # Generate description
     local description=""
@@ -226,7 +223,8 @@ generate_copilot_message() {
     print_info "Generating commit message with GitHub Copilot..."
 
     # Get diff
-    local diff_output=$(git diff --cached)
+    local diff_output
+    diff_output=$(git diff --cached)
 
     # Create prompt for Copilot
     local prompt="Generate a conventional commit message for these changes. Use format: type(scope): description
@@ -240,8 +238,9 @@ $diff_output
 "
 
     # Create secure temporary file
-    local tmp_file=$(mktemp)
-    trap "rm -f \"$tmp_file\"" EXIT
+    local tmp_file
+    tmp_file=$(mktemp)
+    trap 'rm -f "$tmp_file"' EXIT
 
     # Try to use gh copilot suggest
     if echo "$prompt" | gh copilot suggest --target shell 2>/dev/null | grep -E "^(feat|fix|docs|style|refactor|test|chore|security|perf)" > "$tmp_file"; then
@@ -269,8 +268,10 @@ main() {
     fi
 
     # Get staged files
-    local staged_files=$(get_staged_files)
-    local num_files=$(echo "$staged_files" | wc -l)
+    local staged_files
+    staged_files=$(get_staged_files)
+    local num_files
+    num_files=$(echo "$staged_files" | wc -l)
 
     print_info "Staged files: $num_files"
     echo "$staged_files" | sed 's/^/  - /'
