@@ -10,6 +10,28 @@
 
 ---
 
+## The Problem
+
+Scaling AI-assisted development across multiple repositories creates fragmented
+tooling, inconsistent policies, and duplicated effort that grows exponentially
+with team size.
+
+## Our Approach
+
+A centralized `.github` repository providing organization-wide defaults:
+- Standardized governance that inherits automatically
+- Production-ready AI agents for common development tasks
+- Comprehensive workflow automation
+
+## The Outcome
+
+- **Zero-config inheritance** for new repositories
+- **129 workflows** handling CI/CD, security, and maintenance
+- **32 AI agents** ready for deployment
+- **Clean state**: 0 open issues, 0 open PRs
+
+---
+
 ## Overview
 
 A centralized `.github` repository providing organization-wide infrastructure:
