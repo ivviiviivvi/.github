@@ -68,5 +68,7 @@ node_modules/
 
 # Temporary status and test files
 test-results-*.json
+test-results/
+coverage.xml
 *_STATUS_*.md
 *_COMPLETE_*.md
