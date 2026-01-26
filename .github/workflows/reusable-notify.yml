@@ -139,7 +139,7 @@ jobs:
       if: |
         (inputs.notification_type == 'slack' || inputs.notification_type == 'all') &&
         secrets.SLACK_WEBHOOK != ''
-      uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e  # ratchet:slackapi/slack-github-action@v1
+      uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a  # ratchet:slackapi/slack-github-action@v1
       with:
         payload: |
           {
