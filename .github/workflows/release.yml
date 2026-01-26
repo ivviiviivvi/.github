@@ -39,7 +39,7 @@ jobs:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
-      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564  # ratchet:softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b  # ratchet:softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.version || github.ref_name }}
         name: Release ${{ github.event.inputs.version || github.ref_name }}

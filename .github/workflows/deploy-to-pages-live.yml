@@ -254,23 +254,23 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349  # ratchet:docker/setup-buildx-action@v3.7.1
+      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # ratchet:docker/setup-buildx-action@v3.12.0
 
     - name: Log in to Docker Hub
       if: github.event_name != 'pull_request'
-      uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567  # ratchet:docker/login-action@v3.3.0
+      uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef  # ratchet:docker/login-action@v3.6.0
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Extract metadata
       id: meta
-      uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81  # ratchet:docker/metadata-action@v5.5.1
+      uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # ratchet:docker/metadata-action@v5.10.0
       with:
         images: ${{ github.repository }}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75  # ratchet:docker/build-push-action@v6.9.0
+      uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # ratchet:docker/build-push-action@v6.18.0
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
