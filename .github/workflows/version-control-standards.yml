@@ -43,6 +43,12 @@ jobs:
           exit 0
         fi
 
+        # Skip validation for Dependabot branches (automated dependency updates)
+        if [[ "$BRANCH_NAME" =~ ^dependabot/ ]]; then
+          echo "Skipping validation for Dependabot branch: $BRANCH_NAME"
+          exit 0
+        fi
+
         # Skip validation on push events (only validate PRs)
         if [[ "${{ github.event_name }}" == "push" ]]; then
           echo "Skipping validation for push event to $BRANCH_NAME"
@@ -111,7 +117,6 @@ jobs:
           # Format: type(scope): subject or type: subject
           if [[ ! "$MESSAGE" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?:\ .+ ]]; then
             INVALID_COMMITS+=("$HASH: $MESSAGE")
-          fi
           fi
         done <<< "$COMMITS"
 

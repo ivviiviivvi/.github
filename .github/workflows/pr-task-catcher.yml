@@ -93,11 +93,15 @@ jobs:
         echo "checked_count=$CHECKED_COUNT" >> $GITHUB_OUTPUT
 
         # Save unchecked tasks (use delimiter that won't conflict with content)
-        {
-          echo "unchecked_tasks<<TASK_LIST_EOF"
-          printf '%s\n' "$UNCHECKED_TASKS"
-          echo "TASK_LIST_EOF"
-        } >> $GITHUB_OUTPUT
+        if [ -n "$UNCHECKED_TASKS" ]; then
+          {
+            echo "unchecked_tasks<<TASK_LIST_EOF"
+            printf '%s\n' "$UNCHECKED_TASKS"
+            echo "TASK_LIST_EOF"
+          } >> $GITHUB_OUTPUT
+        else
+          echo "unchecked_tasks=" >> $GITHUB_OUTPUT
+        fi
 
     - name: Extract Tasks from Comments
       id: comment_tasks
