@@ -29,7 +29,8 @@ jobs:
         run: |
           # Find uses: lines with @v* but no ratchet comment
           # This detects actions pinned to version tags instead of SHA commits
-          unpinned=$(grep -rn 'uses:.*@v[0-9]' .github/workflows/ .github/.github/workflows/ 2>/dev/null | grep -v '# ratchet:' || true)
+          # Exclude this file itself from the check to avoid false positives in the example code
+          unpinned=$(grep -rn 'uses:.*@v[0-9]' .github/workflows/ .github/.github/workflows/ 2>/dev/null | grep -v '# ratchet:' | grep -v 'validate-action-pins.yml' || true)
 
           if [ -n "$unpinned" ]; then
             echo "::error::Found unpinned actions"
