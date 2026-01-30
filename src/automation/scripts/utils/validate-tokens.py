@@ -123,7 +123,7 @@ def validate_token(token_name: str, config: dict, verbose: bool = False) -> dict
                 print(
                     f"  → Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )
-                print(f"  → Scopes: {', '.join(result['scopes'])}")
+                print(f"  → Token scopes: {', '.join(result['scopes'])}")
 
             # Verify scopes match expected (only for active tokens)
             expected = set(config.get("scopes", []))
@@ -178,7 +178,7 @@ def print_summary(results: list[dict], verbose: bool = False):
 
             print(f"{status_color}{status_icon}{NC} {result['token']}")
             if result["valid"]:
-                print(f"    Scopes: {', '.join(result['scopes'])}")
+                print(f"    Token scopes: {', '.join(result['scopes'])}")
                 print(
                     f"    Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )

@@ -156,11 +156,11 @@ class DeploymentOrchestrator:
 
     def _check_secrets(self) -> bool:
         """Check required secrets are configured."""
-        required_secrets = self.config.get("required_secrets", [])
+        required_secret_names = self.config.get("required_secrets", [])
 
-        for secret in required_secrets:
-            if not os.getenv(secret):
-                print(f"    Missing secret: {secret}")
+        for secret_name in required_secret_names:
+            if not os.getenv(secret_name):
+                print(f"    Missing secret environment variable: {secret_name}")
                 return False
 
         return True

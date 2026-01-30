@@ -82,9 +82,9 @@ class TestLinkExtraction(unittest.TestCase):
         # Note: Current regex may capture some trailing punctuation
         # The validation phase will handle these appropriately
         self.assertEqual(len(urls), 3)
-        self.assertTrue(any("example.com" in url for url in urls))
-        self.assertTrue(any("github.com" in url for url in urls))
-        self.assertTrue(any("test.com" in url for url in urls))
+        self.assertTrue(any(url.startswith("https://example.com") for url in urls))
+        self.assertTrue(any(url.startswith("https://github.com") for url in urls))
+        self.assertTrue(any(url.startswith("https://test.com") for url in urls))
 
     def test_markdown_url_with_parentheses(self):
         """Test markdown links correctly handle URLs with parentheses."""

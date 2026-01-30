@@ -278,7 +278,7 @@ if __name__ == "__main__":
     if token:
         print("✅ Token retrieved successfully")
         print(f"   Length: {len(token)} characters")
-        print(f"   Prefix: {token[:7]}...")
+        print("   Prefix: ***")
     else:
         print("❌ Failed to retrieve token")
         print("")
