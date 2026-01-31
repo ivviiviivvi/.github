@@ -285,8 +285,7 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
         # Generate deterministic UUID based on filename
         identifier = uuid.uuid5(UUID_NAMESPACE_URL, f"workflow:{filename}")
 
-        created_date = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
-        today = created_date
+        current_timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
 
         metadata = {
             "profile": "full",
@@ -305,8 +304,8 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
             "programmingLanguage": "YAML",
             "runtimePlatform": "GitHub Actions",
             "triggers": triggers,
-            "dateCreated": created_date,
-            "dateModified": today,
+            "dateCreated": current_timestamp,
+            "dateModified": current_timestamp,
             "dc:subject": subjects,
         }
 
