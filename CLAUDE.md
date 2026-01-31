@@ -65,6 +65,10 @@ npm run version:sync
 
 ## Architecture Overview
 
+> **Note**: The nested `.github/.github/` structure is intentional and correct
+> for organization-level `.github` repositories. GitHub looks for workflows in
+> `.github/workflows/` relative to the repository root.
+
 ```
 .github/
 ├── .config/               # ALL configs (devcontainer, vscode, jules, pre-commit)
@@ -75,11 +79,11 @@ npm run version:sync
 │   ├── guides/            # How-to guides (includes extended CLAUDE.md)
 │   └── registry/          # Workflow registry
 ├── src/
-│   ├── ai_framework/      # AI agents, chatmodes, instructions, prompts
-│   │   ├── agents/        # 32 production AI agents
-│   │   ├── chatmodes/     # Copilot chat modes
-│   │   ├── instructions/  # 100+ coding instructions
-│   │   └── prompts/       # Task-specific prompts
+│   ├── ai_framework/      # AI agents, chatmodes, prompts
+│   │   ├── agents/        # 32 production AI agents (*.agent.md)
+│   │   ├── chatmodes/     # 95+ chatmodes (*.chatmode.md)
+│   │   ├── collections/   # Collection definitions
+│   │   └── prompts/       # Prompt templates (*.prompt.md)
 │   └── automation/        # Python automation scripts
 │       ├── scripts/       # 44 Python automation scripts
 │       │   └── utils/     # Utility scripts (update-action-pins.py, etc.)
