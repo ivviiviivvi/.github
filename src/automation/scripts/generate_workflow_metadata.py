@@ -15,6 +15,8 @@ from typing import Any, Optional
 
 import yaml
 
+# UUID namespace used for deterministic workflow identifiers (standard URL namespace)
+UUID_NAMESPACE_URL = uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
 
 # Layer classification rules based on workflow patterns
 LAYER_RULES = {
@@ -253,6 +255,13 @@ def generate_canonical_name(filename: str, layer: str, role: str) -> str:
     return f"{layer}.{role}.{domain}.yml"
 
 
+def generate_default_workflow_name(filename: str) -> str:
+    """Generate a human-readable default workflow name from a filename."""
+    base_name = filename.replace(".yml", "")
+    readable = base_name.replace("-", " ")
+    return readable.title()
+
+
 def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
     """Generate metadata for a single workflow file."""
     try:
@@ -263,7 +272,8 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
             return None
 
         filename = file_path.name
-        name = workflow.get("name", filename.replace(".yml", "").replace("-", " ").title())
+        default_name = generate_default_workflow_name(filename)
+        name = workflow.get("name", default_name)
 
         triggers = extract_triggers(workflow)
         layer = classify_layer(name, str(file_path))
@@ -273,10 +283,10 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
         canonical = generate_canonical_name(filename, layer, role)
 
         # Generate deterministic UUID based on filename
-        namespace = uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")  # URL namespace
-        identifier = uuid.uuid5(namespace, f"workflow:{filename}")
+        identifier = uuid.uuid5(UUID_NAMESPACE_URL, f"workflow:{filename}")
 
-        today = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+        created_date = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
+        today = created_date
 
         metadata = {
             "profile": "full",
@@ -295,14 +305,14 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
             "programmingLanguage": "YAML",
             "runtimePlatform": "GitHub Actions",
             "triggers": triggers,
-            "dateCreated": "2024-01-01T00:00:00Z",
+            "dateCreated": created_date,
             "dateModified": today,
             "dc:subject": subjects,
         }
 
         return metadata
 
-    except Exception as e:
+    except (FileNotFoundError, PermissionError, OSError, yaml.YAMLError) as e:
         print(f"Error processing {file_path}: {e}")
         return None
 
@@ -323,8 +333,8 @@ def main():
 
     # Process all workflow files
     for file_path in sorted(workflows_dir.glob("*.yml")):
-        # Skip reusable subdirectory for now
-        if "reusable/" in str(file_path):
+        # Skip reusable subdirectory for now using a Path-aware check
+        if file_path.parent.name == "reusable":
             continue
 
         meta_path = file_path.with_suffix(".yml.meta.json")

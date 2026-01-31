@@ -13,8 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation
 from quota_manager import LOCK_DIR, LOCK_FILE, SUBSCRIPTIONS_FILE, acquire_lock
 
 try:
-    pass
-
+    import fcntl  # noqa: F401
     HAS_FCNTL = True
 except ImportError:
     HAS_FCNTL = False
@@ -148,10 +147,6 @@ class TestQuotaLock(unittest.TestCase):
 
                 # We can't easily verify the content with simple mock_open without more complex setup
                 # but the fact it reached "w" means it processed the logic.
-
-if __name__ == "__main__":
-    unittest.main()
-
 
 if __name__ == "__main__":
     unittest.main()

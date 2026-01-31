@@ -44,7 +44,7 @@ class TestWebCrawlerFull(unittest.TestCase):
             {
                 "name": "stale-repo",
                 "full_name": "org/stale-repo",
-                "updated_at": "2020-01-01T00:00:00Z", # Old
+                "updated_at": "2020-01-01T00:00:00Z",  # Old
                 "stargazers_count": 0,
                 "open_issues_count": 0
             }
@@ -74,9 +74,9 @@ class TestWebCrawlerFull(unittest.TestCase):
 
             # Setup glob returns for different directories
             def glob_side_effect(pattern):
-                if pattern == "*.yml": # workflows
+                if pattern == "*.yml":  # workflows
                     return [Path(".github/workflows/ci.yml")]
-                if pattern == "*.md": # agents/instructions
+                if pattern == "*.md":  # agents/instructions
                     return [Path("agents/coder.md")]
                 return []
 
@@ -89,7 +89,7 @@ class TestWebCrawlerFull(unittest.TestCase):
 
     def test_identify_blind_spots(self):
         """Test blind spot identification."""
-        ecosystem = {"workflows": ["ci.yml"]} # < 5 workflows
+        ecosystem = {"workflows": ["ci.yml"]}  # < 5 workflows
         health = {
             "repositories": [
                 {"name": "stale-1", "is_active": False},
