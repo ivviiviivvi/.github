@@ -149,10 +149,10 @@ class Child(Parent, Mixin):
 
     def test_handles_missing_docstring(self):
         """Test handles functions without docstrings."""
-        code = '''
+        code = """
 def no_doc():
     pass
-'''
+"""
         tree = ast.parse(code)
         extractor = DocstringExtractor()
         extractor.visit(tree)
@@ -236,9 +236,7 @@ class TestDocumentationGenerator:
 
     def test_handles_missing_src_dir(self, tmp_path, capsys):
         """Test exits when source directory doesn't exist."""
-        generator = DocumentationGenerator(
-            tmp_path / "nonexistent", tmp_path / "docs"
-        )
+        generator = DocumentationGenerator(tmp_path / "nonexistent", tmp_path / "docs")
 
         with pytest.raises(SystemExit):
             generator.generate()
@@ -254,7 +252,9 @@ class TestDocumentationGenerator:
         captured = capsys.readouterr()
         assert "No Python files" in captured.out
 
-    def test_warns_about_missing_docstrings(self, mock_src_dir, mock_output_dir, capsys):
+    def test_warns_about_missing_docstrings(
+        self, mock_src_dir, mock_output_dir, capsys
+    ):
         """Test warns about files without module docstrings."""
         py_file = mock_src_dir / "nodoc.py"
         py_file.write_text("def func(): pass")
@@ -324,7 +324,9 @@ class TestUpdateReadme:
     def test_updates_existing_module_section(self, tmp_path, capsys):
         """Test updates existing ## Modules section."""
         readme_path = tmp_path / "README.md"
-        readme_path.write_text("# My Project\n\n## Modules\n\nOld content\n\n## Other\n")
+        readme_path.write_text(
+            "# My Project\n\n## Modules\n\nOld content\n\n## Other\n"
+        )
 
         new_summary = "## Modules\n\n| Module | Description |\n|---|---|\n"
 
@@ -395,9 +397,7 @@ class TestGetName:
         """Test handles ast.Attribute nodes."""
         extractor = DocstringExtractor()
         # Create typing.Optional
-        node = ast.Attribute(
-            value=ast.Name(id="typing"), attr="Optional"
-        )
+        node = ast.Attribute(value=ast.Name(id="typing"), attr="Optional")
 
         result = extractor._get_name(node)
 

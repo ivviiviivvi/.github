@@ -14,7 +14,9 @@ import pytest
 np = pytest.importorskip("numpy")
 pd = pytest.importorskip("pandas")
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 from predict_workflow_failures import WorkflowPredictor
 

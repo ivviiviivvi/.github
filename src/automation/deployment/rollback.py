@@ -69,7 +69,9 @@ class RollbackManager:
             True if rollback succeeded
 
         """
-        print(f"\n⏪ {'[DRY RUN] ' if dry_run else ''}Rolling back deployment: {deployment_id}")
+        print(
+            f"\n⏪ {'[DRY RUN] ' if dry_run else ''}Rolling back deployment: {deployment_id}"
+        )
 
         # Load deployment log
         try:
@@ -100,7 +102,9 @@ class RollbackManager:
                     print("      ❌ Rollback failed")
 
         # Summary
-        print(f"\n{'[DRY RUN] ' if dry_run else ''}Rollback complete: {success_count}/{len(deployments)} successful")
+        print(
+            f"\n{'[DRY RUN] ' if dry_run else ''}Rollback complete: {success_count}/{len(deployments)} successful"
+        )
 
         if not dry_run:
             # Save rollback log
@@ -173,7 +177,9 @@ class RollbackManager:
             content = file_data["content"]
 
             # Get current file SHA
-            current_response = self.session.get(f"{self.api_base}/repos/{repo}/contents/{file_path}")
+            current_response = self.session.get(
+                f"{self.api_base}/repos/{repo}/contents/{file_path}"
+            )
 
             if current_response.status_code != 200:
                 return False
@@ -196,7 +202,9 @@ class RollbackManager:
             print(f"         Error reverting file: {e}")
             return False
 
-    def rollback_repository_to_commit(self, repo: str, commit_sha: str, dry_run: bool = True) -> bool:
+    def rollback_repository_to_commit(
+        self, repo: str, commit_sha: str, dry_run: bool = True
+    ) -> bool:
         """Rollback repository workflows to specific commit.
 
         Args:
@@ -208,7 +216,9 @@ class RollbackManager:
             True if rollback succeeded
 
         """
-        print(f"\n⏪ {'[DRY RUN] ' if dry_run else ''}Rolling back {repo} to {commit_sha[:7]}")
+        print(
+            f"\n⏪ {'[DRY RUN] ' if dry_run else ''}Rolling back {repo} to {commit_sha[:7]}"
+        )
 
         if dry_run:
             print("   [DRY RUN] Would revert all workflow files to specified commit")
@@ -216,7 +226,9 @@ class RollbackManager:
 
         # Get all workflow files
         try:
-            response = self.session.get(f"{self.api_base}/repos/{repo}/contents/.github/workflows")
+            response = self.session.get(
+                f"{self.api_base}/repos/{repo}/contents/.github/workflows"
+            )
 
             if response.status_code != 200:
                 print("   ❌ Failed to get workflow files")
@@ -227,7 +239,9 @@ class RollbackManager:
             # Revert each file
             success_count = 0
             for file_info in files:
-                if file_info["name"].endswith(".yml") or file_info["name"].endswith(".yaml"):
+                if file_info["name"].endswith(".yml") or file_info["name"].endswith(
+                    ".yaml"
+                ):
                     file_path = file_info["path"]
                     print(f"   Reverting: {file_path}...", end=" ")
 
@@ -279,7 +293,9 @@ class RollbackManager:
 
         return workflow_map.get(month, [])
 
-    def _save_rollback_log(self, deployment_id: str, deployments: list[dict], success_count: int):
+    def _save_rollback_log(
+        self, deployment_id: str, deployments: list[dict], success_count: int
+    ):
         """Save rollback log."""
         log_file = Path(f"automation/deployment/logs/rollback_{deployment_id}.json")
 
@@ -305,7 +321,9 @@ def main():
     parser.add_argument("--deployment-id", type=str, help="Deployment ID to rollback")
     parser.add_argument("--repo", type=str, help="Repository to rollback (org/repo)")
     parser.add_argument("--to-commit", type=str, help="Commit SHA to rollback to")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be done")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would be done"
+    )
     parser.add_argument("--execute", action="store_true", help="Execute rollback")
 
     args = parser.parse_args()
@@ -334,7 +352,9 @@ def main():
         success = manager.rollback_deployment(args.deployment_id, dry_run)
     elif args.repo and args.to_commit:
         # Rollback specific repository to commit
-        success = manager.rollback_repository_to_commit(args.repo, args.to_commit, dry_run)
+        success = manager.rollback_repository_to_commit(
+            args.repo, args.to_commit, dry_run
+        )
     else:
         print("❌ Must specify --deployment-id or (--repo and --to-commit)")
         sys.exit(1)

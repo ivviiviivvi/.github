@@ -165,7 +165,9 @@ class DeploymentOrchestrator:
 
         return True
 
-    def deploy_workflows(self, month: int, canary_repos: Optional[list[str]] = None) -> bool:
+    def deploy_workflows(
+        self, month: int, canary_repos: Optional[list[str]] = None
+    ) -> bool:
         """Deploy workflows with phased rollout.
 
         Args:
@@ -310,7 +312,9 @@ class DeploymentOrchestrator:
             file_path = f".github/workflows/{workflow_file.name}"
 
             # Check if file exists
-            get_response = self.session.get(f"{self.api_base}/repos/{repo}/contents/{file_path}")
+            get_response = self.session.get(
+                f"{self.api_base}/repos/{repo}/contents/{file_path}"
+            )
 
             sha = None
             if get_response.status_code == 200:
@@ -329,7 +333,9 @@ class DeploymentOrchestrator:
             if sha:
                 data["sha"] = sha
 
-            response = self.session.put(f"{self.api_base}/repos/{repo}/contents/{file_path}", json=data)
+            response = self.session.put(
+                f"{self.api_base}/repos/{repo}/contents/{file_path}", json=data
+            )
 
             return response.status_code in [200, 201]
 
@@ -367,7 +373,9 @@ class DeploymentOrchestrator:
             )
 
             if success_rate < threshold:
-                print(f"\n      ❌ Health check failed: {success_rate:.1%} < {threshold:.1%}")
+                print(
+                    f"\n      ❌ Health check failed: {success_rate:.1%} < {threshold:.1%}"
+                )
                 return False
 
             time.sleep(interval)
@@ -379,7 +387,9 @@ class DeploymentOrchestrator:
         """Check health of a single repository."""
         try:
             # Get recent workflow runs
-            response = self.session.get(f"{self.api_base}/repos/{repo}/actions/runs", params={"per_page": 10})
+            response = self.session.get(
+                f"{self.api_base}/repos/{repo}/actions/runs", params={"per_page": 10}
+            )
 
             if response.status_code != 200:
                 return False
@@ -433,7 +443,11 @@ class DeploymentOrchestrator:
         }
 
         workflow_names = workflow_map.get(month, [])
-        return [workflow_dir / name for name in workflow_names if (workflow_dir / name).exists()]
+        return [
+            workflow_dir / name
+            for name in workflow_names
+            if (workflow_dir / name).exists()
+        ]
 
     def _select_canary_repos(self) -> list[str]:
         """Select repositories for canary deployment."""
@@ -511,8 +525,12 @@ def main():
         required=True,
         help="Target environment",
     )
-    parser.add_argument("--month", type=int, choices=[1, 2, 3], required=True, help="Month to deploy")
-    parser.add_argument("--canary-repos", type=str, help="Comma-separated list of canary repositories")
+    parser.add_argument(
+        "--month", type=int, choices=[1, 2, 3], required=True, help="Month to deploy"
+    )
+    parser.add_argument(
+        "--canary-repos", type=str, help="Comma-separated list of canary repositories"
+    )
     parser.add_argument("--rollback", action="store_true", help="Rollback deployment")
     parser.add_argument("--deployment-id", type=str, help="Deployment ID to rollback")
 

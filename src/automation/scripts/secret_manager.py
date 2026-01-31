@@ -50,7 +50,9 @@ import sys
 from typing import Optional
 
 
-def get_secret(item_name: str, field: str = "password", vault: str = "Private") -> Optional[str]:
+def get_secret(
+    item_name: str, field: str = "password", vault: str = "Private"
+) -> Optional[str]:
     """Get secret from 1Password CLI.
 
     Args:
@@ -99,7 +101,9 @@ def get_secret(item_name: str, field: str = "password", vault: str = "Private") 
         return None
 
 
-def ensure_secret(item_name: str, field: str = "password", vault: str = "Private") -> str:
+def ensure_secret(
+    item_name: str, field: str = "password", vault: str = "Private"
+) -> str:
     """Get secret from 1Password or exit if unavailable.
 
     Args:

@@ -133,9 +133,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -151,9 +149,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -173,9 +169,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -195,9 +189,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -214,9 +206,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -237,9 +227,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -257,9 +245,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -271,16 +257,12 @@ class TestMainFunction:
     ):
         """Test handles single string tag."""
         collection = mock_collections_dir / "single-tag.md"
-        collection.write_text(
-            "---\nname: Single\ndescription: D\ntags: solo\n---\n"
-        )
+        collection.write_text("---\nname: Single\ndescription: D\ntags: solo\n---\n")
 
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -299,9 +281,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -326,9 +306,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -337,16 +315,12 @@ class TestMainFunction:
         assert "config.json" not in content
         assert "notes.txt" not in content
 
-    def test_empty_directory(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_empty_directory(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles empty directory."""
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -364,9 +338,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -387,9 +359,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -407,9 +377,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
         )
-        monkeypatch.setattr(
-            "generate_collection_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 

@@ -14,7 +14,9 @@ from urllib.parse import urlparse
 import pytest
 import requests
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 from web_crawler import OrganizationCrawler
 
 
@@ -46,13 +48,19 @@ class TestSSRFProtection:
         # Test the _is_safe_url method if it exists
         if hasattr(crawler, "_is_safe_url"):
             result = crawler._is_safe_url(url)
-            assert result is False, f"Private IP {private_ip} should be blocked by SSRF protection"
+            assert (
+                result is False
+            ), f"Private IP {private_ip} should be blocked by SSRF protection"
         else:
             # Verify using ipaddress module directly that this IP would be blocked
             try:
                 ip_obj = ipaddress.ip_address(private_ip)
-                is_private = not ip_obj.is_global or ip_obj.is_private or ip_obj.is_loopback
-                assert is_private, f"IP {private_ip} should be detected as private/local"
+                is_private = (
+                    not ip_obj.is_global or ip_obj.is_private or ip_obj.is_loopback
+                )
+                assert (
+                    is_private
+                ), f"IP {private_ip} should be detected as private/local"
             except ValueError:
                 # localhost string - should also be blocked
                 assert private_ip == "localhost", f"Invalid IP format: {private_ip}"
@@ -139,7 +147,9 @@ class TestLinkExtraction:
 
         # _extract_links extracts all href-like content, validation happens in _check_link
         # Valid HTTPS URLs should be present
-        assert any(link == "https://example.com" for link in links) or any(link == "https://test.com" for link in links)
+        assert any(link == "https://example.com" for link in links) or any(
+            link == "https://test.com" for link in links
+        )
 
     def test_deduplicates_links(self, crawler):
         """Test that duplicate links are deduplicated."""
@@ -294,7 +304,9 @@ class TestMarkdownCrawling:
     @pytest.fixture
     def temp_markdown_dir(self, tmp_path):
         """Create temporary markdown files for testing."""
-        (tmp_path / "test1.md").write_text("Check [GitHub](https://github.com)\nAlso https://example.com\n")
+        (tmp_path / "test1.md").write_text(
+            "Check [GitHub](https://github.com)\nAlso https://example.com\n"
+        )
         (tmp_path / "subdir").mkdir()
         (tmp_path / "subdir" / "test2.md").write_text("[Link](https://test.com)\n")
         return tmp_path
@@ -330,7 +342,9 @@ class TestEndToEnd:
     def test_basic_crawl_workflow(self, tmp_path):
         """Test complete crawl workflow."""
         # Setup
-        (tmp_path / "README.md").write_text("# Test\nVisit [GitHub](https://github.com)\n")
+        (tmp_path / "README.md").write_text(
+            "# Test\nVisit [GitHub](https://github.com)\n"
+        )
 
         crawler = OrganizationCrawler(org_name="test")
 

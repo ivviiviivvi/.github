@@ -339,7 +339,9 @@ def notify_validation_failure(
     # Build error message
     _error_text = "\n".join(f"- {e}" for e in errors)  # noqa: F841
     _warning_text = (  # noqa: F841
-        "\n\n**Warnings:**\n" + "\n".join(f"- {w}" for w in warnings) if warnings else ""
+        "\n\n**Warnings:**\n" + "\n".join(f"- {w}" for w in warnings)
+        if warnings
+        else ""
     )
 
     message = """**Capability:** {capability}

@@ -5,9 +5,12 @@ from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
 
 # Add scripts directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 import ab_test_assignment
+
 
 class TestABTestAssignmentMain(unittest.TestCase):
 
@@ -17,9 +20,19 @@ class TestABTestAssignmentMain(unittest.TestCase):
             "split": {"seed": "seed"},
             "repositories": {"exclude": ["excluded/repo"]},
             "groups": {
-                "control": {"name": "Control", "gracePeriod": 7, "closeAfter": 7, "percentage": 50},
-                "experiment": {"name": "Experiment", "gracePeriod": 10, "closeAfter": 10, "percentage": 50}
-            }
+                "control": {
+                    "name": "Control",
+                    "gracePeriod": 7,
+                    "closeAfter": 7,
+                    "percentage": 50,
+                },
+                "experiment": {
+                    "name": "Experiment",
+                    "gracePeriod": 10,
+                    "closeAfter": 10,
+                    "percentage": 50,
+                },
+            },
         }
 
     @patch("ab_test_assignment.ABTestAssigner")
@@ -31,7 +44,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
             "groupName": "Control",
             "gracePeriod": 7,
             "closeAfter": 7,
-            "percentage": 50
+            "percentage": 50,
         }
 
         with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo"]):
@@ -47,7 +60,9 @@ class TestABTestAssignmentMain(unittest.TestCase):
         mock_instance = MockAssigner.return_value
         mock_instance.generate_workflow_config.return_value = {"group": "control"}
 
-        with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo", "--json"]):
+        with patch(
+            "sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo", "--json"]
+        ):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
                 mock_print.assert_called_with('{\n  "group": "control"\n}')
@@ -61,10 +76,10 @@ class TestABTestAssignmentMain(unittest.TestCase):
             "assignments": {
                 "control": {"count": 1, "percentage": 50, "repositories": ["repo1"]},
                 "experiment": {"count": 1, "percentage": 50, "repositories": ["repo2"]},
-                "excluded": {"count": 0, "repositories": []}
+                "excluded": {"count": 0, "repositories": []},
             },
             "totalActive": 2,
-            "splitRatio": "1:1"
+            "splitRatio": "1:1",
         }
 
         with patch("sys.argv", ["ab_test_assignment.py", "--all"]):
@@ -92,6 +107,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     ab_test_assignment.main()
                 # mock_stderr.assert_called() # sys.exit(1) might not write to stderr directly via python print
+
 
 if __name__ == "__main__":
     unittest.main()

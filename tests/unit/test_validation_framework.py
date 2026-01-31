@@ -11,7 +11,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 # Mock notification_integration before importing validation_framework
 sys.modules["notification_integration"] = MagicMock()
@@ -471,7 +473,9 @@ class TestReportGeneration:
             ],
         }
 
-        (validation_dir / "validation_20240101_120000.json").write_text(json.dumps(validation_data))
+        (validation_dir / "validation_20240101_120000.json").write_text(
+            json.dumps(validation_data)
+        )
 
         report = framework.generate_report("owner", "repo", days=30)
 

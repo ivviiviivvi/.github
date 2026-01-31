@@ -5,17 +5,30 @@ from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
 
 # Add scripts directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 import quota_manager
+
 
 class TestQuotaManagerFull(unittest.TestCase):
 
     def setUp(self):
         self.mock_subscriptions = {
             "subscriptions": [
-                {"name": "sub1", "usage": 10, "reset_cadence": "daily", "last_reset": "2023-01-01"},
-                {"name": "sub2", "usage": 5, "reset_cadence": "monthly", "last_reset": "2023-01-01"}
+                {
+                    "name": "sub1",
+                    "usage": 10,
+                    "reset_cadence": "daily",
+                    "last_reset": "2023-01-01",
+                },
+                {
+                    "name": "sub2",
+                    "usage": 5,
+                    "reset_cadence": "monthly",
+                    "last_reset": "2023-01-01",
+                },
             ]
         }
         self.mock_tasks = ["task1", "task2"]
@@ -53,13 +66,15 @@ class TestQuotaManagerFull(unittest.TestCase):
         with patch("quota_manager.datetime") as mock_datetime:
             # Set today to a different day/month
             mock_today = MagicMock()
-            mock_today.date.return_value = "2023-01-02" # Different day
-            mock_today.month = 2 # Different month
+            mock_today.date.return_value = "2023-01-02"  # Different day
+            mock_today.month = 2  # Different month
             mock_today.year = 2023
             mock_today.strftime.return_value = "2023-02-01"
             mock_datetime.now.return_value = mock_today
             mock_datetime.strptime.side_effect = lambda d, f: datetime.strptime(d, f)
-            from datetime import datetime # Real datetime for strptime fallback if needed
+            from datetime import (
+                datetime,
+            )  # Real datetime for strptime fallback if needed
 
             # Actually mocking strptime is tricky if it's used inside.
             # quota_manager imports datetime class.
@@ -139,6 +154,7 @@ class TestQuotaManagerFull(unittest.TestCase):
     def test_main_remove_task(self, mock_remove):
         quota_manager.main()
         mock_remove.assert_called_with({"id": 1})
+
 
 if __name__ == "__main__":
     unittest.main()

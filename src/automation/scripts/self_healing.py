@@ -93,7 +93,9 @@ class SelfHealingEngine:
         # Execute healing strategy
         result = self._execute_strategy(owner, repo, run, classification, strategy)
 
-        self.logger.info(f"Healing {'successful' if result.healed else 'unsuccessful'}: {result.resolution}")
+        self.logger.info(
+            f"Healing {'successful' if result.healed else 'unsuccessful'}: {result.resolution}"
+        )
 
         return result
 
@@ -259,7 +261,10 @@ class SelfHealingEngine:
         workflow_name = run.get("name", "").lower()
 
         # P0: Critical workflows or permanent failures in production
-        if any(keyword in workflow_name for keyword in ["production", "deploy", "release", "security"]):
+        if any(
+            keyword in workflow_name
+            for keyword in ["production", "deploy", "release", "security"]
+        ):
             if failure_type == FailureType.PERMANENT:
                 return Priority.P0
             return Priority.P1
@@ -367,9 +372,13 @@ class SelfHealingEngine:
             )
 
         # Calculate backoff delay
-        delay = self.config.initial_retry_delay * (self.config.retry_backoff_multiplier**retry_count)
+        delay = self.config.initial_retry_delay * (
+            self.config.retry_backoff_multiplier**retry_count
+        )
 
-        self.logger.info(f"Retry {retry_count + 1}/{self.config.max_retry_attempts} after {delay}s delay")
+        self.logger.info(
+            f"Retry {retry_count + 1}/{self.config.max_retry_attempts} after {delay}s delay"
+        )
 
         if self.config.enable_auto_retry:
             # Re-run the workflow
@@ -417,7 +426,9 @@ class SelfHealingEngine:
                 classification=classification,
                 strategy="retry_exponential",
                 healed=success,
-                resolution=("Workflow re-run initiated" if success else "Re-run failed"),
+                resolution=(
+                    "Workflow re-run initiated" if success else "Re-run failed"
+                ),
                 retry_count=retry_count + 1,
                 actions_taken=actions,
                 timestamp=datetime.now(timezone.utc),
@@ -508,7 +519,9 @@ class SelfHealingEngine:
                 classification=classification,
                 strategy="wait_and_retry",
                 healed=success,
-                resolution=("Waited for dependencies and retried" if success else "Retry failed"),
+                resolution=(
+                    "Waited for dependencies and retried" if success else "Retry failed"
+                ),
                 retry_count=1,
                 actions_taken=actions,
                 timestamp=datetime.now(timezone.utc),
@@ -713,7 +726,9 @@ class SelfHealingEngine:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Self-healing workflow failure detection and recovery")
+    parser = argparse.ArgumentParser(
+        description="Self-healing workflow failure detection and recovery"
+    )
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument("--run-id", required=True, type=int, help="Workflow run ID")

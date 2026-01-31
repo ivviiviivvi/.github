@@ -15,7 +15,6 @@ from typing import Any, Optional
 
 import yaml
 
-
 # Layer classification rules based on workflow patterns
 LAYER_RULES = {
     "core": [
@@ -263,7 +262,9 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
             return None
 
         filename = file_path.name
-        name = workflow.get("name", filename.replace(".yml", "").replace("-", " ").title())
+        name = workflow.get(
+            "name", filename.replace(".yml", "").replace("-", " ").title()
+        )
 
         triggers = extract_triggers(workflow)
         layer = classify_layer(name, str(file_path))

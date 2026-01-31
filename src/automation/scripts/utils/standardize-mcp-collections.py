@@ -18,7 +18,9 @@ import yaml
 def extract_inline_frontmatter(line: str) -> dict[str, Any]:
     """Extract frontmatter from inline comment format."""
     # Pattern: ## name: X description: Y tags: [] updated: Z
-    pattern = r"##\s+name:\s+(.+?)\s+description:\s+(.+?)\s+tags:\s+(.+?)\s+updated:\s+(.+?)$"
+    pattern = (
+        r"##\s+name:\s+(.+?)\s+description:\s+(.+?)\s+tags:\s+(.+?)\s+updated:\s+(.+?)$"
+    )
     match = re.match(pattern, line)
     if not match:
         return {}

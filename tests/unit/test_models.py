@@ -10,7 +10,9 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 from models import (  # Enums; Auto-merge models; Routing models; Self-healing models; Maintenance models; Analytics models; SLA models; Incident models; Validation models; Audit models
     AnalyticsConfig,
@@ -381,9 +383,15 @@ class TestSLAModels:
             repository="owner/repo",
             time_window="24h",
             overall_compliance=98.5,
-            response_time=ResponseTimeMetric(target_minutes=15, actual_minutes=10, met=True),
-            resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
-            success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
+            response_time=ResponseTimeMetric(
+                target_minutes=15, actual_minutes=10, met=True
+            ),
+            resolution_time=ResolutionTimeMetric(
+                target_hours=24, actual_hours=12, met=True
+            ),
+            success_rate=SuccessRateMetric(
+                target_percentage=95.0, actual_percentage=98.0, met=True
+            ),
             availability=AvailabilityMetric(
                 target_percentage=99.0,
                 actual_percentage=99.5,
@@ -413,7 +421,9 @@ class TestSLAModels:
         )
         # P0 should have stricter thresholds
         assert p0_threshold.response_time_minutes < p3_threshold.response_time_minutes
-        assert p0_threshold.availability_percentage > p3_threshold.availability_percentage
+        assert (
+            p0_threshold.availability_percentage > p3_threshold.availability_percentage
+        )
 
 
 class TestIncidentModels:
@@ -605,9 +615,15 @@ class TestDatetimeSerialization:
             repository="owner/repo",
             time_window="24h",
             overall_compliance=98.5,
-            response_time=ResponseTimeMetric(target_minutes=15, actual_minutes=10, met=True),
-            resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
-            success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
+            response_time=ResponseTimeMetric(
+                target_minutes=15, actual_minutes=10, met=True
+            ),
+            resolution_time=ResolutionTimeMetric(
+                target_hours=24, actual_hours=12, met=True
+            ),
+            success_rate=SuccessRateMetric(
+                target_percentage=95.0, actual_percentage=98.0, met=True
+            ),
             availability=AvailabilityMetric(
                 target_percentage=99.0,
                 actual_percentage=99.5,

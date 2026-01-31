@@ -464,12 +464,12 @@ Planned improvements include:
 
 ## Related Documentation
 
-- [Agent Registry](AGENT_REGISTRY.md)
-- [Agents Documentation](README.agents.md)
-- [Instructions Documentation](README.instructions.md)
-- [Prompts Documentation](README.prompts.md)
-- [Chat Modes Documentation](README.chatmodes.md)
-- [Collections Documentation](README.collections.md)
+- [Agent Registry](../reference/AGENT_REGISTRY.md)
+- [Agents Documentation](../guides/README.agents.md)
+- [Instructions Documentation](../guides/README.instructions.md)
+- [Prompts Documentation](../guides/README.prompts.md)
+- [Chat Modes Documentation](../guides/README.chatmodes.md)
+- [Collections Documentation](../guides/README.collections.md)
 - [GitHub Awesome-Copilot Repository](https://github.com/github/awesome-copilot)<!-- link:github.awesome_copilot -->
 
 ## Feedback

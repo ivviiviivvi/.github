@@ -256,7 +256,9 @@ class PreDeploymentChecker:
         inaccessible = []
 
         for repo in repositories:
-            success, stdout, stderr = self._run_command(["gh", "repo", "view", repo, "--json", "name"])
+            success, stdout, stderr = self._run_command(
+                ["gh", "repo", "view", repo, "--json", "name"]
+            )
             if not success:
                 inaccessible.append(repo)
 
@@ -295,7 +297,11 @@ class PreDeploymentChecker:
 
         # Handle both list and dict formats
         if isinstance(labels_config, list):
-            required_labels = {label.get("name", "") for label in labels_config if isinstance(label, dict)}
+            required_labels = {
+                label.get("name", "")
+                for label in labels_config
+                if isinstance(label, dict)
+            }
         elif isinstance(labels_config, dict):
             required_labels = set(labels_config.keys())
         else:
@@ -309,7 +315,9 @@ class PreDeploymentChecker:
         repos_missing_labels = []
 
         for repo in repositories:
-            success, stdout, stderr = self._run_command(["gh", "label", "list", "--repo", repo, "--json", "name"])
+            success, stdout, stderr = self._run_command(
+                ["gh", "label", "list", "--repo", repo, "--json", "name"]
+            )
 
             if not success:
                 repos_missing_labels.append(f"{repo} (inaccessible)")
@@ -318,10 +326,16 @@ class PreDeploymentChecker:
             try:
                 labels_data = json.loads(stdout)
                 if isinstance(labels_data, list):
-                    existing_labels = {label.get("name", "") for label in labels_data if isinstance(label, dict)}
+                    existing_labels = {
+                        label.get("name", "")
+                        for label in labels_data
+                        if isinstance(label, dict)
+                    }
                     missing = required_labels - existing_labels
                     if missing:
-                        repos_missing_labels.append(f"{repo} (missing {len(missing)} labels)")
+                        repos_missing_labels.append(
+                            f"{repo} (missing {len(missing)} labels)"
+                        )
                 else:
                     repos_missing_labels.append(f"{repo} (invalid format)")
             except (
@@ -448,7 +462,9 @@ def main():
     # Ensure GitHub token is available (from 1Password or env)
     _ = ensure_github_token("org-onboarding-token")  # noqa: F841
 
-    parser = argparse.ArgumentParser(description="Pre-deployment checklist for Week 11 deployment")
+    parser = argparse.ArgumentParser(
+        description="Pre-deployment checklist for Week 11 deployment"
+    )
     parser.add_argument(
         "--phase",
         type=int,

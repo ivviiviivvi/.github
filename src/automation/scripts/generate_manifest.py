@@ -89,11 +89,13 @@ def scan_agents(agents_dir: Path) -> dict[str, Any]:
     for path in sorted(agents_dir.glob("*.agent.md")):
         content = path.read_text(encoding="utf-8")
         fm = parse_frontmatter(content)
-        files.append({
-            "file": path.name,
-            "name": fm.get("name", path.stem),
-            "description": fm.get("description", ""),
-        })
+        files.append(
+            {
+                "file": path.name,
+                "name": fm.get("name", path.stem),
+                "description": fm.get("description", ""),
+            }
+        )
 
     return {"total": len(files), "files": files}
 
@@ -107,11 +109,13 @@ def scan_chatmodes(chatmodes_dir: Path) -> dict[str, Any]:
     for path in sorted(chatmodes_dir.glob("*.chatmode.md")):
         content = path.read_text(encoding="utf-8")
         fm = parse_frontmatter(content)
-        files.append({
-            "file": path.name,
-            "name": fm.get("name", path.stem),
-            "description": fm.get("description", ""),
-        })
+        files.append(
+            {
+                "file": path.name,
+                "name": fm.get("name", path.stem),
+                "description": fm.get("description", ""),
+            }
+        )
 
     return {"total": len(files), "files": files}
 
@@ -125,12 +129,14 @@ def scan_prompts(prompts_dir: Path) -> dict[str, Any]:
     for path in sorted(prompts_dir.glob("*.prompt.md")):
         content = path.read_text(encoding="utf-8")
         fm = parse_frontmatter(content)
-        files.append({
-            "file": path.name,
-            "name": fm.get("name", path.stem),
-            "mode": fm.get("mode", ""),
-            "description": fm.get("description", ""),
-        })
+        files.append(
+            {
+                "file": path.name,
+                "name": fm.get("name", path.stem),
+                "mode": fm.get("mode", ""),
+                "description": fm.get("description", ""),
+            }
+        )
 
     return {"total": len(files), "files": files}
 
@@ -227,7 +233,9 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
 
     # Health checks
     orphaned_meta = find_orphaned_meta(workflows_dir) if workflows_dir.exists() else []
-    missing_meta = find_missing_metadata(workflows_dir) if workflows_dir.exists() else []
+    missing_meta = (
+        find_missing_metadata(workflows_dir) if workflows_dir.exists() else []
+    )
 
     # Build manifest
     manifest: dict[str, Any] = {
@@ -238,7 +246,9 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
         "organization": "ivviiviivvi",
         "statistics": {
             "workflows": {
-                "total": workflow_stats.get("total_workflows", workflow_stats.get("total", 0)),
+                "total": workflow_stats.get(
+                    "total_workflows", workflow_stats.get("total", 0)
+                ),
                 "with_metadata": workflow_stats.get("with_metadata", 0),
                 "by_layer": workflow_stats.get("by_layer", {}),
             },

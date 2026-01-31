@@ -5,6 +5,7 @@ import os
 import yaml
 from pathlib import Path
 
+
 def create_defaults():
     """Create default configuration files if they don't exist."""
 
@@ -18,7 +19,7 @@ def create_defaults():
                 "merge_strategy": "squash",
                 "delete_branch": True,
                 "notify_on_merge": True,
-                "notify_on_failure": True
+                "notify_on_failure": True,
             }
         },
         ".github/routing.yml": {
@@ -29,11 +30,11 @@ def create_defaults():
                     "workload": 0.25,
                     "response_time": 0.20,
                     "availability": 0.15,
-                    "performance": 0.05
+                    "performance": 0.05,
                 },
                 "max_assignments_per_user": 10,
                 "fallback_strategy": ["round_robin", "random"],
-                "exempt_labels": []
+                "exempt_labels": [],
             }
         },
         ".github/self-healing.yml": {
@@ -46,7 +47,7 @@ def create_defaults():
                 "max_consecutive_failures": 3,
                 "dependency_wait_time": 300,
                 "create_issues_for_failures": True,
-                "send_notifications": True
+                "send_notifications": True,
             }
         },
         ".github/maintenance.yml": {
@@ -59,7 +60,7 @@ def create_defaults():
                 "dependency_updates_enabled": True,
                 "cleanup_enabled": True,
                 "optimization_enabled": True,
-                "notify_before_minutes": 30
+                "notify_before_minutes": 30,
             }
         },
         ".github/analytics.yml": {
@@ -69,7 +70,7 @@ def create_defaults():
                 "min_confidence": 0.6,
                 "min_accuracy": 0.85,
                 "training_lookback_days": 90,
-                "retrain_schedule": "weekly"
+                "retrain_schedule": "weekly",
             }
         },
         ".github/sla.yml": {
@@ -82,30 +83,30 @@ def create_defaults():
                         "response_time_minutes": 5,
                         "resolution_time_hours": 4,
                         "success_rate_percentage": 99.0,
-                        "availability_percentage": 99.9
+                        "availability_percentage": 99.9,
                     },
                     {
                         "priority": "P1",
                         "response_time_minutes": 30,
                         "resolution_time_hours": 24,
                         "success_rate_percentage": 95.0,
-                        "availability_percentage": 99.0
+                        "availability_percentage": 99.0,
                     },
                     {
                         "priority": "P2",
                         "response_time_minutes": 120,
                         "resolution_time_hours": 72,
                         "success_rate_percentage": 90.0,
-                        "availability_percentage": 98.0
+                        "availability_percentage": 98.0,
                     },
                     {
                         "priority": "P3",
                         "response_time_minutes": 480,
                         "resolution_time_hours": 168,
                         "success_rate_percentage": 85.0,
-                        "availability_percentage": 95.0
-                    }
-                ]
+                        "availability_percentage": 95.0,
+                    },
+                ],
             }
         },
         ".github/incident.yml": {
@@ -116,16 +117,16 @@ def create_defaults():
                 "severity_keywords": {
                     "SEV-1": ["outage", "data loss", "security breach"],
                     "SEV-2": ["broken feature", "performance degradation"],
-                    "SEV-3": ["minor bug", "typo"]
+                    "SEV-3": ["minor bug", "typo"],
                 },
                 "escalation_rules": {},
                 "notification_channels": {
                     "SEV-1": ["slack", "email", "sms"],
                     "SEV-2": ["slack", "email"],
-                    "SEV-3": ["slack"]
-                }
+                    "SEV-3": ["slack"],
+                },
             }
-        }
+        },
     }
 
     for path, content in defaults.items():
@@ -135,6 +136,7 @@ def create_defaults():
                 yaml.dump(content, f, default_flow_style=False)
         else:
             print(f"Skipping {path} (already exists)")
+
 
 if __name__ == "__main__":
     create_defaults()

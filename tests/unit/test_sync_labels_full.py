@@ -5,7 +5,10 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch, call
 
 # Add scripts directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
+
 
 class TestSyncLabelsFull(unittest.TestCase):
 
@@ -25,6 +28,7 @@ class TestSyncLabelsFull(unittest.TestCase):
     def setUp(self):
         # We don't reload modules or patch sys.modules to avoid breaking other tests
         import sync_labels
+
         self.sync_labels = sync_labels
 
         self.mock_github = MagicMock()
@@ -55,7 +59,7 @@ class TestSyncLabelsFull(unittest.TestCase):
 
         repo2 = MagicMock()
         repo2.name = "repo2"
-        repo2.archived = True # Should skip
+        repo2.archived = True  # Should skip
 
         repo3 = MagicMock()
         repo3.name = "repo3"
@@ -65,7 +69,12 @@ class TestSyncLabelsFull(unittest.TestCase):
 
         # Mock sync_labels to return stats
         with patch.object(self.manager, "sync_labels") as mock_sync:
-            mock_sync.return_value = {"created": 1, "updated": 0, "unchanged": 5, "errors": 0}
+            mock_sync.return_value = {
+                "created": 1,
+                "updated": 0,
+                "unchanged": 5,
+                "errors": 0,
+            }
 
             # Run sync
             self.manager.sync_organization("test-org", exclude_repos=["repo3"])
@@ -94,21 +103,36 @@ class TestSyncLabelsFull(unittest.TestCase):
                     self.sync_labels.main()
 
             MockManager.assert_called()
-            mock_instance.sync_organization.assert_called_with("my-org", exclude_repos=[])
+            mock_instance.sync_organization.assert_called_with(
+                "my-org", exclude_repos=[]
+            )
 
     def test_main_dry_run_exclude(self):
         """Test main with dry-run and exclude args."""
         with patch("sync_labels.LabelSyncManager") as MockManager:
             mock_instance = MockManager.return_value
 
-            with patch("sys.argv", ["sync_labels.py", "--org", "my-org", "--dry-run", "--exclude", "r1", "r2"]):
+            with patch(
+                "sys.argv",
+                [
+                    "sync_labels.py",
+                    "--org",
+                    "my-org",
+                    "--dry-run",
+                    "--exclude",
+                    "r1",
+                    "r2",
+                ],
+            ):
                 with patch("builtins.print"):
                     self.sync_labels.main()
 
             # Check dry_run arg
             call_args = MockManager.call_args
-            self.assertTrue(call_args[1]['dry_run'])
-            mock_instance.sync_organization.assert_called_with("my-org", exclude_repos=["r1", "r2"])
+            self.assertTrue(call_args[1]["dry_run"])
+            mock_instance.sync_organization.assert_called_with(
+                "my-org", exclude_repos=["r1", "r2"]
+            )
 
     def test_main_list_labels(self):
         """Test main --list-labels."""
@@ -139,6 +163,7 @@ class TestSyncLabelsFull(unittest.TestCase):
                     with self.assertRaises(SystemExit) as cm:
                         self.sync_labels.main()
                     self.assertEqual(cm.exception.code, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

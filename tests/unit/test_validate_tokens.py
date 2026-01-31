@@ -45,9 +45,9 @@ class TestTokensRegistry:
         """Test token endpoints start with /."""
         for token_name, config in TOKENS.items():
             endpoint = config["test_endpoint"]
-            assert endpoint.startswith("/"), (
-                f"{token_name} endpoint should start with /"
-            )
+            assert endpoint.startswith(
+                "/"
+            ), f"{token_name} endpoint should start with /"
 
     def test_scopes_are_lists(self):
         """Test scopes are defined as lists."""
@@ -141,9 +141,7 @@ class TestValidateToken:
 
     def test_returns_invalid_when_token_not_found(self, token_config):
         """Test returns invalid when token not in 1Password."""
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value=None
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value=None):
             result = validate_token("missing-token", token_config)
 
         assert result["valid"] is False
@@ -244,9 +242,7 @@ class TestValidateToken:
 
     def test_result_includes_purpose(self, token_config):
         """Test result includes token purpose."""
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value=None
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value=None):
             result = validate_token("test-token", token_config)
 
         assert result["purpose"] == "Test purpose"
@@ -263,9 +259,7 @@ class TestMainFunction:
             "rate_limit": {"remaining": 5000, "limit": 5000},
         }
 
-        with patch(
-            "validate_tokens.validate_token", return_value=mock_result
-        ):
+        with patch("validate_tokens.validate_token", return_value=mock_result):
             with pytest.raises(SystemExit) as exc_info:
                 main()
 
@@ -283,9 +277,7 @@ class TestMainFunction:
             "purpose": "Test",
         }
 
-        with patch(
-            "validate_tokens.validate_token", return_value=mock_result
-        ):
+        with patch("validate_tokens.validate_token", return_value=mock_result):
             with pytest.raises(SystemExit) as exc_info:
                 main()
 
@@ -301,9 +293,7 @@ class TestMainFunction:
             "rate_limit": {"remaining": 4000, "limit": 5000},
         }
 
-        with patch(
-            "validate_tokens.validate_token", return_value=mock_result
-        ):
+        with patch("validate_tokens.validate_token", return_value=mock_result):
             with pytest.raises(SystemExit):
                 main()
 
@@ -319,9 +309,7 @@ class TestMainFunction:
             "warning": "Missing scopes: admin",
         }
 
-        with patch(
-            "validate_tokens.validate_token", return_value=mock_result
-        ):
+        with patch("validate_tokens.validate_token", return_value=mock_result):
             with pytest.raises(SystemExit):
                 main()
 
@@ -335,9 +323,7 @@ class TestMainFunction:
             "rate_limit": {"remaining": 5000, "limit": 5000},
         }
 
-        with patch(
-            "validate_tokens.validate_token", return_value=mock_result
-        ):
+        with patch("validate_tokens.validate_token", return_value=mock_result):
             with pytest.raises(SystemExit):
                 main()
 

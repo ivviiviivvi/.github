@@ -98,9 +98,13 @@ def test_prerequisites() -> bool:
 
     # Check Python version
     if sys.version_info >= (3, 11):
-        print_success(f"Python version: {sys.version_info.major}.{sys.version_info.minor}")
+        print_success(
+            f"Python version: {sys.version_info.major}.{sys.version_info.minor}"
+        )
     else:
-        print_error(f"Python 3.11+ required, found {sys.version_info.major}.{sys.version_info.minor}")
+        print_error(
+            f"Python 3.11+ required, found {sys.version_info.major}.{sys.version_info.minor}"
+        )
         all_passed = False
 
     # Check required files exist
@@ -136,7 +140,9 @@ def test_config_validation() -> bool:
 
         # Check required fields
         if "repositories" in config and len(config["repositories"]) > 0:
-            print_success(f"Configuration valid: {len(config['repositories'])} repositories")
+            print_success(
+                f"Configuration valid: {len(config['repositories'])} repositories"
+            )
             return True
         else:
             print_error("Configuration missing required 'repositories' field")
@@ -180,7 +186,9 @@ def test_dryrun() -> bool:
                 if success:
                     print_success(f"  {repo}: {len(steps)} steps (dry-run)")
                 else:
-                    print_warning(f"  {repo}: Failed - {result.get('error', 'unknown')}")
+                    print_warning(
+                        f"  {repo}: Failed - {result.get('error', 'unknown')}"
+                    )
 
             return True
 
@@ -217,7 +225,9 @@ def test_results_format() -> bool:
                     print_error(f"Missing required field '{field}' in result")
                     return False
 
-        print_success(f"Results format valid: All {len(required_fields)} required fields present")
+        print_success(
+            f"Results format valid: All {len(required_fields)} required fields present"
+        )
         return True
 
     except Exception as e:
@@ -274,7 +284,11 @@ def generate_test_report(test_results: dict[str, bool]):
     print()
 
     for test_name, result in test_results.items():
-        status = f"{Colors.GREEN}PASS{Colors.END}" if result else f"{Colors.RED}FAIL{Colors.END}"
+        status = (
+            f"{Colors.GREEN}PASS{Colors.END}"
+            if result
+            else f"{Colors.RED}FAIL{Colors.END}"
+        )
         print(f"  {test_name}: {status}")
 
     print()

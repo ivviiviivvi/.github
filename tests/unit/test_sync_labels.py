@@ -12,7 +12,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 # Mock PyGithub before import
 mock_github_module = MagicMock()
@@ -300,7 +302,9 @@ class TestBatchOperations:
     def test_syncs_to_all_repositories(self, manager, mock_github, mock_org):
         """Test syncing labels to all repositories."""
         # Create mock repositories
-        repos = [MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)]
+        repos = [
+            MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)
+        ]
         for repo in repos:
             repo.get_labels.return_value = []
 
@@ -402,7 +406,9 @@ class TestErrorRecovery:
         """Test handling of GitHub API rate limiting."""
         mock_repo = MagicMock()
         # Use the mocked GithubException from test setup
-        mock_repo.get_labels.side_effect = mock_github_exception(403, "Rate limit exceeded")
+        mock_repo.get_labels.side_effect = mock_github_exception(
+            403, "Rate limit exceeded"
+        )
 
         # Manager's get_existing_labels catches errors and returns empty dict
         labels = manager.get_existing_labels(mock_repo)
@@ -413,7 +419,9 @@ class TestErrorRecovery:
         import requests
 
         mock_repo = MagicMock()
-        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError("Network error")
+        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError(
+            "Network error"
+        )
 
         # Network errors may propagate or be caught - test behavior
         try:

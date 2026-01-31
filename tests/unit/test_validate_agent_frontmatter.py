@@ -233,9 +233,7 @@ class TestMainFunction:
         captured = capsys.readouterr()
         assert "malformed" in captured.out
 
-    def test_main_handles_empty_directory(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_handles_empty_directory(self, mock_agents_dir, monkeypatch, capsys):
         """Test main handles empty directory gracefully."""
         monkeypatch.setattr(
             "validate_agent_frontmatter.AGENTS_DIR",
@@ -247,9 +245,7 @@ class TestMainFunction:
         # No files to validate, should pass
         assert result == 0
 
-    def test_main_validates_multiple_files(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_validates_multiple_files(self, mock_agents_dir, monkeypatch, capsys):
         """Test main validates all agent files in directory."""
         # Create multiple valid agent files
         for i in range(3):
@@ -267,9 +263,7 @@ class TestMainFunction:
 
         assert result == 0
 
-    def test_main_ignores_non_agent_files(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_ignores_non_agent_files(self, mock_agents_dir, monkeypatch, capsys):
         """Test main only validates *.agent.md files."""
         # Create non-agent files
         readme = mock_agents_dir / "README.md"
@@ -280,9 +274,7 @@ class TestMainFunction:
 
         # Create valid agent file
         agent_file = mock_agents_dir / "valid.agent.md"
-        agent_file.write_text(
-            "---\nname: Valid\ndescription: Valid agent\n---\n"
-        )
+        agent_file.write_text("---\nname: Valid\ndescription: Valid agent\n---\n")
 
         monkeypatch.setattr(
             "validate_agent_frontmatter.AGENTS_DIR",

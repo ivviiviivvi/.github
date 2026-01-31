@@ -41,7 +41,9 @@ class GitHubAPIClient:
             "Accept": "application/vnd.github.v3+json",
         }
 
-    def create_issue(self, title: str, body: str, labels: Optional[list[str]] = None) -> dict[str, Any]:
+    def create_issue(
+        self, title: str, body: str, labels: Optional[list[str]] = None
+    ) -> dict[str, Any]:
         """Create a test issue."""
         url = f"{self.base_url}/repos/{self.repo}/issues"
         data: dict[str, Any] = {"title": title, "body": body}
@@ -77,7 +79,9 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()
 
-    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> dict[str, Any]:
+    def create_pr(
+        self, title: str, body: str, head: str, base: str = "main"
+    ) -> dict[str, Any]:
         """Create a test pull request."""
         url = f"{self.base_url}/repos/{self.repo}/pulls"
         data = {"title": title, "body": body, "head": head, "base": base}
@@ -101,7 +105,9 @@ class GitHubAPIClient:
         response = requests.post(url, headers=self.headers, json=data)
         response.raise_for_status()
 
-    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> list[dict[str, Any]]:
+    def get_workflow_runs(
+        self, workflow_id: str, limit: int = 10
+    ) -> list[dict[str, Any]]:
         """Get recent workflow runs."""
         url = f"{self.base_url}/repos/{self.repo}/actions/workflows/{workflow_id}/runs"
         params = {"per_page": limit}
@@ -110,7 +116,9 @@ class GitHubAPIClient:
         response.raise_for_status()
         return response.json()["workflow_runs"]
 
-    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> dict[str, Any]:
+    def wait_for_workflow_completion(
+        self, run_id: int, timeout: int = 300, poll_interval: int = 10
+    ) -> dict[str, Any]:
         """Wait for a workflow run to complete."""
         url = f"{self.base_url}/repos/{self.repo}/actions/runs/{run_id}"
         start_time = time.time()
@@ -162,9 +170,9 @@ class TestIssueTriage:
         updated_issue = github_client.get_issue(issue_number)
         labels = [label["name"] for label in updated_issue["labels"]]
 
-        assert any("priority" in label.lower() and "high" in label.lower() for label in labels), (
-            f"Expected priority high label, got: {labels}"
-        )
+        assert any(
+            "priority" in label.lower() and "high" in label.lower() for label in labels
+        ), f"Expected priority high label, got: {labels}"
 
     def test_priority_labeling_feature(self, github_client):
         """Test that feature requests get priority:medium label."""
@@ -184,7 +192,9 @@ class TestIssueTriage:
             labels = [label["name"] for label in updated_issue["labels"]]
 
             assert any(
-                "priority" in lbl.lower() and ("medium" in lbl.lower() or "low" in lbl.lower()) for lbl in labels
+                "priority" in lbl.lower()
+                and ("medium" in lbl.lower() or "low" in lbl.lower())
+                for lbl in labels
             )
         finally:
             github_client.close_issue(issue["number"])
@@ -217,7 +227,9 @@ class TestIssueTriage:
         successful_runs = sum(1 for run in runs if run["conclusion"] == "success")
         success_rate = successful_runs / len(runs)
 
-        assert success_rate >= 0.95, f"Success rate {success_rate:.1%} below 95% threshold"
+        assert (
+            success_rate >= 0.95
+        ), f"Success rate {success_rate:.1%} below 95% threshold"
 
 
 class TestAutoAssignment:
@@ -404,12 +416,16 @@ class TestMetricsCollection:
             pytest.skip("Not enough runs to validate daily schedule")
 
         # Verify runs are roughly daily
-        run_dates = [datetime.fromisoformat(run["created_at"].replace("Z", "")) for run in runs]
+        run_dates = [
+            datetime.fromisoformat(run["created_at"].replace("Z", "")) for run in runs
+        ]
 
         # Check that runs are spaced approximately 1 day apart
         if len(run_dates) >= 2:
             avg_spacing = (run_dates[0] - run_dates[-1]).days / (len(run_dates) - 1)
-            assert 0.8 <= avg_spacing <= 1.2, f"Average spacing {avg_spacing} not close to 1 day"
+            assert (
+                0.8 <= avg_spacing <= 1.2
+            ), f"Average spacing {avg_spacing} not close to 1 day"
 
     def test_metrics_artifact_created(self, github_client):
         """Test that metrics workflow creates artifacts."""
@@ -444,7 +460,9 @@ class TestMetricsCollection:
         success_rate = successful / total
 
         # Verify Month 1 success rate target (97.5%)
-        assert success_rate >= 0.95, f"Overall success rate {success_rate:.1%} below 95%"
+        assert (
+            success_rate >= 0.95
+        ), f"Overall success rate {success_rate:.1%} below 95%"
 
 
 class TestMonth1Integration:
@@ -467,7 +485,9 @@ class TestMonth1Integration:
 
             # Verify triage
             updated = github_client.get_issue(issue_number)
-            assert any("priority:" in label["name"] for label in updated["labels"]), "Should have priority label"
+            assert any(
+                "priority:" in label["name"] for label in updated["labels"]
+            ), "Should have priority label"
 
             # Step 2: Trigger assignment
             github_client.trigger_workflow("auto-assign.yml")
@@ -541,7 +561,9 @@ class TestMonth1Integration:
         success_rate = successful / total
 
         # Month 1 success criteria: 97.5% success rate
-        assert success_rate >= 0.95, f"Success rate {success_rate:.1%} below Month 1 target"
+        assert (
+            success_rate >= 0.95
+        ), f"Success rate {success_rate:.1%} below Month 1 target"
 
         print(f"✅ Month 1 Success Rate: {success_rate:.1%} ({successful}/{total})")
 

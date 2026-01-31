@@ -25,7 +25,9 @@ class TestJulesJournalFormat:
 
     JULES_DIR = Path(".jules")
     JOURNAL_FILES = ["bolt.md", "palette.md", "sentinel.md"]
-    ENTRY_PATTERN = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s+-\s+\[(.+?)\]\s*$", re.MULTILINE)
+    ENTRY_PATTERN = re.compile(
+        r"^##\s+(\d{4}-\d{2}-\d{2})\s+-\s+\[(.+?)\]\s*$", re.MULTILINE
+    )
 
     def test_jules_directory_exists(self):
         """Verify .jules/ directory exists."""
@@ -102,9 +104,9 @@ class TestJulesJournalFormat:
                 entry_lower = entry.lower()
 
                 # Check for Learning section
-                assert "**learning:**" in entry_lower or "learning:" in entry_lower, (
-                    f"{filename} entry {i} missing Learning section"
-                )
+                assert (
+                    "**learning:**" in entry_lower or "learning:" in entry_lower
+                ), f"{filename} entry {i} missing Learning section"
 
                 # Check for Action section
                 assert (
@@ -128,7 +130,9 @@ class TestJulesJournalFormat:
             dates = [datetime.strptime(date, "%Y-%m-%d") for date, _ in entries]
 
             # Check if sorted in reverse chronological order (newest first)
-            assert dates == sorted(dates, reverse=True), f"{filename} entries not in chronological order (newest first)"
+            assert dates == sorted(
+                dates, reverse=True
+            ), f"{filename} entries not in chronological order (newest first)"
 
 
 class TestTaskDeduplication:
@@ -144,7 +148,9 @@ class TestTaskDeduplication:
     def test_deduplicator_is_executable(self):
         """Verify script has proper shebang and is executable."""
         content = self.SCRIPT_PATH.read_text()
-        assert content.startswith("#!/usr/bin/env python3"), "task_deduplicator.py missing proper shebang"
+        assert content.startswith(
+            "#!/usr/bin/env python3"
+        ), "task_deduplicator.py missing proper shebang"
 
     def test_state_file_structure(self):
         """Verify task_state.json has correct structure if it exists."""
@@ -178,9 +184,9 @@ class TestTaskDeduplication:
             timestamp = datetime.fromisoformat(task_data["timestamp"])
             age_days = (now - timestamp).days
 
-            assert age_days <= retention_days, (
-                f"Task {task_hash} is {age_days} days old, exceeds {retention_days} day retention"
-            )
+            assert (
+                age_days <= retention_days
+            ), f"Task {task_hash} is {age_days} days old, exceeds {retention_days} day retention"
 
 
 class TestAgentMetadata:
@@ -188,7 +194,9 @@ class TestAgentMetadata:
 
     AGENTS_DIR = Path("src/ai_framework/agents")
     AGENT_README = Path("docs/README.agents.md")
-    FRONTMATTER_PATTERN = re.compile(r"^---\s*\n(.*?)\n---\s*$", re.MULTILINE | re.DOTALL)
+    FRONTMATTER_PATTERN = re.compile(
+        r"^---\s*\n(.*?)\n---\s*$", re.MULTILINE | re.DOTALL
+    )
 
     def test_agents_directory_exists(self):
         """Verify agents/ directory exists."""
@@ -208,9 +216,9 @@ class TestAgentMetadata:
 
             frontmatter = match.group(1)
             # Basic validation - should contain name or description
-            assert "name:" in frontmatter or "description:" in frontmatter, (
-                f"{agent_file.name} frontmatter missing name/description"
-            )
+            assert (
+                "name:" in frontmatter or "description:" in frontmatter
+            ), f"{agent_file.name} frontmatter missing name/description"
 
     def test_agent_descriptions(self):
         """Ensure all agents have non-empty descriptions."""
@@ -224,7 +232,9 @@ class TestAgentMetadata:
                 frontmatter = match.group(1)
 
                 # Extract description
-                desc_match = re.search(r"description:\s*['\"]?(.+?)['\"]?\s*$", frontmatter, re.MULTILINE)
+                desc_match = re.search(
+                    r"description:\s*['\"]?(.+?)['\"]?\s*$", frontmatter, re.MULTILINE
+                )
 
                 if desc_match:
                     description = desc_match.group(1).strip()
@@ -263,14 +273,18 @@ class TestAgentMetadata:
 
         # Extract agent references from README
         readme_content = self.AGENT_README.read_text()
-        referenced_agents = re.findall(r"\.\./ai_framework/agents/([a-zA-Z0-9_-]+\.agent\.md)", readme_content)
+        referenced_agents = re.findall(
+            r"\.\./ai_framework/agents/([a-zA-Z0-9_-]+\.agent\.md)", readme_content
+        )
 
         orphaned = []
         for ref_agent in referenced_agents:
             if ref_agent not in agent_files:
                 orphaned.append(ref_agent)
 
-        assert not orphaned, f"README.agents.md references non-existent agents: {orphaned}"
+        assert (
+            not orphaned
+        ), f"README.agents.md references non-existent agents: {orphaned}"
 
 
 class TestMouthpieceFilter:
@@ -285,7 +299,9 @@ class TestMouthpieceFilter:
     def test_has_proper_shebang(self):
         """Verify script has proper shebang."""
         content = self.SCRIPT_PATH.read_text()
-        assert content.startswith("#!/usr/bin/env python3"), "mouthpiece_filter.py missing proper shebang"
+        assert content.startswith(
+            "#!/usr/bin/env python3"
+        ), "mouthpiece_filter.py missing proper shebang"
 
     def test_has_docstring(self):
         """Verify script has module-level docstring."""
@@ -302,7 +318,9 @@ class TestMouthpieceFilter:
 
         # Should use _PATTERN naming convention
         pattern_names = re.findall(r"(_[A-Z_]+)\s*=\s*re\.compile\(", content)
-        assert len(pattern_names) > 0, "No class-level pre-compiled patterns following _PATTERN convention"
+        assert (
+            len(pattern_names) > 0
+        ), "No class-level pre-compiled patterns following _PATTERN convention"
 
 
 if __name__ == "__main__":

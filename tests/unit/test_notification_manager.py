@@ -11,7 +11,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 from notification_manager import (
     DeliveryRecord,
@@ -237,7 +239,9 @@ class TestDeduplication:
     def test_old_notification_not_duplicate(self, manager):
         """Test old notification outside window is not duplicate."""
         # Cache an old notification
-        manager.sent_cache["test-source:Test Alert"] = datetime.now(timezone.utc) - timedelta(seconds=400)
+        manager.sent_cache["test-source:Test Alert"] = datetime.now(
+            timezone.utc
+        ) - timedelta(seconds=400)
 
         notification = Notification(
             title="Test Alert",

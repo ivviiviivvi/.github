@@ -8,7 +8,9 @@ import unittest
 from pathlib import Path
 
 # Add scripts directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 from quota_manager import LOCK_DIR, LOCK_FILE, SUBSCRIPTIONS_FILE, acquire_lock
 
@@ -122,15 +124,15 @@ class TestQuotaLock(unittest.TestCase):
                     "usage": 10,
                     "limit": 100,
                     "reset_cadence": "daily",
-                    "last_reset": yesterday
+                    "last_reset": yesterday,
                 },
                 {
                     "name": "monthly-sub",
                     "usage": 50,
                     "limit": 1000,
                     "reset_cadence": "monthly",
-                    "last_reset": today # Already reset today
-                }
+                    "last_reset": today,  # Already reset today
+                },
             ]
         }
 
@@ -148,6 +150,7 @@ class TestQuotaLock(unittest.TestCase):
 
                 # We can't easily verify the content with simple mock_open without more complex setup
                 # but the fact it reached "w" means it processed the logic.
+
 
 if __name__ == "__main__":
     unittest.main()

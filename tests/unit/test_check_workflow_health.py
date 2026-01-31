@@ -316,7 +316,9 @@ jobs:
         """Test processes all .yml files in directory."""
         for i in range(3):
             workflow = mock_workflow_dir / f"workflow-{i}.yml"
-            workflow.write_text(f"name: Workflow {i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
+            workflow.write_text(
+                f"name: Workflow {i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
+            )
 
         check_workflows()
 
@@ -369,7 +371,9 @@ class TestIntegration:
 
         # Create a valid workflow
         workflow = workflow_dir / "test.yml"
-        workflow.write_text("name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
+        workflow.write_text(
+            "name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
+        )
 
         # Run both checks
         missing_configs = check_configs()

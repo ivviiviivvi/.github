@@ -22,13 +22,11 @@ Generated on: 2026-01-01
 
 ## Top Contributors
 
-1. [@4444JPP](https://github.com/4444JPP) - 129 contributions
-1. [@Copilot](https://github.com/apps/copilot-swe-agent) - 117 contributions
-1. [@google-labs-jules\[bot\]](https://github.com/apps/google-labs-jules) - 47
-   contributions
-1. [@claude](https://github.com/claude) - 17 contributions
-1. [@github-actions\[bot\]](https://github.com/apps/github-actions) - 8
-   contributions
+1. `@4444JPP` - 129 contributions
+1. `@Copilot` (copilot-swe-agent) - 117 contributions
+1. `@google-labs-jules[bot]` - 47 contributions
+1. `@claude` - 17 contributions
+1. `@github-actions[bot]` - 8 contributions
 
 ______________________________________________________________________
 

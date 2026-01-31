@@ -30,7 +30,9 @@ LINK_WITH_COMMENT_RE = re.compile(
     r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)"
     r"(?P<suffix>\)\s*<!--\s*link:(?P<key>[A-Za-z0-9._-]+)\s*-->)"
 )
-UNANNOTATED_LINK_RE = re.compile(r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)")
+UNANNOTATED_LINK_RE = re.compile(
+    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)"
+)
 PLACEHOLDER_RE = re.compile(r"^\[\[link:(?P<key>[A-Za-z0-9._-]+)\]\]$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 
@@ -366,7 +368,12 @@ def main() -> int:
             original = migrate_broken_links(original, link_map, md_file, root)
 
         updated_text, updated, annotated, missing = replace_links(
-            original, link_map, reverse_map, args.annotate, current_file=md_file, root=root
+            original,
+            link_map,
+            reverse_map,
+            args.annotate,
+            current_file=md_file,
+            root=root,
         )
         total_updates += updated
         total_annotations += annotated

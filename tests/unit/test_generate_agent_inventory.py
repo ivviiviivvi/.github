@@ -153,7 +153,9 @@ class TestMainFunction:
         """Create mock output path."""
         return tmp_path / "ai_framework" / "agents" / "INVENTORY.md"
 
-    def test_generates_inventory_file(self, mock_agents_dir, mock_output_path, monkeypatch):
+    def test_generates_inventory_file(
+        self, mock_agents_dir, mock_output_path, monkeypatch
+    ):
         """Test generates INVENTORY.md file."""
         # Create sample agent file
         agent = mock_agents_dir / "test.agent.md"
@@ -161,12 +163,8 @@ class TestMainFunction:
             "---\nname: Test Agent\ndescription: A test\ntags:\n  - test\n---\n"
         )
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -174,17 +172,15 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "# Agent Inventory" in content
 
-    def test_inventory_contains_header(self, mock_agents_dir, mock_output_path, monkeypatch):
+    def test_inventory_contains_header(
+        self, mock_agents_dir, mock_output_path, monkeypatch
+    ):
         """Test inventory has proper table header."""
         agent = mock_agents_dir / "sample.agent.md"
         agent.write_text("---\nname: Sample\ndescription: Desc\n---\n")
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -201,12 +197,8 @@ class TestMainFunction:
             "---\nname: My Agent\ndescription: Does things\ntags:\n  - util\n---\n"
         )
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -222,16 +214,10 @@ class TestMainFunction:
         """Test handles multiple agent files."""
         for i in range(3):
             agent = mock_agents_dir / f"agent-{i}.agent.md"
-            agent.write_text(
-                f"---\nname: Agent {i}\ndescription: Desc {i}\n---\n"
-            )
+            agent.write_text(f"---\nname: Agent {i}\ndescription: Desc {i}\n---\n")
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -240,40 +226,28 @@ class TestMainFunction:
             assert f"agent-{i}.agent.md" in content
             assert f"Agent {i}" in content
 
-    def test_handles_empty_tags(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_empty_tags(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test handles agents without tags."""
         agent = mock_agents_dir / "no-tags.agent.md"
         agent.write_text("---\nname: No Tags Agent\ndescription: No tags\n---\n")
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
         content = mock_output_path.read_text()
         assert "No Tags Agent" in content
 
-    def test_handles_string_tags(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_string_tags(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test handles single string tag instead of list."""
         agent = mock_agents_dir / "string-tag.agent.md"
         agent.write_text(
             "---\nname: String Tag\ndescription: Has string tag\ntags: single\n---\n"
         )
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -290,12 +264,8 @@ class TestMainFunction:
             "---\nname: Multi Tag\ndescription: Multiple tags\ntags:\n  - one\n  - two\n  - three\n---\n"
         )
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -317,12 +287,8 @@ class TestMainFunction:
         agent = mock_agents_dir / "valid.agent.md"
         agent.write_text("---\nname: Valid\ndescription: Desc\n---\n")
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -335,12 +301,8 @@ class TestMainFunction:
         self, mock_agents_dir, mock_output_path, monkeypatch
     ):
         """Test handles empty directory gracefully."""
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -356,12 +318,8 @@ class TestMainFunction:
             agent = mock_agents_dir / f"{name}.agent.md"
             agent.write_text(f"---\nname: {name}\ndescription: Desc\n---\n")
 
-        monkeypatch.setattr(
-            "generate_agent_inventory.AGENTS_DIR", mock_agents_dir
-        )
-        monkeypatch.setattr(
-            "generate_agent_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
+        monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
 
         main()
 

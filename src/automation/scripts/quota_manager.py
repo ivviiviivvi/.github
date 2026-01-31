@@ -51,7 +51,9 @@ def acquire_lock(timeout=60):
                 except OSError as err:
                     # Lock held by another process
                     if time.time() - start_time >= timeout:
-                        raise TimeoutError(f"Could not acquire lock on {LOCK_FILE}") from err
+                        raise TimeoutError(
+                            f"Could not acquire lock on {LOCK_FILE}"
+                        ) from err
                     time.sleep(0.1)
 
             yield

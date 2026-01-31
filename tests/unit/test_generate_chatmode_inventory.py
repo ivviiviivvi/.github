@@ -134,9 +134,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -152,9 +150,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -174,9 +170,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -199,9 +193,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -220,9 +212,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -242,9 +232,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -263,9 +251,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -287,9 +273,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -297,16 +281,12 @@ class TestMainFunction:
         assert "valid.chatmode.md" in content
         assert "README.md" not in content
 
-    def test_empty_directory(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_empty_directory(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test handles empty directory."""
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
@@ -324,9 +304,7 @@ class TestMainFunction:
         monkeypatch.setattr(
             "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
         )
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.OUTPUT", mock_output_path
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 

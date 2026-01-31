@@ -36,7 +36,9 @@ def _parse_frontmatter(lines: list[str]) -> tuple[dict[str, str], int]:
     return frontmatter, end_index
 
 
-def _remove_legacy_description(lines: list[str], end_index: int) -> tuple[list[str], bool]:
+def _remove_legacy_description(
+    lines: list[str], end_index: int
+) -> tuple[list[str], bool]:
     updated = []
     removed = False
     for i, line in enumerate(lines):

@@ -131,9 +131,13 @@ class GitHubProjectManager:
         """
 
         states = [state.upper()]
-        result = self.execute_query(query, {"org": self.org, "repo": repo, "states": states})
+        result = self.execute_query(
+            query, {"org": self.org, "repo": repo, "states": states}
+        )
 
-        return cast(list[dict[Any, Any]], result["data"]["repository"]["issues"]["nodes"])
+        return cast(
+            list[dict[Any, Any]], result["data"]["repository"]["issues"]["nodes"]
+        )
 
     def get_repository_prs(self, repo: str, state: str = "open") -> list[dict]:
         """Get pull requests from a repository."""
@@ -163,9 +167,13 @@ class GitHubProjectManager:
         """
 
         states = [state.upper()]
-        result = self.execute_query(query, {"org": self.org, "repo": repo, "states": states})
+        result = self.execute_query(
+            query, {"org": self.org, "repo": repo, "states": states}
+        )
 
-        return cast(list[dict[Any, Any]], result["data"]["repository"]["pullRequests"]["nodes"])
+        return cast(
+            list[dict[Any, Any]], result["data"]["repository"]["pullRequests"]["nodes"]
+        )
 
     def add_item_to_project(self, project_id: str, content_id: str) -> bool:
         """Add an item to a project."""
@@ -183,7 +191,9 @@ class GitHubProjectManager:
         """
 
         try:
-            self.execute_query(mutation, {"projectId": project_id, "contentId": content_id})
+            self.execute_query(
+                mutation, {"projectId": project_id, "contentId": content_id}
+            )
             return True
         except Exception as e:
             if "already exists" in str(e).lower():
@@ -196,7 +206,9 @@ class GitHubProjectManager:
         projects = []
 
         # Get labels
-        labels = [label["name"].lower() for label in item.get("labels", {}).get("nodes", [])]
+        labels = [
+            label["name"].lower() for label in item.get("labels", {}).get("nodes", [])
+        ]
 
         # Get content for keyword matching
         title = item.get("title", "").lower()
@@ -221,7 +233,10 @@ class GitHubProjectManager:
                 continue
 
             # Check file paths
-            if paths and any(any(path.startswith(prefix) for prefix in mapping["paths"]) for path in paths):
+            if paths and any(
+                any(path.startswith(prefix) for prefix in mapping["paths"])
+                for path in paths
+            ):
                 projects.append(project_num)
 
         # Default to Product Roadmap if no match
@@ -232,7 +247,9 @@ class GitHubProjectManager:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Add existing issues and PRs to GitHub Projects")
+    parser = argparse.ArgumentParser(
+        description="Add existing issues and PRs to GitHub Projects"
+    )
     parser.add_argument("--org", required=True, help="GitHub organization")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument(
@@ -246,8 +263,12 @@ def main():
         action="store_true",
         help="Show what would be done without making changes",
     )
-    parser.add_argument("--issues-only", action="store_true", help="Only process issues")
-    parser.add_argument("--prs-only", action="store_true", help="Only process pull requests")
+    parser.add_argument(
+        "--issues-only", action="store_true", help="Only process issues"
+    )
+    parser.add_argument(
+        "--prs-only", action="store_true", help="Only process pull requests"
+    )
 
     args = parser.parse_args()
 
@@ -299,7 +320,9 @@ def main():
                 if not args.dry_run:
                     for project_num in projects:
                         if project_num in project_ids:
-                            added = manager.add_item_to_project(project_ids[project_num], issue["id"])
+                            added = manager.add_item_to_project(
+                                project_ids[project_num], issue["id"]
+                            )
                             if added:
                                 stats["items_added"] += 1
                                 print(f"    ✓ Added to project #{project_num}")
@@ -327,7 +350,9 @@ def main():
                 if not args.dry_run:
                     for project_num in projects:
                         if project_num in project_ids:
-                            added = manager.add_item_to_project(project_ids[project_num], pr["id"])
+                            added = manager.add_item_to_project(
+                                project_ids[project_num], pr["id"]
+                            )
                             if added:
                                 stats["items_added"] += 1
                                 print(f"    ✓ Added to project #{project_num}")

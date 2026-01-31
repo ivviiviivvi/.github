@@ -62,10 +62,10 @@ Before asking for help, please:
 
 - **📖 [Main Documentation](../INDEX.md)** - Comprehensive guides and API
   reference
-- **🚀 [Getting Started Guide](../WORKSPACE_QUICK_START.md)** - Quick start
+- **🚀 [Getting Started Guide](../guides/WORKSPACE_QUICK_START.md)** - Quick start
   tutorial
 - **📚 [Reference Docs](../reference/)** - Detailed technical reference
-- **🔧 [Configuration Guide](../DEVELOPMENT_ENVIRONMENT_SETUP.md)** -
+- **🔧 [Configuration Guide](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)** -
   Configuration options
 - **🏗️
   [Architecture Overview](../architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md)**
@@ -73,10 +73,9 @@ Before asking for help, please:
 
 ### Tutorials and Examples
 
-- **[Walkthrough Gallery](../walkthrough-gallery.md)** - Code examples and
+- **[Walkthrough Gallery](../guides/walkthrough-gallery.md)** - Code examples and
   templates
-- **[Video Tutorials](https://youtube.com/@ivviiviivvi)** - Video walkthroughs
-  (coming soon)
+- **Video Tutorials (coming soon)** - Follow announcements in Discussions
 
 ### External Resources
 
@@ -92,7 +91,7 @@ Before asking for help, please:
 
 **Q: How do I get started with the project?**
 
-A: Follow our [Getting Started Guide](../WORKSPACE_QUICK_START.md) for
+A: Follow our [Getting Started Guide](../guides/WORKSPACE_QUICK_START.md) for
 installation and setup instructions.
 
 **Q: What are the system requirements?**
@@ -118,7 +117,7 @@ A:
 1. Ensure you have Python 3.11+ installed: `python --version`
 1. Update pip: `pip install --upgrade pip`
 1. Try installing in a virtual environment
-1. Check [Common Issues](../SUPPORT.md) in documentation
+1. Review the [FAQ](#faq) section below
 
 **Q: How do I update to the latest version?**
 
@@ -260,7 +259,7 @@ A:
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
 1. Ask questions in
    [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-1. Join our [Discord](https://discord.gg/ivviiviivvi) for real-time help
+1. Join our upcoming community calls (announced in Discussions)
 
 #### Security
 
@@ -344,22 +343,22 @@ We use labels to track issue status:
 
 ### Real-Time Chat
 
-- **Discord**: [Join our server](https://discord.gg/ivviiviivvi)
+- **Discord**: Invite links shared in Discussions when sessions are scheduled
 - **Office Hours**: Weekly on Fridays, 2-4 PM EST
 - **Community Calls**: Monthly on first Tuesday
 
 ### Social Media
 
-- **Twitter**: [@ivviiviivvi](https://twitter.com/ivviiviivvi)
-- **LinkedIn**: [ivviiviivvi](https://linkedin.com/company/ivviiviivvi)
-- **YouTube**: [ivviiviivvi](https://youtube.com/@ivviiviivvi)
+- **Twitter**: Updates shared via [@githubcopilot](https://twitter.com/githubcopilot)
+- **LinkedIn**: Follow [GitHub](https://www.linkedin.com/company/github/)
+- **YouTube**: Watch [GitHub](https://www.youtube.com/GitHub) for livestreams
 
 ## Commercial Support
 
 For enterprise support, training, or consulting:
 
 - **Email**: enterprise@ivviiviivvi.com
-- **Website**: https://ivviiviivvi.com/support
+- **Support Portal**: Contact enterprise@ivviiviivvi.com for scheduling
 
 ### Enterprise Support Includes
 
@@ -382,15 +381,16 @@ For enterprise support, training, or consulting:
 
 ### Learning Resources
 
-- **[Awesome List](https://github.com/ivviiviivvi/awesome-ivviiviivvi)** -
-  Curated resources
-- **[Tutorials](https://tutorials.ivviiviivvi.com)** - Step-by-step guides
-- **[Cookbook](https://cookbook.ivviiviivvi.com)** - Recipes and patterns
+- **[Documentation Index](../INDEX.md)** - Entry point to all docs
+- **[Workflow Design Guide](../guides/WORKFLOW_DESIGN.md)** - Deep dive on
+  automation patterns
+- **[Common Tasks Runbook](../guides/common-tasks-runbook.md)** - Step-by-step
+  operations playbooks
 
 ### Related Projects
 
-- [Project A](https://github.com/ivviiviivvi/project-a)
-- [Project B](https://github.com/ivviiviivvi/project-b)
+- [Organization Hub Repository](https://github.com/ivviiviivvi/.github)
+- [Workflow Templates](https://github.com/ivviiviivvi/.github/tree/main/workflow-templates)
 
 ______________________________________________________________________
 

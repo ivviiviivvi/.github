@@ -56,7 +56,9 @@ def main() -> None:
         },
     }
 
-    workflows = sorted(list(WORKFLOWS_DIR.glob("*.yml")) + list(WORKFLOWS_DIR.glob("*.yaml")))
+    workflows = sorted(
+        list(WORKFLOWS_DIR.glob("*.yml")) + list(WORKFLOWS_DIR.glob("*.yaml"))
+    )
     health_report["total_workflows"] = len(workflows)
 
     for workflow_file in workflows:

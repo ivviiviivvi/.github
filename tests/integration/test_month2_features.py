@@ -29,7 +29,9 @@ class TestSlackIntegration:
     def test_slack_notify_action_exists(self):
         """Verify Slack notify composite action is present."""
         action_file = ".github/actions/slack-notify/action.yml"
-        assert os.path.exists(action_file), f"Slack notify action not found: {action_file}"
+        assert os.path.exists(
+            action_file
+        ), f"Slack notify action not found: {action_file}"
 
         # Verify action structure
         with open(action_file) as f:
@@ -204,7 +206,9 @@ class TestABTesting:
             content = f.read()
 
             assert "control" in content.lower()
-            assert "experiment" in content.lower()  # Config uses "experiment" not "treatment"
+            assert (
+                "experiment" in content.lower()
+            )  # Config uses "experiment" not "treatment"
             assert "7" in content  # 7-day grace period
             assert "10" in content  # 10-day grace period
 
@@ -253,7 +257,9 @@ class TestABTesting:
             experiment_count = assignments.count("experiment")
 
             # Should be close to 50/50 (allow 40-60% range)
-            assert 40 <= control_count <= 60, f"Imbalanced: {control_count} control, {experiment_count} experiment"
+            assert (
+                40 <= control_count <= 60
+            ), f"Imbalanced: {control_count} control, {experiment_count} experiment"
         except ImportError:
             pytest.skip("Could not import assignment script")
 
@@ -304,7 +310,9 @@ class TestDashboardEnhancements:
             import re
 
             for chart_pattern in charts:
-                assert re.search(chart_pattern, content, re.IGNORECASE), f"Missing chart: {chart_pattern}"
+                assert re.search(
+                    chart_pattern, content, re.IGNORECASE
+                ), f"Missing chart: {chart_pattern}"
 
     def test_dashboard_auto_refresh(self):
         """Test that dashboard has auto-refresh capability."""
@@ -354,7 +362,9 @@ class TestEmailDigest:
             import re
 
             for section_pattern in sections:
-                assert re.search(section_pattern, content, re.IGNORECASE), f"Missing section: {section_pattern}"
+                assert re.search(
+                    section_pattern, content, re.IGNORECASE
+                ), f"Missing section: {section_pattern}"
 
     def test_email_html_formatting(self):
         """Test that email uses HTML formatting."""

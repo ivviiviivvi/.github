@@ -5,7 +5,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 # Add scripts directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
+)
 
 import web_crawler
 
@@ -16,7 +18,9 @@ class TestSSRFLogic(unittest.TestCase):
     def setUp(self):
         # Initialize crawler with dummy values to avoid API calls or env var
         # issues
-        self.crawler = web_crawler.OrganizationCrawler(github_token="dummy", org_name="dummy")
+        self.crawler = web_crawler.OrganizationCrawler(
+            github_token="dummy", org_name="dummy"
+        )
 
     @patch("socket.gethostbyname")
     def test_is_safe_url(self, mock_gethostbyname):

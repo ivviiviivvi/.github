@@ -6,6 +6,7 @@ import yaml
 import re
 from pathlib import Path
 
+
 def check_configs():
     """Check for missing configuration files."""
     required_configs = [
@@ -28,6 +29,7 @@ def check_configs():
             print(f"✅ Found: {config}")
     return missing
 
+
 def check_workflows():
     """Check workflow files for common errors."""
     workflow_dir = Path(".github/workflows")
@@ -43,10 +45,10 @@ def check_workflows():
         (r"runs-on:\s*ubuntu-18.04", "Deprecated runner ubuntu-18.04"),
         (r"node-version: 12", "Deprecated Node.js 12"),
         (r"node-version: '12'", "Deprecated Node.js 12"),
-        (r'node-version: \"12\"', "Deprecated Node.js 12"),
+        (r"node-version: \"12\"", "Deprecated Node.js 12"),
         (r"node-version: 16", "Deprecated Node.js 16"),
         (r"node-version: '16'", "Deprecated Node.js 16"),
-        (r'node-version: \"16\"', "Deprecated Node.js 16"),
+        (r"node-version: \"16\"", "Deprecated Node.js 16"),
         (r"actions/checkout@v2", "Old checkout action (v2)"),
         (r"actions/setup-python@v2", "Old setup-python action (v2)"),
         (r"actions/setup-node@v2", "Old setup-node action (v2)"),
@@ -74,6 +76,7 @@ def check_workflows():
 
         except Exception as e:
             print(f"❌ {workflow_file.name}: Error reading file - {e}")
+
 
 if __name__ == "__main__":
     check_configs()

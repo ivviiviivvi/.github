@@ -186,7 +186,9 @@ def resolve_tag_to_sha(
         if response.status_code == 200:
             return response.json()["object"]["sha"]
 
-        logger.debug(f"Could not resolve {owner}/{repo}@{tag}: HTTP {response.status_code}")
+        logger.debug(
+            f"Could not resolve {owner}/{repo}@{tag}: HTTP {response.status_code}"
+        )
         return None
 
     except requests.exceptions.RequestException as e:
@@ -201,12 +203,17 @@ def parse_action_line(line: str) -> tuple[str, str, str | None] | None:
     Handles both simple actions (owner/repo) and subpath actions (owner/repo/path).
     """
     # Match: uses: owner/repo[/subpath]@ref  # ratchet:owner/repo[/subpath]@version
-    match = re.search(r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)\s*#\s*ratchet:([^\s]+)", line)
+    match = re.search(
+        r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)\s*#\s*ratchet:([^\s]+)",
+        line,
+    )
     if match:
         return match.group(1), match.group(2), match.group(3)
 
     # Match without ratchet comment
-    match = re.search(r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)", line)
+    match = re.search(
+        r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)", line
+    )
     if match:
         return match.group(1), match.group(2), None
 
@@ -224,7 +231,11 @@ def get_base_action(action: str) -> tuple[str, str]:
 
 
 def update_workflow_file(
-    filepath: Path, sha_cache: dict[str, str], session: requests.Session, dry_run: bool = False, verbose: bool = False
+    filepath: Path,
+    sha_cache: dict[str, str],
+    session: requests.Session,
+    dry_run: bool = False,
+    verbose: bool = False,
 ) -> int:
     """Update action pins in a workflow file.
     Returns number of lines updated.
@@ -265,7 +276,9 @@ def update_workflow_file(
         if cache_key not in sha_cache:
             if verbose:
                 logger.info(f"  Resolving {cache_key}...")
-            sha = resolve_tag_to_sha(owner, repo, canonical_version, session, get_github_token())
+            sha = resolve_tag_to_sha(
+                owner, repo, canonical_version, session, get_github_token()
+            )
             if sha:
                 sha_cache[cache_key] = sha
             else:
@@ -310,11 +323,24 @@ def update_workflow_file(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Update GitHub Action SHA pins to latest versions")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be updated without making changes")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed output")
+    parser = argparse.ArgumentParser(
+        description="Update GitHub Action SHA pins to latest versions"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be updated without making changes",
+    )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show detailed output"
+    )
     parser.add_argument("--workflow", "-w", help="Update only a specific workflow file")
-    parser.add_argument("--recursive", "-r", action="store_true", help="Search for workflows in subdirectories")
+    parser.add_argument(
+        "--recursive",
+        "-r",
+        action="store_true",
+        help="Search for workflows in subdirectories",
+    )
     args = parser.parse_args()
 
     if args.verbose:
@@ -356,9 +382,13 @@ def main():
 
     for workflow in sorted(workflow_files):
         try:
-            updates = update_workflow_file(workflow, sha_cache, session, args.dry_run, args.verbose)
+            updates = update_workflow_file(
+                workflow, sha_cache, session, args.dry_run, args.verbose
+            )
             if updates > 0:
-                print(f"  {workflow.relative_to(repo_root)}: {updates} action(s) updated")
+                print(
+                    f"  {workflow.relative_to(repo_root)}: {updates} action(s) updated"
+                )
                 total_updates += updates
                 files_updated += 1
         except Exception as e:
