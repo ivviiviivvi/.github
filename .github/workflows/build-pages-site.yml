@@ -34,9 +34,32 @@ permissions:
   id-token: write
 
 jobs:
+  check-site:
+    runs-on: ubuntu-latest
+    outputs:
+      has_site: ${{ steps.check.outputs.has_site }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Check for site directory
+      id: check
+      run: |
+        if [ -d "site" ] && [ -f "site/Gemfile" -o -f "site/_config.yml" ]; then
+          echo "has_site=true" >> $GITHUB_OUTPUT
+          echo "✅ Site directory found with Jekyll configuration"
+        else
+          echo "has_site=false" >> $GITHUB_OUTPUT
+          echo "⚠️ No site directory or Jekyll configuration found. Skipping build."
+        fi
+
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: check-site
+    if: needs.check-site.outputs.has_site == 'true'
 
     steps:
     - name: Checkout repository
@@ -247,9 +270,9 @@ jobs:
         echo "Visit the site to view the walkthrough gallery!" >> $GITHUB_STEP_SUMMARY
 
   cleanup:
-    needs: deploy
+    needs: [check-site, deploy]
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && needs.check-site.outputs.has_site == 'true' && needs.deploy.result == 'success'
     permissions:
       contents: write
 
@@ -270,17 +293,6 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: Check if gh-pages branch exists
-      id: check_branch
-      run: |
-        if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
-          echo "exists=true" >> $GITHUB_OUTPUT
-          echo "✓ gh-pages branch exists"
-        else
-          echo "exists=false" >> $GITHUB_OUTPUT
-          echo "ℹ️ gh-pages branch does not exist, skipping cleanup"
-        fi
 
     - name: Checkout gh-pages branch
       if: steps.check_branch.outputs.exists == 'true'

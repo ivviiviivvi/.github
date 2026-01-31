@@ -24,7 +24,8 @@ jobs:
     name: JavaScript Mutation Testing
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    if: hashFiles('package.json') != ''
+    # Only run if package.json exists and has test files
+    if: hashFiles('package.json') != '' && (hashFiles('src/**/*.js') != '' || hashFiles('src/**/*.ts') != '')
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
@@ -124,7 +125,9 @@ jobs:
   python-mutation:
     name: Python Mutation Testing
     runs-on: ubuntu-latest
-    if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+    timeout-minutes: 60
+    # Only run if Python project exists with source files to mutate
+    if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != '' && hashFiles('src/**/*.py') != ''
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
@@ -166,7 +169,8 @@ jobs:
   mutation-summary:
     name: Mutation Testing Summary
     needs: [javascript-mutation, python-mutation]
-    if: always()
+    # Only run summary if at least one mutation test ran
+    if: always() && (needs.javascript-mutation.result != 'skipped' || needs.python-mutation.result != 'skipped')
     runs-on: ubuntu-latest
     steps:
     - name: Generate Summary

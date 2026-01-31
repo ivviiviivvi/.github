@@ -221,8 +221,19 @@ jobs:
         INPUT_PLATFORMS: ${{ inputs.platforms }}
         EVENT_PLATFORMS: ${{ github.event.inputs.platforms }}
 
+    - name: Check Docker Hub credentials
+      id: docker-creds
+      run: |
+        if [[ -n "${{ secrets.DOCKER_USERNAME }}" ]]; then
+          echo "available=true" >> $GITHUB_OUTPUT
+        else
+          echo "available=false" >> $GITHUB_OUTPUT
+          echo "⚠️ Docker Hub credentials not configured. Skipping Docker Hub push."
+          echo "To enable Docker Hub push, add DOCKER_USERNAME and DOCKER_PASSWORD secrets."
+        fi
+
     - name: Log in to Docker Hub
-      if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true'
+      if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true' && steps.docker-creds.outputs.available == 'true'
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567  # ratchet:docker/login-action@v3
       with:
         registry: ${{ env.REGISTRY }}
@@ -242,7 +253,7 @@ jobs:
       uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81  # ratchet:docker/metadata-action@v5.5.1
       with:
         images: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          ${{ steps.docker-creds.outputs.available == 'true' && format('{0}/{1}', env.REGISTRY, env.IMAGE_NAME) || '' }}
           ghcr.io/${{ env.IMAGE_NAME }}
         tags: |
           type=ref,event=branch
@@ -254,6 +265,12 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
         flavor: |
           latest=auto
+
+    - name: Set primary image reference
+      id: image-ref
+      run: |
+        # Use GHCR as primary reference (always available), Docker Hub as fallback
+        echo "primary=ghcr.io/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
       uses: docker/build-push-action@1ca370b3a9802c92e886402e0dd88098a2533b12  # ratchet:docker/build-push-action@v5
@@ -278,7 +295,7 @@ jobs:
     - name: Scan image for vulnerabilities
       if: github.event_name != 'pull_request'
       run: |
-        trivy image --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        trivy image --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH ${{ steps.image-ref.outputs.primary }}
 
     - name: Upload Trivy scan results
       if: github.event_name != 'pull_request'
@@ -294,7 +311,7 @@ jobs:
         # Run container for basic smoke test
         docker run --rm -d --name test-container \
           -p 8888:3000 -p 8889:5000 -p 8890:8000 -p 8891:8080 \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ steps.image-ref.outputs.primary }}
 
         # Wait for container to start
         sleep 10
@@ -314,7 +331,7 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: anchore/sbom-action@a930d0ac434e3182448fe678398ba5713717112a  # ratchet:anchore/sbom-action@v0
       with:
-        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        image: ${{ steps.image-ref.outputs.primary }}
         format: spdx-json
         output-file: sbom.spdx.json
 

@@ -96,18 +96,23 @@ jobs:
           fi
 
           # Get previous attempt count from annotations
-          CHECK_RUN_IDS=$(gh api "repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID/jobs" -q '.jobs[].check_run_url' | sed 's/.*\/check-runs\///' || echo "")
+          CHECK_RUN_IDS=$(gh api "repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID/jobs" -q '.jobs[].check_run_url // empty' 2>/dev/null | sed 's/.*\/check-runs\///' || echo "")
           PREVIOUS_ATTEMPTS=0
           if [[ -n "$CHECK_RUN_IDS" ]]; then
             for CHECK_RUN_ID in $CHECK_RUN_IDS; do
-              ATTEMPTS_ON_JOB=$(gh api "repos/${{ github.repository }}/check-runs/$CHECK_RUN_ID/annotations" --jq '[.[] | select(.title == "self-healing-attempt")] | length' 2>/dev/null || echo "0")
-              PREVIOUS_ATTEMPTS=$((PREVIOUS_ATTEMPTS + ATTEMPTS_ON_JOB))
+              if [[ -n "$CHECK_RUN_ID" && "$CHECK_RUN_ID" =~ ^[0-9]+$ ]]; then
+                ATTEMPTS_ON_JOB=$(gh api "repos/${{ github.repository }}/check-runs/$CHECK_RUN_ID/annotations" --jq '[.[] | select(.title == "self-healing-attempt")] | length' 2>/dev/null || echo "0")
+                # Ensure ATTEMPTS_ON_JOB is a valid number
+                if [[ "$ATTEMPTS_ON_JOB" =~ ^[0-9]+$ ]]; then
+                  PREVIOUS_ATTEMPTS=$((PREVIOUS_ATTEMPTS + ATTEMPTS_ON_JOB))
+                fi
+              fi
             done
           fi
           ATTEMPT_NUMBER=$((PREVIOUS_ATTEMPTS + 1))
 
-          # Calculate exponential backoff (use bc for exponentiation)
-          BACKOFF_SECONDS=$(echo "$INITIAL_BACKOFF_SECONDS * ($BACKOFF_MULTIPLIER ^ ($ATTEMPT_NUMBER - 1))" | bc)
+          # Calculate exponential backoff (use bc for exponentiation, with fallback)
+          BACKOFF_SECONDS=$(echo "$INITIAL_BACKOFF_SECONDS * ($BACKOFF_MULTIPLIER ^ ($ATTEMPT_NUMBER - 1))" | bc 2>/dev/null || echo "$INITIAL_BACKOFF_SECONDS")
         fi
 
         # Don't retry if max attempts exceeded
