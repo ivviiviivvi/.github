@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation
 import ab_test_assignment
 
 class TestABTestAssignmentMain(unittest.TestCase):
-    
+
     def setUp(self):
         self.mock_config = {
             "test": {"name": "test1", "startDate": "2023-01-01"},
@@ -33,7 +33,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
             "closeAfter": 7,
             "percentage": 50
         }
-        
+
         with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo"]):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
@@ -46,7 +46,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
     def test_main_repo_json(self, MockAssigner):
         mock_instance = MockAssigner.return_value
         mock_instance.generate_workflow_config.return_value = {"group": "control"}
-        
+
         with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo", "--json"]):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
@@ -66,7 +66,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
             "totalActive": 2,
             "splitRatio": "1:1"
         }
-        
+
         with patch("sys.argv", ["ab_test_assignment.py", "--all"]):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
@@ -77,7 +77,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
     def test_main_all_json(self, MockAssigner):
         mock_instance = MockAssigner.return_value
         mock_instance.generate_report.return_value = {"testName": "test1"}
-        
+
         with patch("sys.argv", ["ab_test_assignment.py", "--all", "--json"]):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
@@ -86,7 +86,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
     @patch("ab_test_assignment.ABTestAssigner")
     def test_main_exception(self, MockAssigner):
         MockAssigner.side_effect = Exception("Config error")
-        
+
         with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo"]):
             with patch("sys.stderr.write") as mock_stderr:
                 with self.assertRaises(SystemExit):

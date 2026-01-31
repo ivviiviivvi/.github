@@ -7,7 +7,7 @@ from pathlib import Path
 
 def create_defaults():
     """Create default configuration files if they don't exist."""
-    
+
     defaults = {
         ".github/auto-merge.yml": {
             "auto_merge": {

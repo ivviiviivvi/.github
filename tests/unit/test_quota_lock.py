@@ -80,7 +80,7 @@ class TestQuotaLock(unittest.TestCase):
         """Test that lock acquisition times out when lock is held."""
         # Hold the lock in a separate thread
         locked_event = threading.Event()
-        
+
         def hold_lock():
             with acquire_lock():
                 locked_event.set()
@@ -88,10 +88,10 @@ class TestQuotaLock(unittest.TestCase):
 
         t = threading.Thread(target=hold_lock)
         t.start()
-        
+
         # Wait for the thread to acquire the lock
         locked_event.wait(timeout=1)
-        
+
         # Try to acquire lock with short timeout - should fail
         start_time = time.time()
         try:
@@ -102,7 +102,7 @@ class TestQuotaLock(unittest.TestCase):
             pass
         except Exception as e:
             self.fail(f"Raised unexpected exception: {type(e)}")
-            
+
         t.join()
 
     def test_reset_quotas(self):
@@ -113,7 +113,7 @@ class TestQuotaLock(unittest.TestCase):
 
         today = datetime.now().strftime("%Y-%m-%d")
         yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-        
+
         # Sample data with daily subscription that needs reset
         data = {
             "subscriptions": [
@@ -125,7 +125,7 @@ class TestQuotaLock(unittest.TestCase):
                     "last_reset": yesterday
                 },
                 {
-                    "name": "monthly-sub", 
+                    "name": "monthly-sub",
                     "usage": 50,
                     "limit": 1000,
                     "reset_cadence": "monthly",
@@ -133,19 +133,19 @@ class TestQuotaLock(unittest.TestCase):
                 }
             ]
         }
-        
+
         json_data = json.dumps(data)
-        
+
         with patch("builtins.open", mock_open(read_data=json_data)) as mock_file:
             # Mock acquire_lock to just yield
             with patch("quota_manager.acquire_lock") as mock_lock:
                 mock_lock.return_value.__enter__.return_value = None
-                
+
                 reset_quotas()
-                
+
                 # Check that file was written
                 mock_file.assert_called_with(SUBSCRIPTIONS_FILE, "w")
-                
+
                 # We can't easily verify the content with simple mock_open without more complex setup
                 # but the fact it reached "w" means it processed the logic.
 

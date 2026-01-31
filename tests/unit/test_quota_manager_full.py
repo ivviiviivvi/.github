@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation
 import quota_manager
 
 class TestQuotaManagerFull(unittest.TestCase):
-    
+
     def setUp(self):
         self.mock_subscriptions = {
             "subscriptions": [
@@ -33,9 +33,9 @@ class TestQuotaManagerFull(unittest.TestCase):
     def test_increment_usage(self, mock_dump, mock_load, mock_file, mock_lock):
         mock_load.return_value = self.mock_subscriptions
         mock_lock.return_value.__enter__.return_value = None
-        
+
         quota_manager.increment_usage("sub1", 5)
-        
+
         # Verify usage increased
         expected_data = self.mock_subscriptions
         expected_data["subscriptions"][0]["usage"] = 15
@@ -48,7 +48,7 @@ class TestQuotaManagerFull(unittest.TestCase):
     def test_reset_quotas(self, mock_dump, mock_load, mock_file, mock_lock):
         mock_load.return_value = self.mock_subscriptions
         mock_lock.return_value.__enter__.return_value = None
-        
+
         # We need to mock datetime to control "today"
         with patch("quota_manager.datetime") as mock_datetime:
             # Set today to a different day/month
@@ -60,12 +60,12 @@ class TestQuotaManagerFull(unittest.TestCase):
             mock_datetime.now.return_value = mock_today
             mock_datetime.strptime.side_effect = lambda d, f: datetime.strptime(d, f)
             from datetime import datetime # Real datetime for strptime fallback if needed
-            
+
             # Actually mocking strptime is tricky if it's used inside.
             # quota_manager imports datetime class.
-            
+
             quota_manager.reset_quotas()
-            
+
             # Both should reset because dates changed
             # Verify called (logic is complex to verify exact structure without precise datetime mocking)
             self.assertTrue(mock_dump.called)
@@ -77,9 +77,9 @@ class TestQuotaManagerFull(unittest.TestCase):
     def test_add_task(self, mock_dump, mock_load, mock_file, mock_lock):
         mock_load.return_value = []
         mock_lock.return_value.__enter__.return_value = None
-        
+
         quota_manager.add_task_to_queue({"id": 1})
-        
+
         mock_dump.assert_called_with([{"id": 1}], mock_file(), indent=2)
 
     @patch("builtins.open", new_callable=mock_open)
@@ -95,9 +95,9 @@ class TestQuotaManagerFull(unittest.TestCase):
     def test_remove_task(self, mock_dump, mock_load, mock_file, mock_lock):
         mock_load.return_value = ["task1", "task2"]
         mock_lock.return_value.__enter__.return_value = None
-        
+
         quota_manager.remove_task_from_queue("task1")
-        
+
         mock_dump.assert_called_with(["task2"], mock_file(), indent=2)
 
     @patch("sys.argv", ["quota_manager.py", "get_usage", "sub1"])

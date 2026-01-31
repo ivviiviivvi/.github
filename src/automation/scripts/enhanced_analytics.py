@@ -515,21 +515,21 @@ class EnhancedAnalyticsEngine:
 
         for name, model in self.models.items():
             model_path = self.models_dir / f"{name}_{timestamp}.joblib"
-            
+
             # Serialize to temp file
             temp_path = model_path.with_suffix(".tmp")
             joblib.dump(model, temp_path)
-            
+
             # Sign
             with open(temp_path, "rb") as f:
                 data = f.read()
                 signature = self._generate_signature(data)
-            
+
             # Save signature
             sig_path = model_path.with_suffix(".sig")
             with open(sig_path, "w") as f:
                 f.write(signature)
-            
+
             # Finalize
             if model_path.exists():
                 model_path.unlink()
@@ -559,17 +559,17 @@ class EnhancedAnalyticsEngine:
             if model_files:
                 model_file = model_files[0]
                 sig_file = model_file.with_suffix(".sig")
-                
+
                 if not sig_file.exists():
                     logger.warning(f"Missing signature for {model_file}")
                     continue
-                
+
                 with open(model_file, "rb") as f:
                     data = f.read()
-                
+
                 with open(sig_file, "r") as f:
                     signature = f.read().strip()
-                
+
                 if self._verify_signature(data, signature):
                     self.models[model_name] = joblib.load(model_file)
                     logger.info(f"Loaded {model_name} from {model_file}")

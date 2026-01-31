@@ -17,7 +17,7 @@ def check_configs():
         ".github/sla.yml",
         ".github/incident.yml",
     ]
-    
+
     print("Checking configuration files...")
     missing = []
     for config in required_configs:
@@ -56,7 +56,7 @@ def check_workflows():
         try:
             with open(workflow_file, "r") as f:
                 content = f.read()
-                
+
             # YAML syntax check
             try:
                 yaml.safe_load(content)
@@ -68,7 +68,7 @@ def check_workflows():
             for pattern, desc in deprecated_patterns:
                 if re.search(pattern, content):
                     issues.append(desc)
-            
+
             if issues:
                 print(f"⚠️  {workflow_file.name}: {', '.join(issues)}")
 
