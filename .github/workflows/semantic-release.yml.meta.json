@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Semantic Release",
+  "identifier": "urn:uuid:636f22f5-987a-50b9-90ba-ae02e9bcaeba",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.semantic.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "semantic"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "push-triggered",
+    "release"
+  ]
+}

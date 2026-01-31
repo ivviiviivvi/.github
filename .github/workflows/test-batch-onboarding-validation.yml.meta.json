@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Test Workflow - Batch Onboarding Validation",
+  "identifier": "urn:uuid:835764f9-5e77-5157-8940-f77ca9e27d4a",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by workflow_dispatch, push, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.testing.test.yml",
+    "layer": "logic",
+    "role": "testing",
+    "domain": "test"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch",
+    "push"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "push-triggered",
+    "testing"
+  ]
+}

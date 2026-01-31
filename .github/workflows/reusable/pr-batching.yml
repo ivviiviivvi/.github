@@ -78,6 +78,14 @@ on:
         description: Current queue status
         value: ${{ jobs.pr-batching.outputs.queue }}
 
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pr-batching:
     runs-on: ubuntu-latest

@@ -1,21 +1,32 @@
 {
   "profile": "full",
   "name": "Advanced CI Pipeline",
-  "identifier": "urn:uuid:c2b3d4e5-f6a7-8901-bcde-f23456789012",
+  "identifier": "urn:uuid:9675b9d0-9374-5fd8-86c1-c2ffdee49f3a",
   "version": "1.0.0",
-  "description": "Advanced multi-language CI pipeline with matrix testing across Python, Node.js, and Docker with cross-platform support",
+  "description": "General-purpose workflow. Triggered by push, pull_request, workflow_dispatch, executes 5 job(s).",
   "functioncalled": {
-    "canonical": "core.ci.advanced.yml",
-    "layer": "core",
-    "role": "ci",
-    "domain": "build"
+    "canonical": "logic.general.ci.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "ci"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "triggers": [
+    "push",
+    "pull_request",
+    "workflow_dispatch"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-30T00:00:00Z",
-  "dc:subject": ["ci", "continuous-integration", "build", "test", "multi-platform", "matrix", "core"]
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "continuous-integration",
+    "general",
+    "logic",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
 }

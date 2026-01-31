@@ -59,6 +59,14 @@ on:
         description: Whether any warnings were generated
         value: ${{ jobs.validate-pr.outputs.has-warnings }}
 
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate-pr:
     runs-on: ubuntu-latest

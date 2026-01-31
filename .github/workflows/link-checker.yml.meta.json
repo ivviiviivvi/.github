@@ -1,0 +1,33 @@
+{
+  "profile": "full",
+  "name": "Link Checker",
+  "identifier": "urn:uuid:effad62e-d7aa-597c-a17c-fa2e5b95e682",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by push, pull_request, schedule, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "logic.quality.link.yml",
+    "layer": "logic",
+    "role": "quality",
+    "domain": "link"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "pull_request",
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "quality",
+    "scheduled"
+  ]
+}

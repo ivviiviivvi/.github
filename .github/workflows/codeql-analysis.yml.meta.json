@@ -1,21 +1,33 @@
 {
   "profile": "full",
-  "name": "CodeQL Analysis",
-  "identifier": "urn:uuid:e4d5f6a7-b8c9-0123-defa-456789012345",
+  "name": "CodeQL",
+  "identifier": "urn:uuid:1d93a2db-7ec7-5b00-918d-ff390a4fb934",
   "version": "1.0.0",
-  "description": "CodeQL semantic code analysis for Python, JavaScript, Go, and Ruby to detect security vulnerabilities",
+  "description": "Security scanning and vulnerability detection. Triggered by push, pull_request, schedule, workflow_dispatch, executes 1 job(s).",
   "functioncalled": {
     "canonical": "core.security.codeql.yml",
     "layer": "core",
     "role": "security",
-    "domain": "analysis"
+    "domain": "codeql"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "pull_request", "schedule", "workflow_dispatch"],
+  "triggers": [
+    "push",
+    "pull_request",
+    "schedule",
+    "workflow_dispatch"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-30T00:00:00Z",
-  "dc:subject": ["security", "codeql", "sast", "static-analysis", "vulnerability-detection", "core"]
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled",
+    "security"
+  ]
 }

@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Grok Workflow",
+  "identifier": "urn:uuid:b72e879e-d841-5583-9b22-abb9ec16cb6b",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.ai.grok.yml",
+    "layer": "logic",
+    "role": "ai",
+    "domain": "grok"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ai",
+    "logic",
+    "manual"
+  ]
+}

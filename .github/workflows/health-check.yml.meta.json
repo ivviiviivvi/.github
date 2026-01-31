@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Workflow Health Check",
+  "identifier": "urn:uuid:40fa9a56-e2b1-578f-bdd1-8a81adb4c69d",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by schedule, workflow_dispatch, push, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.quality.health.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "health"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch",
+    "push"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "manual",
+    "push-triggered",
+    "quality",
+    "scheduled"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "\ud83d\udd0e Gemini Review",
+  "identifier": "urn:uuid:dc3be220-34b8-5b6b-bd0b-bc99a546da0b",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.ai.gemini.yml",
+    "layer": "logic",
+    "role": "ai",
+    "domain": "gemini"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ai",
+    "logic",
+    "review"
+  ]
+}

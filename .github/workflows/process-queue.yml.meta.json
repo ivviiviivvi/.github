@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Process Task Queue",
+  "identifier": "urn:uuid:4e6635d3-d2d7-5dfa-846e-c96defc58692",
+  "version": "1.0.0",
+  "description": "Issue triage and task management. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.issue-management.process.yml",
+    "layer": "logic",
+    "role": "issue-management",
+    "domain": "process"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "issue management",
+    "logic",
+    "manual",
+    "pull-request",
+    "scheduled"
+  ]
+}

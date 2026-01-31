@@ -1,34 +1,26 @@
 {
   "profile": "full",
   "name": "Reusable Security Scan",
-  "identifier": "urn:uuid:a2b3c4d5-e6f7-8901-bcde-f23456789012",
+  "identifier": "urn:uuid:35ae10eb-a34c-5fcf-ab27-f640345bbaf2",
   "version": "1.0.0",
-  "description": "Reusable workflow for security scanning with Trivy, CodeQL, and Semgrep",
+  "description": "Security scanning and vulnerability detection. Triggered by workflow_call, executes 1 job(s).",
   "functioncalled": {
-    "canonical": "core.security.scanning.yml",
+    "canonical": "core.security.reusable.yml",
     "layer": "core",
     "role": "security",
-    "domain": "scanning"
+    "domain": "reusable"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["workflow_call"],
-  "outputs": [
-    {
-      "name": "scan-results",
-      "description": "Path to SARIF scan results"
-    }
+  "triggers": [
+    "workflow_call"
   ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-24T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
   "dc:subject": [
-    "security",
-    "scanning",
-    "trivy",
-    "codeql",
-    "semgrep",
-    "reusable"
+    "core",
+    "security"
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Status Synchronization",
+  "identifier": "urn:uuid:6fcfc78e-d32c-5fdd-8ef1-80b5630a2ad7",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by pull_request, issues, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.status.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "status"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request",
+    "issues",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual",
+    "pr-triggered"
+  ]
+}

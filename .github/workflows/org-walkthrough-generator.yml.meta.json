@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Organization Walkthrough Generator (Reusable)",
+  "identifier": "urn:uuid:681981ea-299b-5f17-a2a8-a6572d7a8e2b",
+  "version": "1.0.0",
+  "description": "Documentation generation and publishing. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.documentation.org.yml",
+    "layer": "core",
+    "role": "documentation",
+    "domain": "org"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "documentation"
+  ]
+}

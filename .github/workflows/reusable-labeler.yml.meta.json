@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Reusable: Pull Request Labeler",
+  "identifier": "urn:uuid:424e73c8-7f80-581c-8367-1a30e8e6090c",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.reusable.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "general"
+  ]
+}

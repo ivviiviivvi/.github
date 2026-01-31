@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Sentry Release",
+  "identifier": "urn:uuid:2f396f2a-4a9e-5fa6-bd30-1d8165916075",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.sentry.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "sentry"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "push-triggered",
+    "release"
+  ]
+}

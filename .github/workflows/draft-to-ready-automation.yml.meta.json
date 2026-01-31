@@ -1,0 +1,32 @@
+{
+  "profile": "full",
+  "name": "Draft to Ready PR Automation",
+  "identifier": "urn:uuid:b17e2d52-f730-58a6-84d2-d1a1c7b89424",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by pull_request, check_suite, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.draft.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "draft"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request",
+    "check_suite",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "automation",
+    "general",
+    "logic",
+    "manual",
+    "pr-triggered",
+    "pull-request"
+  ]
+}

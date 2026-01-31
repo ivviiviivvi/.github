@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Usage Monitoring and Budget Tracking",
+  "identifier": "urn:uuid:8c552d59-c908-5fa8-901e-35db2ed28322",
+  "version": "1.0.0",
+  "description": "Metrics collection and health monitoring. Triggered by schedule, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "logic.metrics.usage.yml",
+    "layer": "logic",
+    "role": "metrics",
+    "domain": "usage"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "metrics",
+    "scheduled"
+  ]
+}

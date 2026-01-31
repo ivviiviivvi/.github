@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Batch Merge Related PRs",
+  "identifier": "urn:uuid:6d684915-b01a-5dc5-9f3e-d17f967b452d",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by issue_comment, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.pr.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "pr"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "issue_comment",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr management",
+    "pull-request"
+  ]
+}

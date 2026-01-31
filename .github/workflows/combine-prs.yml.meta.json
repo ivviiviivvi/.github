@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Combine PRs",
+  "identifier": "urn:uuid:458c93ef-9a09-5816-934f-eee8e948eaec",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, schedule, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.combine.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "combine"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch",
+    "schedule"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual",
+    "pull-request",
+    "scheduled"
+  ]
+}

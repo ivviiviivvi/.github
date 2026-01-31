@@ -1,27 +1,29 @@
 {
   "profile": "full",
   "name": "PR Title Lint",
-  "identifier": "urn:uuid:d4e5f678-9012-3456-def0-567890123456",
+  "identifier": "urn:uuid:7c26504b-52f2-565c-b00c-3e5e178742c8",
   "version": "1.0.0",
-  "description": "Validates pull request titles against conventional commit format",
+  "description": "Code quality validation and linting. Triggered by pull_request, executes 1 job(s).",
   "functioncalled": {
-    "canonical": "logic.validate.title.yml",
-    "layer": "logic",
-    "role": "validate",
-    "domain": "title"
+    "canonical": "core.quality.pr.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "pr"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["pull_request", "pull_request_target"],
+  "triggers": [
+    "pull_request"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-24T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
   "dc:subject": [
-    "validation",
+    "core",
     "linting",
-    "conventional-commits",
-    "pr-title",
-    "logic"
+    "pr-triggered",
+    "pull-request",
+    "quality"
   ]
 }

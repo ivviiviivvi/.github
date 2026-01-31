@@ -1,37 +1,30 @@
 {
   "profile": "full",
-  "name": "Release",
-  "identifier": "urn:uuid:e5f67890-1234-5678-ef01-678901234567",
+  "name": "Release Management",
+  "identifier": "urn:uuid:cbdd8522-f0dc-5861-9a86-702e26fe8fc0",
   "version": "1.0.0",
-  "description": "Manages releases, changelog generation, and version tagging",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 2 job(s).",
   "functioncalled": {
-    "canonical": "application.deploy.release.yml",
+    "canonical": "application.deployment.release.yml",
     "layer": "application",
-    "role": "deploy",
+    "role": "deployment",
     "domain": "release"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "workflow_dispatch", "release"],
-  "outputs": [
-    {
-      "name": "version",
-      "description": "The released version number"
-    },
-    {
-      "name": "release-url",
-      "description": "URL to the GitHub release"
-    }
+  "triggers": [
+    "push",
+    "workflow_dispatch"
   ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-24T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
   "dc:subject": [
-    "release",
+    "application",
     "deployment",
-    "changelog",
-    "versioning",
-    "application"
+    "manual",
+    "push-triggered",
+    "release"
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Reset Quotas",
+  "identifier": "urn:uuid:e02a3d33-8f5b-54f4-abd3-1463b3909ee0",
+  "version": "1.0.0",
+  "description": "Repository maintenance and cleanup. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.maintenance.reset.yml",
+    "layer": "logic",
+    "role": "maintenance",
+    "domain": "reset"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "maintenance",
+    "manual",
+    "scheduled"
+  ]
+}

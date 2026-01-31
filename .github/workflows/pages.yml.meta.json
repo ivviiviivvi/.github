@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Deploy Jekyll site to Pages",
+  "identifier": "urn:uuid:3a86d385-8847-5c45-8016-f1285b77436c",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.pages.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "pages"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "pages",
+    "push-triggered"
+  ]
+}

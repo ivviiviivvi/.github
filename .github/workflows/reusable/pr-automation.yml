@@ -73,6 +73,14 @@ on:
         description: Whether auto-merge was enabled
         value: ${{ jobs.pr-automation.outputs.auto-merge }}
 
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pr-automation:
     runs-on: ubuntu-latest

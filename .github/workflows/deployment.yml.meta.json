@@ -1,21 +1,30 @@
 {
   "profile": "full",
   "name": "Deploy to Production",
-  "identifier": "urn:uuid:f5e6a7b8-c9d0-1234-efab-567890123456",
+  "identifier": "urn:uuid:d62a2727-ba4e-5c4d-be81-99ec4fa8e959",
   "version": "1.0.0",
-  "description": "Production deployment workflow with support for staging and production environments via manual dispatch",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 1 job(s).",
   "functioncalled": {
-    "canonical": "application.deployment.production.yml",
+    "canonical": "application.deployment.deployment.yml",
     "layer": "application",
     "role": "deployment",
-    "domain": "release"
+    "domain": "deployment"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "workflow_dispatch"],
+  "triggers": [
+    "push",
+    "workflow_dispatch"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-30T00:00:00Z",
-  "dc:subject": ["deployment", "production", "staging", "release", "application"]
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "pull-request",
+    "push-triggered"
+  ]
 }

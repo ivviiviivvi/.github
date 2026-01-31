@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Test Slack Notifications",
+  "identifier": "urn:uuid:0c859e75-e2d2-5f87-94d2-f2f3e35d1460",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "interface.testing.test.yml",
+    "layer": "interface",
+    "role": "testing",
+    "domain": "test"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "interface",
+    "manual",
+    "testing"
+  ]
+}

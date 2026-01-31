@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Live Demo Deployment",
+  "identifier": "urn:uuid:49a0531e-569f-5ffd-8daf-b9db5193766b",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.demo.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "demo"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch",
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "push-triggered"
+  ]
+}

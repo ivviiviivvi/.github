@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "CI Pipeline (Reusable)",
+  "identifier": "urn:uuid:ac84978b-251b-55f9-9c70-e0ea649fe0db",
+  "version": "1.0.0",
+  "description": "Continuous integration workflow for building and testing. Triggered by workflow_call, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "core.ci.ci.yml",
+    "layer": "core",
+    "role": "ci",
+    "domain": "ci"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ci",
+    "continuous-integration",
+    "core"
+  ]
+}

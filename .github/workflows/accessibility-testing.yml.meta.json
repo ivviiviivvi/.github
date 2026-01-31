@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Accessibility Testing",
+  "identifier": "urn:uuid:0cdcd18c-ab80-5ba4-bc6e-69f75c92466c",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by pull_request, push, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "logic.testing.accessibility.yml",
+    "layer": "logic",
+    "role": "testing",
+    "domain": "accessibility"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request",
+    "push",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "testing"
+  ]
+}

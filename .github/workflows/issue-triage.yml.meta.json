@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Issue Triage Automation",
+  "identifier": "urn:uuid:8e236223-35e5-5b64-8276-4fa7816e5fe3",
+  "version": "1.0.0",
+  "description": "Issue triage and task management. Triggered by issues, schedule, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "interface.issue-management.issue.yml",
+    "layer": "interface",
+    "role": "issue-management",
+    "domain": "issue"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "issues",
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "automation",
+    "interface",
+    "issue management",
+    "manual",
+    "scheduled"
+  ]
+}

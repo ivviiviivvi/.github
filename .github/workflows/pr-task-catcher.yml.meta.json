@@ -1,0 +1,33 @@
+{
+  "profile": "full",
+  "name": "PR Task Catcher",
+  "identifier": "urn:uuid:b08c8c1d-13d8-5465-9ec8-5636f8de419d",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by pull_request, pull_request_review, issue_comment, pull_request_review_comment, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.pr.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "pr"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request",
+    "pull_request_review",
+    "issue_comment",
+    "pull_request_review_comment",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr management",
+    "pr-triggered",
+    "pull-request"
+  ]
+}

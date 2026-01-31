@@ -1,21 +1,32 @@
 {
   "profile": "full",
-  "name": "CI Pipeline",
-  "identifier": "urn:uuid:b1a2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "CI",
+  "identifier": "urn:uuid:1fd6743d-22e0-5261-a8bd-743ff69e9016",
   "version": "1.0.0",
-  "description": "Core continuous integration pipeline for build, test, and validation",
+  "description": "Continuous integration workflow for building and testing. Triggered by push, pull_request, workflow_dispatch, executes 4 job(s).",
   "functioncalled": {
-    "canonical": "core.ci.build.yml",
+    "canonical": "core.ci.ci.yml",
     "layer": "core",
     "role": "ci",
-    "domain": "build"
+    "domain": "ci"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "triggers": [
+    "push",
+    "pull_request",
+    "workflow_dispatch"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-24T00:00:00Z",
-  "dc:subject": ["ci", "continuous-integration", "build", "test", "core"]
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ci",
+    "continuous-integration",
+    "core",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
 }

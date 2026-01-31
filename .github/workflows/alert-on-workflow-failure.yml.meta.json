@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Alert on Workflow Failure",
+  "identifier": "urn:uuid:2d60261b-da16-5744-b007-e56c11ad6266",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_run, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.alert.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "alert"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_run",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual"
+  ]
+}

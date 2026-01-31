@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Manual Reset",
+  "identifier": "urn:uuid:45b7d06b-dfce-5e6f-a8e8-017cd6192c8f",
+  "version": "1.0.0",
+  "description": "Repository maintenance and cleanup. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.maintenance.manual.yml",
+    "layer": "logic",
+    "role": "maintenance",
+    "domain": "manual"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "maintenance",
+    "manual"
+  ]
+}

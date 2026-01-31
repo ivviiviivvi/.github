@@ -2,9 +2,6 @@ name: Artifact Management (Reusable)
 
 on:
   workflow_call:
-
-permissions:
-  contents: read
     inputs:
       operation:
         description: Operation to perform (upload, download)
@@ -40,6 +37,13 @@ permissions:
       download-path:
         description: Path where artifact was downloaded
         value: ${{ jobs.artifact-ops.outputs.download-path }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   artifact-ops:

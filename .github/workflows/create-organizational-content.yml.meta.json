@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Create Organizational Content",
+  "identifier": "urn:uuid:6e69cb6f-6636-55d3-809e-8292a8580cff",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.create.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "create"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual"
+  ]
+}

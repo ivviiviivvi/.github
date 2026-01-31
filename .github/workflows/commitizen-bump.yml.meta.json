@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Commitizen Bump",
+  "identifier": "urn:uuid:10b353a3-0a10-59af-a3f0-a4fe584cd8fc",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.commitizen.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "commitizen"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual"
+  ]
+}

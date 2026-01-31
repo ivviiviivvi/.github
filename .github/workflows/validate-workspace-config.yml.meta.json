@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Validate Workspace Configurations",
+  "identifier": "urn:uuid:5b50eb60-f1c7-5065-af68-07e34945e2ad",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by push, pull_request, workflow_dispatch, executes 6 job(s).",
+  "functioncalled": {
+    "canonical": "logic.quality.validate.yml",
+    "layer": "logic",
+    "role": "quality",
+    "domain": "validate"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "pull_request",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "quality"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Security Scanning (Reusable)",
+  "identifier": "urn:uuid:0a11778c-3a9a-5874-83b5-abdc0362dce9",
+  "version": "1.0.0",
+  "description": "Security scanning and vulnerability detection. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.security.security.yml",
+    "layer": "core",
+    "role": "security",
+    "domain": "security"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "security"
+  ]
+}

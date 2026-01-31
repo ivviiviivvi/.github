@@ -41,6 +41,15 @@ on:
         description: Path to Trivy report
         value: ${{ jobs.security-scan.outputs.trivy-report }}
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   security-scan:
     runs-on: ubuntu-latest

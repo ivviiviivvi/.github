@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Collect Deployment Metadata",
+  "identifier": "urn:uuid:4bfd63b5-fa14-547a-ab01-f92852e08cf6",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by workflow_run, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.collect.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "collect"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_run",
+    "workflow_dispatch",
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Repository Metrics",
+  "identifier": "urn:uuid:3d4d2227-4d67-57fe-aee0-b473a42348c6",
+  "version": "1.0.0",
+  "description": "Metrics collection and health monitoring. Triggered by schedule, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.metrics.repo.yml",
+    "layer": "logic",
+    "role": "metrics",
+    "domain": "repo"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "metrics",
+    "scheduled"
+  ]
+}

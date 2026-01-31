@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Batch PR Lifecycle Management",
+  "identifier": "urn:uuid:249bab0e-e555-5e34-8c1b-ce8f61f7c593",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by workflow_dispatch, schedule, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.batch.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "batch"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch",
+    "schedule"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr management",
+    "pull-request",
+    "scheduled"
+  ]
+}

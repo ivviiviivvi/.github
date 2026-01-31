@@ -1,0 +1,32 @@
+{
+  "profile": "full",
+  "name": "Badge Management",
+  "identifier": "urn:uuid:fc0eedb2-0a0e-52f6-a2c6-7b6563ea696c",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by push, pull_request, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "interface.general.badge.yml",
+    "layer": "interface",
+    "role": "general",
+    "domain": "badge"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "pull_request",
+    "workflow_dispatch",
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "interface",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
+}

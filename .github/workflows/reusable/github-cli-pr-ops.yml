@@ -2,10 +2,6 @@ name: GitHub CLI PR Operations (Reusable)
 
 on:
   workflow_call:
-
-permissions:
-  contents: read
-  pull-requests: write
     inputs:
       operation:
         description: Operation to perform (list, merge, review, comment, auto-merge)
@@ -57,6 +53,14 @@ permissions:
       result:
         description: Operation result
         value: ${{ jobs.pr-operations.outputs.result }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pr-operations:

@@ -2,9 +2,6 @@ name: Node.js Setup & Build (Reusable)
 
 on:
   workflow_call:
-
-permissions:
-  contents: read
     inputs:
       node-version:
         description: Node.js version to use (falls back to vars.NODE_VERSION_DEFAULT, then 20)
@@ -40,6 +37,13 @@ permissions:
       build-artifact-path:
         description: Path to build artifacts
         value: ${{ jobs.setup-build.outputs.build-path }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   setup-build:

@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Reusable App Detection",
+  "identifier": "urn:uuid:3e5c2b21-6224-5df8-a74a-8cf8fb7c8dca",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.reusable.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "general"
+  ]
+}

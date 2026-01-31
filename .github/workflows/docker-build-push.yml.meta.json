@@ -1,0 +1,33 @@
+{
+  "profile": "full",
+  "name": "Docker Build and Push",
+  "identifier": "urn:uuid:1bd6cd8d-55b8-5cee-8554-f4e3bef6dc73",
+  "version": "1.0.0",
+  "description": "Continuous integration workflow for building and testing. Triggered by push, pull_request, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.ci.docker.yml",
+    "layer": "application",
+    "role": "ci",
+    "domain": "docker"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "pull_request",
+    "workflow_dispatch",
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "ci",
+    "docker",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
+}

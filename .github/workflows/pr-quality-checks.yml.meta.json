@@ -1,21 +1,30 @@
 {
   "profile": "full",
   "name": "PR Quality Checks",
-  "identifier": "urn:uuid:a6f7b8c9-d0e1-2345-fabc-678901234567",
+  "identifier": "urn:uuid:5c23584c-54ea-5484-a774-deda9d98dbae",
   "version": "1.0.0",
-  "description": "Comprehensive PR quality validation including title format, description length, linked issues, checklist completion, size warnings, and merge conflict detection",
+  "description": "Code quality validation and linting. Triggered by pull_request, workflow_dispatch, executes 5 job(s).",
   "functioncalled": {
-    "canonical": "logic.quality.pr-checks.yml",
+    "canonical": "logic.quality.pr.yml",
     "layer": "logic",
-    "role": "validation",
-    "domain": "quality"
+    "role": "quality",
+    "domain": "pr"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["pull_request", "workflow_dispatch"],
+  "triggers": [
+    "pull_request",
+    "workflow_dispatch"
+  ],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2025-01-30T00:00:00Z",
-  "dc:subject": ["quality", "validation", "pull-request", "linting", "logic"]
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr-triggered",
+    "pull-request",
+    "quality"
+  ]
 }

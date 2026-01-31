@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Node.js Setup & Build (Reusable)",
+  "identifier": "urn:uuid:92629409-672b-581a-8c8d-a01d46fe6bea",
+  "version": "1.0.0",
+  "description": "Continuous integration workflow for building and testing. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.ci.nodejs.yml",
+    "layer": "core",
+    "role": "ci",
+    "domain": "nodejs"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ci",
+    "core"
+  ]
+}

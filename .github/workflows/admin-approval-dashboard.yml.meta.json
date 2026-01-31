@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Admin Approval Dashboard",
+  "identifier": "urn:uuid:7b10f8f2-5777-5bc8-8d22-f92f77169b3f",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, repository_dispatch, schedule, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "interface.general.admin.yml",
+    "layer": "interface",
+    "role": "general",
+    "domain": "admin"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch",
+    "repository_dispatch",
+    "schedule"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "interface",
+    "manual",
+    "pull-request",
+    "scheduled"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Reusable: PR Title Lint",
+  "identifier": "urn:uuid:011d046b-2376-5527-af26-a2b5b6bab79b",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.quality.reusable.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "linting",
+    "pull-request",
+    "quality"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "PR Suggestion Implementation",
+  "identifier": "urn:uuid:c4ec6056-cbee-5f74-b992-98fb4e0c48e9",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by issue_comment, pull_request_review_comment, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.pr.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "pr"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "issue_comment",
+    "pull_request_review_comment",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr management",
+    "pull-request"
+  ]
+}

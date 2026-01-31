@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Stale Item Management",
+  "identifier": "urn:uuid:4e95d8bb-f065-55e7-b2d7-f133b9d96c0b",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.stale.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "stale"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "general",
+    "logic",
+    "manual",
+    "scheduled"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Reusable: Release",
+  "identifier": "urn:uuid:bd80aeea-3b15-5f26-89e0-b92004e902e9",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.deployment.reusable.yml",
+    "layer": "core",
+    "role": "deployment",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "deployment",
+    "release"
+  ]
+}

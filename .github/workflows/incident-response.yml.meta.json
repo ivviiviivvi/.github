@@ -1,0 +1,30 @@
+{
+  "profile": "full",
+  "name": "Incident Response",
+  "identifier": "urn:uuid:b578ad3c-54db-5c74-aea3-6cbc8c70bf8f",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_run, issues, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.incident.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "incident"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_run",
+    "issues",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "continuous-integration",
+    "general",
+    "logic",
+    "manual"
+  ]
+}

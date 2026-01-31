@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "name": "Reusable Notification",
+  "identifier": "urn:uuid:cbdbe201-ea1c-5199-ac90-e3ba373c8fda",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.reusable.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "general"
+  ]
+}

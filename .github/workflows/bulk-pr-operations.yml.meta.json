@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Bulk PR Operations",
+  "identifier": "urn:uuid:10bf33b9-9981-59c4-b2c3-9172496076d1",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.bulk.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "bulk"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr management",
+    "pull-request"
+  ]
+}

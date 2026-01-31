@@ -2,9 +2,6 @@ name: Python Setup & Test (Reusable)
 
 on:
   workflow_call:
-
-permissions:
-  contents: read
     inputs:
       python-version:
         description: Python version to use (falls back to vars.PYTHON_VERSION_DEFAULT, then 3.12)
@@ -48,6 +45,13 @@ permissions:
       test-results-path:
         description: Path to test results
         value: ${{ jobs.setup-test.outputs.test-path }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   setup-test:

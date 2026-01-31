@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Auto Create Pull Request",
+  "identifier": "urn:uuid:59fdd7dc-210e-57a5-bde4-5fc0a5018d68",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by push, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.automation.auto.yml",
+    "layer": "logic",
+    "role": "automation",
+    "domain": "auto"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "automation",
+    "logic",
+    "manual",
+    "push-triggered"
+  ]
+}

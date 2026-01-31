@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Organization Health Crawler",
+  "identifier": "urn:uuid:c75b8afa-2724-5665-8f06-287c6643631e",
+  "version": "1.0.0",
+  "description": "Metrics collection and health monitoring. Triggered by schedule, workflow_dispatch, push, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.metrics.org.yml",
+    "layer": "logic",
+    "role": "metrics",
+    "domain": "org"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "schedule",
+    "workflow_dispatch",
+    "push"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "metrics",
+    "push-triggered",
+    "scheduled"
+  ]
+}

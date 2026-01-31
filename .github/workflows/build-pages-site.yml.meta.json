@@ -1,0 +1,35 @@
+{
+  "profile": "full",
+  "name": "Build and Deploy GitHub Pages Site",
+  "identifier": "urn:uuid:e4185b8b-aafb-54b8-a61e-301dfe6950b1",
+  "version": "1.0.0",
+  "description": "Continuous integration workflow for building and testing. Triggered by repository_dispatch, schedule, workflow_dispatch, workflow_call, push, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "core.ci.build.yml",
+    "layer": "core",
+    "role": "ci",
+    "domain": "build"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "repository_dispatch",
+    "schedule",
+    "workflow_dispatch",
+    "workflow_call",
+    "push"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ci",
+    "core",
+    "deployment",
+    "manual",
+    "pages",
+    "push-triggered",
+    "scheduled"
+  ]
+}

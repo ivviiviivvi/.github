@@ -1,0 +1,31 @@
+{
+  "profile": "full",
+  "name": "Deploy Live App to GitHub Pages",
+  "identifier": "urn:uuid:fd818810-5b9f-5f86-9840-a13728a99c6d",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, workflow_call, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.deploy.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "deploy"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "push",
+    "workflow_dispatch",
+    "workflow_call"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "pages",
+    "push-triggered"
+  ]
+}
