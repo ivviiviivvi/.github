@@ -128,13 +128,13 @@ jobs:
       run: pip install PyYAML
 
     - name: Validate managed links
-      run: python .github/src/automation/scripts/resolve_link_placeholders.py --check
+      run: python src/automation/scripts/resolve_link_placeholders.py --check
       continue-on-error: true
 
     - name: Report managed link status
       if: failure()
       run: |
-        echo "::warning::Managed links need updating. Run: python .github/src/automation/scripts/resolve_link_placeholders.py --write"
+        echo "::warning::Managed links need updating. Run: python src/automation/scripts/resolve_link_placeholders.py --write"
 
   markdown-link-check:
     name: Check Markdown Links

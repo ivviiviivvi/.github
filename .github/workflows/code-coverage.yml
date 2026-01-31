@@ -61,7 +61,7 @@ jobs:
       if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov pytest-timeout coverage
+        pip install -e ".[dev]"
 
     - name: Install Node dependencies
       if: hashFiles('package.json') != ''
@@ -151,7 +151,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pytest pytest-cov pytest-timeout
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
 
     - name: Run tests and check coverage
       run: |

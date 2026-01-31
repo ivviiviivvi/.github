@@ -135,7 +135,18 @@ jobs:
           --events notable_events.json \
           --output email_digest.html
 
+    - name: Validate email secrets
+      id: validate-email
+      shell: bash
+      run: |
+        email_valid=false
+        if [[ -n "${{ secrets.SMTP_SERVER }}" && -n "${{ secrets.SMTP_USERNAME }}" && -n "${{ secrets.SMTP_PASSWORD }}" && -n "${{ secrets.DIGEST_RECIPIENTS }}" ]]; then
+          email_valid=true
+        fi
+        echo "email_valid=$email_valid" >> "$GITHUB_OUTPUT"
+
     - name: Send email
+      if: steps.validate-email.outputs.email_valid == 'true'
       uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7  # ratchet:dawidd6/action-send-mail@v3
       with:
         server_address: ${{ secrets.SMTP_SERVER }}
@@ -148,6 +159,11 @@ jobs:
         html_body: file://email_digest.html
         content_type: text/html
 
+    - name: Skip email (missing secrets)
+      if: steps.validate-email.outputs.email_valid != 'true'
+      run: |
+        echo "::warning::Email secrets not configured. Skipping email digest send."
+
     - name: Upload digest
       uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
       with:
@@ -158,8 +174,18 @@ jobs:
           notable_events.json
         retention-days: 90
 
+    - name: Validate Slack secrets
+      id: validate-slack
+      shell: bash
+      run: |
+        slack_valid=false
+        if [[ -n "${{ secrets.SLACK_WEBHOOK_URL }}" && "${{ secrets.SLACK_WEBHOOK_URL }}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+
     - name: Post summary to Slack
-      if: always()
+      if: always() && steps.validate-slack.outputs.slack_valid == 'true'
       uses: ./.github/actions/slack-notify
       with:
         webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

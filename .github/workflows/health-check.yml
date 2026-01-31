@@ -43,7 +43,7 @@ jobs:
       id: health
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: python3 .github/src/automation/scripts/generate_workflow_health_report.py
+      run: python3 src/automation/scripts/generate_workflow_health_report.py
 
     - name: Create health report
       run: |

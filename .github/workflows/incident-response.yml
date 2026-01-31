@@ -5,11 +5,13 @@ on:
     types: [completed]
     workflows:
     - CI
-    - deploy
-    - release
-    - security
-    - Build
-    - Test
+    - Deploy to Production
+    - Live Demo Deployment
+    - Release Management
+    - Semantic Release
+    - CodeQL
+    - Security Scan
+    - Test Coverage
     # Trigger on critical workflow failures only
     # Note: Additional filtering by conclusion is done in job conditions
 

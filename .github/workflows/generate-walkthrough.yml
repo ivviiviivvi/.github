@@ -48,6 +48,9 @@ concurrency:
 
 jobs:
   generate-walkthrough:
+    # DISABLED: dpills/repo-to-video repository is unavailable
+    # See: https://github.com/dpills/repo-to-video - repository does not exist
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 30
 

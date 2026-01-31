@@ -55,7 +55,7 @@ jobs:
     - name: Check quota and deduplication
       id: quota
       run: |
-        usage=$(python .github/src/automation/scripts/quota_manager.py get_usage "Jules_Agent")
+        usage=$(python src/automation/scripts/quota_manager.py get_usage "Jules_Agent")
         quota=$(jq -r '.subscriptions[] | select(.name=="Jules_Agent") | .quota' .github/subscriptions.json)
         echo "usage=$usage" >> $GITHUB_OUTPUT
         echo "quota=$quota" >> $GITHUB_OUTPUT
@@ -104,13 +104,13 @@ jobs:
 
     - name: Increment usage
       if: steps.claude.conclusion == 'success'
-      run: python .github/src/automation/scripts/quota_manager.py increment_usage "Jules_Agent"
+      run: python src/automation/scripts/quota_manager.py increment_usage "Jules_Agent"
 
     - name: Queue Task
       if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
       run: |
         task='{ "subscription": "Jules_Agent", "issue_number": "${{ github.event.issue.number }}", "pr_url": "${{ github.event.pull_request.html_url }}" }'
-        python .github/src/automation/scripts/quota_manager.py add_task "$task"
+        python src/automation/scripts/quota_manager.py add_task "$task"
         gh issue comment ${{ github.event.issue.number }} --body "The daily task limit for Jules has been reached. Your request has been added to the queue and will be processed as soon as possible."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,4 +118,4 @@ jobs:
     - name: Commit state changes
       if: always()
       run: |
-        ./.github/src/automation/scripts/commit_changes.sh "chore: update state for Jules task"
+        ./src/automation/scripts/commit_changes.sh "chore: update state for Jules task"

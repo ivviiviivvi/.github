@@ -139,10 +139,22 @@ jobs:
             body: body
           });
 
+    - name: Validate Slack webhook
+      id: validate-slack
+      if: inputs.notification_type == 'slack' || inputs.notification_type == 'all'
+      shell: bash
+      run: |
+        slack_valid=false
+        WEBHOOK="${{ secrets.SLACK_WEBHOOK }}"
+        if [[ -n "$WEBHOOK" && "$WEBHOOK" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+
     - name: Send Slack notification
       if: |
         (inputs.notification_type == 'slack' || inputs.notification_type == 'all') &&
-        secrets.SLACK_WEBHOOK != ''
+        steps.validate-slack.outputs.slack_valid == 'true'
       uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e  # ratchet:slackapi/slack-github-action@v1
       with:
         payload: |

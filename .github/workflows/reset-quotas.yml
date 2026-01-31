@@ -27,9 +27,9 @@ jobs:
         cache: pip
 
     - name: Reset quotas
-      run: python .github/src/automation/scripts/quota_manager.py reset_quotas
+      run: python src/automation/scripts/quota_manager.py reset_quotas
 
     - name: Commit state changes
       if: always()
       run: >
-        ./.github/src/automation/scripts/commit_changes.sh "chore: reset quotas"
+        ./src/automation/scripts/commit_changes.sh "chore: reset quotas"
