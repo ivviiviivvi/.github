@@ -1,3 +1,24 @@
+"""Quota Manager for GitHub Actions and API usage tracking.
+
+Provides quota management for GitHub Actions workflows and API calls, including:
+- Usage tracking per subscription/service
+- Lock-based concurrency control (fcntl on Unix, directory lock on Windows)
+- Task queue management for deferred operations
+- Automatic quota reset based on daily/monthly cadence
+
+Usage:
+    from quota_manager import get_usage, increment_usage, reset_quotas
+
+    # Check current usage
+    usage = get_usage("github-api")
+
+    # Increment usage
+    increment_usage("github-api", amount=1)
+
+    # Reset expired quotas
+    reset_quotas()
+"""
+
 import json
 import os
 import sys
@@ -51,9 +72,7 @@ def acquire_lock(timeout=60):
                 except OSError as err:
                     # Lock held by another process
                     if time.time() - start_time >= timeout:
-                        raise TimeoutError(
-                            f"Could not acquire lock on {LOCK_FILE}"
-                        ) from err
+                        raise TimeoutError(f"Could not acquire lock on {LOCK_FILE}") from err
                     time.sleep(0.1)
 
             yield

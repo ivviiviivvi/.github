@@ -1,4 +1,20 @@
 #!/usr/bin/env python3
+"""Update Agent Documentation README.
+
+Scans the agents directory for .agent.md files, extracts metadata from YAML
+frontmatter, and regenerates the README.agents.md table with current agent
+information and VS Code install badges.
+
+Usage:
+    python update_agent_docs.py
+
+The script:
+1. Scans AGENTS_DIR for *.agent.md files
+2. Extracts name, title, and description from each file
+3. Generates a markdown table with install badges
+4. Updates README_FILE by replacing the existing table
+"""
+
 import os
 import re
 
@@ -27,9 +43,7 @@ def extract_metadata(filepath):
     title_match = re.search(r"^# (.*)", content, re.MULTILINE)
 
     name = name_match.group(1).strip() if name_match else os.path.basename(filepath)
-    description = (
-        desc_match.group(1).strip() if desc_match else "No description available."
-    )
+    description = desc_match.group(1).strip() if desc_match else "No description available."
     title = title_match.group(1).strip() if title_match else name
 
     return {

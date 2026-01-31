@@ -40,7 +40,7 @@ const VERSION_FILES = {
       return content.replace(/version\s*=\s*"[^"]+"/, `version = "${version}"`);
     },
   },
-  ".schema-org/repository.jsonld": {
+  ".config/schema-org/repository.jsonld": {
     read: (content) => JSON.parse(content).version,
     write: (content, version) => {
       const data = JSON.parse(content);
@@ -49,7 +49,7 @@ const VERSION_FILES = {
       return JSON.stringify(data, null, 2) + "\n";
     },
   },
-  ".schema-org/ai-framework.jsonld": {
+  ".config/schema-org/ai-framework.jsonld": {
     read: (content) => JSON.parse(content).version,
     write: (content, version) => {
       const data = JSON.parse(content);
@@ -57,7 +57,7 @@ const VERSION_FILES = {
       return JSON.stringify(data, null, 2) + "\n";
     },
   },
-  ".schema-org/documentation.jsonld": {
+  ".config/schema-org/documentation.jsonld": {
     read: (content) => JSON.parse(content).version,
     write: (content, version) => {
       const data = JSON.parse(content);

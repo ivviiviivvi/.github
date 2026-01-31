@@ -12,9 +12,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock PyGithub before import
 mock_github_module = MagicMock()
@@ -132,9 +130,8 @@ class TestGetExistingLabels:
 
     def test_handles_api_error(self, manager, mock_repo):
         """Test handling of GitHub API errors - returns empty dict."""
-        from github import GithubException
-
-        mock_repo.get_labels.side_effect = GithubException(404, "Not Found")
+        # Use the GithubException from the sync_labels module (which uses our mock)
+        mock_repo.get_labels.side_effect = mock_github_exception(404, "Not Found")
 
         # Manager returns empty dict on error (doesn't raise)
         labels = manager.get_existing_labels(mock_repo)
@@ -302,9 +299,7 @@ class TestBatchOperations:
     def test_syncs_to_all_repositories(self, manager, mock_github, mock_org):
         """Test syncing labels to all repositories."""
         # Create mock repositories
-        repos = [
-            MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)
-        ]
+        repos = [MagicMock(name=f"repo-{i}", full_name=f"org/repo-{i}") for i in range(3)]
         for repo in repos:
             repo.get_labels.return_value = []
 
@@ -322,11 +317,9 @@ class TestBatchOperations:
 
     def test_handles_individual_repo_failures(self, manager, mock_github, mock_org):
         """Test handling of failures in individual repositories."""
-        from github import GithubException
-
         repos = [MagicMock(name=f"repo-{i}") for i in range(3)]
         # Manager's sync_labels catches GithubException and returns error stats
-        repos[1].get_labels.side_effect = GithubException(403, "Forbidden")
+        repos[1].get_labels.side_effect = mock_github_exception(403, "Forbidden")
         repos[0].get_labels.return_value = []
         repos[2].get_labels.return_value = []
 
@@ -406,9 +399,7 @@ class TestErrorRecovery:
         """Test handling of GitHub API rate limiting."""
         mock_repo = MagicMock()
         # Use the mocked GithubException from test setup
-        mock_repo.get_labels.side_effect = mock_github_exception(
-            403, "Rate limit exceeded"
-        )
+        mock_repo.get_labels.side_effect = mock_github_exception(403, "Rate limit exceeded")
 
         # Manager's get_existing_labels catches errors and returns empty dict
         labels = manager.get_existing_labels(mock_repo)
@@ -419,9 +410,7 @@ class TestErrorRecovery:
         import requests
 
         mock_repo = MagicMock()
-        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError(
-            "Network error"
-        )
+        mock_repo.get_labels.side_effect = requests.exceptions.ConnectionError("Network error")
 
         # Network errors may propagate or be caught - test behavior
         try:

@@ -7,34 +7,68 @@ import importlib
 import importlib.util
 import subprocess
 import sys
-import types
 from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+# Add scripts directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-# Ensure we have the real secret_manager module, not a mock.
-# Other test modules may have inserted MagicMock objects into sys.modules
-# which would break our tests.
-_existing = sys.modules.get("secret_manager")
-if _existing is None or not isinstance(_existing, types.ModuleType):
-    # Remove any mock and do a fresh import
+
+def _load_real_secret_manager():
+    """Force load the real secret_manager module, removing any mocks."""
+    # Remove any mock from sys.modules
     sys.modules.pop("secret_manager", None)
-    import secret_manager
-else:
-    # Real module exists, reload to ensure clean state
-    secret_manager = importlib.reload(_existing)
 
-# Reference the functions directly from the module
-get_secret = secret_manager.get_secret
-ensure_secret = secret_manager.ensure_secret
-get_github_token = secret_manager.get_github_token
-ensure_github_token = secret_manager.ensure_github_token
-_print_secret_error = secret_manager._print_secret_error
+    # Load the module from the actual file path
+    scripts_path = Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"
+    spec = importlib.util.spec_from_file_location("secret_manager", scripts_path / "secret_manager.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["secret_manager"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+# Load the real module at import time
+secret_manager = _load_real_secret_manager()
+
+
+@pytest.fixture(autouse=True)
+def ensure_real_secret_manager():
+    """Ensure the real secret_manager module is loaded for each test."""
+    global secret_manager
+    # Reload fresh for each test to avoid cross-test pollution
+    secret_manager = _load_real_secret_manager()
+    yield
+    # Clean up after test - other tests may want to mock it
+    sys.modules.pop("secret_manager", None)
+
+
+# Helper functions that call through the module (ensures patches work correctly)
+def get_secret(item_name, field="password", vault="Private"):
+    """Call get_secret through the module for proper patch support."""
+    return secret_manager.get_secret(item_name, field, vault)
+
+
+def ensure_secret(item_name, field="password", vault="Private"):
+    """Call ensure_secret through the module for proper patch support."""
+    return secret_manager.ensure_secret(item_name, field, vault)
+
+
+def get_github_token(item_name):
+    """Call get_github_token through the module for proper patch support."""
+    return secret_manager.get_github_token(item_name)
+
+
+def ensure_github_token(item_name):
+    """Call ensure_github_token through the module for proper patch support."""
+    return secret_manager.ensure_github_token(item_name)
+
+
+def _print_secret_error(item_name, field, vault):
+    """Call _print_secret_error through the module for proper patch support."""
+    return secret_manager._print_secret_error(item_name, field, vault)
 
 
 class TestGetSecret:

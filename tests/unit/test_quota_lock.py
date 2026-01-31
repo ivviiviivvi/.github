@@ -8,14 +8,12 @@ import unittest
 from pathlib import Path
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from quota_manager import LOCK_DIR, LOCK_FILE, SUBSCRIPTIONS_FILE, acquire_lock
 
 try:
-    pass
+    import fcntl  # noqa: F401
 
     HAS_FCNTL = True
 except ImportError:
@@ -95,7 +93,6 @@ class TestQuotaLock(unittest.TestCase):
         locked_event.wait(timeout=1)
 
         # Try to acquire lock with short timeout - should fail
-        start_time = time.time()
         try:
             with acquire_lock(timeout=0.1):
                 self.fail("Should not have acquired lock")
@@ -111,6 +108,7 @@ class TestQuotaLock(unittest.TestCase):
         """Test that reset_quotas correctly resets usage based on cadence."""
         from datetime import datetime, timedelta
         from unittest.mock import mock_open, patch
+
         from quota_manager import reset_quotas
 
         today = datetime.now().strftime("%Y-%m-%d")
@@ -150,10 +148,6 @@ class TestQuotaLock(unittest.TestCase):
 
                 # We can't easily verify the content with simple mock_open without more complex setup
                 # but the fact it reached "w" means it processed the logic.
-
-
-if __name__ == "__main__":
-    unittest.main()
 
 
 if __name__ == "__main__":
