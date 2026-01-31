@@ -454,3 +454,320 @@ class TestExtractArguments:
         result = extractor._extract_arguments(args)
 
         assert result[0]["type"] == "Any"
+
+
+@pytest.mark.unit
+class TestGetNameAdvanced:
+    """Test advanced AST node name extraction."""
+
+    def test_handles_subscript_node(self):
+        """Test handles ast.Subscript nodes like List[int]."""
+        extractor = DocstringExtractor()
+        # Create List[int]
+        node = ast.Subscript(
+            value=ast.Name(id="List"),
+            slice=ast.Name(id="int"),
+        )
+
+        result = extractor._get_name(node)
+
+        assert result == "List[int]"
+
+    def test_handles_list_node(self):
+        """Test handles ast.List nodes."""
+        extractor = DocstringExtractor()
+        node = ast.List(elts=[ast.Name(id="int"), ast.Name(id="str")])
+
+        result = extractor._get_name(node)
+
+        assert result == "[int, str]"
+
+    def test_handles_tuple_node(self):
+        """Test handles ast.Tuple nodes."""
+        extractor = DocstringExtractor()
+        node = ast.Tuple(elts=[ast.Name(id="int"), ast.Name(id="str")])
+
+        result = extractor._get_name(node)
+
+        assert result == "(int, str)"
+
+    def test_handles_complex_type_annotation(self):
+        """Test handles complex type like Optional[List[str]]."""
+        extractor = DocstringExtractor()
+        # Create Optional[List[str]]
+        node = ast.Subscript(
+            value=ast.Name(id="Optional"),
+            slice=ast.Subscript(value=ast.Name(id="List"), slice=ast.Name(id="str")),
+        )
+
+        result = extractor._get_name(node)
+
+        assert result == "Optional[List[str]]"
+
+
+@pytest.mark.unit
+class TestDocumentationGeneratorAdvanced:
+    """Test advanced documentation generation."""
+
+    @pytest.fixture
+    def mock_src_dir(self, tmp_path):
+        """Create mock source directory with Python files."""
+        src_dir = tmp_path / "src"
+        src_dir.mkdir()
+        return src_dir
+
+    @pytest.fixture
+    def mock_output_dir(self, tmp_path):
+        """Create mock output directory."""
+        output_dir = tmp_path / "docs"
+        return output_dir
+
+    def test_write_class_doc_with_bases(self, mock_src_dir, mock_output_dir):
+        """Test writes class documentation with bases."""
+        py_file = mock_src_dir / "module.py"
+        py_file.write_text(
+            '''"""Module."""
+
+class Child(Parent, Mixin):
+    """Child class inheriting from Parent and Mixin."""
+    pass
+'''
+        )
+
+        generator = DocumentationGenerator(mock_src_dir, mock_output_dir)
+        generator.generate()
+
+        # Check the generated documentation
+        module_doc = mock_output_dir / "module.md"
+        content = module_doc.read_text()
+        assert "Bases" in content or "Parent" in content
+
+    def test_write_function_doc_with_async(self, mock_src_dir, mock_output_dir):
+        """Test writes async function documentation."""
+        py_file = mock_src_dir / "module.py"
+        py_file.write_text(
+            '''"""Module."""
+
+async def fetch_data(url: str) -> dict:
+    """Fetch data from URL."""
+    pass
+'''
+        )
+
+        generator = DocumentationGenerator(mock_src_dir, mock_output_dir)
+        generator.generate()
+
+        # Check the generated documentation
+        module_doc = mock_output_dir / "module.md"
+        content = module_doc.read_text()
+        assert "async" in content
+
+    def test_write_function_doc_without_docstring(self, mock_src_dir, mock_output_dir):
+        """Test writes function documentation without docstring."""
+        py_file = mock_src_dir / "module.py"
+        py_file.write_text(
+            '''"""Module."""
+
+def no_doc():
+    pass
+'''
+        )
+
+        generator = DocumentationGenerator(mock_src_dir, mock_output_dir)
+        generator.generate()
+
+        # Check the generated documentation
+        module_doc = mock_output_dir / "module.md"
+        content = module_doc.read_text()
+        assert "No documentation available" in content
+
+    def test_generate_readme_summary_empty(self, mock_src_dir):
+        """Test generate_readme_summary with no modules."""
+        generator = DocumentationGenerator(mock_src_dir)
+        # Don't call generate, so modules_info is empty
+
+        summary = generator.generate_readme_summary()
+
+        assert summary == ""
+
+    def test_generate_with_output_dir_none(self, mock_src_dir):
+        """Test generate creates modules_info but no output files."""
+        py_file = mock_src_dir / "module.py"
+        py_file.write_text('"""Module docstring."""\n')
+
+        generator = DocumentationGenerator(mock_src_dir, None)
+        generator.generate()
+
+        assert len(generator.modules_info) >= 1
+
+    def test_process_file_with_exception(self, mock_src_dir, capsys):
+        """Test _process_file handles general exceptions."""
+        py_file = mock_src_dir / "module.py"
+        py_file.write_text('"""Module."""\n')
+
+        generator = DocumentationGenerator(mock_src_dir)
+
+        # Mock ast.parse to raise an exception
+        with patch("ast.parse", side_effect=ValueError("Test error")):
+            generator._process_file(py_file)
+
+        captured = capsys.readouterr()
+        assert "Error processing file" in captured.out
+
+    def test_get_module_name_nested(self, mock_src_dir):
+        """Test _get_module_name with nested directories."""
+        nested = mock_src_dir / "subpackage" / "nested"
+        nested.mkdir(parents=True)
+        py_file = nested / "module.py"
+        py_file.write_text('"""Nested module."""\n')
+
+        generator = DocumentationGenerator(mock_src_dir)
+        result = generator._get_module_name(py_file)
+
+        assert "subpackage" in result
+        assert "nested" in result
+        assert "module" in result
+
+
+@pytest.mark.unit
+class TestMainFunction:
+    """Test main function."""
+
+    def test_main_no_args(self, monkeypatch, capsys):
+        """Test main with no arguments."""
+        monkeypatch.setattr(sys, "argv", ["auto-docs.py"])
+
+        with pytest.raises(SystemExit) as exc:
+            auto_docs.main()
+
+        assert exc.value.code == 2
+
+    def test_main_missing_required_args(self, monkeypatch, capsys):
+        """Test main without output-dir or update-readme."""
+        monkeypatch.setattr(
+            sys, "argv", ["auto-docs.py", "--src-dir", "/some/path"]
+        )
+
+        with pytest.raises(SystemExit) as exc:
+            auto_docs.main()
+
+        assert exc.value.code == 2
+
+    def test_main_with_output_dir(self, tmp_path, monkeypatch, capsys):
+        """Test main with output-dir argument."""
+        src_dir = tmp_path / "src"
+        src_dir.mkdir()
+        py_file = src_dir / "module.py"
+        py_file.write_text('"""Module docstring."""\n')
+
+        output_dir = tmp_path / "docs"
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "auto-docs.py",
+                "--src-dir",
+                str(src_dir),
+                "--output-dir",
+                str(output_dir),
+            ],
+        )
+
+        auto_docs.main()
+
+        assert output_dir.exists()
+
+    def test_main_with_update_readme(self, tmp_path, monkeypatch, capsys):
+        """Test main with update-readme argument."""
+        src_dir = tmp_path / "src"
+        src_dir.mkdir()
+        py_file = src_dir / "module.py"
+        py_file.write_text('"""Module docstring."""\n')
+
+        readme_path = tmp_path / "README.md"
+        readme_path.write_text("# Project\n\n")
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "auto-docs.py",
+                "--src-dir",
+                str(src_dir),
+                "--update-readme",
+                "--readme-path",
+                str(readme_path),
+            ],
+        )
+
+        auto_docs.main()
+
+        content = readme_path.read_text()
+        assert "## Modules" in content
+
+    def test_main_with_both_args(self, tmp_path, monkeypatch, capsys):
+        """Test main with both output-dir and update-readme."""
+        src_dir = tmp_path / "src"
+        src_dir.mkdir()
+        py_file = src_dir / "module.py"
+        py_file.write_text('"""Module docstring."""\n')
+
+        output_dir = tmp_path / "docs"
+        readme_path = tmp_path / "README.md"
+        readme_path.write_text("# Project\n\n")
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "auto-docs.py",
+                "--src-dir",
+                str(src_dir),
+                "--output-dir",
+                str(output_dir),
+                "--update-readme",
+                "--readme-path",
+                str(readme_path),
+            ],
+        )
+
+        auto_docs.main()
+
+        assert output_dir.exists()
+        content = readme_path.read_text()
+        assert "## Modules" in content
+
+
+@pytest.mark.unit
+class TestUpdateReadmeAdvanced:
+    """Test advanced README update functionality."""
+
+    def test_updates_found_but_not_matching(self, tmp_path, capsys):
+        """Test updates when section found but pattern doesn't match."""
+        readme_path = tmp_path / "README.md"
+        readme_path.write_text("# Project\n\n## Modules\n\n## Other Section\n")
+
+        summary = "## Modules\n\n| New | Content |\n"
+
+        update_readme(readme_path, summary)
+
+        content = readme_path.read_text()
+        assert "| New | Content |" in content
+        assert "## Other Section" in content
+
+    def test_fallback_append_when_section_not_found(self, tmp_path, capsys):
+        """Test fallback to append when no ## Modules found."""
+        readme_path = tmp_path / "README.md"
+        readme_path.write_text("# Project\n\nSome content here.\n")
+
+        summary = "## Modules\n\n| Module | Description |\n"
+
+        update_readme(readme_path, summary)
+
+        content = readme_path.read_text()
+        assert "## Modules" in content
+        assert "Some content here" in content
+
+        captured = capsys.readouterr()
+        assert "Added" in captured.out
