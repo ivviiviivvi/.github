@@ -80,12 +80,20 @@ jobs:
         echo "🔍 Scanning PR body for tasks..."
 
         # Extract unchecked tasks
-        UNCHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[ \]' pr_body.txt || echo "")
-        UNCHECKED_COUNT=$(echo "$UNCHECKED_TASKS" | grep -c '^\s*[-*]\s*\[ \]' || echo "0")
+        UNCHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[ \]' pr_body.txt || true)
+        if [ -n "$UNCHECKED_TASKS" ]; then
+          UNCHECKED_COUNT=$(echo "$UNCHECKED_TASKS" | wc -l | tr -d ' ')
+        else
+          UNCHECKED_COUNT=0
+        fi
 
         # Extract checked tasks (for comparison)
-        CHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[x\]' pr_body.txt || echo "")
-        CHECKED_COUNT=$(echo "$CHECKED_TASKS" | grep -c '^\s*[-*]\s*\[x\]' || echo "0")
+        CHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[x\]' pr_body.txt || true)
+        if [ -n "$CHECKED_TASKS" ]; then
+          CHECKED_COUNT=$(echo "$CHECKED_TASKS" | wc -l | tr -d ' ')
+        else
+          CHECKED_COUNT=0
+        fi
 
         echo "Found $UNCHECKED_COUNT unchecked tasks, $CHECKED_COUNT checked tasks in PR body"
 
