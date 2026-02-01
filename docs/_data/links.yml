@@ -69,7 +69,7 @@ internal:
     amplitude_experiment: src/ai_framework/agents/amplitude-experiment-implementation.agent.md
     arm_migration: src/ai_framework/agents/arm-migration.agent.md
     completionism_specialist: src/ai_framework/agents/completionism-specialist.agent.md
-    csharp_expert: src/ai_framework/agents/CSharpExpert.agent.md
+    csharp_expert: src/ai_framework/agents/csharp-expert.agent.md
     data_decommissioning: src/ai_framework/agents/data-decommissioning.agent.md
     data_forensics: src/ai_framework/agents/data-forensics.agent.md
     data_reclamation: src/ai_framework/agents/data-reclamation.agent.md
@@ -77,7 +77,6 @@ internal:
     dynatrace_expert: src/ai_framework/agents/dynatrace-expert.agent.md
     github_org_manager: src/ai_framework/agents/github-org-manager.agent.md
     greener_grass_benchmark: src/ai_framework/agents/greener-grass-workflow-benchmark.agent.md
-    housekeeping_deep_cleaner: src/ai_framework/agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md
     jfrog_sec: src/ai_framework/agents/jfrog-sec.agent.md
     launchdarkly_cleanup: src/ai_framework/agents/launchdarkly-flag-cleanup.agent.md
     neon_migration: src/ai_framework/agents/neon-migration-specialist.agent.md
@@ -89,12 +88,12 @@ internal:
     security_audit: src/ai_framework/agents/security-audit.agent.md
     stackhawk_onboarding: src/ai_framework/agents/stackhawk-security-onboarding.agent.md
     terraform: src/ai_framework/agents/terraform.agent.md
-    winforms_expert: src/ai_framework/agents/WinFormsExpert.agent.md
+    winforms_expert: src/ai_framework/agents/winforms-expert.agent.md
     workflow_optimizer: src/ai_framework/agents/workflow-optimizer.agent.md
 
   guides:
     quick_start: docs/guides/QUICK_START.md
-    best_practices: docs/guides/BEST_PRACTICES.md
+    best_practices: docs/guides/best-practices.md
     claude_guide: docs/guides/CLAUDE.md
     agent_architecture: docs/guides/AGENT_ARCHITECTURE_GUIDE.md
 
