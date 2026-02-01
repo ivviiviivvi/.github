@@ -441,18 +441,18 @@ jobs:
           echo "🚨 Blocking merge due to unresolved blockers"
           echo "should_block=true" >> $GITHUB_OUTPUT
 
-          cat > /tmp/blocker_message.md <<- 'EOF_BLOCKER'
-          🚫 **Merge Blocked**
-
-          This PR has unresolved blocker items that must be addressed before merging.
-
-          Review the task summary above and:
-          1. Address all items marked with 🚨 BLOCKER
-          2. Check off completed tasks
-          3. Or add `ignore-task-checks` label to bypass (not recommended)
-
-          The `has-blockers` label will be automatically removed when blockers are resolved.
-          EOF_BLOCKER
+          {
+            echo "🚫 **Merge Blocked**"
+            echo ""
+            echo "This PR has unresolved blocker items that must be addressed before merging."
+            echo ""
+            echo "Review the task summary above and:"
+            echo "1. Address all items marked with 🚨 BLOCKER"
+            echo "2. Check off completed tasks"
+            echo "3. Or add \`ignore-task-checks\` label to bypass (not recommended)"
+            echo ""
+            echo "The \`has-blockers\` label will be automatically removed when blockers are resolved."
+          } > /tmp/blocker_message.md
           gh pr comment $PR_NUM --body-file /tmp/blocker_message.md
         else
           echo "✅ No blockers found, merge allowed"
@@ -503,23 +503,23 @@ jobs:
           if [ -n "$TASK_TEXT" ]; then
             echo "Creating issue for: $TASK_TEXT"
 
-            cat > /tmp/task_issue.md <<- 'EOF_TASK'
-            # Task from PR #$PR_NUM
-
-            **Original PR:** #$PR_NUM - $PR_TITLE
-            **Author:** @$AUTHOR
-
-            ## Task
-
-            $TASK_TEXT
-
-            ## Context
-
-            This task was left incomplete in PR #$PR_NUM. See the original PR for full context.
-
-            ---
-            _Auto-created by [pr-task-catcher.yml](../.github/workflows/pr-task-catcher.yml)_
-            EOF_TASK
+            {
+              echo "# Task from PR #$PR_NUM"
+              echo ""
+              echo "**Original PR:** #$PR_NUM - $PR_TITLE"
+              echo "**Author:** @$AUTHOR"
+              echo ""
+              echo "## Task"
+              echo ""
+              echo "$TASK_TEXT"
+              echo ""
+              echo "## Context"
+              echo ""
+              echo "This task was left incomplete in PR #$PR_NUM. See the original PR for full context."
+              echo ""
+              echo "---"
+              echo "_Auto-created by [pr-task-catcher.yml](../.github/workflows/pr-task-catcher.yml)_"
+            } > /tmp/task_issue.md
 
             gh issue create \
               --title "Task from PR #$PR_NUM: $TASK_TEXT" \
