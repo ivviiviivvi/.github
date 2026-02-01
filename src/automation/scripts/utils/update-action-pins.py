@@ -170,6 +170,13 @@ def resolve_tag_to_sha(
 
         if response.status_code == 200:
             data = response.json()
+
+            # Handle list response (multiple matching refs when tag is a prefix)
+            if isinstance(data, list):
+                if not data:
+                    return None
+                data = data[0]  # Use first (exact) match
+
             # Handle both lightweight and annotated tags
             if data["object"]["type"] == "tag":
                 # Annotated tag - need to resolve to commit
@@ -184,7 +191,15 @@ def resolve_tag_to_sha(
         response = session.get(url, headers=headers, timeout=30)
 
         if response.status_code == 200:
-            return response.json()["object"]["sha"]
+            data = response.json()
+
+            # Handle list response (multiple matching refs)
+            if isinstance(data, list):
+                if not data:
+                    return None
+                data = data[0]
+
+            return data["object"]["sha"]
 
         logger.debug(
             f"Could not resolve {owner}/{repo}@{tag}: HTTP {response.status_code}"
