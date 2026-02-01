@@ -92,10 +92,90 @@ internal:
     workflow_optimizer: src/ai_framework/agents/workflow-optimizer.agent.md
 
   guides:
+    # Existing entries
     quick_start: docs/guides/QUICK_START.md
     best_practices: docs/guides/best-practices.md
     claude_guide: docs/guides/CLAUDE.md
     agent_architecture: docs/guides/AGENT_ARCHITECTURE_GUIDE.md
+    # New entries (75 guides)
+    agents: docs/guides/AGENTS.md
+    ai_implementation: docs/guides/AI_IMPLEMENTATION_GUIDE.md
+    automation: docs/guides/AUTOMATION_GUIDE.md
+    batch_onboarding: docs/guides/BATCH_ONBOARDING_GUIDE.md
+    best_practices_implementation_summary: docs/guides/BEST_PRACTICES_IMPLEMENTATION_SUMMARY.md
+    best_practices_quick_ref: docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md
+    code_server_setup: docs/guides/CODE_SERVER_SETUP.md
+    codespaces: docs/guides/CODESPACES_GUIDE.md
+    common_tasks_runbook: docs/guides/common-tasks-runbook.md
+    community_agents: docs/guides/COMMUNITY_AGENTS.md
+    complete_deployment: docs/guides/COMPLETE_DEPLOYMENT_README.md
+    copilot_quick_start: docs/guides/COPILOT_QUICK_START.md
+    custom_instructions_setup: docs/guides/CUSTOM_INSTRUCTIONS_SETUP.md
+    dependency_management: docs/guides/dependency-management.md
+    deployment: docs/guides/DEPLOYMENT_GUIDE.md
+    development_environment_setup: docs/guides/DEVELOPMENT_ENVIRONMENT_SETUP.md
+    discussion: docs/guides/DISCUSSION_GUIDE.md
+    docker_best_practices: docs/guides/DOCKER_BEST_PRACTICES.md
+    ecosystem: docs/guides/ECOSYSTEM_README.md
+    examples_and_anti_patterns: docs/guides/examples-and-anti-patterns.md
+    github_apps_integrations: docs/guides/GITHUB_APPS_INTEGRATIONS.md
+    github_best_practices_sessions: docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md
+    github_copilot_actions_setup: docs/guides/GITHUB_COPILOT_ACTIONS_SETUP.md
+    github_pages_setup: docs/guides/GITHUB_PAGES_SETUP.md
+    github_projects_configuration: docs/guides/GITHUB_PROJECTS_CONFIGURATION.md
+    github_projects_deployment: docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md
+    github_projects_implementation: docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md
+    github_projects_quick_ref: docs/guides/GITHUB_PROJECTS_QUICKREF.md
+    github_projects_visual: docs/guides/GITHUB_PROJECTS_VISUAL.md
+    issue_template_validation_report: docs/guides/issue-template-validation-report.md
+    issue_templates: docs/guides/issue-templates.md
+    jules_cascade_prevention: docs/guides/JULES_CASCADE_PREVENTION.md
+    jules_cascade_prevention_quick_ref: docs/guides/JULES_CASCADE_PREVENTION_QUICK_REF.md
+    markdown_style: docs/guides/MARKDOWN_STYLE_GUIDE.md
+    mcp_server_setup: docs/guides/MCP_SERVER_SETUP.md
+    mcp_standardization: docs/guides/MCP_STANDARDIZATION_GUIDE.md
+    monitoring: docs/guides/monitoring.md
+    mouthpiece: docs/guides/MOUTHPIECE_README.md
+    mouthpiece_examples: docs/guides/mouthpiece-examples.md
+    mouthpiece_system: docs/guides/MOUTHPIECE_SYSTEM.md
+    new_contributor: docs/guides/NEW_CONTRIBUTOR_GUIDE.md
+    organizational_content_quick_start: docs/guides/ORGANIZATIONAL_CONTENT_QUICK_START.md
+    organizational_content_visual: docs/guides/ORGANIZATIONAL_CONTENT_VISUAL_GUIDE.md
+    phase_7_completion_plan: docs/guides/PHASE_7_COMPLETION_PLAN.md
+    phase_7_execution_summary: docs/guides/PHASE_7_EXECUTION_SUMMARY.md
+    phase_7_quick_ref: docs/guides/PHASE_7_QUICK_REFERENCE.md
+    phase3_day2: docs/guides/PHASE3_DAY2_GUIDE.md
+    pr_automation: docs/guides/PR_AUTOMATION_GUIDE.md
+    pr_automation_quick_ref: docs/guides/PR_AUTOMATION_QUICK_REF.md
+    pr_compliance: docs/guides/PR_COMPLIANCE_GUIDE.md
+    projects: docs/guides/PROJECTS_GUIDE.md
+    readme_agents: docs/guides/README.agents.md
+    readme_chatmodes: docs/guides/README.chatmodes.md
+    readme_collections: docs/guides/README.collections.md
+    readme_instructions: docs/guides/README.instructions.md
+    readme_prompts: docs/guides/README.prompts.md
+    repository_best_practices: docs/guides/repository-best-practices.md
+    secret_management: docs/guides/SECRET_MANAGEMENT_GUIDE.md
+    secret_scanning: docs/guides/SECRET_SCANNING_GUIDE.md
+    secrets_setup: docs/guides/SECRETS_SETUP.md
+    security_best_practices: docs/guides/security-best-practices.md
+    slack_integration_configuration: docs/guides/SLACK_INTEGRATION_CONFIGURATION.md
+    slack_integration_training: docs/guides/SLACK_INTEGRATION_TRAINING.md
+    style: docs/guides/STYLE_GUIDE.md
+    testing_best_practices: docs/guides/testing-best-practices.md
+    training_presentation: docs/guides/TRAINING_PRESENTATION.md
+    unified_notification_system: docs/guides/UNIFIED_NOTIFICATION_SYSTEM.md
+    walkthrough_gallery: docs/guides/walkthrough-gallery.md
+    week_10_production_deployment: docs/guides/WEEK_10_PRODUCTION_DEPLOYMENT_GUIDE.md
+    week_11_phase1_manual_deployment: docs/guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md
+    wiki: docs/guides/WIKI_GUIDE.md
+    workflow_diagram: docs/guides/WORKFLOW_DIAGRAM.md
+    workflow_optimization_index: docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md
+    workflow_optimization_visual: docs/guides/WORKFLOW_OPTIMIZATION_VISUAL_SUMMARY.md
+    workflow_quick_ref: docs/guides/WORKFLOW_QUICK_REFERENCE.md
+    workflow_testing: docs/guides/WORKFLOW_TESTING_GUIDE.md
+    workflows: docs/guides/WORKFLOWS.md
+    workspace_quick_start: docs/guides/WORKSPACE_QUICK_START.md
 
   reference:
     agent_registry: docs/reference/AGENT_REGISTRY.md
