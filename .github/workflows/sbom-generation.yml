@@ -47,7 +47,7 @@ jobs:
         upload-artifact: true
 
     - name: Upload SBOM to dependency graph
-      uses: advanced-security/spdx-dependency-submission-action@af889147caa602135830f4848557237a5d9139f7  # ratchet:advanced-security/spdx-dependency-submission-action@v0.1.0
+      uses: advanced-security/spdx-dependency-submission-action@f957edbb35161c1f9e33f61026fc86a671c58cae  # ratchet:advanced-security/spdx-dependency-submission-action@v0.1.2
       with:
         filePath: sbom.spdx.json
 
