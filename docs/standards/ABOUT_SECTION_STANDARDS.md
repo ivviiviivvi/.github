@@ -333,6 +333,7 @@ ______________________________________________________________________
 
 **Version**: 1.0.0\
 **Last Updated**: 2026-01-21\
-**Maintained By**: Organization Governance Team\
+**Maintained By**:
+Organization Governance Team\
 **Questions?**
 [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->

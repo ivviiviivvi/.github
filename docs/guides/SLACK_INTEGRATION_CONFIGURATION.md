@@ -3,7 +3,8 @@
 ## Week 5 - Setup and Testing Instructions
 
 **Last Updated:** February 17, 2026\
-**Status:** Ready for Configuration\
+**Status:** Ready for
+Configuration\
 **Target Deployment:** February 18, 2026
 
 ______________________________________________________________________

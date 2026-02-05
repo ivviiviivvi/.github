@@ -179,10 +179,10 @@ Review for secure coding practices:
 Brief overview of security posture:
 
 - **Overall Risk Level**: Critical / High / Medium / Low
-- **Critical Findings**: [Count]
-- **High Findings**: [Count]
-- **Medium Findings**: [Count]
-- **Low Findings**: [Count]
+- **Critical Findings**: \[Count\]
+- **High Findings**: \[Count\]
+- **Medium Findings**: \[Count\]
+- **Low Findings**: \[Count\]
 
 ### Critical Vulnerabilities
 

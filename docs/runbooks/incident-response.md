@@ -9,10 +9,10 @@ detected by the automated incident response system.
 
 | Level | Description             | Response Time | Examples                             |
 | ----- | ----------------------- | ------------- | ------------------------------------ |
-| P0    | Critical - Service down | < 15 minutes  | Production outage, security breach   |
-| P1    | High - Major impact     | < 1 hour      | Partial outage, data loss risk       |
-| P2    | Medium - Limited impact | < 4 hours     | Feature degradation, minor bugs      |
-| P3    | Low - Minimal impact    | < 24 hours    | Cosmetic issues, minor inconvenience |
+| P0    | Critical - Service down | \< 15 minutes | Production outage, security breach   |
+| P1    | High - Major impact     | \< 1 hour     | Partial outage, data loss risk       |
+| P2    | Medium - Limited impact | \< 4 hours    | Feature degradation, minor bugs      |
+| P3    | Low - Minimal impact    | \< 24 hours   | Cosmetic issues, minor inconvenience |
 
 ## Initial Response Steps
 

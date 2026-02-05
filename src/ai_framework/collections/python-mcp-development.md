@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Python MCP Development description: Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance. tags: [] updated: 2026-01-13
+## name: Python MCP Development description: Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance. tags: \[\] updated: 2026-01-13
 
 # Python MCP Server Development
 

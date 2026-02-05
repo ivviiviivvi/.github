@@ -314,7 +314,7 @@ ______________________________________________________________________
 
 - Reviewer leaves comment: "Must fix the SQL injection vulnerability here"
 - Or: "TODO: Add error handling"
-- Or: "- [ ] Add unit tests for this function"
+- Or: "- \[ \] Add unit tests for this function"
 - PR gets merged without addressing the comment
 - Security issue or tech debt gets lost forever
 

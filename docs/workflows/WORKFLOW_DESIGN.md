@@ -687,19 +687,19 @@ ______________________________________________________________________
 
 #### Issue Metrics
 
-- **Time to Triage**: Target < 48 hours
-- **Time to First Response**: Target < 72 hours
+- **Time to Triage**: Target \< 48 hours
+- **Time to First Response**: Target \< 72 hours
 - **Time to Resolution**: Track by priority
-- **Stale Rate**: Target < 10%
-- **Reopen Rate**: Target < 5%
+- **Stale Rate**: Target \< 10%
+- **Reopen Rate**: Target \< 5%
 
 #### PR Metrics
 
-- **Time to First Review**: Target < 48 hours
+- **Time to First Review**: Target \< 48 hours
 - **Time to Merge**: Track by size
-- **Review Iterations**: Average < 3
+- **Review Iterations**: Average \< 3
 - **CI Success Rate**: Target > 95%
-- **Merge Conflict Rate**: Target < 5%
+- **Merge Conflict Rate**: Target \< 5%
 
 #### Community Metrics
 

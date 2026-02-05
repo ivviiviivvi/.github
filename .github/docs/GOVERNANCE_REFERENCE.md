@@ -161,13 +161,13 @@ Monitor these metrics:
 
 ### SLA Targets
 
-| Metric                 | Target                  |
-| ---------------------- | ----------------------- |
-| Issue response         | < 48 hours              |
-| PR review              | < 72 hours              |
-| Security vulnerability | < 5 days acknowledgment |
-| Stale issue threshold  | 90 days                 |
-| Stale PR threshold     | 30 days                 |
+| Metric                 | Target                   |
+| ---------------------- | ------------------------ |
+| Issue response         | \< 48 hours              |
+| PR review              | \< 72 hours              |
+| Security vulnerability | \< 5 days acknowledgment |
+| Stale issue threshold  | 90 days                  |
+| Stale PR threshold     | 30 days                  |
 
 ______________________________________________________________________
 

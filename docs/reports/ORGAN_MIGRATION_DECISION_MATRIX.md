@@ -1,9 +1,10 @@
 # Organ Migration Decision Matrix
 
 **Date:** January 23, 2026 (Updated with new repos)\
-**Status:** Draft - Awaiting Your Decisions\
-**Purpose:** Visual representation and decision checklist for repository
-redistribution
+**Status:** Draft -
+Awaiting Your Decisions\
+**Purpose:** Visual representation and decision
+checklist for repository redistribution
 
 **📊 UPDATE:** 10 new repositories discovered since Jan 18, 2026
 
@@ -298,7 +299,8 @@ ______________________________________________________________________
 ### 1. **solve-et-coagula** - Theory or Commerce?
 
 **Current:** ivviiviivvi\
-**Description:** Alchemical transformation engine for data synthesis
+**Description:** Alchemical transformation engine for
+data synthesis
 
 **Option A:** Theory (Conceptual Framework)
 
@@ -317,7 +319,8 @@ ______________________________________________________________________
 ### 2. **a-i-council--coliseum** - Art or Commerce?
 
 **Current:** ivviiviivvi\
-**Description:** 24/7 AI agent debate streaming platform
+**Description:** 24/7 AI agent debate streaming
+platform
 
 **Option A:** Art (Performance)
 
@@ -355,7 +358,8 @@ ______________________________________________________________________
 ### 4. **supercollider/quarks** - Connect to omni-dromenon-machina?
 
 **Current:** ivviiviivvi (forks)\
-**Question:** Do these audio tools integrate with omni's audio-synthesis-bridge?
+**Question:** Do these audio tools integrate
+with omni's audio-synthesis-bridge?
 
 **Option A:** Move to omni
 
@@ -373,7 +377,8 @@ ______________________________________________________________________
 ### 5. **life-my--midst--in** - What is this?
 
 **Current:** 4444J99 (Personal)\
-**Status:** Updated Jan 20, 2026 (was Jan 18)\
+**Status:** Updated Jan 20, 2026 (was Jan
+18)\
 **Size:** 2.9 MB (+400 KB growth since Jan 18!)
 
 **Need to know:**
@@ -393,7 +398,8 @@ ______________________________________________________________________
 
 **Current:** 4444J99 (Personal)\
 **Created:** Jan 19, 2026\
-**Size:** 224 KB\
+**Size:** 224
+KB\
 **Description:** "Polymorphic Agent Swarm Architecture - Model-agnostic,
 self-organizing multi-agent system"
 
@@ -417,9 +423,10 @@ ______________________________________________________________________
 
 **Current:** 4444J99 (Personal)\
 **Created:** Jan 22, 2026\
-**Size:** 452 KB\
-**Description:** "RE:GE - Recursive Engine: Generative Entity - A symbolic OS
-for myth, identity, ritual, and recursive systems"
+**Size:** 452
+KB\
+**Description:** "RE:GE - Recursive Engine: Generative Entity - A symbolic
+OS for myth, identity, ritual, and recursive systems"
 
 **Option A:** Theory (ivviiviivvi)
 
@@ -446,7 +453,8 @@ ______________________________________________________________________
 
 **Current:** 4444J99 (Personal)\
 **Created:** Jan 20, 2026\
-**Size:** 34.1 MB (LARGEST NEW REPO!)\
+**Size:** 34.1 MB
+(LARGEST NEW REPO!)\
 **Description:** None yet
 
 **Need to know:**
@@ -472,7 +480,8 @@ ______________________________________________________________________
 
 **Current:** 4444J99 (Personal)\
 **Created:** Jan 20, 2026\
-**Size:** 123 KB\
+**Size:** 123
+KB\
 **Description:** None yet
 
 **Need to know:**

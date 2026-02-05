@@ -1,7 +1,8 @@
 # GitHub Projects Deployment Checklist
 
 **Date Created:** January 18, 2026\
-**Status:** Ready for Deployment\
+**Status:** Ready for
+Deployment\
 **Estimated Time:** 2-3 hours
 
 ______________________________________________________________________
@@ -90,7 +91,8 @@ ______________________________________________________________________
   ```
 
 **If dry run succeeds:** ✅ Proceed to Phase 2\
-**If dry run fails:** ❌ Review errors, fix issues, retry
+**If dry run fails:** ❌ Review
+errors, fix issues, retry
 
 ______________________________________________________________________
 
@@ -173,7 +175,8 @@ ______________________________________________________________________
   - [ ] Check: Colors are applied
 
 **If creation succeeds:** ✅ Proceed to Phase 3\
-**If creation fails:** ❌ Check logs, fix issues, retry failed projects
+**If creation fails:** ❌ Check
+logs, fix issues, retry failed projects
 
 ______________________________________________________________________
 
@@ -240,13 +243,13 @@ ______________________________________________________________________
 
 - [ ] **Table: Needs Attention**
 
-  - [ ] Filter: Status = Needs Update OR Next Review Date < Today
+  - [ ] Filter: Status = Needs Update OR Next Review Date \< Today
   - [ ] Sort: Priority, Next Review Date
 
 - [ ] **Board: Quick Wins**
 
   - [ ] Filter: Completeness IN (Draft, Outline Only)
-  - [ ] Filter: Word Count < 500
+  - [ ] Filter: Word Count \< 500
 
 - [ ] **Table: By Category**
 
@@ -273,7 +276,7 @@ ______________________________________________________________________
 
 - [ ] **Table: Needs Attention**
 
-  - [ ] Filter: Success Rate < 80
+  - [ ] Filter: Success Rate \< 80
   - [ ] Sort: Priority
 
 - [ ] **Board: Deployment Workflows**
@@ -312,7 +315,7 @@ ______________________________________________________________________
 
 - [ ] **Table: SLA Dashboard**
 
-  - [ ] Filter: SLA Status != Within SLA OR Resolution Target < +7 days
+  - [ ] Filter: SLA Status != Within SLA OR Resolution Target \< +7 days
   - [ ] Visible columns: Title, Severity, Resolution Target, SLA Status, Days
     Remaining
   - [ ] Sort: Resolution Target
@@ -437,7 +440,8 @@ ______________________________________________________________________
   - [ ] Visible columns: Title, Initiative Type, Status, Effort, Quarter
 
 **If view creation succeeds:** ✅ Proceed to Phase 4\
-**If view creation fails:** ❌ Create views manually, note issues
+**If view creation fails:**
+❌ Create views manually, note issues
 
 ______________________________________________________________________
 
@@ -481,7 +485,8 @@ available via API yet.
 - [ ] Flag slow response times
 
 **If automation setup succeeds:** ✅ Proceed to Phase 5\
-**If automation fails:** ❌ Set up manually, document issues
+**If automation fails:**
+❌ Set up manually, document issues
 
 ______________________________________________________________________
 
@@ -526,7 +531,8 @@ ______________________________________________________________________
   - [ ] Verify project updates
 
 **If integration succeeds:** ✅ Proceed to Phase 6\
-**If integration fails:** ❌ Debug workflow, check permissions
+**If integration fails:** ❌
+Debug workflow, check permissions
 
 ______________________________________________________________________
 
@@ -562,7 +568,8 @@ ______________________________________________________________________
   - [ ] No errors in browser console
 
 **If testing succeeds:** ✅ Proceed to Phase 7\
-**If testing fails:** ❌ Fix issues, retest
+**If testing fails:** ❌ Fix
+issues, retest
 
 ______________________________________________________________________
 
@@ -597,7 +604,8 @@ ______________________________________________________________________
   - [ ] Collect improvement suggestions
 
 **If rollout succeeds:** ✅ Proceed to Phase 8\
-**If rollout has issues:** ❌ Address concerns, provide additional support
+**If rollout has issues:** ❌
+Address concerns, provide additional support
 
 ______________________________________________________________________
 
@@ -638,7 +646,8 @@ ______________________________________________________________________
   - [ ] Verify data accuracy
 
 **If migration succeeds:** ✅ Proceed to Phase 9\
-**If migration incomplete:** ❌ Continue migration, fix data issues
+**If migration incomplete:** ❌
+Continue migration, fix data issues
 
 ______________________________________________________________________
 
@@ -671,7 +680,8 @@ ______________________________________________________________________
   - [ ] Update screenshots and examples
 
 **If documentation complete:** ✅ Proceed to Phase 10\
-**If documentation incomplete:** ❌ Finish documentation
+**If documentation
+incomplete:** ❌ Finish documentation
 
 ______________________________________________________________________
 
@@ -734,7 +744,7 @@ ______________________________________________________________________
 ### Long-term Success (Quarter 1)
 
 - [ ] 95%+ of work tracked in projects
-- [ ] Average cycle time < 7 days
+- [ ] Average cycle time \< 7 days
 - [ ] 80%+ items completed on time
 - [ ] Full team adoption
 - [ ] Projects central to workflow
@@ -812,8 +822,10 @@ Before marking deployment complete, verify:
 **Deployment Status:** ⬜ Not Started | ⬜ In Progress | ⬜ Complete
 
 **Deployed by:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
-**Date:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
-**Time spent:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+**Date:**
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
+**Time spent:**
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ______________________________________________________________________
 

@@ -377,4 +377,5 @@ ______________________________________________________________________
 
 **Last Updated:** 2025-12-23\
 **Workflow Version:** 1.0.0\
-**Maintained by:** Organization Automation Team
+**Maintained by:**
+Organization Automation Team

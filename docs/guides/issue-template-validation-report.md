@@ -1,8 +1,9 @@
 # Issue Template Validation Report
 
 **Date:** 2026-01-15\
-**Validator:** [To be completed]\
-**Repository:** ivviiviivvi/.github\
+**Validator:** \[To be completed\]\
+**Repository:**
+ivviiviivvi/.github\
 **Templates Tested:** 17
 
 ______________________________________________________________________
@@ -157,10 +158,12 @@ ______________________________________________________________________
 ## Sign-off
 
 **Validation Completed By:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
-**Date:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+**Date:**
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 **Review Approved By:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
-**Date:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+**Date:**
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 **Status:**
 

@@ -30,7 +30,7 @@ new or existing functionality. tools:
 
 ______________________________________________________________________
 
-## title: [Concise Title Describing the Specification's Focus] version: [Optional: e.g., 1.0, Date] date_created: [YYYY-MM-DD] last_updated: [Optional: YYYY-MM-DD] owner: [Optional: Team/Individual responsible for this spec] tags: \[Optional: List of relevant tags or categories, e.g., `infrastructure`, `process`, `design`, `app` etc\]
+## title: \[Concise Title Describing the Specification's Focus\] version: \[Optional: e.g., 1.0, Date\] date_created: \[YYYY-MM-DD\] last_updated: \[Optional: YYYY-MM-DD\] owner: \[Optional: Team/Individual responsible for this spec\] tags: \[Optional: List of relevant tags or categories, e.g., `infrastructure`, `process`, `design`, `app` etc\]
 
 # Introduction
 
@@ -54,7 +54,7 @@ bullet points or tables for clarity.\]
 
 - **REQ-001**: Requirement 1
 - **SEC-001**: Security Requirement 1
-- **[3 LETTERS]-001**: Other Requirement 1
+- **\[3 LETTERS\]-001**: Other Requirement 1
 - **CON-001**: Constraint 1
 - **GUD-001**: Guideline 1
 - **PAT-001**: Pattern to follow 1
@@ -69,20 +69,20 @@ tables or code blocks for schemas and examples.\]
 \[Define clear, testable acceptance criteria for each requirement using
 Given-When-Then format where appropriate.\]
 
-- **AC-001**: Given [context], When [action], Then [expected outcome]
-- **AC-002**: The system shall [specific behavior] when [condition]
-- **AC-003**: [Additional acceptance criteria as needed]
+- **AC-001**: Given \[context\], When \[action\], Then \[expected outcome\]
+- **AC-002**: The system shall \[specific behavior\] when \[condition\]
+- **AC-003**: \[Additional acceptance criteria as needed\]
 
 ## 6. Test Automation Strategy
 
-[Define the testing approach, frameworks, and automation requirements.]
+\[Define the testing approach, frameworks, and automation requirements.\]
 
 - **Test Levels**: Unit, Integration, End-to-End
 - **Frameworks**: MSTest, FluentAssertions, Moq (for .NET applications)
-- **Test Data Management**: [approach for test data creation and cleanup]
-- **CI/CD Integration**: [automated testing in GitHub Actions pipelines]
-- **Coverage Requirements**: [minimum code coverage thresholds]
-- **Performance Testing**: [approach for load and performance testing]
+- **Test Data Management**: \[approach for test data creation and cleanup\]
+- **CI/CD Integration**: \[automated testing in GitHub Actions pipelines\]
+- **Coverage Requirements**: \[minimum code coverage thresholds\]
+- **Performance Testing**: \[approach for load and performance testing\]
 
 ## 7. Rationale & Context
 
@@ -98,29 +98,29 @@ architectural constraints.\]
 
 ### External Systems
 
-- **EXT-001**: [External system name] - [Purpose and integration type]
+- **EXT-001**: \[External system name\] - \[Purpose and integration type\]
 
 ### Third-Party Services
 
-- **SVC-001**: [Service name] - [Required capabilities and SLA requirements]
+- **SVC-001**: \[Service name\] - \[Required capabilities and SLA requirements\]
 
 ### Infrastructure Dependencies
 
-- **INF-001**: [Infrastructure component] - [Requirements and constraints]
+- **INF-001**: \[Infrastructure component\] - \[Requirements and constraints\]
 
 ### Data Dependencies
 
-- **DAT-001**: [External data source] - \[Format, frequency, and access
+- **DAT-001**: \[External data source\] - \[Format, frequency, and access
   requirements\]
 
 ### Technology Platform Dependencies
 
-- **PLT-001**: [Platform/runtime requirement] - \[Version constraints and
+- **PLT-001**: \[Platform/runtime requirement\] - \[Version constraints and
   rationale\]
 
 ### Compliance Dependencies
 
-- **COM-001**: [Regulatory or compliance requirement] - \[Impact on
+- **COM-001**: \[Regulatory or compliance requirement\] - \[Impact on
   implementation\]
 
 **Note**: This section should focus on architectural and business dependencies,

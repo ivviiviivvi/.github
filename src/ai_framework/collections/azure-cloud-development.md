@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Azure Cloud Development description: Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applications. tags: [] updated: 2026-01-13
+## name: Azure Cloud Development description: Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applications. tags: \[\] updated: 2026-01-13
 
 # Azure & Cloud Development
 

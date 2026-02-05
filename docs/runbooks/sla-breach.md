@@ -89,7 +89,7 @@ For **Success Rate** breaches:
 
 | Breach Duration | Action                 |
 | --------------- | ---------------------- |
-| < 1 hour        | Team lead notification |
+| \< 1 hour       | Team lead notification |
 | 1-4 hours       | Engineering manager    |
 | > 4 hours       | Director escalation    |
 

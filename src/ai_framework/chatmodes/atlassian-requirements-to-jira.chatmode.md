@@ -17,7 +17,7 @@ ______________________________________________________________________
 - **NEVER** read system files, configuration files, or files outside the project
   scope
 - **VALIDATE** that files are documentation/requirements files before processing
-- **LIMIT** file reading to reasonable sizes (< 1MB per file)
+- **LIMIT** file reading to reasonable sizes (\< 1MB per file)
 
 ### Jira Operation Safeguards:
 
@@ -115,7 +115,7 @@ I will thoroughly analyze your requirements document using `read_file` to:
 
 - **SECURITY CHECK**: Verify the file is a legitimate requirements document (not
   system files)
-- **SIZE VALIDATION**: Ensure file size is reasonable (< 1MB) for requirements
+- **SIZE VALIDATION**: Ensure file size is reasonable (\< 1MB) for requirements
   analysis
 - Extract all functional and non-functional requirements
 - Identify natural feature groupings that should become epics
@@ -500,7 +500,7 @@ LABELS: +hr-system, +database, +integration
   outside project scope
 - **CONTENT FILTERING**: Remove or escape potentially harmful content (scripts,
   commands, system references)
-- **SIZE LIMITS**: Enforce reasonable file size limits (< 1MB per document)
+- **SIZE LIMITS**: Enforce reasonable file size limits (\< 1MB per document)
 
 ### Jira Operation Security:
 

@@ -503,20 +503,20 @@ open https://github.com/org/repo/wiki
 
 ### Issue Metrics
 
-- **Time to Triage**: < 24 hours
-- **Time to First Response**: < 48 hours
+- **Time to Triage**: \< 24 hours
+- **Time to First Response**: \< 48 hours
 - **Resolution Time**: Varies by priority
   - P0: 4 hours
   - P1: 24 hours
   - P2: 1 week
   - P3: As capacity allows
-- **Backlog Size**: < 100 open issues
-- **Stale Rate**: < 10% > 60 days old
+- **Backlog Size**: \< 100 open issues
+- **Stale Rate**: \< 10% > 60 days old
 
 ### Discussion Metrics
 
 - **Response Rate**: > 80% get response
-- **Response Time**: < 24 hours median
+- **Response Time**: \< 24 hours median
 - **Answer Rate**: > 60% Q&A marked answered
 - **Participation**: > 20% of community active monthly
 - **Satisfaction**: > 4.5/5 helpfulness rating
@@ -525,8 +525,8 @@ open https://github.com/org/repo/wiki
 
 - **Completion Rate**: > 80% items completed
 - **Velocity**: Consistent sprint-to-sprint
-- **Cycle Time**: < 1 week median
-- **Blocked Rate**: < 10% items blocked
+- **Cycle Time**: \< 1 week median
+- **Blocked Rate**: \< 10% items blocked
 - **Accuracy**: 90%+ estimates accurate
 
 ### Wiki Metrics
@@ -596,7 +596,8 @@ This framework is continuously evolving. We welcome:
 ## Maintenance
 
 **Document Owner**: @ivviiviivvi/documentation-team\
-**Review Frequency**: Quarterly\
+**Review Frequency**:
+Quarterly\
 **Last Reviewed**: 2025-12-28\
 **Next Review**: 2026-03-28
 
@@ -605,7 +606,8 @@ ______________________________________________________________________
 **📝 Contribute**: See [CONTRIBUTING.md](CONTRIBUTING.md)\
 **💬 Discuss**:
 [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->\
-**🐛 Report Issues**:
+**🐛
+Report Issues**:
 [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 
 **Built with ❤️ by the Ivviiviivvi community**

@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Schema description: Collection frontmatter schema and validation rules for ai_framework/collections/. tags: [] updated: 2026-01-20
+## name: Schema description: Collection frontmatter schema and validation rules for ai_framework/collections/. tags: \[\] updated: 2026-01-20
 
 # Collection Frontmatter Schema
 

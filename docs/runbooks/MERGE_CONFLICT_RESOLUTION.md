@@ -1,7 +1,8 @@
 # Merge Conflict Resolution for PR #82
 
 **Date:** 2025-12-22\
-**PR:** https://github.com/ivviiviivvi/.github/pull/82\
+**PR:**
+https://github.com/ivviiviivvi/.github/pull/82\
 **Status:** ✅ Resolved
 
 ## Problem
@@ -162,5 +163,6 @@ The resolved versions of all 4 files are available on the
 ______________________________________________________________________
 
 **Resolution by:** GitHub Copilot Coding Agent\
-**Branch:** copilot/resolve-merge-conflicts\
-**Commit:** [see latest commit]
+**Branch:**
+copilot/resolve-merge-conflicts\
+**Commit:** \[see latest commit\]

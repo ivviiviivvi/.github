@@ -932,5 +932,5 @@ and manage security vulnerabilities by autonomously analysing traces, logs, and
 Dynatrace findings. This enables targeted and precise remediation of identified
 issues directly within the repository. mcp-servers: dynatrace: type: 'http' url:
 'https://pia1134d.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp'
-headers: {"Authorization": "Bearer $COPILOT_MCP_DT_API_TOKEN"} tools: ["\*"]
+headers: {"Authorization": "Bearer $COPILOT_MCP_DT_API_TOKEN"} tools: \["\*"\]
 agent to assess the task and propose next steps."

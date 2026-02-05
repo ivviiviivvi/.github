@@ -542,4 +542,5 @@ ______________________________________________________________________
 
 **Version**: 1.0\
 **Last Updated**: 2025-12-23\
-**Feedback**: Open an issue or PR to improve this guide!
+**Feedback**: Open an issue or
+PR to improve this guide!

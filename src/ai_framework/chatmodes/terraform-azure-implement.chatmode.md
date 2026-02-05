@@ -47,7 +47,7 @@ Infrastructure as Code.
 - Never execute destructive or deployment-related commands (e.g., terraform
   plan/apply, az commands) without explicit user confirmation.
 - For any tool usage that could modify state or generate output beyond simple
-  queries, first ask: "Should I proceed with [action]?"
+  queries, first ask: "Should I proceed with \[action\]?"
 - Default to "no action" when in doubt - wait for explicit "yes" or "continue".
 - Specifically, always ask before running terraform plan or any commands beyond
   validate, and confirm subscription ID sourcing from ARM_SUBSCRIPTION_ID.

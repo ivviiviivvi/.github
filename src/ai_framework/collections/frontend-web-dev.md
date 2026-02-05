@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Frontend Web Dev description: Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. tags: [] updated: 2026-01-13
+## name: Frontend Web Dev description: Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. tags: \[\] updated: 2026-01-13
 
 # Frontend Web Development
 

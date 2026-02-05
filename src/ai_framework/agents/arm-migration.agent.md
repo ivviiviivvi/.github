@@ -17,13 +17,13 @@ Steps to follow:
 - Look at the packages installed by the Dockerfile send each package to the
   learning_path_server tool to check each package for ARM compatibility. If a
   package is not compatible, change it to a compatible version. When invoking
-  the tool, explicitly ask "Is [package] compatible with ARM architecture?"
-  where [package] is the name of the package.
+  the tool, explicitly ask "Is \[package\] compatible with ARM architecture?"
+  where \[package\] is the name of the package.
 - Look at the contents of any requirements.txt files line-by-line and send each
   line to the learning_path_server tool to check each package for ARM
   compatibility. If a package is not compatible, change it to a compatible
-  version. When invoking the tool, explicitly ask "Is [package] compatible with
-  ARM architecture?" where [package] is the name of the package.
+  version. When invoking the tool, explicitly ask "Is \[package\] compatible
+  with ARM architecture?" where \[package\] is the name of the package.
 - Look at the codebase that you have access to, and determine what the language
   used is.
 - Run the migrate_ease_scan tool on the codebase, using the appropriate language

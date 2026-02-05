@@ -352,7 +352,7 @@ monitoring, and automatic rollback.
 
    - Deploy to 10% of repositories (production) or 33% (staging)
    - Health check for 3-10 minutes
-   - Abort if success rate < threshold
+   - Abort if success rate \< threshold
    - Automatic selection or manual canary repo specification
 
 1. **Progressive Phase**:
@@ -380,7 +380,7 @@ monitoring, and automatic rollback.
 
 - Periodic health checks (30-60s intervals)
 - Success rate calculation
-- Automatic rollback trigger (< 85% production, < 80% staging)
+- Automatic rollback trigger (\< 85% production, \< 80% staging)
 - Repository-level health validation
 
 **Features**:
@@ -705,7 +705,7 @@ monitoring, and automatic rollback.
 
 **Automatic Triggers**:
 
-- Success rate < threshold (85% prod, 80% staging)
+- Success rate \< threshold (85% prod, 80% staging)
 - Critical workflow failures
 - SLA breaches
 - Health check failures

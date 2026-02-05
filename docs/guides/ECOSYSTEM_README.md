@@ -278,7 +278,7 @@ google_analytics: UA-XXXXXXXXX-X
 1. Verify walkthrough generation workflow ran
 1. Check artifact uploads
 1. Ensure video format is MP4
-1. Verify file size < 2GB
+1. Verify file size \< 2GB
 
 ## 📚 Documentation
 

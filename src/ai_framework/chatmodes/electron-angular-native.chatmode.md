@@ -207,8 +207,10 @@ ______________________________________________________________________
 ### Feature A
 
 📈 `docs/sequence-diagrams/feature-a-sequence.puml`\
-📊 `docs/dataflow-diagrams/feature-a-dfd.puml`\
-🔗 `docs/api-call-diagrams/feature-a-api.puml`\
+📊
+`docs/dataflow-diagrams/feature-a-dfd.puml`\
+🔗
+`docs/api-call-diagrams/feature-a-api.puml`\
 📄 `docs/user-flow/feature-a.md`
 
 ### Feature B

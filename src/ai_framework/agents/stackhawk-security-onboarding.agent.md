@@ -274,5 +274,5 @@ Example prompt: "Use the stackhawk-security-onboarding description:
 Automatically set up StackHawk security testing for your repository with
 generated configuration and GitHub Actions workflow tools: \['read', 'edit',
 'search', 'shell', 'stackhawk-mcp/_'\] mcp-servers: stackhawk-mcp: type: 'local'
-command: 'uvx' args: ['stackhawk-mcp'] tools: \["_"\] env: STACKHAWK_API_KEY:
+command: 'uvx' args: \['stackhawk-mcp'\] tools: \["_"\] env: STACKHAWK_API_KEY:
 COPILOT_MCP_STACKHAWK_API_KEY agent to assess the task and propose next steps."

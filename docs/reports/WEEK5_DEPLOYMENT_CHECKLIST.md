@@ -3,7 +3,8 @@
 ## Slack Integration - Production Rollout
 
 **Target Deployment:** February 18, 2026, 2:30 PM UTC\
-**Owner:** Workflow Team\
+**Owner:** Workflow
+Team\
 **Status:** Ready for Execution
 
 ______________________________________________________________________
@@ -467,7 +468,7 @@ If critical issues arise within first 24 hours:
 1. **Announce Rollback:**
 
    - Post in #workflow-alerts: "Slack integration temporarily disabled due to
-     [issue]. Investigating."
+     \[issue\]. Investigating."
    - Update team via email if critical
 
 1. **Investigate Issue:**
@@ -501,13 +502,13 @@ ______________________________________________________________________
 **During Deployment (Feb 18, 2:00-5:00 PM UTC):**
 
 - Primary: @workflow-team (Slack)
-- Secondary: [Email/Phone]
-- Emergency: [Emergency contact]
+- Secondary: \[Email/Phone\]
+- Emergency: \[Emergency contact\]
 
 **After Hours (First Week):**
 
-- On-Call: [Rotation schedule]
-- Escalation: [Manager contact]
+- On-Call: \[Rotation schedule\]
+- Escalation: \[Manager contact\]
 
 **Critical Issues:**
 

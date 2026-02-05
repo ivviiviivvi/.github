@@ -83,16 +83,16 @@ See [LICENSE](LICENSE) EOF
 
 # Create LICENSE if missing (MIT example)
 
-[ -f LICENSE ] || cat > LICENSE \<< 'EOF' MIT License
+\[ -f LICENSE \] || cat > LICENSE \<\< 'EOF' MIT License
 
-Copyright (c) 2026 [Organization]
+Copyright (c) 2026 \[Organization\]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy...
 EOF
 
 # Create .gitignore if missing
 
-[ -f .gitignore ] || cat > .gitignore \<< 'EOF'
+\[ -f .gitignore \] || cat > .gitignore \<\< 'EOF'
 
 # Build artifacts
 

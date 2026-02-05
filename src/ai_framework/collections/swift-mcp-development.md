@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Swift MCP Development description: Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features. tags: [] updated: 2026-01-13
+## name: Swift MCP Development description: Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features. tags: \[\] updated: 2026-01-13
 
 # Swift MCP Server Development
 

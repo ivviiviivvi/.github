@@ -368,4 +368,5 @@ Track these issue metrics:
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi organization maintainers
+**Maintained By**: @ivviiviivvi organization
+maintainers

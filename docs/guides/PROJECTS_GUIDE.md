@@ -41,7 +41,8 @@ GitHub Projects (v2) provides flexible, powerful project management with:
 ### 1. 🚀 Product Roadmap
 
 **Purpose**: Track features and releases across quarters\
-**Views**: Roadmap, By Quarter, By Status\
+**Views**: Roadmap, By
+Quarter, By Status\
 **Duration**: 6-12 months
 
 **Custom Fields:**
@@ -70,7 +71,8 @@ Backlog → Planned → In Progress → In Review → Shipped
 ### 2. 🐛 Bug Triage & Resolution
 
 **Purpose**: Track and prioritize bug fixes\
-**Views**: By Priority, By Component, By Age\
+**Views**: By Priority, By
+Component, By Age\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -103,7 +105,8 @@ New → Triaged → Investigating → Fixing → Testing → Resolved
 ### 3. 📋 Sprint Planning
 
 **Purpose**: Manage 2-week development sprints\
-**Views**: Current Sprint, By Assignee, Velocity Chart\
+**Views**: Current Sprint, By
+Assignee, Velocity Chart\
 **Duration**: 2 weeks
 
 **Custom Fields:**
@@ -133,7 +136,8 @@ Backlog → Sprint Planning → Current Sprint → Completed
 ### 4. 🏗️ Infrastructure & DevOps
 
 **Purpose**: Track infrastructure work and incidents\
-**Views**: By Environment, By Service, Incident Board\
+**Views**: By Environment,
+By Service, Incident Board\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -164,7 +168,8 @@ Detected → Investigating → Mitigating → Resolved → Post-Mortem
 ### 5. 🎓 Onboarding & Training
 
 **Purpose**: Track new contributor onboarding\
-**Views**: By Phase, By Mentee, By Skill\
+**Views**: By Phase, By Mentee,
+By Skill\
 **Duration**: Per cohort
 
 **Custom Fields:**
@@ -195,7 +200,8 @@ Pre-Arrival → Week 1 → Week 2 → Week 3 → Week 4 → Alumni
 ### 6. 📚 Documentation Improvement
 
 **Purpose**: Track documentation gaps and improvements\
-**Views**: By Doc Type, By Priority, By Audience\
+**Views**: By Doc Type,
+By Priority, By Audience\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -226,7 +232,8 @@ Identified → Writing → Review → Published → Maintenance
 ### 7. 🔒 Security & Compliance
 
 **Purpose**: Track security work and compliance requirements\
-**Views**: By Severity, By Compliance Area, Remediation Timeline\
+**Views**: By
+Severity, By Compliance Area, Remediation Timeline\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -258,7 +265,8 @@ New → Assessed → Scheduled → In Progress → Verification → Closed
 ### 8. 🌟 Community Engagement
 
 **Purpose**: Track community initiatives and contributions\
-**Views**: By Initiative, By Contributor, By Status\
+**Views**: By
+Initiative, By Contributor, By Status\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -290,7 +298,8 @@ Ideas → Planning → Execution → Follow-up → Retrospective
 ### 9. ⚡ Performance Optimization
 
 **Purpose**: Track performance improvements and benchmarks\
-**Views**: By Impact, By Component, Timeline\
+**Views**: By
+Impact, By Component, Timeline\
 **Duration**: Quarterly
 
 **Custom Fields:**
@@ -320,7 +329,8 @@ Baseline → Analysis → Implementation → Validation → Deployed
 ### 10. 🎨 Design System
 
 **Purpose**: Track design system components and tokens\
-**Views**: By Component Type, By Status, Adoption View\
+**Views**: By Component
+Type, By Status, Adoption View\
 **Duration**: Ongoing
 
 **Custom Fields:**
@@ -852,4 +862,5 @@ query OrgProjects {
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi project management team
+**Maintained By**: @ivviiviivvi project management
+team

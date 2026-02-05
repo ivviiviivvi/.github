@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Readme description: Collection for Readme. tags: [] updated: 2026-01-20
+## name: Readme description: Collection for Readme. tags: \[\] updated: 2026-01-20
 
 # Collections
 

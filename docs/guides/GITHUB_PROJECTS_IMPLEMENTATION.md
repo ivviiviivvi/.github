@@ -4,7 +4,8 @@
 > organization**
 
 **Last Updated:** January 18, 2026\
-**Status:** Ready for Implementation\
+**Status:** Ready for
+Implementation\
 **Owner:** Organization Administrators
 
 ______________________________________________________________________
@@ -457,7 +458,7 @@ fields:
 
 - Status = Needs Update OR
 - Needs Review != None OR
-- Next Review Date < Today
+- Next Review Date \< Today
 
 **Sort:** Priority, then Next Review Date
 
@@ -468,7 +469,7 @@ fields:
 **Filter:**
 
 - Completeness = Draft OR Outline Only
-- Word Count < 500
+- Word Count \< 500
 
 **Sort:** Priority
 
@@ -674,7 +675,7 @@ fields:
 
 **Filter:**
 
-- Success Rate < 80 OR
+- Success Rate \< 80 OR
 - Status = Testing for > 7 days
 
 **Sort:** Priority
@@ -910,7 +911,7 @@ fields:
 - Status
 - Assigned To
 
-**Filter:** SLA Status != Within SLA OR Resolution Target < +7 days
+**Filter:** SLA Status != Within SLA OR Resolution Target \< +7 days
 
 **Sort:** Resolution Target
 

@@ -874,10 +874,10 @@ except Exception as e:
 
 **Targets**:
 
-- Routing algorithm: < 100ms per assignment
-- Analytics prediction: < 500ms per prediction
-- SLA check: < 2s for 24h window
-- Maintenance scheduling: < 5s for 7-day window
+- Routing algorithm: \< 100ms per assignment
+- Analytics prediction: \< 500ms per prediction
+- SLA check: \< 2s for 24h window
+- Maintenance scheduling: \< 5s for 7-day window
 
 **Framework**: pytest-benchmark
 
@@ -940,7 +940,7 @@ except Exception as e:
 - Documentation coverage: 100% of public APIs
 - Code review: All code reviewed by senior engineer
 - Security scan: Zero high/critical vulnerabilities
-- Performance: All API calls < 2s
+- Performance: All API calls \< 2s
 
 ## Next Steps
 

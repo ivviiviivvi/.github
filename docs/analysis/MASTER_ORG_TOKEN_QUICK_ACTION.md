@@ -2,7 +2,8 @@
 
 **Issue ID:** master-org-token-011726\
 **Date:** January 18, 2026\
-**Status:** 🔴 **Action Required**\
+**Status:** 🔴
+**Action Required**\
 **Priority:** 🔥 **Critical**
 
 ______________________________________________________________________
@@ -189,7 +190,7 @@ ______________________________________________________________________
 
 ### Operations ✅
 
-- [ ] Token rotation time: < 10 minutes (currently: hours)
+- [ ] Token rotation time: \< 10 minutes (currently: hours)
 - [ ] Automated health checks: Daily
 - [ ] Zero downtime during rotation
 - [ ] Emergency procedures documented and tested
@@ -197,8 +198,8 @@ ______________________________________________________________________
 ### Developer Experience ✅
 
 - [ ] Clear documentation: TOKEN_REGISTRY.md
-- [ ] Token selection: < 1 minute to determine correct token
-- [ ] Onboarding time: < 15 minutes to understand system
+- [ ] Token selection: \< 1 minute to determine correct token
+- [ ] Onboarding time: \< 15 minutes to understand system
 - [ ] Self-service: Developers can troubleshoot independently
 
 ______________________________________________________________________
@@ -219,4 +220,5 @@ ______________________________________________________________________
 
 _Document created: 2026-01-18_\
 _Last updated: 2026-01-18_\
-_Owner: Security Team_
+_Owner: Security
+Team_

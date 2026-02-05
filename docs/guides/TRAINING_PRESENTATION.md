@@ -4,7 +4,8 @@
 
 **Date:** January 16, 2026\
 **Duration:** 60 minutes\
-**Audience:** Maintainers and Core Contributors\
+**Audience:** Maintainers
+and Core Contributors\
 **Format:** Interactive with live demos
 
 ______________________________________________________________________
@@ -512,9 +513,11 @@ ______________________________________________________________________
 ### Key Takeaways
 
 ✅ Five workflows automate issue/PR management\
-✅ Label taxonomy drives workflow behavior\
+✅ Label taxonomy drives workflow
+behavior\
 ✅ Manual intervention always possible\
-✅ Monitoring via Actions tab and metrics\
+✅ Monitoring via Actions tab
+and metrics\
 ✅ Documentation available for reference
 
 ### Next Steps
@@ -531,6 +534,8 @@ Questions? Let's discuss now or in GitHub Discussions.
 ______________________________________________________________________
 
 **Training Session:** Workflow System Operations\
-**Recorded:** January 16, 2026\
+**Recorded:** January 16,
+2026\
 **Instructor:** Workflow Automation Team\
-**Next Session:** TBD (based on team feedback)
+**Next Session:** TBD (based on
+team feedback)

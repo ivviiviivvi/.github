@@ -4,7 +4,8 @@
 
 **Date:** February 17, 2026\
 **Duration:** 15 minutes\
-**Audience:** All team members\
+**Audience:** All team
+members\
 **Format:** Live demo + hands-on
 
 ______________________________________________________________________
@@ -341,7 +342,7 @@ I'll now trigger a test notification. Your task:
 
 **Ready? Here we go!**
 
-_[Instructor triggers test notification]_
+_\[Instructor triggers test notification\]_
 
 **Debrief Questions:**
 
@@ -357,31 +358,34 @@ ______________________________________________________________________
 ### Common Questions
 
 **Q: Will I be overwhelmed with notifications?**\
-A: No! P3 (routine) notifications don't go to Slack, and we've tuned thresholds
-to minimize false positives. Average: 2-3 notifications per day.
+A: No! P3 (routine)
+notifications don't go to Slack, and we've tuned thresholds to minimize false
+positives. Average: 2-3 notifications per day.
 
 **Q: Can I mute notifications?**\
-A: You can mute #workflow-alerts if needed, but we recommend at least keeping it
-unmuted during work hours. Critical P0 alerts are rare (1-2 per month).
+A: You can mute #workflow-alerts if needed,
+but we recommend at least keeping it unmuted during work hours. Critical P0
+alerts are rare (1-2 per month).
 
 **Q: What if I miss a notification?**\
-A: All notifications are in Slack history, and the daily summary at 9 AM UTC
-recaps everything. Also available in GitHub Actions dashboard.
+A: All notifications are in Slack
+history, and the daily summary at 9 AM UTC recaps everything. Also available in
+GitHub Actions dashboard.
 
 **Q: How do I customize notification preferences?**\
-A: Slack channel notification settings allow per-channel customization. We
-recommend:
+A: Slack channel
+notification settings allow per-channel customization. We recommend:
 
 - #workflow-alerts: All messages
 - #workflow-metrics: Mentions only (or mute)
 
 **Q: Who responds to P0 alerts?**\
-A: On-call rotation (see CODEOWNERS). But `@channel` means everyone sees it for
-awareness.
+A: On-call rotation (see CODEOWNERS). But
+`@channel` means everyone sees it for awareness.
 
 **Q: What if notification is wrong/noisy?**\
-A: Report in #workflow-alerts thread with "false positive" tag. We'll tune
-thresholds weekly.
+A: Report in #workflow-alerts
+thread with "false positive" tag. We'll tune thresholds weekly.
 
 ### Resources
 

@@ -122,20 +122,20 @@ Evaluate the bug's impact:
 
 #### Business Impact
 
-| Dimension      | Impact Level         | Description             |
-| -------------- | -------------------- | ----------------------- |
-| Revenue        | None/Low/Medium/High | [Financial impact]      |
-| Users Affected | Count/Percentage     | [Scope of impact]       |
-| Data Integrity | None/Low/Medium/High | [Data corruption risk]  |
-| Security       | None/Low/Medium/High | [Security implications] |
-| Reputation     | None/Low/Medium/High | [Brand/trust impact]    |
+| Dimension      | Impact Level         | Description               |
+| -------------- | -------------------- | ------------------------- |
+| Revenue        | None/Low/Medium/High | \[Financial impact\]      |
+| Users Affected | Count/Percentage     | \[Scope of impact\]       |
+| Data Integrity | None/Low/Medium/High | \[Data corruption risk\]  |
+| Security       | None/Low/Medium/High | \[Security implications\] |
+| Reputation     | None/Low/Medium/High | \[Brand/trust impact\]    |
 
 #### Technical Impact
 
-- **Cascading failures**: [Other systems affected]
-- **Data consistency**: [Potential data issues]
-- **Performance**: [System performance impact]
-- **Recovery**: [Effort to recover from bug]
+- **Cascading failures**: \[Other systems affected\]
+- **Data consistency**: \[Potential data issues\]
+- **Performance**: \[System performance impact\]
+- **Recovery**: \[Effort to recover from bug\]
 
 #### Risk Matrix
 

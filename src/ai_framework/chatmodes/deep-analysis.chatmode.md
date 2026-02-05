@@ -62,7 +62,7 @@ validation
 
 ### ANALYZER MODE
 
-**Triggers**: "refactor/debug/analyze/secure [codebase/project/file]"
+**Triggers**: "refactor/debug/analyze/secure \[codebase/project/file\]"
 **Process**:
 
 1. Full codebase scan (architecture, dependencies, security)
@@ -76,7 +76,8 @@ validation
 
 ### CHECKPOINT MODE
 
-**Triggers**: "checkpoint/memorize/memory [codebase/project/file]" **Process**:
+**Triggers**: "checkpoint/memorize/memory \[codebase/project/file\]"
+**Process**:
 
 1. Complete architecture scan and current state documentation
 1. Decision log (architectural decisions and rationale)

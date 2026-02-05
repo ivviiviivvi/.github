@@ -4,7 +4,8 @@
 
 **Last Updated:** January 15, 2026\
 **Duration:** 30-60 minutes\
-**Audience:** Maintainers and Contributors
+**Audience:**
+Maintainers and Contributors
 
 ______________________________________________________________________
 
@@ -73,7 +74,7 @@ ______________________________________________________________________
 > - Manual labeling was time-consuming
 > - Status wasn't synchronized between issues and PRs
 >
-> **Demo:** [Show screenshot of old workflow with unlabeled issues]"
+> **Demo:** \[Show screenshot of old workflow with unlabeled issues\]"
 
 > **Slide 4: The Solution**
 >
@@ -137,7 +138,7 @@ ______________________________________________________________________
 >    - 14-day inactivity warning
 >    - 21-day auto-unassign
 >
-> **Demo:** [Show workflow run logs]"
+> **Demo:** \[Show workflow run logs\]"
 
 ______________________________________________________________________
 
@@ -189,12 +190,15 @@ ______________________________________________________________________
 >
 > ✅ Add labels to your issues automatically\
 > ✅ Assign reviewers to your PRs\
-> ✅ Sync status between issue and PR\
+> ✅
+> Sync status between issue and PR\
 > ✅ Add helpful comments with next steps\
-> ✅ Warn you if assigned issue is inactive for 14 days\
-> ✅ Close stale items after 7-day grace period
+> ✅
+> Warn you if assigned issue is inactive for 14 days\
+> ✅ Close stale items after
+> 7-day grace period
 >
-> **Demo:** [Create test issue, show auto-labeling]"
+> **Demo:** \[Create test issue, show auto-labeling\]"
 
 > **Slide 9: Best Practices for Contributors**
 >
@@ -282,7 +286,7 @@ ______________________________________________________________________
 >
 > - Automation handles this when type/priority/status added
 >
-> **Demo:** [Show triage process on test issue]"
+> **Demo:** \[Show triage process on test issue\]"
 
 > **Slide 13: Review Priorities**
 >
@@ -317,7 +321,7 @@ ______________________________________________________________________
 > - [Actions tab](../../actions) - workflow runs
 > - [Metrics report](../../docs/WORKFLOW_METRICS_REPORT.md) - daily stats
 >
-> **Demo:** [Navigate through filters]"
+> **Demo:** \[Navigate through filters\]"
 
 > **Slide 15: Handling Edge Cases**
 >
@@ -359,7 +363,7 @@ ______________________________________________________________________
 > | Avg review time     | \<24h  | Add reviewers    |
 > | Merge rate          | >80%   | Improve feedback |
 >
-> **Demo:** [Show metrics dashboard]"
+> **Demo:** \[Show metrics dashboard\]"
 
 > **Slide 17: Best Practices for Maintainers**
 >
@@ -462,7 +466,7 @@ ______________________________________________________________________
 >
 > "Now let's open the floor for questions!"
 >
-> [Allow 10-15 minutes for questions]
+> \[Allow 10-15 minutes for questions\]
 
 ______________________________________________________________________
 

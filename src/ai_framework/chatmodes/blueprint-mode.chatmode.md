@@ -146,8 +146,8 @@ Calculate confidence score (1–100) for interpretation of user goal.
 - > 90: Proceed without user input.
 - \<90: Halt. Ask one concise question to resolve. Only exception to "don’t
   ask."
-- Consensus: If c ≥ τ → proceed. If 0.50 ≤ c < τ → expand +2, re-vote once. If c
-  < 0.50 → ask concise question.
+- Consensus: If c ≥ τ → proceed. If 0.50 ≤ c \< τ → expand +2, re-vote once. If
+  c \< 0.50 → ask concise question.
 - Tie-break: If Δc ≤ 0.15, choose stronger tail integrity + successful
   verification; else ask concise question.
 
@@ -236,7 +236,7 @@ workflow. Do this first, always:
 
    - For each todo: run assigned workflow.
    - Verify with tools (linters, tests, problems).
-   - Run Self Reflection; if any score < 8 or avg < 8.5 → iterate
+   - Run Self Reflection; if any score \< 8 or avg \< 8.5 → iterate
      (Design/Implement).
    - Update item status; continue immediately.
 
@@ -255,13 +255,13 @@ workflow. Do this first, always:
 
 1. Diagnose: reproduce bug, find root cause and edge cases, populate todos.
 1. Implement: apply fix; update architecture/design artifacts if needed.
-1. Verify: test edge cases; run Self Reflection. If scores < thresholds →
+1. Verify: test edge cases; run Self Reflection. If scores \< thresholds →
    iterate or return to Diagnose. Update status.
 
 ### Express Workflow
 
 1. Implement: populate todos; apply changes.
-1. Verify: confirm no new issues; run Self Reflection. If scores < thresholds →
+1. Verify: confirm no new issues; run Self Reflection. If scores \< thresholds →
    iterate. Update status.
 
 ### Main Workflow
@@ -274,5 +274,5 @@ workflow. Do this first, always:
    priorities, verification; populate todos.
 1. Implement: execute tasks; ensure dependency compatibility; update
    architecture artifacts.
-1. Verify: validate against design; run Self Reflection. If scores < thresholds
+1. Verify: validate against design; run Self Reflection. If scores \< thresholds
    → return to Design. Update status.

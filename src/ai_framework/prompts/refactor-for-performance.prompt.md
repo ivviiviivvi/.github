@@ -145,17 +145,17 @@ Identify parallelization potential:
 
 ### Prioritized Recommendations
 
-1. **[HIGH] Optimization Name**
+1. **\[HIGH\] Optimization Name**
 
-   - Impact: [Expected improvement]
-   - Effort: [Low/Medium/High]
-   - Risk: [Low/Medium/High]
+   - Impact: \[Expected improvement\]
+   - Effort: \[Low/Medium/High\]
+   - Risk: \[Low/Medium/High\]
 
-1. **[MEDIUM] Optimization Name**
+1. **\[MEDIUM\] Optimization Name**
 
-   - Impact: [Expected improvement]
-   - Effort: [Low/Medium/High]
-   - Risk: [Low/Medium/High]
+   - Impact: \[Expected improvement\]
+   - Effort: \[Low/Medium/High\]
+   - Risk: \[Low/Medium/High\]
 
 ### Refactored Code
 

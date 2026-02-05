@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Project Planning description: Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams. tags: [] updated: 2026-01-13
+## name: Project Planning description: Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams. tags: \[\] updated: 2026-01-13
 
 # Project Planning & Management
 

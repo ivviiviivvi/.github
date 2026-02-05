@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: "🐛 Bug Report" about: "Report a bug to help us improve" title: "[BUG] " labels: ["bug"] assignees: []
+## name: "🐛 Bug Report" about: "Report a bug to help us improve" title: "\[BUG\] " labels: \["bug"\] assignees: \[\]
 
 ## Describe the Bug
 
@@ -29,9 +29,9 @@ If applicable, add screenshots to help explain your problem.
 
 ## Environment
 
-- OS: [e.g. Windows 10, macOS 13, Ubuntu 22.04]
-- Browser: [e.g. Chrome 120, Firefox 121]
-- Version: [e.g. v1.0.0]
+- OS: \[e.g. Windows 10, macOS 13, Ubuntu 22.04\]
+- Browser: \[e.g. Chrome 120, Firefox 121\]
+- Version: \[e.g. v1.0.0\]
 
 ## Additional Context
 

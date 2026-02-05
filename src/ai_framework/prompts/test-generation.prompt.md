@@ -294,9 +294,9 @@ class TestEdgeCases:
 
 Identify areas needing additional tests:
 
-1. **Untested branches**: [List of untested code paths]
-1. **Complex conditions**: [Boolean combinations not covered]
-1. **Error handlers**: [Exception paths not tested]
+1. **Untested branches**: \[List of untested code paths\]
+1. **Complex conditions**: \[Boolean combinations not covered\]
+1. **Error handlers**: \[Exception paths not tested\]
 
 ## Guidelines
 

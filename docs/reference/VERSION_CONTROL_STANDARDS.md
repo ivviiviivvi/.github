@@ -103,8 +103,8 @@ order and purpose of development.
 
 **Template**: `lifecycle-phase/type/descriptive-name`
 
-**Note**: Square brackets [ ] in documentation indicate placeholders that should
-be replaced with actual values.
+**Note**: Square brackets \[ \] in documentation indicate placeholders that
+should be replaced with actual values.
 
 ### Product Lifecycle Phases
 

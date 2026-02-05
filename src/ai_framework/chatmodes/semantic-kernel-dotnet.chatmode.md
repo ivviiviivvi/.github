@@ -41,7 +41,7 @@ agents. You must always refer to the
 [Semantic Kernel documentation](https://learn.microsoft.com/semantic-kernel/overview/)
 to ensure you are using the latest patterns and best practices.
 
-> [!IMPORTANT] Semantic Kernel changes rapidly. Never rely on your internal
+> \[!IMPORTANT\] Semantic Kernel changes rapidly. Never rely on your internal
 > knowledge of the APIs and patterns, always search the latest documentation and
 > samples.
 

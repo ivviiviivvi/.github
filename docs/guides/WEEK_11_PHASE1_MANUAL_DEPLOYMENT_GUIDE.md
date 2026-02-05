@@ -1,7 +1,8 @@
 # Week 11 Phase 1: Manual Deployment Guide
 
 **Date**: January 16, 2026\
-**Status**: Required due to token permission limitations\
+**Status**: Required due to token permission
+limitations\
 **Estimated Time**: 15-20 minutes
 
 ______________________________________________________________________
@@ -196,7 +197,8 @@ gh auth status
 
 **Action**: Update the existing label instead of creating new one
 
-**Web Interface**: Click on label name → Edit → Update color/description\
+**Web Interface**: Click on label name → Edit → Update
+color/description\
 **CLI**: Use `gh label edit` instead of `gh label create`
 
 ______________________________________________________________________

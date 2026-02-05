@@ -286,7 +286,8 @@ ______________________________________________________________________
 
 **Priority**: HIGH\
 **Effort**: 3-4 days\
-**Impact**: 50% reduction in duplicated code
+**Impact**: 50% reduction in
+duplicated code
 
 #### Pattern 1: App Type Detection
 
@@ -510,7 +511,8 @@ ______________________________________________________________________
 
 **Priority**: MEDIUM\
 **Effort**: 1 week\
-**Impact**: 60-70% faster test execution
+**Impact**: 60-70% faster test
+execution
 
 #### Concept
 

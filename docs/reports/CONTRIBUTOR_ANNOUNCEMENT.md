@@ -3,7 +3,8 @@
 ## New Automated Issue & PR Management
 
 **Date:** January 16, 2026\
-**Status:** Training Complete - Production Deployment Next Week\
+**Status:** Training Complete - Production
+Deployment Next Week\
 **Impact:** All repository contributors
 
 ______________________________________________________________________
@@ -175,9 +176,9 @@ We're tracking these metrics to measure success:
 
 - **Triage Rate:** Goal 90% of issues triaged within 48 hours
 - **Reviewer Assignment:** Goal 95% of PRs auto-assigned correctly
-- **Review Time:** Goal < 7 days average review time
+- **Review Time:** Goal \< 7 days average review time
 - **Merge Rate:** Goal > 80% of reviewed PRs merged
-- **Stale Rate:** Goal < 10% of items closed as stale
+- **Stale Rate:** Goal \< 10% of items closed as stale
 
 View live metrics daily: `docs/WORKFLOW_METRICS_REPORT.md`
 
@@ -285,11 +286,13 @@ ______________________________________________________________________
 The workflows go live next week. Thank you for being part of this community!
 
 **Questions?** Drop them in the comments or discussions.\
-**Problems?** Open an issue and we'll help immediately.\
+**Problems?** Open an
+issue and we'll help immediately.\
 **Excited?** We are too! 🚀
 
 ______________________________________________________________________
 
 **Announcement Posted:** January 16, 2026\
-**Workflows Live:** Week of January 20, 2026\
+**Workflows Live:** Week of January
+20, 2026\
 **Tracking:** Issue #246

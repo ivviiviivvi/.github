@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Database Data Management description: Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. tags: [] updated: 2026-01-13
+## name: Database Data Management description: Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. tags: \[\] updated: 2026-01-13
 
 # Database & Data Management
 

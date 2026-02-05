@@ -92,7 +92,7 @@ ______________________________________________________________________
 #### Intelligent Task Detection
 
 - Parse PR bodies, comments, and code comments for tasks
-- Identify checklist items (- [ ] patterns)
+- Identify checklist items (- \[ \] patterns)
 - Extract TODO, FIXME, HACK comments from code
 - Detect incomplete feature implementations
 
