@@ -13,14 +13,6 @@ on:
     - package*.json
   pull_request:
     branches: [main, master, develop]
-    paths:
-    - '**.py'
-    - '**.js'
-    - '**.ts'
-    - '**.go'
-    - '**.rs'
-    - requirements*.txt
-    - package*.json
   schedule:
   - cron: 0 0 * * 0  # Run weekly security scans
   workflow_dispatch:
@@ -83,3 +75,27 @@ jobs:
       if: always()
       with:
         sarif_file: trivy-results.sarif
+
+  secret-detection:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Run Gitleaks secret scan
+      run: |
+        # Install gitleaks (pinned version for reproducibility)
+        curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.1/gitleaks_8.18.1_linux_x64.tar.gz | tar -xz
+        sudo mv gitleaks /usr/local/bin/
+
+        # Run scan using config if available
+        if [ -f ".gitleaks.toml" ]; then
+          gitleaks detect --source . --config .gitleaks.toml --verbose
+        else
+          gitleaks detect --source . --verbose
+        fi
