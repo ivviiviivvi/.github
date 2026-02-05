@@ -211,9 +211,9 @@ class EnhancedAnalyticsEngine:
         features["repo_ci_success_rate"] = repo_stats["ci_success_rate"]
 
         # Branch metrics
-        features["is_main_branch"] = 1.0 if pr.get("base", {}).get("re", "") == "main" else 0.0
-        features["is_feature_branch"] = 1.0 if "feature" in pr.get("head", {}).get("re", "").lower() else 0.0
-        features["is_bugfix_branch"] = 1.0 if "bugfix" in pr.get("head", {}).get("re", "").lower() else 0.0
+        features["is_main_branch"] = 1.0 if pr.get("base", {}).get("ref", "") == "main" else 0.0
+        features["is_feature_branch"] = 1.0 if "feature" in pr.get("head", {}).get("ref", "").lower() else 0.0
+        features["is_bugfix_branch"] = 1.0 if "bugfix" in pr.get("head", {}).get("ref", "").lower() else 0.0
 
         # Label analysis
         labels = pr.get("labels", [])

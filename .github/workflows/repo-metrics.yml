@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Generate Issue Metrics
-      uses: github/issue-metrics@6fa9041b3ea7b6a9dafbdc388d25d86d06b2b6af  # ratchet:github/issue-metrics@v3
+      uses: github/issue-metrics@67526e7bd8100b870f10b1c120780a8375777b43  # ratchet:github/issue-metrics@v3.25.5
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
@@ -34,7 +34,7 @@ jobs:
       run: mv issue_metrics.md issue_metrics_report.md
 
     - name: Generate PR Metrics
-      uses: github/issue-metrics@6fa9041b3ea7b6a9dafbdc388d25d86d06b2b6af  # ratchet:github/issue-metrics@v3
+      uses: github/issue-metrics@67526e7bd8100b870f10b1c120780a8375777b43  # ratchet:github/issue-metrics@v3.25.5
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:pr created:>=${{ github.event.repository.created_at }}

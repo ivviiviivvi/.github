@@ -39,7 +39,7 @@ class TestSlackIntegration:
 
     def test_daily_summary_workflow_configured(self):
         """Verify daily summary workflow is configured."""
-        workflow_file = ".github/workflows/slack-daily-summary.yml"
+        workflow_file = ".github/workflows/google-chat-daily-summary.yml"
         assert os.path.exists(workflow_file), "Daily summary workflow not found"
 
         with open(workflow_file) as f:
@@ -447,7 +447,7 @@ class TestMonth2Integration:
     def test_slack_and_email_coordination(self):
         """Test that Slack and email notifications don't conflict."""
         # Both should be able to run concurrently
-        slack_workflow = ".github/workflows/slack-daily-summary.yml"
+        slack_workflow = ".github/workflows/google-chat-daily-summary.yml"
         email_workflow = ".github/workflows/email-digest.yml"
 
         assert os.path.exists(slack_workflow)
@@ -513,7 +513,7 @@ class TestMonth2Integration:
         # Check that all Month 2 files are present
         month2_files = [
             ".github/actions/slack-notify/action.yml",
-            ".github/workflows/slack-daily-summary.yml",
+            ".github/workflows/google-chat-daily-summary.yml",
             "src/automation/scripts/evaluate_repository.py",
             "src/automation/scripts/generate_pilot_workflows.py",
             "src/automation/config/ab-test-config.yml",
