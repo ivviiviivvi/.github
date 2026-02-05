@@ -6,7 +6,7 @@ import argparse
 import re
 from pathlib import Path
 
-COLLECTIONS_DIR = Path("ai_framework/collections")
+COLLECTIONS_DIR = Path("src/ai_framework/collections")
 REQUIRED_KEYS = {"name", "description"}
 ALLOWED_TAGS: set[str] = set()
 
@@ -42,7 +42,7 @@ def main() -> int:
     parser.parse_args()
 
     if not COLLECTIONS_DIR.exists():
-        print("Missing ai_framework/collections directory.")
+        print("Missing src/ai_framework/collections directory.")
         return 1
 
     failures: list[str] = []

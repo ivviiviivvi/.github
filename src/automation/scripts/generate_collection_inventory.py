@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-COLLECTIONS_DIR = Path("ai_framework/collections")
-OUTPUT = Path("ai_framework/collections/INVENTORY.md")
+COLLECTIONS_DIR = Path("src/ai_framework/collections")
+OUTPUT = Path("src/ai_framework/collections/INVENTORY.md")
 
 
 def parse_frontmatter(lines: list[str]) -> dict[str, object]:

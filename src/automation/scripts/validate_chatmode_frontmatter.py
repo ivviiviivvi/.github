@@ -6,7 +6,7 @@ import argparse
 import re
 from pathlib import Path
 
-CHATMODES_DIR = Path("ai_framework/chatmodes")
+CHATMODES_DIR = Path("src/ai_framework/chatmodes")
 REQUIRED_KEYS = {"name", "description", "tools"}
 
 
@@ -57,7 +57,7 @@ def main() -> int:
     args = parser.parse_args()
 
     if not CHATMODES_DIR.exists():
-        print("Missing ai_framework/chatmodes directory.")
+        print("Missing src/ai_framework/chatmodes directory.")
         return 1
 
     failures: list[str] = []

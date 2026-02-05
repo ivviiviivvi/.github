@@ -6,7 +6,7 @@ import argparse
 import re
 from pathlib import Path
 
-AGENTS_DIR = Path("ai_framework/agents")
+AGENTS_DIR = Path("src/ai_framework/agents")
 REQUIRED_KEYS = {"name", "description"}
 
 
@@ -41,7 +41,7 @@ def main() -> int:
     parser.parse_args()
 
     if not AGENTS_DIR.exists():
-        print("Missing ai_framework/agents directory.")
+        print("Missing src/ai_framework/agents directory.")
         return 1
 
     failures: list[str] = []

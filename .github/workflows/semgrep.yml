@@ -47,8 +47,14 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Check for Semgrep token
+      id: check-token
+      env:
+        HAS_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN != '' }}
+      run: echo "has_token=$HAS_TOKEN" >> $GITHUB_OUTPUT
+
     - name: Run Semgrep (Cloud)
-      if: ${{ secrets.SEMGREP_APP_TOKEN != '' }}
+      if: steps.check-token.outputs.has_token == 'true'
       run: semgrep ci
       env:
         SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
@@ -60,7 +66,7 @@ jobs:
           p/default
 
     - name: Run Semgrep (Local)
-      if: ${{ secrets.SEMGREP_APP_TOKEN == '' }}
+      if: steps.check-token.outputs.has_token != 'true'
       run: |
         semgrep scan \
           --config=auto \
@@ -70,7 +76,7 @@ jobs:
           --severity=WARNING
 
     - name: Upload SARIF to GitHub
-      if: ${{ always() && secrets.SEMGREP_APP_TOKEN == '' }}
+      if: always() && steps.check-token.outputs.has_token != 'true'
       uses: github/codeql-action/upload-sarif@439137e1b50c27ba9e2f9befc93e43091b449c34  # ratchet:github/codeql-action/upload-sarif@v3
       with:
         sarif_file: semgrep-results.sarif

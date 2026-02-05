@@ -2,6 +2,7 @@ name: Self-Healing Workflows
 
 on:
   workflow_run:
+    workflows: [CI, Advanced CI Pipeline]
     types: [completed]
 
   workflow_dispatch:

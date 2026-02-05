@@ -69,7 +69,6 @@ jobs:
   # Alternative: Python semantic release
   python-release:
     name: Python Semantic Release
-    if: hashFiles('setup.py', 'pyproject.toml') != ''
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -78,16 +77,28 @@ jobs:
         fetch-depth: 0
         persist-credentials: false
 
+    - name: Check prerequisites
+      id: check
+      run: |
+        if [ -f "setup.py" ] || [ -f "pyproject.toml" ]; then
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        else
+          echo "should_run=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Setup Python
+      if: steps.check.outputs.should_run == 'true'
       uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
       with:
         python-version: '3.11'
 
     - name: Install python-semantic-release
+      if: steps.check.outputs.should_run == 'true'
       run: |
         pip install python-semantic-release
 
     - name: Python Semantic Release
+      if: steps.check.outputs.should_run == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
@@ -96,7 +107,6 @@ jobs:
   # Go semantic release
   go-release:
     name: Go Semantic Release
-    if: hashFiles('go.mod') != ''
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -104,12 +114,23 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Check prerequisites
+      id: check
+      run: |
+        if [ -f "go.mod" ]; then
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        else
+          echo "should_run=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Setup Go
+      if: steps.check.outputs.should_run == 'true'
       uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff  # ratchet:actions/setup-go@v5
       with:
         go-version: stable
 
     - name: Run GoReleaser
+      if: steps.check.outputs.should_run == 'true'
       uses: goreleaser/goreleaser-action@5742e2a039330cbb23ebf35f046f814d4c6ff811  # ratchet:goreleaser/goreleaser-action@v5
       with:
         version: latest
@@ -120,13 +141,23 @@ jobs:
   # Container image release
   container-release:
     name: Container Image Release
-    if: hashFiles('Dockerfile') != ''
     needs: release
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Check for Dockerfile
+      id: check
+      run: |
+        if [ -f "Dockerfile" ]; then
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        else
+          echo "should_run=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Docker meta
+      if: steps.check.outputs.should_run == 'true'
       id: meta
       uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # ratchet:docker/metadata-action@v5
       with:
@@ -140,8 +171,10 @@ jobs:
           type=sha
 
     - name: Set up Docker Buildx
+      if: steps.check.outputs.should_run == 'true'
       uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # ratchet:docker/setup-buildx-action@v3
     - name: Login to GHCR
+      if: steps.check.outputs.should_run == 'true'
       uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # ratchet:docker/login-action@v3
       with:
         registry: ghcr.io
@@ -149,6 +182,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push
+      if: steps.check.outputs.should_run == 'true'
       uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # ratchet:docker/build-push-action@v6
       with:
         context: .
@@ -159,15 +193,18 @@ jobs:
         cache-to: type=gha,mode=max
 
     - name: Install Trivy
+      if: steps.check.outputs.should_run == 'true'
       run: |
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.58.1
 
     - name: Scan container image for vulnerabilities
+      if: steps.check.outputs.should_run == 'true'
       run: |
         IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
         trivy image --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH "$IMAGE_TAG" || true
 
     - name: Upload Trivy scan results
+      if: steps.check.outputs.should_run == 'true'
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: trivy-container-scan

@@ -39,9 +39,15 @@ jobs:
       run: |
         pip install requests
 
+    - name: Check for 1Password token
+      id: check-op
+      env:
+        HAS_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN != '' }}
+      run: echo "has_token=$HAS_TOKEN" >> $GITHUB_OUTPUT
+
     - name: Set up 1Password CLI
       uses: 1password/install-cli-action@143a85f84a90555d121cde2ff5872e393a47ab9f  # ratchet:1password/install-cli-action@v1
-      if: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN != '' }}
+      if: steps.check-op.outputs.has_token == 'true'
 
     - name: Validate tokens
       id: validate

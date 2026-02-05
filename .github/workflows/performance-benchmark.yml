@@ -148,22 +148,35 @@ jobs:
   lighthouse:
     name: Lighthouse Audit
     runs-on: ubuntu-latest
-    if: hashFiles('package.json') != ''
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+    - name: Check for package.json
+      id: check-pkg
+      run: |
+        if [ -f "package.json" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Setup Node.js
+      if: steps.check-pkg.outputs.exists == 'true'
       uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Install dependencies
+      if: steps.check-pkg.outputs.exists == 'true'
       run: npm ci
 
     - name: Build
+      if: steps.check-pkg.outputs.exists == 'true'
       run: npm run build || true
 
     - name: Run Lighthouse
+      if: steps.check-pkg.outputs.exists == 'true'
       uses: treosh/lighthouse-ci-action@b4dfae3eb959c5cececb2ea7c006f6c796c9f35f  # ratchet:treosh/lighthouse-ci-action@v11
       with:
         urls: |
@@ -174,22 +187,35 @@ jobs:
   bundle-size:
     name: Check Bundle Size
     runs-on: ubuntu-latest
-    if: hashFiles('package.json') != ''
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+    - name: Check for package.json
+      id: check-pkg
+      run: |
+        if [ -f "package.json" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Setup Node.js
+      if: steps.check-pkg.outputs.exists == 'true'
       uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
       with:
         node-version: '20'
 
     - name: Install dependencies
+      if: steps.check-pkg.outputs.exists == 'true'
       run: npm ci
 
     - name: Build
+      if: steps.check-pkg.outputs.exists == 'true'
       run: npm run build
 
     - name: Analyze bundle size
+      if: steps.check-pkg.outputs.exists == 'true'
       uses: andresz1/size-limit-action@f7a56ece616db5bddde81de219695c920a8ae137  # ratchet:andresz1/size-limit-action@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}

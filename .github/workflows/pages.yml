@@ -18,13 +18,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Only run if Jekyll site directory exists
-    if: hashFiles('site/Gemfile') != ''
     steps:
     - name: Checkout
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
 
+    - name: Check for Jekyll site
+      id: check
+      run: |
+        if [ -f "site/Gemfile" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Setup Ruby
+      if: steps.check.outputs.exists == 'true'
       uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd  # ratchet:ruby/setup-ruby@v1
       with:
         ruby-version: '3.1'
@@ -32,16 +40,19 @@ jobs:
         working-directory: site
 
     - name: Setup Pages
+      if: steps.check.outputs.exists == 'true'
       id: pages
       uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b  # ratchet:actions/configure-pages@v5.0.0
 
     - name: Build with Jekyll
+      if: steps.check.outputs.exists == 'true'
       run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
       working-directory: site
       env:
         JEKYLL_ENV: production
 
     - name: Upload artifact
+      if: steps.check.outputs.exists == 'true'
       uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa  # ratchet:actions/upload-pages-artifact@v3.0.1
       with:
         path: site/_site
