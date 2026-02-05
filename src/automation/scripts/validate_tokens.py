@@ -89,9 +89,7 @@ def validate_token(token_name: str, config: dict) -> dict:
             result["rate_limit"] = {
                 "remaining": int(response.headers.get("X-RateLimit-Remaining", 0)),
                 "limit": int(response.headers.get("X-RateLimit-Limit", 0)),
-                "reset": datetime.fromtimestamp(
-                    int(response.headers.get("X-RateLimit-Reset", 0))
-                ).isoformat(),
+                "reset": datetime.fromtimestamp(int(response.headers.get("X-RateLimit-Reset", 0))).isoformat(),
             }
 
             # Verify scopes match expected

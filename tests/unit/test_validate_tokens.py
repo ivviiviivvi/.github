@@ -13,16 +13,10 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from validate_tokens import (
-    TOKENS,
-    get_token_from_1password,
-    validate_token,
-    main,
-)
+from validate_tokens import (TOKENS, get_token_from_1password, main,
+                             validate_token)
 
 
 @pytest.mark.unit
@@ -45,9 +39,7 @@ class TestTokensRegistry:
         """Test token endpoints start with /."""
         for token_name, config in TOKENS.items():
             endpoint = config["test_endpoint"]
-            assert endpoint.startswith(
-                "/"
-            ), f"{token_name} endpoint should start with /"
+            assert endpoint.startswith("/"), f"{token_name} endpoint should start with /"
 
     def test_scopes_are_lists(self):
         """Test scopes are defined as lists."""
@@ -129,9 +121,7 @@ class TestValidateToken:
             "X-RateLimit-Reset": str(int(datetime.now().timestamp())),
         }
 
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="test_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="test_token"):
             with patch("requests.get", return_value=mock_response):
                 result = validate_token("test-token", token_config)
 
@@ -152,9 +142,7 @@ class TestValidateToken:
         mock_response = MagicMock()
         mock_response.status_code = 401
 
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="bad_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="bad_token"):
             with patch("requests.get", return_value=mock_response):
                 result = validate_token("bad-token", token_config)
 
@@ -166,9 +154,7 @@ class TestValidateToken:
         mock_response = MagicMock()
         mock_response.status_code = 403
 
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="limited_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="limited_token"):
             with patch("requests.get", return_value=mock_response):
                 result = validate_token("limited-token", token_config)
 
@@ -186,9 +172,7 @@ class TestValidateToken:
             "X-RateLimit-Reset": str(int(datetime.now().timestamp())),
         }
 
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="test_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="test_token"):
             with patch("requests.get", return_value=mock_response):
                 result = validate_token("test-token", token_config)
 
@@ -198,9 +182,7 @@ class TestValidateToken:
 
     def test_handles_network_error(self, token_config):
         """Test handles network errors gracefully."""
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="test_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="test_token"):
             with patch("requests.get") as mock_get:
                 mock_get.side_effect = requests.RequestException("Connection failed")
                 result = validate_token("test-token", token_config)
@@ -210,9 +192,7 @@ class TestValidateToken:
 
     def test_handles_unexpected_error(self, token_config):
         """Test handles unexpected errors gracefully."""
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="test_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="test_token"):
             with patch("requests.get") as mock_get:
                 mock_get.side_effect = Exception("Unexpected error")
                 result = validate_token("test-token", token_config)
@@ -231,9 +211,7 @@ class TestValidateToken:
             "X-RateLimit-Reset": "1704067200",  # 2024-01-01 00:00:00 UTC
         }
 
-        with patch(
-            "validate_tokens.get_token_from_1password", return_value="test_token"
-        ):
+        with patch("validate_tokens.get_token_from_1password", return_value="test_token"):
             with patch("requests.get", return_value=mock_response):
                 result = validate_token("test-token", token_config)
 

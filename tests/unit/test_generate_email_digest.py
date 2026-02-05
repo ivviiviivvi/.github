@@ -8,22 +8,14 @@ import json
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_email_digest import (
-    format_time_ago,
-    generate_email,
-    generate_summary,
-    generate_trend_commentary,
-    load_json,
-    main,
-)
+from generate_email_digest import (format_time_ago, generate_email,
+                                   generate_summary, generate_trend_commentary,
+                                   load_json, main)
 
 
 @pytest.mark.unit
@@ -434,9 +426,7 @@ class TestMainFunction:
 
     def test_main_missing_metrics_arg(self, monkeypatch):
         """Test main exits with missing metrics arg."""
-        monkeypatch.setattr(
-            sys, "argv", ["generate_email_digest.py", "--events", "e.json", "--output", "o.html"]
-        )
+        monkeypatch.setattr(sys, "argv", ["generate_email_digest.py", "--events", "e.json", "--output", "o.html"])
 
         with pytest.raises(SystemExit) as exc:
             main()

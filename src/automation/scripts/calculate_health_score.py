@@ -234,27 +234,19 @@ class HealthScoreCalculator:
         recommendations = []
 
         if metrics.activity_score < 60:
-            recommendations.append(
-                "Increase commit activity to maintain repository freshness"
-            )
+            recommendations.append("Increase commit activity to maintain repository freshness")
 
         if metrics.test_coverage_score < 70:
             recommendations.append("Improve test coverage to at least 70%")
 
         if metrics.issue_resolution_score < 60:
-            recommendations.append(
-                "Address open issues to improve issue resolution rate"
-            )
+            recommendations.append("Address open issues to improve issue resolution rate")
 
         if metrics.pr_merge_rate_score < 60:
-            recommendations.append(
-                "Review and merge pending PRs to improve PR merge rate"
-            )
+            recommendations.append("Review and merge pending PRs to improve PR merge rate")
 
         if metrics.dependency_health_score < 70:
-            recommendations.append(
-                "Update outdated dependencies and address vulnerabilities"
-            )
+            recommendations.append("Update outdated dependencies and address vulnerabilities")
 
         return recommendations
 

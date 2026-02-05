@@ -25,10 +25,7 @@ Environment Variables:
 """
 
 # Re-export everything from proactive_maintenance for backward compatibility
-from proactive_maintenance import (
-    MaintenanceScheduler,
-    main,
-)
+from proactive_maintenance import MaintenanceScheduler, main
 
 # Additional exports for direct usage
 __all__ = [

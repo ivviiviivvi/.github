@@ -15,12 +15,7 @@ import pytest
 # Import the module with hyphenated filename
 spec = importlib.util.spec_from_file_location(
     "validate_schema_org",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "utils"
-    / "validate-schema-org.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "validate-schema-org.py",
 )
 validate_schema_org = importlib.util.module_from_spec(spec)
 sys.modules["validate_schema_org"] = validate_schema_org
@@ -46,12 +41,16 @@ class TestValidateFile:
     def test_validates_valid_file(self, tmp_path):
         """Test validates a valid JSON-LD file."""
         schema_file = tmp_path / "valid.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test Org",
-            "url": "https://example.com",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test Org",
+                    "url": "https://example.com",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, warnings = validator.validate_file(schema_file)
@@ -86,12 +85,16 @@ class TestValidateContext:
     def test_accepts_https_schema_org(self, tmp_path):
         """Test accepts https://schema.org context."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://test.com",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://test.com",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -101,12 +104,16 @@ class TestValidateContext:
     def test_accepts_http_schema_org(self, tmp_path):
         """Test accepts http://schema.org context."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "http://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://test.com",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "http://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://test.com",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -116,12 +123,16 @@ class TestValidateContext:
     def test_rejects_invalid_context(self, tmp_path):
         """Test rejects invalid context."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://invalid.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://test.com",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://invalid.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://test.com",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -132,10 +143,14 @@ class TestValidateContext:
     def test_requires_context(self, tmp_path):
         """Test requires @context field."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@type": "Organization",
-            "name": "Test",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@type": "Organization",
+                    "name": "Test",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -179,11 +194,15 @@ class TestValidateType:
     def test_warns_for_unknown_type(self, tmp_path):
         """Test warns for unknown schema type."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "UnknownType",
-            "name": "Test",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "UnknownType",
+                    "name": "Test",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, warnings = validator.validate_file(schema_file)
@@ -194,10 +213,14 @@ class TestValidateType:
     def test_requires_type(self, tmp_path):
         """Test requires @type field."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "name": "Test",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "name": "Test",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -213,11 +236,15 @@ class TestValidateRequiredFields:
     def test_requires_organization_fields(self, tmp_path):
         """Test requires Organization fields."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            # Missing name and url
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    # Missing name and url
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -229,12 +256,16 @@ class TestValidateRequiredFields:
     def test_requires_software_source_code_fields(self, tmp_path):
         """Test requires SoftwareSourceCode fields."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "SoftwareSourceCode",
-            "name": "Test",
-            # Missing codeRepository and version
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareSourceCode",
+                    "name": "Test",
+                    # Missing codeRepository and version
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -251,12 +282,16 @@ class TestValidateUrls:
     def test_validates_url_fields(self, tmp_path):
         """Test validates URL fields."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://valid.com",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://valid.com",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -266,12 +301,16 @@ class TestValidateUrls:
     def test_rejects_invalid_urls(self, tmp_path):
         """Test rejects invalid URLs."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "not-a-valid-url",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "not-a-valid-url",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -282,13 +321,17 @@ class TestValidateUrls:
     def test_validates_sameAs_urls(self, tmp_path):
         """Test validates sameAs array URLs."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://test.com",
-            "sameAs": ["not-valid-url"],
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://test.com",
+                    "sameAs": ["not-valid-url"],
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -299,15 +342,19 @@ class TestValidateUrls:
     def test_validates_nested_urls(self, tmp_path):
         """Test validates URLs in nested objects."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test",
-            "url": "https://test.com",
-            "contactPoint": {
-                "url": "invalid-nested-url",
-            },
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test",
+                    "url": "https://test.com",
+                    "contactPoint": {
+                        "url": "invalid-nested-url",
+                    },
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, _ = validator.validate_file(schema_file)
@@ -323,13 +370,17 @@ class TestValidateVersion:
     def test_accepts_valid_semver(self, tmp_path):
         """Test accepts valid semantic version."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "SoftwareSourceCode",
-            "name": "Test",
-            "codeRepository": "https://github.com/test",
-            "version": "1.2.3",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareSourceCode",
+                    "name": "Test",
+                    "codeRepository": "https://github.com/test",
+                    "version": "1.2.3",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, errors, warnings = validator.validate_file(schema_file)
@@ -340,13 +391,17 @@ class TestValidateVersion:
     def test_accepts_semver_with_prerelease(self, tmp_path):
         """Test accepts semver with prerelease suffix."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "SoftwareSourceCode",
-            "name": "Test",
-            "codeRepository": "https://github.com/test",
-            "version": "1.2.3-beta",
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareSourceCode",
+                    "name": "Test",
+                    "codeRepository": "https://github.com/test",
+                    "version": "1.2.3-beta",
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, _, warnings = validator.validate_file(schema_file)
@@ -356,13 +411,17 @@ class TestValidateVersion:
     def test_warns_for_non_semver(self, tmp_path):
         """Test warns for non-semver version."""
         schema_file = tmp_path / "test.jsonld"
-        schema_file.write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "SoftwareSourceCode",
-            "name": "Test",
-            "codeRepository": "https://github.com/test",
-            "version": "v1.0",  # Not 3 parts
-        }))
+        schema_file.write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareSourceCode",
+                    "name": "Test",
+                    "codeRepository": "https://github.com/test",
+                    "version": "v1.0",  # Not 3 parts
+                }
+            )
+        )
 
         validator = validate_schema_org.SchemaOrgValidator()
         valid, _, warnings = validator.validate_file(schema_file)
@@ -469,12 +528,16 @@ class TestMainFunction:
         schema_dir.mkdir()
 
         # Create a valid schema file
-        (schema_dir / "org.jsonld").write_text(json.dumps({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Test Org",
-            "url": "https://example.com",
-        }))
+        (schema_dir / "org.jsonld").write_text(
+            json.dumps(
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "Test Org",
+                    "url": "https://example.com",
+                }
+            )
+        )
 
         with patch.object(validate_schema_org, "__file__", str(script_dir / "validate-schema-org.py")):
             with pytest.raises(SystemExit) as exc:
@@ -493,10 +556,14 @@ class TestMainFunction:
         schema_dir.mkdir()
 
         # Create an invalid schema file
-        (schema_dir / "invalid.jsonld").write_text(json.dumps({
-            "@context": "https://invalid.org",
-            "@type": "Organization",
-        }))
+        (schema_dir / "invalid.jsonld").write_text(
+            json.dumps(
+                {
+                    "@context": "https://invalid.org",
+                    "@type": "Organization",
+                }
+            )
+        )
 
         with patch.object(validate_schema_org, "__file__", str(script_dir / "validate-schema-org.py")):
             with pytest.raises(SystemExit) as exc:

@@ -4,21 +4,18 @@
 Focus: ML model training, prediction, feature extraction, and model persistence.
 """
 
-import json
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import numpy as np
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from models import AnalyticsConfig
 from enhanced_analytics import EnhancedAnalyticsEngine, main
+from models import AnalyticsConfig
 
 
 @pytest.fixture
@@ -38,9 +35,7 @@ def engine(mock_client, config, tmp_path):
     """Create EnhancedAnalyticsEngine with mocks."""
     from sklearn.preprocessing import StandardScaler
 
-    with patch.object(
-        EnhancedAnalyticsEngine, "__init__", lambda self, c, g: None
-    ):
+    with patch.object(EnhancedAnalyticsEngine, "__init__", lambda self, c, g: None):
         eng = EnhancedAnalyticsEngine.__new__(EnhancedAnalyticsEngine)
         eng.config = config
         eng.github = mock_client
@@ -340,8 +335,7 @@ class TestTrainModels:
         """Test trains all model types."""
         # Create enough PRs for training
         prs = [
-            {**sample_pr, "number": i, "merged_at": "2024-01-15T12:00:00Z" if i % 2 == 0 else None}
-            for i in range(30)
+            {**sample_pr, "number": i, "merged_at": "2024-01-15T12:00:00Z" if i % 2 == 0 else None} for i in range(30)
         ]
 
         # Provide enough data for all PRs
@@ -518,8 +512,9 @@ class TestMainFunction:
             with patch("enhanced_analytics.load_config", return_value=AnalyticsConfig()):
                 with patch("enhanced_analytics.GitHubAPIClient"):
                     with patch.object(
-                        EnhancedAnalyticsEngine, "train_models",
-                        return_value={"random_forest": {"accuracy": 0.85, "precision": 0.8, "recall": 0.9, "f1": 0.85}}
+                        EnhancedAnalyticsEngine,
+                        "train_models",
+                        return_value={"random_forest": {"accuracy": 0.85, "precision": 0.8, "recall": 0.9, "f1": 0.85}},
                     ):
                         main()
 
@@ -552,15 +547,12 @@ class TestMainFunction:
             timestamp=datetime.now(),
         )
 
-        with patch("sys.argv", [
-            "enhanced_analytics.py", "--owner", "org", "--repo", "repo",
-            "--predict", "--pr-number", "123"
-        ]):
+        with patch(
+            "sys.argv", ["enhanced_analytics.py", "--owner", "org", "--repo", "repo", "--predict", "--pr-number", "123"]
+        ):
             with patch("enhanced_analytics.load_config", return_value=AnalyticsConfig()):
                 with patch("enhanced_analytics.GitHubAPIClient"):
-                    with patch.object(
-                        EnhancedAnalyticsEngine, "predict", return_value=mock_prediction
-                    ):
+                    with patch.object(EnhancedAnalyticsEngine, "predict", return_value=mock_prediction):
                         main()
 
         captured = capsys.readouterr()
@@ -577,15 +569,10 @@ class TestMainFunction:
             top_features=["lines_changed", "commits_count"],
         )
 
-        with patch("sys.argv", [
-            "enhanced_analytics.py", "--owner", "org", "--repo", "repo", "--feature-importance"
-        ]):
+        with patch("sys.argv", ["enhanced_analytics.py", "--owner", "org", "--repo", "repo", "--feature-importance"]):
             with patch("enhanced_analytics.load_config", return_value=AnalyticsConfig()):
                 with patch("enhanced_analytics.GitHubAPIClient"):
-                    with patch.object(
-                        EnhancedAnalyticsEngine, "get_feature_importance",
-                        return_value=mock_importance
-                    ):
+                    with patch.object(EnhancedAnalyticsEngine, "get_feature_importance", return_value=mock_importance):
                         main()
 
         captured = capsys.readouterr()

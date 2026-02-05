@@ -11,17 +11,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from models import (
-    FailureClassification,
-    FailureType,
-    Priority,
-    SelfHealingConfig,
-    SelfHealingResult,
-)
+from models import (FailureClassification, FailureType, Priority,
+                    SelfHealingConfig, SelfHealingResult)
 from self_healing import SelfHealingEngine, main
 
 
@@ -134,9 +127,7 @@ class TestGetWorkflowRun:
 
         result = engine._get_workflow_run("org", "repo", 12345)
 
-        engine.client.get.assert_called_once_with(
-            "/repos/org/repo/actions/runs/12345"
-        )
+        engine.client.get.assert_called_once_with("/repos/org/repo/actions/runs/12345")
         assert result == failed_run
 
 
@@ -150,9 +141,7 @@ class TestGetWorkflowJobs:
 
         result = engine._get_workflow_jobs("org", "repo", 12345)
 
-        engine.client.get.assert_called_once_with(
-            "/repos/org/repo/actions/runs/12345/jobs"
-        )
+        engine.client.get.assert_called_once_with("/repos/org/repo/actions/runs/12345/jobs")
         assert result == failed_jobs
 
     def test_returns_empty_list_if_no_jobs(self, engine):
@@ -198,9 +187,7 @@ class TestClassifyFailure:
             {
                 "name": "build",
                 "conclusion": "failure",
-                "steps": [
-                    {"name": "Connection timeout during install", "conclusion": "failure"}
-                ],
+                "steps": [{"name": "Connection timeout during install", "conclusion": "failure"}],
             }
         ]
 
@@ -216,9 +203,7 @@ class TestClassifyFailure:
             {
                 "name": "build",
                 "conclusion": "failure",
-                "steps": [
-                    {"name": "Waiting for upstream dependency", "conclusion": "failure"}
-                ],
+                "steps": [{"name": "Waiting for upstream dependency", "conclusion": "failure"}],
             }
         ]
 
@@ -234,9 +219,7 @@ class TestClassifyFailure:
             {
                 "name": "build",
                 "conclusion": "failure",
-                "steps": [
-                    {"name": "Test failed - assertion error", "conclusion": "failure"}
-                ],
+                "steps": [{"name": "Test failed - assertion error", "conclusion": "failure"}],
             }
         ]
 
@@ -402,9 +385,7 @@ class TestExecuteStrategy:
         """Test executes retry_exponential strategy."""
         with patch.object(engine, "_retry_exponential") as mock_retry:
             mock_retry.return_value = MagicMock()
-            engine._execute_strategy(
-                "org", "repo", failed_run, classification, "retry_exponential"
-            )
+            engine._execute_strategy("org", "repo", failed_run, classification, "retry_exponential")
 
         mock_retry.assert_called_once()
 
@@ -412,9 +393,7 @@ class TestExecuteStrategy:
         """Test executes wait_and_retry strategy."""
         with patch.object(engine, "_wait_and_retry") as mock_wait:
             mock_wait.return_value = MagicMock()
-            engine._execute_strategy(
-                "org", "repo", failed_run, classification, "wait_and_retry"
-            )
+            engine._execute_strategy("org", "repo", failed_run, classification, "wait_and_retry")
 
         mock_wait.assert_called_once()
 
@@ -422,9 +401,7 @@ class TestExecuteStrategy:
         """Test executes alert_and_escalate strategy."""
         with patch.object(engine, "_alert_and_escalate") as mock_alert:
             mock_alert.return_value = MagicMock()
-            engine._execute_strategy(
-                "org", "repo", failed_run, classification, "alert_and_escalate"
-            )
+            engine._execute_strategy("org", "repo", failed_run, classification, "alert_and_escalate")
 
         mock_alert.assert_called_once()
 
@@ -432,9 +409,7 @@ class TestExecuteStrategy:
         """Test executes manual_intervention for unknown strategy."""
         with patch.object(engine, "_manual_intervention") as mock_manual:
             mock_manual.return_value = MagicMock()
-            engine._execute_strategy(
-                "org", "repo", failed_run, classification, "unknown_strategy"
-            )
+            engine._execute_strategy("org", "repo", failed_run, classification, "unknown_strategy")
 
         mock_manual.assert_called_once()
 
@@ -447,12 +422,8 @@ class TestRetryExponential:
         """Test retries when under max attempts."""
         with patch.object(engine, "_get_retry_count", return_value=0):
             with patch.object(engine, "_rerun_workflow", return_value=True):
-                with patch(
-                    "self_healing.notify_self_healing_success"
-                ) as mock_notify:
-                    result = engine._retry_exponential(
-                        "org", "repo", failed_run, classification
-                    )
+                with patch("self_healing.notify_self_healing_success") as mock_notify:
+                    result = engine._retry_exponential("org", "repo", failed_run, classification)
 
         assert result.healed is True
         assert result.strategy == "retry_exponential"
@@ -462,9 +433,7 @@ class TestRetryExponential:
     def test_fails_when_max_attempts_reached(self, engine, failed_run, classification):
         """Test fails when max attempts reached."""
         with patch.object(engine, "_get_retry_count", return_value=3):
-            result = engine._retry_exponential(
-                "org", "repo", failed_run, classification
-            )
+            result = engine._retry_exponential("org", "repo", failed_run, classification)
 
         assert result.healed is False
         assert "Max retry attempts" in result.resolution
@@ -473,12 +442,8 @@ class TestRetryExponential:
         """Test sends failure notification when retry fails."""
         with patch.object(engine, "_get_retry_count", return_value=0):
             with patch.object(engine, "_rerun_workflow", return_value=False):
-                with patch(
-                    "self_healing.notify_self_healing_failure"
-                ) as mock_notify:
-                    result = engine._retry_exponential(
-                        "org", "repo", failed_run, classification
-                    )
+                with patch("self_healing.notify_self_healing_failure") as mock_notify:
+                    result = engine._retry_exponential("org", "repo", failed_run, classification)
 
         assert result.healed is False
         mock_notify.assert_called_once()
@@ -488,9 +453,7 @@ class TestRetryExponential:
         engine.config.enable_auto_retry = False
 
         with patch.object(engine, "_get_retry_count", return_value=0):
-            result = engine._retry_exponential(
-                "org", "repo", failed_run, classification
-            )
+            result = engine._retry_exponential("org", "repo", failed_run, classification)
 
         assert result.healed is False
         assert "Auto-retry disabled" in result.resolution
@@ -516,9 +479,7 @@ class TestWaitAndRetry:
         with patch.object(engine, "_rerun_workflow", return_value=True):
             with patch("self_healing.notify_self_healing_success") as mock_notify:
                 with patch("self_healing.time.sleep"):
-                    result = engine._wait_and_retry(
-                        "org", "repo", failed_run, classification
-                    )
+                    result = engine._wait_and_retry("org", "repo", failed_run, classification)
 
         assert result.healed is True
         assert result.strategy == "wait_and_retry"
@@ -540,9 +501,7 @@ class TestWaitAndRetry:
         with patch.object(engine, "_rerun_workflow", return_value=False):
             with patch("self_healing.notify_self_healing_failure") as mock_notify:
                 with patch("self_healing.time.sleep"):
-                    result = engine._wait_and_retry(
-                        "org", "repo", failed_run, classification
-                    )
+                    result = engine._wait_and_retry("org", "repo", failed_run, classification)
 
         assert result.healed is False
         mock_notify.assert_called_once()
@@ -586,9 +545,7 @@ class TestAlertAndEscalate:
 
         with patch.object(engine, "_create_failure_issue", return_value=42):
             with patch("self_healing.notify_self_healing_failure") as mock_notify:
-                result = engine._alert_and_escalate(
-                    "org", "repo", failed_run, classification
-                )
+                result = engine._alert_and_escalate("org", "repo", failed_run, classification)
 
         assert result.healed is False
         assert result.strategy == "alert_and_escalate"
@@ -610,9 +567,7 @@ class TestAlertAndEscalate:
         )
 
         with patch("self_healing.notify_self_healing_failure"):
-            result = engine._alert_and_escalate(
-                "org", "repo", failed_run, classification
-            )
+            result = engine._alert_and_escalate("org", "repo", failed_run, classification)
 
         assert not any("issue" in action.lower() for action in result.actions_taken)
 
@@ -623,9 +578,7 @@ class TestManualIntervention:
 
     def test_returns_manual_intervention_result(self, engine, failed_run, classification):
         """Test returns manual intervention result."""
-        result = engine._manual_intervention(
-            "org", "repo", failed_run, classification
-        )
+        result = engine._manual_intervention("org", "repo", failed_run, classification)
 
         assert result.healed is False
         assert result.strategy == "manual_intervention"
@@ -673,9 +626,7 @@ class TestRerunWorkflow:
         result = engine._rerun_workflow("org", "repo", 12345)
 
         assert result is True
-        engine.client.post.assert_called_once_with(
-            "/repos/org/repo/actions/runs/12345/rerun"
-        )
+        engine.client.post.assert_called_once_with("/repos/org/repo/actions/runs/12345/rerun")
 
     def test_returns_false_on_error(self, engine):
         """Test returns false on API error."""
@@ -701,9 +652,7 @@ class TestCreateFailureIssue:
 
         engine.client.post.return_value = {"number": 42}
 
-        issue_number = engine._create_failure_issue(
-            "org", "repo", failed_run, classification
-        )
+        issue_number = engine._create_failure_issue("org", "repo", failed_run, classification)
 
         assert issue_number == 42
         engine.client.post.assert_called_once()
@@ -719,9 +668,7 @@ class TestCreateFailureIssue:
 
         engine.client.post.side_effect = Exception("API error")
 
-        issue_number = engine._create_failure_issue(
-            "org", "repo", failed_run, classification
-        )
+        issue_number = engine._create_failure_issue("org", "repo", failed_run, classification)
 
         assert issue_number is None
 
@@ -732,6 +679,7 @@ class TestAnalyzeAndHeal:
 
     def test_full_healing_workflow(self, engine, failed_run, failed_jobs):
         """Test complete healing workflow."""
+
         # Mock _get_retry_count to avoid additional API calls
         def mock_get(*args, **kwargs):
             endpoint = args[0] if args else ""
@@ -809,9 +757,7 @@ class TestMainFunction:
             with patch("self_healing.GitHubAPIClient"):
                 with patch("self_healing.ConfigLoader") as mock_loader:
                     mock_loader.return_value.load.side_effect = FileNotFoundError()
-                    with patch.object(
-                        SelfHealingEngine, "analyze_and_heal", return_value=mock_result
-                    ):
+                    with patch.object(SelfHealingEngine, "analyze_and_heal", return_value=mock_result):
                         with pytest.raises(SystemExit) as exc_info:
                             main()
 
@@ -849,9 +795,7 @@ class TestMainFunction:
             with patch("self_healing.GitHubAPIClient"):
                 with patch("self_healing.ConfigLoader") as mock_loader:
                     mock_loader.return_value.load.return_value = {"self_healing": {}}
-                    with patch.object(
-                        SelfHealingEngine, "analyze_and_heal", return_value=mock_result
-                    ):
+                    with patch.object(SelfHealingEngine, "analyze_and_heal", return_value=mock_result):
                         with pytest.raises(SystemExit) as exc_info:
                             main()
 
@@ -865,18 +809,19 @@ class TestMainFunction:
             "sys.argv",
             [
                 "self_healing.py",
-                "--owner", "org",
-                "--repo", "repo",
-                "--run-id", "12345",
+                "--owner",
+                "org",
+                "--repo",
+                "repo",
+                "--run-id",
+                "12345",
                 "--debug",
             ],
         ):
             with patch("self_healing.GitHubAPIClient"):
                 with patch("self_healing.ConfigLoader") as mock_loader:
                     mock_loader.return_value.load.side_effect = FileNotFoundError()
-                    with patch.object(
-                        SelfHealingEngine, "analyze_and_heal"
-                    ) as mock_heal:
+                    with patch.object(SelfHealingEngine, "analyze_and_heal") as mock_heal:
                         mock_heal.return_value = MagicMock(
                             healed=True,
                             run_id=12345,

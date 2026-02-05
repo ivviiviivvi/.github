@@ -169,9 +169,7 @@ class RepositoryEvaluator:
         else:
             return 25  # Large repos are more complex
 
-    def calculate_team_score(
-        self, has_codeowners: bool, has_contributing: bool
-    ) -> float:
+    def calculate_team_score(self, has_codeowners: bool, has_contributing: bool) -> float:
         """Calculate team engagement score (0-100)."""
         score = 0
         if has_codeowners:
@@ -274,12 +272,10 @@ class RepositoryEvaluator:
         open_prs = self.get_open_prs()
         info["openPRs"] = open_prs
 
-        has_codeowners = self.check_file_exists(
-            ".github/CODEOWNERS"
-        ) or self.check_file_exists("CODEOWNERS")
-        has_contributing = self.check_file_exists(
-            ".github/CONTRIBUTING.md"
-        ) or self.check_file_exists("CONTRIBUTING.md")
+        has_codeowners = self.check_file_exists(".github/CODEOWNERS") or self.check_file_exists("CODEOWNERS")
+        has_contributing = self.check_file_exists(".github/CONTRIBUTING.md") or self.check_file_exists(
+            "CONTRIBUTING.md"
+        )
         has_labels = True  # Assume all repos have some labels
 
         weekly_commits = self.get_commit_activity()

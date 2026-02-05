@@ -18,7 +18,6 @@ METRICS_DIR = REPO_ROOT / "metrics" / "health"
 
 def find_unpinned_actions(node: Any) -> list[str]:
     """Return list of workflow `uses:` entries pinned to @main/@master."""
-
     unpinned: list[str] = []
 
     def walk(value: Any) -> None:
@@ -56,9 +55,7 @@ def main() -> None:
         },
     }
 
-    workflows = sorted(
-        list(WORKFLOWS_DIR.glob("*.yml")) + list(WORKFLOWS_DIR.glob("*.yaml"))
-    )
+    workflows = sorted(list(WORKFLOWS_DIR.glob("*.yml")) + list(WORKFLOWS_DIR.glob("*.yaml")))
     health_report["total_workflows"] = len(workflows)
 
     for workflow_file in workflows:
@@ -74,45 +71,31 @@ def main() -> None:
         workflow_str = workflow_file.read_text(encoding="utf-8")
 
         if "permissions" not in workflow:
-            health_report["warnings"].append(
-                f"{workflow_name}: Missing explicit permissions"
-            )
+            health_report["warnings"].append(f"{workflow_name}: Missing explicit permissions")
             health_report["metrics"]["security"]["score"] -= 0.1
 
         unpinned_actions = find_unpinned_actions(workflow)
         if unpinned_actions:
-            health_report["errors"].append(
-                f"{workflow_name}: Contains unpinned actions (@master/@main)"
-            )
+            health_report["errors"].append(f"{workflow_name}: Contains unpinned actions (@master/@main)")
             health_report["metrics"]["security"]["score"] -= 0.5
 
         if "setup-python" in workflow_str and "cache:" not in workflow_str:
-            health_report["recommendations"].append(
-                f"{workflow_name}: Could benefit from pip caching"
-            )
+            health_report["recommendations"].append(f"{workflow_name}: Could benefit from pip caching")
 
         if "setup-node" in workflow_str and "cache:" not in workflow_str:
-            health_report["recommendations"].append(
-                f"{workflow_name}: Could benefit from npm caching"
-            )
+            health_report["recommendations"].append(f"{workflow_name}: Could benefit from npm caching")
 
         if "timeout-minutes" not in workflow_str:
-            health_report["warnings"].append(
-                f"{workflow_name}: Missing timeout configuration"
-            )
+            health_report["warnings"].append(f"{workflow_name}: Missing timeout configuration")
 
         workflow_issues = [
-            item
-            for item in health_report["warnings"] + health_report["errors"]
-            if workflow_name in item
+            item for item in health_report["warnings"] + health_report["errors"] if workflow_name in item
         ]
         if not workflow_issues:
             health_report["healthy_workflows"] += 1
 
     if health_report["total_workflows"]:
-        health_percentage = (
-            health_report["healthy_workflows"] / health_report["total_workflows"] * 100
-        )
+        health_percentage = health_report["healthy_workflows"] / health_report["total_workflows"] * 100
         if health_percentage >= 95:
             health_report["overall_health"] = "excellent"
         elif health_percentage >= 85:
@@ -129,10 +112,7 @@ def main() -> None:
         json.dump(health_report, handle, indent=2)
 
     print(f"Overall Health: {health_report['overall_health']}")
-    print(
-        f"Healthy Workflows: {health_report['healthy_workflows']}/"
-        f"{health_report['total_workflows']}"
-    )
+    print(f"Healthy Workflows: {health_report['healthy_workflows']}/{health_report['total_workflows']}")
     print(f"Errors: {len(health_report['errors'])}")
     print(f"Warnings: {len(health_report['warnings'])}")
 

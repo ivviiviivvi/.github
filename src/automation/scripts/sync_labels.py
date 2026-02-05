@@ -193,8 +193,7 @@ class LabelSyncManager:
                     existing_label = existing_labels[label_name]
                     needs_update = (
                         existing_label.color.lower() != label_config["color"].lower()
-                        or (existing_label.description or "").strip()
-                        != (label_config["description"] or "").strip()
+                        or (existing_label.description or "").strip() != (label_config["description"] or "").strip()
                     )
 
                     if needs_update:
@@ -231,9 +230,7 @@ class LabelSyncManager:
 
         return stats
 
-    def sync_organization(
-        self, org_name: str, exclude_repos: Optional[list[str]] = None
-    ) -> None:
+    def sync_organization(self, org_name: str, exclude_repos: Optional[list[str]] = None) -> None:
         """Sync labels across all repositories in an organization.
 
         Args:
@@ -278,11 +275,7 @@ class LabelSyncManager:
                 total_stats["unchanged"] += stats["unchanged"]
                 total_stats["errors"] += stats["errors"]
 
-                if (
-                    stats["created"] == 0
-                    and stats["updated"] == 0
-                    and stats["errors"] == 0
-                ):
+                if stats["created"] == 0 and stats["updated"] == 0 and stats["errors"] == 0:
                     print("  ✓ All labels up to date")
 
             except Exception as e:

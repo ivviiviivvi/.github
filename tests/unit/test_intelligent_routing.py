@@ -9,9 +9,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 
 # Mock secret_manager before importing modules that depend on it.
@@ -426,9 +424,7 @@ class TestPerformanceCalculation:
     def test_all_successful_closures_gives_high_score(self, router, mock_client):
         """Test all successful closures give high performance score."""
         # Return closed issues with no negative labels
-        mock_client.get.return_value = [
-            {"number": i, "labels": [{"name": "bug"}]} for i in range(10)
-        ]
+        mock_client.get.return_value = [{"number": i, "labels": [{"name": "bug"}]} for i in range(10)]
 
         score = router._calculate_performance("owner", "repo", "user")
 
@@ -566,7 +562,7 @@ class TestResponseTimeScoring:
 
     def test_fast_response_gives_high_score(self, router, mock_client):
         """Test fast response time (< 1 hour) gives high score."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         now = datetime.now(timezone.utc)
         issue_created = now - timedelta(hours=2)
@@ -605,7 +601,7 @@ class TestResponseTimeScoring:
 
     def test_slow_response_gives_lower_score(self, router, mock_client):
         """Test slow response time (> 24 hours) gives lower score."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         now = datetime.now(timezone.utc)
         issue_created = now - timedelta(days=2)
@@ -644,7 +640,7 @@ class TestResponseTimeScoring:
 
     def test_no_assignee_comments_returns_default(self, router, mock_client):
         """Test returns default when no comments by assignee."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         now = datetime.now(timezone.utc)
         issue_created = now - timedelta(hours=2)
@@ -682,7 +678,7 @@ class TestResponseTimeScoring:
 
     def test_comments_api_error_continues(self, router, mock_client):
         """Test continues when comments API fails for an issue."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         now = datetime.now(timezone.utc)
         issue_created = now - timedelta(hours=2)
@@ -729,14 +725,12 @@ class TestAvailabilityBranches:
 
     def test_very_recent_activity_gives_high_score(self, router, mock_client):
         """Test activity < 1 hour ago gives score of 1.0."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         # Activity 30 minutes ago
         recent_time = (datetime.now(timezone.utc) - timedelta(minutes=30)).isoformat()
 
-        mock_client.get.return_value = [
-            {"created_at": recent_time.replace("+00:00", "Z")}
-        ]
+        mock_client.get.return_value = [{"created_at": recent_time.replace("+00:00", "Z")}]
 
         score = router._calculate_availability("owner", "repo", "user")
 
@@ -744,14 +738,12 @@ class TestAvailabilityBranches:
 
     def test_today_activity_gives_good_score(self, router, mock_client):
         """Test activity < 24 hours ago gives score of 0.8."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         # Activity 12 hours ago
         recent_time = (datetime.now(timezone.utc) - timedelta(hours=12)).isoformat()
 
-        mock_client.get.return_value = [
-            {"created_at": recent_time.replace("+00:00", "Z")}
-        ]
+        mock_client.get.return_value = [{"created_at": recent_time.replace("+00:00", "Z")}]
 
         score = router._calculate_availability("owner", "repo", "user")
 
@@ -759,14 +751,12 @@ class TestAvailabilityBranches:
 
     def test_week_old_activity_gives_medium_score(self, router, mock_client):
         """Test activity < 7 days ago gives score of 0.5."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         # Activity 3 days ago
         recent_time = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat()
 
-        mock_client.get.return_value = [
-            {"created_at": recent_time.replace("+00:00", "Z")}
-        ]
+        mock_client.get.return_value = [{"created_at": recent_time.replace("+00:00", "Z")}]
 
         score = router._calculate_availability("owner", "repo", "user")
 
@@ -774,14 +764,12 @@ class TestAvailabilityBranches:
 
     def test_old_activity_gives_low_score(self, router, mock_client):
         """Test activity > 7 days ago gives score of 0.2."""
-        from datetime import datetime, timezone, timedelta
+        from datetime import datetime, timedelta, timezone
 
         # Activity 10 days ago
         recent_time = (datetime.now(timezone.utc) - timedelta(days=10)).isoformat()
 
-        mock_client.get.return_value = [
-            {"created_at": recent_time.replace("+00:00", "Z")}
-        ]
+        mock_client.get.return_value = [{"created_at": recent_time.replace("+00:00", "Z")}]
 
         score = router._calculate_availability("owner", "repo", "user")
 
@@ -863,7 +851,7 @@ class TestMainCLI:
     def test_main_dry_run(self, tmp_path, capsys):
         """Test main in dry run mode (default)."""
         import sys
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         original_argv = sys.argv
         sys.argv = [
@@ -888,9 +876,7 @@ class TestMainCLI:
                         if "issues/123" in endpoint:
                             return {"number": 123, "labels": []}
                         elif "collaborators" in endpoint:
-                            return [
-                                {"login": "user1", "permissions": {"push": True}}
-                            ]
+                            return [{"login": "user1", "permissions": {"push": True}}]
                         elif "commits" in endpoint:
                             return [{"sha": f"c{i}"} for i in range(10)]
                         elif "events" in endpoint:
@@ -919,7 +905,7 @@ class TestMainCLI:
     def test_main_with_assign_flag(self, capsys):
         """Test main with --assign flag actually assigns."""
         import sys
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         original_argv = sys.argv
         sys.argv = [
@@ -943,9 +929,7 @@ class TestMainCLI:
                         if "issues/123" in endpoint:
                             return {"number": 123, "labels": []}
                         elif "collaborators" in endpoint:
-                            return [
-                                {"login": "user1", "permissions": {"push": True}}
-                            ]
+                            return [{"login": "user1", "permissions": {"push": True}}]
                         elif "commits" in endpoint:
                             return [{"sha": f"c{i}"} for i in range(10)]
                         elif "events" in endpoint:
@@ -1005,7 +989,7 @@ class TestMainCLI:
     def test_main_with_debug_flag(self, capsys):
         """Test main with --debug flag enables debug logging."""
         import sys
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         original_argv = sys.argv
         sys.argv = [
@@ -1029,9 +1013,7 @@ class TestMainCLI:
                         if "issues/123" in endpoint:
                             return {"number": 123, "labels": []}
                         elif "collaborators" in endpoint:
-                            return [
-                                {"login": "user1", "permissions": {"push": True}}
-                            ]
+                            return [{"login": "user1", "permissions": {"push": True}}]
                         elif "commits" in endpoint:
                             return [{"sha": f"c{i}"} for i in range(10)]
                         elif "events" in endpoint:
@@ -1055,7 +1037,7 @@ class TestMainCLI:
     def test_main_with_valid_config_file(self, tmp_path, capsys):
         """Test main loads config from file."""
         import sys
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         original_argv = sys.argv
         sys.argv = [
@@ -1078,9 +1060,7 @@ class TestMainCLI:
                         if "issues/123" in endpoint:
                             return {"number": 123, "labels": []}
                         elif "collaborators" in endpoint:
-                            return [
-                                {"login": "user1", "permissions": {"push": True}}
-                            ]
+                            return [{"login": "user1", "permissions": {"push": True}}]
                         elif "commits" in endpoint:
                             return [{"sha": f"c{i}"} for i in range(10)]
                         elif "events" in endpoint:

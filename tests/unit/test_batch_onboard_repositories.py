@@ -7,20 +7,15 @@ and automatic rollback capabilities.
 
 import asyncio
 import sys
-from datetime import datetime
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.batch_onboard_repositories import (
-    BatchOnboardingOrchestrator,
-    OnboardingConfig,
-    OnboardingResult,
-    load_config,
-)
+    BatchOnboardingOrchestrator, OnboardingConfig, OnboardingResult,
+    load_config)
 
 
 @pytest.mark.unit
@@ -124,9 +119,7 @@ class TestResolveDependencies:
             dependencies=[],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         result = orchestrator._resolve_dependencies()
 
@@ -141,9 +134,7 @@ class TestResolveDependencies:
             dependencies=["org/dependent"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         result = orchestrator._resolve_dependencies()
 
@@ -164,16 +155,12 @@ class TestValidateConfiguration:
         import src.automation.scripts.batch_onboard_repositories as batch_mod
 
         mock_github = MagicMock()
-        mock_github.get_repo.side_effect = batch_mod.GithubException(
-            404, {"message": "Not found"}, None
-        )
+        mock_github.get_repo.side_effect = batch_mod.GithubException(404, {"message": "Not found"}, None)
         MockGithub.return_value = mock_github
 
         config = OnboardingConfig(repositories=["org/missing"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         errors = asyncio.run(orchestrator._validate_configuration())
 
@@ -192,9 +179,7 @@ class TestValidateConfiguration:
             secrets={"MISSING_SECRET": "value"},
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         with patch.dict("os.environ", {}, clear=True):
             errors = asyncio.run(orchestrator._validate_configuration())
@@ -243,9 +228,7 @@ class TestOnboardRepository:
 
         config = OnboardingConfig(repositories=["org/repo"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         result = asyncio.run(orchestrator._onboard_repository("org/repo"))
 
@@ -484,9 +467,7 @@ class TestRollbackFailed:
             workflows=["ci.yml"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         failed_results = [
             OnboardingResult(
@@ -512,9 +493,7 @@ class TestLogSummary:
         """Test summary output with all successes."""
         config = OnboardingConfig(repositories=["org/repo1", "org/repo2"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
         orchestrator.results = [
             OnboardingResult(repository="org/repo1", success=True, duration_seconds=1.5),
             OnboardingResult(repository="org/repo2", success=True, duration_seconds=2.0),
@@ -535,12 +514,8 @@ class TestSaveResults:
         """Test results are saved to JSON file."""
         config = OnboardingConfig(repositories=["org/repo"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
-        orchestrator.results = [
-            OnboardingResult(repository="org/repo", success=True)
-        ]
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
+        orchestrator.results = [OnboardingResult(repository="org/repo", success=True)]
 
         output_file = tmp_path / "results.json"
         orchestrator.save_results(str(output_file))
@@ -548,6 +523,7 @@ class TestSaveResults:
         assert output_file.exists()
 
         import json
+
         with open(output_file) as f:
             data = json.load(f)
 
@@ -567,9 +543,7 @@ class TestOnboardRepositories:
         import src.automation.scripts.batch_onboard_repositories as batch_mod
 
         mock_github = MagicMock()
-        mock_github.get_repo.side_effect = batch_mod.GithubException(
-            404, {"message": "Not found"}, None
-        )
+        mock_github.get_repo.side_effect = batch_mod.GithubException(404, {"message": "Not found"}, None)
         MockGithub.return_value = mock_github
 
         config = OnboardingConfig(
@@ -577,9 +551,7 @@ class TestOnboardRepositories:
             validate_before=True,
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         results = asyncio.run(orchestrator.onboard_repositories())
 

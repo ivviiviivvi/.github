@@ -85,9 +85,7 @@ class FailureClassifier:
         """Compile regex patterns for efficiency."""
         self.transient_re = re.compile("|".join(self.TRANSIENT_PATTERNS), re.IGNORECASE)
         self.permanent_re = re.compile("|".join(self.PERMANENT_PATTERNS), re.IGNORECASE)
-        self.dependency_re = re.compile(
-            "|".join(self.DEPENDENCY_PATTERNS), re.IGNORECASE
-        )
+        self.dependency_re = re.compile("|".join(self.DEPENDENCY_PATTERNS), re.IGNORECASE)
 
     def classify(self, log_content: str) -> FailureClassification:
         """Classify a failure based on log content.

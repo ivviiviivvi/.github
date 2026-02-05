@@ -9,11 +9,9 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_chatmode_inventory import parse_frontmatter, main
+from generate_chatmode_inventory import main, parse_frontmatter
 
 
 @pytest.mark.unit
@@ -124,32 +122,24 @@ class TestMainFunction:
         """Create mock output path."""
         return tmp_path / "ai_framework" / "chatmodes" / "INVENTORY.md"
 
-    def test_creates_inventory_file(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_creates_inventory_file(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test creates INVENTORY.md file."""
         chatmode = mock_chatmodes_dir / "review.chatmode.md"
         chatmode.write_text("---\nname: Review Mode\ndescription: Review\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
 
         assert mock_output_path.exists()
 
-    def test_inventory_has_header(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_inventory_has_header(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test inventory file has proper header."""
         chatmode = mock_chatmodes_dir / "test.chatmode.md"
         chatmode.write_text("---\nname: Test\ndescription: Desc\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -158,18 +148,12 @@ class TestMainFunction:
         assert "# Chatmode Inventory" in content
         assert "| File | Name | Description | Tags |" in content
 
-    def test_includes_chatmode_data(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_includes_chatmode_data(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test inventory includes chatmode data in table."""
         chatmode = mock_chatmodes_dir / "debug.chatmode.md"
-        chatmode.write_text(
-            "---\nname: Debug Mode\ndescription: For debugging\ntags:\n  - debug\n---\n"
-        )
+        chatmode.write_text("---\nname: Debug Mode\ndescription: For debugging\ntags:\n  - debug\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -180,19 +164,13 @@ class TestMainFunction:
         assert "For debugging" in content
         assert "debug" in content
 
-    def test_handles_multiple_chatmodes(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_multiple_chatmodes(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test handles multiple chatmode files."""
         for i in range(3):
             chatmode = mock_chatmodes_dir / f"mode-{i}.chatmode.md"
-            chatmode.write_text(
-                f"---\nname: Mode {i}\ndescription: Description {i}\n---\n"
-            )
+            chatmode.write_text(f"---\nname: Mode {i}\ndescription: Description {i}\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -202,16 +180,12 @@ class TestMainFunction:
             assert f"mode-{i}.chatmode.md" in content
             assert f"Mode {i}" in content
 
-    def test_handles_missing_tags(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_missing_tags(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test handles chatmodes without tags."""
         chatmode = mock_chatmodes_dir / "minimal.chatmode.md"
         chatmode.write_text("---\nname: Minimal\ndescription: No tags\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -220,18 +194,12 @@ class TestMainFunction:
         assert "Minimal" in content
         # Should not fail, just have empty tags column
 
-    def test_handles_string_tags(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_string_tags(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test handles single string tag."""
         chatmode = mock_chatmodes_dir / "single.chatmode.md"
-        chatmode.write_text(
-            "---\nname: Single Tag\ndescription: One tag\ntags: solo\n---\n"
-        )
+        chatmode.write_text("---\nname: Single Tag\ndescription: One tag\ntags: solo\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -239,18 +207,12 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "solo" in content
 
-    def test_joins_multiple_tags(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_joins_multiple_tags(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test joins multiple tags with comma."""
         chatmode = mock_chatmodes_dir / "multi.chatmode.md"
-        chatmode.write_text(
-            "---\nname: Multi\ndescription: Many tags\ntags:\n  - a\n  - b\n  - c\n---\n"
-        )
+        chatmode.write_text("---\nname: Multi\ndescription: Many tags\ntags:\n  - a\n  - b\n  - c\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -258,9 +220,7 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "a, b, c" in content
 
-    def test_only_processes_chatmode_files(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_only_processes_chatmode_files(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test only processes *.chatmode.md files."""
         # Create non-chatmode files
         readme = mock_chatmodes_dir / "README.md"
@@ -270,9 +230,7 @@ class TestMainFunction:
         chatmode = mock_chatmodes_dir / "valid.chatmode.md"
         chatmode.write_text("---\nname: Valid\ndescription: Desc\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -283,9 +241,7 @@ class TestMainFunction:
 
     def test_empty_directory(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test handles empty directory."""
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -293,17 +249,13 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "# Chatmode Inventory" in content
 
-    def test_files_sorted_alphabetically(
-        self, mock_chatmodes_dir, mock_output_path, monkeypatch
-    ):
+    def test_files_sorted_alphabetically(self, mock_chatmodes_dir, mock_output_path, monkeypatch):
         """Test files are sorted alphabetically."""
         for name in ["zebra", "alpha", "beta"]:
             chatmode = mock_chatmodes_dir / f"{name}.chatmode.md"
             chatmode.write_text(f"---\nname: {name}\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir
-        )
+        monkeypatch.setattr("generate_chatmode_inventory.CHATMODES_DIR", mock_chatmodes_dir)
         monkeypatch.setattr("generate_chatmode_inventory.OUTPUT", mock_output_path)
 
         main()

@@ -6,15 +6,12 @@ Focus: YAML frontmatter parsing and validation for agent files.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from validate_agent_frontmatter import _parse_frontmatter, main, REQUIRED_KEYS
+from validate_agent_frontmatter import REQUIRED_KEYS, _parse_frontmatter, main
 
 
 @pytest.mark.unit
@@ -174,15 +171,11 @@ class TestMainFunction:
         captured = capsys.readouterr()
         assert "Missing" in captured.out
 
-    def test_main_returns_success_with_valid_files(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_returns_success_with_valid_files(self, mock_agents_dir, monkeypatch, capsys):
         """Test main returns 0 when all files have valid frontmatter."""
         # Create valid agent file
         agent_file = mock_agents_dir / "test.agent.md"
-        agent_file.write_text(
-            "---\nname: Test Agent\ndescription: A test agent\n---\n# Content"
-        )
+        agent_file.write_text("---\nname: Test Agent\ndescription: A test agent\n---\n# Content")
 
         monkeypatch.setattr(
             "validate_agent_frontmatter.AGENTS_DIR",
@@ -196,9 +189,7 @@ class TestMainFunction:
         captured = capsys.readouterr()
         assert "passed" in captured.out
 
-    def test_main_returns_error_with_missing_keys(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_returns_error_with_missing_keys(self, mock_agents_dir, monkeypatch, capsys):
         """Test main returns 1 when required keys are missing."""
         # Create agent file missing description
         agent_file = mock_agents_dir / "incomplete.agent.md"
@@ -217,9 +208,7 @@ class TestMainFunction:
         assert "failed" in captured.out
         assert "description" in captured.out
 
-    def test_main_returns_error_for_malformed_frontmatter(
-        self, mock_agents_dir, monkeypatch, capsys
-    ):
+    def test_main_returns_error_for_malformed_frontmatter(self, mock_agents_dir, monkeypatch, capsys):
         """Test main returns 1 for files with malformed frontmatter."""
         # Create agent file without frontmatter
         agent_file = mock_agents_dir / "no-frontmatter.agent.md"
@@ -255,9 +244,7 @@ class TestMainFunction:
         # Create multiple valid agent files
         for i in range(3):
             agent_file = mock_agents_dir / f"agent-{i}.agent.md"
-            agent_file.write_text(
-                f"---\nname: Agent {i}\ndescription: Description {i}\n---\n"
-            )
+            agent_file.write_text(f"---\nname: Agent {i}\ndescription: Description {i}\n---\n")
 
         monkeypatch.setattr(
             "validate_agent_frontmatter.AGENTS_DIR",

@@ -7,27 +7,16 @@ Focus: Unified manifest generation from multiple sources.
 import json
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_manifest import (
-    build_manifest,
-    count_files,
-    find_missing_metadata,
-    find_orphaned_meta,
-    load_workflow_registry,
-    main,
-    parse_frontmatter,
-    scan_agents,
-    scan_chatmodes,
-    scan_collections,
-    scan_prompts,
-)
+from generate_manifest import (build_manifest, count_files,
+                               find_missing_metadata, find_orphaned_meta,
+                               load_workflow_registry, main, parse_frontmatter,
+                               scan_agents, scan_chatmodes, scan_collections,
+                               scan_prompts)
 
 
 @pytest.mark.unit
@@ -292,14 +281,18 @@ class TestLoadWorkflowRegistry:
     def test_loads_registry_file(self, tmp_path):
         """Test loads existing registry file."""
         registry_file = tmp_path / "registry.json"
-        registry_file.write_text(json.dumps({
-            "statistics": {
-                "total": 50,
-                "with_metadata": 30,
-                "orphans": 2,
-                "by_layer": {"core": 10, "interface": 20},
-            }
-        }))
+        registry_file.write_text(
+            json.dumps(
+                {
+                    "statistics": {
+                        "total": 50,
+                        "with_metadata": 30,
+                        "orphans": 2,
+                        "by_layer": {"core": 10, "interface": 20},
+                    }
+                }
+            )
+        )
 
         result = load_workflow_registry(registry_file)
 
@@ -593,9 +586,7 @@ DESCRIPTION: Test
     def test_workflow_registry_with_alternate_key(self, tmp_path):
         """Test handles total_workflows vs total key."""
         registry_file = tmp_path / "registry.json"
-        registry_file.write_text(json.dumps({
-            "statistics": {"total_workflows": 100}
-        }))
+        registry_file.write_text(json.dumps({"statistics": {"total_workflows": 100}}))
 
         result = load_workflow_registry(registry_file)
 

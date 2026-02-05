@@ -6,14 +6,10 @@ Focus: Workflow file analysis and inventory report generation.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 import pytest
-import yaml
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from analyze_workflows import analyze_workflow, main
 
@@ -41,9 +37,7 @@ class TestAnalyzeWorkflow:
     def test_extracts_workflow_name(self, mock_workflow_dir):
         """Test extracts workflow name from YAML."""
         workflow = mock_workflow_dir / "test.yml"
-        workflow.write_text(
-            "name: Test Workflow\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: Test Workflow\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         result = analyze_workflow(workflow)
 
@@ -81,9 +75,7 @@ jobs:
     def test_handles_simple_on_trigger(self, mock_workflow_dir):
         """Test handles simple 'on: push' format."""
         workflow = mock_workflow_dir / "simple.yml"
-        workflow.write_text(
-            "name: Simple\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: Simple\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         result = analyze_workflow(workflow)
 
@@ -206,9 +198,7 @@ jobs:
     def test_result_includes_filename(self, mock_workflow_dir):
         """Test result includes workflow filename."""
         workflow = mock_workflow_dir / "my-workflow.yml"
-        workflow.write_text(
-            "name: My Workflow\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: My Workflow\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         result = analyze_workflow(workflow)
 
@@ -243,9 +233,7 @@ class TestMainFunction:
         """Test analyzes all .yml files in directory."""
         for i in range(3):
             workflow = mock_workflow_dir / f"workflow-{i}.yml"
-            workflow.write_text(
-                f"name: Workflow {i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-            )
+            workflow.write_text(f"name: Workflow {i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -257,14 +245,10 @@ class TestMainFunction:
     def test_handles_yaml_extension(self, mock_workflow_dir, capsys):
         """Test handles both .yml and .yaml extensions."""
         yml_file = mock_workflow_dir / "test.yml"
-        yml_file.write_text(
-            "name: YML\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        yml_file.write_text("name: YML\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         yaml_file = mock_workflow_dir / "test.yaml"
-        yaml_file.write_text(
-            "name: YAML\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        yaml_file.write_text("name: YAML\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -275,9 +259,7 @@ class TestMainFunction:
     def test_prints_summary_statistics(self, mock_workflow_dir, capsys):
         """Test prints summary statistics."""
         workflow = mock_workflow_dir / "test.yml"
-        workflow.write_text(
-            "name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -288,9 +270,7 @@ class TestMainFunction:
     def test_prints_trigger_distribution(self, mock_workflow_dir, capsys):
         """Test prints trigger distribution."""
         workflow = mock_workflow_dir / "test.yml"
-        workflow.write_text(
-            "name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -301,9 +281,7 @@ class TestMainFunction:
         """Test identifies workflows with duplicate names."""
         for i in range(2):
             workflow = mock_workflow_dir / f"workflow-{i}.yml"
-            workflow.write_text(
-                "name: Same Name\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-            )
+            workflow.write_text("name: Same Name\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -341,9 +319,7 @@ jobs:
     def test_counts_manual_dispatch_workflows(self, mock_workflow_dir, capsys):
         """Test counts workflows with manual dispatch."""
         workflow = mock_workflow_dir / "manual.yml"
-        workflow.write_text(
-            "name: Manual\non: workflow_dispatch\njobs:\n  run:\n    runs-on: ubuntu-latest"
-        )
+        workflow.write_text("name: Manual\non: workflow_dispatch\njobs:\n  run:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -383,9 +359,7 @@ class TestWorkflowStatistics:
         """Test counts total number of workflows."""
         for i in range(5):
             workflow = mock_workflow_dir / f"workflow-{i}.yml"
-            workflow.write_text(
-                f"name: W{i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-            )
+            workflow.write_text(f"name: W{i}\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         main()
 
@@ -396,9 +370,7 @@ class TestWorkflowStatistics:
         """Test counts workflows with errors."""
         # Valid workflow
         valid = mock_workflow_dir / "valid.yml"
-        valid.write_text(
-            "name: Valid\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest"
-        )
+        valid.write_text("name: Valid\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         # Invalid workflow
         invalid = mock_workflow_dir / "invalid.yml"

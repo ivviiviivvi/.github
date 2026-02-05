@@ -12,10 +12,15 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
     '''\.github/workflows/scan-for-secrets\.yml''',
     '''\.github/workflows/safeguard-5-secret-scanning\.yml''',
     '''docs/SECRETS_SETUP\.md''',
+    '''docs/reference/SECURITY_ADVANCED\.md''',
+    '''SECURITY_ADVANCED\.md''',
+    '''\.github/WORKFLOW_GUIDE\.md''',
+    '''WORKFLOW_GUIDE\.md''',
     '''scripts/README\.md''',
     '''agents/.*\.agent\.md''',
     '''\.semgrep/rules\.yml''',
     '''.pre-commit-config.*\.yaml''',
+    '''\.config/\.secrets\.baseline''',
   ]
 
   # Allowlist specific patterns that are examples or documentation
@@ -27,6 +32,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
     '''<your.*>''',  # Placeholder format
     '''xxx+''',  # Placeholder
     '''example\.com''',  # Example domains
+    '''"hashed_secret":\s*"[a-f0-9]+"''',  # detect-secrets baseline hashed values
   ]
 
   # Allowlist commits (if needed in the future)
@@ -48,7 +54,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
   id = "aws-access-key"
   regex = '''AKIA[0-9A-Z]{16}'''
   tags = ["key", "AWS"]
-  [[rules.allowlist]]
+  [rules.allowlist]
     description = "Documentation examples"
     regexes = ['''AKIA\.\.\.''']
     paths = ['''docs/.*''', '''README\.md''', '''agents/.*''']
@@ -58,7 +64,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
   id = "github-pat"
   regex = '''ghp_[a-zA-Z0-9]{36}'''
   tags = ["key", "GitHub"]
-  [[rules.allowlist]]
+  [rules.allowlist]
     description = "Documentation examples"
     regexes = ['''ghp_xxx''', '''ghp_example''']
     paths = ['''docs/.*''', '''README\.md''', '''scripts/.*''']
@@ -68,7 +74,7 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
   id = "generic-api-key"
   regex = '''(?i)(api[_-]?key|apikey)["\s:=]+['"']?([a-zA-Z0-9_\-]{20,})['"']?'''
   tags = ["key", "API"]
-  [[rules.allowlist]]
+  [rules.allowlist]
     description = "Workflow and documentation references"
     paths = [
       '''\.github/workflows/.*''',
@@ -81,24 +87,6 @@ title = "Gitleaks Configuration for ivviiviivvi/.github"
   id = "private-key"
   regex = '''-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----'''
   tags = ["key", "private"]
-  [[rules.allowlist]]
+  [rules.allowlist]
     description = "Pattern definitions"
     paths = ['''\.github/workflows/.*''', '''agents/.*''']
-# Gitleaks Configuration
-# Documentation: https://github.com/gitleaks/gitleaks
-
-title = "Gitleaks Configuration for ivviiviivvi/.github"
-
-# Extend default Gitleaks rules
-[extend]
-useDefault = true
-
-# Custom rules can be added here
-# [[rules]]
-# id = "custom-rule-id"
-# description = "Custom rule description"
-# regex = '''your-regex-pattern'''
-# tags = ["custom", "secret"]
-
-# Note: Allowlist configuration is defined at the top of this file
-# Refer to the [allowlist] section for false positive management

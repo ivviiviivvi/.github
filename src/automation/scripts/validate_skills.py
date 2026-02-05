@@ -52,6 +52,7 @@ def parse_frontmatter(content: str) -> dict[str, object]:
 
     Returns:
         Frontmatter dict or empty dict if no frontmatter
+
     """
     lines = content.splitlines()
     if not lines or lines[0].strip() != "---":
@@ -104,6 +105,7 @@ def extract_skill_info(path: Path, skill_type: str) -> SkillInfo | None:
 
     Returns:
         SkillInfo or None if not a valid skill file
+
     """
     try:
         content = path.read_text(encoding="utf-8")
@@ -156,6 +158,7 @@ def collect_skills(base_dir: Path) -> list[SkillInfo]:
 
     Returns:
         List of SkillInfo objects
+
     """
     skills: list[SkillInfo] = []
 
@@ -197,6 +200,7 @@ def collect_collections(collections_dir: Path) -> set[str]:
 
     Returns:
         Set of collection names
+
     """
     collections: set[str] = set()
 
@@ -235,6 +239,7 @@ def validate_skills(
 
     Returns:
         ValidationResult with errors and warnings
+
     """
     errors: list[str] = []
     warnings: list[str] = []
@@ -244,9 +249,7 @@ def validate_skills(
     if filter_collection:
         filtered_skills = [s for s in skills if s.collection == filter_collection]
         if not filtered_skills:
-            warnings.append(
-                f"No skills found in collection '{filter_collection}'"
-            )
+            warnings.append(f"No skills found in collection '{filter_collection}'")
 
     # Check for unique identifiers
     if check_unique:
@@ -257,25 +260,19 @@ def validate_skills(
         for identifier, duplicates in id_to_skills.items():
             if len(duplicates) > 1:
                 paths = [str(s.path.name) for s in duplicates]
-                errors.append(
-                    f"Duplicate identifier '{identifier}': {', '.join(paths)}"
-                )
+                errors.append(f"Duplicate identifier '{identifier}': {', '.join(paths)}")
 
     # Check collection references
     for skill in filtered_skills:
         if skill.collection and skill.collection not in collections:
-            warnings.append(
-                f"{skill.path.name}: references unknown collection '{skill.collection}'"
-            )
+            warnings.append(f"{skill.path.name}: references unknown collection '{skill.collection}'")
 
     # Check dependencies (warn about potential broken references)
     all_identifiers = {s.identifier for s in skills}
     for skill in filtered_skills:
         for dep in skill.dependencies:
             if dep and dep not in all_identifiers:
-                warnings.append(
-                    f"{skill.path.name}: depends on unknown skill '{dep}'"
-                )
+                warnings.append(f"{skill.path.name}: depends on unknown skill '{dep}'")
 
     return ValidationResult(
         valid=len(errors) == 0,
@@ -287,9 +284,7 @@ def validate_skills(
 
 def main() -> int:
     """Main entry point for the script."""
-    parser = argparse.ArgumentParser(
-        description="Validate skills across agents, chatmodes, and prompts"
-    )
+    parser = argparse.ArgumentParser(description="Validate skills across agents, chatmodes, and prompts")
     parser.add_argument(
         "--framework-dir",
         type=Path,
@@ -370,7 +365,7 @@ def main() -> int:
             print(f"  WARNING: {warning}")
 
     # Summary
-    print(f"\nValidation summary:")
+    print("\nValidation summary:")
     print(f"  Skills validated: {len(result.skills)}")
     print(f"  Errors: {len(result.errors)}")
     print(f"  Warnings: {len(result.warnings)}")

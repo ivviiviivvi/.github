@@ -12,17 +12,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from notification_manager import (
-    DeliveryRecord,
-    Notification,
-    NotificationManager,
-    NotificationStatus,
-    Priority,
-)
+from notification_manager import (DeliveryRecord, Notification,
+                                  NotificationManager, NotificationStatus,
+                                  Priority)
 
 
 class TestNotificationModel:
@@ -240,9 +234,7 @@ class TestDeduplication:
     def test_old_notification_not_duplicate(self, manager):
         """Test old notification outside window is not duplicate."""
         # Cache an old notification
-        manager.sent_cache["test-source:Test Alert"] = datetime.now(
-            timezone.utc
-        ) - timedelta(seconds=400)
+        manager.sent_cache["test-source:Test Alert"] = datetime.now(timezone.utc) - timedelta(seconds=400)
 
         notification = Notification(
             title="Test Alert",
@@ -719,9 +711,7 @@ class TestSendSlackExtended:
                     "slack": {
                         "webhook_url": "https://hooks.slack.com/default",
                         "channels": {
-                            "#incidents": {
-                                "webhook_url": "https://hooks.slack.com/incidents"
-                            },
+                            "#incidents": {"webhook_url": "https://hooks.slack.com/incidents"},
                             "#alerts": {"webhook_url": "https://hooks.slack.com/alerts"},
                         },
                     },
@@ -1222,13 +1212,9 @@ deduplication:
                 mock_post.return_value.raise_for_status = MagicMock()
 
                 # Mock NotificationManager to use our config
-                with patch.object(
-                    NotificationManager, "_load_config"
-                ) as mock_load_config:
+                with patch.object(NotificationManager, "_load_config") as mock_load_config:
                     mock_load_config.return_value = {
-                        "channels": {
-                            "slack": {"webhook_url": "https://hooks.slack.com/test"}
-                        },
+                        "channels": {"slack": {"webhook_url": "https://hooks.slack.com/test"}},
                         "priority_routing": {"MEDIUM": ["slack"]},
                         "rate_limiting": {"max_per_minute": {"slack": 10}},
                         "deduplication": {"enabled": True, "window_seconds": 300},

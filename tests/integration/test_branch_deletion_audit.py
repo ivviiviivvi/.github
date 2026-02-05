@@ -54,17 +54,13 @@ class TestScriptSyntax:
     def test_log_script_syntax(self):
         """log-branch-deletion.sh should have valid bash syntax."""
         script = SCRIPTS_DIR / "log-branch-deletion.sh"
-        result = subprocess.run(
-            ["bash", "-n", str(script)], capture_output=True, text=True
-        )
+        result = subprocess.run(["bash", "-n", str(script)], capture_output=True, text=True)
         assert result.returncode == 0, f"Syntax error: {result.stderr}"
 
     def test_recover_script_syntax(self):
         """recover-branch.sh should have valid bash syntax."""
         script = SCRIPTS_DIR / "recover-branch.sh"
-        result = subprocess.run(
-            ["bash", "-n", str(script)], capture_output=True, text=True
-        )
+        result = subprocess.run(["bash", "-n", str(script)], capture_output=True, text=True)
         assert result.returncode == 0, f"Syntax error: {result.stderr}"
 
 
@@ -82,9 +78,7 @@ class TestLogScriptArguments:
     def test_missing_reason(self):
         """Script should fail with only branch name."""
         script = SCRIPTS_DIR / "log-branch-deletion.sh"
-        result = subprocess.run(
-            ["bash", str(script), "test-branch"], capture_output=True, text=True
-        )
+        result = subprocess.run(["bash", str(script), "test-branch"], capture_output=True, text=True)
         assert result.returncode != 0, "Should fail without reason"
 
     def test_invalid_reason(self):
@@ -97,9 +91,9 @@ class TestLogScriptArguments:
         )
         assert result.returncode != 0, "Should fail with invalid reason"
         # Scripts output to stdout, not stderr
-        assert (
-            "Invalid reason" in result.stdout or "Valid reasons" in result.stdout
-        ), "Should show error about invalid reason"
+        assert "Invalid reason" in result.stdout or "Valid reasons" in result.stdout, (
+            "Should show error about invalid reason"
+        )
 
 
 class TestRecoverScriptArguments:
@@ -204,9 +198,7 @@ class TestIntegration:
         assert workflow.exists(), f"Workflow not found: {workflow}"
 
         content = workflow.read_text()
-        assert (
-            "log-branch-deletion.sh" in content
-        ), "Workflow should call log-branch-deletion.sh"
+        assert "log-branch-deletion.sh" in content, "Workflow should call log-branch-deletion.sh"
 
     def test_three_deletion_points(self):
         """Workflow should log at all three deletion points."""

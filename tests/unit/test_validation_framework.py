@@ -11,9 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock notification_integration before importing validation_framework
 sys.modules["notification_integration"] = MagicMock()
@@ -470,9 +468,7 @@ class TestReportGeneration:
             ],
         }
 
-        (validation_dir / "validation_20240101_120000.json").write_text(
-            json.dumps(validation_data)
-        )
+        (validation_dir / "validation_20240101_120000.json").write_text(json.dumps(validation_data))
 
         report = framework.generate_report("owner", "repo", days=30)
 
@@ -739,11 +735,10 @@ class TestSendValidationNotification:
             )
         ]
 
-        with patch(
-            "validation_framework.notify_validation_success"
-        ) as mock_success, patch(
-            "validation_framework.notify_validation_failure"
-        ) as mock_failure:
+        with (
+            patch("validation_framework.notify_validation_success") as mock_success,
+            patch("validation_framework.notify_validation_failure") as mock_failure,
+        ):
             framework._send_validation_notification(suite)
 
             mock_success.assert_called_once()
@@ -782,11 +777,10 @@ class TestSendValidationNotification:
             ),
         ]
 
-        with patch(
-            "validation_framework.notify_validation_success"
-        ) as mock_success, patch(
-            "validation_framework.notify_validation_failure"
-        ) as mock_failure:
+        with (
+            patch("validation_framework.notify_validation_success") as mock_success,
+            patch("validation_framework.notify_validation_failure") as mock_failure,
+        ):
             framework._send_validation_notification(suite)
 
             # Should be called twice for the two failed capabilities
@@ -820,6 +814,7 @@ class TestMainCLI:
                 mock_validate.return_value = suite
 
                 from validation_framework import main
+
                 main()
 
                 captured = capsys.readouterr()
@@ -850,6 +845,7 @@ class TestMainCLI:
                 mock_validate.return_value = suite
 
                 from validation_framework import main
+
                 main()
 
                 captured = capsys.readouterr()
@@ -859,7 +855,9 @@ class TestMainCLI:
 
     def test_validate_single_capability(self, mock_github, capsys):
         """Test --validate single capability."""
-        with patch("sys.argv", ["validation_framework.py", "--owner", "org", "--repo", "repo", "--validate", "routing"]):
+        with patch(
+            "sys.argv", ["validation_framework.py", "--owner", "org", "--repo", "repo", "--validate", "routing"]
+        ):
             with patch.object(ValidationFramework, "validate_routing") as mock_validate:
                 mock_validate.return_value = ValidationResult(
                     capability="routing",
@@ -869,6 +867,7 @@ class TestMainCLI:
                 )
 
                 from validation_framework import main
+
                 main()
 
                 captured = capsys.readouterr()
@@ -889,6 +888,7 @@ class TestMainCLI:
                 )
 
                 from validation_framework import main
+
                 main()
 
                 captured = capsys.readouterr()
@@ -898,7 +898,9 @@ class TestMainCLI:
 
     def test_report_cli(self, mock_github, capsys):
         """Test --report CLI option."""
-        with patch("sys.argv", ["validation_framework.py", "--owner", "org", "--repo", "repo", "--report", "--days", "14"]):
+        with patch(
+            "sys.argv", ["validation_framework.py", "--owner", "org", "--repo", "repo", "--report", "--days", "14"]
+        ):
             with patch.object(ValidationFramework, "generate_report") as mock_report:
                 mock_report.return_value = {
                     "repository": "org/repo",
@@ -910,6 +912,7 @@ class TestMainCLI:
                 }
 
                 from validation_framework import main
+
                 main()
 
                 captured = capsys.readouterr()
@@ -923,6 +926,7 @@ class TestMainCLI:
         with patch("sys.argv", ["validation_framework.py", "--owner", "org", "--repo", "repo"]):
             with patch("argparse.ArgumentParser.print_help") as mock_help:
                 from validation_framework import main
+
                 main()
 
                 mock_help.assert_called_once()
@@ -940,6 +944,7 @@ class TestMainCLI:
                 }
 
                 from validation_framework import main
+
                 main()
 
                 # Check that debug logging was enabled

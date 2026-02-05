@@ -13,13 +13,10 @@ import pytest
 
 sys.path.insert(0, "src/automation/scripts")
 
-from src.automation.scripts.models import (
-    MaintenanceConfig,
-    MaintenanceTask,
-    Priority,
-    RiskLevel,
-)
-from src.automation.scripts.proactive_maintenance import MaintenanceScheduler, main
+from src.automation.scripts.models import (MaintenanceConfig, MaintenanceTask,
+                                           Priority, RiskLevel)
+from src.automation.scripts.proactive_maintenance import (MaintenanceScheduler,
+                                                          main)
 
 
 @pytest.mark.unit
@@ -51,13 +48,9 @@ class TestScheduleMaintenance:
 
     def test_schedule_maintenance_returns_window(self, scheduler):
         """Test schedule_maintenance returns optimal window."""
-        with patch.object(
-            scheduler, "_analyze_activity_patterns"
-        ) as mock_analyze:
+        with patch.object(scheduler, "_analyze_activity_patterns") as mock_analyze:
             with patch.object(scheduler, "_get_pending_tasks") as mock_tasks:
-                with patch.object(
-                    scheduler, "_predict_maintenance_windows"
-                ) as mock_predict:
+                with patch.object(scheduler, "_predict_maintenance_windows") as mock_predict:
                     mock_analyze.return_value = {
                         "hourly_patterns": {},
                         "daily_patterns": {},
@@ -70,21 +63,15 @@ class TestScheduleMaintenance:
                     mock_window.confidence = 0.85
                     mock_predict.return_value = [mock_window]
 
-                    result = scheduler.schedule_maintenance(
-                        "owner", "repo", "cleanup"
-                    )
+                    result = scheduler.schedule_maintenance("owner", "repo", "cleanup")
 
                     assert result == mock_window
 
     def test_schedule_maintenance_no_windows_raises(self, scheduler):
         """Test schedule_maintenance raises when no windows found."""
-        with patch.object(
-            scheduler, "_analyze_activity_patterns"
-        ) as mock_analyze:
+        with patch.object(scheduler, "_analyze_activity_patterns") as mock_analyze:
             with patch.object(scheduler, "_get_pending_tasks") as mock_tasks:
-                with patch.object(
-                    scheduler, "_predict_maintenance_windows"
-                ) as mock_predict:
+                with patch.object(scheduler, "_predict_maintenance_windows") as mock_predict:
                     mock_analyze.return_value = {}
                     mock_tasks.return_value = []
                     mock_predict.return_value = []
@@ -137,9 +124,7 @@ class TestGetCommitActivity:
 
     def test_get_commit_activity_success(self, scheduler):
         """Test successful commit activity retrieval."""
-        scheduler.client.get.return_value = [
-            {"sha": "abc123", "commit": {"message": "Test"}}
-        ]
+        scheduler.client.get.return_value = [{"sha": "abc123", "commit": {"message": "Test"}}]
 
         result = scheduler._get_commit_activity("owner", "repo")
 
@@ -168,9 +153,7 @@ class TestGetWorkflowActivity:
 
     def test_get_workflow_activity_success(self, scheduler):
         """Test successful workflow activity retrieval."""
-        scheduler.client.get.return_value = {
-            "workflow_runs": [{"id": 1, "status": "completed"}]
-        }
+        scheduler.client.get.return_value = {"workflow_runs": [{"id": 1, "status": "completed"}]}
 
         result = scheduler._get_workflow_activity("owner", "repo")
 
@@ -199,9 +182,7 @@ class TestGetIssueActivity:
 
     def test_get_issue_activity_success(self, scheduler):
         """Test successful issue activity retrieval."""
-        scheduler.client.get.return_value = [
-            {"number": 1, "title": "Test Issue"}
-        ]
+        scheduler.client.get.return_value = [{"number": 1, "title": "Test Issue"}]
 
         result = scheduler._get_issue_activity("owner", "repo")
 
@@ -316,9 +297,7 @@ class TestGetPendingTasks:
 
     def test_get_pending_tasks_dependency_update(self, scheduler):
         """Test pending tasks for dependency updates."""
-        with patch.object(
-            scheduler, "_get_dependency_update_tasks"
-        ) as mock_deps:
+        with patch.object(scheduler, "_get_dependency_update_tasks") as mock_deps:
             mock_deps.return_value = [
                 MaintenanceTask(
                     task_type="dependency_update",
@@ -329,9 +308,7 @@ class TestGetPendingTasks:
                 )
             ]
 
-            result = scheduler._get_pending_tasks(
-                "owner", "repo", "dependency_update"
-            )
+            result = scheduler._get_pending_tasks("owner", "repo", "dependency_update")
 
             assert len(result) == 1
             assert result[0].task_type == "dependency_update"
@@ -513,17 +490,15 @@ class TestPredictMaintenanceWindows:
     def test_predict_windows_returns_sorted_list(self, scheduler):
         """Test windows are sorted by impact score."""
         activity_data = {
-            "hourly_patterns": {h: 0.5 for h in range(24)},
-            "daily_patterns": {d: 0.5 for d in range(7)},
+            "hourly_patterns": dict.fromkeys(range(24), 0.5),
+            "daily_patterns": dict.fromkeys(range(7), 0.5),
             "commit_activity": [],
             "workflow_activity": [],
             "issue_activity": [],
         }
         tasks = []
 
-        result = scheduler._predict_maintenance_windows(
-            "owner", "repo", "cleanup", activity_data, tasks
-        )
+        result = scheduler._predict_maintenance_windows("owner", "repo", "cleanup", activity_data, tasks)
 
         assert len(result) > 0
         # Verify sorted by impact score
@@ -533,16 +508,14 @@ class TestPredictMaintenanceWindows:
     def test_predict_windows_adds_alternatives(self, scheduler):
         """Test alternatives are added to best window."""
         activity_data = {
-            "hourly_patterns": {h: 0.5 for h in range(24)},
-            "daily_patterns": {d: 0.5 for d in range(7)},
+            "hourly_patterns": dict.fromkeys(range(24), 0.5),
+            "daily_patterns": dict.fromkeys(range(7), 0.5),
             "commit_activity": [],
             "workflow_activity": [],
             "issue_activity": [],
         }
 
-        result = scheduler._predict_maintenance_windows(
-            "owner", "repo", "cleanup", activity_data, []
-        )
+        result = scheduler._predict_maintenance_windows("owner", "repo", "cleanup", activity_data, [])
 
         if len(result) > 1:
             assert len(result[0].alternatives) > 0
@@ -566,36 +539,30 @@ class TestCalculateImpactScore:
     def test_impact_score_preferred_hour_reduction(self, scheduler):
         """Test preferred hours reduce impact score."""
         activity_data = {
-            "hourly_patterns": {h: 0.5 for h in range(24)},
-            "daily_patterns": {d: 0.5 for d in range(7)},
+            "hourly_patterns": dict.fromkeys(range(24), 0.5),
+            "daily_patterns": dict.fromkeys(range(7), 0.5),
         }
 
         # Preferred hour (2:00)
         window_time = datetime(2024, 1, 15, 2, 0, tzinfo=timezone.utc)
-        score_preferred = scheduler._calculate_impact_score(
-            window_time, activity_data, "cleanup"
-        )
+        score_preferred = scheduler._calculate_impact_score(window_time, activity_data, "cleanup")
 
         # Non-preferred hour (12:00)
         window_time_non = datetime(2024, 1, 15, 12, 0, tzinfo=timezone.utc)
-        score_non_preferred = scheduler._calculate_impact_score(
-            window_time_non, activity_data, "cleanup"
-        )
+        score_non_preferred = scheduler._calculate_impact_score(window_time_non, activity_data, "cleanup")
 
         assert score_preferred < score_non_preferred
 
     def test_impact_score_avoid_dates_maximum(self, scheduler):
         """Test avoid dates get maximum impact score."""
         activity_data = {
-            "hourly_patterns": {h: 0.1 for h in range(24)},
-            "daily_patterns": {d: 0.1 for d in range(7)},
+            "hourly_patterns": dict.fromkeys(range(24), 0.1),
+            "daily_patterns": dict.fromkeys(range(7), 0.1),
         }
 
         window_time = datetime(2024, 12, 25, 2, 0, tzinfo=timezone.utc)
         # Use dependency_update which doesn't reduce the impact
-        score = scheduler._calculate_impact_score(
-            window_time, activity_data, "dependency_update"
-        )
+        score = scheduler._calculate_impact_score(window_time, activity_data, "dependency_update")
 
         # Avoid dates set base_impact to 1.0, dependency_update multiplies by 1.2
         # but result is capped at 1.0
@@ -604,17 +571,13 @@ class TestCalculateImpactScore:
     def test_impact_score_task_type_adjustment(self, scheduler):
         """Test task type adjusts impact score."""
         activity_data = {
-            "hourly_patterns": {h: 0.5 for h in range(24)},
-            "daily_patterns": {d: 0.5 for d in range(7)},
+            "hourly_patterns": dict.fromkeys(range(24), 0.5),
+            "daily_patterns": dict.fromkeys(range(7), 0.5),
         }
         window_time = datetime(2024, 1, 16, 10, 0, tzinfo=timezone.utc)
 
-        dep_score = scheduler._calculate_impact_score(
-            window_time, activity_data, "dependency_update"
-        )
-        cleanup_score = scheduler._calculate_impact_score(
-            window_time, activity_data, "cleanup"
-        )
+        dep_score = scheduler._calculate_impact_score(window_time, activity_data, "dependency_update")
+        cleanup_score = scheduler._calculate_impact_score(window_time, activity_data, "cleanup")
 
         # dependency_update should have higher impact
         assert dep_score > cleanup_score
