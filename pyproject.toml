@@ -112,6 +112,7 @@ exclude_dirs = ["tests", ".venv", "node_modules"]
 skips = ["B101"]  # Allow assert statements in tests
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
