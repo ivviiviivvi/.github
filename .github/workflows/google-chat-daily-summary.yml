@@ -74,9 +74,15 @@ jobs:
           core.setOutput('date', startDate);
 
     - name: Send daily summary to Google Chat
-      if: ${{ secrets.GOOGLE_CHAT_WEBHOOK_METRICS != '' }}
+      env:
+        GOOGLE_CHAT_WEBHOOK: ${{ secrets.GOOGLE_CHAT_WEBHOOK_METRICS }}
       shell: bash
       run: |
+        if [ -z "$GOOGLE_CHAT_WEBHOOK" ]; then
+          echo "::warning::GOOGLE_CHAT_WEBHOOK_METRICS secret not configured, skipping notification"
+          exit 0
+        fi
+
         WORKFLOW_DATA='${{ steps.metrics.outputs.by-workflow }}'
 
         # Determine status emoji and color
@@ -96,7 +102,7 @@ jobs:
         WORKFLOW_BREAKDOWN=$(echo "$WORKFLOW_DATA" | jq -r 'to_entries | map("<b>" + .key + ":</b> " + (.value.successful|tostring) + "/" + (.value.total|tostring) + " (" + (if .value.total > 0 then ((.value.successful / .value.total * 100)|tostring|split(".")[0]) else "0" end) + "%)") | join("<br>")')
 
         # Send to Google Chat using Card v2 format
-        if ! curl -sf -X POST "${{ secrets.GOOGLE_CHAT_WEBHOOK_METRICS }}" \
+        if ! curl -sf -X POST "$GOOGLE_CHAT_WEBHOOK" \
           -H 'Content-Type: application/json' \
           -d "{
             \"cardsV2\": [
