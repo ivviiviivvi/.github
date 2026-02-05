@@ -33,10 +33,7 @@ Environment Variables:
 """
 
 # Re-export from enhanced_analytics for compatibility
-from enhanced_analytics import (
-    EnhancedAnalyticsEngine,
-    main,
-)
+from enhanced_analytics import EnhancedAnalyticsEngine, main
 
 # Re-export all functionality
 __all__ = [

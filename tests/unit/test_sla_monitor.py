@@ -10,9 +10,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock notification_integration before importing sla_monitor
 sys.modules["notification_integration"] = MagicMock()
@@ -470,27 +468,18 @@ class TestReportGeneration:
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
                 with patch.object(monitor, "_monitor_workflows") as mock_wf:
-                    from models import (
-                        AvailabilityMetric,
-                        ResolutionTimeMetric,
-                        ResponseTimeMetric,
-                        SLAMetrics,
-                        SuccessRateMetric,
-                    )
+                    from models import (AvailabilityMetric,
+                                        ResolutionTimeMetric,
+                                        ResponseTimeMetric, SLAMetrics,
+                                        SuccessRateMetric)
 
                     mock_metrics = SLAMetrics(
                         repository="owner/repo",
                         time_window="24h",
                         overall_compliance=95.0,
-                        response_time=ResponseTimeMetric(
-                            target_minutes=60, actual_minutes=30, met=True
-                        ),
-                        resolution_time=ResolutionTimeMetric(
-                            target_hours=24, actual_hours=12, met=True
-                        ),
-                        success_rate=SuccessRateMetric(
-                            target_percentage=95.0, actual_percentage=98.0, met=True
-                        ),
+                        response_time=ResponseTimeMetric(target_minutes=60, actual_minutes=30, met=True),
+                        resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
+                        success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
                         availability=AvailabilityMetric(
                             target_percentage=99.0,
                             actual_percentage=99.5,
@@ -514,27 +503,18 @@ class TestReportGeneration:
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
                 with patch.object(monitor, "_monitor_workflows") as mock_wf:
-                    from models import (
-                        AvailabilityMetric,
-                        ResolutionTimeMetric,
-                        ResponseTimeMetric,
-                        SLAMetrics,
-                        SuccessRateMetric,
-                    )
+                    from models import (AvailabilityMetric,
+                                        ResolutionTimeMetric,
+                                        ResponseTimeMetric, SLAMetrics,
+                                        SuccessRateMetric)
 
                     mock_metrics = SLAMetrics(
                         repository="owner/repo",
                         time_window="24h",
                         overall_compliance=95.0,
-                        response_time=ResponseTimeMetric(
-                            target_minutes=60, actual_minutes=30, met=True
-                        ),
-                        resolution_time=ResolutionTimeMetric(
-                            target_hours=24, actual_hours=12, met=True
-                        ),
-                        success_rate=SuccessRateMetric(
-                            target_percentage=95.0, actual_percentage=98.0, met=True
-                        ),
+                        response_time=ResponseTimeMetric(target_minutes=60, actual_minutes=30, met=True),
+                        resolution_time=ResolutionTimeMetric(target_hours=24, actual_hours=12, met=True),
+                        success_rate=SuccessRateMetric(target_percentage=95.0, actual_percentage=98.0, met=True),
                         availability=AvailabilityMetric(
                             target_percentage=99.0,
                             actual_percentage=99.5,
@@ -635,12 +615,8 @@ class TestMonitorRepositoryBreaches:
         )
 
         with patch.object(monitor, "_monitor_issues", return_value=mock_metrics):
-            with patch.object(
-                monitor, "_monitor_pull_requests", return_value=mock_metrics
-            ):
-                with patch.object(
-                    monitor, "_monitor_workflows", return_value=mock_metrics
-                ):
+            with patch.object(monitor, "_monitor_pull_requests", return_value=mock_metrics):
+                with patch.object(monitor, "_monitor_workflows", return_value=mock_metrics):
                     with patch.object(monitor, "_handle_breaches") as mock_handle:
                         monitor.monitor_repository("owner", "repo")
 
@@ -741,9 +717,7 @@ class TestClosedIssuesResolution:
         ]
 
         # Mock first response to avoid breach
-        with patch.object(
-            monitor, "_get_first_response", return_value=open_time + timedelta(seconds=30)
-        ):
+        with patch.object(monitor, "_get_first_response", return_value=open_time + timedelta(seconds=30)):
             metrics = monitor._monitor_issues("owner", "repo")
 
         # Resolution time should be calculated (close - create time)
@@ -859,9 +833,7 @@ class TestMergedPRResolution:
         ]
 
         # Mock first review to avoid breach
-        with patch.object(
-            monitor, "_get_first_review", return_value=open_time + timedelta(seconds=30)
-        ):
+        with patch.object(monitor, "_get_first_review", return_value=open_time + timedelta(seconds=30)):
             metrics = monitor._monitor_pull_requests("owner", "repo")
 
         # Resolution time should be calculated from merged PRs
@@ -1083,16 +1055,10 @@ class TestGenerateReportWithBreachFiles:
         breach_data = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "repository": "owner/repo",
-            "breaches": [
-                {"item_type": "issue", "item_number": 1, "breach_type": "response_time"}
-            ],
+            "breaches": [{"item_type": "issue", "item_number": 1, "breach_type": "response_time"}],
         }
-        (monitor.breaches_dir / "breach_20240101_120000.json").write_text(
-            json.dumps(breach_data)
-        )
-        (monitor.breaches_dir / "breach_20240102_120000.json").write_text(
-            json.dumps(breach_data)
-        )
+        (monitor.breaches_dir / "breach_20240101_120000.json").write_text(json.dumps(breach_data))
+        (monitor.breaches_dir / "breach_20240102_120000.json").write_text(json.dumps(breach_data))
 
         return monitor
 
@@ -1111,12 +1077,8 @@ class TestGenerateReportWithBreachFiles:
         )
 
         with patch.object(monitor, "_monitor_issues", return_value=mock_metrics):
-            with patch.object(
-                monitor, "_monitor_pull_requests", return_value=mock_metrics
-            ):
-                with patch.object(
-                    monitor, "_monitor_workflows", return_value=mock_metrics
-                ):
+            with patch.object(monitor, "_monitor_pull_requests", return_value=mock_metrics):
+                with patch.object(monitor, "_monitor_workflows", return_value=mock_metrics):
                     report = monitor.generate_report("owner", "repo", lookback_days=30)
 
         # Should count breaches from the files
@@ -1148,9 +1110,7 @@ class TestSLAMonitorCLI:
             with patch("sla_monitor.load_config") as mock_config:
                 mock_config.return_value = SLAConfig()
                 with patch("sla_monitor.GitHubAPIClient"):
-                    with patch.object(
-                        SLAMonitor, "monitor_repository"
-                    ) as mock_monitor:
+                    with patch.object(SLAMonitor, "monitor_repository") as mock_monitor:
                         mock_monitor.return_value = {
                             "issues": mock_metrics,
                             "pull_requests": mock_metrics,
@@ -1196,9 +1156,7 @@ class TestSLAMonitorCLI:
             with patch("sla_monitor.load_config") as mock_config:
                 mock_config.return_value = SLAConfig()
                 with patch("sla_monitor.GitHubAPIClient"):
-                    with patch.object(
-                        SLAMonitor, "monitor_repository"
-                    ) as mock_monitor:
+                    with patch.object(SLAMonitor, "monitor_repository") as mock_monitor:
                         mock_monitor.return_value = {
                             "issues": mock_metrics,
                             "pull_requests": mock_metrics,
@@ -1236,8 +1194,7 @@ class TestSLAMonitorCLI:
                     with patch.object(SLAMonitor, "generate_report") as mock_report:
                         mock_report.return_value = SLAReport(
                             repository="org/repo",
-                            period_start=datetime.now(timezone.utc)
-                            - timedelta(days=14),
+                            period_start=datetime.now(timezone.utc) - timedelta(days=14),
                             period_end=datetime.now(timezone.utc),
                             metrics={},
                             total_breaches=5,
@@ -1254,9 +1211,7 @@ class TestSLAMonitorCLI:
 
     def test_no_args_prints_help(self, capsys):
         """Test no arguments prints help."""
-        with patch(
-            "sys.argv", ["sla_monitor.py", "--owner", "org", "--repo", "repo"]
-        ):
+        with patch("sys.argv", ["sla_monitor.py", "--owner", "org", "--repo", "repo"]):
             with patch("sla_monitor.load_config") as mock_config:
                 mock_config.return_value = SLAConfig()
                 with patch("sla_monitor.GitHubAPIClient"):
@@ -1298,9 +1253,7 @@ class TestSLAMonitorCLI:
             with patch("sla_monitor.load_config") as mock_config:
                 mock_config.return_value = SLAConfig()
                 with patch("sla_monitor.GitHubAPIClient"):
-                    with patch.object(
-                        SLAMonitor, "monitor_repository"
-                    ) as mock_monitor:
+                    with patch.object(SLAMonitor, "monitor_repository") as mock_monitor:
                         mock_monitor.return_value = {
                             "issues": mock_metrics,
                             "pull_requests": mock_metrics,

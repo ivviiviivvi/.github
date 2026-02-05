@@ -9,11 +9,9 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_collection_inventory import parse_frontmatter, main
+from generate_collection_inventory import main, parse_frontmatter
 
 
 @pytest.mark.unit
@@ -123,32 +121,24 @@ class TestMainFunction:
         """Create mock output path."""
         return tmp_path / "ai_framework" / "collections" / "INVENTORY.md"
 
-    def test_creates_inventory_file(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_creates_inventory_file(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test creates INVENTORY.md file."""
         collection = mock_collections_dir / "mcp-tools.md"
         collection.write_text("---\nname: MCP Tools\ndescription: Tools\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
 
         assert mock_output_path.exists()
 
-    def test_inventory_has_header(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_inventory_has_header(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test inventory has proper header."""
         collection = mock_collections_dir / "test.md"
         collection.write_text("---\nname: Test\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -157,18 +147,12 @@ class TestMainFunction:
         assert "# Collection Inventory" in content
         assert "| File | Name | Description | Tags |" in content
 
-    def test_includes_collection_data(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_includes_collection_data(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test inventory includes collection data."""
         collection = mock_collections_dir / "utilities.md"
-        collection.write_text(
-            "---\nname: Utilities\ndescription: Utility tools\ntags:\n  - util\n---\n"
-        )
+        collection.write_text("---\nname: Utilities\ndescription: Utility tools\ntags:\n  - util\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -179,16 +163,12 @@ class TestMainFunction:
         assert "Utility tools" in content
         assert "util" in content
 
-    def test_handles_md_files(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_md_files(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test processes .md files."""
         collection = mock_collections_dir / "markdown.md"
         collection.write_text("---\nname: MD Collection\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -196,16 +176,12 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "markdown.md" in content
 
-    def test_handles_yml_files(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_yml_files(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test processes .yml files."""
         collection = mock_collections_dir / "config.yml"
         collection.write_text("---\nname: YAML Collection\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -214,19 +190,13 @@ class TestMainFunction:
         assert "config.yml" in content
         assert "YAML Collection" in content
 
-    def test_handles_multiple_collections(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_multiple_collections(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles multiple collection files."""
         for i in range(3):
             collection = mock_collections_dir / f"collection-{i}.md"
-            collection.write_text(
-                f"---\nname: Collection {i}\ndescription: Desc {i}\n---\n"
-            )
+            collection.write_text(f"---\nname: Collection {i}\ndescription: Desc {i}\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -235,16 +205,12 @@ class TestMainFunction:
         for i in range(3):
             assert f"collection-{i}.md" in content
 
-    def test_handles_missing_tags(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_missing_tags(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles collections without tags."""
         collection = mock_collections_dir / "no-tags.md"
         collection.write_text("---\nname: No Tags\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -252,16 +218,12 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "No Tags" in content
 
-    def test_handles_string_tags(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_string_tags(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles single string tag."""
         collection = mock_collections_dir / "single-tag.md"
         collection.write_text("---\nname: Single\ndescription: D\ntags: solo\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -269,18 +231,12 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "solo" in content
 
-    def test_joins_multiple_tags(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_joins_multiple_tags(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test joins multiple tags with comma."""
         collection = mock_collections_dir / "multi-tag.md"
-        collection.write_text(
-            "---\nname: Multi\ndescription: D\ntags:\n  - a\n  - b\n  - c\n---\n"
-        )
+        collection.write_text("---\nname: Multi\ndescription: D\ntags:\n  - a\n  - b\n  - c\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -288,9 +244,7 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "a, b, c" in content
 
-    def test_ignores_other_file_types(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_ignores_other_file_types(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test ignores non-md/yml files."""
         # Create various file types
         json_file = mock_collections_dir / "config.json"
@@ -303,9 +257,7 @@ class TestMainFunction:
         collection = mock_collections_dir / "valid.md"
         collection.write_text("---\nname: Valid\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -317,9 +269,7 @@ class TestMainFunction:
 
     def test_empty_directory(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles empty directory."""
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -327,17 +277,13 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "# Collection Inventory" in content
 
-    def test_files_sorted_alphabetically(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_files_sorted_alphabetically(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test files are sorted alphabetically."""
         for name in ["zebra", "alpha", "beta"]:
             collection = mock_collections_dir / f"{name}.md"
             collection.write_text(f"---\nname: {name}\ndescription: D\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -349,16 +295,12 @@ class TestMainFunction:
 
         assert alpha_pos < beta_pos < zebra_pos
 
-    def test_handles_missing_name(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_missing_name(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles collection with missing name."""
         collection = mock_collections_dir / "no-name.md"
         collection.write_text("---\ndescription: No name field\n---\n")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()
@@ -367,16 +309,12 @@ class TestMainFunction:
         assert "no-name.md" in content
         # Should not fail, just have empty name
 
-    def test_handles_no_frontmatter(
-        self, mock_collections_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_no_frontmatter(self, mock_collections_dir, mock_output_path, monkeypatch):
         """Test handles files without frontmatter."""
         collection = mock_collections_dir / "no-fm.md"
         collection.write_text("# Just content\nNo frontmatter here")
 
-        monkeypatch.setattr(
-            "generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir
-        )
+        monkeypatch.setattr("generate_collection_inventory.COLLECTIONS_DIR", mock_collections_dir)
         monkeypatch.setattr("generate_collection_inventory.OUTPUT", mock_output_path)
 
         main()

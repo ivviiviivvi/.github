@@ -4,22 +4,18 @@
 Focus: A/B test assignment logic, hashing, group assignment, and reporting.
 """
 
-import io
 import json
 import subprocess
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, mock_open, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from ab_test_assignment import ABTestAssigner, main, print_table
-
 
 # Note: Lines 22-24 (yaml ImportError handling) cannot be easily tested
 # since yaml is always available as a dependency. This is acceptable
@@ -279,10 +275,12 @@ class TestListAllRepositories:
     def test_lists_repositories_successfully(self, assigner):
         """Test successful repository listing."""
         mock_result = MagicMock()
-        mock_result.stdout = json.dumps([
-            {"nameWithOwner": "org/repo1"},
-            {"nameWithOwner": "org/repo2"},
-        ])
+        mock_result.stdout = json.dumps(
+            [
+                {"nameWithOwner": "org/repo1"},
+                {"nameWithOwner": "org/repo2"},
+            ]
+        )
 
         with patch("ab_test_assignment.subprocess.run", return_value=mock_result):
             repos = assigner.list_all_repositories()
@@ -345,9 +343,7 @@ class TestGenerateReport:
             "excluded": ["security/vuln-scanner"],
         }
 
-        with patch.object(
-            assigner, "assign_all_repositories", return_value=assignments
-        ):
+        with patch.object(assigner, "assign_all_repositories", return_value=assignments):
             report = assigner.generate_report()
 
             assert report["testName"] == "Stale Grace Period Test"
@@ -366,9 +362,7 @@ class TestGenerateReport:
             "excluded": [],
         }
 
-        with patch.object(
-            assigner, "assign_all_repositories", return_value=assignments
-        ):
+        with patch.object(assigner, "assign_all_repositories", return_value=assignments):
             report = assigner.generate_report()
 
             assert report["assignments"]["control"]["percentage"] == 50.0
@@ -378,9 +372,7 @@ class TestGenerateReport:
         """Test report handles zero repositories."""
         assignments = {"control": [], "experiment": [], "excluded": []}
 
-        with patch.object(
-            assigner, "assign_all_repositories", return_value=assignments
-        ):
+        with patch.object(assigner, "assign_all_repositories", return_value=assignments):
             report = assigner.generate_report()
 
             assert report["assignments"]["control"]["percentage"] == 0
@@ -517,9 +509,7 @@ class TestMainFunction:
             "reason": "Excluded from A/B test",
         }
 
-        with patch(
-            "sys.argv", ["ab_test_assignment.py", "--repo", "security/scanner"]
-        ):
+        with patch("sys.argv", ["ab_test_assignment.py", "--repo", "security/scanner"]):
             with patch("builtins.print") as mock_print:
                 main()
 

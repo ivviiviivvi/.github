@@ -10,9 +10,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock PyGithub before import
 mock_github_module = MagicMock()
@@ -28,7 +26,7 @@ sys.modules["github.Repository"] = MagicMock()
 # Mock secret_manager
 sys.modules["secret_manager"] = MagicMock()
 
-from sync_labels import LABEL_DEFINITIONS, LabelSyncManager, main
+from sync_labels import LabelSyncManager, main
 
 
 @pytest.mark.unit
@@ -47,9 +45,7 @@ class TestGetRepositoriesErrors:
         # Import the actual GithubException class used by sync_labels
         from sync_labels import GithubException
 
-        manager.github.get_organization.side_effect = GithubException(
-            404, "Org not found"
-        )
+        manager.github.get_organization.side_effect = GithubException(404, "Org not found")
 
         with pytest.raises(SystemExit) as exc:
             manager.get_repositories("nonexistent-org")
@@ -192,9 +188,7 @@ class TestSyncOrganization:
         mock_repo.archived = False
 
         manager.get_repositories = MagicMock(return_value=[mock_repo])
-        manager.sync_labels = MagicMock(
-            return_value={"created": 0, "updated": 0, "unchanged": 5, "errors": 0}
-        )
+        manager.sync_labels = MagicMock(return_value={"created": 0, "updated": 0, "unchanged": 5, "errors": 0})
 
         manager.sync_organization("test-org")
 
@@ -257,9 +251,7 @@ class TestMainFunction:
         """Test main handles KeyboardInterrupt gracefully."""
         with patch("sys.argv", ["sync_labels.py", "--org", "test", "--token", "token"]):
             with patch("sync_labels.LabelSyncManager") as MockManager:
-                MockManager.return_value.sync_organization.side_effect = (
-                    KeyboardInterrupt()
-                )
+                MockManager.return_value.sync_organization.side_effect = KeyboardInterrupt()
 
                 with pytest.raises(SystemExit) as exc:
                     main()
@@ -272,9 +264,7 @@ class TestMainFunction:
         """Test main handles unexpected errors gracefully."""
         with patch("sys.argv", ["sync_labels.py", "--org", "test", "--token", "token"]):
             with patch("sync_labels.LabelSyncManager") as MockManager:
-                MockManager.return_value.sync_organization.side_effect = RuntimeError(
-                    "Unexpected"
-                )
+                MockManager.return_value.sync_organization.side_effect = RuntimeError("Unexpected")
 
                 with pytest.raises(SystemExit) as exc:
                     main()

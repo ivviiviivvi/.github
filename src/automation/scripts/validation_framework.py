@@ -29,10 +29,8 @@ from pathlib import Path
 from typing import Any
 
 from models import ValidationResult, ValidationSuite
-from notification_integration import (
-    notify_validation_failure,
-    notify_validation_success,
-)
+from notification_integration import (notify_validation_failure,
+                                      notify_validation_success)
 from utils import GitHubAPIClient
 
 # Configure logging
@@ -174,9 +172,7 @@ class ValidationFramework:
                         reviewers[username] = reviewers.get(username, 0) + 1
 
                 result.metrics["unique_reviewers"] = len(reviewers)
-                result.metrics["avg_prs_per_reviewer"] = (
-                    sum(reviewers.values()) / len(reviewers) if reviewers else 0
-                )
+                result.metrics["avg_prs_per_reviewer"] = sum(reviewers.values()) / len(reviewers) if reviewers else 0
 
             result.passed = True
             result.message = "Routing validation passed"
@@ -212,11 +208,7 @@ class ValidationFramework:
             )
 
             total_runs = len(runs.get("workflow_runs", []))
-            failed_runs = [
-                r
-                for r in runs.get("workflow_runs", [])
-                if r.get("conclusion") == "failure"
-            ]
+            failed_runs = [r for r in runs.get("workflow_runs", []) if r.get("conclusion") == "failure"]
 
             if total_runs > 0:
                 result.metrics["total_runs"] = total_runs
@@ -576,9 +568,7 @@ def main():
 
     elif args.validate:
         # Run specific validation
-        validate_func = getattr(
-            framework, f"validate_{args.validate.replace('-', '_')}"
-        )
+        validate_func = getattr(framework, f"validate_{args.validate.replace('-', '_')}")
         result = validate_func(args.owner, args.repo)
 
         emoji = "✅" if result.passed else "❌"

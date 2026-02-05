@@ -1,17 +1,13 @@
-import json
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, mock_open, patch
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 
 class TestWebCrawlerFull(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # Ensure secret_manager is mocked if not present
@@ -26,9 +22,7 @@ class TestWebCrawlerFull(unittest.TestCase):
         self.get_secret_patcher = patch("web_crawler.get_secret")
         self.get_secret_patcher.start()
 
-        self.crawler = self.web_crawler.OrganizationCrawler(
-            github_token="fake-token", org_name="test-org"
-        )
+        self.crawler = self.web_crawler.OrganizationCrawler(github_token="fake-token", org_name="test-org")
         self.crawler.session = MagicMock()
 
     def tearDown(self):
@@ -60,11 +54,10 @@ class TestWebCrawlerFull(unittest.TestCase):
         # Mock datetime to control "now"
         with patch("web_crawler.datetime") as mock_datetime:
             # Re-implement datetime.fromisoformat since we are mocking the class
-            from datetime import datetime as real_datetime, timezone
+            from datetime import datetime as real_datetime
+            from datetime import timezone
 
-            mock_datetime.fromisoformat.side_effect = (
-                lambda d: real_datetime.fromisoformat(d)
-            )
+            mock_datetime.fromisoformat.side_effect = lambda d: real_datetime.fromisoformat(d)
 
             mock_now = real_datetime(2025, 1, 30, tzinfo=timezone.utc)
             mock_datetime.now.return_value = mock_now
@@ -82,7 +75,6 @@ class TestWebCrawlerFull(unittest.TestCase):
             patch("pathlib.Path.exists", return_value=True),
             patch("pathlib.Path.glob") as mock_glob,
         ):
-
             # Setup glob returns for different directories
             def glob_side_effect(pattern):
                 if pattern == "*.yml":  # workflows
@@ -116,9 +108,7 @@ class TestWebCrawlerFull(unittest.TestCase):
 
     def test_identify_shatter_points(self):
         """Test shatter point identification."""
-        ecosystem = {
-            "workflows": ["ci.yml"]
-        }  # Missing security-scan.yml, deployment.yml
+        ecosystem = {"workflows": ["ci.yml"]}  # Missing security-scan.yml, deployment.yml
 
         shatter_points = self.crawler.identify_shatter_points(ecosystem)
 
@@ -157,7 +147,6 @@ class TestWebCrawlerFull(unittest.TestCase):
             patch.object(self.crawler, "identify_shatter_points") as mock_shatter,
             patch.object(self.crawler, "generate_report") as mock_report,
         ):
-
             self.crawler.run_full_analysis(Path("."), validate_external_links=True)
 
             mock_map.assert_called()

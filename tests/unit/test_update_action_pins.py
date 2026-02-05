@@ -14,12 +14,7 @@ import pytest
 # Import with hyphenated filename workaround
 spec = importlib.util.spec_from_file_location(
     "update_action_pins",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "utils"
-    / "update-action-pins.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "update-action-pins.py",
 )
 update_action_pins = importlib.util.module_from_spec(spec)
 sys.modules["update_action_pins"] = update_action_pins
@@ -110,9 +105,7 @@ class TestResolveTagToSha:
         """Test resolves lightweight tag to SHA."""
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "object": {"type": "commit", "sha": "abc123def456"}
-        }
+        mock_response.json.return_value = {"object": {"type": "commit", "sha": "abc123def456"}}
         mock_session.get.return_value = mock_response
 
         result = resolve_tag_to_sha("actions", "checkout", "v4", mock_session)
@@ -314,9 +307,7 @@ jobs:
 
         sha_cache = {"actions/checkout@v4": "newsha123def456789012345678901234567890abc"}
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 1
         content = workflow_file.read_text()
@@ -337,9 +328,7 @@ jobs:
 
         sha_cache = {"actions/checkout@v4": "newsha123def456789012345678901234567890abc"}
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=True, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=True, verbose=False)
 
         assert updates == 1
         # File should be unchanged
@@ -361,9 +350,7 @@ jobs:
 
         sha_cache = {}
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 0
 
@@ -384,9 +371,7 @@ jobs:
 
         sha_cache = {"actions/checkout@v4": sha}
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 0
 
@@ -412,14 +397,10 @@ jobs:
         # Set up a mock response for resolve_tag_to_sha
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "object": {"type": "commit", "sha": new_sha}
-        }
+        mock_response.json.return_value = {"object": {"type": "commit", "sha": new_sha}}
         mock_session.get.return_value = mock_response
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 1
         assert "actions/checkout@v4" in sha_cache
@@ -428,9 +409,7 @@ jobs:
         """Test handles file read error."""
         workflow_file = tmp_path / "nonexistent.yml"
 
-        updates = update_workflow_file(
-            workflow_file, {}, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, {}, mock_session, dry_run=False, verbose=False)
 
         assert updates == 0
 
@@ -451,9 +430,7 @@ jobs:
 
         # Mock write_text to raise an error
         with patch.object(Path, "write_text", side_effect=PermissionError("No permission")):
-            updates = update_workflow_file(
-                workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-            )
+            updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 0
 
@@ -470,9 +447,7 @@ jobs:
 
         sha_cache = {"actions/checkout@v4": "newsha123def456789012345678901234567890abc"}
 
-        update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         content = workflow_file.read_text()
         assert "      - uses:" in content
@@ -520,20 +495,12 @@ jobs:
 
         # Set script location to temp path
         with patch.object(Path, "__new__", return_value=tmp_path):
-            with patch.object(
-                update_action_pins, "__file__", str(tmp_path / "update-action-pins.py")
-            ):
-                monkeypatch.setattr(
-                    sys, "argv", ["update-action-pins.py", "--dry-run"]
-                )
+            with patch.object(update_action_pins, "__file__", str(tmp_path / "update-action-pins.py")):
+                monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--dry-run"])
 
                 # Mock the workflows directory lookup
-                with patch.object(
-                    Path, "exists", return_value=True
-                ):
-                    with patch.object(
-                        Path, "glob", return_value=[workflow_file]
-                    ):
+                with patch.object(Path, "exists", return_value=True):
+                    with patch.object(Path, "glob", return_value=[workflow_file]):
                         # Run main - it will fail because we can't fully mock Path
                         # but we can verify the argument parsing works
                         try:
@@ -543,9 +510,7 @@ jobs:
 
     def test_main_missing_workflows_dir(self, tmp_path, monkeypatch, capsys):
         """Test main exits when workflows directory missing."""
-        with patch.object(
-            update_action_pins, "__file__", str(tmp_path / "scripts" / "update-action-pins.py")
-        ):
+        with patch.object(update_action_pins, "__file__", str(tmp_path / "scripts" / "update-action-pins.py")):
             monkeypatch.setattr(sys, "argv", ["update-action-pins.py"])
 
             with pytest.raises(SystemExit) as exc:
@@ -555,9 +520,7 @@ jobs:
 
     def test_main_specific_workflow(self, monkeypatch):
         """Test main with specific workflow flag."""
-        monkeypatch.setattr(
-            sys, "argv", ["update-action-pins.py", "--workflow", "ci.yml", "--dry-run"]
-        )
+        monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--workflow", "ci.yml", "--dry-run"])
 
         # Will fail due to missing directory, but tests argument parsing
         with pytest.raises(SystemExit):

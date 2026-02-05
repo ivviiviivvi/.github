@@ -68,9 +68,7 @@ class DependencyResolver:
                 line = line.strip()
                 if line and not line.startswith("#"):
                     # Extract package name (before version specifier)
-                    pkg = (
-                        line.split("==")[0].split(">=")[0].split("<=")[0].split("[")[0]
-                    )
+                    pkg = line.split("==")[0].split(">=")[0].split("<=")[0].split("[")[0]
                     deps.append(pkg.strip())
 
         elif path.name == "package.json":
@@ -158,9 +156,7 @@ class DependencyResolver:
             report_lines.append("## Conflicts")
             report_lines.append("")
             for conflict in self.conflicts:
-                report_lines.append(
-                    f"- **{conflict['dependency']}**: {conflict['type']}"
-                )
+                report_lines.append(f"- **{conflict['dependency']}**: {conflict['type']}")
 
         return "\n".join(report_lines)
 
@@ -171,9 +167,7 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(description="Dependency resolution tool")
     parser.add_argument("--check", action="store_true", help="Check for conflicts")
-    parser.add_argument(
-        "--resolve", action="store_true", help="Attempt to resolve conflicts"
-    )
+    parser.add_argument("--resolve", action="store_true", help="Attempt to resolve conflicts")
     parser.add_argument("--report", action="store_true", help="Generate report")
 
     args = parser.parse_args()

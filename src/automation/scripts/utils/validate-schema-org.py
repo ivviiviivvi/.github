@@ -68,9 +68,7 @@ class SchemaOrgValidator:
         if not context:
             self.errors.append("Missing required field: @context")
         elif context not in self.VALID_CONTEXTS:
-            self.errors.append(
-                f"Invalid @context: {context}. Expected one of: {', '.join(self.VALID_CONTEXTS)}"
-            )
+            self.errors.append(f"Invalid @context: {context}. Expected one of: {', '.join(self.VALID_CONTEXTS)}")
 
     def _validate_type(self, data: dict) -> None:
         """Validate @type field."""
@@ -78,9 +76,7 @@ class SchemaOrgValidator:
         if not schema_type:
             self.errors.append("Missing required field: @type")
         elif schema_type not in self.REQUIRED_FIELDS:
-            self.warnings.append(
-                f"Unknown @type: {schema_type}. Known types: {', '.join(self.REQUIRED_FIELDS.keys())}"
-            )
+            self.warnings.append(f"Unknown @type: {schema_type}. Known types: {', '.join(self.REQUIRED_FIELDS.keys())}")
 
     def _validate_required_fields(self, data: dict) -> None:
         """Validate required fields for the type."""
@@ -110,14 +106,8 @@ class SchemaOrgValidator:
                 for i, item in enumerate(value):
                     if isinstance(item, dict):
                         self._validate_urls(item, f"{current_path}[{i}]")
-                    elif (
-                        isinstance(item, str)
-                        and key == "sameAs"
-                        and not self._is_valid_url(item)
-                    ):
-                        self.errors.append(
-                            f"Invalid URL at {current_path}[{i}]: {item}"
-                        )
+                    elif isinstance(item, str) and key == "sameAs" and not self._is_valid_url(item):
+                        self.errors.append(f"Invalid URL at {current_path}[{i}]: {item}")
             elif isinstance(value, dict):
                 self._validate_urls(value, current_path)
 

@@ -6,20 +6,13 @@ Focus: Repository health score calculation with multiple metrics.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from calculate_health_score import (
-    HealthMetrics,
-    HealthScore,
-    HealthScoreCalculator,
-    main,
-)
+from calculate_health_score import (HealthMetrics, HealthScore,
+                                    HealthScoreCalculator, main)
 
 
 @pytest.mark.unit
@@ -88,26 +81,32 @@ class TestCalculateActivityScore:
 
     def test_low_activity_90_days_returns_40(self, calculator):
         """Test 10+ commits in 90 days returns 40."""
-        result = calculator.calculate_activity_score({
-            "commits_last_30_days": 0,
-            "commits_last_90_days": 15,
-        })
+        result = calculator.calculate_activity_score(
+            {
+                "commits_last_30_days": 0,
+                "commits_last_90_days": 15,
+            }
+        )
         assert result == 40.0
 
     def test_minimal_activity_returns_20(self, calculator):
         """Test 1-9 commits in 90 days returns 20."""
-        result = calculator.calculate_activity_score({
-            "commits_last_30_days": 0,
-            "commits_last_90_days": 5,
-        })
+        result = calculator.calculate_activity_score(
+            {
+                "commits_last_30_days": 0,
+                "commits_last_90_days": 5,
+            }
+        )
         assert result == 20.0
 
     def test_no_activity_returns_0(self, calculator):
         """Test no commits returns 0."""
-        result = calculator.calculate_activity_score({
-            "commits_last_30_days": 0,
-            "commits_last_90_days": 0,
-        })
+        result = calculator.calculate_activity_score(
+            {
+                "commits_last_30_days": 0,
+                "commits_last_90_days": 0,
+            }
+        )
         assert result == 0.0
 
 
@@ -165,47 +164,59 @@ class TestCalculateIssueResolutionScore:
 
     def test_no_issues_returns_neutral(self, calculator):
         """Test no issues returns neutral score."""
-        result = calculator.calculate_issue_resolution_score({
-            "open_issues": 0,
-            "closed_issues": 0,
-        })
+        result = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 0,
+                "closed_issues": 0,
+            }
+        )
         assert result == 80.0
 
     def test_all_closed_fast_returns_high(self, calculator):
         """Test all issues closed quickly returns high score."""
-        result = calculator.calculate_issue_resolution_score({
-            "open_issues": 0,
-            "closed_issues": 20,
-            "avg_issue_resolution_days": 3,
-        })
+        result = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 0,
+                "closed_issues": 20,
+                "avg_issue_resolution_days": 3,
+            }
+        )
         assert result > 80
 
     def test_slow_resolution_penalized(self, calculator):
         """Test slow resolution is penalized."""
-        fast = calculator.calculate_issue_resolution_score({
-            "open_issues": 5,
-            "closed_issues": 20,
-            "avg_issue_resolution_days": 5,
-        })
-        slow = calculator.calculate_issue_resolution_score({
-            "open_issues": 5,
-            "closed_issues": 20,
-            "avg_issue_resolution_days": 50,
-        })
+        fast = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 5,
+                "closed_issues": 20,
+                "avg_issue_resolution_days": 5,
+            }
+        )
+        slow = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 5,
+                "closed_issues": 20,
+                "avg_issue_resolution_days": 50,
+            }
+        )
         assert fast > slow
 
     def test_many_open_issues_penalized(self, calculator):
         """Test many open issues are penalized."""
-        few_open = calculator.calculate_issue_resolution_score({
-            "open_issues": 2,
-            "closed_issues": 20,
-            "avg_issue_resolution_days": 10,
-        })
-        many_open = calculator.calculate_issue_resolution_score({
-            "open_issues": 18,
-            "closed_issues": 4,
-            "avg_issue_resolution_days": 10,
-        })
+        few_open = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 2,
+                "closed_issues": 20,
+                "avg_issue_resolution_days": 10,
+            }
+        )
+        many_open = calculator.calculate_issue_resolution_score(
+            {
+                "open_issues": 18,
+                "closed_issues": 4,
+                "avg_issue_resolution_days": 10,
+            }
+        )
         assert few_open > many_open
 
 
@@ -219,34 +230,42 @@ class TestCalculatePrMergeRateScore:
 
     def test_no_prs_returns_neutral(self, calculator):
         """Test no PRs returns neutral score."""
-        result = calculator.calculate_pr_merge_rate_score({
-            "open_prs": 0,
-            "merged_prs": 0,
-        })
+        result = calculator.calculate_pr_merge_rate_score(
+            {
+                "open_prs": 0,
+                "merged_prs": 0,
+            }
+        )
         assert result == 80.0
 
     def test_all_merged_fast_returns_high(self, calculator):
         """Test all PRs merged quickly returns high score."""
-        result = calculator.calculate_pr_merge_rate_score({
-            "open_prs": 0,
-            "merged_prs": 20,
-            "avg_pr_merge_days": 1,
-        })
+        result = calculator.calculate_pr_merge_rate_score(
+            {
+                "open_prs": 0,
+                "merged_prs": 20,
+                "avg_pr_merge_days": 1,
+            }
+        )
         # Score is capped at 100 but formula may yield slightly under
         assert result >= 95.0
 
     def test_slow_merge_penalized(self, calculator):
         """Test slow merges are penalized."""
-        fast = calculator.calculate_pr_merge_rate_score({
-            "open_prs": 2,
-            "merged_prs": 15,
-            "avg_pr_merge_days": 2,
-        })
-        slow = calculator.calculate_pr_merge_rate_score({
-            "open_prs": 2,
-            "merged_prs": 15,
-            "avg_pr_merge_days": 12,
-        })
+        fast = calculator.calculate_pr_merge_rate_score(
+            {
+                "open_prs": 2,
+                "merged_prs": 15,
+                "avg_pr_merge_days": 2,
+            }
+        )
+        slow = calculator.calculate_pr_merge_rate_score(
+            {
+                "open_prs": 2,
+                "merged_prs": 15,
+                "avg_pr_merge_days": 12,
+            }
+        )
         assert fast > slow
 
 
@@ -260,43 +279,53 @@ class TestCalculateDependencyHealthScore:
 
     def test_no_issues_returns_100(self, calculator):
         """Test no outdated or vulnerable deps returns 100."""
-        result = calculator.calculate_dependency_health_score({
-            "outdated_dependencies": 0,
-            "vulnerable_dependencies": 0,
-            "total_dependencies": 30,
-        })
+        result = calculator.calculate_dependency_health_score(
+            {
+                "outdated_dependencies": 0,
+                "vulnerable_dependencies": 0,
+                "total_dependencies": 30,
+            }
+        )
         assert result == 100.0
 
     def test_vulnerabilities_heavily_penalized(self, calculator):
         """Test vulnerabilities are heavily penalized."""
-        result = calculator.calculate_dependency_health_score({
-            "outdated_dependencies": 0,
-            "vulnerable_dependencies": 2,
-            "total_dependencies": 30,
-        })
+        result = calculator.calculate_dependency_health_score(
+            {
+                "outdated_dependencies": 0,
+                "vulnerable_dependencies": 2,
+                "total_dependencies": 30,
+            }
+        )
         assert result == 60.0  # 100 - (2 * 20)
 
     def test_outdated_deps_penalized(self, calculator):
         """Test outdated dependencies are penalized."""
-        none_outdated = calculator.calculate_dependency_health_score({
-            "outdated_dependencies": 0,
-            "vulnerable_dependencies": 0,
-            "total_dependencies": 30,
-        })
-        some_outdated = calculator.calculate_dependency_health_score({
-            "outdated_dependencies": 15,
-            "vulnerable_dependencies": 0,
-            "total_dependencies": 30,
-        })
+        none_outdated = calculator.calculate_dependency_health_score(
+            {
+                "outdated_dependencies": 0,
+                "vulnerable_dependencies": 0,
+                "total_dependencies": 30,
+            }
+        )
+        some_outdated = calculator.calculate_dependency_health_score(
+            {
+                "outdated_dependencies": 15,
+                "vulnerable_dependencies": 0,
+                "total_dependencies": 30,
+            }
+        )
         assert none_outdated > some_outdated
 
     def test_score_never_negative(self, calculator):
         """Test score never goes below 0."""
-        result = calculator.calculate_dependency_health_score({
-            "outdated_dependencies": 100,
-            "vulnerable_dependencies": 10,
-            "total_dependencies": 10,
-        })
+        result = calculator.calculate_dependency_health_score(
+            {
+                "outdated_dependencies": 100,
+                "vulnerable_dependencies": 10,
+                "total_dependencies": 10,
+            }
+        )
         assert result == 0.0
 
 
@@ -464,9 +493,7 @@ class TestMainFunction:
 
     def test_main_with_demo_flag(self, monkeypatch, capsys):
         """Test main with --demo flag."""
-        monkeypatch.setattr(
-            sys, "argv", ["calculate_health_score.py", "--demo"]
-        )
+        monkeypatch.setattr(sys, "argv", ["calculate_health_score.py", "--demo"])
 
         result = main()
 
@@ -487,9 +514,7 @@ class TestMainFunction:
 
     def test_main_demo_shows_breakdown(self, monkeypatch, capsys):
         """Test demo mode shows metric breakdown."""
-        monkeypatch.setattr(
-            sys, "argv", ["calculate_health_score.py", "--demo"]
-        )
+        monkeypatch.setattr(sys, "argv", ["calculate_health_score.py", "--demo"])
 
         main()
 

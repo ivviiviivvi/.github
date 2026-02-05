@@ -6,30 +6,19 @@ Focus: Managed link resolution and placeholder replacement in Markdown files.
 
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from resolve_link_placeholders import (
-    DEFAULT_EXCLUDES,
-    LINK_WITH_COMMENT_RE,
-    PLACEHOLDER_RE,
-    UNANNOTATED_LINK_RE,
-    _flatten_map,
-    _parse_simple_yaml,
-    build_agent_path_map,
-    calculate_relative_path,
-    is_internal_path,
-    iter_markdown_files,
-    load_link_map,
-    main,
-    migrate_broken_links,
-    replace_links,
-)
+from resolve_link_placeholders import (DEFAULT_EXCLUDES, LINK_WITH_COMMENT_RE,
+                                       PLACEHOLDER_RE, UNANNOTATED_LINK_RE,
+                                       _flatten_map, _parse_simple_yaml,
+                                       build_agent_path_map,
+                                       calculate_relative_path,
+                                       is_internal_path, iter_markdown_files,
+                                       load_link_map, main,
+                                       migrate_broken_links, replace_links)
 
 
 @pytest.mark.unit
@@ -287,9 +276,7 @@ class TestReplaceLinks:
         """Test updates annotated links."""
         text = "[Discussions](https://old-url.com)<!-- link:github.discussions -->"
 
-        result, updated, annotated, missing = replace_links(
-            text, link_map, reverse_map, annotate=False
-        )
+        result, updated, annotated, missing = replace_links(text, link_map, reverse_map, annotate=False)
 
         assert updated == 1
         assert "https://github.com/org/repo/discussions" in result
@@ -298,9 +285,7 @@ class TestReplaceLinks:
         """Test handles placeholder syntax."""
         text = "[Link]([[link:github.discussions]])"
 
-        result, updated, annotated, missing = replace_links(
-            text, link_map, reverse_map, annotate=False
-        )
+        result, updated, annotated, missing = replace_links(text, link_map, reverse_map, annotate=False)
 
         assert updated == 1
         assert annotated == 1
@@ -310,9 +295,7 @@ class TestReplaceLinks:
         """Test annotates existing URLs when enabled."""
         text = "[Discussions](https://github.com/org/repo/discussions)"
 
-        result, updated, annotated, missing = replace_links(
-            text, link_map, reverse_map, annotate=True
-        )
+        result, updated, annotated, missing = replace_links(text, link_map, reverse_map, annotate=True)
 
         assert annotated == 1
         assert "<!-- link:github.discussions -->" in result
@@ -323,9 +306,7 @@ class TestReplaceLinks:
 [Link](https://github.com/org/repo/discussions)
 ```"""
 
-        result, updated, annotated, missing = replace_links(
-            text, link_map, reverse_map, annotate=True
-        )
+        result, updated, annotated, missing = replace_links(text, link_map, reverse_map, annotate=True)
 
         assert annotated == 0
         assert result == text
@@ -334,9 +315,7 @@ class TestReplaceLinks:
         """Test handles missing link keys."""
         text = "[Link](url)<!-- link:nonexistent.key -->"
 
-        result, updated, annotated, missing = replace_links(
-            text, link_map, reverse_map, annotate=False
-        )
+        result, updated, annotated, missing = replace_links(text, link_map, reverse_map, annotate=False)
 
         assert missing == 1
 
@@ -663,9 +642,7 @@ class TestMainFunction:
         """Test main with --migrate flag."""
         # Create link map
         link_map = tmp_path / "links.yml"
-        link_map.write_text(
-            "internal:\n  agents:\n    foo: src/ai_framework/agents/foo.agent.md"
-        )
+        link_map.write_text("internal:\n  agents:\n    foo: src/ai_framework/agents/foo.agent.md")
 
         # Create markdown file with broken link
         doc = tmp_path / "doc.md"

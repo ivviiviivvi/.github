@@ -2,13 +2,12 @@
 """Create default configuration files for Week 9 automation."""
 
 import os
+
 import yaml
-from pathlib import Path
 
 
 def create_defaults():
     """Create default configuration files if they don't exist."""
-
     defaults = {
         ".github/auto-merge.yml": {
             "auto_merge": {

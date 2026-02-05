@@ -7,19 +7,13 @@ Focus: MCP collection frontmatter standardization.
 import importlib.util
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
 # Import the module with hyphenated filename
 spec = importlib.util.spec_from_file_location(
     "standardize_mcp_collections",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "utils"
-    / "standardize-mcp-collections.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "standardize-mcp-collections.py",
 )
 standardize_mcp_collections = importlib.util.module_from_spec(spec)
 sys.modules["standardize_mcp_collections"] = standardize_mcp_collections

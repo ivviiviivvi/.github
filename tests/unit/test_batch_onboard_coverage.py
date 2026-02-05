@@ -6,20 +6,14 @@ Focus: actual implementation paths, rollback, error handling, main function.
 
 import asyncio
 import sys
-from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.batch_onboard_repositories import (
-    BatchOnboardingOrchestrator,
-    OnboardingConfig,
-    OnboardingResult,
-    main,
-    load_config,
-)
+    BatchOnboardingOrchestrator, OnboardingConfig, OnboardingResult, main)
 
 
 @pytest.mark.unit
@@ -38,9 +32,7 @@ class TestValidateConfigurationWorkflows:
             workflows=["nonexistent-workflow.yml"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         errors = asyncio.run(orchestrator._validate_configuration())
 
@@ -69,9 +61,7 @@ class TestOnboardRepositoriesRollback:
             rollback_on_failure=True,
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         # Mock _onboard_repository to return a failure
         async def mock_onboard(repo_name):
@@ -111,9 +101,7 @@ class TestDeployWorkflowsActual:
             workflows=["nonexistent-workflow.yml"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         result = OnboardingResult(repository="org/repo", success=False)
 
@@ -139,9 +127,7 @@ class TestConfigureLabelsError:
             labels={"bug": {"color": "ff0000"}},
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         result = OnboardingResult(repository="org/repo", success=False)
 
@@ -175,9 +161,7 @@ class TestSetupBranchProtectionActual:
             },
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         result = OnboardingResult(repository="org/repo", success=False)
         asyncio.run(orchestrator._setup_branch_protection(mock_repo, result))
@@ -199,9 +183,7 @@ class TestSetupBranchProtectionActual:
             branch_protection={"branch": "main"},
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         result = OnboardingResult(repository="org/repo", success=False)
 
@@ -225,9 +207,7 @@ class TestCreateEnvironmentsActual:
             environments=["production", "staging"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=False
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=False)
 
         result = OnboardingResult(repository="org/repo", success=False)
         asyncio.run(orchestrator._create_environments(mock_repo, result))
@@ -249,9 +229,7 @@ class TestRollbackFailedErrors:
         mock_repo = MagicMock()
         mock_repo.full_name = "org/repo"
         mock_repo.default_branch = "main"
-        mock_repo.get_contents.side_effect = batch_mod.GithubException(
-            404, {"message": "Not found"}, None
-        )
+        mock_repo.get_contents.side_effect = batch_mod.GithubException(404, {"message": "Not found"}, None)
         mock_github.get_repo.return_value = mock_repo
         MockGithub.return_value = mock_github
 
@@ -260,9 +238,7 @@ class TestRollbackFailedErrors:
             workflows=["ci.yml"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         failed_results = [
             OnboardingResult(
@@ -285,9 +261,7 @@ class TestRollbackFailedErrors:
 
         config = OnboardingConfig(repositories=["org/repo"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
 
         failed_results = [
             OnboardingResult(
@@ -311,13 +285,9 @@ class TestLogSummaryWithFailures:
         """Test summary logs failed repositories."""
         config = OnboardingConfig(repositories=["org/repo1", "org/repo2"])
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config)
         orchestrator.results = [
-            OnboardingResult(
-                repository="org/repo1", success=True, duration_seconds=1.5
-            ),
+            OnboardingResult(repository="org/repo1", success=True, duration_seconds=1.5),
             OnboardingResult(
                 repository="org/repo2",
                 success=False,
@@ -337,9 +307,7 @@ class TestMainFunctionPaths:
     @patch("src.automation.scripts.batch_onboard_repositories.BatchOnboardingOrchestrator")
     @patch("src.automation.scripts.batch_onboard_repositories.load_config")
     @patch("src.automation.scripts.batch_onboard_repositories.ensure_github_token")
-    def test_main_with_config_file(
-        self, mock_ensure_token, mock_load_config, MockOrchestrator
-    ):
+    def test_main_with_config_file(self, mock_ensure_token, mock_load_config, MockOrchestrator):
         """Test main loads config from file."""
         mock_ensure_token.return_value = "test-token"  # allow-secret
         mock_load_config.return_value = OnboardingConfig(repositories=["org/repo"])
@@ -424,9 +392,7 @@ class TestOnboardRepositorySteps:
             environments=["prod"],
         )
 
-        orchestrator = BatchOnboardingOrchestrator(
-            github_token="test", config=config, dry_run=True
-        )
+        orchestrator = BatchOnboardingOrchestrator(github_token="test", config=config, dry_run=True)
 
         result = asyncio.run(orchestrator._onboard_repository("org/repo"))
 

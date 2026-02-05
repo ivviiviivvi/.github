@@ -4,7 +4,6 @@
 Focus: Repository evaluation for workflow deployment readiness.
 """
 
-import json
 import subprocess
 import sys
 from pathlib import Path
@@ -12,16 +11,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from evaluate_repository import (
-    RepositoryEvaluator,
-    RepositoryMetrics,
-    evaluate_all_repos,
-    main,
-)
+from evaluate_repository import (RepositoryEvaluator, RepositoryMetrics,
+                                 evaluate_all_repos, main)
 
 
 @pytest.mark.unit
@@ -75,9 +68,7 @@ class TestRunGhCommand:
         evaluator = RepositoryEvaluator("test/repo")
 
         with patch("subprocess.run") as mock_run:
-            mock_run.return_value = MagicMock(
-                stdout='{"name": "repo"}', returncode=0
-            )
+            mock_run.return_value = MagicMock(stdout='{"name": "repo"}', returncode=0)
 
             result = evaluator.run_gh_command(["repo", "view", "test/repo"])
 
@@ -306,9 +297,7 @@ class TestCalculateTeamScore:
         """Test full score with both files."""
         evaluator = RepositoryEvaluator("test/repo")
 
-        result = evaluator.calculate_team_score(
-            has_codeowners=True, has_contributing=True
-        )
+        result = evaluator.calculate_team_score(has_codeowners=True, has_contributing=True)
 
         assert result == 100
 
@@ -316,9 +305,7 @@ class TestCalculateTeamScore:
         """Test partial score with one file."""
         evaluator = RepositoryEvaluator("test/repo")
 
-        result = evaluator.calculate_team_score(
-            has_codeowners=True, has_contributing=False
-        )
+        result = evaluator.calculate_team_score(has_codeowners=True, has_contributing=False)
 
         assert result == 50
 
@@ -326,9 +313,7 @@ class TestCalculateTeamScore:
         """Test zero score with no files."""
         evaluator = RepositoryEvaluator("test/repo")
 
-        result = evaluator.calculate_team_score(
-            has_codeowners=False, has_contributing=False
-        )
+        result = evaluator.calculate_team_score(has_codeowners=False, has_contributing=False)
 
         assert result == 0
 
@@ -540,12 +525,8 @@ class TestEvaluate:
                 with patch.object(mock_evaluator, "check_file_exists", return_value=True):
                     with patch.object(mock_evaluator, "get_commit_activity", return_value=10):
                         # Mock all score calculations since openIssues format varies
-                        with patch.object(
-                            mock_evaluator, "calculate_activity_score", return_value=75.0
-                        ):
-                            with patch.object(
-                                mock_evaluator, "calculate_maintenance_score", return_value=80.0
-                            ):
+                        with patch.object(mock_evaluator, "calculate_activity_score", return_value=75.0):
+                            with patch.object(mock_evaluator, "calculate_maintenance_score", return_value=80.0):
                                 result = mock_evaluator.evaluate()
 
         assert result is not None
@@ -617,9 +598,7 @@ class TestEvaluateAllRepos:
                 returncode=0,
             )
 
-            with patch.object(
-                RepositoryEvaluator, "evaluate"
-            ) as mock_eval:
+            with patch.object(RepositoryEvaluator, "evaluate") as mock_eval:
                 mock_eval.return_value = RepositoryMetrics(
                     name="org/repo1",
                     stars=50,
@@ -640,6 +619,7 @@ class TestEvaluateAllRepos:
 
                 # Change to tmp_path to write output file
                 import os
+
                 original_dir = os.getcwd()
                 os.chdir(tmp_path)
                 try:
@@ -698,9 +678,7 @@ class TestMainFunction:
     def test_main_single_repo(self, tmp_path, capsys):
         """Test main with single repo."""
         with patch.object(sys, "argv", ["evaluate_repository.py", "test/repo"]):
-            with patch.object(
-                RepositoryEvaluator, "evaluate"
-            ) as mock_eval:
+            with patch.object(RepositoryEvaluator, "evaluate") as mock_eval:
                 mock_eval.return_value = RepositoryMetrics(
                     name="test/repo",
                     stars=50,
@@ -721,6 +699,7 @@ class TestMainFunction:
 
                 # Change to tmp_path to write output file
                 import os
+
                 original_dir = os.getcwd()
                 os.chdir(tmp_path)
                 try:
@@ -734,9 +713,7 @@ class TestMainFunction:
     def test_main_single_repo_failed(self, capsys):
         """Test main with single repo that fails evaluation."""
         with patch.object(sys, "argv", ["evaluate_repository.py", "test/repo"]):
-            with patch.object(
-                RepositoryEvaluator, "evaluate"
-            ) as mock_eval:
+            with patch.object(RepositoryEvaluator, "evaluate") as mock_eval:
                 mock_eval.return_value = None
 
                 main()

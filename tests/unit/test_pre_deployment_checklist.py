@@ -7,7 +7,6 @@ validation, GitHub CLI checks, and prerequisite verification.
 
 import json
 import sys
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -15,10 +14,7 @@ import pytest
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.pre_deployment_checklist import (
-    CheckResult,
-    PreDeploymentChecker,
-    main,
-)
+    CheckResult, PreDeploymentChecker, main)
 
 
 @pytest.mark.unit

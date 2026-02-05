@@ -145,9 +145,7 @@ class NotificationManager:
 
         # Determine channels based on priority if not specified
         if not notification.channels:
-            notification.channels = self._get_channels_for_priority(
-                notification.priority
-            )
+            notification.channels = self._get_channels_for_priority(notification.priority)
 
         # Send to each channel
         records = {}
@@ -163,9 +161,7 @@ class NotificationManager:
 
         return records
 
-    def _send_to_channel(
-        self, notification: Notification, channel: str
-    ) -> DeliveryRecord:
+    def _send_to_channel(self, notification: Notification, channel: str) -> DeliveryRecord:
         """Send notification to specific channel."""
         record = DeliveryRecord(
             notification_id=cast(str, notification.notification_id),
@@ -218,11 +214,7 @@ class NotificationManager:
         if ":" in channel:
             # Channel-specific: slack:#incidents
             channel_name = channel.split(":", 1)[1]
-            webhook_url = (
-                slack_config.get("channels", {})
-                .get(channel_name, {})
-                .get("webhook_url")
-            )
+            webhook_url = slack_config.get("channels", {}).get(channel_name, {}).get("webhook_url")
         else:
             # Default webhook
             webhook_url = slack_config.get("webhook_url")
@@ -272,9 +264,7 @@ class NotificationManager:
 
         # Add metadata if present
         if notification.metadata:
-            metadata_text = "\n".join(
-                f"*{k}:* {v}" for k, v in notification.metadata.items()
-            )
+            metadata_text = "\n".join(f"*{k}:* {v}" for k, v in notification.metadata.items())
             slack_message["blocks"].append(
                 {
                     "type": "section",

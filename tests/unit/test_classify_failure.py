@@ -6,20 +6,13 @@ Focus: Workflow failure classification for automated remediation.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from classify_failure import (
-    FailureClassification,
-    FailureClassifier,
-    FailureType,
-    main,
-)
+from classify_failure import (FailureClassification, FailureClassifier,
+                              FailureType, main)
 
 
 @pytest.mark.unit
@@ -337,9 +330,7 @@ class TestMainFunction:
         log_file = tmp_path / "error.log"
         log_file.write_text("Connection timeout error")
 
-        monkeypatch.setattr(
-            sys, "argv", ["classify_failure.py", "--log", str(log_file)]
-        )
+        monkeypatch.setattr(sys, "argv", ["classify_failure.py", "--log", str(log_file)])
 
         result = main()
 
@@ -376,9 +367,7 @@ class TestMainFunction:
         log_file = tmp_path / "error.log"
         log_file.write_text("HTTP 401 Unauthorized")
 
-        monkeypatch.setattr(
-            sys, "argv", ["classify_failure.py", "--log", str(log_file)]
-        )
+        monkeypatch.setattr(sys, "argv", ["classify_failure.py", "--log", str(log_file)])
 
         main()
 

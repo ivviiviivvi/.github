@@ -10,9 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from update_agent_docs import extract_metadata, generate_table, main
 
@@ -119,9 +117,7 @@ class TestGenerateTable:
 
     def test_generates_markdown_table(self):
         """Test generates markdown table with headers."""
-        agents = [
-            {"filename": "test.agent.md", "title": "Test Agent", "description": "A test"}
-        ]
+        agents = [{"filename": "test.agent.md", "title": "Test Agent", "description": "A test"}]
 
         result = generate_table(agents)
 
@@ -146,9 +142,7 @@ class TestGenerateTable:
 
     def test_includes_install_badge(self):
         """Test includes VS Code install badge."""
-        agents = [
-            {"filename": "test.agent.md", "title": "Test", "description": "Desc"}
-        ]
+        agents = [{"filename": "test.agent.md", "title": "Test", "description": "Desc"}]
 
         result = generate_table(agents)
 
@@ -157,9 +151,7 @@ class TestGenerateTable:
 
     def test_includes_link_to_agent_file(self):
         """Test includes link to agent file."""
-        agents = [
-            {"filename": "test.agent.md", "title": "Test", "description": "Desc"}
-        ]
+        agents = [{"filename": "test.agent.md", "title": "Test", "description": "Desc"}]
 
         result = generate_table(agents)
 

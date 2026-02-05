@@ -11,9 +11,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import yaml
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock secret_manager before importing validate_labels
 sys.modules["secret_manager"] = MagicMock()
@@ -104,12 +102,8 @@ class TestValidateAllWithFixMode:
         """Test fix_mode calls fix_repository when issues found."""
         missing = [{"name": "bug", "color": "d73a4a"}]
 
-        with patch.object(
-            fix_mode_validator, "validate_repository", return_value=(False, missing, [])
-        ):
-            with patch.object(
-                fix_mode_validator, "fix_repository", return_value=True
-            ) as mock_fix:
+        with patch.object(fix_mode_validator, "validate_repository", return_value=(False, missing, [])):
+            with patch.object(fix_mode_validator, "fix_repository", return_value=True) as mock_fix:
                 result = fix_mode_validator.validate_all()
 
         # fix_repository should be called for each repo with issues
@@ -119,12 +113,8 @@ class TestValidateAllWithFixMode:
         """Test fix_mode updates success status after fix."""
         missing = [{"name": "bug", "color": "d73a4a"}]
 
-        with patch.object(
-            fix_mode_validator, "validate_repository", return_value=(False, missing, [])
-        ):
-            with patch.object(
-                fix_mode_validator, "fix_repository", return_value=True
-            ):
+        with patch.object(fix_mode_validator, "validate_repository", return_value=(False, missing, [])):
+            with patch.object(fix_mode_validator, "fix_repository", return_value=True):
                 result = fix_mode_validator.validate_all()
 
         # Should still return False since validation failed initially
@@ -134,9 +124,7 @@ class TestValidateAllWithFixMode:
 
     def test_fix_mode_banner_printed(self, fix_mode_validator, capsys):
         """Test fix mode banner is printed."""
-        with patch.object(
-            fix_mode_validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(fix_mode_validator, "validate_repository", return_value=(True, [], [])):
             fix_mode_validator.validate_all()
 
         captured = capsys.readouterr()
@@ -154,9 +142,7 @@ class TestValidateAllWithFixMode:
 
         validator = LabelValidator(config_path, fix_mode=False)
 
-        with patch.object(
-            validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(True, [], [])):
             validator.validate_all()
 
         captured = capsys.readouterr()
@@ -166,12 +152,8 @@ class TestValidateAllWithFixMode:
         """Test fix_mode handles mismatched labels."""
         mismatched = [{"name": "bug", "color": "d73a4a"}]
 
-        with patch.object(
-            fix_mode_validator, "validate_repository", return_value=(False, [], mismatched)
-        ):
-            with patch.object(
-                fix_mode_validator, "fix_repository", return_value=True
-            ) as mock_fix:
+        with patch.object(fix_mode_validator, "validate_repository", return_value=(False, [], mismatched)):
+            with patch.object(fix_mode_validator, "fix_repository", return_value=True) as mock_fix:
                 result = fix_mode_validator.validate_all()
 
         # Should call fix for mismatched labels
@@ -189,9 +171,7 @@ class TestValidateAllWithFixMode:
 
         validator = LabelValidator(config_path, fix_mode=False)
 
-        with patch.object(
-            validator, "validate_repository", return_value=(False, [{"name": "bug"}], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(False, [{"name": "bug"}], [])):
             result = validator.validate_all()
 
         assert result is False
@@ -205,9 +185,7 @@ class TestMainFunction:
 
     def test_main_config_not_found(self, tmp_path, capsys, monkeypatch):
         """Test main exits when config file not found."""
-        monkeypatch.setattr(
-            sys, "argv", ["validate_labels.py", "--config", str(tmp_path / "missing.yml")]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate_labels.py", "--config", str(tmp_path / "missing.yml")])
 
         with patch("validate_labels.ensure_github_token", return_value="token"):
             with pytest.raises(SystemExit) as exc:
@@ -227,14 +205,10 @@ class TestMainFunction:
         with open(config_path, "w") as f:
             yaml.dump(config, f)
 
-        monkeypatch.setattr(
-            sys, "argv", ["validate_labels.py", "--config", str(config_path)]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate_labels.py", "--config", str(config_path)])
 
         with patch("validate_labels.ensure_github_token", return_value="token"):
-            with patch.object(
-                LabelValidator, "validate_all", return_value=True
-            ):
+            with patch.object(LabelValidator, "validate_all", return_value=True):
                 with pytest.raises(SystemExit) as exc:
                     main()
 
@@ -250,14 +224,10 @@ class TestMainFunction:
         with open(config_path, "w") as f:
             yaml.dump(config, f)
 
-        monkeypatch.setattr(
-            sys, "argv", ["validate_labels.py", "--config", str(config_path)]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate_labels.py", "--config", str(config_path)])
 
         with patch("validate_labels.ensure_github_token", return_value="token"):
-            with patch.object(
-                LabelValidator, "validate_all", return_value=False
-            ):
+            with patch.object(LabelValidator, "validate_all", return_value=False):
                 with pytest.raises(SystemExit) as exc:
                     main()
 
@@ -273,9 +243,7 @@ class TestMainFunction:
         with open(config_path, "w") as f:
             yaml.dump(config, f)
 
-        monkeypatch.setattr(
-            sys, "argv", ["validate_labels.py", "--config", str(config_path), "--fix"]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate_labels.py", "--config", str(config_path), "--fix"])
 
         validator_instances = []
 
@@ -287,9 +255,7 @@ class TestMainFunction:
 
         with patch("validate_labels.ensure_github_token", return_value="token"):
             with patch.object(LabelValidator, "__init__", tracking_init):
-                with patch.object(
-                    LabelValidator, "validate_all", return_value=True
-                ):
+                with patch.object(LabelValidator, "validate_all", return_value=True):
                     with pytest.raises(SystemExit):
                         main()
 
@@ -307,16 +273,10 @@ class TestMainFunction:
         with open(config_path, "w") as f:
             yaml.dump(config, f)
 
-        monkeypatch.setattr(
-            sys, "argv", ["validate_labels.py", "--config", str(config_path)]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate_labels.py", "--config", str(config_path)])
 
-        with patch(
-            "validate_labels.ensure_github_token", return_value="token"
-        ) as mock_ensure:
-            with patch.object(
-                LabelValidator, "validate_all", return_value=True
-            ):
+        with patch("validate_labels.ensure_github_token", return_value="token") as mock_ensure:
+            with patch.object(LabelValidator, "validate_all", return_value=True):
                 with pytest.raises(SystemExit):
                     main()
 
@@ -493,9 +453,7 @@ class TestValidateAllSummary:
 
     def test_prints_summary_header(self, validator, capsys):
         """Test prints summary header."""
-        with patch.object(
-            validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(True, [], [])):
             validator.validate_all()
 
         captured = capsys.readouterr()
@@ -504,9 +462,7 @@ class TestValidateAllSummary:
 
     def test_prints_pass_for_successful_repos(self, validator, capsys):
         """Test prints PASS for repos that validate successfully."""
-        with patch.object(
-            validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(True, [], [])):
             validator.validate_all()
 
         captured = capsys.readouterr()
@@ -514,9 +470,7 @@ class TestValidateAllSummary:
 
     def test_prints_fail_for_failed_repos(self, validator, capsys):
         """Test prints FAIL for repos that fail validation."""
-        with patch.object(
-            validator, "validate_repository", return_value=(False, [{"name": "bug"}], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(False, [{"name": "bug"}], [])):
             validator.validate_all()
 
         captured = capsys.readouterr()
@@ -524,9 +478,7 @@ class TestValidateAllSummary:
 
     def test_prints_all_validated_success(self, validator, capsys):
         """Test prints success message when all repos pass."""
-        with patch.object(
-            validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(True, [], [])):
             result = validator.validate_all()
 
         assert result is True
@@ -535,15 +487,14 @@ class TestValidateAllSummary:
 
     def test_prints_failed_count(self, validator, capsys):
         """Test prints count of failed repos."""
+
         # Make only repo1 pass
         def mock_validate(repo):
             if "repo1" in repo:
                 return (True, [], [])
             return (False, [{"name": "bug"}], [])
 
-        with patch.object(
-            validator, "validate_repository", side_effect=mock_validate
-        ):
+        with patch.object(validator, "validate_repository", side_effect=mock_validate):
             result = validator.validate_all()
 
         assert result is False

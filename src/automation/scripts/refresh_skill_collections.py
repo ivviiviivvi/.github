@@ -41,6 +41,7 @@ def parse_frontmatter(content: str) -> tuple[dict[str, object], int]:
 
     Returns:
         Tuple of (frontmatter dict, end line index) or ({}, -1) if no frontmatter
+
     """
     lines = content.splitlines()
     if not lines or lines[0].strip() != "---":
@@ -92,6 +93,7 @@ def validate_collection(path: Path) -> ValidationResult:
 
     Returns:
         ValidationResult with validation status and any errors/warnings
+
     """
     errors: list[str] = []
     warnings: list[str] = []
@@ -158,6 +160,7 @@ def generate_inventory(results: list[ValidationResult]) -> str:
 
     Returns:
         Generated markdown content for INVENTORY.md
+
     """
     lines = [
         "# Collection Inventory\n",
@@ -186,18 +189,14 @@ def generate_inventory(results: list[ValidationResult]) -> str:
         if result.warnings:
             status = "Warning"
 
-        lines.append(
-            f"| `{result.path.name}` | {name} | {description} | {tags_text} | {status} |\n"
-        )
+        lines.append(f"| `{result.path.name}` | {name} | {description} | {tags_text} | {status} |\n")
 
     return "".join(lines)
 
 
 def main() -> int:
     """Main entry point for the script."""
-    parser = argparse.ArgumentParser(
-        description="Refresh and validate skill collections"
-    )
+    parser = argparse.ArgumentParser(description="Refresh and validate skill collections")
     parser.add_argument(
         "--collections-dir",
         type=Path,
@@ -260,7 +259,7 @@ def main() -> int:
                 print(f"  WARNING: {warning}")
 
     # Summary
-    print(f"\nValidation complete:")
+    print("\nValidation complete:")
     print(f"  Files checked: {len(results)}")
     print(f"  Valid: {sum(1 for r in results if r.valid)}")
     print(f"  Invalid: {sum(1 for r in results if not r.valid)}")

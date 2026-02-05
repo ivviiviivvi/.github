@@ -12,29 +12,16 @@ from unittest.mock import MagicMock
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock secret_manager before importing utils
 # Save original and restore after imports to avoid polluting other tests
 _original_secret_manager = sys.modules.get("secret_manager")
 sys.modules["secret_manager"] = MagicMock()
 
-from utils import (
-    APIError,
-    AutomationError,
-    ConfigLoader,
-    ConfigurationError,
-    RateLimiter,
-    ValidationError,
-    read_json,
-    read_yaml,
-    safe_get,
-    setup_logger,
-    write_json,
-    write_yaml,
-)
+from utils import (APIError, AutomationError, ConfigLoader, ConfigurationError,
+                   RateLimiter, ValidationError, read_json, read_yaml,
+                   safe_get, setup_logger, write_json, write_yaml)
 
 # Restore original secret_manager module after imports
 if _original_secret_manager is not None:
@@ -425,7 +412,7 @@ class TestGitHubAPIClient:
 
     def test_init_with_gh_cli(self):
         """Test initialization using gh CLI token."""
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         from utils import GitHubAPIClient
 
@@ -458,7 +445,7 @@ class TestGitHubAPIClientRequest:
     @pytest.fixture
     def mock_client(self):
         """Create client with mocked session."""
-        from unittest.mock import patch, MagicMock
+        from unittest.mock import MagicMock, patch
 
         from utils import GitHubAPIClient
 
@@ -499,7 +486,7 @@ class TestGitHubAPIClientRequest:
     def test_put_request(self, mock_client):
         """Test PUT request."""
         mock_response = MagicMock()
-        mock_response.content = b'{}'
+        mock_response.content = b"{}"
         mock_response.json.return_value = {}
         mock_response.headers = {}
         mock_client.session.request.return_value = mock_response
@@ -523,7 +510,7 @@ class TestGitHubAPIClientRequest:
     def test_delete_request(self, mock_client):
         """Test DELETE request."""
         mock_response = MagicMock()
-        mock_response.content = b''
+        mock_response.content = b""
         mock_response.json.return_value = {}
         mock_response.headers = {}
         mock_client.session.request.return_value = mock_response
@@ -535,7 +522,7 @@ class TestGitHubAPIClientRequest:
     def test_handles_empty_response(self, mock_client):
         """Test handling of empty response."""
         mock_response = MagicMock()
-        mock_response.content = b''  # Empty content
+        mock_response.content = b""  # Empty content
         mock_response.headers = {}
         mock_client.session.request.return_value = mock_response
 
@@ -546,7 +533,7 @@ class TestGitHubAPIClientRequest:
     def test_logs_low_rate_limit(self, mock_client):
         """Test logs warning when rate limit is low."""
         mock_response = MagicMock()
-        mock_response.content = b'{}'
+        mock_response.content = b"{}"
         mock_response.json.return_value = {}
         mock_response.headers = {"X-RateLimit-Remaining": "50"}
         mock_client.session.request.return_value = mock_response
@@ -614,7 +601,7 @@ class TestGitHubAPIClientRequest:
         mock_error_response.headers = {"Retry-After": "1"}
 
         mock_success_response = MagicMock()
-        mock_success_response.content = b'{}'
+        mock_success_response.content = b"{}"
         mock_success_response.json.return_value = {}
         mock_success_response.headers = {}
 
@@ -657,9 +644,7 @@ class TestGitHubAPIClientRequest:
         """Test raises on general request exception."""
         import requests
 
-        mock_client.session.request.side_effect = requests.exceptions.ConnectionError(
-            "Connection refused"
-        )
+        mock_client.session.request.side_effect = requests.exceptions.ConnectionError("Connection refused")
 
         with pytest.raises(requests.exceptions.ConnectionError):
             mock_client.request("GET", "/endpoint")
@@ -726,9 +711,7 @@ class TestRetryWithBackoff:
                 raise ValueError("Temporary failure")
             return "success"
 
-        result = retry_with_backoff(
-            flaky_func, max_attempts=3, initial_delay=0.01, jitter=False
-        )
+        result = retry_with_backoff(flaky_func, max_attempts=3, initial_delay=0.01, jitter=False)
 
         assert result == "success"
         assert call_count == 3
@@ -741,9 +724,7 @@ class TestRetryWithBackoff:
             raise RuntimeError("Always fails")
 
         with pytest.raises(RuntimeError, match="Always fails"):
-            retry_with_backoff(
-                always_fail, max_attempts=3, initial_delay=0.01, jitter=False
-            )
+            retry_with_backoff(always_fail, max_attempts=3, initial_delay=0.01, jitter=False)
 
     def test_respects_max_delay(self):
         """Test respects maximum delay setting."""
