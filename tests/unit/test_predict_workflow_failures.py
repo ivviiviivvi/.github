@@ -14,9 +14,7 @@ import pytest
 np = pytest.importorskip("numpy")
 pd = pytest.importorskip("pandas")
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from predict_workflow_failures import WorkflowPredictor
 
@@ -575,12 +573,8 @@ class TestPredictWorkflowByName:
     def test_predict_low_risk_level(self, trained_predictor):
         """Test low probability results in LOW risk level."""
         # Mock to return low probability
-        with patch.object(
-            trained_predictor.model, "predict_proba", return_value=np.array([[0.97, 0.03]])
-        ):
-            with patch.object(
-                trained_predictor.model, "predict", return_value=np.array([0])
-            ):
+        with patch.object(trained_predictor.model, "predict_proba", return_value=np.array([[0.97, 0.03]])):
+            with patch.object(trained_predictor.model, "predict", return_value=np.array([0])):
                 result = trained_predictor.predict("ci.yml", "owner/repo")
 
                 assert result["risk_level"] == "LOW"
@@ -588,12 +582,8 @@ class TestPredictWorkflowByName:
 
     def test_predict_medium_risk_level(self, trained_predictor):
         """Test medium probability results in MEDIUM risk level."""
-        with patch.object(
-            trained_predictor.model, "predict_proba", return_value=np.array([[0.90, 0.10]])
-        ):
-            with patch.object(
-                trained_predictor.model, "predict", return_value=np.array([0])
-            ):
+        with patch.object(trained_predictor.model, "predict_proba", return_value=np.array([[0.90, 0.10]])):
+            with patch.object(trained_predictor.model, "predict", return_value=np.array([0])):
                 result = trained_predictor.predict("ci.yml", "owner/repo")
 
                 assert result["risk_level"] == "MEDIUM"
@@ -601,12 +591,8 @@ class TestPredictWorkflowByName:
 
     def test_predict_high_risk_level(self, trained_predictor):
         """Test high probability results in HIGH risk level."""
-        with patch.object(
-            trained_predictor.model, "predict_proba", return_value=np.array([[0.80, 0.20]])
-        ):
-            with patch.object(
-                trained_predictor.model, "predict", return_value=np.array([0])
-            ):
+        with patch.object(trained_predictor.model, "predict_proba", return_value=np.array([[0.80, 0.20]])):
+            with patch.object(trained_predictor.model, "predict", return_value=np.array([0])):
                 result = trained_predictor.predict("ci.yml", "owner/repo")
 
                 assert result["risk_level"] == "HIGH"
@@ -614,12 +600,8 @@ class TestPredictWorkflowByName:
 
     def test_predict_critical_risk_level(self, trained_predictor):
         """Test very high probability results in CRITICAL risk level."""
-        with patch.object(
-            trained_predictor.model, "predict_proba", return_value=np.array([[0.55, 0.45]])
-        ):
-            with patch.object(
-                trained_predictor.model, "predict", return_value=np.array([1])
-            ):
+        with patch.object(trained_predictor.model, "predict_proba", return_value=np.array([[0.55, 0.45]])):
+            with patch.object(trained_predictor.model, "predict", return_value=np.array([1])):
                 result = trained_predictor.predict("ci.yml", "owner/repo")
 
                 assert result["risk_level"] == "CRITICAL"
@@ -718,9 +700,7 @@ class TestGetHighRiskWorkflows:
 
                 # Should be sorted descending
                 if len(high_risk) >= 2:
-                    assert high_risk[0]["failure_probability"] >= high_risk[1][
-                        "failure_probability"
-                    ]
+                    assert high_risk[0]["failure_probability"] >= high_risk[1]["failure_probability"]
 
 
 @pytest.mark.unit

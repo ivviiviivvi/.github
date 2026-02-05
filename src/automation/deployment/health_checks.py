@@ -41,9 +41,7 @@ class HealthChecker:
             }
         )
 
-    def check_repository(
-        self, repo: str, workflows: Optional[list[str]] = None
-    ) -> dict:
+    def check_repository(self, repo: str, workflows: Optional[list[str]] = None) -> dict:
         """Check health of workflows in repository.
 
         Args:
@@ -66,9 +64,7 @@ class HealthChecker:
 
         # Get workflow runs
         try:
-            response = self.session.get(
-                f"{self.api_base}/repos/{repo}/actions/runs", params={"per_page": 50}
-            )
+            response = self.session.get(f"{self.api_base}/repos/{repo}/actions/runs", params={"per_page": 50})
 
             if response.status_code != 200:
                 results["overall_health"] = "error"
@@ -80,10 +76,7 @@ class HealthChecker:
             # Filter recent runs (last 24 hours)
             cutoff = datetime.now() - timedelta(hours=24)
             recent_runs = [
-                run
-                for run in runs
-                if datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
-                > cutoff
+                run for run in runs if datetime.fromisoformat(run["created_at"].replace("Z", "+00:00")) > cutoff
             ]
 
             # Group by workflow
@@ -229,9 +222,7 @@ class HealthChecker:
                 status = health["status"]
                 emoji = status_emoji.get(status, "❓")
                 print(f"      {emoji} {name}")
-                print(
-                    f"         {health['runs']} runs, {health['success_rate']:.1%} success"
-                )
+                print(f"         {health['runs']} runs, {health['success_rate']:.1%} success")
 
     def check_all_repositories(self, repos: list[str]) -> dict[str, dict]:
         """Check health of multiple repositories.
@@ -257,18 +248,14 @@ class HealthChecker:
 
         healthy = sum(1 for r in results.values() if r["overall_health"] == "healthy")
         degraded = sum(1 for r in results.values() if r["overall_health"] == "degraded")
-        unhealthy = sum(
-            1 for r in results.values() if r["overall_health"] == "unhealthy"
-        )
+        unhealthy = sum(1 for r in results.values() if r["overall_health"] == "unhealthy")
 
         print(f"\n✅ Healthy: {healthy}/{len(repos)}")
         print(f"⚠️  Degraded: {degraded}/{len(repos)}")
         print(f"❌ Unhealthy: {unhealthy}/{len(repos)}")
 
         overall_health = (
-            "healthy"
-            if unhealthy == 0 and degraded == 0
-            else "degraded" if unhealthy == 0 else "unhealthy"
+            "healthy" if unhealthy == 0 and degraded == 0 else "degraded" if unhealthy == 0 else "unhealthy"
         )
 
         print(f"\nOverall system health: {overall_health.upper()}")
@@ -343,9 +330,7 @@ def main():
             sys.exit(0 if results["overall_health"] in ["healthy", "degraded"] else 1)
         else:
             # Multiple repos
-            any_unhealthy = any(
-                r["overall_health"] == "unhealthy" for r in results.values()
-            )
+            any_unhealthy = any(r["overall_health"] == "unhealthy" for r in results.values())
             sys.exit(1 if any_unhealthy else 0)
 
 

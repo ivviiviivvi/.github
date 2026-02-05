@@ -4,18 +4,13 @@
 Focus: acquire_lock edge cases, file error handling, date parsing, CLI.
 """
 
-import json
-import os
 import sys
-import time
 from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 
 @pytest.mark.unit

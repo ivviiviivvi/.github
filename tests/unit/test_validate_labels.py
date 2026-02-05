@@ -8,14 +8,12 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock secret_manager before importing validate_labels
 # Save original and restore after imports to avoid polluting other tests
@@ -208,9 +206,7 @@ class TestGetRepoLabels:
     def test_returns_labels_on_success(self, validator):
         """Test returns parsed labels on successful API call."""
         mock_result = MagicMock()
-        mock_result.stdout = json.dumps(
-            [{"name": "bug", "color": "d73a4a", "description": "Bug report"}]
-        )
+        mock_result.stdout = json.dumps([{"name": "bug", "color": "d73a4a", "description": "Bug report"}])
 
         with patch("subprocess.run", return_value=mock_result):
             labels = validator._get_repo_labels("owner/repo")
@@ -221,9 +217,7 @@ class TestGetRepoLabels:
     def test_returns_none_on_subprocess_error(self, validator, capsys):
         """Test returns None when subprocess fails."""
         with patch("subprocess.run") as mock_run:
-            mock_run.side_effect = subprocess.CalledProcessError(
-                1, "gh", stderr="API error"
-            )
+            mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="API error")
             labels = validator._get_repo_labels("owner/repo")
 
         assert labels is None
@@ -272,9 +266,7 @@ class TestCreateLabel:
         label = {"name": "bug", "color": "d73a4a", "description": "Bug report"}
 
         with patch("subprocess.run") as mock_run:
-            mock_run.side_effect = subprocess.CalledProcessError(
-                1, "gh", stderr="Permission denied"
-            )
+            mock_run.side_effect = subprocess.CalledProcessError(1, "gh", stderr="Permission denied")
             result = validator._create_label("owner/repo", label)
 
         assert result is False
@@ -451,9 +443,7 @@ class TestValidateAll:
 
     def test_returns_true_when_all_pass(self, validator):
         """Test returns True when all repositories pass validation."""
-        with patch.object(
-            validator, "validate_repository", return_value=(True, [], [])
-        ):
+        with patch.object(validator, "validate_repository", return_value=(True, [], [])):
             result = validator.validate_all()
 
         assert result is True

@@ -28,11 +28,7 @@ import re
 import sys
 from pathlib import Path
 
-from models import (
-    AutoMergeConfig,
-    AutoMergeEligibility,
-    AutoMergeSafetyChecks,
-)
+from models import AutoMergeConfig, AutoMergeEligibility, AutoMergeSafetyChecks
 from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 # Add parent directory to path for imports
@@ -54,9 +50,7 @@ class AutoMergeChecker:
         self.config = config
         self.logger = setup_logger(__name__)
 
-    def check_eligibility(
-        self, owner: str, repo: str, pr_number: int
-    ) -> AutoMergeEligibility:
+    def check_eligibility(self, owner: str, repo: str, pr_number: int) -> AutoMergeEligibility:
         """Check if PR is eligible for auto-merge.
 
         Args:
@@ -68,9 +62,7 @@ class AutoMergeChecker:
             Auto-merge eligibility result
 
         """
-        self.logger.info(
-            f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}"
-        )
+        self.logger.info(f"Checking auto-merge eligibility for {owner}/{repo}#{pr_number}")
 
         # Get PR details
         pr = self._get_pull_request(owner, repo, pr_number)
@@ -94,9 +86,7 @@ class AutoMergeChecker:
         if not checks.all_tests_passed:
             reasons.append("CI tests have not all passed")
         if not checks.reviews_approved:
-            reasons.append(
-                f"Missing required approvals (need {self.config.min_reviews})"
-            )
+            reasons.append(f"Missing required approvals (need {self.config.min_reviews})")
         if not checks.no_conflicts:
             reasons.append("PR has merge conflicts")
         if not checks.branch_up_to_date:
@@ -128,9 +118,7 @@ class AutoMergeChecker:
         endpoint = f"/repos/{owner}/{repo}/pulls/{pr_number}"
         return self.client.get(endpoint)
 
-    def _run_safety_checks(
-        self, owner: str, repo: str, pr: dict
-    ) -> AutoMergeSafetyChecks:
+    def _run_safety_checks(self, owner: str, repo: str, pr: dict) -> AutoMergeSafetyChecks:
         """Run all safety checks on PR."""
         return AutoMergeSafetyChecks(
             all_tests_passed=self._check_tests_passed(owner, repo, pr),
@@ -168,10 +156,7 @@ class AutoMergeChecker:
             endpoint = f"/repos/{owner}/{repo}/commits/{head_sha}/check-runs"
             check_runs = self.client.get(endpoint)
 
-            check_names = {
-                run["name"]: run["conclusion"]
-                for run in check_runs.get("check_runs", [])
-            }
+            check_names = {run["name"]: run["conclusion"] for run in check_runs.get("check_runs", [])}
 
             for required_check in self.config.required_checks:
                 if required_check not in check_names:
@@ -208,9 +193,7 @@ class AutoMergeChecker:
             # Keep only the latest review state per reviewer
             reviewer_states[reviewer] = review["state"]
 
-        approved_count = sum(
-            1 for state in reviewer_states.values() if state == "APPROVED"
-        )
+        approved_count = sum(1 for state in reviewer_states.values() if state == "APPROVED")
 
         self.logger.debug(
             f"Reviews: {approved_count} approved (need {self.config.min_reviews})"  # noqa: E501

@@ -76,9 +76,7 @@ class ContextPayloadGenerator:
         with open(self.state_file, encoding="utf-8") as f:
             return json.load(f)
 
-    def generate_context(
-        self, level: CompressionLevel = CompressionLevel.STANDARD
-    ) -> dict[str, Any]:
+    def generate_context(self, level: CompressionLevel = CompressionLevel.STANDARD) -> dict[str, Any]:
         """Generate context payload at specified compression level.
 
         Args:
@@ -271,9 +269,7 @@ class ContextPayloadGenerator:
             List of recent decision dictionaries
 
         """
-        decisions = self.state.get("user_customizations", {}).get(
-            "runtime_decisions", []
-        )
+        decisions = self.state.get("user_customizations", {}).get("runtime_decisions", [])
         return [
             {"prompt": d.get("prompt"), "choice": d.get("decision", {}).get("choice")}
             for d in sorted(
@@ -296,9 +292,7 @@ class ContextPayloadGenerator:
         """
         warnings = []
         env = self.state.get("environment_config", {})
-        python_ver = (
-            env.get("runtime_environment", {}).get("python", {}).get("version", "")
-        )
+        python_ver = env.get("runtime_environment", {}).get("python", {}).get("version", "")
         if python_ver and python_ver < "3.10":
             warnings.append(f"Python {python_ver} detected, 3.10+ recommended")
         missing = env.get("dependencies", {}).get("missing_dependencies", [])
@@ -319,10 +313,7 @@ class ContextPayloadGenerator:
         tasks = self.state.get("tasks", {})
         completed = []
         for pid, phase in phases.items():
-            if all(
-                tasks.get(tid, {}).get("status") == "success"
-                for tid in phase.get("tasks", [])
-            ):
+            if all(tasks.get(tid, {}).get("status") == "success" for tid in phase.get("tasks", [])):
                 completed.append(pid)
         return completed
 
@@ -339,9 +330,7 @@ class ContextPayloadGenerator:
         phases = self.state.get("dag", {}).get("phases", {})
         phase_tasks = phases.get(phase_id, {}).get("tasks", [])
         tasks = self.state.get("tasks", {})
-        completed = sum(
-            1 for tid in phase_tasks if tasks.get(tid, {}).get("status") == "success"
-        )
+        completed = sum(1 for tid in phase_tasks if tasks.get(tid, {}).get("status") == "success")
         return {
             "total": len(phase_tasks),
             "complete": completed,
@@ -359,9 +348,7 @@ class ContextPayloadGenerator:
         """
         tasks = self.state.get("tasks", {})
         priority = [
-            (tid, len(task.get("dependents", [])))
-            for tid, task in tasks.items()
-            if task.get("status") != "success"
+            (tid, len(task.get("dependents", []))) for tid, task in tasks.items() if task.get("status") != "success"
         ]
         priority.sort(key=lambda x: x[1], reverse=True)
         return [tid for tid, _ in priority]
@@ -375,9 +362,7 @@ class ContextPayloadGenerator:
         """
         files = self.state.get("filesystem_state", {}).get("files", {})
         return [
-            {"path": path, "by": info.get("produced_by")}
-            for path, info in files.items()
-            if info.get("produced_by")
+            {"path": path, "by": info.get("produced_by")} for path, info in files.items() if info.get("produced_by")
         ]
 
     def _get_required_files(self) -> list[str]:
@@ -397,11 +382,7 @@ class ContextPayloadGenerator:
             Disk usage in megabytes
 
         """
-        usage = (
-            self.state.get("filesystem_state", {})
-            .get("disk_usage", {})
-            .get("total_bytes", 0)
-        )
+        usage = self.state.get("filesystem_state", {}).get("disk_usage", {}).get("total_bytes", 0)
         return int(usage / (1024 * 1024))
 
     def _get_os_info(self) -> str:
@@ -411,11 +392,7 @@ class ContextPayloadGenerator:
             OS type and version string
 
         """
-        os = (
-            self.state.get("environment_config", {})
-            .get("system_info", {})
-            .get("os", {})
-        )
+        os = self.state.get("environment_config", {}).get("system_info", {}).get("os", {})
         return f"{os.get('type')} {os.get('version')}"
 
     def _get_python_version(self) -> str:
@@ -445,11 +422,7 @@ class ContextPayloadGenerator:
             Dictionary mapping package names to versions
 
         """
-        packages = (
-            self.state.get("environment_config", {})
-            .get("dependencies", {})
-            .get("python_packages", [])
-        )
+        packages = self.state.get("environment_config", {}).get("dependencies", {}).get("python_packages", [])
         key = {}
         for pkg in packages:
             if pkg.get("name") in ["numpy", "pandas", "torch", "tensorflow"]:
@@ -509,9 +482,7 @@ def main():
     """Command-line interface for context generation."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Generate AI session handoff context from orchestrator state"
-    )
+    parser = argparse.ArgumentParser(description="Generate AI session handoff context from orchestrator state")
     parser.add_argument(
         "--state-file",
         default=".orchestrator_state.json",
@@ -528,9 +499,7 @@ def main():
         default="standard",
         help="Compression level (default: standard)",
     )
-    parser.add_argument(
-        "--show-tokens", action="store_true", help="Display estimated token count"
-    )
+    parser.add_argument("--show-tokens", action="store_true", help="Display estimated token count")
 
     args = parser.parse_args()
 

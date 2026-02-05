@@ -15,8 +15,7 @@ import pytest
 # Import the module with hyphens in name
 spec = importlib.util.spec_from_file_location(
     "configure_github_projects",
-    Path(__file__).parent.parent.parent
-    / "src/automation/scripts/utils/configure-github-projects.py",
+    Path(__file__).parent.parent.parent / "src/automation/scripts/utils/configure-github-projects.py",
 )
 configure_github_projects = importlib.util.module_from_spec(spec)
 sys.modules["configure_github_projects"] = configure_github_projects
@@ -105,9 +104,7 @@ class TestExecuteQuery:
         """Test successful query execution."""
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": {"organization": {"id": "org-123"}}
-        }
+        mock_response.json.return_value = {"data": {"organization": {"id": "org-123"}}}
         mock_post.return_value = mock_response
 
         result = manager.execute_query("query { test }")
@@ -147,9 +144,7 @@ class TestExecuteQuery:
         """Test query execution handles GraphQL errors."""
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "errors": [{"message": "Field not found"}]
-        }
+        mock_response.json.return_value = {"errors": [{"message": "Field not found"}]}
         mock_post.return_value = mock_response
 
         with pytest.raises(Exception) as exc_info:
@@ -177,9 +172,7 @@ class TestGetOrgId:
     )
     def test_get_org_id_success(self, mock_execute, manager):
         """Test successful org ID retrieval."""
-        mock_execute.return_value = {
-            "data": {"organization": {"id": "MDEyOk9yZ2FuaXphdGlvbjEyMzQ="}}
-        }
+        mock_execute.return_value = {"data": {"organization": {"id": "MDEyOk9yZ2FuaXphdGlvbjEyMzQ="}}}
 
         result = manager.get_org_id()
 
@@ -213,9 +206,7 @@ class TestCreateProject:
         configure_github_projects.GitHubProjectsManager,
         "get_org_id",
     )
-    def test_create_project_success(
-        self, mock_get_org, mock_execute, mock_update_desc, manager
-    ):
+    def test_create_project_success(self, mock_get_org, mock_execute, mock_update_desc, manager):
         """Test successful project creation."""
         mock_get_org.return_value = "org-id-123"
         mock_execute.return_value = {
@@ -257,9 +248,7 @@ class TestUpdateProjectDescription:
     )
     def test_update_project_description_success(self, mock_execute, manager):
         """Test successful description update."""
-        mock_execute.return_value = {
-            "data": {"updateProjectV2": {"projectV2": {"id": "proj-123"}}}
-        }
+        mock_execute.return_value = {"data": {"updateProjectV2": {"projectV2": {"id": "proj-123"}}}}
 
         manager.update_project_description("proj-123", "New description")
 
@@ -491,18 +480,14 @@ class TestProjectsConfig:
         for project_key, config in configure_github_projects.PROJECTS_CONFIG.items():
             for field_name, field_config in config["fields"].items():
                 field_type = field_config["type"]
-                assert field_type in valid_types, (
-                    f"Invalid field type '{field_type}' in {project_key}.{field_name}"
-                )
+                assert field_type in valid_types, f"Invalid field type '{field_type}' in {project_key}.{field_name}"
 
     def test_single_select_fields_have_options(self):
         """Test single select fields have options list."""
         for project_key, config in configure_github_projects.PROJECTS_CONFIG.items():
             for field_name, field_config in config["fields"].items():
                 if field_config["type"] == "single_select":
-                    assert "options" in field_config, (
-                        f"Missing options in {project_key}.{field_name}"
-                    )
+                    assert "options" in field_config, f"Missing options in {project_key}.{field_name}"
                     assert len(field_config["options"]) > 0
 
 
@@ -612,9 +597,7 @@ class TestMainFunction:
         configure_github_projects.GitHubProjectsManager,
         "create_project",
     )
-    def test_main_handles_project_creation_error(
-        self, mock_create_project, capsys
-    ):
+    def test_main_handles_project_creation_error(self, mock_create_project, capsys):
         """Test main handles project creation errors gracefully."""
         mock_create_project.side_effect = Exception("API Error")
 
@@ -644,9 +627,7 @@ class TestMainFunction:
         "create_project",
     )
     @patch("time.sleep")
-    def test_main_handles_field_creation_error(
-        self, mock_sleep, mock_create_project, mock_create_field, capsys
-    ):
+    def test_main_handles_field_creation_error(self, mock_sleep, mock_create_project, mock_create_field, capsys):
         """Test main handles field creation errors gracefully."""
         mock_create_project.return_value = {
             "id": "proj-123",

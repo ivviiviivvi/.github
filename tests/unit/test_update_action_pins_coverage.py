@@ -7,19 +7,14 @@ Focus: main function paths, verbose logging, recursive mode, error handling.
 import importlib.util
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 # Import with hyphenated filename workaround
 spec = importlib.util.spec_from_file_location(
     "update_action_pins",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "utils"
-    / "update-action-pins.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "update-action-pins.py",
 )
 update_action_pins = importlib.util.module_from_spec(spec)
 sys.modules["update_action_pins"] = update_action_pins
@@ -62,9 +57,7 @@ class TestResolveTagToShaRateLimiting:
 
         with patch("time.sleep") as mock_sleep:
             with patch("time.time", return_value=future_reset - 10):
-                result = resolve_tag_to_sha(
-                    "actions", "checkout", "v4", mock_session, None
-                )
+                result = resolve_tag_to_sha("actions", "checkout", "v4", mock_session, None)
 
         # Should have called sleep
         mock_sleep.assert_called_once()
@@ -87,9 +80,7 @@ class TestResolveTagToShaRateLimiting:
 
         with patch("time.sleep") as mock_sleep:
             with patch("time.time", return_value=future_reset - 400):
-                result = resolve_tag_to_sha(
-                    "actions", "checkout", "v4", mock_session, None
-                )
+                result = resolve_tag_to_sha("actions", "checkout", "v4", mock_session, None)
 
         # Should not have called sleep
         mock_sleep.assert_not_called()
@@ -138,13 +129,15 @@ class TestResolveTagToShaRateLimiting:
         """Test token is added to authorization header."""
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "object": {"type": "commit", "sha": "abc123"}
-        }
+        mock_response.json.return_value = {"object": {"type": "commit", "sha": "abc123"}}
         mock_session.get.return_value = mock_response
 
         resolve_tag_to_sha(
-            "actions", "checkout", "v4", mock_session, "test-token"  # allow-secret
+            "actions",
+            "checkout",
+            "v4",
+            mock_session,
+            "test-token",  # allow-secret
         )
 
         # Verify Authorization header was set
@@ -187,9 +180,7 @@ jobs:
 
         sha_cache = {}
 
-        update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=True
-        )
+        update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=True)
 
         captured = capsys.readouterr()
         assert "Resolving" in captured.out or "actions/checkout@v4" in sha_cache
@@ -215,9 +206,7 @@ jobs:
         sha_cache = {"actions/checkout@v4": new_sha}
 
         with caplog.at_level(logging.INFO):
-            updates = update_workflow_file(
-                workflow_file, sha_cache, mock_session, dry_run=False, verbose=True
-            )
+            updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=True)
 
         assert updates == 1
         # Should log the update with old and new SHAs (truncated)
@@ -236,9 +225,7 @@ jobs:
 
         sha_cache = {}
 
-        update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=True
-        )
+        update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=True)
 
         # Should log no canonical version debug message
         # (may not appear in capsys since it's DEBUG level)
@@ -266,9 +253,7 @@ jobs:
         sha_cache = {}
 
         with caplog.at_level(logging.WARNING):
-            updates = update_workflow_file(
-                workflow_file, sha_cache, mock_session, dry_run=False, verbose=True
-            )
+            updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=True)
 
         assert updates == 0
         assert "Could not resolve" in caplog.text
@@ -291,9 +276,7 @@ jobs:
 
         sha_cache = {"actions/checkout@v4": new_sha}
 
-        updates = update_workflow_file(
-            workflow_file, sha_cache, mock_session, dry_run=False, verbose=False
-        )
+        updates = update_workflow_file(workflow_file, sha_cache, mock_session, dry_run=False, verbose=False)
 
         assert updates == 1
         content = workflow_file.read_text()
@@ -323,12 +306,8 @@ jobs:
         # Point script to temp directory
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--verbose", "--dry-run"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--verbose", "--dry-run"])
 
             with pytest.raises(SystemExit) as exc:
                 main()
@@ -355,12 +334,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--recursive", "--dry-run"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--recursive", "--dry-run"])
 
             with pytest.raises(SystemExit) as exc:
                 main()
@@ -387,12 +362,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--workflow", "ci.yml", "--dry-run"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--workflow", "ci.yml", "--dry-run"])
 
             with pytest.raises(SystemExit) as exc:
                 main()
@@ -412,12 +383,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--workflow", "nonexistent.yml"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--workflow", "nonexistent.yml"])
 
             with caplog.at_level(logging.ERROR):
                 with pytest.raises(SystemExit) as exc:
@@ -448,12 +415,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--dry-run"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--dry-run"])
 
             # Mock the API calls to return a new SHA
             new_sha = "abcdef0123456789012345678901234567890123"
@@ -487,12 +450,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py"])
 
             # Mock update_workflow_file to raise an exception
             with patch.object(
@@ -529,12 +488,8 @@ jobs:
 
         script_path = tmp_path / "scripts" / "update-action-pins.py"
 
-        with patch.object(
-            update_action_pins, "__file__", str(script_path)
-        ):
-            monkeypatch.setattr(
-                sys, "argv", ["update-action-pins.py", "--dry-run"]
-            )
+        with patch.object(update_action_pins, "__file__", str(script_path)):
+            monkeypatch.setattr(sys, "argv", ["update-action-pins.py", "--dry-run"])
 
             # Mock API to return new SHA
             mock_response = MagicMock()

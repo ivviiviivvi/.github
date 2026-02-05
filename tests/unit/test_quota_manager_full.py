@@ -1,19 +1,15 @@
-import json
 import sys
 import unittest
-from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
+from unittest.mock import MagicMock, mock_open, patch
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 import quota_manager
 
 
 class TestQuotaManagerFull(unittest.TestCase):
-
     def setUp(self):
         self.mock_subscriptions = {
             "subscriptions": [
@@ -72,9 +68,8 @@ class TestQuotaManagerFull(unittest.TestCase):
             mock_today.strftime.return_value = "2023-02-01"
             mock_datetime.now.return_value = mock_today
             mock_datetime.strptime.side_effect = lambda d, f: datetime.strptime(d, f)
-            from datetime import (
-                datetime,
-            )  # Real datetime for strptime fallback if needed
+            from datetime import \
+                datetime  # Real datetime for strptime fallback if needed
 
             # Actually mocking strptime is tricky if it's used inside.
             # quota_manager imports datetime class.

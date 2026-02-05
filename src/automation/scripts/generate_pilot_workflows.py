@@ -40,10 +40,7 @@ class WorkflowGenerator:
 
             # Convert to workflow conditions
             title_conditions = " || ".join(
-                [
-                    f"contains(github.event.issue.title, '{term}')"
-                    for term in conditions[0].get("titleContains", [])
-                ]
+                [f"contains(github.event.issue.title, '{term}')" for term in conditions[0].get("titleContains", [])]
             )
 
             body_conditions = " || ".join(

@@ -34,14 +34,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from models import (
-    Incident,
-    IncidentConfig,
-    IncidentSeverity,
-    IncidentStatus,
-    PostIncidentReport,
-    RunbookStep,
-)
+from models import (Incident, IncidentConfig, IncidentSeverity, IncidentStatus,
+                    PostIncidentReport, RunbookStep)
 from notification_integration import notify_incident_created
 from utils import GitHubAPIClient, load_config
 
@@ -131,9 +125,7 @@ class IncidentResponseEngine:
         logger.info(f"Incident {incident_id} created with severity {severity.value}")
         return incident
 
-    def _classify_severity(
-        self, title: str, description: str, source: str
-    ) -> IncidentSeverity:
+    def _classify_severity(self, title: str, description: str, source: str) -> IncidentSeverity:
         """Classify incident severity based on content and source.
 
         SEV-1: Critical - Production down, data loss, security breach
@@ -406,9 +398,7 @@ Current status: {incident.status.value}
             incident.resolution = resolution or "Resolved"
 
             # Calculate time to resolution
-            incident.time_to_resolution_minutes = (
-                incident.resolved_at - incident.created_at
-            ).total_seconds() / 60
+            incident.time_to_resolution_minutes = (incident.resolved_at - incident.created_at).total_seconds() / 60
 
         self._save_incident(incident)
 
@@ -625,13 +615,9 @@ def main():
     parser.add_argument("--create", action="store_true", help="Create incident")
     parser.add_argument("--title", help="Incident title")
     parser.add_argument("--description", help="Incident description")
-    parser.add_argument(
-        "--run-id", type=int, help="Workflow run ID (for workflow incidents)"
-    )
+    parser.add_argument("--run-id", type=int, help="Workflow run ID (for workflow incidents)")
     parser.add_argument("--incident-id", help="Incident ID")
-    parser.add_argument(
-        "--execute-runbook", action="store_true", help="Execute runbook"
-    )
+    parser.add_argument("--execute-runbook", action="store_true", help="Execute runbook")
     parser.add_argument("--update-status", help="Update status")
     parser.add_argument("--resolution", help="Resolution details")
     parser.add_argument("--report", action="store_true", help="Generate report")
@@ -661,9 +647,7 @@ def main():
         )
         source = "workflow" if args.run_id else "manual"
 
-        incident = engine.create_incident(
-            args.owner, args.repo, args.title, description, source
-        )
+        incident = engine.create_incident(args.owner, args.repo, args.title, description, source)
         print(f"\n✅ Created incident {incident.incident_id}")
         print(f"   Severity: {incident.severity.value}")
         print(f"   Status: {incident.status.value}")
@@ -683,9 +667,7 @@ def main():
             return
 
         status = IncidentStatus(args.update_status.upper())
-        incident = engine.update_incident_status(
-            args.incident_id, status, args.resolution
-        )
+        incident = engine.update_incident_status(args.incident_id, status, args.resolution)
         print(f"\n✅ Updated {incident.incident_id} to {status.value}")
 
     elif args.report:

@@ -7,13 +7,11 @@ Focus: Workflow health report generation with security and performance metrics.
 import json
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from generate_workflow_health_report import find_unpinned_actions, main
 
@@ -24,15 +22,7 @@ class TestFindUnpinnedActions:
 
     def test_finds_main_branch_reference(self):
         """Test finds @main branch reference."""
-        node = {
-            "jobs": {
-                "build": {
-                    "steps": [
-                        {"uses": "actions/checkout@main"}
-                    ]
-                }
-            }
-        }
+        node = {"jobs": {"build": {"steps": [{"uses": "actions/checkout@main"}]}}}
 
         result = find_unpinned_actions(node)
 
@@ -40,15 +30,7 @@ class TestFindUnpinnedActions:
 
     def test_finds_master_branch_reference(self):
         """Test finds @master branch reference."""
-        node = {
-            "jobs": {
-                "build": {
-                    "steps": [
-                        {"uses": "actions/setup-node@master"}
-                    ]
-                }
-            }
-        }
+        node = {"jobs": {"build": {"steps": [{"uses": "actions/setup-node@master"}]}}}
 
         result = find_unpinned_actions(node)
 
@@ -56,15 +38,7 @@ class TestFindUnpinnedActions:
 
     def test_ignores_sha_pinned_actions(self):
         """Test ignores SHA-pinned actions."""
-        node = {
-            "jobs": {
-                "build": {
-                    "steps": [
-                        {"uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"}
-                    ]
-                }
-            }
-        }
+        node = {"jobs": {"build": {"steps": [{"uses": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"}]}}}
 
         result = find_unpinned_actions(node)
 
@@ -72,16 +46,7 @@ class TestFindUnpinnedActions:
 
     def test_ignores_version_pinned_actions(self):
         """Test ignores version-pinned actions."""
-        node = {
-            "jobs": {
-                "build": {
-                    "steps": [
-                        {"uses": "actions/checkout@v4"},
-                        {"uses": "actions/setup-python@v5"}
-                    ]
-                }
-            }
-        }
+        node = {"jobs": {"build": {"steps": [{"uses": "actions/checkout@v4"}, {"uses": "actions/setup-python@v5"}]}}}
 
         result = find_unpinned_actions(node)
 
@@ -91,12 +56,8 @@ class TestFindUnpinnedActions:
         """Test handles deeply nested structures."""
         node = {
             "jobs": {
-                "job1": {
-                    "steps": [{"uses": "org/action1@main"}]
-                },
-                "job2": {
-                    "steps": [{"uses": "org/action2@master"}]
-                }
+                "job1": {"steps": [{"uses": "org/action1@main"}]},
+                "job2": {"steps": [{"uses": "org/action2@master"}]},
             }
         }
 
@@ -126,7 +87,7 @@ class TestFindUnpinnedActions:
         """Test ignores non-uses keys."""
         node = {
             "name": "actions/checkout@main",  # Not a 'uses' key
-            "run": "echo @main"
+            "run": "echo @main",
         }
 
         result = find_unpinned_actions(node)

@@ -16,12 +16,7 @@ import pytest
 # Import the module with hyphenated filename
 spec = importlib.util.spec_from_file_location(
     "validate_tokens_utils",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "utils"
-    / "validate-tokens.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "validate-tokens.py",
 )
 validate_tokens_utils = importlib.util.module_from_spec(spec)
 sys.modules["validate_tokens_utils"] = validate_tokens_utils
@@ -79,9 +74,7 @@ class TestValidateToken:
         }
 
         with patch.dict("os.environ", {}, clear=True):
-            with patch.object(
-                validate_tokens_utils, "get_secret", return_value="secret_token"
-            ):
+            with patch.object(validate_tokens_utils, "get_secret", return_value="secret_token"):
                 with patch("requests.get", return_value=mock_response):
                     result = validate_tokens_utils.validate_token("test-token", config)
 
@@ -161,9 +154,7 @@ class TestValidateToken:
         config = {"status": "active", "test_endpoint": "/user"}
 
         with patch.dict("os.environ", {"TEST_TOKEN": "valid"}, clear=True):
-            with patch(
-                "requests.get", side_effect=requests.exceptions.ConnectionError
-            ):
+            with patch("requests.get", side_effect=requests.exceptions.ConnectionError):
                 result = validate_tokens_utils.validate_token("test-token", config)
 
         assert not result["valid"]
@@ -330,9 +321,7 @@ class TestMainFunction:
         """Test main validates all tokens by default."""
         monkeypatch.setattr(sys, "argv", ["validate-tokens.py", "--ignore-planned"])
 
-        with patch.object(
-            validate_tokens_utils, "validate_token"
-        ) as mock_validate:
+        with patch.object(validate_tokens_utils, "validate_token") as mock_validate:
             mock_validate.return_value = {
                 "token": "test",
                 "valid": True,
@@ -349,14 +338,9 @@ class TestMainFunction:
 
     def test_main_validates_single_token(self, monkeypatch):
         """Test main validates single token when specified."""
-        monkeypatch.setattr(
-            sys, "argv",
-            ["validate-tokens.py", "--token", "org-label-sync-token", "--ignore-planned"]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate-tokens.py", "--token", "org-label-sync-token", "--ignore-planned"])
 
-        with patch.object(
-            validate_tokens_utils, "validate_token"
-        ) as mock_validate:
+        with patch.object(validate_tokens_utils, "validate_token") as mock_validate:
             mock_validate.return_value = {
                 "token": "org-label-sync-token",
                 "valid": True,
@@ -376,9 +360,7 @@ class TestMainFunction:
         """Test main exits with code 1 on validation failure."""
         monkeypatch.setattr(sys, "argv", ["validate-tokens.py"])
 
-        with patch.object(
-            validate_tokens_utils, "validate_token"
-        ) as mock_validate:
+        with patch.object(validate_tokens_utils, "validate_token") as mock_validate:
             mock_validate.return_value = {
                 "token": "test",
                 "valid": False,
@@ -395,13 +377,9 @@ class TestMainFunction:
 
     def test_main_verbose_flag(self, monkeypatch, capsys):
         """Test main with verbose flag."""
-        monkeypatch.setattr(
-            sys, "argv", ["validate-tokens.py", "--verbose", "--ignore-planned"]
-        )
+        monkeypatch.setattr(sys, "argv", ["validate-tokens.py", "--verbose", "--ignore-planned"])
 
-        with patch.object(
-            validate_tokens_utils, "validate_token"
-        ) as mock_validate:
+        with patch.object(validate_tokens_utils, "validate_token") as mock_validate:
             mock_validate.return_value = {
                 "token": "test",
                 "valid": True,
@@ -432,6 +410,4 @@ class TestTokensRegistry:
     def test_all_endpoints_start_with_slash(self):
         """Test all test endpoints start with /."""
         for token_name, config in validate_tokens_utils.TOKENS.items():
-            assert config["test_endpoint"].startswith("/"), (
-                f"{token_name} endpoint should start with /"
-            )
+            assert config["test_endpoint"].startswith("/"), f"{token_name} endpoint should start with /"

@@ -42,16 +42,10 @@ import numpy as np
 # ML libraries
 try:
     import joblib
-    from sklearn.ensemble import (
-        GradientBoostingClassifier,
-        RandomForestClassifier,
-    )
-    from sklearn.metrics import (
-        accuracy_score,
-        f1_score,
-        precision_score,
-        recall_score,
-    )
+    from sklearn.ensemble import (GradientBoostingClassifier,
+                                  RandomForestClassifier)
+    from sklearn.metrics import (accuracy_score, f1_score, precision_score,
+                                 recall_score)
     from sklearn.model_selection import train_test_split
     from sklearn.neural_network import MLPClassifier
     from sklearn.preprocessing import StandardScaler
@@ -105,9 +99,7 @@ class EnhancedAnalyticsEngine:
         expected = self._generate_signature(data)
         return hmac.compare_digest(expected, signature)
 
-    def extract_features(
-        self, owner: str, repo: str, pr_number: int
-    ) -> dict[str, float]:
+    def extract_features(self, owner: str, repo: str, pr_number: int) -> dict[str, float]:
         """Extract comprehensive feature set from a pull request.
 
         Features extracted:
@@ -152,41 +144,25 @@ class EnhancedAnalyticsEngine:
 
         # Code complexity metrics
         features["avg_lines_per_file"] = (
-            features["lines_changed"] / features["files_changed"]
-            if features["files_changed"] > 0
-            else 0
+            features["lines_changed"] / features["files_changed"] if features["files_changed"] > 0 else 0
         )
         features["avg_lines_per_commit"] = (
-            features["lines_changed"] / features["commits_count"]
-            if features["commits_count"] > 0
-            else 0
+            features["lines_changed"] / features["commits_count"] if features["commits_count"] > 0 else 0
         )
 
         # File type analysis
         if files:
-            features["test_files_changed"] = sum(
-                1 for f in files if "test" in f.get("filename", "").lower()
-            )
+            features["test_files_changed"] = sum(1 for f in files if "test" in f.get("filename", "").lower())
             features["doc_files_changed"] = sum(
-                1
-                for f in files
-                if any(
-                    ext in f.get("filename", "")
-                    for ext in [".md", ".rst", ".txt", "README"]
-                )
+                1 for f in files if any(ext in f.get("filename", "") for ext in [".md", ".rst", ".txt", "README"])
             )
             features["config_files_changed"] = sum(
                 1
                 for f in files
-                if any(
-                    ext in f.get("filename", "")
-                    for ext in [".yml", ".yaml", ".json", ".toml", ".ini"]
-                )
+                if any(ext in f.get("filename", "") for ext in [".yml", ".yaml", ".json", ".toml", ".ini"])
             )
             features["test_coverage_ratio"] = (
-                features["test_files_changed"] / features["files_changed"]
-                if features["files_changed"] > 0
-                else 0
+                features["test_files_changed"] / features["files_changed"] if features["files_changed"] > 0 else 0
             )
 
         # Author metrics
@@ -198,32 +174,20 @@ class EnhancedAnalyticsEngine:
         features["author_avg_review_time"] = author_stats["avg_review_time_hours"]
 
         # Timing metrics
-        created_at = datetime.fromisoformat(
-            pr.get("created_at", "").replace("Z", "+00:00")
-        )
+        created_at = datetime.fromisoformat(pr.get("created_at", "").replace("Z", "+00:00"))
         features["hour_of_day"] = created_at.hour
         features["day_of_week"] = created_at.weekday()  # 0=Monday, 6=Sunday
         features["is_weekend"] = 1.0 if features["day_of_week"] >= 5 else 0.0
-        features["is_business_hours"] = (
-            1.0 if 9 <= features["hour_of_day"] <= 17 else 0.0
-        )
+        features["is_business_hours"] = 1.0 if 9 <= features["hour_of_day"] <= 17 else 0.0
 
         # Review metrics
         if reviews:
-            features["reviewers_count"] = len(
-                {r.get("user", {}).get("login", "") for r in reviews}
-            )
+            features["reviewers_count"] = len({r.get("user", {}).get("login", "") for r in reviews})
             features["reviews_count"] = len(reviews)
-            features["approvals_count"] = sum(
-                1 for r in reviews if r.get("state") == "APPROVED"
-            )
-            features["changes_requested_count"] = sum(
-                1 for r in reviews if r.get("state") == "CHANGES_REQUESTED"
-            )
+            features["approvals_count"] = sum(1 for r in reviews if r.get("state") == "APPROVED")
+            features["changes_requested_count"] = sum(1 for r in reviews if r.get("state") == "CHANGES_REQUESTED")
             features["approval_ratio"] = (
-                features["approvals_count"] / features["reviews_count"]
-                if features["reviews_count"] > 0
-                else 0
+                features["approvals_count"] / features["reviews_count"] if features["reviews_count"] > 0 else 0
             )
         else:
             features["reviewers_count"] = 0
@@ -235,9 +199,7 @@ class EnhancedAnalyticsEngine:
         # Comment metrics
         if comments:
             features["comments_count"] = len(comments)
-            features["avg_comment_length"] = np.mean(
-                [len(c.get("body", "")) for c in comments]
-            )
+            features["avg_comment_length"] = np.mean([len(c.get("body", "")) for c in comments])
         else:
             features["comments_count"] = 0
             features["avg_comment_length"] = 0
@@ -249,32 +211,20 @@ class EnhancedAnalyticsEngine:
         features["repo_ci_success_rate"] = repo_stats["ci_success_rate"]
 
         # Branch metrics
-        features["is_main_branch"] = (
-            1.0 if pr.get("base", {}).get("re", "") == "main" else 0.0
-        )
-        features["is_feature_branch"] = (
-            1.0 if "feature" in pr.get("head", {}).get("re", "").lower() else 0.0
-        )
-        features["is_bugfix_branch"] = (
-            1.0 if "bugfix" in pr.get("head", {}).get("re", "").lower() else 0.0
-        )
+        features["is_main_branch"] = 1.0 if pr.get("base", {}).get("re", "") == "main" else 0.0
+        features["is_feature_branch"] = 1.0 if "feature" in pr.get("head", {}).get("re", "").lower() else 0.0
+        features["is_bugfix_branch"] = 1.0 if "bugfix" in pr.get("head", {}).get("re", "").lower() else 0.0
 
         # Label analysis
         labels = pr.get("labels", [])
         features["has_breaking_change"] = (
-            1.0
-            if any("breaking" in label.get("name", "").lower() for label in labels)
-            else 0.0
+            1.0 if any("breaking" in label.get("name", "").lower() for label in labels) else 0.0
         )
         features["has_security_label"] = (
-            1.0
-            if any("security" in label.get("name", "").lower() for label in labels)
-            else 0.0
+            1.0 if any("security" in label.get("name", "").lower() for label in labels) else 0.0
         )
         features["has_documentation_label"] = (
-            1.0
-            if any("documentation" in label.get("name", "").lower() for label in labels)
-            else 0.0
+            1.0 if any("documentation" in label.get("name", "").lower() for label in labels) else 0.0
         )
 
         logger.info(f"Extracted {len(features)} features")
@@ -307,12 +257,8 @@ class EnhancedAnalyticsEngine:
             review_times = []
             for pr in merged_prs:
                 if pr.get("created_at") and pr.get("merged_at"):
-                    created = datetime.fromisoformat(
-                        pr["created_at"].replace("Z", "+00:00")
-                    )
-                    merged = datetime.fromisoformat(
-                        pr["merged_at"].replace("Z", "+00:00")
-                    )
+                    created = datetime.fromisoformat(pr["created_at"].replace("Z", "+00:00"))
+                    merged = datetime.fromisoformat(pr["merged_at"].replace("Z", "+00:00"))
                     review_times.append((merged - created).total_seconds() / 3600)
 
             avg_review_time = np.mean(review_times) if review_times else 24.0
@@ -350,15 +296,11 @@ class EnhancedAnalyticsEngine:
             merge_rate = 0.5
 
         # Fetch recent workflow runs
-        runs = self.github.get(
-            f"/repos/{owner}/{repo}/actions/runs", params={"per_page": 100}
-        )
+        runs = self.github.get(f"/repos/{owner}/{repo}/actions/runs", params={"per_page": 100})
 
         # Calculate CI success rate
         if runs and runs.get("workflow_runs"):
-            successful = sum(
-                1 for r in runs["workflow_runs"] if r.get("conclusion") == "success"
-            )
+            successful = sum(1 for r in runs["workflow_runs"] if r.get("conclusion") == "success")
             ci_success_rate = successful / len(runs["workflow_runs"])
         else:
             ci_success_rate = 0.8
@@ -369,9 +311,7 @@ class EnhancedAnalyticsEngine:
             "ci_success_rate": ci_success_rate,
         }
 
-    def train_models(
-        self, owner: str, repo: str, lookback_days: int = 90
-    ) -> dict[str, Any]:
+    def train_models(self, owner: str, repo: str, lookback_days: int = 90) -> dict[str, Any]:
         """Train ML models on historical PR data.
 
         Args:
@@ -410,9 +350,7 @@ class EnhancedAnalyticsEngine:
                 if not self.feature_names:
                     self.feature_names = list(features.keys())
             except Exception as e:
-                logger.warning(
-                    f"Failed to extract features for PR #{pr['number']}: {e}"
-                )
+                logger.warning(f"Failed to extract features for PR #{pr['number']}: {e}")
                 continue
 
         X = np.array(X)
@@ -423,9 +361,7 @@ class EnhancedAnalyticsEngine:
         )
 
         # Split data
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
-        )
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         # Scale features
         X_train_scaled = self.scaler.fit_transform(X_train)
@@ -436,9 +372,7 @@ class EnhancedAnalyticsEngine:
 
         # Random Forest
         logger.info("Training Random Forest...")
-        rf = RandomForestClassifier(
-            n_estimators=100, max_depth=10, random_state=42, n_jobs=-1
-        )
+        rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42, n_jobs=-1)
         rf.fit(X_train_scaled, y_train)
         rf_pred = rf.predict(X_test_scaled)
         results["random_forest"] = {
@@ -537,9 +471,7 @@ class EnhancedAnalyticsEngine:
             timestamp=datetime.now(),
         )
 
-    def get_feature_importance(
-        self, model_name: str = "random_forest"
-    ) -> FeatureImportance:
+    def get_feature_importance(self, model_name: str = "random_forest") -> FeatureImportance:
         """Get feature importance from trained model.
 
         Args:
@@ -563,9 +495,7 @@ class EnhancedAnalyticsEngine:
 
         # Create sorted list
         importance_dict = dict(zip(self.feature_names, importances))
-        sorted_features = sorted(
-            importance_dict.items(), key=lambda x: x[1], reverse=True
-        )
+        sorted_features = sorted(importance_dict.items(), key=lambda x: x[1], reverse=True)
 
         return FeatureImportance(
             model_name=model_name,
@@ -631,7 +561,7 @@ class EnhancedAnalyticsEngine:
                 with open(model_file, "rb") as f:
                     data = f.read()
 
-                with open(sig_file, "r") as f:
+                with open(sig_file) as f:
                     signature = f.read().strip()
 
                 if self._verify_signature(data, signature):

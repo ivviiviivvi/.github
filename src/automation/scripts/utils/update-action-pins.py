@@ -201,9 +201,7 @@ def resolve_tag_to_sha(
 
             return data["object"]["sha"]
 
-        logger.debug(
-            f"Could not resolve {owner}/{repo}@{tag}: HTTP {response.status_code}"
-        )
+        logger.debug(f"Could not resolve {owner}/{repo}@{tag}: HTTP {response.status_code}")
         return None
 
     except requests.exceptions.RequestException as e:
@@ -226,9 +224,7 @@ def parse_action_line(line: str) -> tuple[str, str, str | None] | None:
         return match.group(1), match.group(2), match.group(3)
 
     # Match without ratchet comment
-    match = re.search(
-        r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)", line
-    )
+    match = re.search(r"uses:\s*([a-zA-Z0-9_-]+/[a-zA-Z0-9_/-]+)@([a-f0-9]{40}|v[\d.]+)", line)
     if match:
         return match.group(1), match.group(2), None
 
@@ -291,9 +287,7 @@ def update_workflow_file(
         if cache_key not in sha_cache:
             if verbose:
                 logger.info(f"  Resolving {cache_key}...")
-            sha = resolve_tag_to_sha(
-                owner, repo, canonical_version, session, get_github_token()
-            )
+            sha = resolve_tag_to_sha(owner, repo, canonical_version, session, get_github_token())
             if sha:
                 sha_cache[cache_key] = sha
             else:
@@ -339,17 +333,13 @@ def update_workflow_file(
 
 def main() -> None:
     """Main entry point for updating action pins."""
-    parser = argparse.ArgumentParser(
-        description="Update GitHub Action SHA pins to latest versions"
-    )
+    parser = argparse.ArgumentParser(description="Update GitHub Action SHA pins to latest versions")
     parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show what would be updated without making changes",
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Show detailed output"
-    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed output")
     parser.add_argument("--workflow", "-w", help="Update only a specific workflow file")
     parser.add_argument(
         "--recursive",
@@ -409,13 +399,9 @@ def main() -> None:
 
     for workflow in sorted(workflow_files):
         try:
-            updates = update_workflow_file(
-                workflow, sha_cache, session, args.dry_run, args.verbose
-            )
+            updates = update_workflow_file(workflow, sha_cache, session, args.dry_run, args.verbose)
             if updates > 0:
-                print(
-                    f"  {workflow.relative_to(workflows_dir.parent.parent)}: {updates} action(s) updated"
-                )
+                print(f"  {workflow.relative_to(workflows_dir.parent.parent)}: {updates} action(s) updated")
                 total_updates += updates
                 files_updated += 1
         except Exception as e:

@@ -9,11 +9,8 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-import mouthpiece_filter  # noqa: E402
 
 
 class TestContentFiltering:
@@ -30,10 +27,7 @@ class TestContentFiltering:
 
         for content in sensitive_content:
             # Should detect as sensitive
-            assert any(
-                pattern in content.lower()
-                for pattern in ["password", "api", "token", "ssh-rsa"]
-            )
+            assert any(pattern in content.lower() for pattern in ["password", "api", "token", "ssh-rsa"])
 
     def test_allows_safe_content(self):
         """Test that safe content is not filtered."""
@@ -47,12 +41,8 @@ class TestContentFiltering:
         for content in safe_content:
             # Should not match sensitive patterns
             content_lower = content.lower()
-            has_sensitive = any(
-                pattern in content_lower for pattern in sensitive_patterns
-            )
-            assert (
-                not has_sensitive
-            ), f"Safe content '{content}' matched sensitive patterns"
+            has_sensitive = any(pattern in content_lower for pattern in sensitive_patterns)
+            assert not has_sensitive, f"Safe content '{content}' matched sensitive patterns"
 
     def test_handles_empty_content(self):
         """Test handling of empty or None content."""
@@ -60,11 +50,7 @@ class TestContentFiltering:
 
         for value in empty_values:
             # Should handle gracefully - empty/None values are considered "handled"
-            is_empty = (
-                value is None
-                or not value
-                or (isinstance(value, str) and not value.strip())
-            )
+            is_empty = value is None or not value or (isinstance(value, str) and not value.strip())
             assert is_empty, f"Value '{value}' should be considered empty/handled"
 
 
@@ -118,12 +104,8 @@ class TestConfiguration:
         """Test default configuration is applied."""
         # Verify default sensitive patterns exist
         default_patterns = ["password", "api", "token", "secret", "key"]
-        assert (
-            len(default_patterns) >= 3
-        ), "Default configuration should have at least 3 patterns"
-        assert all(
-            isinstance(p, str) for p in default_patterns
-        ), "Patterns should be strings"
+        assert len(default_patterns) >= 3, "Default configuration should have at least 3 patterns"
+        assert all(isinstance(p, str) for p in default_patterns), "Patterns should be strings"
 
     def test_validates_configuration(self):
         """Test configuration validation."""

@@ -150,8 +150,7 @@ def scan_collections(collections_dir: Path) -> dict[str, Any]:
     for pattern in ["*.collection.yml", "*.yml"]:
         for path in sorted(collections_dir.glob(pattern)):
             if path.name.endswith(".collection.yml") or not any(
-                p.name == path.stem + ".collection.yml"
-                for p in collections_dir.glob("*.collection.yml")
+                p.name == path.stem + ".collection.yml" for p in collections_dir.glob("*.collection.yml")
             ):
                 files.append({"file": path.name})
 
@@ -233,9 +232,7 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
 
     # Health checks
     orphaned_meta = find_orphaned_meta(workflows_dir) if workflows_dir.exists() else []
-    missing_meta = (
-        find_missing_metadata(workflows_dir) if workflows_dir.exists() else []
-    )
+    missing_meta = find_missing_metadata(workflows_dir) if workflows_dir.exists() else []
 
     # Build manifest
     manifest: dict[str, Any] = {
@@ -246,9 +243,7 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
         "organization": "ivviiviivvi",
         "statistics": {
             "workflows": {
-                "total": workflow_stats.get(
-                    "total_workflows", workflow_stats.get("total", 0)
-                ),
+                "total": workflow_stats.get("total_workflows", workflow_stats.get("total", 0)),
                 "with_metadata": workflow_stats.get("with_metadata", 0),
                 "by_layer": workflow_stats.get("by_layer", {}),
             },
@@ -277,9 +272,7 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
 
 def main() -> None:
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Generate unified manifest for org .github repository"
-    )
+    parser = argparse.ArgumentParser(description="Generate unified manifest for org .github repository")
     parser.add_argument(
         "--root",
         type=Path,

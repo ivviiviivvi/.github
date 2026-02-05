@@ -6,14 +6,11 @@ Focus: Default configuration file creation for Week 9 automation.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 import yaml
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from create_default_configs import create_defaults
 

@@ -1,19 +1,15 @@
-import json
 import sys
 import unittest
-from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
+from unittest.mock import patch
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 import ab_test_assignment
 
 
 class TestABTestAssignmentMain(unittest.TestCase):
-
     def setUp(self):
         self.mock_config = {
             "test": {"name": "test1", "startDate": "2023-01-01"},
@@ -60,9 +56,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
         mock_instance = MockAssigner.return_value
         mock_instance.generate_workflow_config.return_value = {"group": "control"}
 
-        with patch(
-            "sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo", "--json"]
-        ):
+        with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo", "--json"]):
             with patch("builtins.print") as mock_print:
                 ab_test_assignment.main()
                 mock_print.assert_called_with('{\n  "group": "control"\n}')

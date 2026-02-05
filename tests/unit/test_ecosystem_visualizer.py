@@ -4,16 +4,13 @@ Focus: Diagram generation, workflow categorization, path calculation.
 """
 
 import json
-
 # Import the module under test
 import sys
 from pathlib import Path
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 from ecosystem_visualizer import EcosystemVisualizer
 
 
@@ -1041,12 +1038,8 @@ class TestMainFunction:
 
     def test_no_report_shows_error(self, capsys, monkeypatch):
         """Test main shows error when no report specified."""
-        import argparse
-
         # Mock argparse to return no report
-        monkeypatch.setattr(
-            "sys.argv", ["ecosystem_visualizer.py"]
-        )
+        monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py"])
 
         # Import and run main
         from ecosystem_visualizer import main
@@ -1058,8 +1051,6 @@ class TestMainFunction:
 
     def test_find_latest_with_no_reports_dir(self, capsys, monkeypatch, tmp_path):
         """Test find-latest with missing reports directory."""
-        import os
-
         # Change to temp directory where there's no reports/ folder
         monkeypatch.chdir(tmp_path)
         monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py", "--find-latest"])
@@ -1124,7 +1115,7 @@ class TestRelativePathEdgeCases:
     def test_handles_none_output_path(self, viz):
         """Test path calculation with None output path."""
         result = viz._calculate_relative_path(None, ".github/workflows/")
-        assert "../.github/workflows/" == result
+        assert result == "../.github/workflows/"
 
     def test_handles_absolute_path(self, viz):
         """Test path calculation with absolute output path."""

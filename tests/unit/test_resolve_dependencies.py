@@ -7,13 +7,10 @@ Focus: Dependency resolution and conflict detection.
 import json
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from resolve_dependencies import DependencyResolver, main
 
@@ -163,9 +160,7 @@ class TestFindConflicts:
     def test_finds_multiple_declarations(self, tmp_path):
         """Test finds dependencies declared in multiple files."""
         (tmp_path / "requirements.txt").write_text("requests\nflask\n")
-        (tmp_path / "package.json").write_text(
-            '{"dependencies": {"requests": "1.0", "express": "1.0"}}'
-        )
+        (tmp_path / "package.json").write_text('{"dependencies": {"requests": "1.0", "express": "1.0"}}')
 
         resolver = DependencyResolver(tmp_path)
         resolver.scan_dependencies()

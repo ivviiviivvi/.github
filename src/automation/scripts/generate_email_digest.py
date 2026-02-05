@@ -345,9 +345,7 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
     summary = html.escape(generate_summary(metrics))
 
     # Trend analysis
-    trend_direction, trend_amount, trend_commentary, trend_sentiment = (
-        generate_trend_commentary(metrics)
-    )
+    trend_direction, trend_amount, trend_commentary, trend_sentiment = generate_trend_commentary(metrics)
     trend_commentary = html.escape(trend_commentary)
 
     # Format events

@@ -6,13 +6,11 @@ Focus: Workflow generation from YAML configuration.
 
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, mock_open, patch
+from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from generate_pilot_workflows import WorkflowGenerator, main
 
@@ -644,9 +642,7 @@ class TestMainFunction:
 
     def test_main_missing_config(self, capsys):
         """Test main with missing config file."""
-        with patch.object(
-            sys, "argv", ["generate_pilot_workflows.py", "/nonexistent/config.yml"]
-        ):
+        with patch.object(sys, "argv", ["generate_pilot_workflows.py", "/nonexistent/config.yml"]):
             with pytest.raises(SystemExit) as exc:
                 main()
 

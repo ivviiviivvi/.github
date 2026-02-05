@@ -42,9 +42,7 @@ class IntelligentRouter:
         self.config = config
         self.logger = setup_logger(__name__)
 
-    def calculate_assignment(
-        self, owner: str, repo: str, issue_number: int
-    ) -> RoutingDecision:
+    def calculate_assignment(self, owner: str, repo: str, issue_number: int) -> RoutingDecision:
         """Calculate optimal assignment for issue/PR.
 
         Args:
@@ -71,9 +69,7 @@ class IntelligentRouter:
         issue_labels = {label["name"] for label in issue.get("labels", [])}
         if any(label in self.config.exempt_labels for label in issue_labels):
             self.logger.info("Issue has exempt label, using fallback strategy")
-            return self._fallback_assignment(
-                owner, repo, issue_number, issue, candidates
-            )
+            return self._fallback_assignment(owner, repo, issue_number, issue, candidates)
 
         # Calculate scores for each candidate
         candidate_scores = []
@@ -142,9 +138,7 @@ class IntelligentRouter:
         self.logger.debug(f"Found {len(candidates)} candidate assignees")
         return candidates
 
-    def _calculate_factor_scores(
-        self, owner: str, repo: str, candidate: dict, issue: dict
-    ) -> RoutingFactorScores:
+    def _calculate_factor_scores(self, owner: str, repo: str, candidate: dict, issue: dict) -> RoutingFactorScores:
         """Calculate routing factor scores for candidate.
 
         Args:
@@ -174,9 +168,7 @@ class IntelligentRouter:
             performance=performance,
         )
 
-    def _calculate_expertise(
-        self, owner: str, repo: str, username: str, issue: dict
-    ) -> float:
+    def _calculate_expertise(self, owner: str, repo: str, username: str, issue: dict) -> float:
         """Calculate expertise score based on historical contributions.
 
         Factors:
@@ -220,9 +212,7 @@ class IntelligentRouter:
             if issue_labels:
                 matching_labels = 0
                 for closed_issue in closed_issues[:20]:  # Check recent 20
-                    closed_labels = {
-                        label["name"] for label in closed_issue.get("labels", [])
-                    }
+                    closed_labels = {label["name"] for label in closed_issue.get("labels", [])}
                     if issue_labels & closed_labels:  # Intersection
                         matching_labels += 1
 
@@ -300,16 +290,12 @@ class IntelligentRouter:
             count = 0
 
             for issue in issues[:10]:  # Sample recent 10
-                created = datetime.fromisoformat(
-                    issue["created_at"].replace("Z", "+00:00")
-                )
+                created = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
 
                 # Get first comment by assignee
                 comments_endpoint = issue["comments_url"]
                 try:
-                    comments = self.client.get(
-                        comments_endpoint.replace(self.client.base_url, "")
-                    )
+                    comments = self.client.get(comments_endpoint.replace(self.client.base_url, ""))
                 except Exception as exc:
                     self.logger.debug(
                         "Failed to fetch comments for %s: %s",
@@ -323,13 +309,10 @@ class IntelligentRouter:
 
                 for comment in comments:
                     if comment["user"]["login"] == username:
-                        commented = datetime.fromisoformat(
-                            comment["created_at"].replace("Z", "+00:00")
-                        )
+                        commented = datetime.fromisoformat(comment["created_at"].replace("Z", "+00:00"))
                         response_time = (
                             # hours
-                            commented
-                            - created
+                            commented - created
                         ).total_seconds() / 3600
                         total_response_time += response_time
                         count += 1
@@ -349,9 +332,7 @@ class IntelligentRouter:
             else:
                 score = max(0.0, 0.5 - ((avg_response_hours - 24) / 24) * 0.5)
 
-            self.logger.debug(
-                f"Response time for {username}: {avg_response_hours:.1f}h (score: {score:.3f})"
-            )
+            self.logger.debug(f"Response time for {username}: {avg_response_hours:.1f}h (score: {score:.3f})")
 
             return score
 
@@ -379,9 +360,7 @@ class IntelligentRouter:
 
             # Find most recent event
             latest_event = events[0]
-            latest_time = datetime.fromisoformat(
-                latest_event["created_at"].replace("Z", "+00:00")
-            )
+            latest_time = datetime.fromisoformat(latest_event["created_at"].replace("Z", "+00:00"))
             now = datetime.now(timezone.utc)
             hours_since = (now - latest_time).total_seconds() / 3600
 
@@ -396,9 +375,7 @@ class IntelligentRouter:
             else:
                 score = 0.2
 
-            self.logger.debug(
-                f"Availability for {username}: {hours_since:.1f}h ago (score: {score:.3f})"
-            )
+            self.logger.debug(f"Availability for {username}: {hours_since:.1f}h ago (score: {score:.3f})")
 
             return score
 
@@ -445,9 +422,7 @@ class IntelligentRouter:
             total = min(len(closed_issues), 30)
             success_rate = completed / total if total > 0 else 0.5
 
-            self.logger.debug(
-                f"Performance for {username}: {completed}/{total} (score: {success_rate:.3f})"
-            )
+            self.logger.debug(f"Performance for {username}: {completed}/{total} (score: {success_rate:.3f})")
 
             return success_rate
 
@@ -617,9 +592,7 @@ class IntelligentRouter:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Intelligent routing for issue/PR assignment"
-    )
+    parser = argparse.ArgumentParser(description="Intelligent routing for issue/PR assignment")
     parser.add_argument("--owner", required=True, help="Repository owner")
     parser.add_argument("--repo", required=True, help="Repository name")
     parser.add_argument("--issue", required=True, type=int, help="Issue number")
