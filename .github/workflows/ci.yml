@@ -9,10 +9,6 @@ on:
     - .github/workflows/ci.yml
   pull_request:
     branches: [main, master, develop]
-    paths:
-    - src/automation/scripts/utils/**
-    - requirements*.txt
-    - .github/workflows/ci.yml
   workflow_dispatch:
 
 concurrency:
@@ -177,3 +173,27 @@ jobs:
       run: |
         # Run unit tests in scripts/utils directory
         cd src/automation/scripts/utils && python3 -m unittest discover -p "test_*.py"
+
+  ci-status-check:
+    name: CI Status Check
+    needs: [lint, test, build-and-test-node, security]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check job results
+      run: |
+        echo "Lint: ${{ needs.lint.result }}"
+        echo "Test: ${{ needs.test.result }}"
+        echo "Build and Test Node: ${{ needs.build-and-test-node.result }}"
+        echo "Security: ${{ needs.security.result }}"
+
+        if [[ "${{ needs.lint.result }}" == "failure" || \
+              "${{ needs.test.result }}" == "failure" || \
+              "${{ needs.build-and-test-node.result }}" == "failure" || \
+              "${{ needs.security.result }}" == "failure" ]]; then
+          echo "::error::One or more CI jobs failed"
+          exit 1
+        fi
+
+        echo "All CI jobs passed or were skipped"
