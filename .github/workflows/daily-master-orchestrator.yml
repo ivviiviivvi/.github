@@ -187,7 +187,7 @@ jobs:
   consolidate-prs:
     name: Consolidate All Open PRs
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     needs: [check-if-should-run, orchestrate-daily-tasks, process-task-queue]
     if: always() && needs.check-if-should-run.outputs.should-run == 'true'
 
@@ -204,7 +204,11 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "🔀 Triggering PR consolidation workflow..."
-        gh workflow run daily-pr-consolidator.yml --repo ${{ github.repository }}
+        if gh workflow run daily-pr-consolidator.yml --repo ${{ github.repository }} 2>/dev/null; then
+          echo "✅ PR consolidation workflow triggered"
+        else
+          echo "::warning::daily-pr-consolidator.yml workflow not found or failed to trigger - skipping"
+        fi
 
   cleanup:
     name: Cleanup Old Records
