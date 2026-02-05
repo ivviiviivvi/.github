@@ -90,10 +90,10 @@ class TestSyncLabelsFull(unittest.TestCase):
             self.mock_github.get_organization.assert_called_with("test-org")
             # Should process repo1
             mock_sync.assert_any_call(repo1)
-            # Should NOT process repo2 (archived)
+            # Should not process repo2 (archived)
             with self.assertRaises(AssertionError):
                 mock_sync.assert_any_call(repo2)
-            # Should NOT process repo3 (excluded)
+            # Should not process repo3 (excluded)
             with self.assertRaises(AssertionError):
                 mock_sync.assert_any_call(repo3)
 
