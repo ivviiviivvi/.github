@@ -34,9 +34,7 @@ class OrganizationCrawler:
     # Group 1: URL inside markdown link [text](URL) - excludes spaces to avoid malformed URLs  # noqa: E501
     # Group 2: Bare URL - excludes closing paren and spaces to avoid trailing
     # punctuation
-    LINK_PATTERN = re.compile(
-        r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)'
-    )
+    LINK_PATTERN = re.compile(r'\[(?:[^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>"{}|\\^`\[\])]+)')
 
     def __init__(
         self,
@@ -48,9 +46,7 @@ class OrganizationCrawler:
         if github_token is None:
             github_token = get_secret("org-repo-analysis-token", "password")
         self.github_token = github_token
-        self.org_name = (
-            org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
-        )
+        self.org_name = org_name or os.environ.get("GITHUB_REPOSITORY", "").split("/")[0]
         self.max_workers = max_workers
         self.session = requests.Session()
         self.request_timeout = 10
@@ -134,18 +130,12 @@ class OrganizationCrawler:
         # Filter links efficiently
         # Optimization: Filter WITHOUT sorting to avoid O(M log M).
         # Processing order is irrelevant due to concurrency.
-        links_to_check = [
-            link for link in all_links if link.startswith(("http:", "https:"))
-        ]
+        links_to_check = [link for link in all_links if link.startswith(("http:", "https:"))]
 
         # Use ThreadPoolExecutor for parallel link checking
         # Max workers to be respectful but faster than serial
-        with concurrent.futures.ThreadPoolExecutor(
-            max_workers=self.max_workers
-        ) as executor:
-            future_to_link = {
-                executor.submit(self._check_link, link): link for link in links_to_check
-            }
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            future_to_link = {executor.submit(self._check_link, link): link for link in links_to_check}
 
             for future in concurrent.futures.as_completed(future_to_link):
                 link = future_to_link[future]
@@ -168,9 +158,7 @@ class OrganizationCrawler:
                         print(f"  ✗ {link} (HTTP {status})")
                 except Exception as exc:
                     results["broken"] += 1
-                    results["broken_links"].append(
-                        {"url": link, "status": f"Exception: {exc}"}
-                    )
+                    results["broken_links"].append({"url": link, "status": f"Exception: {exc}"})
                     print(f"  ✗ {link} (Exception: {exc})")
 
         return results
@@ -248,9 +236,7 @@ class OrganizationCrawler:
             return False
 
     @functools.lru_cache(maxsize=1024)
-    def _get_pinned_pool(
-        self, scheme: str, safe_ip: str, port: int, hostname: str
-    ) -> urllib3.HTTPConnectionPool:
+    def _get_pinned_pool(self, scheme: str, safe_ip: str, port: int, hostname: str) -> urllib3.HTTPConnectionPool:
         """Get a cached connection pool for a specific (IP, hostname) tuple.
 
         This enables TCP Keep-Alive and SSL Session reuse across multiple
@@ -269,9 +255,7 @@ class OrganizationCrawler:
                 server_hostname=hostname,
             )
         else:
-            return urllib3.HTTPConnectionPool(
-                host=safe_ip, port=port, maxsize=self.max_workers
-            )
+            return urllib3.HTTPConnectionPool(host=safe_ip, port=port, maxsize=self.max_workers)
 
     def _check_link(self, url: str, timeout: int = 10) -> int:
         """Check if a link is accessible with SSRF protection."""
@@ -480,9 +464,7 @@ class OrganizationCrawler:
 
         # Calculate days since last update
         try:
-            updated_at = datetime.fromisoformat(
-                repo["updated_at"].replace("Z", "+00:00")
-            )
+            updated_at = datetime.fromisoformat(repo["updated_at"].replace("Z", "+00:00"))
             if updated_at.tzinfo is None:
                 updated_at = updated_at.replace(tzinfo=timezone.utc)
 
@@ -787,9 +769,7 @@ def main() -> None:
         max_workers=args.max_workers,
     )
 
-    results = crawler.run_full_analysis(
-        base_dir=args.base_dir, validate_external_links=args.validate_links
-    )
+    results = crawler.run_full_analysis(base_dir=args.base_dir, validate_external_links=args.validate_links)
 
     # Print summary
     print("\n" + "=" * 60)

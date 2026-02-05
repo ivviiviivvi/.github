@@ -30,9 +30,7 @@ LINK_WITH_COMMENT_RE = re.compile(
     r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)"
     r"(?P<suffix>\)\s*<!--\s*link:(?P<key>[A-Za-z0-9._-]+)\s*-->)"
 )
-UNANNOTATED_LINK_RE = re.compile(
-    r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)"
-)
+UNANNOTATED_LINK_RE = re.compile(r"(?P<prefix>!?\[[^\]]+\]\()(?P<url>[^)\s]+)" r"(?P<suffix>\))(?!\s*<!--\s*link:)")
 PLACEHOLDER_RE = re.compile(r"^\[\[link:(?P<key>[A-Za-z0-9._-]+)\]\]$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
 

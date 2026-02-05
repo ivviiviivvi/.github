@@ -64,9 +64,7 @@ class AutoMergeSafetyChecks(BaseModel):
     reviews_approved: bool = Field(..., description="Required reviews approved")
     no_conflicts: bool = Field(..., description="No merge conflicts present")
     branch_up_to_date: bool = Field(..., description="Branch is up-to-date with base")
-    coverage_threshold_met: bool = Field(
-        ..., description="Code coverage meets minimum threshold"
-    )
+    coverage_threshold_met: bool = Field(..., description="Code coverage meets minimum threshold")
 
 
 class AutoMergeEligibility(BaseModel):
@@ -78,12 +76,8 @@ class AutoMergeEligibility(BaseModel):
 
     eligible: bool = Field(..., description="Whether PR is eligible for auto-merge")
     checks_passed: AutoMergeSafetyChecks
-    reasons: list[str] = Field(
-        default_factory=list, description="Reasons if not eligible"
-    )
-    confidence: float = Field(
-        ..., ge=0.0, le=1.0, description="Confidence score (0.0-1.0)"
-    )
+    reasons: list[str] = Field(default_factory=list, description="Reasons if not eligible")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence score (0.0-1.0)")
 
     class Config:
         """Pydantic configuration."""
@@ -137,12 +131,8 @@ class RoutingDecision(BaseModel):
     score: float = Field(..., ge=0.0, le=1.0, description="Overall assignment score")
     scores: RoutingFactorScores = Field(..., description="Individual factor scores")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Decision confidence")
-    fallback_used: bool = Field(
-        default=False, description="Whether fallback was triggered"
-    )
-    alternatives: list[dict[str, float]] = Field(
-        default_factory=list, description="Alternative assignees and scores"
-    )
+    fallback_used: bool = Field(default=False, description="Whether fallback was triggered")
+    alternatives: list[dict[str, float]] = Field(default_factory=list, description="Alternative assignees and scores")
 
     class Config:
         """Pydantic configuration."""
@@ -187,14 +177,10 @@ class FailureClassification(BaseModel):
     run_id: int = Field(..., description="Workflow run ID")
     workflow_name: str = Field(..., description="Workflow name")
     failure_type: FailureType = Field(..., description="Failure type")
-    confidence: float = Field(
-        ..., ge=0.0, le=1.0, description="Classification confidence"
-    )
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Classification confidence")
     reason: str = Field(..., description="Classification reason")
     priority: Priority = Field(..., description="Failure priority")
-    failed_jobs: list[str] = Field(
-        default_factory=list, description="List of failed job names"
-    )
+    failed_jobs: list[str] = Field(default_factory=list, description="List of failed job names")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     class Config:
@@ -213,9 +199,7 @@ class SelfHealingResult(BaseModel):
     healed: bool = Field(..., description="Whether healing was successful")
     resolution: str = Field(..., description="Resolution description")
     retry_count: int = Field(..., ge=0, description="Number of retries")
-    actions_taken: list[str] = Field(
-        default_factory=list, description="List of actions taken"
-    )
+    actions_taken: list[str] = Field(default_factory=list, description="List of actions taken")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     class Config:
@@ -230,18 +214,10 @@ class SelfHealingConfig(BaseModel):
     enabled: bool = True
     enable_auto_retry: bool = True
     max_retry_attempts: int = Field(default=3, ge=1, le=10)
-    initial_retry_delay: int = Field(
-        default=60, ge=1, description="Initial retry delay in seconds"
-    )
-    retry_backoff_multiplier: float = Field(
-        default=2.0, ge=1.0, description="Backoff multiplier"
-    )
-    max_consecutive_failures: int = Field(
-        default=3, ge=1, description="Max failures before marking permanent"
-    )
-    dependency_wait_time: int = Field(
-        default=300, ge=1, description="Wait time for dependencies in seconds"
-    )
+    initial_retry_delay: int = Field(default=60, ge=1, description="Initial retry delay in seconds")
+    retry_backoff_multiplier: float = Field(default=2.0, ge=1.0, description="Backoff multiplier")
+    max_consecutive_failures: int = Field(default=3, ge=1, description="Max failures before marking permanent")
+    dependency_wait_time: int = Field(default=300, ge=1, description="Wait time for dependencies in seconds")
     create_issues_for_failures: bool = True
     send_notifications: bool = True
 
@@ -268,17 +244,11 @@ class MaintenanceWindow(BaseModel):
     task_type: str = Field(..., description="Type of maintenance task")
     scheduled_time: datetime = Field(..., description="Scheduled start time")
     duration_minutes: int = Field(..., ge=1, description="Estimated duration")
-    impact_score: float = Field(
-        ..., ge=0.0, le=1.0, description="Impact score (lower is better)"
-    )
+    impact_score: float = Field(..., ge=0.0, le=1.0, description="Impact score (lower is better)")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Prediction confidence")
-    alternatives: list[dict] = Field(
-        default_factory=list, description="Alternative time windows"
-    )
+    alternatives: list[dict] = Field(default_factory=list, description="Alternative time windows")
     reasoning: str = Field(..., description="Scheduling rationale")
-    tasks: list[MaintenanceTask] = Field(
-        default_factory=list, description="Tasks to perform"
-    )
+    tasks: list[MaintenanceTask] = Field(default_factory=list, description="Tasks to perform")
 
     class Config:
         """Pydantic configuration."""
@@ -290,9 +260,7 @@ class MaintenanceConfig(BaseModel):
     """Proactive maintenance configuration."""
 
     enabled: bool = True
-    timing_predictor: str = Field(
-        default="ml", description="Timing method: ml or fixed"
-    )
+    timing_predictor: str = Field(default="ml", description="Timing method: ml or fixed")
 
     # Preferred windows
     preferred_hours: list[int] = Field(default=[2, 3, 4], description="2-4 AM")
@@ -343,17 +311,11 @@ class WorkflowPrediction(BaseModel):
     new_tests: int = Field(..., ge=0)
 
     # Predictions
-    success_probability: float = Field(
-        ..., ge=0.0, le=1.0, description="Predicted success probability"
-    )
-    estimated_duration: int = Field(
-        ..., ge=0, description="Estimated duration in seconds"
-    )
+    success_probability: float = Field(..., ge=0.0, le=1.0, description="Predicted success probability")
+    estimated_duration: int = Field(..., ge=0, description="Estimated duration in seconds")
     risk_level: RiskLevel = Field(..., description="Risk classification")
     confidence: float = Field(..., ge=0.0, le=1.0, description="Model confidence")
-    factors: dict[str, float] = Field(
-        default_factory=dict, description="Feature importance scores"
-    )
+    factors: dict[str, float] = Field(default_factory=dict, description="Feature importance scores")
     recommendation: str = Field(..., description="Recommended action")
 
     # Actual outcome (for training)
@@ -416,9 +378,7 @@ class ItemMetrics(BaseModel):
     avg_response_time_minutes: float = Field(default=0.0, ge=0.0)
     avg_resolution_time_hours: float = Field(default=0.0, ge=0.0)
     success_rate_percentage: float = Field(default=100.0, ge=0.0, le=100.0)
-    breaches: list["SLABreach"] = Field(
-        default_factory=list, description="SLA breaches"
-    )
+    breaches: list["SLABreach"] = Field(default_factory=list, description="SLA breaches")
 
 
 class SLAMetrics(BaseModel):
@@ -428,9 +388,7 @@ class SLAMetrics(BaseModel):
     time_window: str = Field(..., description="Time window (e.g., '24h', '7d')")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    overall_compliance: float = Field(
-        ..., ge=0.0, le=100.0, description="Overall compliance percentage"
-    )
+    overall_compliance: float = Field(..., ge=0.0, le=100.0, description="Overall compliance percentage")
 
     response_time: ResponseTimeMetric
     resolution_time: ResolutionTimeMetric
@@ -496,9 +454,7 @@ class AuditLogEntry(BaseModel):
     # Security context
     ip_address: Optional[str] = None
     user_agent: Optional[str] = None
-    token_preview: Optional[str] = Field(
-        None, description="First 8 chars of token used"
-    )
+    token_preview: Optional[str] = Field(None, description="First 8 chars of token used")
 
     class Config:
         """Pydantic configuration."""

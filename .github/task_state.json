@@ -1,0 +1,16 @@
+{
+  "tasks": {
+    "12c1e07bf65299b2": {
+      "type": "orchestrated_task",
+      "timestamp": "2026-02-05T19:55:46.746242",
+      "data": {
+        "id": "daily-market-summary",
+        "subscription": "Perplexity_Pro_API",
+        "prompt": "Provide a concise summary of the previous day's stock market performance, highlighting key indices and major news."
+      }
+    }
+  },
+  "active_prs": [],
+  "last_orchestration": "2026-02-05",
+  "last_cleanup": null
+}

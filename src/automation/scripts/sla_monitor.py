@@ -34,14 +34,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
-from models import (
-    ItemMetrics,
-    Priority,
-    SLABreach,
-    SLAConfig,
-    SLAReport,
-    SLAThresholds,
-)
+from models import (ItemMetrics, Priority, SLABreach, SLAConfig, SLAReport,
+                    SLAThresholds)
 from notification_integration import notify_sla_breach
 from utils import GitHubAPIClient, load_config
 
@@ -138,9 +132,7 @@ class SLAMonitor:
             thresholds = self._get_thresholds(priority)
 
             # Check response time
-            created_at = datetime.fromisoformat(
-                issue["created_at"].replace("Z", "+00:00")
-            )
+            created_at = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
             first_comment = self._get_first_response(owner, repo, issue["number"])
 
             if first_comment:
@@ -191,22 +183,14 @@ class SLAMonitor:
             closed_issues = [i for i in closed_issues if not i.get("pull_request")]
 
             for issue in closed_issues:
-                created_at = datetime.fromisoformat(
-                    issue["created_at"].replace("Z", "+00:00")
-                )
-                closed_at = datetime.fromisoformat(
-                    issue["closed_at"].replace("Z", "+00:00")
-                )
+                created_at = datetime.fromisoformat(issue["created_at"].replace("Z", "+00:00"))
+                closed_at = datetime.fromisoformat(issue["closed_at"].replace("Z", "+00:00"))
                 resolution_time = closed_at - created_at
                 resolution_hours = resolution_time.total_seconds() / 3600
                 resolution_times.append(resolution_hours)
 
-        avg_response = (
-            sum(response_times) / len(response_times) if response_times else 0
-        )
-        avg_resolution = (
-            sum(resolution_times) / len(resolution_times) if resolution_times else 0
-        )
+        avg_response = sum(response_times) / len(response_times) if response_times else 0
+        avg_resolution = sum(resolution_times) / len(resolution_times) if resolution_times else 0
 
         return ItemMetrics(
             item_type="issues",
@@ -215,9 +199,7 @@ class SLAMonitor:
             breached=len(breaches),
             avg_response_time_minutes=avg_response,
             avg_resolution_time_hours=avg_resolution,
-            success_rate_percentage=(
-                (within_sla / total * 100) if total > 0 else 100.0
-            ),
+            success_rate_percentage=((within_sla / total * 100) if total > 0 else 100.0),
         )
 
     def _monitor_pull_requests(self, owner: str, repo: str) -> ItemMetrics:
@@ -306,28 +288,18 @@ class SLAMonitor:
             merged_prs = [pr for pr in closed_prs if pr.get("merged_at")]
 
             for pr in merged_prs:
-                created_at = datetime.fromisoformat(
-                    pr["created_at"].replace("Z", "+00:00")
-                )
-                merged_at = datetime.fromisoformat(
-                    pr["merged_at"].replace("Z", "+00:00")
-                )
+                created_at = datetime.fromisoformat(pr["created_at"].replace("Z", "+00:00"))
+                merged_at = datetime.fromisoformat(pr["merged_at"].replace("Z", "+00:00"))
                 resolution_time = merged_at - created_at
                 resolution_hours = resolution_time.total_seconds() / 3600
                 resolution_times.append(resolution_hours)
 
-            merge_rate = (
-                len(merged_prs) / len(closed_prs) * 100 if closed_prs else 100.0
-            )
+            merge_rate = len(merged_prs) / len(closed_prs) * 100 if closed_prs else 100.0
         else:
             merge_rate = 100.0
 
-        avg_response = (
-            sum(response_times) / len(response_times) if response_times else 0
-        )
-        avg_resolution = (
-            sum(resolution_times) / len(resolution_times) if resolution_times else 0
-        )
+        avg_response = sum(response_times) / len(response_times) if response_times else 0
+        avg_resolution = sum(resolution_times) / len(resolution_times) if resolution_times else 0
 
         return ItemMetrics(
             item_type="pull_requests",
@@ -345,9 +317,7 @@ class SLAMonitor:
         logger.info("Monitoring workflows...")
 
         # Fetch recent workflow runs (last 24 hours)
-        runs = self.github.get(
-            f"/repos/{owner}/{repo}/actions/runs", params={"per_page": 100}
-        )
+        runs = self.github.get(f"/repos/{owner}/{repo}/actions/runs", params={"per_page": 100})
 
         if not runs or not runs.get("workflow_runs"):
             return ItemMetrics(
@@ -365,9 +335,7 @@ class SLAMonitor:
         # Filter to last 24 hours
         cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
         recent_runs = [
-            r
-            for r in workflow_runs
-            if datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")) > cutoff
+            r for r in workflow_runs if datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")) > cutoff
         ]
 
         total = len(recent_runs)
@@ -404,18 +372,12 @@ class SLAMonitor:
         execution_times = []
         for run in recent_runs:
             if run.get("conclusion") in ["success", "failure"]:
-                created = datetime.fromisoformat(
-                    run["created_at"].replace("Z", "+00:00")
-                )
-                updated = datetime.fromisoformat(
-                    run["updated_at"].replace("Z", "+00:00")
-                )
+                created = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
+                updated = datetime.fromisoformat(run["updated_at"].replace("Z", "+00:00"))
                 duration = (updated - created).total_seconds() / 60
                 execution_times.append(duration)
 
-        avg_execution = (
-            sum(execution_times) / len(execution_times) if execution_times else 0
-        )
+        avg_execution = sum(execution_times) / len(execution_times) if execution_times else 0
 
         return ItemMetrics(
             item_type="workflows",
@@ -428,43 +390,29 @@ class SLAMonitor:
             breaches=breaches,
         )
 
-    def _get_first_response(
-        self, owner: str, repo: str, issue_number: int
-    ) -> Optional[datetime]:
+    def _get_first_response(self, owner: str, repo: str, issue_number: int) -> Optional[datetime]:
         """Get timestamp of first response to an issue."""
-        comments = self.github.get(
-            f"/repos/{owner}/{repo}/issues/{issue_number}/comments"
-        )
+        comments = self.github.get(f"/repos/{owner}/{repo}/issues/{issue_number}/comments")
 
         if comments:
             first_comment = min(
                 comments,
-                key=lambda c: datetime.fromisoformat(
-                    c["created_at"].replace("Z", "+00:00")
-                ),
+                key=lambda c: datetime.fromisoformat(c["created_at"].replace("Z", "+00:00")),
             )
-            return datetime.fromisoformat(
-                first_comment["created_at"].replace("Z", "+00:00")
-            )
+            return datetime.fromisoformat(first_comment["created_at"].replace("Z", "+00:00"))
 
         return None
 
-    def _get_first_review(
-        self, owner: str, repo: str, pr_number: int
-    ) -> Optional[datetime]:
+    def _get_first_review(self, owner: str, repo: str, pr_number: int) -> Optional[datetime]:
         """Get timestamp of first review on a PR."""
         reviews = self.github.get(f"/repos/{owner}/{repo}/pulls/{pr_number}/reviews")
 
         if reviews:
             first_review = min(
                 reviews,
-                key=lambda r: datetime.fromisoformat(
-                    r["submitted_at"].replace("Z", "+00:00")
-                ),
+                key=lambda r: datetime.fromisoformat(r["submitted_at"].replace("Z", "+00:00")),
             )
-            return datetime.fromisoformat(
-                first_review["submitted_at"].replace("Z", "+00:00")
-            )
+            return datetime.fromisoformat(first_review["submitted_at"].replace("Z", "+00:00"))
 
         return None
 
@@ -516,9 +464,7 @@ class SLAMonitor:
         # Log breaches
         self._log_breaches(owner, repo, breaches)
 
-    def _send_breach_notification(
-        self, owner: str, repo: str, priority: str, breaches: list[SLABreach]
-    ):
+    def _send_breach_notification(self, owner: str, repo: str, priority: str, breaches: list[SLABreach]):
         """Send notification for SLA breaches."""
         _breach_list = "\n".join(  # noqa: F841
             [
@@ -570,9 +516,7 @@ class SLAMonitor:
 
         logger.info(f"Logged breaches to {log_file}")
 
-    def generate_report(
-        self, owner: str, repo: str, lookback_days: int = 30
-    ) -> SLAReport:
+    def generate_report(self, owner: str, repo: str, lookback_days: int = 30) -> SLAReport:
         """Generate SLA report for specified period.
 
         Args:

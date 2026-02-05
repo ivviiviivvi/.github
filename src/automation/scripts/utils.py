@@ -280,17 +280,13 @@ class GitHubAPIClient:
             attempt += 1
 
             try:
-                response = self.session.request(
-                    method, url, params=params, json=json_data, timeout=30
-                )
+                response = self.session.request(method, url, params=params, json=json_data, timeout=30)
 
                 # Update rate limit info from headers
                 if "X-RateLimit-Remaining" in response.headers:
                     remaining = int(response.headers["X-RateLimit-Remaining"])
                     if remaining < 100:
-                        self.logger.warning(
-                            f"Low rate limit remaining: {remaining} requests"
-                        )
+                        self.logger.warning(f"Low rate limit remaining: {remaining} requests")
 
                 response.raise_for_status()
                 return response.json() if response.content else {}
@@ -329,9 +325,7 @@ class GitHubAPIClient:
                         raise
                 else:
                     # Don't retry 4xx errors (except 429)
-                    self.logger.error(
-                        f"HTTP {e.response.status_code}: {e.response.text}"
-                    )
+                    self.logger.error(f"HTTP {e.response.status_code}: {e.response.text}")
                     raise
 
             except requests.exceptions.RequestException as e:
@@ -507,9 +501,7 @@ def write_yaml(filepath: Path, data: dict[str, Any]) -> None:
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
 
-def load_config(
-    config_path: str, default: Optional[dict[str, Any]] = None
-) -> dict[str, Any]:
+def load_config(config_path: str, default: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     """Load configuration from YAML file with fallback to default.
 
     Args:
@@ -576,9 +568,7 @@ def retry_with_backoff(
                 if jitter:
                     delay += random.uniform(0, 1)  # nosec B311
 
-                logger.warning(
-                    f"Attempt {attempt}/{max_attempts} failed: {e}. Retrying in {delay:.1f}s..."
-                )
+                logger.warning(f"Attempt {attempt}/{max_attempts} failed: {e}. Retrying in {delay:.1f}s...")
                 time.sleep(delay)
             else:
                 logger.error(f"All {max_attempts} attempts failed")

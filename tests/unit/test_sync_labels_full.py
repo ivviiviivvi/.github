@@ -1,17 +1,13 @@
-import argparse
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 
 class TestSyncLabelsFull(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # Create properly structured github mock with all submodules
@@ -94,10 +90,10 @@ class TestSyncLabelsFull(unittest.TestCase):
             self.mock_github.get_organization.assert_called_with("test-org")
             # Should process repo1
             mock_sync.assert_any_call(repo1)
-            # Should NOT process repo2 (archived)
+            # Should not process repo2 (archived)
             with self.assertRaises(AssertionError):
                 mock_sync.assert_any_call(repo2)
-            # Should NOT process repo3 (excluded)
+            # Should not process repo3 (excluded)
             with self.assertRaises(AssertionError):
                 mock_sync.assert_any_call(repo3)
 
@@ -114,9 +110,7 @@ class TestSyncLabelsFull(unittest.TestCase):
                     self.sync_labels.main()
 
             MockManager.assert_called()
-            mock_instance.sync_organization.assert_called_with(
-                "my-org", exclude_repos=[]
-            )
+            mock_instance.sync_organization.assert_called_with("my-org", exclude_repos=[])
 
     def test_main_dry_run_exclude(self):
         """Test main with dry-run and exclude args."""
@@ -141,9 +135,7 @@ class TestSyncLabelsFull(unittest.TestCase):
             # Check dry_run arg
             call_args = MockManager.call_args
             self.assertTrue(call_args[1]["dry_run"])
-            mock_instance.sync_organization.assert_called_with(
-                "my-org", exclude_repos=["r1", "r2"]
-            )
+            mock_instance.sync_organization.assert_called_with("my-org", exclude_repos=["r1", "r2"])
 
     def test_main_list_labels(self):
         """Test main --list-labels."""

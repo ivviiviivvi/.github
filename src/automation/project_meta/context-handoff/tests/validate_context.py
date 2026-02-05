@@ -147,9 +147,7 @@ class ContextValidator:
                 # Validate subfields
                 for subfield in subfields:
                     if subfield not in self.context[field]:
-                        self.errors.append(
-                            f"Missing required subfield: {field}.{subfield}"
-                        )
+                        self.errors.append(f"Missing required subfield: {field}.{subfield}")
                         valid = False
 
         return valid
@@ -168,9 +166,7 @@ class ContextValidator:
         target = self.TARGETS[level]
 
         if token_count > target:
-            self.warnings.append(
-                f"Token count {token_count} exceeds target {target} by {token_count - target} tokens"
-            )
+            self.warnings.append(f"Token count {token_count} exceeds target {target} by {token_count - target} tokens")
             return False
 
         return True
@@ -295,9 +291,7 @@ class ContextValidator:
 
         if is_valid and not errors and not warnings:
             print("\n✓ All validations passed")
-            print(
-                f"✓ Token efficiency: {(1 - token_count / 8500) * 100:.1f}% reduction from naive"
-            )
+            print(f"✓ Token efficiency: {(1 - token_count / 8500) * 100:.1f}% reduction from naive")
 
         print("=" * 80)
 
@@ -308,9 +302,7 @@ def main():
     """Command-line interface."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Validate context payload against schema and token requirements"
-    )
+    parser = argparse.ArgumentParser(description="Validate context payload against schema and token requirements")
     parser.add_argument(
         "context_file",
         nargs="?",

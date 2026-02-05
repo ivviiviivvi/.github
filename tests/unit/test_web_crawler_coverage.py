@@ -4,17 +4,14 @@
 Focus: validate_links, _check_link edge cases, error handling, report generation.
 """
 
-import concurrent.futures
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 
 import pytest
 import urllib3
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from web_crawler import OrganizationCrawler
 
@@ -73,9 +70,7 @@ class TestValidateLinks:
 
     def test_validate_links_skips_non_http_links(self, crawler):
         """Test validate_links skips mailto and other non-http links."""
-        links_by_file = {
-            "test.md": ["mailto:test@example.com", "ftp://files.example.com"]
-        }
+        links_by_file = {"test.md": ["mailto:test@example.com", "ftp://files.example.com"]}
 
         with patch.object(crawler, "_check_link") as mock_check:
             results = crawler.validate_links(links_by_file)
@@ -110,9 +105,7 @@ class TestIsHostnameSafe:
     def test_ipv6_global_address(self, crawler):
         """Test _is_hostname_safe allows global IPv6."""
         # 2607:f8b0:4004:800::200e is a Google IPv6 (global)
-        with patch.object(
-            crawler, "_resolve_hostname", return_value=["2607:f8b0:4004:800::200e"]
-        ):
+        with patch.object(crawler, "_resolve_hostname", return_value=["2607:f8b0:4004:800::200e"]):
             result = crawler._is_hostname_safe("google.com")
         assert result is True
 
@@ -196,9 +189,7 @@ class TestCheckLinkEdgeCases:
         mock_pool = MagicMock()
         mock_pool.request.return_value = mock_response
 
-        with patch.object(
-            crawler, "_resolve_hostname", return_value=["2607:f8b0:4004:800::200e"]
-        ):
+        with patch.object(crawler, "_resolve_hostname", return_value=["2607:f8b0:4004:800::200e"]):
             with patch.object(crawler, "_is_hostname_safe", return_value=True):
                 with patch.object(crawler, "_get_pinned_pool", return_value=mock_pool):
                     result = crawler._check_link("https://google.com")

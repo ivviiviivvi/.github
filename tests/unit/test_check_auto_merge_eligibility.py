@@ -10,9 +10,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from check_auto_merge_eligibility import AutoMergeChecker
 from models import AutoMergeConfig, AutoMergeSafetyChecks
@@ -191,11 +189,7 @@ class TestCoverageThreshold:
         checker = AutoMergeChecker(mock_client, config)
 
         mock_client.get.side_effect = [
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 85.5%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 85.5%"}]},
             {"check_runs": []},
         ]
 
@@ -210,11 +204,7 @@ class TestCoverageThreshold:
         checker = AutoMergeChecker(mock_client, config)
 
         mock_client.get.side_effect = [
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 75.0%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 75.0%"}]},
             {"check_runs": []},
         ]
 
@@ -418,11 +408,7 @@ class TestCheckEligibility:
             # Reviews
             [{"user": {"login": "user1"}, "state": "APPROVED"}],
             # Coverage status
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 85%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 85%"}]},
         ]
 
         result = checker.check_eligibility("owner", "repo", 123)
@@ -450,11 +436,7 @@ class TestCheckEligibility:
             # Reviews
             [{"user": {"login": "user1"}, "state": "APPROVED"}],
             # Coverage
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 85%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 85%"}]},
             {"check_runs": []},
         ]
 
@@ -482,11 +464,7 @@ class TestCheckEligibility:
             # Reviews - NO APPROVALS
             [{"user": {"login": "user1"}, "state": "CHANGES_REQUESTED"}],
             # Coverage
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 85%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 85%"}]},
         ]
 
         result = checker.check_eligibility("owner", "repo", 123)
@@ -513,11 +491,7 @@ class TestCheckEligibility:
             # Reviews
             [{"user": {"login": "user1"}, "state": "APPROVED"}],
             # Coverage
-            {
-                "statuses": [
-                    {"context": "codecov/patch", "description": "Coverage: 85%"}
-                ]
-            },
+            {"statuses": [{"context": "codecov/patch", "description": "Coverage: 85%"}]},
         ]
 
         result = checker.check_eligibility("owner", "repo", 123)
@@ -726,9 +700,7 @@ class TestMainCLI:
                 ]
 
                 with patch("check_auto_merge_eligibility.ConfigLoader") as mock_config_loader:
-                    mock_config_loader.return_value.load.return_value = {
-                        "auto_merge": {"min_reviews": 1}
-                    }
+                    mock_config_loader.return_value.load.return_value = {"auto_merge": {"min_reviews": 1}}
 
                     from check_auto_merge_eligibility import main
 

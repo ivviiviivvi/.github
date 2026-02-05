@@ -112,17 +112,13 @@ def validate_token(token_name: str, config: dict[str, Any], verbose: bool = Fals
 
             # Get scopes
             scopes_header = response.headers.get("X-OAuth-Scopes", "")
-            result["scopes"] = [
-                s.strip() for s in scopes_header.split(",") if s.strip()
-            ]
+            result["scopes"] = [s.strip() for s in scopes_header.split(",") if s.strip()]
 
             # Get rate limit
             result["rate_limit"] = {
                 "remaining": int(response.headers.get("X-RateLimit-Remaining", 0)),
                 "limit": int(response.headers.get("X-RateLimit-Limit", 0)),
-                "reset": datetime.fromtimestamp(
-                    int(response.headers.get("X-RateLimit-Reset", 0))
-                ),
+                "reset": datetime.fromtimestamp(int(response.headers.get("X-RateLimit-Reset", 0))),
             }
 
             if verbose:
@@ -165,9 +161,7 @@ def print_summary(results: list[dict[str, Any]], verbose: bool = False) -> bool:
     print("=" * 80 + "\n")
 
     valid_count = sum(1 for r in results if r["valid"])
-    failed_count = sum(
-        1 for r in results if not r["valid"] and r["status"] != "planned"
-    )
+    failed_count = sum(1 for r in results if not r["valid"] and r["status"] != "planned")
     planned_count = sum(1 for r in results if r["status"] == "planned")
     warning_count = sum(1 for r in results if r.get("warning"))
 
@@ -181,16 +175,8 @@ def print_summary(results: list[dict[str, Any]], verbose: bool = False) -> bool:
         print("\n" + "-" * 80)
         print(f"{BLUE}Detailed Results:{NC}\n")
         for result in results:
-            status_icon = (
-                "✓"
-                if result["valid"]
-                else "✗" if result["status"] != "planned" else "⏳"
-            )
-            status_color = (
-                GREEN
-                if result["valid"]
-                else RED if result["status"] != "planned" else YELLOW
-            )
+            status_icon = "✓" if result["valid"] else "✗" if result["status"] != "planned" else "⏳"
+            status_color = GREEN if result["valid"] else RED if result["status"] != "planned" else YELLOW
 
             print(f"{status_color}{status_icon}{NC} {result['token']}")
             if result["valid"]:

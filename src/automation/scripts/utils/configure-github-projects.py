@@ -148,9 +148,7 @@ class GitHubProjectsManager:
 
         self.execute_query(mutation, variables)
 
-    def create_single_select_field(
-        self, project_id: str, name: str, options: list[dict[str, str]]
-    ) -> str:
+    def create_single_select_field(self, project_id: str, name: str, options: list[dict[str, str]]) -> str:
         """Create a single select field."""
         mutation = """
         mutation($input: CreateProjectV2FieldInput!) {
@@ -754,9 +752,7 @@ def main():
 
                 try:
                     if field_config["type"] == "single_select":
-                        manager.create_single_select_field(
-                            project["id"], field_name, field_config["options"]
-                        )
+                        manager.create_single_select_field(project["id"], field_name, field_config["options"])
                     elif field_config["type"] == "text":
                         manager.create_text_field(project["id"], field_name)
                     elif field_config["type"] == "number":

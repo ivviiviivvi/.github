@@ -10,11 +10,10 @@ from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from validate_chatmode_frontmatter import _parse_frontmatter, _remove_legacy_description, main
+from validate_chatmode_frontmatter import (_parse_frontmatter,
+                                           _remove_legacy_description, main)
 
 
 @pytest.mark.unit

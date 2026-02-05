@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Generate SBOM
-      uses: anchore/sbom-action@deef08a0db64bfad603422135db61477b16cef56  # ratchet:anchore/sbom-action@v0
+      uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # ratchet:anchore/sbom-action@v0
       with:
         format: spdx-json
         output-file: sbom.spdx.json
@@ -40,14 +40,14 @@ jobs:
         upload-release-assets: true
 
     - name: Generate SBOM (CycloneDX format)
-      uses: anchore/sbom-action@deef08a0db64bfad603422135db61477b16cef56  # ratchet:anchore/sbom-action@v0
+      uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # ratchet:anchore/sbom-action@v0
       with:
         format: cyclonedx-json
         output-file: sbom.cyclonedx.json
         upload-artifact: true
 
     - name: Upload SBOM to dependency graph
-      uses: advanced-security/spdx-dependency-submission-action@af889147caa602135830f4848557237a5d9139f7  # ratchet:advanced-security/spdx-dependency-submission-action@v0.1.0
+      uses: advanced-security/spdx-dependency-submission-action@f957edbb35161c1f9e33f61026fc86a671c58cae  # ratchet:advanced-security/spdx-dependency-submission-action@v0.1.2
       with:
         filePath: sbom.spdx.json
 

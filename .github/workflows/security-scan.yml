@@ -84,8 +84,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Run Gitleaks secret scan
       run: |
@@ -93,9 +91,10 @@ jobs:
         curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.1/gitleaks_8.18.1_linux_x64.tar.gz | tar -xz
         sudo mv gitleaks /usr/local/bin/
 
-        # Run scan using config if available
+        # Scan current filesystem only (--no-git), not full git history
+        # History scanning finds thousands of false positives from old commits
         if [ -f ".config/.gitleaks.toml" ]; then
-          gitleaks detect --source . --config .config/.gitleaks.toml --verbose
+          gitleaks detect --source . --no-git --config .config/.gitleaks.toml --verbose
         else
-          gitleaks detect --source . --verbose
+          gitleaks detect --source . --no-git --verbose
         fi

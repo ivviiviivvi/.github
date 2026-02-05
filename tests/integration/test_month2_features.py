@@ -29,9 +29,7 @@ class TestSlackIntegration:
     def test_slack_notify_action_exists(self):
         """Verify Slack notify composite action is present."""
         action_file = ".github/actions/slack-notify/action.yml"
-        assert os.path.exists(
-            action_file
-        ), f"Slack notify action not found: {action_file}"
+        assert os.path.exists(action_file), f"Slack notify action not found: {action_file}"
 
         # Verify action structure
         with open(action_file) as f:
@@ -41,7 +39,7 @@ class TestSlackIntegration:
 
     def test_daily_summary_workflow_configured(self):
         """Verify daily summary workflow is configured."""
-        workflow_file = ".github/workflows/slack-daily-summary.yml"
+        workflow_file = ".github/workflows/google-chat-daily-summary.yml"
         assert os.path.exists(workflow_file), "Daily summary workflow not found"
 
         with open(workflow_file) as f:
@@ -206,9 +204,7 @@ class TestABTesting:
             content = f.read()
 
             assert "control" in content.lower()
-            assert (
-                "experiment" in content.lower()
-            )  # Config uses "experiment" not "treatment"
+            assert "experiment" in content.lower()  # Config uses "experiment" not "treatment"
             assert "7" in content  # 7-day grace period
             assert "10" in content  # 10-day grace period
 
@@ -257,9 +253,7 @@ class TestABTesting:
             experiment_count = assignments.count("experiment")
 
             # Should be close to 50/50 (allow 40-60% range)
-            assert (
-                40 <= control_count <= 60
-            ), f"Imbalanced: {control_count} control, {experiment_count} experiment"
+            assert 40 <= control_count <= 60, f"Imbalanced: {control_count} control, {experiment_count} experiment"
         except ImportError:
             pytest.skip("Could not import assignment script")
 
@@ -310,9 +304,7 @@ class TestDashboardEnhancements:
             import re
 
             for chart_pattern in charts:
-                assert re.search(
-                    chart_pattern, content, re.IGNORECASE
-                ), f"Missing chart: {chart_pattern}"
+                assert re.search(chart_pattern, content, re.IGNORECASE), f"Missing chart: {chart_pattern}"
 
     def test_dashboard_auto_refresh(self):
         """Test that dashboard has auto-refresh capability."""
@@ -362,9 +354,7 @@ class TestEmailDigest:
             import re
 
             for section_pattern in sections:
-                assert re.search(
-                    section_pattern, content, re.IGNORECASE
-                ), f"Missing section: {section_pattern}"
+                assert re.search(section_pattern, content, re.IGNORECASE), f"Missing section: {section_pattern}"
 
     def test_email_html_formatting(self):
         """Test that email uses HTML formatting."""
@@ -457,7 +447,7 @@ class TestMonth2Integration:
     def test_slack_and_email_coordination(self):
         """Test that Slack and email notifications don't conflict."""
         # Both should be able to run concurrently
-        slack_workflow = ".github/workflows/slack-daily-summary.yml"
+        slack_workflow = ".github/workflows/google-chat-daily-summary.yml"
         email_workflow = ".github/workflows/email-digest.yml"
 
         assert os.path.exists(slack_workflow)
@@ -523,7 +513,7 @@ class TestMonth2Integration:
         # Check that all Month 2 files are present
         month2_files = [
             ".github/actions/slack-notify/action.yml",
-            ".github/workflows/slack-daily-summary.yml",
+            ".github/workflows/google-chat-daily-summary.yml",
             "src/automation/scripts/evaluate_repository.py",
             "src/automation/scripts/generate_pilot_workflows.py",
             "src/automation/config/ab-test-config.yml",

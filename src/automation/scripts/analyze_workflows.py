@@ -103,9 +103,7 @@ def main():
     print(f"  Pull Request Triggers: {pr_triggers}")
 
     print("\n🔄 TRIGGER DISTRIBUTION")
-    for trigger, files in sorted(
-        trigger_groups.items(), key=lambda x: len(x[1]), reverse=True
-    ):
+    for trigger, files in sorted(trigger_groups.items(), key=lambda x: len(x[1]), reverse=True):
         print(f"  {trigger}: {len(files)} workflows")
 
     print("\n📋 DETAILED INVENTORY")
@@ -141,20 +139,14 @@ def main():
             print(f"   '{name}': {', '.join(files)}")
 
     # High complexity workflows
-    high_complexity = [
-        w for w in workflows if w.get("complexity", 0) > 15000 and "error" not in w
-    ]
+    high_complexity = [w for w in workflows if w.get("complexity", 0) > 15000 and "error" not in w]
     if high_complexity:
         print("\n🔴 HIGH COMPLEXITY WORKFLOWS (>15KB)")
-        for w in sorted(high_complexity, key=lambda x: x["complexity"], reverse=True)[
-            :10
-        ]:
+        for w in sorted(high_complexity, key=lambda x: x["complexity"], reverse=True)[:10]:
             print(f"   {w['file']}: {w['complexity']} ({w['job_count']} jobs)")
 
     # Workflows without manual dispatch
-    no_dispatch = [
-        w for w in workflows if not w.get("has_workflow_dispatch") and "error" not in w
-    ]
+    no_dispatch = [w for w in workflows if not w.get("has_workflow_dispatch") and "error" not in w]
     if no_dispatch:
         print(f"\n💡 WORKFLOWS WITHOUT MANUAL DISPATCH: {len(no_dispatch)}")
         print("   (Consider adding workflow_dispatch for testing)")

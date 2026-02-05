@@ -2,9 +2,10 @@
 """Check workflow health and configuration."""
 
 import os
-import yaml
 import re
 from pathlib import Path
+
+import yaml
 
 
 def check_configs():
@@ -56,7 +57,7 @@ def check_workflows():
 
     for workflow_file in workflow_dir.glob("*.yml"):
         try:
-            with open(workflow_file, "r") as f:
+            with open(workflow_file) as f:
                 content = f.read()
 
             # YAML syntax check

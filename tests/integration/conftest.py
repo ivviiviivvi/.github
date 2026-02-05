@@ -61,9 +61,7 @@ class MockGitHubAPIClient:
                 )
             self._workflow_runs[workflow] = runs
 
-    def create_issue(
-        self, title: str, body: str, labels: Optional[list[str]] = None
-    ) -> dict[str, Any]:
+    def create_issue(self, title: str, body: str, labels: Optional[list[str]] = None) -> dict[str, Any]:
         """Create a mock test issue."""
         self._issue_counter += 1
         issue_number = self._issue_counter
@@ -115,9 +113,7 @@ class MockGitHubAPIClient:
         issue["updated_at"] = datetime.now(timezone.utc).isoformat()
         return issue
 
-    def create_pr(
-        self, title: str, body: str, head: str, base: str = "main"
-    ) -> dict[str, Any]:
+    def create_pr(self, title: str, body: str, head: str, base: str = "main") -> dict[str, Any]:
         """Create a mock test pull request."""
         self._issue_counter += 1
         pr_number = self._issue_counter
@@ -226,17 +222,13 @@ class MockGitHubAPIClient:
             # Stale logic would check last update time
             # For testing, we don't add stale label automatically
 
-    def get_workflow_runs(
-        self, workflow_id: str, limit: int = 10
-    ) -> list[dict[str, Any]]:
+    def get_workflow_runs(self, workflow_id: str, limit: int = 10) -> list[dict[str, Any]]:
         """Get mock recent workflow runs."""
         if workflow_id not in self._workflow_runs:
             return []
         return self._workflow_runs[workflow_id][:limit]
 
-    def wait_for_workflow_completion(
-        self, run_id: int, timeout: int = 300, poll_interval: int = 10
-    ) -> dict[str, Any]:
+    def wait_for_workflow_completion(self, run_id: int, timeout: int = 300, poll_interval: int = 10) -> dict[str, Any]:
         """Mock wait for a workflow run to complete."""
         return {
             "id": run_id,

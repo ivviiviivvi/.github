@@ -21,9 +21,7 @@ def pytest_configure(config):
     mock_secret_manager.get_secret = MagicMock(return_value="mock-secret-value")
     mock_secret_manager.ensure_secret = MagicMock(return_value="mock-secret-value")
     mock_secret_manager.get_github_token = MagicMock(return_value="mock-github-token")
-    mock_secret_manager.ensure_github_token = MagicMock(
-        return_value="mock-github-token"
-    )
+    mock_secret_manager.ensure_github_token = MagicMock(return_value="mock-github-token")
 
     # Install the mock in sys.modules BEFORE any imports happen
     sys.modules["secret_manager"] = mock_secret_manager

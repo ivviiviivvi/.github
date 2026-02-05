@@ -8,7 +8,7 @@ Note: This script runs at import time, so we test by mocking and re-importing.
 import importlib.util
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -28,12 +28,7 @@ def load_quick_validate(env_vars, mock_responses):
         with patch("requests.get", return_value=mock_response):
             spec = importlib.util.spec_from_file_location(
                 "quick_validate",
-                Path(__file__).parent.parent.parent
-                / "src"
-                / "automation"
-                / "scripts"
-                / "utils"
-                / "quick-validate.py",
+                Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "quick-validate.py",
             )
             module = importlib.util.module_from_spec(spec)
             # Don't execute - just return for inspection
@@ -56,12 +51,7 @@ class TestQuickValidateModule:
         # Load spec without executing
         spec = importlib.util.spec_from_file_location(
             "quick_validate_check",
-            Path(__file__).parent.parent.parent
-            / "src"
-            / "automation"
-            / "scripts"
-            / "utils"
-            / "quick-validate.py",
+            Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "utils" / "quick-validate.py",
         )
         source = spec.loader.get_source("quick_validate_check")
 

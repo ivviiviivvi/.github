@@ -7,24 +7,18 @@ Focus: AST-based docstring extraction and documentation generation.
 import ast
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Import with hyphenated filename workaround
 import importlib.util
 
 spec = importlib.util.spec_from_file_location(
     "auto_docs",
-    Path(__file__).parent.parent.parent
-    / "src"
-    / "automation"
-    / "scripts"
-    / "auto-docs.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "auto-docs.py",
 )
 auto_docs = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(auto_docs)
@@ -252,9 +246,7 @@ class TestDocumentationGenerator:
         captured = capsys.readouterr()
         assert "No Python files" in captured.out
 
-    def test_warns_about_missing_docstrings(
-        self, mock_src_dir, mock_output_dir, capsys
-    ):
+    def test_warns_about_missing_docstrings(self, mock_src_dir, mock_output_dir, capsys):
         """Test warns about files without module docstrings."""
         py_file = mock_src_dir / "nodoc.py"
         py_file.write_text("def func(): pass")
@@ -324,9 +316,7 @@ class TestUpdateReadme:
     def test_updates_existing_module_section(self, tmp_path, capsys):
         """Test updates existing ## Modules section."""
         readme_path = tmp_path / "README.md"
-        readme_path.write_text(
-            "# My Project\n\n## Modules\n\nOld content\n\n## Other\n"
-        )
+        readme_path.write_text("# My Project\n\n## Modules\n\nOld content\n\n## Other\n")
 
         new_summary = "## Modules\n\n| Module | Description |\n|---|---|\n"
 
@@ -356,8 +346,7 @@ class TestUpdateReadme:
         """Test preserves other sections when updating."""
         readme_path = tmp_path / "README.md"
         readme_path.write_text(
-            "# Project\n\n## Installation\n\nInstall steps.\n\n"
-            "## Modules\n\nOld.\n\n## License\n\nMIT\n"
+            "# Project\n\n## Installation\n\nInstall steps.\n\n## Modules\n\nOld.\n\n## License\n\nMIT\n"
         )
 
         summary = "## Modules\n\n| New | Table |\n"
@@ -644,9 +633,7 @@ class TestMainFunction:
 
     def test_main_missing_required_args(self, monkeypatch, capsys):
         """Test main without output-dir or update-readme."""
-        monkeypatch.setattr(
-            sys, "argv", ["auto-docs.py", "--src-dir", "/some/path"]
-        )
+        monkeypatch.setattr(sys, "argv", ["auto-docs.py", "--src-dir", "/some/path"])
 
         with pytest.raises(SystemExit) as exc:
             auto_docs.main()

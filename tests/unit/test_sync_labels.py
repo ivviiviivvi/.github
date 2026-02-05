@@ -4,7 +4,6 @@ Focus: Label synchronization, GitHub API interaction, dry-run mode.
 """
 
 import argparse
-
 # Import the module under test
 import sys
 from pathlib import Path

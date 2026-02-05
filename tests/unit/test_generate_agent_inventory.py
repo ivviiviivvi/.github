@@ -6,15 +6,12 @@ Focus: Frontmatter parsing and inventory generation for agent files.
 
 import sys
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_agent_inventory import parse_frontmatter, main
+from generate_agent_inventory import main, parse_frontmatter
 
 
 @pytest.mark.unit
@@ -153,15 +150,11 @@ class TestMainFunction:
         """Create mock output path."""
         return tmp_path / "ai_framework" / "agents" / "INVENTORY.md"
 
-    def test_generates_inventory_file(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_generates_inventory_file(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test generates INVENTORY.md file."""
         # Create sample agent file
         agent = mock_agents_dir / "test.agent.md"
-        agent.write_text(
-            "---\nname: Test Agent\ndescription: A test\ntags:\n  - test\n---\n"
-        )
+        agent.write_text("---\nname: Test Agent\ndescription: A test\ntags:\n  - test\n---\n")
 
         monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
         monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
@@ -172,9 +165,7 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "# Agent Inventory" in content
 
-    def test_inventory_contains_header(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_inventory_contains_header(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test inventory has proper table header."""
         agent = mock_agents_dir / "sample.agent.md"
         agent.write_text("---\nname: Sample\ndescription: Desc\n---\n")
@@ -188,14 +179,10 @@ class TestMainFunction:
         assert "| File | Name | Description | Tags |" in content
         assert "| --- | --- | --- | --- |" in content
 
-    def test_inventory_contains_agent_row(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_inventory_contains_agent_row(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test inventory contains row for each agent."""
         agent = mock_agents_dir / "my-agent.agent.md"
-        agent.write_text(
-            "---\nname: My Agent\ndescription: Does things\ntags:\n  - util\n---\n"
-        )
+        agent.write_text("---\nname: My Agent\ndescription: Does things\ntags:\n  - util\n---\n")
 
         monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
         monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
@@ -208,9 +195,7 @@ class TestMainFunction:
         assert "Does things" in content
         assert "util" in content
 
-    def test_handles_multiple_agents(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_multiple_agents(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test handles multiple agent files."""
         for i in range(3):
             agent = mock_agents_dir / f"agent-{i}.agent.md"
@@ -242,9 +227,7 @@ class TestMainFunction:
     def test_handles_string_tags(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test handles single string tag instead of list."""
         agent = mock_agents_dir / "string-tag.agent.md"
-        agent.write_text(
-            "---\nname: String Tag\ndescription: Has string tag\ntags: single\n---\n"
-        )
+        agent.write_text("---\nname: String Tag\ndescription: Has string tag\ntags: single\n---\n")
 
         monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
         monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
@@ -255,14 +238,10 @@ class TestMainFunction:
         assert "String Tag" in content
         assert "single" in content
 
-    def test_handles_multiple_tags(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_multiple_tags(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test joins multiple tags with comma."""
         agent = mock_agents_dir / "multi-tag.agent.md"
-        agent.write_text(
-            "---\nname: Multi Tag\ndescription: Multiple tags\ntags:\n  - one\n  - two\n  - three\n---\n"
-        )
+        agent.write_text("---\nname: Multi Tag\ndescription: Multiple tags\ntags:\n  - one\n  - two\n  - three\n---\n")
 
         monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
         monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
@@ -272,9 +251,7 @@ class TestMainFunction:
         content = mock_output_path.read_text()
         assert "one, two, three" in content
 
-    def test_ignores_non_agent_files(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_ignores_non_agent_files(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test only processes *.agent.md files."""
         # Create non-agent files
         readme = mock_agents_dir / "README.md"
@@ -297,9 +274,7 @@ class TestMainFunction:
         assert "README.md" not in content
         assert "config.yaml" not in content
 
-    def test_handles_empty_directory(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_handles_empty_directory(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test handles empty directory gracefully."""
         monkeypatch.setattr("generate_agent_inventory.AGENTS_DIR", mock_agents_dir)
         monkeypatch.setattr("generate_agent_inventory.OUTPUT", mock_output_path)
@@ -310,9 +285,7 @@ class TestMainFunction:
         assert "# Agent Inventory" in content
         # Should still have header row
 
-    def test_files_sorted_alphabetically(
-        self, mock_agents_dir, mock_output_path, monkeypatch
-    ):
+    def test_files_sorted_alphabetically(self, mock_agents_dir, mock_output_path, monkeypatch):
         """Test agent files are sorted alphabetically."""
         for name in ["zebra", "alpha", "middle"]:
             agent = mock_agents_dir / f"{name}.agent.md"

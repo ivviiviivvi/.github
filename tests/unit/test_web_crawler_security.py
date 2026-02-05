@@ -1,13 +1,10 @@
-import unittest
 import sys
-import os
+import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 # Add scripts directory to path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from web_crawler import OrganizationCrawler
 
@@ -134,9 +131,7 @@ class TestWebCrawlerSecurity(unittest.TestCase):
         # Let's rely on the fact that if we pass an IP as host, it resolves to itself?  # noqa: E501
         # No, _resolve_hostname uses socket.getaddrinfo.
 
-        with patch.object(
-            self.crawler, "_resolve_hostname", return_value=["224.0.0.1"]
-        ):
+        with patch.object(self.crawler, "_resolve_hostname", return_value=["224.0.0.1"]):
             url = "http://224.0.0.1/stream"
             status = self.crawler._check_link(url)
             self.assertEqual(status, 403)
@@ -145,9 +140,7 @@ class TestWebCrawlerSecurity(unittest.TestCase):
     def test_ssrf_protection_reserved(self):
         """Verify that reserved IPs are blocked."""
         # 240.0.0.1 is Reserved for future use
-        with patch.object(
-            self.crawler, "_resolve_hostname", return_value=["240.0.0.1"]
-        ):
+        with patch.object(self.crawler, "_resolve_hostname", return_value=["240.0.0.1"]):
             url = "http://240.0.0.1/secret"
             status = self.crawler._check_link(url)
             self.assertEqual(status, 403)

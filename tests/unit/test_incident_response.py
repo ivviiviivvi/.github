@@ -11,20 +11,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(
-    0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts")
-)
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 # Mock notification_integration before importing incident_response
 sys.modules["notification_integration"] = MagicMock()
 
 from incident_response import IncidentResponseEngine
-from models import (
-    Incident,
-    IncidentConfig,
-    IncidentSeverity,
-    IncidentStatus,
-)
+from models import Incident, IncidentConfig, IncidentSeverity, IncidentStatus
 
 
 class TestIncidentResponseEngine:
@@ -76,30 +69,22 @@ class TestSeverityClassification:
 
     def test_sev1_production_down(self, engine):
         """Test SEV-1 classification for production down."""
-        severity = engine._classify_severity(
-            "Production API Down", "All users affected by outage", "manual"
-        )
+        severity = engine._classify_severity("Production API Down", "All users affected by outage", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev1_security_breach(self, engine):
         """Test SEV-1 classification for security breach."""
-        severity = engine._classify_severity(
-            "Security Breach Detected", "Unauthorized access to data", "manual"
-        )
+        severity = engine._classify_severity("Security Breach Detected", "Unauthorized access to data", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev1_data_loss(self, engine):
         """Test SEV-1 classification for data loss."""
-        severity = engine._classify_severity(
-            "Database Corruption", "Critical data loss detected", "manual"
-        )
+        severity = engine._classify_severity("Database Corruption", "Critical data loss detected", "manual")
         assert severity == IncidentSeverity.SEV1
 
     def test_sev2_major_failure(self, engine):
         """Test SEV-2 classification for major failure."""
-        severity = engine._classify_severity(
-            "Major Feature Broken", "Main feature affecting multiple users", "manual"
-        )
+        severity = engine._classify_severity("Major Feature Broken", "Main feature affecting multiple users", "manual")
         assert severity == IncidentSeverity.SEV2
 
     def test_sev2_from_sla_breach(self, engine):
@@ -113,23 +98,17 @@ class TestSeverityClassification:
 
     def test_sev3_minor_issue(self, engine):
         """Test SEV-3 classification for minor issue."""
-        severity = engine._classify_severity(
-            "Minor Bug", "Minor issue with workaround available", "manual"
-        )
+        severity = engine._classify_severity("Minor Bug", "Minor issue with workaround available", "manual")
         assert severity == IncidentSeverity.SEV3
 
     def test_sev3_from_workflow(self, engine):
         """Test SEV-3 classification from workflow source."""
-        severity = engine._classify_severity(
-            "Build Failed", "CI pipeline test failure", "workflow"
-        )
+        severity = engine._classify_severity("Build Failed", "CI pipeline test failure", "workflow")
         assert severity == IncidentSeverity.SEV3
 
     def test_sev4_default(self, engine):
         """Test SEV-4 as default classification."""
-        severity = engine._classify_severity(
-            "Cosmetic Issue", "Button color is wrong", "manual"
-        )
+        severity = engine._classify_severity("Cosmetic Issue", "Button color is wrong", "manual")
         assert severity == IncidentSeverity.SEV4
 
 
@@ -249,9 +228,7 @@ class TestIncidentCreation:
     def test_creates_incident_with_id(self, engine):
         """Test creates incident with unique ID."""
         with patch.object(engine, "_send_incident_notification"):
-            incident = engine.create_incident(
-                "owner", "repo", "Test Incident", "Test description", "manual"
-            )
+            incident = engine.create_incident("owner", "repo", "Test Incident", "Test description", "manual")
 
         assert incident.incident_id.startswith("INC-")
         assert incident.title == "Test Incident"
@@ -260,9 +237,7 @@ class TestIncidentCreation:
     def test_creates_incident_with_correct_severity(self, engine):
         """Test creates incident with classified severity."""
         with patch.object(engine, "_send_incident_notification"):
-            incident = engine.create_incident(
-                "owner", "repo", "Production Outage", "All users affected", "manual"
-            )
+            incident = engine.create_incident("owner", "repo", "Production Outage", "All users affected", "manual")
 
         assert incident.severity == IncidentSeverity.SEV1
 
@@ -426,9 +401,7 @@ class TestPostIncidentReport:
 
         assert len(report.action_items) >= 1
         # High severity should have monitoring action
-        assert any(
-            "monitoring" in item["action"].lower() for item in report.action_items
-        )
+        assert any("monitoring" in item["action"].lower() for item in report.action_items)
 
     def test_report_includes_lessons_learned(self, engine, resolved_incident):
         """Test report includes lessons learned."""
@@ -543,9 +516,7 @@ class TestAutoExecuteRunbooks:
 
         with patch.object(engine, "_send_incident_notification"):
             with patch.object(engine, "_execute_runbook") as mock_runbook:
-                engine.create_incident(
-                    "owner", "repo", "Test Incident", "Test description", "manual"
-                )
+                engine.create_incident("owner", "repo", "Test Incident", "Test description", "manual")
 
                 mock_runbook.assert_called_once()
 
@@ -905,13 +876,9 @@ class TestIncidentResponseCLI:
             ],
         ):
             with patch("incident_response.load_config") as mock_config:
-                mock_config.return_value = IncidentConfig(
-                    create_github_issues=False, auto_execute_runbooks=False
-                )
+                mock_config.return_value = IncidentConfig(create_github_issues=False, auto_execute_runbooks=False)
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_send_incident_notification"
-                    ):
+                    with patch.object(IncidentResponseEngine, "_send_incident_notification"):
                         from incident_response import main
 
                         main()
@@ -960,9 +927,7 @@ class TestIncidentResponseCLI:
             with patch("incident_response.load_config") as mock_config:
                 mock_config.return_value = IncidentConfig()
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_load_incident", return_value=incident
-                    ):
+                    with patch.object(IncidentResponseEngine, "_load_incident", return_value=incident):
                         with patch.object(IncidentResponseEngine, "_save_incident"):
                             from incident_response import main
 
@@ -1013,13 +978,9 @@ class TestIncidentResponseCLI:
             with patch("incident_response.load_config") as mock_config:
                 mock_config.return_value = IncidentConfig()
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_load_incident", return_value=incident
-                    ):
+                    with patch.object(IncidentResponseEngine, "_load_incident", return_value=incident):
                         with patch.object(IncidentResponseEngine, "_save_incident"):
-                            with patch.object(
-                                IncidentResponseEngine, "_send_incident_notification"
-                            ):
+                            with patch.object(IncidentResponseEngine, "_send_incident_notification"):
                                 from incident_response import main
 
                                 main()
@@ -1030,9 +991,7 @@ class TestIncidentResponseCLI:
 
     def test_update_status_requires_incident_id(self, capsys):
         """Test --update-status requires incident ID."""
-        with patch(
-            "sys.argv", ["incident_response.py", "--update-status", "resolved"]
-        ):
+        with patch("sys.argv", ["incident_response.py", "--update-status", "resolved"]):
             with patch("incident_response.load_config") as mock_config:
                 mock_config.return_value = IncidentConfig()
                 with patch("incident_response.GitHubAPIClient"):
@@ -1064,9 +1023,7 @@ class TestIncidentResponseCLI:
             with patch("incident_response.load_config") as mock_config:
                 mock_config.return_value = IncidentConfig()
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_load_incident", return_value=incident
-                    ):
+                    with patch.object(IncidentResponseEngine, "_load_incident", return_value=incident):
                         with patch.object(IncidentResponseEngine, "_save_report"):
                             from incident_response import main
 
@@ -1129,9 +1086,7 @@ class TestIncidentResponseCLI:
             with patch("incident_response.load_config") as mock_config:
                 mock_config.return_value = IncidentConfig()
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_load_incident", return_value=incident
-                    ):
+                    with patch.object(IncidentResponseEngine, "_load_incident", return_value=incident):
                         with patch.object(IncidentResponseEngine, "_save_incident"):
                             from incident_response import main
 
@@ -1160,13 +1115,9 @@ class TestIncidentResponseCLI:
             ],
         ):
             with patch("incident_response.load_config") as mock_config:
-                mock_config.return_value = IncidentConfig(
-                    create_github_issues=False, auto_execute_runbooks=False
-                )
+                mock_config.return_value = IncidentConfig(create_github_issues=False, auto_execute_runbooks=False)
                 with patch("incident_response.GitHubAPIClient"):
-                    with patch.object(
-                        IncidentResponseEngine, "_send_incident_notification"
-                    ):
+                    with patch.object(IncidentResponseEngine, "_send_incident_notification"):
                         from incident_response import main
 
                         main()

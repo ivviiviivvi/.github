@@ -63,9 +63,7 @@ class MouthpieceFilter:
         "light",
         "shadow",
     ]
-    _METAPHOR_PATTERN = re.compile(
-        r"|".join(map(re.escape, _METAPHOR_INDICATORS)), re.IGNORECASE
-    )
+    _METAPHOR_PATTERN = re.compile(r"|".join(map(re.escape, _METAPHOR_INDICATORS)), re.IGNORECASE)
 
     _SENTENCE_SPLIT = re.compile(r"[.!?]+")
     _QUESTIONS_PATTERN = re.compile(r"([^.!?]*\?)")
@@ -77,9 +75,7 @@ class MouthpieceFilter:
     # Questions
     _QUESTIONS = re.compile(r"([^.!?]*\?)")
     # Steps
-    _STEPS = re.compile(
-        r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b"
-    )
+    _STEPS = re.compile(r"\b(?:step\s+)?\d+[\.:)]|\bfirst\b|\bsecond\b|\bthen\b|\bfinally\b")
 
     def __init__(self, config: Optional[dict] = None):
         """Initialize the filter with optional configuration."""
@@ -134,11 +130,7 @@ class MouthpieceFilter:
         analysis = {
             "intent": self._detect_intent(text),
             "concepts": concepts,
-            "metaphors": (
-                self._extract_metaphors(text)
-                if self.config["extract_metaphors"]
-                else []
-            ),
+            "metaphors": (self._extract_metaphors(text) if self.config["extract_metaphors"] else []),
             "tone": self._detect_tone(text),
             "complexity": self._assess_complexity(text, concepts),
             "key_verbs": self._extract_key_verbs(text),
@@ -151,15 +143,9 @@ class MouthpieceFilter:
         text_lower = text.lower()
 
         # Intent patterns
-        if any(
-            word in text_lower
-            for word in ["create", "build", "implement", "make", "develop"]
-        ):
+        if any(word in text_lower for word in ["create", "build", "implement", "make", "develop"]):
             return "creation"
-        elif any(
-            word in text_lower
-            for word in ["fix", "repair", "solve", "debug", "resolve"]
-        ):
+        elif any(word in text_lower for word in ["fix", "repair", "solve", "debug", "resolve"]):
             return "problem_solving"
         elif any(
             word in text_lower
@@ -184,13 +170,9 @@ class MouthpieceFilter:
             ]
         ):
             return "improvement"
-        elif any(
-            word in text_lower for word in ["design", "architect", "plan", "structure"]
-        ):
+        elif any(word in text_lower for word in ["design", "architect", "plan", "structure"]):
             return "design"
-        elif any(
-            word in text_lower for word in ["analyze", "review", "examine", "inspect"]
-        ):
+        elif any(word in text_lower for word in ["analyze", "review", "examine", "inspect"]):
             return "analysis"
         else:
             return "general"
@@ -242,27 +224,16 @@ class MouthpieceFilter:
             ]
         ):
             return "urgent"
-        elif any(
-            word in text_lower
-            for word in ["please", "could you", "would you", "kindly"]
-        ):
+        elif any(word in text_lower for word in ["please", "could you", "would you", "kindly"]):
             return "polite"
-        elif any(
-            word in text_lower
-            for word in ["excited", "amazing", "wonderful", "love", "great"]
-        ):
+        elif any(word in text_lower for word in ["excited", "amazing", "wonderful", "love", "great"]):
             return "enthusiastic"
-        elif any(
-            word in text_lower
-            for word in ["confused", "unclear", "not sure", "maybe", "perhaps"]
-        ):
+        elif any(word in text_lower for word in ["confused", "unclear", "not sure", "maybe", "perhaps"]):
             return "uncertain"
         else:
             return "neutral"
 
-    def _assess_complexity(
-        self, text: str, concepts: Optional[list[str]] = None
-    ) -> str:
+    def _assess_complexity(self, text: str, concepts: Optional[list[str]] = None) -> str:
         """Assess the complexity level of the request."""
         words = text.split()
         sentences = self._SENTENCE_SPLIT.split(text)
@@ -407,9 +378,7 @@ class MouthpieceFilter:
         else:
             return self._build_structured_prompt(text, analysis, structure)
 
-    def _build_structured_prompt(
-        self, text: str, analysis: dict, structure: dict
-    ) -> str:
+    def _build_structured_prompt(self, text: str, analysis: dict, structure: dict) -> str:
         """Build a structured prompt format."""
         prompt_parts = []
 
@@ -428,9 +397,7 @@ class MouthpieceFilter:
         # Header
         if self.config["preserve_poetry"] and analysis["metaphors"]:
             prompt_parts.append(f"# {title}: {text.split('.')[0].strip()}...\n")
-            prompt_parts.append(
-                "_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else ""
-            )
+            prompt_parts.append("_\"{analysis['metaphors'][0]}\"_\n" if analysis["metaphors"] else "")
         else:
             prompt_parts.append(f"# {title}\n")
 
@@ -526,9 +493,7 @@ class MouthpieceFilter:
                 output.append(f"  Intent: {result['metadata']['intent']}")
                 output.append(f"  Tone: {result['metadata']['tone']}")
                 output.append(f"  Complexity: {result['metadata']['complexity']}")
-                output.append(
-                    f"  Concepts found: {result['metadata']['concept_count']}"
-                )
+                output.append(f"  Concepts found: {result['metadata']['concept_count']}")
                 output.append("")
 
             output.append("-" * 80)
@@ -584,9 +549,7 @@ Examples:
         action="store_true",
         help="Don't preserve poetic elements",
     )
-    parser.add_argument(
-        "--no-voice", action="store_true", help="Don't maintain original voice"
-    )
+    parser.add_argument("--no-voice", action="store_true", help="Don't maintain original voice")
     parser.add_argument("--output", "-o", help="Write output to file")
 
     args = parser.parse_args()

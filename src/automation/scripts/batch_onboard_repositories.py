@@ -187,9 +187,7 @@ class BatchOnboardingOrchestrator:
         # Validate secrets are available (if specified)
         for secret_name in self.config.secrets:
             if secret_name not in os.environ:
-                errors.append(
-                    f"Required secret not found in environment: {secret_name}"
-                )
+                errors.append(f"Required secret not found in environment: {secret_name}")
 
         return errors
 
@@ -354,15 +352,11 @@ class BatchOnboardingOrchestrator:
 
                 if label_name in existing_labels:
                     # Update existing label
-                    existing_labels[label_name].edit(
-                        name=label_name, color=color, description=description
-                    )
+                    existing_labels[label_name].edit(name=label_name, color=color, description=description)
                     logger.info(f"    Updated label: {label_name}")
                 else:
                     # Create new label
-                    repo.create_label(
-                        name=label_name, color=color, description=description
-                    )
+                    repo.create_label(name=label_name, color=color, description=description)
                     logger.info(f"    Created label: {label_name}")
 
             result.steps_completed.append(step)
@@ -391,15 +385,9 @@ class BatchOnboardingOrchestrator:
             required_checks = protection_config.get("required_checks", [])
 
             branch.edit_protection(
-                required_approving_review_count=protection_config.get(
-                    "required_approving_reviews", 1
-                ),
-                require_code_owner_reviews=protection_config.get(
-                    "require_code_owner_reviews", True
-                ),
-                dismiss_stale_reviews=protection_config.get(
-                    "dismiss_stale_reviews", True
-                ),
+                required_approving_review_count=protection_config.get("required_approving_reviews", 1),
+                require_code_owner_reviews=protection_config.get("require_code_owner_reviews", True),
+                dismiss_stale_reviews=protection_config.get("dismiss_stale_reviews", True),
                 enforce_admins=protection_config.get("enforce_admins", False),
                 strict=True,
                 contexts=required_checks,
@@ -428,9 +416,7 @@ class BatchOnboardingOrchestrator:
         logger.warning(
             "    Secret configuration requires GitHub App or PAT with admin:org scope"  # noqa: E501
         )
-        result.steps_completed.append(
-            f"{step} (skipped - requires elevated permissions)"
-        )
+        result.steps_completed.append(f"{step} (skipped - requires elevated permissions)")
 
     async def _create_environments(self, repo, result: OnboardingResult) -> None:
         """Create repository environments."""
@@ -468,9 +454,7 @@ class BatchOnboardingOrchestrator:
                         # Remove deployed workflows
                         for workflow_file in self.config.workflows:
                             try:
-                                contents = repo.get_contents(
-                                    f".github/workflows/{workflow_file}"
-                                )
+                                contents = repo.get_contents(f".github/workflows/{workflow_file}")
                                 repo.delete_file(
                                     path=contents.path,
                                     message=f"chore: rollback {workflow_file}",
@@ -541,9 +525,7 @@ def load_config(config_file: str) -> OnboardingConfig:
 
 async def main() -> None:
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Batch onboard multiple repositories with validation and rollback"
-    )  # noqa: E501
+    parser = argparse.ArgumentParser(description="Batch onboard multiple repositories with validation and rollback")  # noqa: E501
     parser.add_argument("--config", type=str, help="Path to configuration YAML file")
     parser.add_argument(
         "--repos",
@@ -580,18 +562,14 @@ async def main() -> None:
     if args.config:
         config = load_config(args.config)
     elif args.repos:
-        config = OnboardingConfig(
-            repositories=args.repos, max_concurrent=args.max_concurrent
-        )
+        config = OnboardingConfig(repositories=args.repos, max_concurrent=args.max_concurrent)
     else:
         logger.error("Either --config or --repos must be specified")
         parser.print_help()
         sys.exit(1)
 
     # Create orchestrator
-    orchestrator = BatchOnboardingOrchestrator(
-        github_token=github_token, config=config, dry_run=args.dry_run
-    )
+    orchestrator = BatchOnboardingOrchestrator(github_token=github_token, config=config, dry_run=args.dry_run)
 
     # Run onboarding
     results = await orchestrator.onboard_repositories()

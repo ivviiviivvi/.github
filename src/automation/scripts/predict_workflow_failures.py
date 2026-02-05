@@ -25,18 +25,13 @@ from typing import Any, Optional
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import (
-    accuracy_score,
-    precision_recall_fscore_support,
-)
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from sklearn.model_selection import train_test_split
 
 try:
     import joblib
 except ImportError as err:
-    raise SystemExit(
-        "joblib is required for model serialization. Install joblib to proceed."
-    ) from err
+    raise SystemExit("joblib is required for model serialization. Install joblib to proceed.") from err
 
 
 class WorkflowPredictor:
@@ -203,9 +198,7 @@ class WorkflowPredictor:
         X, y = self.prepare_features(df)
 
         # Split data
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=test_size, random_state=42, stratify=y
-        )
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, stratify=y)
 
         print(f"Training set: {len(X_train)} samples")
         print(f"Test set: {len(X_test)} samples")
@@ -228,9 +221,7 @@ class WorkflowPredictor:
         _y_proba = self.model.predict_proba(X_test)[:, 1]  # noqa: F841
 
         accuracy = accuracy_score(y_test, y_pred)
-        precision, recall, f1, _ = precision_recall_fscore_support(
-            y_test, y_pred, average="binary"
-        )
+        precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average="binary")
 
         metrics: dict[str, Any] = {
             "accuracy": float(accuracy),
@@ -254,9 +245,7 @@ class WorkflowPredictor:
         feature_importance = dict(zip(self.feature_columns, importances))
 
         print("\nTop 5 Features:")
-        for feature, importance in sorted(
-            feature_importance.items(), key=lambda x: x[1], reverse=True
-        )[:5]:
+        for feature, importance in sorted(feature_importance.items(), key=lambda x: x[1], reverse=True)[:5]:
             print(f"  {feature}: {importance:.3f}")
 
         metrics["feature_importance"] = feature_importance
@@ -266,9 +255,7 @@ class WorkflowPredictor:
 
         return metrics
 
-    def predict(
-        self, workflow_name: str | dict, repository: Optional[str] = None
-    ) -> float | dict:
+    def predict(self, workflow_name: str | dict, repository: Optional[str] = None) -> float | dict:
         """Predict failure probability for a workflow or feature set.
 
         Args:
@@ -436,7 +423,7 @@ class WorkflowPredictor:
         with open(self.model_path, "rb") as f:
             data = f.read()
 
-        with open(sig_path, "r") as f:
+        with open(sig_path) as f:
             signature = f.read().strip()
 
         if not self._verify_signature(data, signature):
@@ -453,9 +440,7 @@ class WorkflowPredictor:
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Predict workflow failures using machine learning"
-    )
+    parser = argparse.ArgumentParser(description="Predict workflow failures using machine learning")
     parser.add_argument(
         "--collect",
         action="store_true",
@@ -467,18 +452,14 @@ def main():
         default=90,
         help="Days of historical data to collect (default: 90)",
     )
-    parser.add_argument(
-        "--train", action="store_true", help="Train the prediction model"
-    )
+    parser.add_argument("--train", action="store_true", help="Train the prediction model")
     parser.add_argument(
         "--predict",
         nargs=2,
         metavar=("REPO", "WORKFLOW"),
         help="Predict failure for specific workflow",
     )
-    parser.add_argument(
-        "--high-risk", action="store_true", help="List high-risk workflows"
-    )
+    parser.add_argument("--high-risk", action="store_true", help="List high-risk workflows")
     parser.add_argument(
         "--threshold",
         type=float,
