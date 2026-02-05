@@ -4,21 +4,21 @@
 # Automatically label Pull Requests based on changed files
 labelPRBasedOnFilePath:
   area/automation:
-    - "src/automation/**/*"
-    - "scripts/**/*"
+  - src/automation/**/*
+  - scripts/**/*
   area/workflows:
-    - ".github/workflows/**/*"
+  - .github/workflows/**/*
   area/docs:
-    - "docs/**/*"
-    - "**/*.md"
+  - docs/**/*
+  - '**/*.md'
   lang/python:
-    - "**/*.py"
+  - '**/*.py'
   lang/javascript:
-    - "**/*.js"
-    - "**/*.ts"
+  - '**/*.js'
+  - '**/*.ts'
   config:
-    - ".github/*.yml"
-    - ".config/**/*"
+  - .github/*.yml
+  - .config/**/*
 
 # Greet first-time contributors
 firstPR: |

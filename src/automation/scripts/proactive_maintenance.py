@@ -24,8 +24,13 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from models import (MaintenanceConfig, MaintenanceTask, MaintenanceWindow,
-                    Priority, RiskLevel)
+from models import (
+    MaintenanceConfig,
+    MaintenanceTask,
+    MaintenanceWindow,
+    Priority,
+    RiskLevel,
+)
 from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 sys.path.insert(0, str(Path(__file__).parent))

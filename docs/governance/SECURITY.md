@@ -8,7 +8,7 @@ versions:
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.x     | :white_check_mark: |
-| \< 1.0  | :x:                |
+| < 1.0   | :x:                |
 
 **Note:** Only the latest major version receives security updates. Please
 upgrade to the latest version to ensure you have the latest security patches.
@@ -225,7 +225,7 @@ We provide security updates for the following versions:
 | Version | Supported |
 | ------- | --------- |
 | Latest  | ✅ Yes    |
-| \< 1.0  | ❌ No     |
+| < 1.0   | ❌ No     |
 
 ## Security Best Practices
 

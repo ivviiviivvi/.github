@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for update-action-pins.py to improve coverage.
 
 Focus: main function paths, verbose logging, recursive mode, error handling.

@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Edge AI Tasks description: Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai tags: \[\] updated: 2026-01-13
+## name: Edge AI Tasks description: Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai tags: [] updated: 2026-01-13
 
 # Tasks by microsoft/edge-ai
 

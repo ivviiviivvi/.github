@@ -5,29 +5,29 @@
 
 # Organization Settings
 org:
-  name: "{{ORG_NAME}}"                    # GitHub org/user name (e.g., "my-company")
-  display_name: "{{ORG_DISPLAY_NAME}}"    # Human-readable name (e.g., "My Company")
-  github_url: "https://github.com/{{ORG_NAME}}"
-  website: "{{ORG_WEBSITE}}"              # Optional: organization website
+  name: '{{ORG_NAME}}'                    # GitHub org/user name (e.g., "my-company")
+  display_name: '{{ORG_DISPLAY_NAME}}'    # Human-readable name (e.g., "My Company")
+  github_url: https://github.com/{{ORG_NAME}}
+  website: '{{ORG_WEBSITE}}'              # Optional: organization website
 
 # Product/Application Settings (for demo workflows)
 product:
-  name: "{{PRODUCT_NAME}}"                # Main product name if applicable
-  api_endpoint: "{{API_ENDPOINT}}"        # API base URL if applicable
+  name: '{{PRODUCT_NAME}}'                # Main product name if applicable
+  api_endpoint: '{{API_ENDPOINT}}'        # API base URL if applicable
 
 # Default Tool Versions
 # These should match your repository variables for consistency
 defaults:
-  python_version: "3.12"
-  node_version: "20"
-  go_version: "1.22"
-  rust_version: "stable"
+  python_version: '3.12'
+  node_version: '20'
+  go_version: '1.22'
+  rust_version: stable
 
 # Template Metadata
 template:
-  version: "1.0.0"
-  source: "https://github.com/{{ORG_NAME}}/.github"
-  description: "Organization-wide GitHub configuration template"
+  version: 1.0.0
+  source: https://github.com/{{ORG_NAME}}/.github
+  description: Organization-wide GitHub configuration template
 
 # Feature Flags
 # Enable/disable optional features when adopting the template

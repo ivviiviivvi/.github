@@ -3,11 +3,9 @@
 > **Step-by-step guide to visualizing the workflow system using GitHub
 > Projects**
 
-**Purpose:** Create kanban boards and roadmaps to track workflow
-stages\
+**Purpose:** Create kanban boards and roadmaps to track workflow stages\
 **Audience:** Project administrators and maintainers\
-**Time:** 30
-minutes setup
+**Time:** 30 minutes setup
 
 ______________________________________________________________________
 
@@ -326,7 +324,7 @@ ______________________________________________________________________
 1. **Name:** "Stale Items"
 1. **Filter:**
    - Has label "stale" OR
-   - Updated \< 30 days ago AND Open
+   - Updated < 30 days ago AND Open
 1. **Sort:** Oldest first
 1. **Purpose:** Quick review of items needing attention
 

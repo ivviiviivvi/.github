@@ -2,18 +2,18 @@
 
 Get up and running with the ivviiviivvi GitHub template in minutes.
 
----
+______________________________________________________________________
 
 ## Prerequisites
 
 Before you begin, ensure you have:
 
-| Requirement | Version | Notes |
-|-------------|---------|-------|
-| GitHub Organization | - | Admin access required |
-| Python | >= 3.9 | 3.12 recommended |
-| Node.js | >= 20.0.0 | For version scripts |
-| Git | >= 2.30 | With SSH key configured |
+| Requirement         | Version   | Notes                   |
+| ------------------- | --------- | ----------------------- |
+| GitHub Organization | -         | Admin access required   |
+| Python              | >= 3.9    | 3.12 recommended        |
+| Node.js             | >= 20.0.0 | For version scripts     |
+| Git                 | >= 2.30   | With SSH key configured |
 
 ### Optional Tools
 
@@ -21,7 +21,7 @@ Before you begin, ensure you have:
 - **GitHub CLI (`gh`)**: For workflow management
 - **Docker**: For containerized development
 
----
+______________________________________________________________________
 
 ## Installation
 
@@ -52,25 +52,27 @@ pre-commit --version
 
 ### Step 3: Configure Repository Variables
 
-Set up required repository variables in GitHub Settings > Secrets and variables > Actions > Variables:
+Set up required repository variables in GitHub Settings > Secrets and variables
+\> Actions > Variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PYTHON_VERSION_DEFAULT` | `3.12` | Python version for workflows |
-| `NODE_VERSION_DEFAULT` | `20` | Node.js version for workflows |
-| `COVERAGE_THRESHOLD` | `58` | Minimum test coverage percentage |
+| Variable                 | Default | Description                      |
+| ------------------------ | ------- | -------------------------------- |
+| `PYTHON_VERSION_DEFAULT` | `3.12`  | Python version for workflows     |
+| `NODE_VERSION_DEFAULT`   | `20`    | Node.js version for workflows    |
+| `COVERAGE_THRESHOLD`     | `58`    | Minimum test coverage percentage |
 
 ### Step 4: Configure Repository Secrets
 
-Add required secrets in GitHub Settings > Secrets and variables > Actions > Secrets:
+Add required secrets in GitHub Settings > Secrets and variables > Actions >
+Secrets:
 
-| Secret | Required | Description |
-|--------|----------|-------------|
-| `GITHUB_TOKEN` | Auto | Automatically provided by GitHub |
-| `CODECOV_TOKEN` | Optional | For coverage reporting |
-| `SLACK_WEBHOOK_URL` | Optional | For Slack notifications |
+| Secret              | Required | Description                      |
+| ------------------- | -------- | -------------------------------- |
+| `GITHUB_TOKEN`      | Auto     | Automatically provided by GitHub |
+| `CODECOV_TOKEN`     | Optional | For coverage reporting           |
+| `SLACK_WEBHOOK_URL` | Optional | For Slack notifications          |
 
----
+______________________________________________________________________
 
 ## Basic Configuration
 
@@ -100,14 +102,14 @@ pre-commit run --all-files
 python -m pytest tests/ -v --tb=short
 ```
 
----
+______________________________________________________________________
 
 ## First Workflow Run
 
 ### Trigger the CI Workflow
 
 1. Make a small change to any file
-2. Commit and push:
+1. Commit and push:
 
 ```bash
 git add .
@@ -132,7 +134,7 @@ gh workflow run ci.yml
 gh workflow run manual-reset.yml -f scope=all
 ```
 
----
+______________________________________________________________________
 
 ## Verification Checklist
 
@@ -145,7 +147,7 @@ Confirm your setup is complete:
 - [ ] First CI workflow passed
 - [ ] Template variables replaced
 
----
+______________________________________________________________________
 
 ## Next Steps
 
@@ -154,7 +156,7 @@ Confirm your setup is complete:
 - **[Workflow Guide](../guides/WORKFLOWS.md)** - Understanding workflows
 - **[Architecture Overview](../architecture/OVERVIEW.md)** - System design
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -177,13 +179,16 @@ pip install -e ".[dev]" --force-reinstall
 ### Workflow Permissions Error
 
 Ensure your repository has:
-- **Settings > Actions > General > Workflow permissions**: Read and write permissions
+
+- **Settings > Actions > General > Workflow permissions**: Read and write
+  permissions
 - **Allow GitHub Actions to create and approve pull requests**: Enabled
 
----
+______________________________________________________________________
 
 ## Support
 
-- **[Discussions](https://github.com/ivviiviivvi/.github/discussions)** - Ask questions
+- **[Discussions](https://github.com/ivviiviivvi/.github/discussions)** - Ask
+  questions
 - **[Issues](https://github.com/ivviiviivvi/.github/issues)** - Report bugs
 - **[Support Guide](../governance/SUPPORT.md)** - Full support options

@@ -75,6 +75,10 @@ target-version = "py39"
 select = ["E", "F", "W", "I", "N", "D", "UP", "B", "C4", "SIM"]
 ignore = [
     "D100", "D101", "D102", "D103", "D104", "D105", "D107", "D205", "D401",
+    # Docstring punctuation - too many violations for now
+    "D400", "D415",
+    # Uppercase function args - ML convention (X, X_train, etc.)
+    "N803",
     # SIM rules are stylistic simplifications - not enforced
     "SIM102", "SIM103", "SIM105", "SIM108", "SIM115", "SIM117",
 ]
@@ -82,12 +86,14 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # JavaScript embedded in Python strings causes false positives
 "src/automation/scripts/generate_pilot_workflows.py" = ["F821"]
+# Hyphenated filename can't be renamed (used by workflows)
+"src/automation/scripts/auto-docs.py" = ["N999"]
 # ML code uses X, X_train, X_test by convention
 "src/automation/scripts/enhanced_analytics.py" = ["N806"]
 "src/automation/scripts/predict_workflow_failures.py" = ["N806"]
 "tests/unit/test_predict_workflow_failures.py" = ["N806"]
-# Test files with sys.path manipulation need late imports
-"tests/unit/test_*.py" = ["E402"]
+# Test files: sys.path manipulation needs late imports, MockClass naming convention
+"tests/unit/test_*.py" = ["E402", "N806"]
 # LRU cache on crawler methods is intentional (short-lived instances)
 "src/automation/scripts/web_crawler.py" = ["B019"]
 # HTML templates have long lines that can't be wrapped

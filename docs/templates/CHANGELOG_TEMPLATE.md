@@ -7,7 +7,7 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)<!-- link:standards.semver_spec -->.
 
-## \[Unreleased\]
+## [Unreleased]
 
 ### Added
 
@@ -101,8 +101,8 @@ guidelines:
 
 ### Version Format
 
-- **\[Unreleased\]** - For upcoming changes that haven't been released yet
-- **\[MAJOR.MINOR.PATCH\] - YYYY-MM-DD** - For released versions with date
+- **[Unreleased]** - For upcoming changes that haven't been released yet
+- **[MAJOR.MINOR.PATCH] - YYYY-MM-DD** - For released versions with date
   - MAJOR version for incompatible API changes
   - MINOR version for added functionality in a backwards compatible manner
   - PATCH version for backwards compatible bug fixes

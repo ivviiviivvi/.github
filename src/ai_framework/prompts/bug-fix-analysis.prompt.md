@@ -20,7 +20,8 @@ updated: 2026-01-30
 
 # Bug Fix Analysis Prompt
 
-You are a debugging expert. Analyze the reported bug to identify root cause, assess impact, and provide actionable fix recommendations.
+You are a debugging expert. Analyze the reported bug to identify root cause,
+assess impact, and provide actionable fix recommendations.
 
 ## Input
 
@@ -35,13 +36,13 @@ You are a debugging expert. Analyze the reported bug to identify root cause, ass
 
 Categorize the bug to guide investigation:
 
-| Attribute | Classification |
-|-----------|----------------|
-| **Type** | Logic / Runtime / Performance / Security / UI / Data |
-| **Severity** | Critical / High / Medium / Low |
-| **Frequency** | Always / Intermittent / Rare |
+| Attribute       | Classification                                       |
+| --------------- | ---------------------------------------------------- |
+| **Type**        | Logic / Runtime / Performance / Security / UI / Data |
+| **Severity**    | Critical / High / Medium / Low                       |
+| **Frequency**   | Always / Intermittent / Rare                         |
 | **Environment** | Production / Staging / Development / Specific config |
-| **Scope** | Single user / Group / All users |
+| **Scope**       | Single user / Group / All users                      |
 
 ### 2. Symptom Analysis
 
@@ -121,13 +122,13 @@ Evaluate the bug's impact:
 
 #### Business Impact
 
-| Dimension | Impact Level | Description |
-|-----------|--------------|-------------|
-| Revenue | None/Low/Medium/High | [Financial impact] |
-| Users Affected | Count/Percentage | [Scope of impact] |
-| Data Integrity | None/Low/Medium/High | [Data corruption risk] |
-| Security | None/Low/Medium/High | [Security implications] |
-| Reputation | None/Low/Medium/High | [Brand/trust impact] |
+| Dimension      | Impact Level         | Description             |
+| -------------- | -------------------- | ----------------------- |
+| Revenue        | None/Low/Medium/High | [Financial impact]      |
+| Users Affected | Count/Percentage     | [Scope of impact]       |
+| Data Integrity | None/Low/Medium/High | [Data corruption risk]  |
+| Security       | None/Low/Medium/High | [Security implications] |
+| Reputation     | None/Low/Medium/High | [Brand/trust impact]    |
 
 #### Technical Impact
 
@@ -138,12 +139,12 @@ Evaluate the bug's impact:
 
 #### Risk Matrix
 
-| Probability | Impact | Risk Level | Action |
-|-------------|--------|------------|--------|
-| High | High | Critical | Immediate fix |
-| High | Low | Medium | Schedule fix |
-| Low | High | High | Plan mitigation |
-| Low | Low | Low | Backlog |
+| Probability | Impact | Risk Level | Action          |
+| ----------- | ------ | ---------- | --------------- |
+| High        | High   | Critical   | Immediate fix   |
+| High        | Low    | Medium     | Schedule fix    |
+| Low         | High   | High       | Plan mitigation |
+| Low         | Low    | Low        | Backlog         |
 
 ### 5. Fix Recommendations
 
@@ -270,9 +271,9 @@ Confirm the fix works:
 ## Guidelines
 
 1. **Reproduce first** - Always confirm the bug before investigating
-2. **Gather evidence** - Collect logs, traces, and context
-3. **Isolate variables** - Change one thing at a time when debugging
-4. **Document findings** - Keep notes as you investigate
-5. **Test the fix** - Verify the fix works before deploying
-6. **Learn from bugs** - Every bug is an opportunity to improve
-7. **Communicate status** - Keep stakeholders informed of progress
+1. **Gather evidence** - Collect logs, traces, and context
+1. **Isolate variables** - Change one thing at a time when debugging
+1. **Document findings** - Keep notes as you investigate
+1. **Test the fix** - Verify the fix works before deploying
+1. **Learn from bugs** - Every bug is an opportunity to improve
+1. **Communicate status** - Keep stakeholders informed of progress

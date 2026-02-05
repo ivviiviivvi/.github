@@ -63,7 +63,7 @@ Once the discussion is posted:
 
 Once posted, add the link here:
 
-- **Discussion URL**: \[To be added after posting\]
+- **Discussion URL**: [To be added after posting]
 
 ## Notes
 
@@ -76,4 +76,4 @@ Once posted, add the link here:
 ______________________________________________________________________
 
 **Posted by**: @4444JPP **Date Posted**: 2025-12-21 (Update this after actual
-posting) **Discussion ID**: \[To be filled in after posting\]
+posting) **Discussion ID**: [To be filled in after posting]

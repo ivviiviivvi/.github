@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Partners description: Custom agents that have been created by GitHub partners tags: \[\] updated: 2026-01-13
+## name: Partners description: Custom agents that have been created by GitHub partners tags: [] updated: 2026-01-13
 
 # Partners
 

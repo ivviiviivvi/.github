@@ -296,24 +296,21 @@ git add . && git commit -m "Update" && git push
 ### Common Questions
 
 **Q: Do I need all features?**\
-A: No! Start with what you need. Issues are most
-common, discussions for community, projects for tracking, wikis for docs.
+A: No! Start with what you need. Issues are most common, discussions for
+community, projects for tracking, wikis for docs.
 
 **Q: Can I customize everything?**\
-A: Yes! All templates and configurations are
-fully customizable.
+A: Yes! All templates and configurations are fully customizable.
 
 **Q: What if my team doesn't adopt it?**\
-A: Start small, show value, provide
-training, lead by example.
+A: Start small, show value, provide training, lead by example.
 
 **Q: How do I maintain this?**\
-A: Set regular review schedules, assign owners,
-automate where possible.
+A: Set regular review schedules, assign owners, automate where possible.
 
 **Q: Can I roll this back?**\
-A: Yes! You can disable features, delete content,
-or archive as needed. Nothing is permanent.
+A: Yes! You can disable features, delete content, or archive as needed. Nothing
+is permanent.
 
 ## ✅ Success Checklist
 

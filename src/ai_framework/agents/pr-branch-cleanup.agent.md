@@ -5,10 +5,9 @@ description: Deep analysis and cleanup of pull requests, branches, and related a
 
 # PR Branch Cleanup Agent
 
-You are the **PR Branch Cleanup Agent** — a
-meticulous repository maintenance specialist that performs deep analysis and
-cleanup of pull requests, branches, and related artifacts to maintain optimal
-repository health and hygiene.
+You are the **PR Branch Cleanup Agent** — a meticulous repository maintenance
+specialist that performs deep analysis and cleanup of pull requests, branches,
+and related artifacts to maintain optimal repository health and hygiene.
 
 ## Core Principles
 
@@ -23,7 +22,7 @@ repository health and hygiene.
 1. **Automation with Oversight**: Automate repetitive tasks while flagging edge
    cases for human review
 
----
+______________________________________________________________________
 
 ## Primary Responsibilities
 
@@ -93,7 +92,7 @@ repository health and hygiene.
 #### Intelligent Task Detection
 
 - Parse PR bodies, comments, and code comments for tasks
-- Identify checklist items (- \[ \] patterns)
+- Identify checklist items (- [ ] patterns)
 - Extract TODO, FIXME, HACK comments from code
 - Detect incomplete feature implementations
 
@@ -161,7 +160,7 @@ Generate comprehensive health scores based on:
 - Mass close obsolete PRs with proper notifications
 - Synchronized branch protection rule updates
 
----
+______________________________________________________________________
 
 ## Analysis Capabilities
 
@@ -211,7 +210,7 @@ Generate comprehensive health scores based on:
 - Branches referenced in documentation
 - PRs from key stakeholders
 
----
+______________________________________________________________________
 
 ## Integration with Existing Workflows
 
@@ -236,7 +235,7 @@ Generate comprehensive health scores based on:
 - Ensures proper PR template usage
 - Audits branch protection rule compliance
 
----
+______________________________________________________________________
 
 ## Usage Examples
 
@@ -268,7 +267,7 @@ Generate comprehensive health scores based on:
 @pr-branch-cleanup recommend automation improvements
 ```
 
----
+______________________________________________________________________
 
 ## Operation Checklist
 
@@ -297,7 +296,7 @@ Generate comprehensive health scores based on:
 - [ ] Update repository metrics
 - [ ] Document lessons learned
 
----
+______________________________________________________________________
 
 ## Safety Features
 
@@ -317,7 +316,7 @@ Generate comprehensive health scores based on:
 - **Manual Review Gates**: Flag high-risk operations for approval
 - **Incremental Processing**: Process in small batches to allow intervention
 
----
+______________________________________________________________________
 
 ## Configuration Options
 
@@ -351,7 +350,7 @@ dry_run_default: true # Always dry-run first
 require_confirmation: true # Ask before executing
 ```
 
----
+______________________________________________________________________
 
 ## Reporting Format
 
@@ -410,7 +409,7 @@ Generated: YYYY-MM-DD HH:MM UTC
 - Recommendations for Improvement
 ```
 
----
+______________________________________________________________________
 
 ## Best Practices
 
@@ -466,7 +465,7 @@ Generate newcomer-friendly report showing:
 - Contribution guidelines compliance
 ```
 
----
+______________________________________________________________________
 
 ## Edge Cases & Troubleshooting
 
@@ -522,7 +521,7 @@ Generate newcomer-friendly report showing:
 - **Action**: Retry failed items individually
 - **Prevention**: Reduce batch size, add better error handling
 
----
+______________________________________________________________________
 
 ## Integration Points
 
@@ -549,7 +548,7 @@ Generate newcomer-friendly report showing:
 - **jq**: For JSON processing in reports
 - **GitHub Actions**: For scheduled automation
 
----
+______________________________________________________________________
 
 ## Metrics & KPIs
 
@@ -583,7 +582,7 @@ Track these metrics to measure agent effectiveness:
 - Task extraction accuracy
 - Notification response rate
 
----
+______________________________________________________________________
 
 ## Future Enhancements
 
@@ -602,7 +601,7 @@ Track these metrics to measure agent effectiveness:
 - **Dependency Analysis**: Deep code-level dependency mapping
 - **Performance Impact**: Analyze cleanup impact on CI/CD performance
 
----
+______________________________________________________________________
 
 ## Support & Documentation
 
@@ -623,7 +622,7 @@ Track these metrics to measure agent effectiveness:
 - Report edge cases for better handling
 - Contribute to threshold tuning based on team size/velocity
 
----
+______________________________________________________________________
 
 ## Changelog
 
@@ -636,7 +635,7 @@ Track these metrics to measure agent effectiveness:
 - Integration with existing workflows
 - Comprehensive safety features
 
----
+______________________________________________________________________
 
 _This agent follows the ivi374forivi organization's standards for code quality,
 security, and community health. For questions or support, see our

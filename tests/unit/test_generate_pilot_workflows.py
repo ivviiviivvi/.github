@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_pilot_workflows.py
 
 Focus: Workflow generation from YAML configuration.

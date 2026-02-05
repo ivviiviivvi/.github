@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/update_agent_docs.py
 
 Focus: Agent documentation table generation and README updates.
@@ -163,7 +162,7 @@ class TestGenerateTable:
 
         assert "| Title | Description | MCP Servers |" in result
         # Should only have header rows, no data rows
-        lines = [l for l in result.strip().split("\n") if l.strip()]
+        lines = [line for line in result.strip().split("\n") if line.strip()]
         assert len(lines) == 2  # Header + separator
 
 
@@ -221,7 +220,7 @@ description: 'A test'
                 main()
 
         # Should complete without error
-        captured = capsys.readouterr()
+        capsys.readouterr()
         # Either updated or error message
         assert True  # No exception raised
 

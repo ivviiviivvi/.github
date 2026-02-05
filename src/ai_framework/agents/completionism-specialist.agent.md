@@ -229,7 +229,7 @@ For each incomplete item:
 
 ### Completion Roadmap
 
-- Quick wins (\< 5 minutes each)
+- Quick wins (< 5 minutes each)
 - Short-term improvements (5-30 minutes)
 - Medium-term enhancements (30 minutes - 2 hours)
 - Long-term completeness goals (> 2 hours)

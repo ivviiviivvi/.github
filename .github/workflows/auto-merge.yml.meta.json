@@ -23,10 +23,5 @@
   ],
   "dateCreated": "2024-01-01T00:00:00Z",
   "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": [
-    "automation",
-    "logic",
-    "manual",
-    "pr-triggered"
-  ]
+  "dc:subject": ["automation", "logic", "manual", "pr-triggered"]
 }

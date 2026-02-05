@@ -2,7 +2,7 @@
 
 System architecture and design principles for the ivviiviivvi GitHub template.
 
----
+______________________________________________________________________
 
 ## Repository Purpose
 
@@ -14,7 +14,7 @@ This is an **organization-level `.github` repository** that provides:
 - **GitHub Copilot customizations** (instructions, prompts, chatmodes)
 - **Shared automation scripts** and utilities
 
----
+______________________________________________________________________
 
 ## Directory Structure
 
@@ -66,7 +66,7 @@ This is an **organization-level `.github` repository** that provides:
 └── package.json                # Node.js configuration
 ```
 
----
+______________________________________________________________________
 
 ## Design Principles
 
@@ -83,6 +83,7 @@ All configuration files live in `.config/`:
 ```
 
 Root symlinks point to configs:
+
 - `.pre-commit-config.yaml` -> `.config/pre-commit.yaml`
 
 ### 2. Documentation First
@@ -107,15 +108,15 @@ Workflows:       .github/workflows/
 
 As an organization `.github` repository:
 
-| File | Inheritance |
-|------|-------------|
+| File                 | Inheritance                |
+| -------------------- | -------------------------- |
 | `CODE_OF_CONDUCT.md` | Inherited by all org repos |
-| `CONTRIBUTING.md` | Inherited by all org repos |
-| `SECURITY.md` | Inherited by all org repos |
-| `FUNDING.yml` | Inherited by all org repos |
-| Issue/PR templates | Inherited by all org repos |
+| `CONTRIBUTING.md`    | Inherited by all org repos |
+| `SECURITY.md`        | Inherited by all org repos |
+| `FUNDING.yml`        | Inherited by all org repos |
+| Issue/PR templates   | Inherited by all org repos |
 
----
+______________________________________________________________________
 
 ## Layer Classification
 
@@ -181,7 +182,7 @@ deploy-to-pages-live.yml
 - Require approvals
 - Have rollback capabilities
 
----
+______________________________________________________________________
 
 ## Workflow Architecture
 
@@ -230,7 +231,7 @@ graph TD
     Ready -->|no| Fix[Needs Fix]
 ```
 
----
+______________________________________________________________________
 
 ## AI Framework Architecture
 
@@ -271,7 +272,7 @@ sequenceDiagram
     Output->>User: Result
 ```
 
----
+______________________________________________________________________
 
 ## Data Flow
 
@@ -297,7 +298,7 @@ graph TD
     Artifacts --> Archive[Archive Storage]
 ```
 
----
+______________________________________________________________________
 
 ## Security Architecture
 
@@ -325,35 +326,35 @@ uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actio
 
 ### Secret Scoping
 
-| Scope | Visibility | Use Case |
-|-------|------------|----------|
-| Organization | All org repos | Shared tokens |
-| Repository | This repo only | Repo-specific credentials |
-| Environment | Specific environment | Deployment secrets |
+| Scope        | Visibility           | Use Case                  |
+| ------------ | -------------------- | ------------------------- |
+| Organization | All org repos        | Shared tokens             |
+| Repository   | This repo only       | Repo-specific credentials |
+| Environment  | Specific environment | Deployment secrets        |
 
----
+______________________________________________________________________
 
 ## Integration Points
 
 ### External Services
 
-| Service | Integration | Purpose |
-|---------|-------------|---------|
-| Codecov | codecov-action | Coverage reporting |
-| Slack | Webhook/Bot | Notifications |
-| SonarCloud | sonar-action | Code quality |
-| Dependabot | Native | Dependency updates |
+| Service    | Integration    | Purpose            |
+| ---------- | -------------- | ------------------ |
+| Codecov    | codecov-action | Coverage reporting |
+| Slack      | Webhook/Bot    | Notifications      |
+| SonarCloud | sonar-action   | Code quality       |
+| Dependabot | Native         | Dependency updates |
 
 ### MCP Servers
 
-| Server | Agent | Purpose |
-|--------|-------|---------|
-| Terraform | terraform.agent.md | Infrastructure |
-| PagerDuty | pagerduty-incident-responder.agent.md | Incidents |
-| Dynatrace | dynatrace-expert.agent.md | Observability |
-| LaunchDarkly | launchdarkly-flag-cleanup.agent.md | Feature flags |
+| Server       | Agent                                 | Purpose        |
+| ------------ | ------------------------------------- | -------------- |
+| Terraform    | terraform.agent.md                    | Infrastructure |
+| PagerDuty    | pagerduty-incident-responder.agent.md | Incidents      |
+| Dynatrace    | dynatrace-expert.agent.md             | Observability  |
+| LaunchDarkly | launchdarkly-flag-cleanup.agent.md    | Feature flags  |
 
----
+______________________________________________________________________
 
 ## Scalability Considerations
 
@@ -380,32 +381,32 @@ concurrency:
     key: pip-${{ hashFiles('**/requirements*.txt') }}
 ```
 
----
+______________________________________________________________________
 
 ## Extension Points
 
 ### Adding New Workflows
 
 1. Create workflow in `.github/workflows/`
-2. Follow naming conventions
-3. Add to workflow catalog
-4. Document triggers and inputs
+1. Follow naming conventions
+1. Add to workflow catalog
+1. Document triggers and inputs
 
 ### Adding New Agents
 
 1. Create agent in `src/ai_framework/agents/`
-2. Follow schema specification
-3. Add MCP server config if needed
-4. Regenerate inventory
+1. Follow schema specification
+1. Add MCP server config if needed
+1. Regenerate inventory
 
 ### Adding New Scripts
 
 1. Create script in `src/automation/scripts/`
-2. Add tests in `tests/`
-3. Document usage
-4. Add to workflow if automated
+1. Add tests in `tests/`
+1. Document usage
+1. Add to workflow if automated
 
----
+______________________________________________________________________
 
 ## Monitoring & Observability
 
@@ -425,11 +426,13 @@ concurrency:
 - Test external integrations
 ```
 
----
+______________________________________________________________________
 
 ## Next Steps
 
 - **[Workflow Guide](../guides/WORKFLOWS.md)** - Detailed workflow documentation
 - **[Agents Guide](../guides/AGENTS.md)** - AI agent usage
-- **[Workflow Catalog](../reference/WORKFLOW_CATALOG.md)** - Complete workflow list
-- **[Customization Guide](../getting-started/CUSTOMIZATION.md)** - Extending the template
+- **[Workflow Catalog](../reference/WORKFLOW_CATALOG.md)** - Complete workflow
+  list
+- **[Customization Guide](../getting-started/CUSTOMIZATION.md)** - Extending the
+  template

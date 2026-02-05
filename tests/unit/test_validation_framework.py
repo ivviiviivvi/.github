@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validation_framework.py
 Focus: ValidationFramework class, capability validations, report generation.
 """

@@ -104,12 +104,12 @@ steps after PR conversion:
 ALL GitHub Apps can be used immediately ✅ **Comprehensive notification** - Posts
 dedicated comment listing all available assistants ✅ **Task tracking works** -
 PR tasks and blockers are scanned automatically\
-✅ **Auto-merge enabled** -
-Qualifying PRs proceed to merge without manual intervention ✅ **No functionality
-reversal** - Original auto-merge preserved and enhanced ✅ **Error handling** -
-Graceful failures don't break the workflow ✅ **Backwards compatible** - Manual
-PR conversions work as before ✅ **Well documented** - Comprehensive docs for
-users and developers ✅ **Testable** - Automated test script included
+✅ **Auto-merge enabled** - Qualifying PRs proceed to merge without manual
+intervention ✅ **No functionality reversal** - Original auto-merge preserved and
+enhanced ✅ **Error handling** - Graceful failures don't break the workflow ✅
+**Backwards compatible** - Manual PR conversions work as before ✅ **Well
+documented** - Comprehensive docs for users and developers ✅ **Testable** -
+Automated test script included
 
 ## Performance Impact
 

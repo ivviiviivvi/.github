@@ -14,7 +14,7 @@ on:
         type: string
         default: '{}'
       fallback-reviewers:
-        description: 'Comma-separated list of fallback reviewers when no pattern matches'
+        description: Comma-separated list of fallback reviewers when no pattern matches
         required: false
         type: string
         default: ''
@@ -44,10 +44,10 @@ on:
         type: string
         default: squash
       auto-merge-labels:
-        description: 'Comma-separated labels that trigger auto-merge'
+        description: Comma-separated labels that trigger auto-merge
         required: false
         type: string
-        default: 'auto-merge,automerge'
+        default: auto-merge,automerge
       delete-branch-on-merge:
         description: Delete head branch after merge
         required: false
@@ -57,7 +57,7 @@ on:
         description: Label that skips automation
         required: false
         type: string
-        default: 'skip-automation'
+        default: skip-automation
     secrets:
       github-token:
         description: GitHub token with PR permissions (defaults to GITHUB_TOKEN)

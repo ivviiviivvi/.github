@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Tests for pre_deployment_checklist.py.
 
 Tests the pre-deployment validation checklist including configuration
@@ -14,7 +13,10 @@ import pytest
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.pre_deployment_checklist import (
-    CheckResult, PreDeploymentChecker, main)
+    CheckResult,
+    PreDeploymentChecker,
+    main,
+)
 
 
 @pytest.mark.unit

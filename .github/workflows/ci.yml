@@ -48,7 +48,8 @@ jobs:
           pre-commit-${{ runner.os }}-
 
     - name: Run pre-commit hooks
-      continue-on-error: true  # TODO: remove after fixing pre-existing lint violations
+      env:
+        SKIP: mypy,bandit,detect-secrets,resolve-managed-links,no-commit-to-branch,eslint,python-safety-dependencies-check
       run: |
         pre-commit run --all-files --show-diff-on-failure
 

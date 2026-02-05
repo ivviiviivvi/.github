@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Rust MCP Development description: Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. tags: \[\] updated: 2026-01-13
+## name: Rust MCP Development description: Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. tags: [] updated: 2026-01-13
 
 # Rust MCP Server Development
 

@@ -22,14 +22,14 @@ automation.
 | --------------------- | ----------------- | ------- |
 | Workflow Success Rate | **95% success**   | 92%     |
 | Auto-Healing Coverage | **80% auto-heal** | 65%     |
-| Mean Time to Recovery | \< 5 min          | 8 min   |
+| Mean Time to Recovery | < 5 min           | 8 min   |
 
 ### Intelligence Targets
 
 | Metric                  | Target           | Current |
 | ----------------------- | ---------------- | ------- |
 | Prediction Accuracy     | **85% accuracy** | 74.3%   |
-| False Positive Rate     | \< 5%            | 8%      |
+| False Positive Rate     | < 5%             | 8%      |
 | Proactive Interventions | 50%              | 25%     |
 
 ## Phase Breakdown

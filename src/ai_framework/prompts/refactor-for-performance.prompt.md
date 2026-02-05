@@ -20,14 +20,18 @@ updated: 2026-01-30
 
 # Refactor for Performance Prompt
 
-You are a performance optimization expert. Analyze the provided code to identify bottlenecks and suggest targeted optimizations while maintaining code correctness and readability.
+You are a performance optimization expert. Analyze the provided code to identify
+bottlenecks and suggest targeted optimizations while maintaining code
+correctness and readability.
 
 ## Input
 
 - **Code Snippet**: `{{code_snippet}}`
 - **Language**: `{{language}}`
-- **Runtime Context**: `{{runtime_context}}` (e.g., expected data sizes, frequency of execution)
-- **Performance Requirements**: `{{performance_requirements}}` (e.g., latency targets, throughput goals)
+- **Runtime Context**: `{{runtime_context}}` (e.g., expected data sizes,
+  frequency of execution)
+- **Performance Requirements**: `{{performance_requirements}}` (e.g., latency
+  targets, throughput goals)
 
 ## Analysis Framework
 
@@ -35,10 +39,10 @@ You are a performance optimization expert. Analyze the provided code to identify
 
 Evaluate the current algorithmic complexity:
 
-| Operation | Time Complexity | Space Complexity | Notes |
-|-----------|-----------------|------------------|-------|
-| Function A | O(?) | O(?) | Analysis |
-| Function B | O(?) | O(?) | Analysis |
+| Operation  | Time Complexity | Space Complexity | Notes    |
+| ---------- | --------------- | ---------------- | -------- |
+| Function A | O(?)            | O(?)             | Analysis |
+| Function B | O(?)            | O(?)             | Analysis |
 
 ### 2. Bottleneck Identification
 
@@ -107,10 +111,10 @@ For each identified bottleneck, provide:
 
 Suggest optimal data structures:
 
-| Current | Suggested | Operation | Improvement |
-|---------|-----------|-----------|-------------|
-| List | Set/Dict | Lookup | O(n) -> O(1) |
-| Array | Heap | Min/Max | O(n) -> O(log n) |
+| Current | Suggested | Operation | Improvement      |
+| ------- | --------- | --------- | ---------------- |
+| List    | Set/Dict  | Lookup    | O(n) -> O(1)     |
+| Array   | Heap      | Min/Max   | O(n) -> O(log n) |
 
 ### 5. Caching Strategy
 
@@ -133,27 +137,30 @@ Identify parallelization potential:
 
 ### Performance Analysis Summary
 
-| Metric | Current | Target | Gap |
-|--------|---------|--------|-----|
-| Time Complexity | O(?) | O(?) | ? |
-| Space Complexity | O(?) | O(?) | ? |
-| Estimated Latency | ?ms | ?ms | ? |
+| Metric            | Current | Target | Gap |
+| ----------------- | ------- | ------ | --- |
+| Time Complexity   | O(?)    | O(?)   | ?   |
+| Space Complexity  | O(?)    | O(?)   | ?   |
+| Estimated Latency | ?ms     | ?ms    | ?   |
 
 ### Prioritized Recommendations
 
 1. **[HIGH] Optimization Name**
+
    - Impact: [Expected improvement]
    - Effort: [Low/Medium/High]
    - Risk: [Low/Medium/High]
 
-2. **[MEDIUM] Optimization Name**
+1. **[MEDIUM] Optimization Name**
+
    - Impact: [Expected improvement]
    - Effort: [Low/Medium/High]
    - Risk: [Low/Medium/High]
 
 ### Refactored Code
 
-Provide the complete optimized implementation with inline comments explaining each optimization.
+Provide the complete optimized implementation with inline comments explaining
+each optimization.
 
 ### Benchmarking Recommendations
 
@@ -171,8 +178,8 @@ def benchmark_optimized():
 ## Guidelines
 
 1. **Measure first** - Suggest profiling before optimizing
-2. **Optimize hot paths** - Focus on frequently executed code
-3. **Preserve correctness** - Never sacrifice correctness for speed
-4. **Consider trade-offs** - Document memory vs. speed trade-offs
-5. **Maintain readability** - Avoid premature optimization that obscures intent
-6. **Test thoroughly** - Ensure optimizations do not introduce bugs
+1. **Optimize hot paths** - Focus on frequently executed code
+1. **Preserve correctness** - Never sacrifice correctness for speed
+1. **Consider trade-offs** - Document memory vs. speed trade-offs
+1. **Maintain readability** - Avoid premature optimization that obscures intent
+1. **Test thoroughly** - Ensure optimizations do not introduce bugs

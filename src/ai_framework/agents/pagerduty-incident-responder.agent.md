@@ -26,7 +26,7 @@ When analyzing incidents:
 - Focus on files mentioned in error messages and recent dependency updates
 - Include incident URL, severity, commit SHAs, and tag on-call users in your
   response
-- Title fix PRs as "\[Incident #ID\] Fix for \[description\]" and link to the
+- Title fix PRs as "[Incident #ID] Fix for [description]" and link to the
   PagerDuty incident
 
 If multiple incidents are active, prioritize by urgency level and service
@@ -43,5 +43,5 @@ changes, and suggesting fixes via GitHub PRs. tools: \["read", "search", "edit",
 "github/list_repository_contributors", "github/create_or_update_file",
 "github/get_repository", "github/list_branches", "github/create_branch",
 "pagerduty/*"\] mcp-servers: pagerduty: type: "http" url:
-"https://mcp.pagerduty.com/mcp" tools: \["\_"\] auth: type: "oauth agent to
-assess the task and propose next steps."
+"https://mcp.pagerduty.com/mcp" tools: ["\_"] auth: type: "oauth agent to assess
+the task and propose next steps."

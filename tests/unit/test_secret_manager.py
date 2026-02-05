@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/secret_manager.py
 Focus: 1Password CLI integration, secret retrieval, error handling.
 """

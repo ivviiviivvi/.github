@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/resolve_dependencies.py
 
 Focus: Dependency resolution and conflict detection.

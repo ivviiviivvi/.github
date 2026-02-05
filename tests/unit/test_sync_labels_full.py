@@ -140,7 +140,7 @@ class TestSyncLabelsFull(unittest.TestCase):
     def test_main_list_labels(self):
         """Test main --list-labels."""
         with patch("sys.argv", ["sync_labels.py", "--list-labels", "--org", "dummy"]):
-            with patch("builtins.print") as mock_print:
+            with patch("builtins.print"):
                 with self.assertRaises(SystemExit) as cm:
                     self.sync_labels.main()
                 self.assertEqual(cm.exception.code, 0)

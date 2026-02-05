@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils/quick-validate.py
 
 Focus: Quick token validation using environment variables.

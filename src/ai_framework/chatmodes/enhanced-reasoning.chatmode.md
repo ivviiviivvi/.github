@@ -2,7 +2,7 @@
 name: Enhanced Reasoning
 description: GPT-4.1 as a top-notch coding agent with enhanced reasoning capabilities.
 tools:
-  - "*"
+  - '*'
 tags:
   - beast
   - agent

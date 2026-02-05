@@ -1,8 +1,18 @@
 # ivviiviivvi Organization Hub
-<!-- BADGES:START -->
-[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE) [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#) [![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![Stars](https://img.shields.io/github/stars/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/stargazers) [![Issues](https://img.shields.io/github/issues/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/issues) [![Pull Requests](https://img.shields.io/github/issues-pr/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/pulls) [![Last Commit](https://img.shields.io/github/last-commit/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/commits) [![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors) 
-<!-- BADGES:END -->
 
+<!-- BADGES:START -->
+
+[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](#)
+[![Stars](https://img.shields.io/github/stars/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/stargazers)
+[![Issues](https://img.shields.io/github/issues/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/pulls)
+[![Last Commit](https://img.shields.io/github/last-commit/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/commits)
+[![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors)
+
+<!-- BADGES:END -->
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.example.dev)
 
@@ -138,7 +148,8 @@ ______________________________________________________________________
 ### Security
 
 - **SHA-Pinned Actions** - All actions pinned to specific commits
-- **Secret Scanning** - Multi-tool detection (TruffleHog, Gitleaks, detect-secrets)
+- **Secret Scanning** - Multi-tool detection (TruffleHog, Gitleaks,
+  detect-secrets)
 - **CodeQL Analysis** - Continuous vulnerability scanning
 - **Branch Protection** - Enforced rules on production branches
 
@@ -170,12 +181,12 @@ ______________________________________________________________________
 
 ### Guides
 
-| Guide                                                        | Description              |
-| ------------------------------------------------------------ | ------------------------ |
-| [COPILOT_QUICK_START.md](docs/COPILOT_QUICK_START.md)        | GitHub Copilot setup     |
-| [BATCH_ONBOARDING_GUIDE.md](docs/BATCH_ONBOARDING_GUIDE.md)  | Multi-repo onboarding    |
-| [WORKFLOW_DESIGN.md](docs/WORKFLOW_DESIGN.md)                | Workflow architecture    |
-| [docs/guides/CLAUDE.md](docs/guides/CLAUDE.md)               | Working with Claude Code |
+| Guide                                                       | Description              |
+| ----------------------------------------------------------- | ------------------------ |
+| [COPILOT_QUICK_START.md](docs/COPILOT_QUICK_START.md)       | GitHub Copilot setup     |
+| [BATCH_ONBOARDING_GUIDE.md](docs/BATCH_ONBOARDING_GUIDE.md) | Multi-repo onboarding    |
+| [WORKFLOW_DESIGN.md](docs/WORKFLOW_DESIGN.md)               | Workflow architecture    |
+| [docs/guides/CLAUDE.md](docs/guides/CLAUDE.md)              | Working with Claude Code |
 
 ______________________________________________________________________
 
@@ -290,8 +301,7 @@ ______________________________________________________________________
 
 - **Questions:**
   [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- **Issues:**
-  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
+- **Issues:** [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)
 - **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ______________________________________________________________________

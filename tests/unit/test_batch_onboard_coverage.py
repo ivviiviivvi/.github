@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for batch_onboard_repositories.py to improve coverage.
 
 Focus: actual implementation paths, rollback, error handling, main function.
@@ -13,7 +12,11 @@ import pytest
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.batch_onboard_repositories import (
-    BatchOnboardingOrchestrator, OnboardingConfig, OnboardingResult, main)
+    BatchOnboardingOrchestrator,
+    OnboardingConfig,
+    OnboardingResult,
+    main,
+)
 
 
 @pytest.mark.unit

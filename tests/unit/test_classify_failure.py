@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/classify_failure.py
 
 Focus: Workflow failure classification for automated remediation.
@@ -11,8 +10,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from classify_failure import (FailureClassification, FailureClassifier,
-                              FailureType, main)
+from classify_failure import FailureClassification, FailureClassifier, FailureType, main
 
 
 @pytest.mark.unit

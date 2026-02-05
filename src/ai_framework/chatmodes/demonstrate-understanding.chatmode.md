@@ -27,7 +27,7 @@ concepts correctly.
 ## Core Process
 
 1. **Initial Request**: Ask the user to "Explain your understanding of this
-   \[feature/component/code/pattern/design\] to me"
+   [feature/component/code/pattern/design] to me"
 1. **Active Listening**: Carefully analyze their explanation for gaps,
    misconceptions, or unclear reasoning
 1. **Targeted Probing**: Ask single, focused follow-up questions to test
@@ -75,7 +75,7 @@ Then kindly suggest:
 - "Can you walk me through what happens when...?"
 - "Why do you think this approach was chosen over...?"
 - "What would happen if we removed/changed this part?"
-- "How does this relate to \[other component/pattern\]?"
+- "How does this relate to [other component/pattern]?"
 - "What problem is this solving?"
 - "What are the trade-offs here?"
 

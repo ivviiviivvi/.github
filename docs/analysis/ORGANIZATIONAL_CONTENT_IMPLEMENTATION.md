@@ -686,32 +686,27 @@ gh api repos/YOUR_ORG/your-repo/discussions | \
 #### "Features won't enable"
 
 **Cause**: Insufficient permissions\
-**Solution**: Ensure organization
-owner/admin access
+**Solution**: Ensure organization owner/admin access
 
 #### "Templates not showing"
 
 **Cause**: Not in `.github` directory or wrong format\
-**Solution**: Verify file
-location and YAML syntax
+**Solution**: Verify file location and YAML syntax
 
 #### "Low adoption rate"
 
 **Cause**: Lack of training or unclear value\
-**Solution**: More training,
-better communication, leadership buy-in
+**Solution**: More training, better communication, leadership buy-in
 
 #### "Too complex for our needs"
 
 **Cause**: Over-engineering\
-**Solution**: Start smaller, use only what you
-need, simplify
+**Solution**: Start smaller, use only what you need, simplify
 
 #### "Duplicates across repos"
 
 **Cause**: Lack of coordination\
-**Solution**: Use org-level projects,
-cross-repo discussions
+**Solution**: Use org-level projects, cross-repo discussions
 
 ### Getting Help
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for quota_manager.py to improve coverage.
 
 Focus: acquire_lock edge cases, file error handling, date parsing, CLI.

@@ -97,7 +97,7 @@ class TestABTestAssignmentMain(unittest.TestCase):
         MockAssigner.side_effect = Exception("Config error")
 
         with patch("sys.argv", ["ab_test_assignment.py", "--repo", "owner/repo"]):
-            with patch("sys.stderr.write") as mock_stderr:
+            with patch("sys.stderr.write"):
                 with self.assertRaises(SystemExit):
                     ab_test_assignment.main()
                 # mock_stderr.assert_called() # sys.exit(1) might not write to stderr directly via python print

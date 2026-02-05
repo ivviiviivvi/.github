@@ -764,7 +764,7 @@ Let's get started! ☕
 ## Success Criteria
 
 - New developers can complete setup independently
-- Reduced onboarding time from \[X\] days to \[Y\] days
+- Reduced onboarding time from [X] days to [Y] days
 - Decreased onboarding-related questions
 - Positive feedback from new team members
 
@@ -901,9 +901,9 @@ functions as narrative timelines, showing:
 ### Timeline Style
 ````
 
-Birth ----\[changes\]----\[bug fix\]----\[refactor\]----\[feature\]----> Present
-↓ ↓ ↓ ↓ ↓ ↓ Story Edits Crisis Renewal Growth Current Chapter Chapter Chapter
-Chapter Chapter State
+Birth ----[changes]----[bug fix]----[refactor]----[feature]----> Present ↓ ↓ ↓ ↓
+↓ ↓ Story Edits Crisis Renewal Growth Current Chapter Chapter Chapter Chapter
+Chapter State
 
 ```
 

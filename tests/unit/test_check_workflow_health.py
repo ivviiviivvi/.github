@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/check_workflow_health.py
 
 Focus: Configuration validation and workflow deprecation checks.
@@ -287,7 +286,7 @@ jobs:
 
         check_workflows()
 
-        captured = capsys.readouterr()
+        capsys.readouterr()
         # Should not contain deprecation warnings for this file
         # Note: output may still contain header messages
 
@@ -302,7 +301,7 @@ jobs:
 
             check_workflows()
 
-            captured = capsys.readouterr()
+            capsys.readouterr()
             # Should handle error gracefully
         finally:
             # Restore permissions for cleanup
@@ -368,7 +367,7 @@ class TestIntegration:
         workflow.write_text("name: Test\non: push\njobs:\n  build:\n    runs-on: ubuntu-latest")
 
         # Run both checks
-        missing_configs = check_configs()
+        check_configs()
         check_workflows()
 
         captured = capsys.readouterr()

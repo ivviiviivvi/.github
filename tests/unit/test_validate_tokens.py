@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validate_tokens.py
 
 Focus: Token validation against GitHub API and 1Password integration.
@@ -15,8 +14,7 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from validate_tokens import (TOKENS, get_token_from_1password, main,
-                             validate_token)
+from validate_tokens import TOKENS, get_token_from_1password, main, validate_token
 
 
 @pytest.mark.unit
@@ -43,7 +41,7 @@ class TestTokensRegistry:
 
     def test_scopes_are_lists(self):
         """Test scopes are defined as lists."""
-        for token_name, config in TOKENS.items():
+        for _token_name, config in TOKENS.items():
             assert isinstance(config["scopes"], list)
 
 

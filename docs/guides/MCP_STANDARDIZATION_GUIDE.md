@@ -323,5 +323,4 @@ ______________________________________________________________________
 
 **Last Updated**: January 20, 2026\
 **Status**: Active\
-**Maintained By**:
-Organization Maintainers
+**Maintained By**: Organization Maintainers

@@ -2,7 +2,7 @@
 
 Comprehensive guide to GitHub Actions workflows in the ivviiviivvi template.
 
----
+______________________________________________________________________
 
 ## Workflow Categories Overview
 
@@ -12,83 +12,84 @@ The repository contains **130+ workflows** organized into functional categories:
 
 Foundation workflows that other workflows depend on.
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `ci.yml` | Main CI pipeline (lint, test, security) | Push, PR |
-| `release.yml` | Release automation | Tag push, manual |
-| `deployment.yml` | Deployment orchestration | Push to main, manual |
+| Workflow         | Purpose                                 | Trigger              |
+| ---------------- | --------------------------------------- | -------------------- |
+| `ci.yml`         | Main CI pipeline (lint, test, security) | Push, PR             |
+| `release.yml`    | Release automation                      | Tag push, manual     |
+| `deployment.yml` | Deployment orchestration                | Push to main, manual |
 
 ### Reusable Workflows
 
-Modular workflows called by other workflows (located in `.github/workflows/reusable/`):
+Modular workflows called by other workflows (located in
+`.github/workflows/reusable/`):
 
-| Workflow | Purpose | Inputs |
-|----------|---------|--------|
-| `python-setup-test.yml` | Python setup and testing | `python-version`, `run-tests` |
-| `nodejs-setup-build.yml` | Node.js setup and build | `node-version`, `cache` |
-| `security-scanning.yml` | Security analysis | `scan-type`, `fail-on-severity` |
-| `docker-build-push.yml` | Docker image build/push | `image-name`, `push` |
-| `artifact-management.yml` | Artifact handling | `artifact-name`, `retention` |
-| `github-cli-pr-ops.yml` | PR operations via CLI | `operation`, `pr-number` |
+| Workflow                  | Purpose                  | Inputs                          |
+| ------------------------- | ------------------------ | ------------------------------- |
+| `python-setup-test.yml`   | Python setup and testing | `python-version`, `run-tests`   |
+| `nodejs-setup-build.yml`  | Node.js setup and build  | `node-version`, `cache`         |
+| `security-scanning.yml`   | Security analysis        | `scan-type`, `fail-on-severity` |
+| `docker-build-push.yml`   | Docker image build/push  | `image-name`, `push`            |
+| `artifact-management.yml` | Artifact handling        | `artifact-name`, `retention`    |
+| `github-cli-pr-ops.yml`   | PR operations via CLI    | `operation`, `pr-number`        |
 
 ### PR Automation
 
 Workflows that automate pull request lifecycle:
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `auto-labeler.yml` | Auto-label PRs based on paths | PR opened |
-| `pr-title-lint.yml` | Validate PR title format | PR opened, edited |
-| `auto-assign.yml` | Auto-assign reviewers | PR opened |
-| `pr-quality-checks.yml` | Quality gates for PRs | PR sync |
-| `combine-prs.yml` | Batch Dependabot PRs | Schedule, manual |
-| `auto-merge.yml` | Auto-merge approved PRs | PR approved |
+| Workflow                | Purpose                       | Trigger           |
+| ----------------------- | ----------------------------- | ----------------- |
+| `auto-labeler.yml`      | Auto-label PRs based on paths | PR opened         |
+| `pr-title-lint.yml`     | Validate PR title format      | PR opened, edited |
+| `auto-assign.yml`       | Auto-assign reviewers         | PR opened         |
+| `pr-quality-checks.yml` | Quality gates for PRs         | PR sync           |
+| `combine-prs.yml`       | Batch Dependabot PRs          | Schedule, manual  |
+| `auto-merge.yml`        | Auto-merge approved PRs       | PR approved       |
 
 ### Issue Management
 
 Workflows for issue lifecycle:
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `issue-triage.yml` | Triage and label new issues | Issue opened |
-| `stale-management.yml` | Mark/close stale issues | Schedule |
-| `welcome.yml` | Welcome new contributors | Issue/PR opened |
+| Workflow               | Purpose                     | Trigger         |
+| ---------------------- | --------------------------- | --------------- |
+| `issue-triage.yml`     | Triage and label new issues | Issue opened    |
+| `stale-management.yml` | Mark/close stale issues     | Schedule        |
+| `welcome.yml`          | Welcome new contributors    | Issue/PR opened |
 
 ### Security & Compliance
 
 Security-focused workflows:
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `security-scan.yml` | Security vulnerability scanning | Push, PR, schedule |
-| `dependency-review.yml` | Review dependency changes | PR |
-| `scan-for-secrets.yml` | Detect leaked secrets | Push, PR |
-| `sbom-generation.yml` | Generate SBOM | Release, manual |
-| `semgrep.yml` | Static analysis | Push, PR |
+| Workflow                | Purpose                         | Trigger            |
+| ----------------------- | ------------------------------- | ------------------ |
+| `security-scan.yml`     | Security vulnerability scanning | Push, PR, schedule |
+| `dependency-review.yml` | Review dependency changes       | PR                 |
+| `scan-for-secrets.yml`  | Detect leaked secrets           | Push, PR           |
+| `sbom-generation.yml`   | Generate SBOM                   | Release, manual    |
+| `semgrep.yml`           | Static analysis                 | Push, PR           |
 
 ### Reporting & Metrics
 
 Analytics and reporting:
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `metrics-collection.yml` | Collect repository metrics | Schedule |
-| `repo-metrics.yml` | Repository statistics | Schedule |
-| `workflow-metrics.yml` | Workflow performance metrics | Schedule |
-| `weekly-commit-report.yml` | Weekly activity report | Schedule |
+| Workflow                   | Purpose                      | Trigger  |
+| -------------------------- | ---------------------------- | -------- |
+| `metrics-collection.yml`   | Collect repository metrics   | Schedule |
+| `repo-metrics.yml`         | Repository statistics        | Schedule |
+| `workflow-metrics.yml`     | Workflow performance metrics | Schedule |
+| `weekly-commit-report.yml` | Weekly activity report       | Schedule |
 
 ### AI/LLM Integration
 
 AI-assisted automation:
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `claude.yml` | Claude AI integration | PR, manual |
-| `claude-code-review.yml` | AI-powered code review | PR |
-| `gemini-triage.yml` | Gemini issue triage | Issue opened |
-| `jules.yml` | Jules agent automation | Manual |
+| Workflow                 | Purpose                | Trigger      |
+| ------------------------ | ---------------------- | ------------ |
+| `claude.yml`             | Claude AI integration  | PR, manual   |
+| `claude-code-review.yml` | AI-powered code review | PR           |
+| `gemini-triage.yml`      | Gemini issue triage    | Issue opened |
+| `jules.yml`              | Jules agent automation | Manual       |
 
----
+______________________________________________________________________
 
 ## Common Patterns
 
@@ -220,7 +221,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 ```
 
----
+______________________________________________________________________
 
 ## Calling Reusable Workflows
 
@@ -267,7 +268,7 @@ jobs:
       push: true
 ```
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -278,10 +279,11 @@ jobs:
 **Problem**: Workflow doesn't run on push/PR.
 
 **Solutions**:
+
 1. Check branch/path filters match
-2. Verify workflow file is on default branch
-3. Check for YAML syntax errors
-4. Ensure workflow is enabled in Actions settings
+1. Verify workflow file is on default branch
+1. Check for YAML syntax errors
+1. Ensure workflow is enabled in Actions settings
 
 ```bash
 # Validate YAML syntax
@@ -293,9 +295,10 @@ python -c "import yaml; yaml.safe_load(open('.github/workflows/my-workflow.yml')
 **Problem**: `Error: Resource not accessible by integration`
 
 **Solutions**:
+
 1. Check `permissions` block in workflow
-2. Verify repository Actions settings
-3. Use PAT instead of GITHUB_TOKEN for cross-repo operations
+1. Verify repository Actions settings
+1. Use PAT instead of GITHUB_TOKEN for cross-repo operations
 
 ```yaml
 permissions:
@@ -309,9 +312,10 @@ permissions:
 **Problem**: `Error: secret not found`
 
 **Solutions**:
+
 1. Verify secret name (case-sensitive)
-2. Check secret scope (org vs repo)
-3. Ensure environment is specified if using environment secrets
+1. Check secret scope (org vs repo)
+1. Ensure environment is specified if using environment secrets
 
 #### Concurrency Issues
 
@@ -340,6 +344,7 @@ python src/automation/scripts/utils/update-action-pins.py --recursive
 #### Enable Debug Logging
 
 Set repository secrets:
+
 - `ACTIONS_RUNNER_DEBUG`: `true`
 - `ACTIONS_STEP_DEBUG`: `true`
 
@@ -367,63 +372,65 @@ gh run view <run-id> --log
 gh run download <run-id>
 ```
 
----
+______________________________________________________________________
 
 ## Best Practices
 
 ### Performance
 
 1. **Use caching**: Cache dependencies to speed up builds
-2. **Minimize checkout depth**: Use `fetch-depth: 1` when full history not needed
-3. **Cancel redundant runs**: Use concurrency groups
-4. **Use matrix sparingly**: Only test combinations that matter
+1. **Minimize checkout depth**: Use `fetch-depth: 1` when full history not
+   needed
+1. **Cancel redundant runs**: Use concurrency groups
+1. **Use matrix sparingly**: Only test combinations that matter
 
 ### Security
 
 1. **Pin actions by SHA**: Prevent supply chain attacks
-2. **Minimal permissions**: Grant only required permissions
-3. **Use secrets appropriately**: Never log secrets
-4. **Review third-party actions**: Audit before adoption
+1. **Minimal permissions**: Grant only required permissions
+1. **Use secrets appropriately**: Never log secrets
+1. **Review third-party actions**: Audit before adoption
 
 ### Maintainability
 
 1. **Use reusable workflows**: Reduce duplication
-2. **Document workflows**: Add comments and README
-3. **Consistent naming**: Follow naming conventions
-4. **Test changes**: Use feature branches
+1. **Document workflows**: Add comments and README
+1. **Consistent naming**: Follow naming conventions
+1. **Test changes**: Use feature branches
 
----
+______________________________________________________________________
 
 ## Workflow Lifecycle
 
 ### Adding a New Workflow
 
 1. Create workflow file in `.github/workflows/`
-2. Follow naming convention: `<category>-<action>.yml`
-3. Add proper triggers, permissions, and concurrency
-4. Test on feature branch
-5. Document in workflow catalog
+1. Follow naming convention: `<category>-<action>.yml`
+1. Add proper triggers, permissions, and concurrency
+1. Test on feature branch
+1. Document in workflow catalog
 
 ### Modifying Existing Workflows
 
 1. Create feature branch
-2. Make changes
-3. Test via PR (workflows run on PRs)
-4. Review logs and fix issues
-5. Merge after approval
+1. Make changes
+1. Test via PR (workflows run on PRs)
+1. Review logs and fix issues
+1. Merge after approval
 
 ### Deprecating Workflows
 
 1. Add `(Deprecated)` to workflow name
-2. Comment out triggers (keep `workflow_dispatch`)
-3. Add deprecation notice to file
-4. Move to `workflows/deprecated/` after grace period
-5. Delete after confirmation no usage
+1. Comment out triggers (keep `workflow_dispatch`)
+1. Add deprecation notice to file
+1. Move to `workflows/deprecated/` after grace period
+1. Delete after confirmation no usage
 
----
+______________________________________________________________________
 
 ## Next Steps
 
-- **[Workflow Catalog](../reference/WORKFLOW_CATALOG.md)** - Complete workflow reference
+- **[Workflow Catalog](../reference/WORKFLOW_CATALOG.md)** - Complete workflow
+  reference
 - **[Agents Guide](AGENTS.md)** - AI agent integration
 - **[Architecture Overview](../architecture/OVERVIEW.md)** - System design

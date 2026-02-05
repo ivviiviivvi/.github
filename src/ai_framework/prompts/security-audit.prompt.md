@@ -21,14 +21,16 @@ updated: 2026-01-30
 
 # Security Audit Prompt
 
-You are a security expert conducting a comprehensive security audit. Identify vulnerabilities, assess risks, and provide remediation guidance.
+You are a security expert conducting a comprehensive security audit. Identify
+vulnerabilities, assess risks, and provide remediation guidance.
 
 ## Input
 
 - **Code/Repository**: `{{code_or_repo}}`
 - **Language**: `{{language}}`
 - **Framework**: `{{framework}}`
-- **Deployment Context**: `{{deployment_context}}` (e.g., cloud provider, container, serverless)
+- **Deployment Context**: `{{deployment_context}}` (e.g., cloud provider,
+  container, serverless)
 
 ## Security Audit Checklist
 
@@ -122,10 +124,11 @@ You are a security expert conducting a comprehensive security audit. Identify vu
 Scan for known CVEs in dependencies:
 
 | Package | Current Version | Vulnerability | Severity | Fixed Version |
-|---------|-----------------|---------------|----------|---------------|
-| example | 1.0.0 | CVE-XXXX-XXXX | Critical | 1.0.1 |
+| ------- | --------------- | ------------- | -------- | ------------- |
+| example | 1.0.0           | CVE-XXXX-XXXX | Critical | 1.0.1         |
 
 Recommended actions:
+
 - Upgrade path analysis
 - Breaking change assessment
 - Alternative package suggestions
@@ -134,12 +137,13 @@ Recommended actions:
 
 Scan for exposed secrets and credentials:
 
-| Type | Location | Risk Level | Remediation |
-|------|----------|------------|-------------|
-| API Key | file.py:42 | Critical | Rotate and use env vars |
-| Password | config.json | Critical | Move to secrets manager |
+| Type     | Location    | Risk Level | Remediation             |
+| -------- | ----------- | ---------- | ----------------------- |
+| API Key  | file.py:42  | Critical   | Rotate and use env vars |
+| Password | config.json | Critical   | Move to secrets manager |
 
 Common patterns to detect:
+
 - API keys and tokens
 - Database credentials
 - Cloud provider credentials (AWS, GCP, Azure)
@@ -173,6 +177,7 @@ Review for secure coding practices:
 ### Executive Summary
 
 Brief overview of security posture:
+
 - **Overall Risk Level**: Critical / High / Medium / Low
 - **Critical Findings**: [Count]
 - **High Findings**: [Count]
@@ -212,27 +217,30 @@ Follow same format with appropriate urgency level.
 
 Prioritized action plan:
 
-| Priority | Finding | Effort | Timeline |
-|----------|---------|--------|----------|
-| 1 | CRITICAL-001 | Low | Immediate |
-| 2 | HIGH-001 | Medium | 1 week |
-| 3 | MEDIUM-001 | High | 1 month |
+| Priority | Finding      | Effort | Timeline  |
+| -------- | ------------ | ------ | --------- |
+| 1        | CRITICAL-001 | Low    | Immediate |
+| 2        | HIGH-001     | Medium | 1 week    |
+| 3        | MEDIUM-001   | High   | 1 month   |
 
 ### Security Recommendations
 
 Long-term security improvements:
 
 1. **Implement security automation**
+
    - SAST/DAST in CI/CD
    - Dependency scanning
    - Secret scanning pre-commit hooks
 
-2. **Enhance monitoring**
+1. **Enhance monitoring**
+
    - Security event logging
    - Alerting thresholds
    - Incident response playbooks
 
-3. **Security training**
+1. **Security training**
+
    - Developer security awareness
    - Secure coding practices
    - Threat modeling workshops
@@ -240,7 +248,7 @@ Long-term security improvements:
 ## Guidelines
 
 1. **Prioritize by risk** - Focus on exploitable vulnerabilities first
-2. **Provide evidence** - Include specific code/config examples
-3. **Be actionable** - Every finding needs a clear remediation path
-4. **Consider context** - Evaluate risk based on deployment environment
-5. **Verify fixes** - Suggest testing procedures for validating remediations
+1. **Provide evidence** - Include specific code/config examples
+1. **Be actionable** - Every finding needs a clear remediation path
+1. **Consider context** - Evaluate risk based on deployment environment
+1. **Verify fixes** - Suggest testing procedures for validating remediations

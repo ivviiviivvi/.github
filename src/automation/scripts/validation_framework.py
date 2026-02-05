@@ -29,8 +29,10 @@ from pathlib import Path
 from typing import Any
 
 from models import ValidationResult, ValidationSuite
-from notification_integration import (notify_validation_failure,
-                                      notify_validation_success)
+from notification_integration import (
+    notify_validation_failure,
+    notify_validation_success,
+)
 from utils import GitHubAPIClient
 
 # Configure logging

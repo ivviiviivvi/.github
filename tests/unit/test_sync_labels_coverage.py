@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for sync_labels.py to improve coverage.
 
 Focus: get_repositories errors, dry_run paths, sync_organization, main function.

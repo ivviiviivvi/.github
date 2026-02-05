@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Integration Tests for Month 3 Advanced Features.
 
 Tests all Month 3 implementations (Week 9-12):

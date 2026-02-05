@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Tests for configure-github-projects.py.
 
 Tests GitHub Projects V2 configuration including GraphQL operations,

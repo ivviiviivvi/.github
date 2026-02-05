@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/schedule_maintenance.py
 
 Focus: Verify re-exports from proactive_maintenance module.

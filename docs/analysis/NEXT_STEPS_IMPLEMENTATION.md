@@ -167,11 +167,11 @@ jobs:
 
 #### Adding Caching
 
-\[Examples from WORKFLOW_QUICK_REFERENCE.md\]
+[Examples from WORKFLOW_QUICK_REFERENCE.md]
 
 #### Debugging Workflows
 
-\[Troubleshooting section from WORKFLOW_QUICK_REFERENCE.md\]
+[Troubleshooting section from WORKFLOW_QUICK_REFERENCE.md]
 
 ### Getting Help
 

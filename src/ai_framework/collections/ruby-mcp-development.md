@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-## name: Ruby MCP Development description: Complete toolkit for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration support. tags: \[\] updated: 2026-01-13
+## name: Ruby MCP Development description: Complete toolkit for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration support. tags: [] updated: 2026-01-13
 
 # Ruby MCP Server Development
 
@@ -11,8 +11,8 @@ official MCP Ruby SDK gem with Rails integration support.
 
 ## Items in this Collection
 
-| Title                                                                                                                                                                                                                                                                                                                                                                                                | Type      | Description                                                                                                                                                     |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Title                                                                                                                                                                                                                                                                                                                 | Type      | Description                                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Ruby MCP Expert](../chatmodes/ruby-mcp-expert.chatmode.md)<br />[View Agent Source](https://raw.githubusercontent.com/github/awesome-copilot/main/agents/ruby-mcp-expert.agent.md)<br />[Download Prompt](https://raw.githubusercontent.com/github/awesome-copilot/main/prompts/ruby-mcp-server-generator.prompt.md) | Chat Mode | Expert assistance for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration. [see usage](#ruby-mcp-expert) |
 
 ## Collection Usage

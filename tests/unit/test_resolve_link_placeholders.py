@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/resolve_link_placeholders.py
 
 Focus: Managed link resolution and placeholder replacement in Markdown files.
@@ -11,14 +10,22 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from resolve_link_placeholders import (DEFAULT_EXCLUDES, LINK_WITH_COMMENT_RE,
-                                       PLACEHOLDER_RE, UNANNOTATED_LINK_RE,
-                                       _flatten_map, _parse_simple_yaml,
-                                       build_agent_path_map,
-                                       calculate_relative_path,
-                                       is_internal_path, iter_markdown_files,
-                                       load_link_map, main,
-                                       migrate_broken_links, replace_links)
+from resolve_link_placeholders import (
+    DEFAULT_EXCLUDES,
+    LINK_WITH_COMMENT_RE,
+    PLACEHOLDER_RE,
+    UNANNOTATED_LINK_RE,
+    _flatten_map,
+    _parse_simple_yaml,
+    build_agent_path_map,
+    calculate_relative_path,
+    is_internal_path,
+    iter_markdown_files,
+    load_link_map,
+    main,
+    migrate_broken_links,
+    replace_links,
+)
 
 
 @pytest.mark.unit

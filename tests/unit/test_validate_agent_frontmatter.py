@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validate_agent_frontmatter.py
 
 Focus: YAML frontmatter parsing and validation for agent files.

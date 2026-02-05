@@ -630,7 +630,7 @@ git commit -m "asdf"                  # ❌ Meaningless
   git checkout -b docs/update-testing-guide
   ```
 
-- **Keep branches short-lived** (\< 1 week ideal)
+- **Keep branches short-lived** (< 1 week ideal)
 
 - **Rebase before merging** to keep history clean
 
@@ -689,7 +689,7 @@ ______________________________________________________________________
 
 - **Respond to feedback** promptly
 
-- **Keep PRs small** (\< 400 lines ideal)
+- **Keep PRs small** (< 400 lines ideal)
 
 - **Link to issues**
 

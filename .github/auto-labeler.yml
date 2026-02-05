@@ -3,11 +3,11 @@
 
 # Add labels to every new PR
 addLabels:
-  - "needs-review"
+- needs-review
 
 # Add labels based on author
 authorLabels:
   dependabot[bot]:
-    - "dependencies"
+  - dependencies
   renovate[bot]:
-    - "dependencies"
+  - dependencies

@@ -146,7 +146,7 @@ on security policies
 
 ______________________________________________________________________
 
-### QA Team (@ivviiviivvi/qa) \[Optional\]
+### QA Team (@ivviiviivvi/qa) [Optional]
 
 **Purpose**: Quality assurance and testing
 
@@ -176,7 +176,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-### Frontend Team (@ivviiviivvi/frontend) \[Optional\]
+### Frontend Team (@ivviiviivvi/frontend) [Optional]
 
 **Purpose**: Frontend development and UI/UX implementation
 
@@ -208,7 +208,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-### Backend Team (@ivviiviivvi/backend) \[Optional\]
+### Backend Team (@ivviiviivvi/backend) [Optional]
 
 **Purpose**: Backend development and API implementation
 

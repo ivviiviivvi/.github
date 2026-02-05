@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validate_chatmode_frontmatter.py
 
 Focus: Chatmode frontmatter validation for ai_framework/chatmodes.
@@ -12,8 +11,11 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from validate_chatmode_frontmatter import (_parse_frontmatter,
-                                           _remove_legacy_description, main)
+from validate_chatmode_frontmatter import (
+    _parse_frontmatter,
+    _remove_legacy_description,
+    main,
+)
 
 
 @pytest.mark.unit

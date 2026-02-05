@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/calculate_health_score.py
 
 Focus: Repository health score calculation with multiple metrics.
@@ -11,8 +10,12 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from calculate_health_score import (HealthMetrics, HealthScore,
-                                    HealthScoreCalculator, main)
+from calculate_health_score import (
+    HealthMetrics,
+    HealthScore,
+    HealthScoreCalculator,
+    main,
+)
 
 
 @pytest.mark.unit

@@ -2,18 +2,19 @@
 
 Complete reference for configuring the ivviiviivvi GitHub template.
 
----
+______________________________________________________________________
 
 ## Template Variables
 
-The following template variables are used throughout the repository. Replace them with your organization-specific values.
+The following template variables are used throughout the repository. Replace
+them with your organization-specific values.
 
 ### Core Variables
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `{{ORG_NAME}}` | GitHub organization slug | `my-company` |
-| `ivviiviivvi` | Human-readable org name | `My Company Inc.` |
+| Variable       | Description              | Example           |
+| -------------- | ------------------------ | ----------------- |
+| `{{ORG_NAME}}` | GitHub organization slug | `my-company`      |
+| `ivviiviivvi`  | Human-readable org name  | `My Company Inc.` |
 
 ### Replacement Script
 
@@ -36,7 +37,7 @@ find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.js
 echo "Template variables replaced successfully"
 ```
 
----
+______________________________________________________________________
 
 ## Repository Settings
 
@@ -46,30 +47,30 @@ Configure these in GitHub Repository Settings:
 
 #### General Settings
 
-| Setting | Value | Location |
-|---------|-------|----------|
-| Default branch | `main` | Settings > General |
-| Features | Issues, Projects, Discussions | Settings > General |
-| Merge button | Squash, Rebase | Settings > General |
+| Setting        | Value                         | Location           |
+| -------------- | ----------------------------- | ------------------ |
+| Default branch | `main`                        | Settings > General |
+| Features       | Issues, Projects, Discussions | Settings > General |
+| Merge button   | Squash, Rebase                | Settings > General |
 
 #### Branch Protection (main)
 
-| Rule | Value |
-|------|-------|
-| Require pull request reviews | 1 reviewer minimum |
-| Require status checks | `lint`, `test`, `security` |
-| Require branches to be up to date | Enabled |
-| Include administrators | Optional |
+| Rule                              | Value                      |
+| --------------------------------- | -------------------------- |
+| Require pull request reviews      | 1 reviewer minimum         |
+| Require status checks             | `lint`, `test`, `security` |
+| Require branches to be up to date | Enabled                    |
+| Include administrators            | Optional                   |
 
 #### Actions Settings
 
-| Setting | Value | Location |
-|---------|-------|----------|
-| Actions permissions | Allow all actions | Settings > Actions > General |
-| Workflow permissions | Read and write | Settings > Actions > General |
-| Allow GitHub Actions to create PRs | Enabled | Settings > Actions > General |
+| Setting                            | Value             | Location                     |
+| ---------------------------------- | ----------------- | ---------------------------- |
+| Actions permissions                | Allow all actions | Settings > Actions > General |
+| Workflow permissions               | Read and write    | Settings > Actions > General |
+| Allow GitHub Actions to create PRs | Enabled           | Settings > Actions > General |
 
----
+______________________________________________________________________
 
 ## Secret Setup
 
@@ -77,19 +78,19 @@ Configure these in GitHub Repository Settings:
 
 Configure in **Settings > Secrets and variables > Actions > Secrets**:
 
-| Secret | Required | Description | How to Obtain |
-|--------|----------|-------------|---------------|
-| `GITHUB_TOKEN` | Auto | Automatic token | Provided by GitHub |
-| `PAT_TOKEN` | Optional | Personal Access Token | User Settings > Developer settings |
+| Secret         | Required | Description           | How to Obtain                      |
+| -------------- | -------- | --------------------- | ---------------------------------- |
+| `GITHUB_TOKEN` | Auto     | Automatic token       | Provided by GitHub                 |
+| `PAT_TOKEN`    | Optional | Personal Access Token | User Settings > Developer settings |
 
 ### Optional Secrets
 
-| Secret | Purpose | Documentation |
-|--------|---------|---------------|
-| `CODECOV_TOKEN` | Coverage reporting | [Codecov Docs](https://docs.codecov.com/) |
-| `SLACK_WEBHOOK_URL` | Slack notifications | [Slack API](https://api.slack.com/messaging/webhooks) |
-| `SLACK_BOT_TOKEN` | Advanced Slack integration | [Slack Bot Tokens](https://api.slack.com/authentication/token-types) |
-| `SONAR_TOKEN` | SonarCloud analysis | [SonarCloud Docs](https://docs.sonarcloud.io/) |
+| Secret              | Purpose                    | Documentation                                                        |
+| ------------------- | -------------------------- | -------------------------------------------------------------------- |
+| `CODECOV_TOKEN`     | Coverage reporting         | [Codecov Docs](https://docs.codecov.com/)                            |
+| `SLACK_WEBHOOK_URL` | Slack notifications        | [Slack API](https://api.slack.com/messaging/webhooks)                |
+| `SLACK_BOT_TOKEN`   | Advanced Slack integration | [Slack Bot Tokens](https://api.slack.com/authentication/token-types) |
+| `SONAR_TOKEN`       | SonarCloud analysis        | [SonarCloud Docs](https://docs.sonarcloud.io/)                       |
 
 ### Secret Scopes
 
@@ -99,7 +100,7 @@ Repository secrets:    Specific to this repo only
 Environment secrets:   Scoped to deployment environments
 ```
 
----
+______________________________________________________________________
 
 ## Variable Configuration
 
@@ -109,26 +110,26 @@ Configure in **Settings > Secrets and variables > Actions > Variables**:
 
 #### Version Management
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PYTHON_VERSION_DEFAULT` | `3.12` | Default Python version |
-| `NODE_VERSION_DEFAULT` | `20` | Default Node.js version |
-| `GO_VERSION_DEFAULT` | `1.21` | Default Go version (if used) |
+| Variable                 | Default | Description                  |
+| ------------------------ | ------- | ---------------------------- |
+| `PYTHON_VERSION_DEFAULT` | `3.12`  | Default Python version       |
+| `NODE_VERSION_DEFAULT`   | `20`    | Default Node.js version      |
+| `GO_VERSION_DEFAULT`     | `1.21`  | Default Go version (if used) |
 
 #### Quality Thresholds
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `COVERAGE_THRESHOLD` | `58` | Minimum coverage percentage |
-| `COMPLEXITY_THRESHOLD` | `10` | Max cyclomatic complexity |
+| Variable               | Default | Description                 |
+| ---------------------- | ------- | --------------------------- |
+| `COVERAGE_THRESHOLD`   | `58`    | Minimum coverage percentage |
+| `COMPLEXITY_THRESHOLD` | `10`    | Max cyclomatic complexity   |
 
 #### Feature Flags
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `ENABLE_SLACK_NOTIFICATIONS` | `false` | Enable Slack integration |
-| `ENABLE_AUTO_MERGE` | `true` | Enable auto-merge for Dependabot |
-| `ENABLE_STALE_MANAGEMENT` | `true` | Enable stale issue/PR management |
+| Variable                     | Default | Description                      |
+| ---------------------------- | ------- | -------------------------------- |
+| `ENABLE_SLACK_NOTIFICATIONS` | `false` | Enable Slack integration         |
+| `ENABLE_AUTO_MERGE`          | `true`  | Enable auto-merge for Dependabot |
+| `ENABLE_STALE_MANAGEMENT`    | `true`  | Enable stale issue/PR management |
 
 ### Using Variables in Workflows
 
@@ -143,23 +144,23 @@ jobs:
           python-version: ${{ vars.PYTHON_VERSION_DEFAULT || '3.12' }}
 ```
 
----
+______________________________________________________________________
 
 ## Environment Configuration
 
 ### Creating Environments
 
 1. Navigate to **Settings > Environments**
-2. Click **New environment**
-3. Configure protection rules and secrets
+1. Click **New environment**
+1. Configure protection rules and secrets
 
 ### Recommended Environments
 
-| Environment | Purpose | Protection Rules |
-|-------------|---------|------------------|
-| `development` | Dev deployments | None |
-| `staging` | Pre-production testing | Required reviewers |
-| `production` | Live deployments | Required reviewers, wait timer |
+| Environment   | Purpose                | Protection Rules               |
+| ------------- | ---------------------- | ------------------------------ |
+| `development` | Dev deployments        | None                           |
+| `staging`     | Pre-production testing | Required reviewers             |
+| `production`  | Live deployments       | Required reviewers, wait timer |
 
 ### Environment-Specific Secrets
 
@@ -174,13 +175,14 @@ jobs:
           API_KEY: ${{ secrets.PRODUCTION_API_KEY }}
 ```
 
----
+______________________________________________________________________
 
 ## Pre-commit Configuration
 
 ### Configuration File
 
-The pre-commit configuration is at `.config/pre-commit.yaml` (symlinked to `.pre-commit-config.yaml`):
+The pre-commit configuration is at `.config/pre-commit.yaml` (symlinked to
+`.pre-commit-config.yaml`):
 
 ```yaml
 repos:
@@ -214,7 +216,7 @@ Add organization-specific hooks:
         types: [python]
 ```
 
----
+______________________________________________________________________
 
 ## Workflow Defaults
 
@@ -242,7 +244,7 @@ Update pins with:
 python src/automation/scripts/utils/update-action-pins.py --recursive
 ```
 
----
+______________________________________________________________________
 
 ## File Structure Configuration
 
@@ -285,7 +287,7 @@ Node.js configuration (version scripts):
 }
 ```
 
----
+______________________________________________________________________
 
 ## Validation
 
@@ -307,13 +309,13 @@ pre-commit run --all-files
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| `Permission denied` | Check workflow permissions in Settings |
-| `Secret not found` | Verify secret name and scope |
-| `Variable undefined` | Add fallback value in workflow |
+| Issue                | Solution                               |
+| -------------------- | -------------------------------------- |
+| `Permission denied`  | Check workflow permissions in Settings |
+| `Secret not found`   | Verify secret name and scope           |
+| `Variable undefined` | Add fallback value in workflow         |
 
----
+______________________________________________________________________
 
 ## Next Steps
 

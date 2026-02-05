@@ -1,4 +1,4 @@
-## 2025-02-19 - \[Secure ML Model Persistence\]
+## 2025-02-19 - [Secure ML Model Persistence]
 
 **Vulnerability:** Insecure deserialization in
 `src/automation/scripts/predict_workflow_failures.py`. The script used
@@ -12,7 +12,7 @@ are a robust way to verify file integrity before deserialization.
 HMAC-SHA256 to sign and verify the data. Ensure the verification happens
 *before* any unpickling occurs.
 
-## 2025-02-18 - \[Prevent DoS via urllib3 Large File Download\]
+## 2025-02-18 - [Prevent DoS via urllib3 Large File Download]
 
 **Vulnerability:** Potential Denial of Service (DoS) in
 `scripts/web_crawler.py`. The crawler used `urllib3`'s default behavior for
@@ -26,7 +26,7 @@ body. **Prevention:** For status checks on untrusted URLs, always use
 `preload_content=False` and ensure the connection is released via
 `response.release_conn()` or `response.close()`.
 
-## 2025-02-17 - \[Fix Code Injection in GitHub Actions\]
+## 2025-02-17 - [Fix Code Injection in GitHub Actions]
 
 **Vulnerability:** Unmitigated Code Injection in
 `.github/workflows/bulk-pr-operations.yml`. The workflow interpolated user

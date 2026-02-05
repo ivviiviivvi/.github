@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Tests for proactive_maintenance.py.
 
 Tests the proactive maintenance scheduler with ML-based timing,
@@ -13,10 +12,13 @@ import pytest
 
 sys.path.insert(0, "src/automation/scripts")
 
-from src.automation.scripts.models import (MaintenanceConfig, MaintenanceTask,
-                                           Priority, RiskLevel)
-from src.automation.scripts.proactive_maintenance import (MaintenanceScheduler,
-                                                          main)
+from src.automation.scripts.models import (
+    MaintenanceConfig,
+    MaintenanceTask,
+    Priority,
+    RiskLevel,
+)
+from src.automation.scripts.proactive_maintenance import MaintenanceScheduler, main
 
 
 @pytest.mark.unit
@@ -318,7 +320,7 @@ class TestGetPendingTasks:
         with patch.object(scheduler, "_get_cleanup_tasks") as mock_cleanup:
             mock_cleanup.return_value = []
 
-            result = scheduler._get_pending_tasks("owner", "repo", "cleanup")
+            scheduler._get_pending_tasks("owner", "repo", "cleanup")
 
             mock_cleanup.assert_called_once()
 
@@ -327,7 +329,7 @@ class TestGetPendingTasks:
         with patch.object(scheduler, "_get_optimization_tasks") as mock_opt:
             mock_opt.return_value = []
 
-            result = scheduler._get_pending_tasks("owner", "repo", "optimization")
+            scheduler._get_pending_tasks("owner", "repo", "optimization")
 
             mock_opt.assert_called_once()
 

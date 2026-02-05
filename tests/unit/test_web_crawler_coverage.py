@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for web_crawler.py to improve coverage.
 
 Focus: validate_links, _check_link edge cases, error handling, report generation.

@@ -276,8 +276,7 @@ ______________________________________________________________________
 
 **Last Updated**: 2025-12-25\
 **Maintained By**: Security Team\
-**Related
-Files**:
+**Related Files**:
 
 - `.gitleaks.toml`
 - `.secrets.baseline`

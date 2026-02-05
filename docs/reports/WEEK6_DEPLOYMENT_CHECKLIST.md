@@ -1,11 +1,9 @@
 # Week 6 Repository Expansion - Deployment Checklist
 
 **Pilot Repository:** `[owner/repo-name]`\
-**Start Date:** February 22,
-2026\
+**Start Date:** February 22, 2026\
 **Target Completion:** February 28, 2026\
-**Deployment Lead:**
-`@workflow-team`
+**Deployment Lead:** `@workflow-team`
 
 ______________________________________________________________________
 
@@ -136,8 +134,7 @@ ______________________________________________________________________
 ## Phase 1: Passive Mode Deployment
 
 **Duration:** 24 hours (Feb 24, 2:00 PM UTC → Feb 25, 2:00 PM UTC)\
-**Mode:**
-Observation only (dry-run, no actual changes)
+**Mode:** Observation only (dry-run, no actual changes)
 
 ### Feb 24, 2:00 PM UTC - Deployment
 
@@ -222,8 +219,7 @@ ______________________________________________________________________
 ## Phase 2: Active Mode Deployment
 
 **Duration:** 4 days (Feb 25 → Feb 28)\
-**Mode:** Gradual activation with
-intensive monitoring
+**Mode:** Gradual activation with intensive monitoring
 
 ### Day 1: Feb 25 - Issue Triage Only
 
@@ -403,12 +399,12 @@ ______________________________________________________________________
 
 ### Trigger Conditions
 
-- [ ] Workflow success rate \< 90%
+- [ ] Workflow success rate < 90%
 - [ ] Multiple critical failures
 - [ ] Negative team feedback
 - [ ] Stakeholder request
 
-### Immediate Rollback (\< 5 minutes)
+### Immediate Rollback (< 5 minutes)
 
 ```bash
 # Disable all workflows
@@ -527,12 +523,10 @@ ______________________________________________________________________
 
 ## Sign-Off
 
-**Deployment Lead:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Date:
+**Deployment Lead:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Date: \_\_\_\_\_\_\_\
+**Repository Maintainer:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Date:
 \_\_\_\_\_\_\_\
-**Repository Maintainer:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-Date: \_\_\_\_\_\_\_\
-**Engineering Manager:**
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Date: \_\_\_\_\_\_\_
+**Engineering Manager:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Date: \_\_\_\_\_\_\_
 
 ______________________________________________________________________
 

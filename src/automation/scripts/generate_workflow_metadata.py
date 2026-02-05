@@ -160,7 +160,7 @@ def extract_triggers(workflow: dict) -> list[str]:
             "merge_group",
             "milestone",
         ]
-        return [k for k in on_section.keys() if k in valid_triggers]
+        return [k for k in on_section if k in valid_triggers]
 
     return []
 
@@ -238,7 +238,7 @@ def generate_subjects(name: str, layer: str, role: str, triggers: list[str]) -> 
         elif trigger == "pull_request":
             subjects.add("pr-triggered")
 
-    return sorted(list(subjects))
+    return sorted(subjects)
 
 
 def generate_canonical_name(filename: str, layer: str, role: str) -> str:

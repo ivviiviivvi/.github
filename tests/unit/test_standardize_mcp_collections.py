@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils/standardize-mcp-collections.py
 
 Focus: MCP collection frontmatter standardization.

@@ -1,8 +1,7 @@
 # Hour 6 Monitoring Checkpoint
 
 **Scheduled Time**: January 17, 2026 at 22:00 UTC\
-**Current Time**: ~17:00
-UTC\
+**Current Time**: ~17:00 UTC\
 **Time Until Checkpoint**: ~5 hours
 
 ______________________________________________________________________
@@ -283,6 +282,5 @@ gh run view [RUN_ID] -R ivviiviivvi/[REPO] --log | grep -i error
 ______________________________________________________________________
 
 **Status**: ⏳ Awaiting Hour 6 checkpoint at 22:00 UTC\
-**Preparation**: ✅
-Complete\
+**Preparation**: ✅ Complete\
 **Script Ready**: ✅ Yes

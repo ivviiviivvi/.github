@@ -14,12 +14,12 @@ on:
         type: boolean
         default: false
       review-assignment-strategy:
-        description: 'Strategy for assigning reviewers (round-robin, load-balanced, random)'
+        description: Strategy for assigning reviewers (round-robin, load-balanced, random)
         required: false
         type: string
-        default: 'round-robin'
+        default: round-robin
       team-reviewers:
-        description: 'Comma-separated list of team slugs to request reviews from'
+        description: Comma-separated list of team slugs to request reviews from
         required: false
         type: string
         default: ''
@@ -39,7 +39,7 @@ on:
         type: boolean
         default: false
       auto-approve-patterns:
-        description: 'Comma-separated list of author patterns to auto-approve (e.g., dependabot[bot],renovate[bot])'
+        description: Comma-separated list of author patterns to auto-approve (e.g., dependabot[bot],renovate[bot])
         required: false
         type: string
         default: ''

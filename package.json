@@ -31,5 +31,7 @@
     "version:sync": "node src/automation/scripts/utils/sync-version.js",
     "postversion": "npm run version:sync"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "prettier": "3.8.1"
+  }
 }

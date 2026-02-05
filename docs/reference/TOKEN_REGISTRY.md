@@ -5,8 +5,7 @@
 
 **Last Updated:** 2026-01-18\
 **Owner:** Organization Security Team\
-**Review
-Schedule:** Quarterly (next: 2026-04-18)
+**Review Schedule:** Quarterly (next: 2026-04-18)
 
 ______________________________________________________________________
 
@@ -640,8 +639,7 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 **Registry maintained by:** Organization Security Team\
-**Next review:**
-2026-04-18\
+**Next review:** 2026-04-18\
 **Version:** 1.0.0
 
 ### Day 1 Token Validation (2026-01-18)

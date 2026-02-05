@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Tests for notification_integration.py.
 
 Tests the backward-compatible notification wrapper that integrates

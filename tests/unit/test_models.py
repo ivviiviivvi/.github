@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/models.py
 Focus: Pydantic models, validators, enums, field constraints.
 """
@@ -13,15 +12,40 @@ from pydantic import ValidationError
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
 from models import (  # Enums; Auto-merge models; Routing models; Self-healing models; Maintenance models; Analytics models; SLA models; Incident models; Validation models; Audit models
-    AnalyticsConfig, AuditLogEntry, AutoMergeConfig, AutoMergeEligibility,
-    AutoMergeSafetyChecks, AvailabilityMetric, FailureClassification,
-    FailureType, FeatureImportance, Incident, IncidentConfig, IncidentSeverity,
-    IncidentStatus, MaintenanceConfig, MaintenanceTask, MaintenanceWindow,
-    MergeStrategy, Priority, ResolutionTimeMetric, ResponseTimeMetric,
-    RiskLevel, RoutingConfig, RoutingDecision, RoutingFactorScores,
-    RunbookStep, SelfHealingConfig, SelfHealingResult, SLAMetrics,
-    SLAThresholds, SuccessRateMetric, ValidationResult, ValidationSuite,
-    WorkflowPrediction)
+    AnalyticsConfig,
+    AuditLogEntry,
+    AutoMergeConfig,
+    AutoMergeEligibility,
+    AutoMergeSafetyChecks,
+    AvailabilityMetric,
+    FailureClassification,
+    FailureType,
+    FeatureImportance,
+    Incident,
+    IncidentConfig,
+    IncidentSeverity,
+    IncidentStatus,
+    MaintenanceConfig,
+    MaintenanceTask,
+    MaintenanceWindow,
+    MergeStrategy,
+    Priority,
+    ResolutionTimeMetric,
+    ResponseTimeMetric,
+    RiskLevel,
+    RoutingConfig,
+    RoutingDecision,
+    RoutingFactorScores,
+    RunbookStep,
+    SelfHealingConfig,
+    SelfHealingResult,
+    SLAMetrics,
+    SLAThresholds,
+    SuccessRateMetric,
+    ValidationResult,
+    ValidationSuite,
+    WorkflowPrediction,
+)
 
 
 class TestEnums:

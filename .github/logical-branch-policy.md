@@ -471,16 +471,16 @@ git for-each-ref --sort=-committerdate refs/remotes/origin/ \
 
 Open `branch-inventory.csv` and add a "Status" column. Classify each branch:
 
-| Classification | Criteria                             | Action                                           |
-| -------------- | ------------------------------------ | ------------------------------------------------ |
-| **MAIN**       | Branch name is `main` or `master`    | ✅ **Keep** (permanent)                          |
-| **ACTIVE**     | Last commit \< 7 days ago            | ✅ **Keep** (under development)                  |
-| **REVIEW**     | Open PR exists                       | ✅ **Keep** (under review)                       |
-| **MERGEABLE**  | Complete work, no PR, \< 30 days old | 🔀 **Merge to main**                             |
-| **STALE**      | No activity 14-90 days               | ⚠️ **Contact owner → Merge, Archive, or Delete** |
-| **DEAD**       | No activity > 90 days                | ❌ **Archive (if valuable) or Delete**           |
-| **LEGACY**     | Old release/maintenance branches     | 📦 **Archive with documentation**                |
-| **DUPLICATE**  | Superseded by another branch         | ❌ **Delete after verification**                 |
+| Classification | Criteria                            | Action                                           |
+| -------------- | ----------------------------------- | ------------------------------------------------ |
+| **MAIN**       | Branch name is `main` or `master`   | ✅ **Keep** (permanent)                          |
+| **ACTIVE**     | Last commit < 7 days ago            | ✅ **Keep** (under development)                  |
+| **REVIEW**     | Open PR exists                      | ✅ **Keep** (under review)                       |
+| **MERGEABLE**  | Complete work, no PR, < 30 days old | 🔀 **Merge to main**                             |
+| **STALE**      | No activity 14-90 days              | ⚠️ **Contact owner → Merge, Archive, or Delete** |
+| **DEAD**       | No activity > 90 days               | ❌ **Archive (if valuable) or Delete**           |
+| **LEGACY**     | Old release/maintenance branches    | 📦 **Archive with documentation**                |
+| **DUPLICATE**  | Superseded by another branch        | ❌ **Delete after verification**                 |
 
 ### Step 3: Contact Owners
 
@@ -1558,8 +1558,7 @@ ______________________________________________________________________
 
 **Policy Owner**: Repository Maintainers\
 **Last Updated**: 2024-12-15\
-**Next
-Review**: 2025-03-15 (quarterly)
+**Next Review**: 2025-03-15 (quarterly)
 
 **Questions or Feedback?** Open an issue or contact the maintainers via
 [CONTRIBUTING.md](../docs/CONTRIBUTING.md).

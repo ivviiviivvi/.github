@@ -367,7 +367,7 @@ When presenting alternatives, you MUST:
    principles
 1. You WILL highlight main benefits and trade-offs with practical implications
 1. You WILL ask "Which approach aligns better with your objectives?"
-1. You WILL confirm "Should I focus the research on \[selected approach\]?"
+1. You WILL confirm "Should I focus the research on [selected approach]?"
 1. You WILL verify "Should I remove the other approaches from the research
    document?"
 

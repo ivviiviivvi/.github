@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/sla_monitor.py
 Focus: SLA monitoring, breach detection, metrics calculation, threshold enforcement.
 """
@@ -468,10 +467,13 @@ class TestReportGeneration:
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
                 with patch.object(monitor, "_monitor_workflows") as mock_wf:
-                    from models import (AvailabilityMetric,
-                                        ResolutionTimeMetric,
-                                        ResponseTimeMetric, SLAMetrics,
-                                        SuccessRateMetric)
+                    from models import (
+                        AvailabilityMetric,
+                        ResolutionTimeMetric,
+                        ResponseTimeMetric,
+                        SLAMetrics,
+                        SuccessRateMetric,
+                    )
 
                     mock_metrics = SLAMetrics(
                         repository="owner/repo",
@@ -503,10 +505,13 @@ class TestReportGeneration:
         with patch.object(monitor, "_monitor_issues") as mock_issues:
             with patch.object(monitor, "_monitor_pull_requests") as mock_prs:
                 with patch.object(monitor, "_monitor_workflows") as mock_wf:
-                    from models import (AvailabilityMetric,
-                                        ResolutionTimeMetric,
-                                        ResponseTimeMetric, SLAMetrics,
-                                        SuccessRateMetric)
+                    from models import (
+                        AvailabilityMetric,
+                        ResolutionTimeMetric,
+                        ResponseTimeMetric,
+                        SLAMetrics,
+                        SuccessRateMetric,
+                    )
 
                     mock_metrics = SLAMetrics(
                         repository="owner/repo",

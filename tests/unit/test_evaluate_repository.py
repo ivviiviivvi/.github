@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/evaluate_repository.py
 
 Focus: Repository evaluation for workflow deployment readiness.
@@ -13,8 +12,12 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from evaluate_repository import (RepositoryEvaluator, RepositoryMetrics,
-                                 evaluate_all_repos, main)
+from evaluate_repository import (
+    RepositoryEvaluator,
+    RepositoryMetrics,
+    evaluate_all_repos,
+    main,
+)
 
 
 @pytest.mark.unit

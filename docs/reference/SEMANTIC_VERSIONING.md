@@ -483,7 +483,7 @@ ______________________________________________________________________
 
 ## Best Practices
 
-### DO \[x\]
+### DO [x]
 
 1. **Use Conventional Commits**: Enables automation
 1. **Document Breaking Changes**: Always include migration guides
@@ -494,7 +494,7 @@ ______________________________________________________________________
 1. **Support Old Versions**: At least one major version back
 1. **Version Everything**: APIs, schemas, configs
 
-### DON'T \[ \]
+### DON'T [ ]
 
 1. **Skip Versions**: Don't jump from 1.0 to 3.0
 1. **Rewrite History**: Don't change published versions

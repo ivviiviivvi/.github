@@ -14,18 +14,8 @@
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": [
-    "workflow_dispatch",
-    "repository_dispatch",
-    "schedule"
-  ],
+  "triggers": ["workflow_dispatch", "repository_dispatch", "schedule"],
   "dateCreated": "2024-01-01T00:00:00Z",
   "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": [
-    "general",
-    "interface",
-    "manual",
-    "pull-request",
-    "scheduled"
-  ]
+  "dc:subject": ["general", "interface", "manual", "pull-request", "scheduled"]
 }

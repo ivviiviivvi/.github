@@ -42,10 +42,8 @@ import numpy as np
 # ML libraries
 try:
     import joblib
-    from sklearn.ensemble import (GradientBoostingClassifier,
-                                  RandomForestClassifier)
-    from sklearn.metrics import (accuracy_score, f1_score, precision_score,
-                                 recall_score)
+    from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+    from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
     from sklearn.model_selection import train_test_split
     from sklearn.neural_network import MLPClassifier
     from sklearn.preprocessing import StandardScaler

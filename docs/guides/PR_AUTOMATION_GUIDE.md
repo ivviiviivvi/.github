@@ -451,5 +451,4 @@ ______________________________________________________________________
 
 **Last Updated:** 2025-12-31\
 **Version:** 1.0.0\
-**Maintained By:** Automation
-Team
+**Maintained By:** Automation Team

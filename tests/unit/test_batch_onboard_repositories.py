@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Tests for batch_onboard_repositories.py.
 
 Tests batch repository onboarding with validation, dependency resolution,
@@ -14,8 +13,11 @@ import pytest
 sys.path.insert(0, "src/automation/scripts")
 
 from src.automation.scripts.batch_onboard_repositories import (
-    BatchOnboardingOrchestrator, OnboardingConfig, OnboardingResult,
-    load_config)
+    BatchOnboardingOrchestrator,
+    OnboardingConfig,
+    OnboardingResult,
+    load_config,
+)
 
 
 @pytest.mark.unit

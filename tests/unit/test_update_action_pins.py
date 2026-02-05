@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils/update-action-pins.py
 
 Focus: GitHub Action SHA pin updates and tag resolution.

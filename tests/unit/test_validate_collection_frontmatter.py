@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validate_collection_frontmatter.py
 
 Focus: Collection frontmatter validation for ai_framework/collections.

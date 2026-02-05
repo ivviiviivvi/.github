@@ -2,10 +2,9 @@
 
 **Status:** Binding Architectural Definition\
 **Version:** 1.0.0\
-**Date:**
-January 18, 2026\
-**Purpose:** Concrete implementation of the organ system
-across the repository ecosystem
+**Date:** January 18, 2026\
+**Purpose:** Concrete implementation of the organ system across the repository
+ecosystem
 
 ______________________________________________________________________
 
@@ -112,8 +111,7 @@ ______________________________________________________________________
 ### ORGAN II: omni-dromenon-machina
 
 **Function:** Art / Enactment / Experiential Systems\
-**Where thought enters
-time and meets bodies**
+**Where thought enters time and meets bodies**
 
 #### Current State
 
@@ -167,8 +165,7 @@ ______________________________________________________________________
 ### ORGAN III: labores-profani-crux
 
 **Function:** Commerce / Applied Labor / Survival Surface\
-**Acknowledges
-profane necessity of income**
+**Acknowledges profane necessity of income**
 
 #### Current State
 
@@ -255,8 +252,7 @@ ______________________________________________________________________
 ### ORGAN IV: Orchestration Layer
 
 **Function:** Governance / Flow Control / System Integrity\
-**Coordinates
-without creating**
+**Coordinates without creating**
 
 #### Current State
 
@@ -291,8 +287,7 @@ ______________________________________________________________________
 ### ORGAN V: Public Process / Building in Light
 
 **Function:** Translucent Visibility / Attention Filtering\
-**Makes process
-visible without resolving it**
+**Makes process visible without resolving it**
 
 #### Current State
 
@@ -368,8 +363,7 @@ ______________________________________________________________________
 ### ORGAN VII: Marketing / Attention Routing
 
 **Function:** Discoverability Infrastructure\
-**Not expressive, not sincere, not
-personal**
+**Not expressive, not sincere, not personal**
 
 #### Current State
 
@@ -908,10 +902,8 @@ ______________________________________________________________________
 
 **System Version:** 1.0.0\
 **Maintained by:** Orchestration Layer\
-**Next
-Review:** July 18, 2026 (6 months)\
-**Enforcement:** Binding and operational
-from date of adoption
+**Next Review:** July 18, 2026 (6 months)\
+**Enforcement:** Binding and operational from date of adoption
 
 ______________________________________________________________________
 

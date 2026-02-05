@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/check_auto_merge_eligibility.py
 Focus: AutoMergeChecker safety checks, eligibility determination, confidence calculation.
 """

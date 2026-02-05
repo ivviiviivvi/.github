@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Comprehensive unit tests for automation/scripts/self_healing.py
 
 Focus: Self-healing workflow failure detection, classification, and recovery.
@@ -13,8 +12,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from models import (FailureClassification, FailureType, Priority,
-                    SelfHealingConfig, SelfHealingResult)
+from models import (
+    FailureClassification,
+    FailureType,
+    Priority,
+    SelfHealingConfig,
+    SelfHealingResult,
+)
 from self_healing import SelfHealingEngine, main
 
 

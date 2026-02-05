@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for mouthpiece_filter.py
 Focus: Content filtering, safety checks, error handling.
 """
@@ -10,7 +9,6 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
-
 
 
 class TestContentFiltering:

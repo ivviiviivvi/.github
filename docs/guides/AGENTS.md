@@ -4,11 +4,13 @@ Global policy: /Users/4jp/AGENTS.md applies and cannot be overridden.
 
 Complete guide to working with AI agents in the ivviiviivvi template.
 
----
+______________________________________________________________________
 
 ## Overview
 
-The AI framework includes **26+ production agents** designed for specialized tasks. Agents are markdown-based definitions that guide AI assistants (GitHub Copilot, Claude, etc.) for specific workflows.
+The AI framework includes **26+ production agents** designed for specialized
+tasks. Agents are markdown-based definitions that guide AI assistants (GitHub
+Copilot, Claude, etc.) for specific workflows.
 
 ### Agent Architecture
 
@@ -31,70 +33,70 @@ graph TD
     Output --> User
 ```
 
----
+______________________________________________________________________
 
 ## Available Agents
 
 ### Security & Compliance
 
-| Agent | Purpose |
-|-------|---------|
-| `security-audit.agent.md` | Comprehensive security audits |
-| `jfrog-sec.agent.md` | JFrog security remediation |
-| `stackhawk-security-onboarding.agent.md` | StackHawk security setup |
-| `data-sanitization.agent.md` | PII and sensitive data cleanup |
-| `data-forensics.agent.md` | Security incident investigation |
+| Agent                                    | Purpose                         |
+| ---------------------------------------- | ------------------------------- |
+| `security-audit.agent.md`                | Comprehensive security audits   |
+| `jfrog-sec.agent.md`                     | JFrog security remediation      |
+| `stackhawk-security-onboarding.agent.md` | StackHawk security setup        |
+| `data-sanitization.agent.md`             | PII and sensitive data cleanup  |
+| `data-forensics.agent.md`                | Security incident investigation |
 
 ### Infrastructure & DevOps
 
-| Agent | Purpose |
-|-------|---------|
-| `terraform.agent.md` | Terraform infrastructure management |
-| `arm-migration.agent.md` | ARM architecture migration |
-| `workflow-optimizer.agent.md` | GitHub Actions optimization |
-| `repository-setup.agent.md` | New repository configuration |
+| Agent                         | Purpose                             |
+| ----------------------------- | ----------------------------------- |
+| `terraform.agent.md`          | Terraform infrastructure management |
+| `arm-migration.agent.md`      | ARM architecture migration          |
+| `workflow-optimizer.agent.md` | GitHub Actions optimization         |
+| `repository-setup.agent.md`   | New repository configuration        |
 
 ### Database & Data
 
-| Agent | Purpose |
-|-------|---------|
-| `neon-migration-specialist.agent.md` | Postgres migrations with Neon |
+| Agent                                 | Purpose                        |
+| ------------------------------------- | ------------------------------ |
+| `neon-migration-specialist.agent.md`  | Postgres migrations with Neon  |
 | `neon-optimization-analyzer.agent.md` | Query performance optimization |
-| `data-decommissioning.agent.md` | Secure data removal |
-| `data-reclamation.agent.md` | Data recovery and restoration |
+| `data-decommissioning.agent.md`       | Secure data removal            |
+| `data-reclamation.agent.md`           | Data recovery and restoration  |
 
 ### Incident Response
 
-| Agent | Purpose |
-|-------|---------|
+| Agent                                   | Purpose                     |
+| --------------------------------------- | --------------------------- |
 | `pagerduty-incident-responder.agent.md` | PagerDuty incident analysis |
-| `dynatrace-expert.agent.md` | Observability and debugging |
+| `dynatrace-expert.agent.md`             | Observability and debugging |
 
 ### Development Assistance
 
-| Agent | Purpose |
-|-------|---------|
-| `csharp-expert.agent.md` | C# development assistance |
-| `winforms-expert.agent.md` | WinForms application development |
-| `adr-generator.agent.md` | Architecture Decision Records |
-| `completionism-specialist.agent.md` | Ensuring completeness |
+| Agent                               | Purpose                          |
+| ----------------------------------- | -------------------------------- |
+| `csharp-expert.agent.md`            | C# development assistance        |
+| `winforms-expert.agent.md`          | WinForms application development |
+| `adr-generator.agent.md`            | Architecture Decision Records    |
+| `completionism-specialist.agent.md` | Ensuring completeness            |
 
 ### Feature Management
 
-| Agent | Purpose |
-|-------|---------|
-| `launchdarkly-flag-cleanup.agent.md` | Feature flag cleanup |
+| Agent                                          | Purpose                    |
+| ---------------------------------------------- | -------------------------- |
+| `launchdarkly-flag-cleanup.agent.md`           | Feature flag cleanup       |
 | `amplitude-experiment-implementation.agent.md` | A/B testing with Amplitude |
 
 ### Organization Management
 
-| Agent | Purpose |
-|-------|---------|
-| `github-org-manager.agent.md` | GitHub organization management |
-| `pr-branch-cleanup.agent.md` | Stale branch cleanup |
-| `greener-grass-workflow-benchmark.agent.md` | Workflow benchmarking |
+| Agent                                       | Purpose                        |
+| ------------------------------------------- | ------------------------------ |
+| `github-org-manager.agent.md`               | GitHub organization management |
+| `pr-branch-cleanup.agent.md`                | Stale branch cleanup           |
+| `greener-grass-workflow-benchmark.agent.md` | Workflow benchmarking          |
 
----
+______________________________________________________________________
 
 ## How to Use Agents
 
@@ -139,7 +141,7 @@ mcp-servers:
     args: ['run', '-i', '--rm', 'hashicorp/terraform-mcp-server:latest']
 ```
 
----
+______________________________________________________________________
 
 ## Agent Anatomy
 
@@ -232,7 +234,7 @@ Invoke this agent when you need to:
 - Some scans may require manual verification
 ```
 
----
+______________________________________________________________________
 
 ## Creating Custom Agents
 
@@ -301,7 +303,7 @@ python src/automation/scripts/generate_agent_inventory.py
 
 Test with your AI assistant to verify behavior matches expectations.
 
----
+______________________________________________________________________
 
 ## Agent Development Best Practices
 
@@ -332,11 +334,12 @@ terraform.agent.md
 data-forensics.agent.md
 ```
 
----
+______________________________________________________________________
 
 ## MCP Server Integration
 
-Some agents integrate with MCP (Model Context Protocol) servers for enhanced capabilities:
+Some agents integrate with MCP (Model Context Protocol) servers for enhanced
+capabilities:
 
 ### MCP Server Configuration
 
@@ -353,15 +356,15 @@ mcp-servers:
 
 ### Agents with MCP Integration
 
-| Agent | MCP Server | Purpose |
-|-------|-----------|---------|
-| `terraform.agent.md` | terraform | HCP Terraform operations |
-| `dynatrace-expert.agent.md` | dynatrace | Observability integration |
-| `pagerduty-incident-responder.agent.md` | pagerduty | Incident management |
-| `launchdarkly-flag-cleanup.agent.md` | launchdarkly | Feature flag management |
-| `octopus-deploy-release-notes-mcp.agent.md` | octopus | Deployment automation |
+| Agent                                       | MCP Server   | Purpose                   |
+| ------------------------------------------- | ------------ | ------------------------- |
+| `terraform.agent.md`                        | terraform    | HCP Terraform operations  |
+| `dynatrace-expert.agent.md`                 | dynatrace    | Observability integration |
+| `pagerduty-incident-responder.agent.md`     | pagerduty    | Incident management       |
+| `launchdarkly-flag-cleanup.agent.md`        | launchdarkly | Feature flag management   |
+| `octopus-deploy-release-notes-mcp.agent.md` | octopus      | Deployment automation     |
 
----
+______________________________________________________________________
 
 ## Related Resources
 
@@ -389,7 +392,7 @@ Located in `src/ai_framework/chatmodes/`, these define conversation styles:
 - Beginner-friendly mode
 - Domain-specific modes
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -406,20 +409,22 @@ ls src/ai_framework/agents/*.agent.md
 ### Tools Not Working
 
 1. Verify tool is listed in agent's `tools` field
-2. Check MCP server configuration if applicable
-3. Ensure required permissions are granted
+1. Check MCP server configuration if applicable
+1. Ensure required permissions are granted
 
 ### MCP Connection Issues
 
 1. Verify MCP server is running
-2. Check environment variables
-3. Review MCP server logs
+1. Check environment variables
+1. Review MCP server logs
 
----
+______________________________________________________________________
 
 ## Next Steps
 
-- **[Agent Schema](../../src/ai_framework/agents/SCHEMA.md)** - Frontmatter specification
-- **[Development Guide](../../src/ai_framework/agents/DEVELOPMENT_GUIDE.md)** - Authoring guide
+- **[Agent Schema](../../src/ai_framework/agents/SCHEMA.md)** - Frontmatter
+  specification
+- **[Development Guide](../../src/ai_framework/agents/DEVELOPMENT_GUIDE.md)** -
+  Authoring guide
 - **[Workflow Guide](WORKFLOWS.md)** - Workflow integration
 - **[Architecture Overview](../architecture/OVERVIEW.md)** - System design

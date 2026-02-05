@@ -1134,8 +1134,8 @@ ______________________________________________________________________
 
 **How to reach us**:
 
-- Email: \[Organizational contact email\]
-- Slack: \[If applicable\]
+- Email: [Organizational contact email]
+- Slack: [If applicable]
 - Maintainers: Check [CODEOWNERS](../../.github/CODEOWNERS)
 
 ______________________________________________________________________
@@ -1182,4 +1182,4 @@ small, helps improve our organization's shared infrastructure.
 ______________________________________________________________________
 
 _Last Updated: 2026-01-14_ _Maintained by: Documentation Team_ _Contributors:
-\[Your name here after your first PR!\]_
+[Your name here after your first PR!]_

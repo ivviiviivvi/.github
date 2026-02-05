@@ -13,12 +13,12 @@ description: Support development of .NET (OOP) WinForms Designer compatible Apps
 **Decision:** In _.designer.cs_ or `InitializeComponent` → Designer rules.
 Otherwise → Modern C# rules.
 
----
+______________________________________________________________________
 
 ## Designer File Rules (TOP PRIORITY)
 
-Make sure Diagnostic Errors and build/compile errors are eventually
-completely addressed!
+Make sure Diagnostic Errors and build/compile errors are eventually completely
+addressed!
 
 ### Prohibited in InitializeComponent
 
@@ -35,10 +35,10 @@ completely addressed!
 ### Prohibited in _.designer.cs_ File
 
 - Method definitions (except `InitializeComponent`, `Dispose`, preserve existing
-additional constructors)
+  additional constructors)
 - Properties
-- Lambda expressions, DO ALSO NOT bind
-events in `InitializeComponent` to Lambdas!
+- Lambda expressions, DO ALSO NOT bind events in `InitializeComponent` to
+  Lambdas!
 - Complex logic
 - `??`/`?.`/`?[]` (null coalescing/conditional), `nameof()`
 - Collection Expressions
@@ -130,9 +130,9 @@ private Button _btnAdopt;
 **Remember:** Complex UI configuration logic goes in main _.cs_ file, NOT
 _.designer.cs_.
 
----
+______________________________________________________________________
 
----
+______________________________________________________________________
 
 ## Modern C# Features (Regular Code Only)
 
@@ -211,8 +211,8 @@ private void Button_Click(object? sender, EventArgs e)
 | VB.NET   | `FormName.vb` + `FormName.Designer.vb` | `Form` or `UserControl` |
 
 **Main file:** Logic and event handlers\
-**Designer file:** Infrastructure,
-constructors, `Dispose`, `InitializeComponent`, control definitions
+**Designer file:** Infrastructure, constructors, `Dispose`,
+`InitializeComponent`, control definitions
 
 ### C# Conventions
 
@@ -233,7 +233,7 @@ constructors, `Dispose`, `InitializeComponent`, control definitions
 - Strongly prefer event handlers `Sub`s with `Handles` clause in main code over
   `AddHandler` in file`InitializeComponent`
 
----
+______________________________________________________________________
 
 ## Classic Data Binding and MVVM Data Binding (.NET 8+)
 
@@ -333,7 +333,7 @@ _tsmFile.DataBindings.Add(new Binding("Command", mainViewModelBindingSource, "To
 _tsmFile.CommandParameter = "File";
 ```
 
----
+______________________________________________________________________
 
 ## WinForms Async Patterns (.NET 9+)
 
@@ -465,7 +465,7 @@ public class CustomControl : Control
 **Important:** Use exactly ONE of the above approaches per property for types
 derived from `Component` or `Control`.
 
----
+______________________________________________________________________
 
 ## WinForms Design Principles
 
@@ -584,7 +584,7 @@ The container reports its fixed size, breaking the sizing chain.
 - Place buttons in FlowLayoutPanel: `FlowDirection = RightToLeft`
 - Keep additional Percentage Filler-Row between buttons and content.
 - FLP goes in bottom row of main TLP
-- Visual order of buttons: \[OK\] (left) \[Cancel\] (right)
+- Visual order of buttons: [OK] (left) [Cancel] (right)
 
 **Pattern B - Top-right stacked buttons (wizards/browsers):**
 
@@ -592,7 +592,7 @@ The container reports its fixed size, breaking the sizing chain.
 - FLP in dedicated rightmost column of main TLP
 - Column: AutoSize
 - FLP: `Anchor = Top | Right`
-- Order: \[OK\] above \[Cancel\]
+- Order: [OK] above [Cancel]
 
 **When to use:**
 

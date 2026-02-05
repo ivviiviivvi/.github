@@ -23,7 +23,7 @@ working with AI agents (like Jules) and high volumes of PRs. It handles:
 
 Automatically converts draft PRs to "ready for review" when:
 
-- PR is from a trusted AI agent (Jules, github-actions\[bot\], dependabot)
+- PR is from a trusted AI agent (Jules, github-actions[bot], dependabot)
 - PR has `auto-ready` or `ready-when-green` label
 - PR title contains `[auto-ready]`
 

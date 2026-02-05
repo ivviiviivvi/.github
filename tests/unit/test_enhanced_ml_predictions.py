@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/enhanced_ml_predictions.py
 
 Focus: Verify re-exports from enhanced_analytics module.

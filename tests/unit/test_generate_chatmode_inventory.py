@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_chatmode_inventory.py
 
 Focus: Frontmatter parsing and inventory generation for chatmode files.

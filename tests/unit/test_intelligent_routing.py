@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/intelligent_routing.py
 Focus: Routing algorithm, score calculations, fallback strategies.
 """

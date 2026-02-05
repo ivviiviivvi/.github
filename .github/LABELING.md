@@ -4,12 +4,12 @@ This repository uses multiple labeling configurations for different purposes.
 
 ## Overview
 
-| Config File | Purpose | Trigger |
-|-------------|---------|---------|
-| `labeler.yml` | Path-based PR labels | PR file changes |
-| `auto-labeler.yml` | Author-based PR labels | PR creation |
-| `issue-labeler.yml` | ML-based issue classification | Issue creation |
-| `keyword-labeler.yml` | Keyword-based issue labels | Issue title/body |
+| Config File           | Purpose                       | Trigger          |
+| --------------------- | ----------------------------- | ---------------- |
+| `labeler.yml`         | Path-based PR labels          | PR file changes  |
+| `auto-labeler.yml`    | Author-based PR labels        | PR creation      |
+| `issue-labeler.yml`   | ML-based issue classification | Issue creation   |
+| `keyword-labeler.yml` | Keyword-based issue labels    | Issue title/body |
 
 ## Configuration Details
 
@@ -33,6 +33,7 @@ github-actions:
 ```
 
 **Labels Applied**:
+
 - `documentation` - Markdown and docs changes
 - `github-actions` - Workflow changes
 - `configuration` - Config file changes (yml, json, toml)
@@ -59,12 +60,14 @@ authorLabels:
 ```
 
 **Behavior**:
+
 - All new PRs get `needs-review` label
 - Bot-authored PRs get `dependencies` label automatically
 
 ### 3. issue-labeler.yml (ML-Based Issue Classification)
 
-**Used by**: [issue-label-bot](https://github.com/machine-learning-apps/issue-label-bot)
+**Used by**:
+[issue-label-bot](https://github.com/machine-learning-apps/issue-label-bot)
 
 Uses machine learning to classify issues:
 
@@ -73,6 +76,7 @@ threshold: 0.7  # Minimum confidence for label application
 ```
 
 **Behavior**:
+
 - Analyzes issue content using ML model
 - Applies labels when confidence exceeds threshold
 - Works best with trained models on your repository data
@@ -92,6 +96,7 @@ keywords:
 ```
 
 **Behavior**:
+
 - Scans issue title and body for keywords
 - Applies corresponding label when keyword found
 - Multiple labels can match
@@ -101,16 +106,16 @@ keywords:
 The labeling configurations are triggered by:
 
 1. **`auto-labeler.yml` workflow** - Runs on PR open/edit
-2. **`issue-labeler` workflow** - Runs on issue creation
-3. **External bots** - Dependabot, Renovate add their own labels
+1. **`issue-labeler` workflow** - Runs on issue creation
+1. **External bots** - Dependabot, Renovate add their own labels
 
 ## Maintenance
 
 ### Adding New Labels
 
 1. Define the label in `labels.yml` (label definitions)
-2. Add matching rules to the appropriate labeler config
-3. Test with a sample PR or issue
+1. Add matching rules to the appropriate labeler config
+1. Test with a sample PR or issue
 
 ### Updating Path Patterns
 
@@ -132,6 +137,6 @@ keywords:
   new-label: ["keyword1", "keyword2"]
 ```
 
----
+______________________________________________________________________
 
 _Last Updated: 2026-01-30_

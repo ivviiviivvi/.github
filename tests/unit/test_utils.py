@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils.py
 Focus: ConfigLoader, RateLimiter, GitHubAPIClient, and utility functions.
 """
@@ -19,9 +18,20 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation
 _original_secret_manager = sys.modules.get("secret_manager")
 sys.modules["secret_manager"] = MagicMock()
 
-from utils import (APIError, AutomationError, ConfigLoader, ConfigurationError,
-                   RateLimiter, ValidationError, read_json, read_yaml,
-                   safe_get, setup_logger, write_json, write_yaml)
+from utils import (
+    APIError,
+    AutomationError,
+    ConfigLoader,
+    ConfigurationError,
+    RateLimiter,
+    ValidationError,
+    read_json,
+    read_yaml,
+    safe_get,
+    setup_logger,
+    write_json,
+    write_yaml,
+)
 
 # Restore original secret_manager module after imports
 if _original_secret_manager is not None:

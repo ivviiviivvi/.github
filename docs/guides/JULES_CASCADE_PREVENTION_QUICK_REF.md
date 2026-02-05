@@ -91,11 +91,9 @@ cat .github/task_state.json | jq '.'
 ## Benefits
 
 ✅ **ONE PR per day** instead of 10-100\
-✅ **No redundant tasks** - deduplication
-prevents waste\
+✅ **No redundant tasks** - deduplication prevents waste\
 ✅ **Simple checklist** - approve/reject items easily\
-✅ **Clean
-history** - no PR sprawl\
+✅ **Clean history** - no PR sprawl\
 ✅ **Auto cleanup** - old records removed daily
 
 ## Troubleshooting
@@ -123,8 +121,7 @@ echo '{"tasks":{},"active_prs":[],"last_orchestration":null,"last_cleanup":null}
 ## Need Help?
 
 📖 **Full docs:** `docs/JULES_CASCADE_PREVENTION.md`\
-🔧 **Workflow logs:** GitHub
-Actions tab\
+🔧 **Workflow logs:** GitHub Actions tab\
 💬 **Questions:** Create an issue
 
 ______________________________________________________________________

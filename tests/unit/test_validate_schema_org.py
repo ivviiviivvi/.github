@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils/validate-schema-org.py
 
 Focus: Schema.org JSON-LD validation.
@@ -318,7 +317,7 @@ class TestValidateUrls:
         assert valid is False
         assert any("Invalid URL" in e for e in errors)
 
-    def test_validates_sameAs_urls(self, tmp_path):
+    def test_validates_same_as_urls(self, tmp_path):
         """Test validates sameAs array URLs."""
         schema_file = tmp_path / "test.jsonld"
         schema_file.write_text(

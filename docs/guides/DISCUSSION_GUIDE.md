@@ -52,8 +52,7 @@ GitHub Discussions provides a collaborative space for:
 ### 1. 📢 Announcements
 
 **Purpose**: Official communications from maintainers\
-**Who Can Post**:
-Maintainers and core team\
+**Who Can Post**: Maintainers and core team\
 **Format**: Read-only after posting
 
 **Topics Include:**
@@ -104,8 +103,7 @@ Ask in the comments below!
 ### 2. 💡 Ideas & Feature Proposals
 
 **Purpose**: Community-driven feature ideation\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Discussion with voting
 
 **Topics Include:**
@@ -151,8 +149,7 @@ Mockups, examples, references.
 ### 3. ❓ Q&A (Questions & Answers)
 
 **Purpose**: Community support and knowledge sharing\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Question format with accepted answers
 
 **Topics Include:**
@@ -198,8 +195,7 @@ Logs, screenshots, code snippets.
 ### 4. 🏆 Show and Tell
 
 **Purpose**: Showcase community work and achievements\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Open discussion
 
 **Topics Include:**
@@ -250,8 +246,7 @@ What would you like input on?
 ### 5. 🎯 Best Practices & Patterns
 
 **Purpose**: Share and discuss best practices\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Knowledge-sharing discussion
 
 **Topics Include:**
@@ -306,8 +301,7 @@ Code or configuration example.
 ### 6. 🐛 Troubleshooting & Support
 
 **Purpose**: Community support for complex issues\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Collaborative problem-solving
 
 **Topics Include:**
@@ -360,10 +354,8 @@ Specific questions or areas where you need guidance.
 ### 7. 🚀 Roadmap & Planning
 
 **Purpose**: Discuss project direction and priorities\
-**Who Can Post**:
-Maintainers (community can comment)\
-**Format**: Strategic discussion with
-polling
+**Who Can Post**: Maintainers (community can comment)\
+**Format**: Strategic discussion with polling
 
 **Topics Include:**
 
@@ -418,8 +410,7 @@ Ways to contribute to this initiative.
 ### 8. 🎓 Tutorials & Learning
 
 **Purpose**: Educational content and learning resources\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Educational discussion
 
 **Topics Include:**
@@ -524,8 +515,7 @@ Where collaboration happens (Discord, Slack, etc.).
 ### 10. 🔒 Security & Privacy
 
 **Purpose**: Discuss security topics (not report vulnerabilities)\
-**Who Can
-Post**: Everyone\
+**Who Can Post**: Everyone\
 **Format**: Security-focused discussion
 
 **Topics Include:**
@@ -572,8 +562,7 @@ What feedback are you seeking?
 ### 11. 📊 Metrics & Analytics
 
 **Purpose**: Discuss performance, metrics, and data\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Data-driven discussion
 
 **Topics Include:**
@@ -618,8 +607,7 @@ Proposed actions based on data.
 ### 12. 🎨 Design & UX
 
 **Purpose**: Discuss design decisions and user experience\
-**Who Can Post**:
-Everyone\
+**Who Can Post**: Everyone\
 **Format**: Design critique and feedback
 
 **Topics Include:**

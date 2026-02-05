@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Repository Purpose
 
@@ -105,7 +106,8 @@ All GitHub Actions are SHA-pinned with ratchet comments:
 uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
 ```
 
-Update pins with: `python src/automation/scripts/utils/update-action-pins.py --recursive`
+Update pins with:
+`python src/automation/scripts/utils/update-action-pins.py --recursive`
 
 ### Centralized Version Management
 
@@ -136,6 +138,7 @@ Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
 ```
 
 Examples:
+
 - `feat(workflows): add auto-labeling for new PRs`
 - `fix(ci): resolve CodeQL security alerts`
 - `docs: update installation guide`
@@ -143,22 +146,25 @@ Examples:
 ## Pre-commit Troubleshooting
 
 If `mypy` fails on `types-all` dependency:
+
 1. Remove `types-all` from `.config/pre-commit-rapid.yaml`
-2. Run `pre-commit clean && pre-commit install`
+1. Run `pre-commit clean && pre-commit install`
 
 If `mdformat` has dependency conflicts:
+
 1. Ensure rev is `0.7.17` with `mdformat-gfm>=0.3.5`
-2. Run `pre-commit autoupdate --repo https://github.com/executablebooks/mdformat`
+1. Run
+   `pre-commit autoupdate --repo https://github.com/executablebooks/mdformat`
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `pyproject.toml` | Python config (deps, pytest, coverage, ruff, mypy, bandit) |
-| `.pre-commit-config.yaml` | Quality hooks (symlink to .config/pre-commit.yaml) |
-| `src/automation/scripts/utils/update-action-pins.py` | SHA pin updater |
-| `.github/WORKFLOW_STANDARDS.md` | Workflow conventions |
-| `docs/guides/CLAUDE.md` | Extended AI assistant guide with workflow catalog |
+| File                                                 | Purpose                                                    |
+| ---------------------------------------------------- | ---------------------------------------------------------- |
+| `pyproject.toml`                                     | Python config (deps, pytest, coverage, ruff, mypy, bandit) |
+| `.pre-commit-config.yaml`                            | Quality hooks (symlink to .config/pre-commit.yaml)         |
+| `src/automation/scripts/utils/update-action-pins.py` | SHA pin updater                                            |
+| `.github/WORKFLOW_STANDARDS.md`                      | Workflow conventions                                       |
+| `docs/guides/CLAUDE.md`                              | Extended AI assistant guide with workflow catalog          |
 
 ## Runtime Requirements
 
@@ -169,6 +175,7 @@ If `mdformat` has dependency conflicts:
 ## Branch Naming
 
 Allowed patterns:
+
 - `<lifecycle>/<type>/<component>` (e.g., `develop/feature/user-auth`)
 - `fix/<description>` (e.g., `fix/workflow-bug`)
 - `release/v<semver>` (e.g., `release/v1.2.0`)

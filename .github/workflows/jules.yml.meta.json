@@ -23,9 +23,5 @@
   ],
   "dateCreated": "2024-01-01T00:00:00Z",
   "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": [
-    "ai",
-    "logic",
-    "manual"
-  ]
+  "dc:subject": ["ai", "logic", "manual"]
 }

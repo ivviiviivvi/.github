@@ -16,7 +16,7 @@ This `.github` repository provides organization-wide defaults for:
 
 ## Implementation Status by Module
 
-### Module 1: Organization & Repository Administration \[AI-GH-01\]
+### Module 1: Organization & Repository Administration [AI-GH-01]
 
 **Status: Partially Implemented**
 
@@ -33,7 +33,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] RBAC enforcement scripts
 - [ ] Billing monitoring automation
 
-### Module 2: Project Management & Workflow Automation \[AI-GH-02\]
+### Module 2: Project Management & Workflow Automation [AI-GH-02]
 
 **Status: Implemented**
 
@@ -50,7 +50,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] Auto-labeling workflows
 - [ ] Milestone tracking automation
 
-### Module 3: CI/CD & Development Lifecycle \[AI-GH-03\]
+### Module 3: CI/CD & Development Lifecycle [AI-GH-03]
 
 **Status: Partially Implemented**
 
@@ -67,7 +67,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] Secrets rotation automation
 - [ ] Multi-environment deployment strategies
 
-### Module 4: Security & Compliance Operations \[AI-GH-04\]
+### Module 4: Security & Compliance Operations [AI-GH-04]
 
 **Status: Partially Implemented**
 
@@ -84,7 +84,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] Access audit workflows
 - [ ] Compliance reporting automation
 
-### Module 5: Documentation & Knowledge Base Management \[AI-GH-05\]
+### Module 5: Documentation & Knowledge Base Management [AI-GH-05]
 
 **Status: Implemented**
 
@@ -101,7 +101,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] API documentation generation
 - [ ] Wiki automation scripts
 
-### Module 6: Ecosystem Integration & Architecture Monitoring \[AI-GH-06\]
+### Module 6: Ecosystem Integration & Architecture Monitoring [AI-GH-06]
 
 **Status: Not Implemented**
 
@@ -112,7 +112,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] API contract validation
 - [ ] Integration testing automation
 
-### Module 7: Observability & System Health \[AI-GH-07\]
+### Module 7: Observability & System Health [AI-GH-07]
 
 **Status: Partially Implemented**
 
@@ -127,7 +127,7 @@ This `.github` repository provides organization-wide defaults for:
 - [ ] Centralized observability setup
 - [ ] Alerting configuration
 
-### Module 8: Strategic Analysis & Risk Mitigation \[AI-GH-08\]
+### Module 8: Strategic Analysis & Risk Mitigation [AI-GH-08]
 
 **Status: Not Implemented**
 

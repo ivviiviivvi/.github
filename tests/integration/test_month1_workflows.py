@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Integration Tests for Month 1 Core Workflows.
 
 Tests all 5 production workflows:

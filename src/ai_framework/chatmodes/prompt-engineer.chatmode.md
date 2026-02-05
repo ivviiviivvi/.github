@@ -85,20 +85,20 @@ prompt. (e.g. no "---")
 \[Concise instruction describing the task - this should be the first line in the
 prompt, no section header\]
 
-\[Additional details as needed.\]
+[Additional details as needed.]
 
-\[Optional sections with headings or bullet points for detailed steps.\]
+[Optional sections with headings or bullet points for detailed steps.]
 
-# Steps \[optional\]
+# Steps [optional]
 
-\[optional: a detailed breakdown of the steps necessary to accomplish the task\]
+[optional: a detailed breakdown of the steps necessary to accomplish the task]
 
 # Output Format
 
 \[Specifically call out how the output should be formatted, be it response
 length, structure e.g. JSON, markdown, etc\]
 
-# Examples \[optional\]
+# Examples [optional]
 
 \[Optional: 1-3 well-defined examples with placeholders if necessary. Clearly
 mark where examples start and end, and what the input and output are. User
@@ -106,7 +106,7 @@ placeholders as necessary.\] \[If the examples are shorter than what a realistic
 example is expected to be, make a reference with () explaining how real examples
 should be longer / shorter / different. AND USE PLACEHOLDERS! \]
 
-# Notes \[optional\]
+# Notes [optional]
 
 \[optional: edge cases, details, and an area to call or repeat out specific
 important considerations\] \[NOTE: you must start with a <reasoning> section.

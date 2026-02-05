@@ -2,7 +2,7 @@
 
 How to customize the ivviiviivvi GitHub template for your organization.
 
----
+______________________________________________________________________
 
 ## Branding Changes
 
@@ -10,12 +10,12 @@ How to customize the ivviiviivvi GitHub template for your organization.
 
 Update these files with your organization's branding:
 
-| File | Purpose | Changes Required |
-|------|---------|------------------|
-| `README.md` | Repository overview | Logo, description, links |
-| `CLAUDE.md` | AI assistant context | Organization name, purpose |
-| `docs/INDEX.md` | Documentation portal | Organization references |
-| `FUNDING.yml` | Sponsorship links | Your sponsorship URLs |
+| File            | Purpose              | Changes Required           |
+| --------------- | -------------------- | -------------------------- |
+| `README.md`     | Repository overview  | Logo, description, links   |
+| `CLAUDE.md`     | AI assistant context | Organization name, purpose |
+| `docs/INDEX.md` | Documentation portal | Organization references    |
+| `FUNDING.yml`   | Sponsorship links    | Your sponsorship URLs      |
 
 ### Template Variable Replacement
 
@@ -29,15 +29,15 @@ sed -i '' 's/ivviiviivvi/Your Organization/g' README.md
 
 Customize these inherited files in the root:
 
-| File | Purpose |
-|------|---------|
-| `CODE_OF_CONDUCT.md` | Community guidelines |
-| `CONTRIBUTING.md` | Contribution guidelines |
-| `SECURITY.md` | Security policy |
-| `SUPPORT.md` | Support channels |
-| `FUNDING.yml` | Sponsorship configuration |
+| File                 | Purpose                   |
+| -------------------- | ------------------------- |
+| `CODE_OF_CONDUCT.md` | Community guidelines      |
+| `CONTRIBUTING.md`    | Contribution guidelines   |
+| `SECURITY.md`        | Security policy           |
+| `SUPPORT.md`         | Support channels          |
+| `FUNDING.yml`        | Sponsorship configuration |
 
----
+______________________________________________________________________
 
 ## Workflow Modifications
 
@@ -98,7 +98,7 @@ env:
   MAX_STALE_DAYS: 30  # Organization preference
 ```
 
----
+______________________________________________________________________
 
 ## Adding New Workflows
 
@@ -173,7 +173,7 @@ Examples:
   pr-labeler.yml      - PR labeling
 ```
 
----
+______________________________________________________________________
 
 ## AI Framework Customization
 
@@ -260,7 +260,7 @@ You are a specialized assistant for [domain].
 - Provide [type of responses]
 ```
 
----
+______________________________________________________________________
 
 ## Label Customization
 
@@ -288,7 +288,7 @@ gh label create "org/custom-label" --description "Custom label" --color "0e8a16"
 gh workflow run label-sync.yml
 ```
 
----
+______________________________________________________________________
 
 ## Issue and PR Templates
 
@@ -345,7 +345,7 @@ Modify `.github/PULL_REQUEST_TEMPLATE.md`:
 Closes #
 ```
 
----
+______________________________________________________________________
 
 ## Automation Scripts
 
@@ -388,7 +388,7 @@ if __name__ == "__main__":
     python src/automation/scripts/custom_script.py --option value
 ```
 
----
+______________________________________________________________________
 
 ## Removing Unused Components
 
@@ -402,13 +402,13 @@ Before removing any component:
    grep -r "component-name" .github/workflows/
    ```
 
-2. **Check imports**: For Python scripts
+1. **Check imports**: For Python scripts
 
    ```bash
    grep -r "from component import" src/
    ```
 
-3. **Archive instead of delete**: Move to archive directory
+1. **Archive instead of delete**: Move to archive directory
 
    ```bash
    mkdir -p archive/removed
@@ -417,14 +417,14 @@ Before removing any component:
 
 ### Components Safe to Remove
 
-| Component | Dependencies | Safe to Remove |
-|-----------|--------------|----------------|
-| Unused workflows | Check triggers | Yes, if not referenced |
-| Unused agents | Check workflow invocations | Yes |
-| Documentation | None | Yes |
-| Test files | None | Yes |
+| Component        | Dependencies               | Safe to Remove         |
+| ---------------- | -------------------------- | ---------------------- |
+| Unused workflows | Check triggers             | Yes, if not referenced |
+| Unused agents    | Check workflow invocations | Yes                    |
+| Documentation    | None                       | Yes                    |
+| Test files       | None                       | Yes                    |
 
----
+______________________________________________________________________
 
 ## Testing Customizations
 
@@ -459,7 +459,7 @@ git push -u origin test/customization
 gh pr create --title "Test: Customization" --body "Testing customizations"
 ```
 
----
+______________________________________________________________________
 
 ## Best Practices
 
@@ -478,10 +478,12 @@ gh pr create --title "Test: Customization" --body "Testing customizations"
 - Modifying reusable workflows without testing consumers
 - Creating duplicate workflows for minor variations
 
----
+______________________________________________________________________
 
 ## Next Steps
 
-- **[Workflow Guide](../guides/WORKFLOWS.md)** - Workflow patterns and troubleshooting
+- **[Workflow Guide](../guides/WORKFLOWS.md)** - Workflow patterns and
+  troubleshooting
 - **[Agents Guide](../guides/AGENTS.md)** - Working with AI agents
-- **[Architecture Overview](../architecture/OVERVIEW.md)** - Understanding the system design
+- **[Architecture Overview](../architecture/OVERVIEW.md)** - Understanding the
+  system design

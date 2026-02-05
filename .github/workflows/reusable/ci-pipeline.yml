@@ -10,12 +10,12 @@ on:
         type: string
         default: both
       python-versions:
-        description: 'Python versions to test (JSON array, e.g., ["3.11", "3.12"])'
+        description: Python versions to test (JSON array, e.g., ["3.11", "3.12"])
         required: false
         type: string
         default: '["3.12"]'
       node-versions:
-        description: 'Node.js versions to test (JSON array, e.g., ["20", "22"])'
+        description: Node.js versions to test (JSON array, e.g., ["20", "22"])
         required: false
         type: string
         default: '["20"]'

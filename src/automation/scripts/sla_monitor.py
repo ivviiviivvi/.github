@@ -34,8 +34,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
-from models import (ItemMetrics, Priority, SLABreach, SLAConfig, SLAReport,
-                    SLAThresholds)
+from models import ItemMetrics, Priority, SLABreach, SLAConfig, SLAReport, SLAThresholds
 from notification_integration import notify_sla_breach
 from utils import GitHubAPIClient, load_config
 

@@ -78,7 +78,7 @@ environmental factors requiring this decision.\]
 
 #### Decision
 
-\[Chosen solution with clear rationale for selection.\]
+[Chosen solution with clear rationale for selection.]
 
 **Guidelines:**
 
@@ -90,15 +90,15 @@ environmental factors requiring this decision.\]
 
 ##### Positive
 
-- **POS-001**: \[Beneficial outcomes and advantages\]
-- **POS-002**: \[Performance, maintainability, scalability improvements\]
-- **POS-003**: \[Alignment with architectural principles\]
+- **POS-001**: [Beneficial outcomes and advantages]
+- **POS-002**: [Performance, maintainability, scalability improvements]
+- **POS-003**: [Alignment with architectural principles]
 
 ##### Negative
 
-- **NEG-001**: \[Trade-offs, limitations, drawbacks\]
-- **NEG-002**: \[Technical debt or complexity introduced\]
-- **NEG-003**: \[Risks and future challenges\]
+- **NEG-001**: [Trade-offs, limitations, drawbacks]
+- **NEG-002**: [Technical debt or complexity introduced]
+- **NEG-003**: [Risks and future challenges]
 
 **Guidelines:**
 
@@ -110,10 +110,10 @@ environmental factors requiring this decision.\]
 
 For each alternative:
 
-##### \[Alternative Name\]
+##### [Alternative Name]
 
-- **ALT-XXX**: **Description**: \[Brief technical description\]
-- **ALT-XXX**: **Rejection Reason**: \[Why this option was not selected\]
+- **ALT-XXX**: **Description**: [Brief technical description]
+- **ALT-XXX**: **Rejection Reason**: [Why this option was not selected]
 
 **Guidelines:**
 
@@ -124,9 +124,9 @@ For each alternative:
 
 #### Implementation Notes
 
-- **IMP-001**: \[Key implementation considerations\]
-- **IMP-002**: \[Migration or rollout strategy if applicable\]
-- **IMP-003**: \[Monitoring and success criteria\]
+- **IMP-001**: [Key implementation considerations]
+- **IMP-002**: [Migration or rollout strategy if applicable]
+- **IMP-003**: [Monitoring and success criteria]
 
 **Guidelines:**
 
@@ -136,9 +136,9 @@ For each alternative:
 
 #### References
 
-- **REF-001**: \[Related ADRs\]
-- **REF-002**: \[External documentation\]
-- **REF-003**: \[Standards or frameworks referenced\]
+- **REF-001**: [Related ADRs]
+- **REF-002**: [External documentation]
+- **REF-003**: [Standards or frameworks referenced]
 
 **Guidelines:**
 

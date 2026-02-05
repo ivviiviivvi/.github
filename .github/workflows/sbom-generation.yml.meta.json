@@ -14,17 +14,8 @@
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": [
-    "push",
-    "release",
-    "workflow_dispatch"
-  ],
+  "triggers": ["push", "release", "workflow_dispatch"],
   "dateCreated": "2024-01-01T00:00:00Z",
   "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": [
-    "application",
-    "general",
-    "manual",
-    "push-triggered"
-  ]
+  "dc:subject": ["application", "general", "manual", "push-triggered"]
 }

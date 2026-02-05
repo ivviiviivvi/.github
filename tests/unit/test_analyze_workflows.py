@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/analyze_workflows.py
 
 Focus: Workflow file analysis and inventory report generation.

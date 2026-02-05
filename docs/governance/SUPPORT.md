@@ -62,8 +62,8 @@ Before asking for help, please:
 
 - **📖 [Main Documentation](../INDEX.md)** - Comprehensive guides and API
   reference
-- **🚀 [Getting Started Guide](../guides/WORKSPACE_QUICK_START.md)** - Quick start
-  tutorial
+- **🚀 [Getting Started Guide](../guides/WORKSPACE_QUICK_START.md)** - Quick
+  start tutorial
 - **📚 [Reference Docs](../reference/)** - Detailed technical reference
 - **🔧 [Configuration Guide](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)** -
   Configuration options
@@ -73,8 +73,8 @@ Before asking for help, please:
 
 ### Tutorials and Examples
 
-- **[Walkthrough Gallery](../guides/walkthrough-gallery.md)** - Code examples and
-  templates
+- **[Walkthrough Gallery](../guides/walkthrough-gallery.md)** - Code examples
+  and templates
 - **Video Tutorials (coming soon)** - Follow announcements in Discussions
 
 ### External Resources
@@ -349,7 +349,8 @@ We use labels to track issue status:
 
 ### Social Media
 
-- **Twitter**: Updates shared via [@githubcopilot](https://twitter.com/githubcopilot)
+- **Twitter**: Updates shared via
+  [@githubcopilot](https://twitter.com/githubcopilot)
 - **LinkedIn**: Follow [GitHub](https://www.linkedin.com/company/github/)
 - **YouTube**: Watch [GitHub](https://www.youtube.com/GitHub) for livestreams
 

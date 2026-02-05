@@ -2,8 +2,7 @@
 
 **Generated:** 2026-01-14\
 **Total Workflows:** 99\
-**Status:** 🔴 19 YAML syntax
-errors, 80 working workflows
+**Status:** 🔴 19 YAML syntax errors, 80 working workflows
 
 ______________________________________________________________________
 
@@ -355,5 +354,4 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 **Last Updated:** 2026-01-14\
-**Related Issues:** #193, #207 (21 errors = 19
-YAML + 2 other issues)
+**Related Issues:** #193, #207 (21 errors = 19 YAML + 2 other issues)

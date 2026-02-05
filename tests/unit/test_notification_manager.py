@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/notification_manager.py
 Focus: Multi-channel notifications, rate limiting, deduplication, delivery tracking.
 """
@@ -14,9 +13,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from notification_manager import (DeliveryRecord, Notification,
-                                  NotificationManager, NotificationStatus,
-                                  Priority)
+from notification_manager import (
+    DeliveryRecord,
+    Notification,
+    NotificationManager,
+    NotificationStatus,
+    Priority,
+)
 
 
 class TestNotificationModel:
@@ -1161,7 +1164,7 @@ class TestSendWithChannelSelection:
                 status=NotificationStatus.SENT,
             )
 
-            records = manager.send(notification)
+            manager.send(notification)
 
         # Should have called for slack, pagerduty, email
         assert mock_send.call_count == 3

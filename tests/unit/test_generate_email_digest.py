@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_email_digest.py
 
 Focus: HTML email digest generation from workflow metrics.
@@ -13,9 +12,14 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_email_digest import (format_time_ago, generate_email,
-                                   generate_summary, generate_trend_commentary,
-                                   load_json, main)
+from generate_email_digest import (
+    format_time_ago,
+    generate_email,
+    generate_summary,
+    generate_trend_commentary,
+    load_json,
+    main,
+)
 
 
 @pytest.mark.unit

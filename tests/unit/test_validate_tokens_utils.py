@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/utils/validate-tokens.py
 
 Focus: Token validation and health checks for organization tokens.

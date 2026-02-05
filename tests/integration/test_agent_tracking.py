@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Validation tests for Jules Agent Tracking System.
 
 Tests the integrity and format of:

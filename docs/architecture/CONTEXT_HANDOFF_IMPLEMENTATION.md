@@ -146,9 +146,9 @@ ______________________________________________________________________
 
 ### Execution Performance
 
-- **Context Generation Time**: \< 2 minutes (for 169-task project)
-- **Validation Time**: \< 10 seconds
-- **Memory Usage**: \< 50MB
+- **Context Generation Time**: < 2 minutes (for 169-task project)
+- **Validation Time**: < 10 seconds
+- **Memory Usage**: < 50MB
 - **Disk Usage**: ~100KB per context payload
 
 ______________________________________________________________________

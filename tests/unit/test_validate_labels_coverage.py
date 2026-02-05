@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Extended unit tests for validate_labels.py to improve coverage.
 
 Focus: main function, config loading errors, fix_mode in validate_all.
@@ -104,7 +103,7 @@ class TestValidateAllWithFixMode:
 
         with patch.object(fix_mode_validator, "validate_repository", return_value=(False, missing, [])):
             with patch.object(fix_mode_validator, "fix_repository", return_value=True) as mock_fix:
-                result = fix_mode_validator.validate_all()
+                fix_mode_validator.validate_all()
 
         # fix_repository should be called for each repo with issues
         assert mock_fix.call_count == 2
@@ -115,7 +114,7 @@ class TestValidateAllWithFixMode:
 
         with patch.object(fix_mode_validator, "validate_repository", return_value=(False, missing, [])):
             with patch.object(fix_mode_validator, "fix_repository", return_value=True):
-                result = fix_mode_validator.validate_all()
+                fix_mode_validator.validate_all()
 
         # Should still return False since validation failed initially
         # but the overall result reflects fix attempts
@@ -154,7 +153,7 @@ class TestValidateAllWithFixMode:
 
         with patch.object(fix_mode_validator, "validate_repository", return_value=(False, [], mismatched)):
             with patch.object(fix_mode_validator, "fix_repository", return_value=True) as mock_fix:
-                result = fix_mode_validator.validate_all()
+                fix_mode_validator.validate_all()
 
         # Should call fix for mismatched labels
         assert mock_fix.call_count == 2

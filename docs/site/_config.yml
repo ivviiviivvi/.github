@@ -2,17 +2,17 @@
 # This site showcases all walkthrough videos and live demos for the organization
 
 # Site settings
-title: "ivviiviivvi Walkthrough Gallery"
-description: "Comprehensive gallery of application walkthroughs and live demos for all ivviiviivvi organization repositories"
-url: "https://ivviiviivvi.github.io"
+title: ivviiviivvi Walkthrough Gallery
+description: Comprehensive gallery of application walkthroughs and live demos for all ivviiviivvi organization repositories
+url: https://ivviiviivvi.github.io
 baseurl: /.github
-author: "{{ORG_AUTHOR}}"
-email: "support@{{ORG_DOMAIN}}"
+author: '{{ORG_AUTHOR}}'
+email: support@{{ORG_DOMAIN}}
 
 # Organization settings
 organization:
-  name: "ivviiviivvi"
-  github_url: "https://github.com/ivviiviivvi"
+  name: ivviiviivvi
+  github_url: https://github.com/ivviiviivvi
   logo_url: ''
   tagline: Building innovative solutions through automation and AI
 
@@ -167,13 +167,13 @@ footer:
   copyright_year: 2025
   links:
   - title: GitHub
-    url: "https://github.com/ivviiviivvi"
+    url: https://github.com/ivviiviivvi
     icon: github
   - title: Documentation
-    url: "https://github.com/ivviiviivvi/.github/tree/main/docs"
+    url: https://github.com/ivviiviivvi/.github/tree/main/docs
     icon: book
   - title: Support
-    url: "https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md"
+    url: https://github.com/ivviiviivvi/.github/blob/main/docs/SUPPORT.md
     icon: help
 
 # Analytics (optional)
@@ -185,7 +185,7 @@ analytics:
 # SEO settings
 seo:
   twitter_card: summary_large_image
-  twitter_creator: "{{ORG_TWITTER}}"
+  twitter_creator: '{{ORG_TWITTER}}'
   og_image: /assets/images/og-image.png
 
 # Performance settings

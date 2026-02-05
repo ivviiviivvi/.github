@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_workflow_health_report.py
 
 Focus: Workflow health report generation with security and performance metrics.

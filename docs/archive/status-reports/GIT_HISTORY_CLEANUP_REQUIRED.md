@@ -27,9 +27,9 @@ GitHub push protection is blocking our push due to secrets found in git history.
 
 **Fixed in latest commit:**
 
-- ✅ Added `.specstory/` to `.gitignore` \[commit b4c6837\]
-- ✅ Removed all `.specstory/` files from repository \[commit b4c6837\]
-- ✅ Redacted secrets from `SESSION_SUMMARY_REQUEST_45_46.md` \[commit 57d9b96\]
+- ✅ Added `.specstory/` to `.gitignore` [commit b4c6837]
+- ✅ Removed all `.specstory/` files from repository [commit b4c6837]
+- ✅ Redacted secrets from `SESSION_SUMMARY_REQUEST_45_46.md` [commit 57d9b96]
 
 **Problem:**
 
@@ -185,5 +185,4 @@ fc4bca9 docs: add deployment readiness guide
 ______________________________________________________________________
 
 **Created:** January 17, 2026 17:00 UTC\
-**Status:** Awaiting user decision on
-cleanup method
+**Status:** Awaiting user decision on cleanup method

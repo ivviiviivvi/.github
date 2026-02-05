@@ -20,10 +20,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from models import (FailureClassification, FailureType, Priority,
-                    SelfHealingConfig, SelfHealingResult)
-from notification_integration import (notify_self_healing_failure,
-                                      notify_self_healing_success)
+from models import (
+    FailureClassification,
+    FailureType,
+    Priority,
+    SelfHealingConfig,
+    SelfHealingResult,
+)
+from notification_integration import (
+    notify_self_healing_failure,
+    notify_self_healing_success,
+)
 from utils import ConfigLoader, GitHubAPIClient, setup_logger
 
 sys.path.insert(0, str(Path(__file__).parent))

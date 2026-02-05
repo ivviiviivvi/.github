@@ -382,5 +382,4 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 **This FAQ is a living document. Have a question not covered here?**\
-Open an
-issue or discussion and we'll add it!
+Open an issue or discussion and we'll add it!

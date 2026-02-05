@@ -21,14 +21,16 @@ updated: 2026-01-30
 
 # Test Generation Prompt
 
-You are a testing expert. Generate comprehensive test suites that ensure code correctness, handle edge cases, and provide meaningful coverage.
+You are a testing expert. Generate comprehensive test suites that ensure code
+correctness, handle edge cases, and provide meaningful coverage.
 
 ## Input
 
 - **Code to Test**: `{{code_to_test}}`
 - **Language**: `{{language}}`
 - **Test Framework**: `{{test_framework}}` (pytest, jest, JUnit, etc.)
-- **Coverage Requirements**: `{{coverage_requirements}}` (e.g., 80% line coverage)
+- **Coverage Requirements**: `{{coverage_requirements}}` (e.g., 80% line
+  coverage)
 
 ## Test Generation Framework
 
@@ -88,13 +90,13 @@ class TestFunctionName:
 
 #### Test Categories to Cover
 
-| Category | Description | Examples |
-|----------|-------------|----------|
-| Happy Path | Normal expected usage | Valid inputs, typical scenarios |
-| Edge Cases | Boundary conditions | Empty, max, min values |
-| Error Cases | Invalid inputs | Wrong types, out of range |
-| Null/None | Absence of values | None, null, undefined |
-| Concurrency | Thread safety | Race conditions, deadlocks |
+| Category    | Description           | Examples                        |
+| ----------- | --------------------- | ------------------------------- |
+| Happy Path  | Normal expected usage | Valid inputs, typical scenarios |
+| Edge Cases  | Boundary conditions   | Empty, max, min values          |
+| Error Cases | Invalid inputs        | Wrong types, out of range       |
+| Null/None   | Absence of values     | None, null, undefined           |
+| Concurrency | Thread safety         | Race conditions, deadlocks      |
 
 ### 3. Integration Test Generation
 
@@ -132,13 +134,13 @@ Systematically identify edge cases:
 
 #### Data Type Edge Cases
 
-| Type | Edge Cases |
-|------|------------|
-| String | Empty, whitespace, unicode, very long, special chars |
-| Number | 0, negative, max int, min int, float precision |
-| List/Array | Empty, single item, very large, nested |
-| Date/Time | Epoch, far future, DST transitions, timezones |
-| Boolean | True, false, truthy/falsy values |
+| Type       | Edge Cases                                           |
+| ---------- | ---------------------------------------------------- |
+| String     | Empty, whitespace, unicode, very long, special chars |
+| Number     | 0, negative, max int, min int, float precision       |
+| List/Array | Empty, single item, very large, nested               |
+| Date/Time  | Epoch, far future, DST transitions, timezones        |
+| Boolean    | True, false, truthy/falsy values                     |
 
 #### Business Logic Edge Cases
 
@@ -278,30 +280,30 @@ class TestEdgeCases:
 ### Test Coverage Report
 
 | Component | Statements | Coverage | Missing Lines |
-|-----------|------------|----------|---------------|
-| module.py | 100 | 85% | 45-50, 72 |
+| --------- | ---------- | -------- | ------------- |
+| module.py | 100        | 85%      | 45-50, 72     |
 
 ### Test Cases Summary
 
-| Test Name | Type | Category | Status |
-|-----------|------|----------|--------|
+| Test Name        | Type | Category   | Status    |
+| ---------------- | ---- | ---------- | --------- |
 | test_valid_input | Unit | Happy Path | Generated |
-| test_empty_input | Unit | Edge Case | Generated |
+| test_empty_input | Unit | Edge Case  | Generated |
 
 ### Missing Test Coverage
 
 Identify areas needing additional tests:
 
 1. **Untested branches**: [List of untested code paths]
-2. **Complex conditions**: [Boolean combinations not covered]
-3. **Error handlers**: [Exception paths not tested]
+1. **Complex conditions**: [Boolean combinations not covered]
+1. **Error handlers**: [Exception paths not tested]
 
 ## Guidelines
 
 1. **Descriptive names** - Test names should describe expected behavior
-2. **AAA pattern** - Arrange, Act, Assert structure for clarity
-3. **One assertion concept** - Each test verifies one behavior
-4. **Independent tests** - Tests should not depend on each other
-5. **Fast execution** - Unit tests should run in milliseconds
-6. **Deterministic** - Same input always produces same result
-7. **Meaningful assertions** - Assert specific values, not just truthiness
+1. **AAA pattern** - Arrange, Act, Assert structure for clarity
+1. **One assertion concept** - Each test verifies one behavior
+1. **Independent tests** - Tests should not depend on each other
+1. **Fast execution** - Unit tests should run in milliseconds
+1. **Deterministic** - Same input always produces same result
+1. **Meaningful assertions** - Assert specific values, not just truthiness

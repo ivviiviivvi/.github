@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/validate_labels.py
 
 Focus: Label validation and creation for GitHub repositories.

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Comprehensive unit tests for automation/scripts/enhanced_analytics.py
 
 Focus: ML model training, prediction, feature extraction, and model persistence.

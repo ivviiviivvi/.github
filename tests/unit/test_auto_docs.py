@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/auto-docs.py
 
 Focus: AST-based docstring extraction and documentation generation.

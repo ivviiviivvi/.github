@@ -21,10 +21,5 @@
   ],
   "dateCreated": "2024-01-01T00:00:00Z",
   "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": [
-    "logic",
-    "manual",
-    "pr management",
-    "pull-request"
-  ]
+  "dc:subject": ["logic", "manual", "pr management", "pull-request"]
 }

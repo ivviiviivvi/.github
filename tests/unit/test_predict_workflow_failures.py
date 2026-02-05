@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/predict_workflow_failures.py
 Focus: Feature extraction, model training, prediction, safe serialization.
 """

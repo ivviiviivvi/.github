@@ -1,10 +1,10 @@
 ______________________________________________________________________
 
-## name: Workflow System Deployment about: Deploy the new discussion/issue/PR workflow system title: "Deploy Workflow System: \[Environment\]" labels: type: infrastructure, priority: high, status: backlog assignees: ''
+## name: Workflow System Deployment about: Deploy the new discussion/issue/PR workflow system title: "Deploy Workflow System: [Environment]" labels: type: infrastructure, priority: high, status: backlog assignees: ''
 
 # Workflow System Deployment Checklist
 
-**Environment:** \[Sandbox / Staging / Production\] **Target Date:** YYYY-MM-DD
+**Environment:** [Sandbox / Staging / Production] **Target Date:** YYYY-MM-DD
 **Owner:** @username
 
 ______________________________________________________________________
@@ -272,7 +272,7 @@ ______________________________________________________________________
 
 ### Known Issues
 
-\[Document any issues discovered during deployment\]
+[Document any issues discovered during deployment]
 
 | Issue | Severity | Status | Workaround |
 | ----- | -------- | ------ | ---------- |
@@ -300,7 +300,7 @@ ______________________________________________________________________
 - [ ] Schedule 30-day retrospective
 - [ ] Create follow-up issues for improvements
 
-**Retrospective Date:** YYYY-MM-DD **Lessons Learned:** \[Link to doc\]
+**Retrospective Date:** YYYY-MM-DD **Lessons Learned:** [Link to doc]
 
 ______________________________________________________________________
 
@@ -314,4 +314,4 @@ ______________________________________________________________________
 
 **Deployment Status:** ⬜ Not Started | 🟡 In Progress | ✅ Complete | ❌ Failed
 
-**Notes:** \[Add any additional notes here\]
+**Notes:** [Add any additional notes here]

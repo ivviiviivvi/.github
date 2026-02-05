@@ -3,11 +3,11 @@
 
 # Paths to ignore
 ignore:
-  - "node_modules/**/*"
-  - "dist/**/*"
-  - "build/**/*"
-  - "test/**/*"
-  - "tests/**/*"
+- node_modules/**/*
+- dist/**/*
+- build/**/*
+- test/**/*
+- tests/**/*
 
 # Rule overrides (examples)
 # rules:

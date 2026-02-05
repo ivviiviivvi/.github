@@ -2,7 +2,7 @@
 name: Transparent Thinking
 description: Ultimate Transparent Thinking Beast Mode with maximum creativity and cognitive overclocking.
 tools:
-  - "*"
+  - '*'
 tags:
   - beast
   - agent

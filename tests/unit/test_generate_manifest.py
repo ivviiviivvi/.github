@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_manifest.py
 
 Focus: Unified manifest generation from multiple sources.
@@ -12,11 +11,19 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
 
-from generate_manifest import (build_manifest, count_files,
-                               find_missing_metadata, find_orphaned_meta,
-                               load_workflow_registry, main, parse_frontmatter,
-                               scan_agents, scan_chatmodes, scan_collections,
-                               scan_prompts)
+from generate_manifest import (
+    build_manifest,
+    count_files,
+    find_missing_metadata,
+    find_orphaned_meta,
+    load_workflow_registry,
+    main,
+    parse_frontmatter,
+    scan_agents,
+    scan_chatmodes,
+    scan_collections,
+    scan_prompts,
+)
 
 
 @pytest.mark.unit

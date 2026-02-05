@@ -171,8 +171,7 @@ ______________________________________________________________________
 ### "FORBIDDEN" error during deployment
 
 **Solution:** Token needs `project` + `read:org` scopes\
-**Guide:**
-[TOKEN_SETUP_GUIDE.md](TOKEN_SETUP_GUIDE.md)
+**Guide:** [TOKEN_SETUP_GUIDE.md](TOKEN_SETUP_GUIDE.md)
 
 ### 1Password CLI not working
 
@@ -187,14 +186,12 @@ op account add
 ### Can't generate token
 
 **URL:** https://github.com/settings/tokens/new\
-**Required scopes:** `project`,
-`read:org`
+**Required scopes:** `project`, `read:org`
 
 ### Dry-run succeeds but deploy fails
 
 **Cause:** Dry-run doesn't make API calls\
-**Solution:** Check token scopes and
-organization permissions
+**Solution:** Check token scopes and organization permissions
 
 ______________________________________________________________________
 
@@ -255,8 +252,7 @@ ______________________________________________________________________
 | Content Migration    | Ongoing   | ⏳ Pending         |
 
 **Total time invested:** ~5 hours\
-**Time to completion:** ~15 minutes (after
-token setup)
+**Time to completion:** ~15 minutes (after token setup)
 
 ______________________________________________________________________
 

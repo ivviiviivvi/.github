@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/generate_agent_inventory.py
 
 Focus: Frontmatter parsing and inventory generation for agent files.

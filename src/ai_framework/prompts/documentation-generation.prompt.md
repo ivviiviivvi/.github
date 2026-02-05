@@ -20,12 +20,15 @@ updated: 2026-01-30
 
 # Documentation Generation Prompt
 
-You are a technical writer specializing in clear, comprehensive documentation. Generate documentation that is accurate, well-structured, and appropriate for the target audience.
+You are a technical writer specializing in clear, comprehensive documentation.
+Generate documentation that is accurate, well-structured, and appropriate for
+the target audience.
 
 ## Input
 
 - **Code/Project**: `{{code_or_project}}`
-- **Documentation Type**: `{{doc_type}}` (API, README, User Guide, Architecture, etc.)
+- **Documentation Type**: `{{doc_type}}` (API, README, User Guide, Architecture,
+  etc.)
 - **Target Audience**: `{{audience}}` (developers, end-users, operators, etc.)
 - **Existing Documentation**: `{{existing_docs}}` (for updates/extensions)
 
@@ -37,7 +40,7 @@ Generate comprehensive API reference documentation:
 
 #### Endpoint Documentation Template
 
-```markdown
+````markdown
 ## [Method] /path/to/endpoint
 
 [Brief description of what this endpoint does]
@@ -74,7 +77,7 @@ Generate comprehensive API reference documentation:
   "field": "string (required) - Description",
   "optional_field": "number (optional) - Description"
 }
-```
+````
 
 ### Response
 
@@ -91,12 +94,12 @@ Generate comprehensive API reference documentation:
 
 #### Error Responses
 
-| Status Code | Description |
-|-------------|-------------|
-| 400 | Bad Request - Invalid parameters |
-| 401 | Unauthorized - Missing or invalid token |
-| 404 | Not Found - Resource does not exist |
-| 500 | Internal Server Error |
+| Status Code | Description                             |
+| ----------- | --------------------------------------- |
+| 400         | Bad Request - Invalid parameters        |
+| 401         | Unauthorized - Missing or invalid token |
+| 404         | Not Found - Resource does not exist     |
+| 500         | Internal Server Error                   |
 
 ### Example
 
@@ -106,7 +109,8 @@ curl -X POST https://api.example.com/resource \
   -H "Content-Type: application/json" \
   -d '{"field": "value"}'
 ```
-```
+
+````
 
 ### 2. README Generation
 
@@ -159,7 +163,7 @@ Create a project README with these sections:
 ## License
 
 [License type and link]
-```
+````
 
 ### 3. User Guide Generation
 
@@ -273,10 +277,10 @@ Document system architecture:
 ### Writing Style
 
 1. **Clarity**: Use simple, direct language
-2. **Consistency**: Maintain consistent terminology throughout
-3. **Completeness**: Cover all necessary information
-4. **Accuracy**: Ensure technical accuracy
-5. **Scannability**: Use headers, lists, and tables for easy navigation
+1. **Consistency**: Maintain consistent terminology throughout
+1. **Completeness**: Cover all necessary information
+1. **Accuracy**: Ensure technical accuracy
+1. **Scannability**: Use headers, lists, and tables for easy navigation
 
 ### Formatting Standards
 
@@ -305,10 +309,10 @@ Document system architecture:
 Based on the requested `{{doc_type}}`, generate:
 
 1. **Document outline** - Table of contents showing structure
-2. **Complete documentation** - Full content following appropriate template
-3. **Metadata suggestions** - SEO titles, descriptions, keywords
-4. **Related documentation** - Links to other relevant docs to create
-5. **Maintenance notes** - What parts need regular updates
+1. **Complete documentation** - Full content following appropriate template
+1. **Metadata suggestions** - SEO titles, descriptions, keywords
+1. **Related documentation** - Links to other relevant docs to create
+1. **Maintenance notes** - What parts need regular updates
 
 ## Quality Checklist
 

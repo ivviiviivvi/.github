@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 """Unit tests for web_crawler.py
 Focus: SSRF protection, link extraction, security validation.
 """
 
 import ipaddress
+
 # Import the module under test
 import sys
 from pathlib import Path

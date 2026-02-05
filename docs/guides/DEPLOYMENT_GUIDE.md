@@ -194,7 +194,7 @@ Run health checks anytime:
 
 - **✅ Healthy**: Success rate ≥ 95%
 - **⚠️ Degraded**: Success rate 85-95%
-- **❌ Unhealthy**: Success rate \< 85%
+- **❌ Unhealthy**: Success rate < 85%
 
 ### Health Check Reports
 
@@ -227,7 +227,7 @@ Results saved to JSON:
 
 Rollback triggers automatically if:
 
-- Health check success rate \< 85% (production: \< 90%)
+- Health check success rate < 85% (production: < 90%)
 - Critical workflow failures detected
 - SLA breach detected
 
@@ -296,7 +296,7 @@ Saved to `automation/deployment/logs/rollback_{deployment_id}.json`:
 **Symptoms:**
 
 - Health checks fail during canary phase
-- Success rate \< 80%
+- Success rate < 80%
 
 **Solutions:**
 

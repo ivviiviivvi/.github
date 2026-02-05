@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Unit tests for automation/scripts/create_default_configs.py
 
 Focus: Default configuration file creation for Week 9 automation.

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Comprehensive unit tests for automation/scripts/ab_test_assignment.py
 
 Focus: A/B test assignment logic, hashing, group assignment, and reporting.
@@ -521,8 +520,6 @@ class TestMainFunction:
     @patch("ab_test_assignment.ABTestAssigner")
     def test_main_no_args_shows_help(self, MockAssigner):
         """Test main with no arguments shows help."""
-        mock_instance = MockAssigner.return_value
-
         with patch("sys.argv", ["ab_test_assignment.py"]):
             with patch("argparse.ArgumentParser.print_help") as mock_help:
                 main()

@@ -34,8 +34,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from models import (Incident, IncidentConfig, IncidentSeverity, IncidentStatus,
-                    PostIncidentReport, RunbookStep)
+from models import (
+    Incident,
+    IncidentConfig,
+    IncidentSeverity,
+    IncidentStatus,
+    PostIncidentReport,
+    RunbookStep,
+)
 from notification_integration import notify_incident_created
 from utils import GitHubAPIClient, load_config
 

@@ -4,26 +4,26 @@ on:
   workflow_call:
     inputs:
       operation:
-        description: 'Operation to perform (create-batch, merge-batch, list-queue, add-to-queue, remove-from-queue)'
+        description: Operation to perform (create-batch, merge-batch, list-queue, add-to-queue, remove-from-queue)
         required: true
         type: string
       batch-label:
         description: Label to identify PRs for batching
         required: false
         type: string
-        default: 'batch-merge'
+        default: batch-merge
       batch-branch-prefix:
         description: Prefix for batch merge branches
         required: false
         type: string
-        default: 'batch/'
+        default: batch/
       base-branch:
         description: Base branch for batch operations
         required: false
         type: string
-        default: 'main'
+        default: main
       pr-numbers:
-        description: 'Comma-separated PR numbers to include in batch (for create-batch operation)'
+        description: Comma-separated PR numbers to include in batch (for create-batch operation)
         required: false
         type: string
         default: ''
@@ -31,7 +31,7 @@ on:
         description: Merge method (merge, squash, rebase)
         required: false
         type: string
-        default: 'squash'
+        default: squash
       require-all-checks:
         description: Require all checks to pass before batching
         required: false
@@ -53,10 +53,10 @@ on:
         type: number
         default: 10
       conflict-resolution:
-        description: 'How to handle conflicts (skip, abort, manual)'
+        description: How to handle conflicts (skip, abort, manual)
         required: false
         type: string
-        default: 'skip'
+        default: skip
     secrets:
       github-token:
         description: GitHub token with PR and contents permissions

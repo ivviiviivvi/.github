@@ -327,9 +327,9 @@ Get up and running in 5 minutes:
 
 1. **Next Steps**
 
-   - \[Link to detailed docs\]
-   - \[Link to examples\]
-   - \[Link to tutorials\]
+   - [Link to detailed docs]
+   - [Link to examples]
+   - [Link to tutorials]
 
 **Need help?** See [Documentation](#-documentation) or [open an issue](link).
 
@@ -601,7 +601,6 @@ ______________________________________________________________________
 
 **Version**: 1.0.0\
 **Last Updated**: 2026-01-21\
-**Maintained By**:
-Organization Governance Team\
+**Maintained By**: Organization Governance Team\
 **Questions?**
 [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
