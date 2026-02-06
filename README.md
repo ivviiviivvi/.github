@@ -14,7 +14,7 @@
 
 <!-- BADGES:END -->
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](pyproject.toml)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-129%20workflows-blue?logo=github-actions)](https://github.com/ivviiviivvi/.github/actions)
 [![Security Scanning](https://img.shields.io/badge/security-bandit%20%7C%20gitleaks-green?logo=security)](https://github.com/ivviiviivvi/.github)
@@ -66,7 +66,7 @@ ______________________________________________________________________
    [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 1. **Browse documentation:** [Documentation Index](docs/INDEX.md)
 1. **Set up environment:**
-   [Development Environment Setup](docs/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+   [Development Environment Setup](docs/guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
 1. **Clone and explore:**
    ```bash
    git clone https://github.com/ivviiviivvi/.github.git
@@ -118,13 +118,13 @@ ______________________________________________________________________
 **Production Agents** across 5 categories:
 
 - Security, Infrastructure, Development, Languages, Documentation
-- See [Agent Registry](docs/AGENT_REGISTRY.md) for complete catalog
+- See [Agent Registry](docs/reference/AGENT_REGISTRY.md) for complete catalog
 
 **GitHub Copilot Customizations:**
 
-- [Quick Start Guide](docs/COPILOT_QUICK_START.md) - Setup guide
-- [Custom Instructions](docs/CUSTOM_INSTRUCTIONS_SETUP.md) - Coding standards
-- [MCP Server Setup](docs/MCP_SERVER_SETUP.md) - Language support
+- [Quick Start Guide](docs/guides/COPILOT_QUICK_START.md) - Setup guide
+- [Custom Instructions](docs/guides/CUSTOM_INSTRUCTIONS_SETUP.md) - Coding standards
+- [MCP Server Setup](docs/guides/MCP_SERVER_SETUP.md) - Language support
 
 ### Workflow Automation
 
@@ -181,9 +181,9 @@ ______________________________________________________________________
 
 | Guide                                                       | Description              |
 | ----------------------------------------------------------- | ------------------------ |
-| [COPILOT_QUICK_START.md](docs/COPILOT_QUICK_START.md)       | GitHub Copilot setup     |
-| [BATCH_ONBOARDING_GUIDE.md](docs/BATCH_ONBOARDING_GUIDE.md) | Multi-repo onboarding    |
-| [WORKFLOW_DESIGN.md](docs/WORKFLOW_DESIGN.md)               | Workflow architecture    |
+| [COPILOT_QUICK_START.md](docs/guides/COPILOT_QUICK_START.md)       | GitHub Copilot setup     |
+| [BATCH_ONBOARDING_GUIDE.md](docs/guides/BATCH_ONBOARDING_GUIDE.md) | Multi-repo onboarding    |
+| [WORKFLOW_DESIGN.md](docs/workflows/WORKFLOW_DESIGN.md)             | Workflow architecture    |
 | [docs/guides/CLAUDE.md](docs/guides/CLAUDE.md)              | Working with Claude Code |
 
 ______________________________________________________________________
