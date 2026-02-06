@@ -45,8 +45,8 @@ ______________________________________________________________________
   - Automated validation via `scripts/validate-schema-org.py`
   - GitHub workflow for continuous validation
   - Version synchronization with semver
-  - See [SCHEMA_ORG_SEMVER_GUIDE.md](../docs/SCHEMA_ORG_SEMVER_GUIDE.md) for
-    details
+  - See [SCHEMA_ORG_SEMVER_GUIDE.md](../docs/guides/SCHEMA_ORG_SEMVER_GUIDE.md)
+    for details
 
 - **Semantic Versioning (SemVer):** ✅ **DEPLOYED** - Organization-wide semver
   implementation:
@@ -262,9 +262,9 @@ ______________________________________________________________________
       to ensure proper control over sensitive resources.
   - **Reference Documentation:**
     - See
-      [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../docs/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
+      [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../docs/analysis/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
       for comprehensive analysis
-    - See [TOKEN_REGISTRY.md](../docs/TOKEN_REGISTRY.md) for token management
+    - See [TOKEN_REGISTRY.md](../docs/reference/TOKEN_REGISTRY.md) for token management
       guidelines
     - **Migration Plan:** Replace single master token with purpose-specific
       tokens by 2026-02-18
@@ -529,9 +529,9 @@ ______________________________________________________________________
 
        # 🚀 Ivviiviivvi Organization Hub
 
-       [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](VERSION)
+       [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](../pyproject.toml)
        [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
-       [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](docs/INDEX.md)
+       [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](../docs/INDEX.md)
 
        > **AI-Driven Development Infrastructure for the Modern Organization**
 
