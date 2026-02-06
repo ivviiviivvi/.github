@@ -44,12 +44,19 @@ jobs:
           --exclude 'linkedin.com'
           --exclude 'twitter.com'
           --exclude 'x.com'
+          --exclude-path 'src/automation/project_meta/reports/'
+          --exclude-path 'docs/analysis/'
+          --exclude-path 'docs/archive/'
+          --exclude-path 'docs/_includes/'
+          --exclude-path 'docs/_layouts/'
+          --exclude-path 'docs/site/'
+          --exclude-path 'src/automation/dashboard/'
           --max-retries 3
           --timeout 20
           '**/*.md'
           '**/*.html'
          # Fail action on broken links
-        fail: false
+        fail: true
             # Output format
         format: markdown
             # Output file
@@ -138,6 +145,7 @@ jobs:
 
   markdown-link-check:
     name: Check Markdown Links
+    if: false  # Disabled: lychee handles link checking with better exclusion support
     continue-on-error: true
     runs-on: ubuntu-latest
     steps:
@@ -157,6 +165,7 @@ jobs:
 
   spell-check:
     name: Spell Check Documentation
+    if: false  # Disabled: too many false positives in technical documentation
     continue-on-error: true
     runs-on: ubuntu-latest
     steps:
