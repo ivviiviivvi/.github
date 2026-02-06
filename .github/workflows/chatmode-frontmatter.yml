@@ -50,21 +50,26 @@ jobs:
       with:
         python-version: '3.11'
         cache: pip
+    - name: Install mdformat
+      run: pip install 'mdformat==0.7.17' 'mdformat-gfm>=0.3.5,<1.0.0'
     - name: Validate chatmode frontmatter
       run: python src/automation/scripts/validate_chatmode_frontmatter.py
     - name: Verify chatmode inventory is up to date
       run: |
         python src/automation/scripts/generate_chatmode_inventory.py
+        mdformat src/ai_framework/chatmodes/INVENTORY.md
         git diff --exit-code -- src/ai_framework/chatmodes/INVENTORY.md
     - name: Validate agent frontmatter
       run: python src/automation/scripts/validate_agent_frontmatter.py
     - name: Verify agent inventory is up to date
       run: |
         python src/automation/scripts/generate_agent_inventory.py
+        mdformat src/ai_framework/agents/INVENTORY.md
         git diff --exit-code -- src/ai_framework/agents/INVENTORY.md
     - name: Validate collection frontmatter
       run: python src/automation/scripts/validate_collection_frontmatter.py
     - name: Verify collection inventory is up to date
       run: |
         python src/automation/scripts/generate_collection_inventory.py
+        mdformat src/ai_framework/collections/INVENTORY.md
         git diff --exit-code -- src/ai_framework/collections/INVENTORY.md
