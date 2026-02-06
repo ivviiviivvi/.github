@@ -496,10 +496,10 @@ git clone <repo>
 ### Community
 
 - 💬
-  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
-- 📚 [Wiki](https://github.com/{{ORG_NAME}}/.github/wiki)
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
+- 📚 [Wiki](https://github.com/%7B%7BORG_NAME%7D%7D/.github/wiki)
 
 ### Training
 

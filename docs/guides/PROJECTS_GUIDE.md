@@ -862,5 +862,5 @@ query OrgProjects {
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @{{ORG_NAME}} project management
-team
+**Maintained By**: @{{ORG_NAME}} project
+management team

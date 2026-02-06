@@ -5,9 +5,9 @@
 staging:
   # Target repositories for staging
   repositories:
-  - {{ORG_NAME}}/.github
-  - {{ORG_NAME}}/test-repo-1
-  - {{ORG_NAME}}/test-repo-2
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/test-repo-1'
+  - '{{ORG_NAME}}/test-repo-2'
 
   # Phased rollout configuration
   canary_percentage: 33 # 1 of 3 repos
@@ -38,12 +38,12 @@ staging:
 production:
   # Target repositories for production
   repositories:
-  - {{ORG_NAME}}/.github
-  - {{ORG_NAME}}/production-repo-1
-  - {{ORG_NAME}}/production-repo-2
-  - {{ORG_NAME}}/production-repo-3
-  - {{ORG_NAME}}/production-repo-4
-  - {{ORG_NAME}}/production-repo-5
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/production-repo-1'
+  - '{{ORG_NAME}}/production-repo-2'
+  - '{{ORG_NAME}}/production-repo-3'
+  - '{{ORG_NAME}}/production-repo-4'
+  - '{{ORG_NAME}}/production-repo-5'
     # Add more repositories as needed
 
   # Phased rollout configuration (more conservative)
@@ -91,7 +91,7 @@ production:
 # Development environment (for local testing)
 development:
   repositories:
-  - {{ORG_NAME}}/.github
+  - '{{ORG_NAME}}/.github'
 
   canary_percentage: 100
   progressive_percentage: 100

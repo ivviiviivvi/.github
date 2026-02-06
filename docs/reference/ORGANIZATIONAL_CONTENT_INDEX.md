@@ -544,7 +544,7 @@ open https://github.com/org/repo/wiki
 **For Users**:
 
 - 💬
-  [Ask in Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Ask in Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 📖 Read the documentation guides
 - 🔍 Search existing issues and discussions
 
@@ -558,9 +558,9 @@ open https://github.com/org/repo/wiki
 
 - 🤝 [Contributing Guide](../governance/CONTRIBUTING.md)
 - 💬
-  [Community Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Community Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Report Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ### Feedback & Improvements
 
@@ -606,9 +606,9 @@ ______________________________________________________________________
 **📝 Contribute**: See [CONTRIBUTING.md](../governance/CONTRIBUTING.md)\
 **💬
 Discuss**:
-[GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->\
+[GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->\
 **🐛
 Report Issues**:
-[GitHub Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+[GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 **Built with ❤️ by the Ivviiviivvi community**

@@ -106,7 +106,7 @@ ______________________________________________________________________
 
 ### Expected Results
 
-- ✅ Site live at: <https://{{ORG_NAME}}.github.io/.github/>
+- ✅ Site live at: <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 - ✅ 200 OK status (not 404)
 - ✅ Beautiful landing page with navigation
 - ✅ All internal links working
@@ -163,24 +163,24 @@ ______________________________________________________________________
 
 ### Main Landing Page
 
-- <https://{{ORG_NAME}}.github.io/.github/>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 
 ### Documentation
 
-- <https://{{ORG_NAME}}.github.io/.github/docs/INDEX.html>
-- <https://{{ORG_NAME}}.github.io/.github/docs/reference/SEMANTIC_VERSIONING.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/docs/INDEX.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/docs/reference/SEMANTIC_VERSIONING.html>
 
 ### AI Framework
 
-- <https://{{ORG_NAME}}.github.io/.github/ai_framework/INDEX.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/ai_framework/INDEX.html>
 
 ### Automation
 
-- <https://{{ORG_NAME}}.github.io/.github/automation/dashboard/index.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/automation/dashboard/index.html>
 
 ### Reports
 
-- <https://{{ORG_NAME}}.github.io/.github/reports/>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/reports/>
 
 ______________________________________________________________________
 
@@ -211,7 +211,7 @@ curl -I https://{{ORG_NAME}}.github.io/.github/
 
 ### 4. Visual Check
 
-Open in browser: <https://{{ORG_NAME}}.github.io/.github/>
+Open in browser: <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 
 - Should see: "🚀 Ivviiviivvi Organization Hub"
 - Should see: Navigation cards for Docs, AI Framework, Automation, Reports

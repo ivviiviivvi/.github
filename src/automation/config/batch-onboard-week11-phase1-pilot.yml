@@ -4,9 +4,9 @@
 # RISK: LOW (comprehensive Week 10 validation)
 
 repositories:
-- {{ORG_NAME}}/theoretical-specifications-first
-- {{ORG_NAME}}/system-governance-framework
-- {{ORG_NAME}}/trade-perpetual-future
+- '{{ORG_NAME}}/theoretical-specifications-first'
+- '{{ORG_NAME}}/system-governance-framework'
+- '{{ORG_NAME}}/trade-perpetual-future'
 
 # Workflows from automation/workflow-templates/
 workflows:

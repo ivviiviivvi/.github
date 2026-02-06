@@ -14,7 +14,7 @@ them with your organization-specific values.
 | Variable       | Description              | Example           |
 | -------------- | ------------------------ | ----------------- |
 | `{{ORG_NAME}}` | GitHub organization slug | `my-company`      |
-| `{{ORG_NAME}}`  | Human-readable org name  | `My Company Inc.` |
+| `{{ORG_NAME}}` | Human-readable org name  | `My Company Inc.` |
 
 ### Replacement Script
 

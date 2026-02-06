@@ -1952,7 +1952,7 @@ ______________________________________________________________________
 
 - Open an issue with label `project-management`
 - Ask in
-  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - Reach out to project admins
 
 **Feedback:**

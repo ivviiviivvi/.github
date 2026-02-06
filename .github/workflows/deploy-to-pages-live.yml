@@ -226,9 +226,9 @@ jobs:
         TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
         cat > deployment-metadata.json <<-EOF
         {
-          "repository": "${{ github.repository }}",
-          "source_url": "https://github.com/${{ github.repository }}",
-          "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+          "repository": ${{ github.repository }},
+          "source_url": https://github.com/${{ github.repository }},
+          "app_type": ${{ needs.detect-app-type.outputs.app_type }},
           "deployment_strategy": "pages-direct",
           "live_url": "$DEPLOY_URL",
           "status": "deployed",
@@ -301,9 +301,9 @@ jobs:
         cat > docs/live-apps/${{ github.event.repository.name }}.md <<- 'EOF'
         ---
         layout: app-demo
-        title: "Live Demo: ${{ github.event.repository.name }}"
-        repository: "${{ github.repository }}"
-        docker_image: "${{ steps.meta.outputs.tags }}"
+        title: Live Demo: ${{ github.event.repository.name }}
+        repository: ${{ github.repository }}
+        docker_image: ${{ steps.meta.outputs.tags }}
         ---
 
         # Live Demo: ${{ github.event.repository.name }}
@@ -324,9 +324,9 @@ jobs:
         TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
         cat > deployment-metadata.json <<-'EOF'
         {
-          "repository": "${{ github.repository }}",
-          "source_url": "https://github.com/${{ github.repository }}",
-          "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+          "repository": ${{ github.repository }},
+          "source_url": https://github.com/${{ github.repository }},
+          "app_type": ${{ needs.detect-app-type.outputs.app_type }},
           "deployment_strategy": "docker",
           "docker_image": "$PRIMARY_TAG",
           "status": "deployed",
@@ -382,11 +382,11 @@ jobs:
         TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
         cat > deployment-metadata.json <<-'EOF'
         {
-          "repository": "${{ github.repository }}",
-          "source_url": "https://github.com/${{ github.repository }}",
-          "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+          "repository": ${{ github.repository }},
+          "source_url": https://github.com/${{ github.repository }},
+          "app_type": ${{ needs.detect-app-type.outputs.app_type }},
           "deployment_strategy": "codespaces",
-          "codespaces_url": "https://github.com/${{ github.repository }}/codespaces",
+          "codespaces_url": https://github.com/${{ github.repository }}/codespaces,
           "status": "deployed",
           "last_updated": "$TIMESTAMP"
         }
@@ -414,9 +414,9 @@ jobs:
         TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
         cat > deployment-metadata.json <<-'EOF'
         {
-          "repository": "${{ github.repository }}",
-          "source_url": "https://github.com/${{ github.repository }}",
-          "app_type": "${{ needs.detect-app-type.outputs.app_type }}",
+          "repository": ${{ github.repository }},
+          "source_url": https://github.com/${{ github.repository }},
+          "app_type": ${{ needs.detect-app-type.outputs.app_type }},
           "deployment_strategy": "documentation-only",
           "documentation_url": "${{ github.event.repository.html_url }}/blob/main/README.md",
           "status": "documentation",

@@ -1644,8 +1644,8 @@ ______________________________________________________________________
 
 - 📖 [Documentation](../)
 - 💬
-  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 _Last Updated: 2024-01-01_

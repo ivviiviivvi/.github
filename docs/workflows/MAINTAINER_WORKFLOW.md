@@ -59,10 +59,10 @@ ______________________________________________________________________
 
 1. **Review dashboards**
 
-   - [Open PRs awaiting review](https://github.com/{{ORG_NAME}}/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
-   - [Issues needing triage](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
-   - [Blocked items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
-   - [Critical items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
+   - [Open PRs awaiting review](https://github.com/%7B%7BORG_NAME%7D%7D/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
+   - [Issues needing triage](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
+   - [Blocked items](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
+   - [Critical items](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
 
 ### Throughout the Day
 
@@ -560,7 +560,7 @@ ______________________________________________________________________
 
 **Check workflow runs**:
 
-- [Actions tab](https://github.com/{{ORG_NAME}}/.github/actions)
+- [Actions tab](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions)
 - Failed runs notify maintainers
 - Review logs for issues
 
@@ -676,11 +676,11 @@ ______________________________________________________________________
 
 ### Useful Filters
 
-- [Needs triage](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
-- [Awaiting review](https://github.com/{{ORG_NAME}}/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
-- [Blocked items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
-- [Critical](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
-- [Stale](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3Astale)
+- [Needs triage](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
+- [Awaiting review](https://github.com/%7B%7BORG_NAME%7D%7D/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
+- [Blocked items](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
+- [Critical](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
+- [Stale](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3Astale)
 
 ### Key Documents
 

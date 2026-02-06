@@ -2,16 +2,16 @@
 # This site showcases all walkthrough videos and live demos for the organization
 
 # Site settings
-title: {{ORG_NAME}} Walkthrough Gallery
+title: '{{ORG_NAME}} Walkthrough Gallery'
 description: Comprehensive gallery of application walkthroughs and live demos for all {{ORG_NAME}} organization repositories
 url: https://{{ORG_NAME}}.github.io
 baseurl: /.github
-author: {{ORG_NAME}}
+author: '{{ORG_NAME}}'
 email: support@{{ORG_NAME}}.com
 
 # Organization settings
 organization:
-  name: {{ORG_NAME}}
+  name: '{{ORG_NAME}}'
   github_url: https://github.com/{{ORG_NAME}}
   logo_url: ''
   tagline: Building innovative solutions through automation and AI

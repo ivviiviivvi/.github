@@ -7,7 +7,7 @@ For current project status and next steps, see:
 
 - [Project Retrospective: Lessons Learned](../docs/PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md)
 - [Phase 7 Completion Summary](../docs/guides/PHASE_7_EXECUTION_SUMMARY.md)
-- [Current Issues](https://github.com/{{ORG_NAME}}/.github/issues)
+- [Current Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)
 
 ______________________________________________________________________
 
@@ -1377,11 +1377,11 @@ best practices guide
 
    - `tests/unit/test_web_crawler.py` (315 lines) - SSRF protection, link
      extraction, validation
-   - `tests/unit/test_org_health_visualizer.py` (305 lines) - Diagram generation,
-     categorization
+   - `tests/unit/test_org_health_visualizer.py` (305 lines) - Diagram
+     generation, categorization
    - `tests/unit/test_sync_labels.py` (277 lines) - Label sync, API interaction
-   - `tests/unit/test_natural_language_prompt_filter.py` (92 lines) - Content filtering,
-     safety checks
+   - `tests/unit/test_natural_language_prompt_filter.py` (92 lines) - Content
+     filtering, safety checks
 
 1. **CI Workflow (.github/workflows/test-coverage.yml)**:
 

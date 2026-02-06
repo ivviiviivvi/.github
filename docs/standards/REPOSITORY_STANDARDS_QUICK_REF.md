@@ -307,9 +307,9 @@ ______________________________________________________________________
 ## 🆘 Need Help?
 
 - **Questions?**
-  [Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues?**
-  [Report a Problem](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report a Problem](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Documentation**: See [Full Standards](standards/)
 
 ______________________________________________________________________

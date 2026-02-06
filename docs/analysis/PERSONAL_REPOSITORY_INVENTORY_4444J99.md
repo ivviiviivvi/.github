@@ -14,7 +14,7 @@ ______________________________________________________________________
 - [Forked Repositories](#forked-repositories)
 - [Repository Categories](#repository-categories)
 - [Maintenance Status](#maintenance-status)
-- [Relationship to {{ORG_NAME}} Org](#relationship-to-{{ORG_NAME}}-org)
+- [Relationship to {{ORG_NAME}} Org](#relationship-to-%7B%7BORG_NAME%7D%7D-org)
 
 ______________________________________________________________________
 
@@ -753,7 +753,7 @@ Both accounts show strong interest in:
 
 ### Differences
 
-| Aspect                | Personal (4444J99)                      | Organization ({{ORG_NAME}})                                |
+| Aspect                | Personal (4444J99)                      | Organization ({{ORG_NAME}})                               |
 | --------------------- | --------------------------------------- | --------------------------------------------------------- |
 | **Fork Ratio**        | 85.7% forks                             | 42.6% forks                                               |
 | **Original Projects** | 8 (mostly personal)                     | 27 (mostly systems)                                       |

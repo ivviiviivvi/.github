@@ -49,7 +49,7 @@ on:
 
 jobs:
   bootstrap:
-    uses: {{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main'
     with:
       target_repository: ${{ github.repository }}
       enable_issues: ${{ inputs.enable_issues }}

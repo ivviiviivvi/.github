@@ -63,8 +63,8 @@ ______________________________________________________________________
 
 ### Repositories to KEEP in {{ORG_NAME}}
 
-| Status | Repo Name                          | Current     | Suggested | Size   | Rationale                                                                                         |
-| ------ | ---------------------------------- | ----------- | --------- | ------ | ------------------------------------------------------------------------------------------------- |
+| Status | Repo Name                          | Current      | Suggested | Size   | Rationale                                                                                         |
+| ------ | ---------------------------------- | ------------ | --------- | ------ | ------------------------------------------------------------------------------------------------- |
 | ⬜     | **.github**                        | {{ORG_NAME}} | `STAY`    | 6.9 GB | Core org infrastructure, AI framework (26+ agents, 11+ MCP servers, 100+ instructions, 133+ docs) |
 | ⬜     | **auto-revision-epistemic-engine** | {{ORG_NAME}} | `STAY`    | 202 KB | Self-governing orchestration framework - pure theory                                              |
 | ⬜     | **cognitive-archaelogy-tribunal**  | {{ORG_NAME}} | `STAY`    | 3.6 MB | Multi-layer cognitive excavation - conceptual tool                                                |
@@ -79,8 +79,8 @@ ______________________________________________________________________
 
 **Theory Forks to Keep:**
 
-| Status | Repo Name                            | Current     | Suggested | Size    | Rationale                           |
-| ------ | ------------------------------------ | ----------- | --------- | ------- | ----------------------------------- |
+| Status | Repo Name                            | Current      | Suggested | Size    | Rationale                           |
+| ------ | ------------------------------------ | ------------ | --------- | ------- | ----------------------------------- |
 | ⬜     | **auto-ontological-schema**          | {{ORG_NAME}} | `STAY`    | 234 MB  | Schema.org - ontological structures |
 | ⬜     | **theoretical-specifications-first** | {{ORG_NAME}} | `STAY`    | 2.8 MB  | SpecStory - spec-driven development |
 | ⬜     | **semantic-pedantic-grep**           | {{ORG_NAME}} | `STAY`    | 93 MB   | Semgrep - semantic code analysis    |
@@ -140,8 +140,8 @@ ______________________________________________________________________
 
 ### Suggested Migrations TO omni-dromenon-machina
 
-| Status | Repo Name                   | Current     | Suggested | Size    | Rationale                                                                                   | Your Decision                   |
-| ------ | --------------------------- | ----------- | --------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
+| Status | Repo Name                   | Current      | Suggested | Size    | Rationale                                                                                   | Your Decision                   |
+| ------ | --------------------------- | ------------ | --------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
 | 🟨     | **a-i-council--coliseum**   | {{ORG_NAME}} | `MOVE?`   | 556 KB  | 24/7 AI agent debate streaming - performance/event-based. May connect to metasystem-master? | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
 | 🟨     | **classroom-rpg-aetheria**  | {{ORG_NAME}} | `MOVE?`   | 2.7 MB  | Educational RPG - experiential system                                                       | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
 | 🟨     | **virgil-training-overlay** | {{ORG_NAME}} | `MOVE?`   | 159 KB  | Clippy-as-Virgil Divine Comedy guide - ritual/experiential                                  | ⬜ MOVE / ⬜ STAY / ⬜ DELETE   |
@@ -161,8 +161,8 @@ ______________________________________________________________________
 
 ### Currently EMPTY - Suggested Migrations
 
-| Status | Repo Name                                   | Current     | Suggested | Size    | Revenue Model                        | Your Decision                 |
-| ------ | ------------------------------------------- | ----------- | --------- | ------- | ------------------------------------ | ----------------------------- |
+| Status | Repo Name                                   | Current      | Suggested | Size    | Revenue Model                        | Your Decision                 |
+| ------ | ------------------------------------------- | ------------ | --------- | ------- | ------------------------------------ | ----------------------------- |
 | ⬜     | **trade-perpetual-future**                  | {{ORG_NAME}} | `MOVE`    | 13.8 MB | Trading fees, subscriptions          | ⬜ MOVE / ⬜ STAY             |
 | ⬜     | **search-local--happy-hour**                | {{ORG_NAME}} | `MOVE`    | 902 KB  | Affiliate marketing, listings        | ⬜ MOVE / ⬜ STAY             |
 | ⬜     | **sovereign-ecosystem--real-estate-luxury** | {{ORG_NAME}} | `MOVE`    | 1.6 MB  | Commissions, listing fees            | ⬜ MOVE / ⬜ STAY             |
@@ -176,8 +176,8 @@ ______________________________________________________________________
 
 **Applied Tool Forks (Commerce):**
 
-| Status | Repo Name                  | Current     | Suggested | Size    | Purpose                               | Your Decision     |
-| ------ | -------------------------- | ----------- | --------- | ------- | ------------------------------------- | ----------------- |
+| Status | Repo Name                  | Current      | Suggested | Size    | Purpose                               | Your Decision     |
+| ------ | -------------------------- | ------------ | --------- | ------- | ------------------------------------- | ----------------- |
 | ⬜     | **are-is-clone-cloud**     | {{ORG_NAME}} | `MOVE`    | 214 MB  | rclone - infrastructure for services  | ⬜ MOVE / ⬜ STAY |
 | ⬜     | **codex-a-i**              | {{ORG_NAME}} | `MOVE`    | 24.2 MB | Terminal coding agent - productizable | ⬜ MOVE / ⬜ STAY |
 | ⬜     | **gemini-cli**             | {{ORG_NAME}} | `MOVE`    | 50.7 MB | Gemini terminal agent                 | ⬜ MOVE / ⬜ STAY |
@@ -257,8 +257,8 @@ ______________________________________________________________________
 
 ### Infrastructure & Research (Unclear Purpose)
 
-| Status | Repo Name                      | Current     | Suggested | Size    | Question                                                         | Your Decision                       |
-| ------ | ------------------------------ | ----------- | --------- | ------- | ---------------------------------------------------------------- | ----------------------------------- |
+| Status | Repo Name                      | Current      | Suggested | Size    | Question                                                         | Your Decision                       |
+| ------ | ------------------------------ | ------------ | --------- | ------- | ---------------------------------------------------------------- | ----------------------------------- |
 | 🟨     | **anon-hookup-now**            | {{ORG_NAME}} | `REVIEW`  | 46.9 MB | Anonymous hookup platform - Commerce? Art? Research?             | ⬜ COMMERCE / ⬜ ART / ⬜ DELETE    |
 | 🟨     | **a-context7**                 | {{ORG_NAME}} | `REVIEW`  | 4.7 MB  | MCP Server fork - Theory tool or Commerce product?               | ⬜ THEORY / ⬜ COMMERCE             |
 | 🟨     | **claude-cookbooks**           | {{ORG_NAME}} | `REVIEW`  | 180 MB  | Anthropic cookbooks - Theory reference or Commerce product base? | ⬜ THEORY / ⬜ COMMERCE             |
@@ -276,7 +276,7 @@ ______________________________________________________________________
 
 | Organ                               | Original (Jan 18)  | Current (Jan 23)   | After Migration         | Change     | Character                    |
 | ----------------------------------- | ------------------ | ------------------ | ----------------------- | ---------- | ---------------------------- |
-| **{{ORG_NAME}} (Theory)**            | 47 repos, 5.2 GB   | 47 repos, 5.2 GB   | 21-23 repos, ~9.7 GB    | -24 to -26 | Pure conceptual work         |
+| **{{ORG_NAME}} (Theory)**           | 47 repos, 5.2 GB   | 47 repos, 5.2 GB   | 21-23 repos, ~9.7 GB    | -24 to -26 | Pure conceptual work         |
 | **omni-dromenon-machina (Art)**     | 14 repos, 645 KB   | 14 repos, 645 KB   | 20-21 repos?, ~1.3 MB?  | +6 to +7   | Performance & temporal works |
 | **labores-profani-crux (Commerce)** | 0 repos, 0 GB      | 0 repos, 0 GB      | 17-19 repos?, ~1.4 GB   | +17 to +19 | Revenue-generating           |
 | **4444J99 (Personal)**              | 56 repos, 8.7 GB   | 66 repos, 12.7 GB  | 58-61 repos, ~8-9 GB    | -5 to -8   | Incubation & learning        |

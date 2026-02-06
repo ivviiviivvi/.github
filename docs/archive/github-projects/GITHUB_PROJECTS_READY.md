@@ -306,9 +306,9 @@ ______________________________________________________________________
 - **Documentation:** Review [README_PROJECTS.md](scripts/README_PROJECTS.md)
   troubleshooting section
 - **Discussions:** Ask in
-  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues:** Report in
-  [GitHub Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Logs:** Check script output and GitHub UI for error messages
 
 ______________________________________________________________________
@@ -429,9 +429,9 @@ _Status: 100% Ready for
 Deployment_
 
 **Questions?** Open an
-[issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+[issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 or
-[discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->.
+[discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->.
 
 **Ready to deploy?** Start with
 [GITHUB_PROJECTS_DEPLOYMENT.md](docs/GITHUB_PROJECTS_DEPLOYMENT.md).

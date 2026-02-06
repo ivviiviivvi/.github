@@ -5,9 +5,9 @@
 
 # List of repositories to onboard (required)
 repositories:
-- {{ORG_NAME}}/repo1
-- {{ORG_NAME}}/repo2
-- {{ORG_NAME}}/repo3
+- '{{ORG_NAME}}/repo1'
+- '{{ORG_NAME}}/repo2'
+- '{{ORG_NAME}}/repo3'
 
 # Workflows to deploy (optional)
 workflows:
@@ -56,7 +56,7 @@ environments:
 # Dependencies (optional)
 # List repositories that depend on others (processed after non-dependent repos)
 dependencies:
-- {{ORG_NAME}}/dependent-repo
+- '{{ORG_NAME}}/dependent-repo'
 
 # Processing configuration
 max_concurrent: 5 # Maximum parallel onboardings

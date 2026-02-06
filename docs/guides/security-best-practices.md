@@ -1,6 +1,7 @@
 # Security Best Practices Guide
 
-> **Comprehensive security guidelines for the {{ORG_NAME}}/.github organization**
+> **Comprehensive security guidelines for the {{ORG_NAME}}/.github
+> organization**
 
 **Last Updated:** 2026-01-14
 
@@ -43,7 +44,8 @@ ______________________________________________________________________
 
 1. **Navigate to Security Advisories**:
 
-   - Go to: <https://github.com/{{ORG_NAME}}/.github/security/advisories/new>
+   - Go to:
+     <https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new>
 
 1. **Fill Out the Advisory Form**:
 
@@ -592,9 +594,9 @@ ______________________________________________________________________
 ## Questions or Concerns?
 
 - **Security Issues**: Use
-  [private security advisory](https://github.com/{{ORG_NAME}}/.github/security/advisories/new)<!-- link:github.security_advisory -->
+  [private security advisory](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new)<!-- link:github.security_advisory -->
 - **General Questions**: Open a
-  [discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Documentation Improvements**: Submit a
   [pull request](../governance/CONTRIBUTING.md)
 

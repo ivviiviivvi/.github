@@ -3,7 +3,7 @@
 > Comprehensive guide for configuring API keys and optional integrations
 
 **Last Updated:** December 21, 2025 **Maintainer:** @4444JPP **Support:**
-[GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+[GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 ______________________________________________________________________
 
@@ -881,7 +881,7 @@ ______________________________________________________________________
 ### Getting Help
 
 - 💬 **GitHub Discussions**:
-  [Ask the community](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Ask the community](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛 **Bug Reports**: [File an issue](../../.github/ISSUE_TEMPLATE/)
 - 📧 **Direct Support**: Contact @4444JPP
 - 📖 **Documentation Hub**: [View all docs](./)
@@ -936,7 +936,7 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 ______________________________________________________________________
 
 **Last Updated:** December 21, 2025 **Version:** 1.0.0 **Feedback:**
-[Submit suggestions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+[Submit suggestions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 ______________________________________________________________________
 

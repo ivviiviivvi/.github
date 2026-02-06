@@ -650,14 +650,14 @@ Need help?
 
 - 📖 Check [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬 Start a
-  [Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛 Open an
-  [Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 📧 Contact maintainers via GitHub
 
 ______________________________________________________________________
 
 **Version**: 1.0.0\
 **Last Updated**: 2026-01-18\
-**Maintained by**: {{ORG_NAME}}
-organization
+**Maintained by**:
+{{ORG_NAME}} organization

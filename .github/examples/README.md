@@ -434,9 +434,9 @@ ______________________________________________________________________
 
 - **Quick Start Guide**: [Get started in 5 minutes](../docs/QUICK_START.md)
 - **GitHub Issues**:
-  [Report problems](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report problems](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Ask questions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Ask questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Contact**:
   [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 

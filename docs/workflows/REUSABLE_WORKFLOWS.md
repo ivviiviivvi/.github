@@ -731,11 +731,11 @@ ______________________________________________________________________
 **Questions or Issues?**
 
 - 📖
-  [View Examples](https://github.com/{{ORG_NAME}}/.github/tree/main/.github/workflows/reusable)
+  [View Examples](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/.github/workflows/reusable)
 - 💬
-  [Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Report an Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report an Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

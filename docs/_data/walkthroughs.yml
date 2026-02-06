@@ -4,7 +4,7 @@
 # Sample structure shown below for reference
 
 # - title: "Example Walkthrough"
-#   repository: "{{ORG_NAME}}/example-repo"
+#   repository: '{{ORG_NAME}}/example-repo'
 #   description: "Demonstration of application features"
 #   video_url: "https://example.com/video.mp4"
 #   thumbnail_url: ""

@@ -1080,9 +1080,10 @@ Include this when asking for help!
 
 ### Community Support
 
-- 💬 [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions) - Ask the
-  community
-- 🐛 [Issues](https://github.com/{{ORG_NAME}}/.github/issues) - Report bugs
+- 💬 [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions) -
+  Ask the community
+- 🐛 [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues) - Report
+  bugs
 - 📧 [Email](mailto:support@example.com) - Private support
 
 ## See Also
@@ -1527,4 +1528,5 @@ installation -windows    # Exclude term
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @{{ORG_NAME}} documentation team
+**Maintained By**: @{{ORG_NAME}} documentation
+team

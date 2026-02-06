@@ -15,7 +15,7 @@ permissions:
 jobs:
   pr-automation:
     name: PR Automation
-    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/pr-automation.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/pr-automation.yml@main'
     with:
       auto-assign-reviewers: true
       auto-label: true

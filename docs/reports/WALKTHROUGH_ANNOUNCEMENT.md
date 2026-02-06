@@ -257,7 +257,7 @@ Increase the `timeout-minutes` in your workflow configuration.
 
 - 📖 **Documentation**: Check our [comprehensive guides](./)
 - 💬 **Discussions**: Ask questions in
-  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛 **Bug Reports**: File an issue using our bug report template
 - 📧 **Direct Support**: Contact @4444JPP for urgent issues
 
@@ -365,7 +365,7 @@ contributors and early testers!
 Have questions or need help getting started?
 
 - 💬 **Start a discussion** in the
-  [Discussions tab](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Discussions tab](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 📧 **Contact** @4444JPP for direct support
 - 🐛 **Report issues** using the bug report template
 - 📖 **Check the docs** at [our documentation hub](./)
@@ -377,6 +377,6 @@ ______________________________________________________________________
 👉
 [Create a Walkthrough Request Issue](../../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
 👉 [Read the Setup Guide](../guides/SECRETS_SETUP.md) 👉
-[Join the Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+[Join the Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 Happy walkthrough generating! 🎬✨

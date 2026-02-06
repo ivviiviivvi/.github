@@ -704,7 +704,7 @@ ______________________________________________________________________
 
 - **Issues**: Open an issue in this repository
 - **Discussions**: Join
-  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Slack**: Contact the DevOps team
 
 ______________________________________________________________________

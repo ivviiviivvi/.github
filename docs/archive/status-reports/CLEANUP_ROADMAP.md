@@ -1369,11 +1369,11 @@ best practices guide
 
    - `tests/unit/test_web_crawler.py` (315 lines) - SSRF protection, link
      extraction, validation
-   - `tests/unit/test_org_health_visualizer.py` (305 lines) - Diagram generation,
-     categorization
+   - `tests/unit/test_org_health_visualizer.py` (305 lines) - Diagram
+     generation, categorization
    - `tests/unit/test_sync_labels.py` (277 lines) - Label sync, API interaction
-   - `tests/unit/test_natural_language_prompt_filter.py` (92 lines) - Content filtering,
-     safety checks
+   - `tests/unit/test_natural_language_prompt_filter.py` (92 lines) - Content
+     filtering, safety checks
 
 1. **CI Workflow (.github/workflows/test-coverage.yml)**:
 

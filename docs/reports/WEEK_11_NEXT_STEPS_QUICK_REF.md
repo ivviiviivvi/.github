@@ -32,9 +32,9 @@ ______________________________________________________________________
 
 1. **Open browser tabs** for each repository's labels page:
 
-   - [theoretical-specifications-first/labels](https://github.com/{{ORG_NAME}}/theoretical-specifications-first/labels)
-   - [system-governance-framework/labels](https://github.com/{{ORG_NAME}}/system-governance-framework/labels)
-   - [trade-perpetual-future/labels](https://github.com/{{ORG_NAME}}/trade-perpetual-future/labels)
+   - [theoretical-specifications-first/labels](https://github.com/%7B%7BORG_NAME%7D%7D/theoretical-specifications-first/labels)
+   - [system-governance-framework/labels](https://github.com/%7B%7BORG_NAME%7D%7D/system-governance-framework/labels)
+   - [trade-perpetual-future/labels](https://github.com/%7B%7BORG_NAME%7D%7D/trade-perpetual-future/labels)
 
 1. **For each repository**, click "New label" and create 12 labels:
 

@@ -415,8 +415,9 @@ ______________________________________________________________________
 ## 📞 Support & Feedback
 
 - **Questions**: Open a
-  [Discussion](https://github.com/{{ORG_NAME}}/.github/discussions)
-- **Issues**: Report in [Issues](https://github.com/{{ORG_NAME}}/.github/issues)
+  [Discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)
+- **Issues**: Report in
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)
 - **Improvements**: Submit a PR
 - **Urgent Matters**: Contact @{{ORG_NAME}}/maintainers
 

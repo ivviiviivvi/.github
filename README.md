@@ -6,14 +6,14 @@
 
 <!-- BADGES:START -->
 
-[![CI](https://img.shields.io/github/actions/workflow/status/{{ORG_NAME}}/.github/ci.yml?style=flat-square&label=CI)](https://github.com/{{ORG_NAME}}/.github/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/{{ORG_NAME}}/.github?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/%7B%7BORG_NAME%7D%7D/.github/ci.yml?style=flat-square&label=CI)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/%7B%7BORG_NAME%7D%7D/.github?style=flat-square)](LICENSE)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=flat-square&logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 <!-- BADGES:END -->
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/{{ORG_NAME}}/.github?devcontainer_path=.devcontainer/devcontainer.json)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/%7B%7BORG_NAME%7D%7D/.github?devcontainer_path=.devcontainer/devcontainer.json)
 
 [Documentation](docs/INDEX.md) | [Contributing](CONTRIBUTING.md) |
 [Security](SECURITY.md)
@@ -52,12 +52,13 @@ pre-commit install
 ```
 
 Need help? Check [SUPPORT.md](SUPPORT.md) or
-[start a discussion](https://github.com/orgs/{{ORG_NAME}}/discussions).
+[start a discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions).
 
 ## Workflows
 
-**{{WORKFLOW_COUNT}} workflows** covering CI/CD pipelines, security scanning (CodeQL, Gitleaks,
-TruffleHog), PR automation, health monitoring, and metrics. All actions are
+**{{WORKFLOW_COUNT}} workflows** covering CI/CD pipelines, security scanning
+(CodeQL, Gitleaks, TruffleHog), PR automation, health monitoring, and metrics.
+All actions are
 [SHA-pinned](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions#using-third-party-actions)
 with ratchet comments.
 
@@ -68,10 +69,10 @@ See the [Workflow Registry](docs/registry/) for the full catalog.
 
 ## AI Framework
 
-**{{AGENT_COUNT}} production agents** across security, infrastructure, development,
-languages, and documentation. **{{CHATMODE_COUNT}} chatmodes** for specialized AI personas. Plus
-coding instructions, task prompts, and curated collections — all compatible with
-GitHub Copilot.
+**{{AGENT_COUNT}} production agents** across security, infrastructure,
+development, languages, and documentation. **{{CHATMODE_COUNT}} chatmodes** for
+specialized AI personas. Plus coding instructions, task prompts, and curated
+collections — all compatible with GitHub Copilot.
 
 - [Agent Registry](docs/reference/AGENT_REGISTRY.md)
 - [Copilot Quick Start](docs/guides/COPILOT_QUICK_START.md)
@@ -110,7 +111,7 @@ guidelines, including our
 
 Found a vulnerability? **Do not open a public issue.** Follow our
 [Security Policy](SECURITY.md) or use
-[GitHub Security Advisories](https://github.com/{{ORG_NAME}}/.github/security/advisories/new).
+[GitHub Security Advisories](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new).
 
 ## License
 

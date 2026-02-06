@@ -3,7 +3,7 @@
 # This file tracks all live app deployments
 
 # Sample structure:
-# - repository: "{{ORG_NAME}}/example-app"
+# - repository: '{{ORG_NAME}}/example-app'
 #   app_type: "frontend"
 #   deployment_strategy: "pages-direct"
 #   deployment_url: "https://{{ORG_NAME}}.github.io/example-app"

@@ -5,7 +5,7 @@
 **Issue**: 🚨 Security Alert: Potential Secrets Detected in Code\
 **Workflow
 Run**:
-[#20510017480](https://github.com/{{ORG_NAME}}/.github/actions/runs/20510017480)\
+[#20510017480](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/runs/20510017480)\
 **Date**:
 2025-12-25\
 **Status**: ✅ RESOLVED

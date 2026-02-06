@@ -19,7 +19,7 @@ permissions:
 jobs:
   security:
     name: Security Scan
-    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main'
     with:
       scan-type: all
       severity-threshold: MEDIUM

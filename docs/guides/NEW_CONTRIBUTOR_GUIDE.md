@@ -1111,18 +1111,18 @@ ______________________________________________________________________
 
 **GitHub Discussions**:
 
-- [Ask Questions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+- [Ask Questions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
   \- Get help from the community
-- [Ideas](https://github.com/orgs/{{ORG_NAME}}/discussions/categories/ideas) -
-  Share suggestions
-- [Show and Tell](https://github.com/orgs/{{ORG_NAME}}/discussions/categories/show-and-tell)
+- [Ideas](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions/categories/ideas)
+  \- Share suggestions
+- [Show and Tell](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions/categories/show-and-tell)
   \- Share your work
 
 **GitHub Issues**:
 
-- [Report Bugs](https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
-- [Request Features](https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
-- [Improve Docs](https://github.com/{{ORG_NAME}}/.github/issues/new?template=documentation.yml)
+- [Report Bugs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+- [Request Features](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
+- [Improve Docs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=documentation.yml)
 
 ### Direct Support
 

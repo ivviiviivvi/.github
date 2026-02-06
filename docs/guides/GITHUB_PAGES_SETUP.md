@@ -468,7 +468,7 @@ Need help? Contact:
   [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 - 📚 **Documentation**: AgentSphere Setup
 - 🐛 **Issues**:
-  [Report a bug](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report a bug](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 📖 **Jekyll Docs**: https://jekyllrb.com/docs/
 
 ______________________________________________________________________

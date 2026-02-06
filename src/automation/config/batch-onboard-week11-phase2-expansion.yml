@@ -3,11 +3,11 @@
 # Simplified flat configuration format
 
 repositories:
-- {{ORG_NAME}}/intelligent-artifice-ark
-- {{ORG_NAME}}/render-second-amendment
-- {{ORG_NAME}}/a-mavs-olevm
-- {{ORG_NAME}}/a-recursive-root
-- {{ORG_NAME}}/collective-persona-operations
+- '{{ORG_NAME}}/intelligent-artifice-ark'
+- '{{ORG_NAME}}/render-second-amendment'
+- '{{ORG_NAME}}/a-mavs-olevm'
+- '{{ORG_NAME}}/a-recursive-root'
+- '{{ORG_NAME}}/collective-persona-operations'
 
 workflows:
 - repository-health-check.yml
