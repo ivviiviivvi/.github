@@ -670,7 +670,7 @@ ______________________________________________________________________
 
 ## Support
 
-- 📖 [Main Protocols](./WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
+- 📖 [Main Protocols](../architecture/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
 - 💬
   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - 🐛

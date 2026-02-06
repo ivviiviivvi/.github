@@ -163,7 +163,7 @@ Last updated: {{date}} | [Edit this page]({{page_url}}) | [View history]({{histo
 
 ---
 
-Licensed under [MIT License](../LICENSE) | [Code of Conduct](CODE_OF_CONDUCT.md) | [Security Policy](SECURITY.md)
+Licensed under [MIT License](../../LICENSE) | [Code of Conduct](../governance/CODE_OF_CONDUCT.md) | [Security Policy](../governance/SECURITY.md)
 ```
 
 ## Content Types
@@ -767,7 +767,7 @@ Great! Please [open a feature request](https://github.com/ivviiviivvi/.github/is
 
 ### What license is [Project] under?
 
-[Project] is licensed under [License]. See [LICENSE](../LICENSE) for details.
+[Project] is licensed under [License]. See [LICENSE](../../LICENSE) for details.
 
 ### Can I use [Project] commercially?
 

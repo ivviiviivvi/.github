@@ -12,7 +12,7 @@ practices:
 ## Quick Links
 
 - 📖 [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
-- 📚 [Best Practices Overview](./BEST_PRACTICES.md)
+- 📚 Best Practices Overview
 - 💬 [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
 - 🎫 [Issue Templates](../../.github/ISSUE_TEMPLATE/)
 
@@ -352,7 +352,7 @@ Need assistance?
 - 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
   for template improvements
 - 📖 Review the [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
-- 📚 Check the [Best Practices Guide](./BEST_PRACTICES.md)
+- 📚 Check the Best Practices Guide
 
 ______________________________________________________________________
 
@@ -366,7 +366,7 @@ Found these templates helpful? Have improvements to suggest?
 - Document your use cases and lessons learned
 - Help others by answering questions
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for details.
 
 ______________________________________________________________________
 

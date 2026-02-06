@@ -1051,7 +1051,7 @@ pip install joblib==1.3.2
 
 ### C. API Reference
 
-See [API_REFERENCE.md](API_REFERENCE.md) for detailed API documentation.
+See API_REFERENCE.md for detailed API documentation.
 
 ### D. Change Log
 

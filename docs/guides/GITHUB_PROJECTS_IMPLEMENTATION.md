@@ -1964,8 +1964,8 @@ ______________________________________________________________________
 **Documentation:**
 
 - [GitHub Projects Configuration](GITHUB_PROJECTS_CONFIGURATION.md)
-- [Workflow System](WORKFLOW_DESIGN.md)
-- [Contributing Guide](CONTRIBUTING.md)
+- [Workflow System](../workflows/WORKFLOW_DESIGN.md)
+- [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

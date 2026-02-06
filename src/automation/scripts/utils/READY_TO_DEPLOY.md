@@ -190,7 +190,7 @@ Manual steps in GitHub UI for each project:
 1. Save each view
 
 See:
-[GITHUB_PROJECTS_DEPLOYMENT.md](../docs/GITHUB_PROJECTS_DEPLOYMENT.md#phase-3-view-configuration-45-60-minutes)
+[GITHUB_PROJECTS_DEPLOYMENT.md](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md#phase-3-view-configuration-45-60-minutes)
 
 ### Step 5: Set Up Automation (30 minutes)
 
@@ -202,7 +202,7 @@ Manual steps for each project:
 1. Test with sample items
 
 See:
-[GITHUB_PROJECTS_DEPLOYMENT.md](../docs/GITHUB_PROJECTS_DEPLOYMENT.md#phase-4-automation-setup-30-minutes)
+[GITHUB_PROJECTS_DEPLOYMENT.md](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md#phase-4-automation-setup-30-minutes)
 
 ______________________________________________________________________
 
@@ -226,11 +226,11 @@ ______________________________________________________________________
 ## 📚 Documentation References
 
 - **Complete Guide:**
-  [GITHUB_PROJECTS_IMPLEMENTATION.md](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
+  [GITHUB_PROJECTS_IMPLEMENTATION.md](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
 - **Deployment Checklist:**
-  [GITHUB_PROJECTS_DEPLOYMENT.md](../docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+  [GITHUB_PROJECTS_DEPLOYMENT.md](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 - **Quick Reference:**
-  [GITHUB_PROJECTS_QUICKREF.md](../docs/GITHUB_PROJECTS_QUICKREF.md)
+  [GITHUB_PROJECTS_QUICKREF.md](../../../../docs/guides/GITHUB_PROJECTS_QUICKREF.md)
 - **Scripts Guide:** [README_PROJECTS.md](README_PROJECTS.md)
 - **1Password Guide:** [1PASSWORD_QUICK_START.md](1PASSWORD_QUICK_START.md)
 
@@ -299,7 +299,7 @@ cd /workspace/scripts && export GH_TOKEN=$(gh auth token) && python3 configure-g
 ______________________________________________________________________
 
 **Questions?** See [README_PROJECTS.md](README_PROJECTS.md) or
-[GITHUB_PROJECTS_DEPLOYMENT.md](../docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+[GITHUB_PROJECTS_DEPLOYMENT.md](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 
 ______________________________________________________________________
 

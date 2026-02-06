@@ -460,7 +460,7 @@ GitHub Pages automatically caches static assets with proper headers.
 
 ## Related Documentation
 
-- [AgentSphere Setup Guide](AGENTSPHERE_SETUP.md)
+- AgentSphere Setup Guide
 - [Live Deployment Guide](LIVE_DEPLOYMENT_GUIDE.md)
 - [Jekyll Documentation](https://jekyllrb.com/docs/)
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)
@@ -471,4 +471,4 @@ GitHub Pages automatically caches static assets with proper headers.
   [Create an issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
   [Join the discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation**: [Main README](../README.md)
+- **Documentation**: [Main README](../../README.md)

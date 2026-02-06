@@ -246,9 +246,9 @@ labels instead of failing. This is safe and ensures labels match specifications.
 
 ## See Also
 
-- [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../../docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
+- [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../../../docs/guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
   \- Manual label deployment via Web UI
-- [WEEK_11_NEXT_STEPS_QUICK_REF.md](../../docs/WEEK_11_NEXT_STEPS_QUICK_REF.md)
+- [WEEK_11_NEXT_STEPS_QUICK_REF.md](../../../docs/reports/WEEK_11_NEXT_STEPS_QUICK_REF.md)
   \- Quick reference for deployment
 - [batch_onboard_repositories.py](batch_onboard_repositories.py) - Main
   deployment script

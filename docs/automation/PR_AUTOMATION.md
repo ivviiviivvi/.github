@@ -731,9 +731,9 @@ ______________________________________________________________________
   commit conventions
 - [Automation Master Guide](AUTOMATION_MASTER_GUIDE.md) - Overall automation
   architecture
-- [Contributing Guidelines](../CONTRIBUTING.md) - How to contribute to the
+- [Contributing Guidelines](../governance/CONTRIBUTING.md) - How to contribute to the
   organization
-- [Branch Protection](../BRANCH_PROTECTION.md) - Branch protection configuration
+- [Branch Protection](../governance/BRANCH_PROTECTION.md) - Branch protection configuration
 
 ______________________________________________________________________
 

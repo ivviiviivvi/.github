@@ -214,10 +214,10 @@ ______________________________________________________________________
 
 - **1Password CLI Docs:** https://developer.1password.com/docs/cli/
 - **GitHub Projects Deployment:**
-  [GITHUB_PROJECTS_DEPLOYMENT.md](../docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+  [GITHUB_PROJECTS_DEPLOYMENT.md](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 - **Complete Setup Guide:** [README_PROJECTS.md](README_PROJECTS.md)
 - **Quick Reference:**
-  [GITHUB_PROJECTS_QUICKREF.md](../docs/GITHUB_PROJECTS_QUICKREF.md)
+  [GITHUB_PROJECTS_QUICKREF.md](../../../../docs/guides/GITHUB_PROJECTS_QUICKREF.md)
 
 ______________________________________________________________________
 

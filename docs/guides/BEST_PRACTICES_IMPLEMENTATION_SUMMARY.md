@@ -366,14 +366,14 @@ ______________________________________________________________________
 
 - [Complete Sessions Guide](./GITHUB_BEST_PRACTICES_SESSIONS.md)
 - [Quick Reference](./BEST_PRACTICES_QUICK_REFERENCE.md)
-- [Best Practices Overview](./BEST_PRACTICES.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- Best Practices Overview
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ### Templates
 
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
 - [Issue Templates](../../.github/ISSUE_TEMPLATE/)
-- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
+- PR Templates
 
 ### External
 
@@ -391,7 +391,7 @@ Need help implementing or using these templates?
   [Start a Discussion](https://github.com/ivi374forivi/.github/discussions)<!-- link:github.legacy_discussions -->
 - 🎫 [Open an Issue](https://github.com/ivi374forivi/.github/issues/new/choose)
 - 📖 [Read the Docs](../../)
-- 🤝 [Contributing Guide](../CONTRIBUTING.md)
+- 🤝 [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

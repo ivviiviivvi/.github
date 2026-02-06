@@ -619,7 +619,7 @@ ______________________________________________________________________
 ## Support
 
 - **Documentation**:
-  - [Unified Notification System](UNIFIED_NOTIFICATION_SYSTEM.md)
+  - [Unified Notification System](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)
   - [Week 9 Advanced Automation](WEEK_9_ADVANCED_AUTOMATION.md)
 - **Code**:
   - `automation/scripts/notification_manager.py`

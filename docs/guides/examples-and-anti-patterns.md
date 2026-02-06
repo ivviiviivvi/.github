@@ -460,9 +460,9 @@ feature_x:
 
 ## Related Resources
 
-- [API Documentation](api-docs.md)
-- [Configuration Reference](config-reference.md)
-- [GitHub Actions Integration](github-actions.md)
+- API Documentation
+- Configuration Reference
+- GitHub Actions Integration
 
 ______________________________________________________________________
 

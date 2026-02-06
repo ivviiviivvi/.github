@@ -11,7 +11,7 @@ ______________________________________________________________________
 
 ### 📚 Documentation (4 files)
 
-1. **[GITHUB_PROJECTS_IMPLEMENTATION.md](GITHUB_PROJECTS_IMPLEMENTATION.md)**
+1. **[GITHUB_PROJECTS_IMPLEMENTATION.md](../guides/GITHUB_PROJECTS_IMPLEMENTATION.md)**
    (3,500+ lines)
 
    - Complete implementation plan for all 7 projects
@@ -23,7 +23,7 @@ ______________________________________________________________________
    - Success metrics and KPIs
    - Training and documentation resources
 
-1. **[GITHUB_PROJECTS_QUICKREF.md](GITHUB_PROJECTS_QUICKREF.md)** (800+ lines)
+1. **[GITHUB_PROJECTS_QUICKREF.md](../guides/GITHUB_PROJECTS_QUICKREF.md)** (800+ lines)
 
    - One-page quick reference for daily use
    - Project-specific tips and shortcuts
@@ -32,7 +32,7 @@ ______________________________________________________________________
    - Filter examples and saved queries
    - Troubleshooting guide
 
-1. **[GITHUB_PROJECTS_VISUAL.md](GITHUB_PROJECTS_VISUAL.md)** (600+ lines)
+1. **GITHUB_PROJECTS_VISUAL.md** (600+ lines)
 
    - Visual diagrams and ASCII art representations
    - Project structure overview
@@ -41,7 +41,7 @@ ______________________________________________________________________
    - Statistics dashboard mockup
    - Field relationship diagrams
 
-1. **[../scripts/README_PROJECTS.md](../scripts/README_PROJECTS.md)** (800+
+1. **[../scripts/README_PROJECTS.md](../../src/automation/scripts/utils/README_PROJECTS.md)** (800+
    lines)
 
    - Complete setup guide
@@ -54,7 +54,7 @@ ______________________________________________________________________
 
 ### 🔧 Scripts (2 files)
 
-1. **[configure-github-projects.py](../scripts/configure-github-projects.py)**
+1. **configure-github-projects.py**
    (500+ lines)
 
    - Python script for complete project setup via GraphQL API
@@ -75,7 +75,7 @@ ______________________________________________________________________
    - ✅ Rate limiting protection
    - ✅ Progress logging
 
-1. **[create-github-projects.sh](../scripts/create-github-projects.sh)** (200+
+1. **create-github-projects.sh** (200+
    lines)
 
    - Bash script for basic project creation
@@ -188,7 +188,7 @@ cd scripts
 ### Option 3: Manual Setup
 
 Follow the complete guide in
-[GITHUB_PROJECTS_IMPLEMENTATION.md](GITHUB_PROJECTS_IMPLEMENTATION.md).
+[GITHUB_PROJECTS_IMPLEMENTATION.md](../guides/GITHUB_PROJECTS_IMPLEMENTATION.md).
 
 ______________________________________________________________________
 
@@ -254,18 +254,18 @@ ______________________________________________________________________
 
 ### Setup & Configuration
 
-- [Complete Implementation Plan](GITHUB_PROJECTS_IMPLEMENTATION.md) - 3,500+
+- [Complete Implementation Plan](../guides/GITHUB_PROJECTS_IMPLEMENTATION.md) - 3,500+
   lines
-- [Quick Reference Guide](GITHUB_PROJECTS_QUICKREF.md) - Daily use
-- [Visual Overview](GITHUB_PROJECTS_VISUAL.md) - Diagrams
-- [Scripts Documentation](../scripts/README_PROJECTS.md) - Automation
+- [Quick Reference Guide](../guides/GITHUB_PROJECTS_QUICKREF.md) - Daily use
+- Visual Overview - Diagrams
+- [Scripts Documentation](../../src/automation/scripts/utils/README_PROJECTS.md) - Automation
 
 ### Related Documentation
 
-- [Workflow System](WORKFLOW_DESIGN.md) - Integration with workflows
-- [GitHub Projects Configuration](GITHUB_PROJECTS_CONFIGURATION.md) - Manual
+- [Workflow System](../workflows/WORKFLOW_DESIGN.md) - Integration with workflows
+- [GitHub Projects Configuration](../guides/GITHUB_PROJECTS_CONFIGURATION.md) - Manual
   setup
-- [Documentation Index](INDEX.md) - All documentation
+- [Documentation Index](../INDEX.md) - All documentation
 
 ### External Resources
 
@@ -308,14 +308,14 @@ ______________________________________________________________________
 
 ### For Contributors
 
-1. Read [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
+1. Read [Quick Reference](../guides/GITHUB_PROJECTS_QUICKREF.md)
 1. Watch demo videos (coming soon)
 1. Practice with test issues
 1. Ask questions in discussions
 
 ### For Maintainers
 
-1. Review [Implementation Guide](GITHUB_PROJECTS_IMPLEMENTATION.md)
+1. Review [Implementation Guide](../guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
 1. Understand automation rules
 1. Learn GraphQL API basics
 1. Practice project administration
@@ -374,8 +374,8 @@ ______________________________________________________________________
 
 **Questions?**
 
-- Check [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
-- Review [Troubleshooting](../scripts/README_PROJECTS.md#troubleshooting)
+- Check [Quick Reference](../guides/GITHUB_PROJECTS_QUICKREF.md)
+- Review [Troubleshooting](../../src/automation/scripts/utils/README_PROJECTS.md#troubleshooting)
 - Open an
   [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - Ask in
@@ -383,7 +383,7 @@ ______________________________________________________________________
 
 **Issues?**
 
-- Script errors: Check [Scripts README](../scripts/README_PROJECTS.md)
+- Script errors: Check [Scripts README](../../src/automation/scripts/utils/README_PROJECTS.md)
 - API errors: Verify token permissions
 - Rate limits: Add delays between operations
 - Field issues: Check GraphQL syntax

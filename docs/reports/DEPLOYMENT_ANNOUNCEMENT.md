@@ -161,15 +161,15 @@ ______________________________________________________________________
 
 ### Must-Read
 
-- **[Complete Integration Guide](AUTONOMOUS_ECOSYSTEM_GUIDE.md)** - Everything
+- **Complete Integration Guide** - Everything
   you need to know
 - **[Deployment Summary](DEPLOYMENT_SUMMARY.md)** - What was deployed and why
 
 ### Additional Resources
 
 - [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
-- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
+- AgentSphere Documentation
+- GitHub Pages Setup
 
 ______________________________________________________________________
 

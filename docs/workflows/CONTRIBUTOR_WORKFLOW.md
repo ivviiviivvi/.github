@@ -31,10 +31,10 @@ ______________________________________________________________________
 **Welcome!** 👋 Here's your fastest path to contributing:
 
 1. Look for issues labeled
-   [`good-first-issue`](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
+   [`good-first-issue`](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
 1. Comment "I'd like to work on this"
 1. Wait for assignment (usually within 24 hours)
-1. Follow the [development setup guide](DEVELOPMENT_ENVIRONMENT_SETUP.md)
+1. Follow the [development setup guide](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
 1. Make your changes
 1. Open a pull request
 
@@ -44,16 +44,16 @@ ______________________________________________________________________
 
 ### Required Reading
 
-- [ ] [Code of Conduct](CODE_OF_CONDUCT.md) - Our community standards
-- [ ] [Contributing Guidelines](CONTRIBUTING.md) - Detailed contribution rules
-- [ ] [Development Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md) - Environment
+- [ ] [Code of Conduct](../governance/CODE_OF_CONDUCT.md) - Our community standards
+- [ ] [Contributing Guidelines](../governance/CONTRIBUTING.md) - Detailed contribution rules
+- [ ] [Development Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md) - Environment
   configuration
 
 ### Recommended Reading
 
 - [ ] [Workflow Design](WORKFLOW_DESIGN.md) - How our process works
-- [ ] [Labels Guide](LABELS.md) - Understanding issue/PR labels
-- [ ] [GitHub Best Practices Sessions](guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
+- [ ] [Labels Guide](../reference/LABELS.md) - Understanding issue/PR labels
+- [ ] [GitHub Best Practices Sessions](../guides/GITHUB_BEST_PRACTICES_SESSIONS.md)
 
 ### Prerequisites
 
@@ -80,7 +80,7 @@ ______________________________________________________________________
 
 1. **Create a discussion** (if needed)
 
-   - Go to [Discussions](../../discussions)
+   - Go to [Discussions](https://github.com/ivviiviivvi/.github/discussions)
    - Choose appropriate category:
      - **Ideas**: New features or enhancements
      - **Q&A**: Questions about the project
@@ -110,10 +110,10 @@ ______________________________________________________________________
 
 1. **Browse available issues**
 
-   - [All open issues](../../issues)
-   - [Good first issues](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
-   - [Help wanted](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22help-wanted%22)
-   - [Backlog items](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+backlog%22)
+   - [All open issues](https://github.com/ivviiviivvi/.github/issues)
+   - [Good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
+   - [Help wanted](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22help-wanted%22)
+   - [Backlog items](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+backlog%22)
 
 1. **Read the issue carefully**
 
@@ -442,7 +442,7 @@ ______________________________________________________________________
 
 1. **Join discussions**
 
-   - [Q&A Discussions](../../discussions/categories/q-a)
+   - [Q&A Discussions](https://github.com/ivviiviivvi/.github/discussions/categories/q-a)
    - General community help
 
 1. **Contact maintainers**
@@ -497,12 +497,12 @@ git push --force-with-lease origin branch-name
 
 ### Helpful Links
 
-- [Issues](../../issues)
-- [Pull Requests](../../pulls)
-- [Discussions](../../discussions)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Contributing Guide](CONTRIBUTING.md)
-- [Development Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md)
+- [Issues](https://github.com/ivviiviivvi/.github/issues)
+- [Pull Requests](https://github.com/ivviiviivvi/.github/pulls)
+- [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
+- [Contributing Guide](../governance/CONTRIBUTING.md)
+- [Development Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
 
 ______________________________________________________________________
 

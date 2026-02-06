@@ -174,8 +174,8 @@ ______________________________________________________________________
 ## Related Resources
 
 - [REUSABLE_WORKFLOWS.md](./REUSABLE_WORKFLOWS.md) - Reusable GitHub Actions
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
-- [SECURITY.md](../SECURITY.md) - Security policy
+- [CONTRIBUTING.md](../../docs/governance/CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](../../docs/governance/SECURITY.md) - Security policy
 - [CODEOWNERS](../CODEOWNERS) - Code ownership
 
 ______________________________________________________________________

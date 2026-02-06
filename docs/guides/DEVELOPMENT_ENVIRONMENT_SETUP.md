@@ -843,14 +843,14 @@ ______________________________________________________________________
   standards
 - [MCP Server Setup](MCP_SERVER_SETUP.md) - Integrate MCP servers
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Build custom agents
-- [Contributing Guide](CONTRIBUTING.md) - Contribute to this repository
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this repository
 
 ### Templates
 
-- [DevContainer Template](../.devcontainer/devcontainer.json) - Base
+- [DevContainer Template](../../.devcontainer/devcontainer.json) - Base
   configuration
-- [VS Code Settings Template](../.vscode/settings.json) - Recommended settings
-- [Git Configuration Template](../.gitconfig) - Git setup examples
+- [VS Code Settings Template](../../.vscode/settings.json) - Recommended settings
+- Git Configuration Template - Git setup examples
 
 ______________________________________________________________________
 

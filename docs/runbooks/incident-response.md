@@ -99,6 +99,6 @@ detected by the automated incident response system.
 
 ## Related Links
 
-- [SLA Thresholds](../automation/config/sla-thresholds.yml)
-- [On-Call Rotation](../automation/config/on-call-rotation.yml)
-- [Incident Response Workflow](../.github/workflows/incident-response.yml)
+- [SLA Thresholds](../../src/automation/config/sla-thresholds.yml)
+- [On-Call Rotation](../../src/automation/config/on-call-rotation.yml)
+- [Incident Response Workflow](../../.github/workflows/incident-response.yml)

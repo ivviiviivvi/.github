@@ -187,5 +187,5 @@ cat dispatch_results.json | jq '.'
 ## More Information
 
 📖 [Complete Documentation](ORG_WIDE_WORKFLOW_DISPATCH.md) 🔧
-[Workflow Template](../../workflow-templates/org-health-check.yml) 🎯
+[Workflow Template](../../.github/workflow-templates/org-health-check.yml) 🎯
 [Main Workflow](../../.github/workflows/org-wide-workflow-dispatch.yml)

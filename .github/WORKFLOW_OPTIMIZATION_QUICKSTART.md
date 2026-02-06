@@ -103,9 +103,9 @@ on:
 
 ## Documentation
 
-- **[WORKFLOW_STANDARDS.md](.github/WORKFLOW_STANDARDS.md)**: Comprehensive
+- **[WORKFLOW_STANDARDS.md](WORKFLOW_STANDARDS.md)**: Comprehensive
   standards and best practices
-- **[WORKFLOW_OPTIMIZATION_REPORT.md](.github/WORKFLOW_OPTIMIZATION_REPORT.md)**:
+- **[WORKFLOW_OPTIMIZATION_REPORT.md](WORKFLOW_OPTIMIZATION_REPORT.md)**:
   Detailed analysis and metrics
 
 ## Next Steps
@@ -195,9 +195,9 @@ jobs:
 
 ## Questions?
 
-- See [WORKFLOW_STANDARDS.md](.github/WORKFLOW_STANDARDS.md) for detailed
+- See [WORKFLOW_STANDARDS.md](WORKFLOW_STANDARDS.md) for detailed
   standards
-- See [WORKFLOW_OPTIMIZATION_REPORT.md](.github/WORKFLOW_OPTIMIZATION_REPORT.md)
+- See [WORKFLOW_OPTIMIZATION_REPORT.md](WORKFLOW_OPTIMIZATION_REPORT.md)
   for metrics
 - Open an issue if you need help
 

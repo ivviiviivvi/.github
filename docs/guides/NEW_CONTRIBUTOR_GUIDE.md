@@ -1096,16 +1096,16 @@ ______________________________________________________________________
 
 **Documentation**:
 
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 - [Testing Best Practices](testing-best-practices.md)
 - [Monitoring Guide](monitoring.md)
-- [Copilot Quick Start](../COPILOT_QUICK_START.md)
+- [Copilot Quick Start](COPILOT_QUICK_START.md)
 
 **Reference**:
 
-- [Agent Registry](../AGENT_REGISTRY.md) - Catalog of all agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Catalog of all agents
 - [Documentation Index](../INDEX.md) - Complete documentation list
-- [Cleanup Roadmap](../../CLEANUP_ROADMAP.md) - Project status
+- [Cleanup Roadmap](../archive/CLEANUP_ROADMAP.md) - Project status
 
 ### Community
 
@@ -1154,19 +1154,19 @@ Now that you've read this guide:
 **For new contributors**:
 
 1. This guide (you're here!)
-1. [Contributing Guidelines](../CONTRIBUTING.md)
+1. [Contributing Guidelines](../governance/CONTRIBUTING.md)
 1. [Testing Best Practices](testing-best-practices.md)
 
 **For AI framework contributors**:
 
-1. [Agent Architecture Guide](../AGENT_ARCHITECTURE_GUIDE.md)
-1. [Agent Registry](../AGENT_REGISTRY.md)
-1. [Copilot Quick Start](../COPILOT_QUICK_START.md)
+1. [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md)
+1. [Agent Registry](../reference/AGENT_REGISTRY.md)
+1. [Copilot Quick Start](COPILOT_QUICK_START.md)
 
 **For workflow developers**:
 
 1. [Monitoring Guide](monitoring.md)
-1. [Workflow Optimization Analysis](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+1. [Workflow Optimization Analysis](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 
 ______________________________________________________________________
 

@@ -361,9 +361,9 @@ Track these issue metrics:
 ## References
 
 - [GitHub Issues Documentation](https://docs.github.com/en/issues)<!-- link:docs.github_issues -->
-- [Project Planning Guide](PROJECT_PLANNING.md)
+- Project Planning Guide
 - [Label Standards](LABELS.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

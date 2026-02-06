@@ -40,7 +40,7 @@ ______________________________________________________________________
     [GITHUB_PROJECTS_IMPLEMENTATION.md](GITHUB_PROJECTS_IMPLEMENTATION.md)
   - [ ] Reviewed [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
   - [ ] Understood [Visual Overview](GITHUB_PROJECTS_VISUAL.md)
-  - [ ] Read [Scripts README](../scripts/README_PROJECTS.md)
+  - [ ] Read [Scripts README](../../src/automation/scripts/utils/README_PROJECTS.md)
 
 ______________________________________________________________________
 
@@ -791,7 +791,7 @@ ______________________________________________________________________
 
 **Questions?**
 
-- Review [Troubleshooting](../scripts/README_PROJECTS.md#troubleshooting)
+- Review [Troubleshooting](../../src/automation/scripts/utils/README_PROJECTS.md#troubleshooting)
 - Check [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
 - Ask in
   [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->

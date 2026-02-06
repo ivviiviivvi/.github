@@ -713,9 +713,9 @@ ______________________________________________________________________
 
 ### Related Documentation
 
-- [Week 5 Implementation Guide](WEEK5_SLACK_INTEGRATION_GUIDE.md)
+- Week 5 Implementation Guide
 - [Slack Integration Training](SLACK_INTEGRATION_TRAINING.md)
-- [Month 2 Kickoff Plan](MONTH2_KICKOFF_PLAN.md)
+- Month 2 Kickoff Plan
 
 ### External Links
 

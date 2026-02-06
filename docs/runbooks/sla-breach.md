@@ -36,7 +36,7 @@ automated SLA monitoring system.
 ## Detection
 
 SLA breaches are automatically detected by the
-[SLA Monitoring Workflow](../.github/workflows/sla-monitoring.yml) which runs
+[SLA Monitoring Workflow](../../.github/workflows/sla-monitoring.yml) which runs
 every 30 minutes.
 
 ### Alert Channels
@@ -119,6 +119,6 @@ For **Success Rate** breaches:
 
 ## Related Links
 
-- [SLA Thresholds Config](../automation/config/sla-thresholds.yml)
-- [SLA Monitoring Workflow](../.github/workflows/sla-monitoring.yml)
+- [SLA Thresholds Config](../../src/automation/config/sla-thresholds.yml)
+- [SLA Monitoring Workflow](../../.github/workflows/sla-monitoring.yml)
 - [Incident Response Runbook](./incident-response.md)

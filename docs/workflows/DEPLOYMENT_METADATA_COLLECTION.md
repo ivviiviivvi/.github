@@ -293,6 +293,6 @@ Potential enhancements for this system:
 
 ## Related Documentation
 
-- [Deployment Summary](../DEPLOYMENT_SUMMARY.md)
-- [Complete Deployment README](../COMPLETE_DEPLOYMENT_README.md)
+- [Deployment Summary](../reports/DEPLOYMENT_SUMMARY.md)
+- [Complete Deployment README](../guides/COMPLETE_DEPLOYMENT_README.md)
 - [Architecture Guide](../architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md)

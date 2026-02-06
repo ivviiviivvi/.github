@@ -685,7 +685,7 @@ ______________________________________________________________________
 
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Building custom
   agents
-- [Agent Registry](AGENT_REGISTRY.md) - Catalog of available agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Catalog of available agents
 - [Custom Instructions Guide](CUSTOM_INSTRUCTIONS_SETUP.md) - Setting up coding
   standards
 - [Development Environment Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md) -
@@ -707,7 +707,7 @@ Each language collection includes:
   \- Ask questions and share ideas
 - [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
   \- Report bugs or request features
-- [Contributing Guide](CONTRIBUTING.md) - Contribute to this documentation
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this documentation
 
 ______________________________________________________________________
 

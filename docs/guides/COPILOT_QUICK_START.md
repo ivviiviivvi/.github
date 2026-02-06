@@ -272,11 +272,11 @@ Specialized AI assistants that extend Copilot for specific domains:
 
 ### Available Agents
 
-Browse all 26+ agents: [Agent Registry](AGENT_REGISTRY.md)
+Browse all 26+ agents: [Agent Registry](../reference/AGENT_REGISTRY.md)
 
 **Popular agents**:
 
-- [`CSharpExpert`](../ai_framework/agents/CSharpExpert.agent.md) - C# and .NET
+- `CSharpExpert` - C# and .NET
 - [`terraform`](../ai_framework/agents/terraform.agent.md) - Infrastructure
 - [`security-audit`](../ai_framework/agents/security-audit.agent.md) - Security
 - [`adr-generator`](../ai_framework/agents/adr-generator.agent.md) -
@@ -426,7 +426,7 @@ ______________________________________________________________________
 
 ### Quick References
 
-- [Agent Registry](AGENT_REGISTRY.md) - Complete catalog of agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Complete catalog of agents
 - [README.agents.md](README.agents.md) - Agent documentation
 - [README.instructions.md](README.instructions.md) - Instructions documentation
 - [README.prompts.md](README.prompts.md) - Prompts documentation
@@ -536,10 +536,10 @@ ______________________________________________________________________
 
 ### Resources
 
-- **Documentation**: [README.md](../README.md) - Complete repository overview
-- **Agent Registry**: [AGENT_REGISTRY.md](AGENT_REGISTRY.md) - Catalog of all
+- **Documentation**: [README.md](../../README.md) - Complete repository overview
+- **Agent Registry**: [AGENT_REGISTRY.md](../reference/AGENT_REGISTRY.md) - Catalog of all
   agents
-- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md) - How to contribute
+- **Contributing**: [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - How to contribute
 
 ### Community
 

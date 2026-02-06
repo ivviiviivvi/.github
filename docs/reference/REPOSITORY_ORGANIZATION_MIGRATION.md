@@ -75,11 +75,11 @@ Brief description of the project.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 
 ## License
 
-See [LICENSE](LICENSE) EOF
+See [LICENSE](../../LICENSE) EOF
 
 # Create LICENSE if missing (MIT example)
 
@@ -206,7 +206,7 @@ cat > docs/INDEX.md << 'EOF'
 - [Repository Structure](reference/REPOSITORY_STRUCTURE.md)
 
 ## Governance
-- [Contributing](governance/CONTRIBUTING.md)
+- [Contributing](../governance/CONTRIBUTING.md)
 EOF
 ```
 

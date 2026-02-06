@@ -857,7 +857,7 @@ query OrgProjects {
 - [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
 - [Projects GraphQL API](https://docs.github.com/en/graphql/reference/objects#projectv2)
 - [Project Automation](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project)
-- [Project Templates](./project-templates/)
+- Project Templates
 
 ______________________________________________________________________
 

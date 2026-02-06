@@ -616,11 +616,11 @@ ______________________________________________________________________
 
 ### Internal Docs
 
-- [SEMANTIC_VERSIONING.md](reference/SEMANTIC_VERSIONING.md) - Detailed semver
+- SEMANTIC_VERSIONING.md - Detailed semver
   guide
-- [AI_CODE_INTELLIGENCE.md](architecture/AI_CODE_INTELLIGENCE.md) - AI
+- [AI_CODE_INTELLIGENCE.md](../architecture/AI_CODE_INTELLIGENCE.md) - AI
   integration
-- [VERSION_CONTROL_STANDARDS.md](.github/VERSION_CONTROL_STANDARDS.md) - Branch
+- [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) - Branch
   naming
 
 ### Tools
@@ -649,7 +649,7 @@ ______________________________________________________________________
 
 Need help?
 
-- 📖 Check [CONTRIBUTING.md](../CONTRIBUTING.md)
+- 📖 Check [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬 Start a
   [Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 🐛 Open an

@@ -755,8 +755,8 @@ ______________________________________________________________________
 ### Related Documentation
 
 - [Security Best Practices](security-best-practices.md) - Security guidelines
-- [SECURITY.md](../SECURITY.md) - Security disclosure policy
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](../governance/SECURITY.md) - Security disclosure policy
+- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - Contribution guidelines
 
 ______________________________________________________________________
 
@@ -766,7 +766,7 @@ ______________________________________________________________________
   [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - **Issues**: Report in
   [issue tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
-- **Improvements**: Submit a [pull request](../CONTRIBUTING.md)
+- **Improvements**: Submit a [pull request](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

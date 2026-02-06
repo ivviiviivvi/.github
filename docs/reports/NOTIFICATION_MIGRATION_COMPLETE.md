@@ -533,7 +533,7 @@ If issues arise, rollback is straightforward:
 
 ### Complete Documentation Set
 
-1. **[UNIFIED_NOTIFICATION_SYSTEM.md](UNIFIED_NOTIFICATION_SYSTEM.md)**
+1. **[UNIFIED_NOTIFICATION_SYSTEM.md](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)**
 
    - Architecture overview
    - Configuration guide
@@ -624,7 +624,7 @@ ______________________________________________________________________
 
 **Questions or Issues?**
 
-- See [Troubleshooting Guide](UNIFIED_NOTIFICATION_SYSTEM.md#troubleshooting)
+- See [Troubleshooting Guide](../guides/UNIFIED_NOTIFICATION_SYSTEM.md#troubleshooting)
 - Open issue: <https://github.com/ivviiviivvi/.github/issues>
 - Contact: <automation-team@example.com>
 

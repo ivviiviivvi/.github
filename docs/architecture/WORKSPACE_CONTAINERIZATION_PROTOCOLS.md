@@ -1633,16 +1633,16 @@ architecture** - Grow with your needs
 
 ### Additional Resources
 
-- [Development Environment Setup](./DEVELOPMENT_ENVIRONMENT_SETUP.md)
-- [Docker Best Practices](./guides/DOCKER_BEST_PRACTICES.md)
-- [Security Guide](SECURITY.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
+- [Development Environment Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+- [Docker Best Practices](../guides/DOCKER_BEST_PRACTICES.md)
+- [Security Guide](../governance/SECURITY.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 
 **Questions or Issues?**
 
-- 📖 [Documentation](../docs/)
+- 📖 [Documentation](../)
 - 💬
   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - 🐛

@@ -222,8 +222,8 @@ To improve the organization's GitHub management:
 
 ## References
 
-- [AI GitHub Management Protocol](for-ai-implementation.txt)
-- [Branch Protection Guide](BRANCH_PROTECTION.md)
-- [Repository Setup Checklist](REPOSITORY_SETUP_CHECKLIST.md)
-- [Label Standards](LABELS.md)
+- AI GitHub Management Protocol
+- [Branch Protection Guide](../governance/BRANCH_PROTECTION.md)
+- [Repository Setup Checklist](../runbooks/REPOSITORY_SETUP_CHECKLIST.md)
+- [Label Standards](../reference/LABELS.md)
 - [GitHub Documentation](https://docs.github.com)

@@ -757,10 +757,10 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
-- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
+- [Walkthrough Setup Guide](../reports/WALKTHROUGH_ANNOUNCEMENT.md)
+- AgentSphere Documentation
 - [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
-- [Security Best Practices](SECURITY.md)
+- [Security Best Practices](../governance/SECURITY.md)
 
 ### Workflow Files
 
@@ -788,13 +788,13 @@ ______________________________________________________________________
 
 ### Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for guidelines
 
 ### Feedback
 
 - Feature requests: Create issue with `enhancement` label
 - Bug reports: Create issue with `bug` label
-- Security issues: See [SECURITY.md](SECURITY.md)
+- Security issues: See [SECURITY.md](../governance/SECURITY.md)
 
 ______________________________________________________________________
 
@@ -813,5 +813,5 @@ ______________________________________________________________________
 **Maintained by**: @4444JPP\
 **Organization**: ivviiviivvi\
 **License**: See
-[LICENSE](../LICENSE)\
+[LICENSE](../../LICENSE)\
 **Last Updated**: 2025-12-22

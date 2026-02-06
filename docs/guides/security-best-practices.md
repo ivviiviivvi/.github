@@ -565,8 +565,8 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [SECURITY.md](../SECURITY.md) - Security disclosure policy
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](../governance/SECURITY.md) - Security disclosure policy
+- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - Contribution guidelines
 - [Dependency Management Guide](dependency-management.md) - Dependency best
   practices
 
@@ -595,7 +595,7 @@ ______________________________________________________________________
   [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
 - **General Questions**: Open a
   [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation Improvements**: Submit a [pull request](../CONTRIBUTING.md)
+- **Documentation Improvements**: Submit a [pull request](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

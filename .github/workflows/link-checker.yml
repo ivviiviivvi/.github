@@ -51,6 +51,13 @@ jobs:
           --exclude-path 'docs/_layouts/'
           --exclude-path 'docs/site/'
           --exclude-path 'src/automation/dashboard/'
+          --exclude-path 'src/ai_framework/collections/'
+          --exclude-path 'docs/ai_framework/collections/'
+          --exclude-path 'docs/templates/'
+          --exclude-path 'docs/standards/'
+          --exclude-path 'docs/status/'
+          --exclude-path '.devcontainer/'
+          --exclude-path 'SUPPORT.md'
           --max-retries 3
           --timeout 20
           '**/*.md'

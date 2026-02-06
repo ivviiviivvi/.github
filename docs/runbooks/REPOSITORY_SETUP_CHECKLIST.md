@@ -13,9 +13,9 @@ with best practices.
 - [ ] Website URL set (documentation, demo, or homepage)
 - [ ] Social preview image configured (for public repos)
 - [ ] Ontological title defined (see
-  [About Section Standards](standards/ABOUT_SECTION_STANDARDS.md))
+  About Section Standards)
 - [ ] README.md created with problem → approach → outcome narrative (see
-  [README Standards](standards/README_TEMPLATE_STANDARDS.md))
+  README Standards)
 - [ ] LICENSE file added (MIT or organization standard)
 - [ ] .gitignore configured for language/framework
 

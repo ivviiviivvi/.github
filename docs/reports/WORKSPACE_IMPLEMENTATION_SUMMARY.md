@@ -20,7 +20,7 @@ framework that enables developers to:
 
 #### Primary Documents
 
-1. **[Workspace & Containerization Protocols](./WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)**
+1. **[Workspace & Containerization Protocols](../architecture/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)**
    (30+ pages)
 
    - Complete architecture and design philosophy
@@ -29,7 +29,7 @@ framework that enables developers to:
    - Resource management strategies
    - Best practices and troubleshooting
 
-1. **[Codespaces Guide](./CODESPACES_GUIDE.md)** (25+ pages)
+1. **[Codespaces Guide](../guides/CODESPACES_GUIDE.md)** (25+ pages)
 
    - GitHub Codespaces setup and configuration
    - Cost management and optimization
@@ -37,7 +37,7 @@ framework that enables developers to:
    - Advanced usage patterns
    - Migration guides
 
-1. **[Code-Server Setup Guide](./CODE_SERVER_SETUP.md)** (15+ pages)
+1. **[Code-Server Setup Guide](../guides/CODE_SERVER_SETUP.md)** (15+ pages)
 
    - Self-hosted VS Code in browser
    - Security hardening with HTTPS
@@ -45,7 +45,7 @@ framework that enables developers to:
    - Backup and recovery procedures
    - Production-ready configurations
 
-1. **[Quick Start Guide](./WORKSPACE_QUICK_START.md)** (10+ pages)
+1. **[Quick Start Guide](../guides/WORKSPACE_QUICK_START.md)** (10+ pages)
 
    - Get productive in 5 minutes
    - Choose-your-own-path approach
@@ -487,10 +487,10 @@ git clone <repo>
 
 ### Documentation
 
-- 📖 [Complete Protocols](./WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
-- 🚀 [Quick Start](./WORKSPACE_QUICK_START.md)
-- 🌐 [Codespaces Guide](./CODESPACES_GUIDE.md)
-- 🔧 [Code-Server Setup](./CODE_SERVER_SETUP.md)
+- 📖 [Complete Protocols](../architecture/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
+- 🚀 [Quick Start](../guides/WORKSPACE_QUICK_START.md)
+- 🌐 [Codespaces Guide](../guides/CODESPACES_GUIDE.md)
+- 🔧 [Code-Server Setup](../guides/CODE_SERVER_SETUP.md)
 
 ### Community
 

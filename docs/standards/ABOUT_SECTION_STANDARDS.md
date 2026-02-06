@@ -308,10 +308,10 @@ The README.md should reflect About section information:
 
 ### Related Documentation
 
-- [Repository Setup Checklist](../REPOSITORY_SETUP_CHECKLIST.md)
+- [Repository Setup Checklist](../runbooks/REPOSITORY_SETUP_CHECKLIST.md)
 - [README Template Standards](./README_TEMPLATE_STANDARDS.md)
-- [Schema.org Implementation Guide](../SCHEMA_ORG_SEMVER_GUIDE.md)
-- [Completionism Specialist Agent](../../ai_framework/agents/completionism-specialist.agent.md)
+- [Schema.org Implementation Guide](../guides/SCHEMA_ORG_SEMVER_GUIDE.md)
+- [Completionism Specialist Agent](../../src/ai_framework/agents/completionism-specialist.agent.md)
 
 ### Tools
 

@@ -157,11 +157,11 @@ pip install black flake8
 ## Creating Custom Templates
 
 See
-[Template Development Guide](../../docs/guides/DEVCONTAINER_TEMPLATE_GUIDE.md)
+Template Development Guide
 
 ## Support
 
-- 📖 [Main Protocols](../../docs/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
+- 📖 [Main Protocols](../../../docs/architecture/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
 - 💬
   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - 🐛

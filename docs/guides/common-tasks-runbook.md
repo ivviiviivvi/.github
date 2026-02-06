@@ -919,7 +919,7 @@ ______________________________________________________________________
 - [New Contributor Guide](NEW_CONTRIBUTOR_GUIDE.md) - Getting started
 - [Monitoring Guide](monitoring.md) - Detailed monitoring runbooks
 - [Testing Best Practices](testing-best-practices.md) - Testing standards
-- [Contributing Guidelines](../CONTRIBUTING.md) - Contribution process
+- [Contributing Guidelines](../governance/CONTRIBUTING.md) - Contribution process
 
 ______________________________________________________________________
 

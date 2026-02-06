@@ -5,15 +5,15 @@
 This document has been relocated to maintain better organization.
 
 **New Location:**
-[`guides/PR_AUTOMATION_QUICK_REF.md`](guides/PR_AUTOMATION_QUICK_REF.md)
+[`guides/PR_AUTOMATION_QUICK_REF.md`](PR_AUTOMATION_QUICK_REF.md)
 
 ______________________________________________________________________
 
 ## Quick Links
 
-- **Main Documentation Index**: [INDEX.md](INDEX.md)
-- **All Guides**: [guides/](guides/)
-- **Workflow Documentation**: [workflows/](workflows/)
+- **Main Documentation Index**: [INDEX.md](../INDEX.md)
+- **All Guides**: guides/
+- **Workflow Documentation**: workflows/
 
 ______________________________________________________________________
 

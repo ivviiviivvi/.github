@@ -244,7 +244,7 @@ ______________________________________________________________________
 ## Documentation References
 
 - **Full Manual Guide**:
-  [docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
+  [docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
 - **Phase 1 Status**: [docs/WEEK_11_PHASE1_STATUS.md](WEEK_11_PHASE1_STATUS.md)
 - **Session Summary**:
   [docs/WEEK_11_SESSION_SUMMARY.md](WEEK_11_SESSION_SUMMARY.md)

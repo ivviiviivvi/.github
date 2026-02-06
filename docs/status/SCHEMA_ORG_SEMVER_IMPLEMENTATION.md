@@ -394,10 +394,10 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [SCHEMA_ORG_SEMVER_GUIDE.md](docs/SCHEMA_ORG_SEMVER_GUIDE.md) - Complete guide
-- [SEMANTIC_VERSIONING.md](docs/reference/SEMANTIC_VERSIONING.md) - Semver
+- [SCHEMA_ORG_SEMVER_GUIDE.md](../guides/SCHEMA_ORG_SEMVER_GUIDE.md) - Complete guide
+- SEMANTIC_VERSIONING.md - Semver
   details
-- [.schema-org/README.md](.schema-org/README.md) - Schema docs
+- [.schema-org/README.md](../../README.md) - Schema docs
 
 ### External Resources
 
@@ -408,7 +408,7 @@ ______________________________________________________________________
 
 ### Support
 
-- 📖 [CONTRIBUTING.md](CONTRIBUTING.md)
+- 📖 [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬
   [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - 🐛
@@ -420,7 +420,7 @@ ______________________________________________________________________
 
 ### For Teams
 
-1. ✅ Review the [complete guide](docs/SCHEMA_ORG_SEMVER_GUIDE.md)
+1. ✅ Review the [complete guide](../guides/SCHEMA_ORG_SEMVER_GUIDE.md)
 1. ✅ Start using conventional commits
 1. ✅ Use version bump workflows for releases
 1. ✅ Keep schemas updated with project changes

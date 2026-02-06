@@ -638,9 +638,9 @@ ______________________________________________________________________
 
 **Our Documentation:**
 
-- [Workflow Design](WORKFLOW_DESIGN.md)
-- [Maintainer Guide](MAINTAINER_WORKFLOW.md)
-- [Contributor Guide](CONTRIBUTOR_WORKFLOW.md)
+- [Workflow Design](../workflows/WORKFLOW_DESIGN.md)
+- [Maintainer Guide](../workflows/MAINTAINER_WORKFLOW.md)
+- [Contributor Guide](../workflows/CONTRIBUTOR_WORKFLOW.md)
 
 ______________________________________________________________________
 

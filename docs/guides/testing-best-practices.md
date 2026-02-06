@@ -488,11 +488,11 @@ ______________________________________________________________________
 
 ### Organization Resources
 
-- [pytest.ini](../../pytest.ini) - Test configuration
+- [pyproject.toml](../../pyproject.toml) - Test configuration
 - [conftest.py](../../tests/conftest.py) - Shared fixtures
 - [Test Coverage Workflow](../../.github/workflows/test-coverage.yml) - CI
   configuration
-- [CLEANUP_ROADMAP.md](../../CLEANUP_ROADMAP.md) - Phase 8 details
+- [CLEANUP_ROADMAP.md](../archive/CLEANUP_ROADMAP.md) - Phase 8 details
 
 ______________________________________________________________________
 

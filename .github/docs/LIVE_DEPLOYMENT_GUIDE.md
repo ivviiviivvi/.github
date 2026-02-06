@@ -715,7 +715,7 @@ USER node
 
 ## Related Documentation
 
-- [AgentSphere Setup Guide](AGENTSPHERE_SETUP.md)
+- AgentSphere Setup Guide
 - [GitHub Pages Setup Guide](GITHUB_PAGES_SETUP.md)
 - [Docker Documentation](https://docs.docker.com)
 - [GitHub Codespaces Documentation](https://docs.github.com/en/codespaces)
@@ -727,4 +727,4 @@ USER node
   [Report a problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
 - **Discussions:**
   [Ask questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation:** [Main README](../README.md)
+- **Documentation:** [Main README](../../README.md)

@@ -552,11 +552,11 @@ ______________________________________________________________________
 
 **Documentation:**
 
-- [SLACK_INTEGRATION_TRAINING.md](SLACK_INTEGRATION_TRAINING.md) - Team training
+- [SLACK_INTEGRATION_TRAINING.md](../guides/SLACK_INTEGRATION_TRAINING.md) - Team training
   materials
-- [SLACK_INTEGRATION_CONFIGURATION.md](SLACK_INTEGRATION_CONFIGURATION.md) -
+- [SLACK_INTEGRATION_CONFIGURATION.md](../guides/SLACK_INTEGRATION_CONFIGURATION.md) -
   Setup guide
-- [WEEK5_DEPLOYMENT_CHECKLIST.md](WEEK5_DEPLOYMENT_CHECKLIST.md) - Complete
+- [WEEK5_DEPLOYMENT_CHECKLIST.md](../reports/WEEK5_DEPLOYMENT_CHECKLIST.md) - Complete
   checklist
 
 **Code:**

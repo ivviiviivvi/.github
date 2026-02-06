@@ -895,7 +895,7 @@ ______________________________________________________________________
 - [Testing Best Practices](testing-best-practices.md)
 - [Monitoring Guide](monitoring.md)
 - [Common Tasks Runbook](common-tasks-runbook.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

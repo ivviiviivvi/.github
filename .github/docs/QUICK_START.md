@@ -315,7 +315,7 @@ available._
   types
 - [Scheduled Automation](../workflows/scheduled-walkthrough-generator.yml) -
   Automated recurring walkthroughs
-- [Contributing](../../docs/CONTRIBUTING.md) - Help improve the system
+- [Contributing](../../docs/governance/CONTRIBUTING.md) - Help improve the system
 
 ______________________________________________________________________
 

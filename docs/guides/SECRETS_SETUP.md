@@ -873,16 +873,16 @@ ______________________________________________________________________
 ### Documentation
 
 - 📋
-  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
-- 📢 [Announcement & Quick Start](./WALKTHROUGH_ANNOUNCEMENT.md)
+  [Walkthrough Request Template](../../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📢 [Announcement & Quick Start](../reports/WALKTHROUGH_ANNOUNCEMENT.md)
 - 🏗️ [System Architecture](./AI_IMPLEMENTATION_GUIDE.md)
-- 🤝 [Contributing Guide](./CONTRIBUTING.md)
+- 🤝 [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ### Getting Help
 
 - 💬 **GitHub Discussions**:
   [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
-- 🐛 **Bug Reports**: [File an issue](../.github/ISSUE_TEMPLATE/)
+- 🐛 **Bug Reports**: [File an issue](../../.github/ISSUE_TEMPLATE/)
 - 📧 **Direct Support**: Contact @4444JPP
 - 📖 **Documentation Hub**: [View all docs](./)
 

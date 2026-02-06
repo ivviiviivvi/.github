@@ -680,16 +680,16 @@ ______________________________________________________________________
 
 - **[Workflow Optimization Guide](./WORKFLOW_OPTIMIZATION.md)** - Performance
   tips
-- **[Security Best Practices](../SECURITY_BEST_PRACTICES.md)** - Security
+- **Security Best Practices** - Security
   guidelines
-- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute
+- **[Contributing Guide](../governance/CONTRIBUTING.md)** - How to contribute
 
 ______________________________________________________________________
 
 ## 🤝 Contributing
 
 Have ideas for new reusable workflows? See our
-[Contributing Guide](../CONTRIBUTING.md).
+[Contributing Guide](../governance/CONTRIBUTING.md).
 
 **Common workflow patterns to contribute:**
 
