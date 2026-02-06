@@ -7,14 +7,14 @@
 
 New to GitHub Copilot customizations? Follow this path:
 
-1. **[Quick Start Guide](../guides/COPILOT_QUICK_START.md)** ⭐ - Get everything set up in
-   15 minutes
-1. **[Custom Instructions Setup](../guides/CUSTOM_INSTRUCTIONS_SETUP.md)** - Configure
-   coding standards
-1. **[MCP Server Setup](../guides/MCP_SERVER_SETUP.md)** - Add specialized tools and
-   capabilities
-1. **[Development Environment Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)** -
-   Optimize your workspace
+1. **[Quick Start Guide](../guides/COPILOT_QUICK_START.md)** ⭐ - Get everything
+   set up in 15 minutes
+1. **[Custom Instructions Setup](../guides/CUSTOM_INSTRUCTIONS_SETUP.md)** -
+   Configure coding standards
+1. **[MCP Server Setup](../guides/MCP_SERVER_SETUP.md)** - Add specialized tools
+   and capabilities
+1. **[Development Environment Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)**
+   \- Optimize your workspace
 
 ______________________________________________________________________
 
@@ -137,16 +137,18 @@ ______________________________________________________________________
 **I want to...**
 
 - **Write better code**: Install
-  [Custom Instructions](../guides/CUSTOM_INSTRUCTIONS_SETUP.md) for your languages
-- **Extend Copilot's capabilities**: Set up [MCP Servers](../guides/MCP_SERVER_SETUP.md)
-- **Get specialized help**: Use [Custom Agents](../guides/AGENT_ARCHITECTURE_GUIDE.md) for
-  your domain
+  [Custom Instructions](../guides/CUSTOM_INSTRUCTIONS_SETUP.md) for your
+  languages
+- **Extend Copilot's capabilities**: Set up
+  [MCP Servers](../guides/MCP_SERVER_SETUP.md)
+- **Get specialized help**: Use
+  [Custom Agents](../guides/AGENT_ARCHITECTURE_GUIDE.md) for your domain
 - **Optimize my environment**: Follow
   [Development Environment Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
-- **Generate boilerplate code**: Use [Prompts](../guides/README.prompts.md) for common
-  tasks
-- **Switch contexts**: Activate [Chat Modes](../guides/README.chatmodes.md) for different
-  roles
+- **Generate boilerplate code**: Use [Prompts](../guides/README.prompts.md) for
+  common tasks
+- **Switch contexts**: Activate [Chat Modes](../guides/README.chatmodes.md) for
+  different roles
 
 ### By Language
 
@@ -189,10 +191,12 @@ ______________________________________________________________________
 
 - [Agent Registry](AGENT_REGISTRY.md) - Complete catalog of all agents
 - [README.agents.md](../README.agents.md) - Agent system documentation
-- [README.instructions.md](../guides/README.instructions.md) - Instructions system
+- [README.instructions.md](../guides/README.instructions.md) - Instructions
+  system documentation
+- [README.prompts.md](../guides/README.prompts.md) - Prompts system
   documentation
-- [README.prompts.md](../guides/README.prompts.md) - Prompts system documentation
-- [README.chatmodes.md](../guides/README.chatmodes.md) - Chat modes system documentation
+- [README.chatmodes.md](../guides/README.chatmodes.md) - Chat modes system
+  documentation
 - [README.collections.md](../guides/README.collections.md) - Collections system
   documentation
 
@@ -209,7 +213,8 @@ ______________________________________________________________________
   \- Ask questions, share ideas
 - [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
   \- Report bugs, request features
-- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this repository
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this
+  repository
 
 ______________________________________________________________________
 
@@ -218,14 +223,18 @@ ______________________________________________________________________
 ### Week 1: Foundations
 
 1. **Day 1-2**: Complete [Quick Start Guide](../guides/COPILOT_QUICK_START.md)
-1. **Day 3-4**: Configure [Custom Instructions](../guides/CUSTOM_INSTRUCTIONS_SETUP.md)
-   for your primary languages
-1. **Day 5**: Set up [Development Environment](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+1. **Day 3-4**: Configure
+   [Custom Instructions](../guides/CUSTOM_INSTRUCTIONS_SETUP.md) for your
+   primary languages
+1. **Day 5**: Set up
+   [Development Environment](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
 
 ### Week 2: Enhancement
 
-1. **Day 1-2**: Install [MCP Servers](../guides/MCP_SERVER_SETUP.md) for your stack
-1. **Day 3-4**: Try [Custom Agents](../guides/AGENT_ARCHITECTURE_GUIDE.md) for real tasks
+1. **Day 1-2**: Install [MCP Servers](../guides/MCP_SERVER_SETUP.md) for your
+   stack
+1. **Day 3-4**: Try [Custom Agents](../guides/AGENT_ARCHITECTURE_GUIDE.md) for
+   real tasks
 1. **Day 5**: Explore [Chat Modes](../guides/README.chatmodes.md) and
    [Prompts](../guides/README.prompts.md)
 
@@ -257,8 +266,8 @@ ______________________________________________________________________
 ## 🆘 Get Help
 
 - **Quick Answers**: Check the
-  [Troubleshooting](../guides/CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) sections in
-  guides
+  [Troubleshooting](../guides/CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting)
+  sections in guides
 - **Questions**: Ask in
   [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - **Issues**: Report in
@@ -267,7 +276,8 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-**Ready to get started? → [Quick Start Guide](../guides/COPILOT_QUICK_START.md) ⭐**
+**Ready to get started? → [Quick Start Guide](../guides/COPILOT_QUICK_START.md)
+⭐**
 
 ______________________________________________________________________
 

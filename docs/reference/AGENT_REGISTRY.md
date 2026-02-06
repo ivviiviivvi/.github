@@ -951,8 +951,7 @@ Specialized agents for specific programming languages and frameworks.
 - .NET build and test workflows
 - NuGet package publishing
 
-**Documentation**:
-agents/CSharpExpert.agent.md
+**Documentation**: agents/CSharpExpert.agent.md
 
 ______________________________________________________________________
 
@@ -994,8 +993,7 @@ applications.
 - Windows application build workflows
 - MSI/installer creation
 
-**Documentation**:
-agents/WinFormsExpert.agent.md
+**Documentation**: agents/WinFormsExpert.agent.md
 
 ______________________________________________________________________
 
@@ -1319,16 +1317,18 @@ All new agents must go through:
 ### Core Documentation
 
 - [README.agents.md](../README.agents.md) - Agent installation and usage guide
-- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - How to contribute to the organization
+- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - How to contribute to the
+  organization
 - [CODE_OF_CONDUCT.md](../governance/CODE_OF_CONDUCT.md) - Community standards
 - [SECURITY.md](../governance/SECURITY.md) - Security policies and reporting
 
 ### GitHub Copilot Resources
 
 - [README.prompts.md](../guides/README.prompts.md) - Task-specific prompts
-- [README.instructions.md](../guides/README.instructions.md) - Coding standards and best
-  practices
-- [README.chatmodes.md](../guides/README.chatmodes.md) - Chat mode configurations
+- [README.instructions.md](../guides/README.instructions.md) - Coding standards
+  and best practices
+- [README.chatmodes.md](../guides/README.chatmodes.md) - Chat mode
+  configurations
 - [README.collections.md](../guides/README.collections.md) - Copilot collections
 
 ### Organization Guides
@@ -1392,11 +1392,13 @@ ______________________________________________________________________
   [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
   [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
-- **Security Issues**: See [SECURITY.md](../governance/SECURITY.md) for reporting procedures
+- **Security Issues**: See [SECURITY.md](../governance/SECURITY.md) for
+  reporting procedures
 
 ### Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for:
+We welcome contributions! See [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
+for:
 
 - How to contribute new agents
 - Code review process

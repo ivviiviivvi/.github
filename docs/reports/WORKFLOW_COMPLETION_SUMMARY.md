@@ -16,8 +16,7 @@ ______________________________________________________________________
 
 **Changes:**
 
-- Updated [docs/INDEX.md](../INDEX.md) to include all new workflow
-  documentation
+- Updated [docs/INDEX.md](../INDEX.md) to include all new workflow documentation
 - Added prominent section under "Guides → Workflow & Automation"
 - Included references to:
   - WORKFLOW_DESIGN.md
@@ -125,7 +124,8 @@ ______________________________________________________________________
 **Files Created:** 1\
 **File:**
 [docs/WORKFLOW_ONBOARDING.md](../workflows/WORKFLOW_ONBOARDING.md)\
-**Size:** 16 KB
+**Size:** 16
+KB
 
 **Contents:**
 
@@ -480,7 +480,8 @@ ______________________________________________________________________
 1. Read [Workflow Design](../workflows/WORKFLOW_DESIGN.md) for architecture
 1. Review [Testing Guide](../guides/WORKFLOW_TESTING_GUIDE.md) for validation
 1. Create deployment issue from template
-1. Follow [Deployment Checklist](../../.github/ISSUE_TEMPLATE/workflow-deployment.md)
+1. Follow
+   [Deployment Checklist](../../.github/ISSUE_TEMPLATE/workflow-deployment.md)
 
 **For Teams:**
 

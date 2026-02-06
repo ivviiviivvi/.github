@@ -604,7 +604,8 @@ Quarterly\
 ______________________________________________________________________
 
 **📝 Contribute**: See [CONTRIBUTING.md](../governance/CONTRIBUTING.md)\
-**💬 Discuss**:
+**💬
+Discuss**:
 [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->\
 **🐛
 Report Issues**:
