@@ -1,17 +1,7 @@
 # ivviiviivvi Organization Hub
 
 <!-- BADGES:START -->
-
-[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#)
-[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](#)
-[![Stars](https://img.shields.io/github/stars/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/stargazers)
-[![Issues](https://img.shields.io/github/issues/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/pulls)
-[![Last Commit](https://img.shields.io/github/last-commit/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/commits)
-[![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors)
-
+[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE) [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#) [![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![Stars](https://img.shields.io/github/stars/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/stargazers) [![Issues](https://img.shields.io/github/issues/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/issues) [![Pull Requests](https://img.shields.io/github/issues-pr/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/pulls) [![Last Commit](https://img.shields.io/github/last-commit/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/commits) [![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors) 
 <!-- BADGES:END -->
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](pyproject.toml)
