@@ -378,8 +378,8 @@ ______________________________________________________________________
 
 **Documentation:**
 
-- [Full Implementation Guide](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
-- [Setup Instructions](README_PROJECTS.md)
+- [Full Implementation Guide](GITHUB_PROJECTS_IMPLEMENTATION.md)
+- [Setup Instructions](../../src/automation/scripts/utils/README_PROJECTS.md)
 - [GitHub's Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
 
 **Support:**
@@ -388,7 +388,7 @@ ______________________________________________________________________
   [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
 - Open an
   [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
-- Check [Workflow Documentation](../docs/WORKFLOW_DESIGN.md)
+- Check [Workflow Documentation](../workflows/WORKFLOW_DESIGN.md)
 
 **Training:**
 

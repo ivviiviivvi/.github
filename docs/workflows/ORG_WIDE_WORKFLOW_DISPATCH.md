@@ -515,7 +515,7 @@ Potential improvements for this workflow:
 
 - [GitHub Actions Workflow Dispatch API](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
 - [Organization Repository Management](../architecture/REPOSITORY_PURPOSE_ANALYSIS.md)
-- [Workflow Security Best Practices](../../WORKFLOW_SECURITY_AUDIT.md)
+- [Workflow Security Best Practices](WORKFLOW_SECURITY_AUDIT.md)
 - [Deployment Metadata Collection](DEPLOYMENT_METADATA_COLLECTION.md)
 
 ## Support

@@ -81,8 +81,9 @@ pre-commit run ruff --all-files
 
 ### Reporting Bugs
 
-Use our [Bug Report template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml) and
-include:
+Use our
+[Bug Report template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml)
+and include:
 
 - Clear description of the issue
 - Steps to reproduce
@@ -92,8 +93,8 @@ include:
 ### Suggesting Features
 
 Use our
-[Feature Request template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/feature_request.yml) and
-include:
+[Feature Request template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/feature_request.yml)
+and include:
 
 - Problem statement
 - Proposed solution
@@ -102,14 +103,14 @@ include:
 ### Improving Documentation
 
 Documentation improvements are always welcome! Use our
-[Documentation template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/documentation.yml) for doc
-issues.
+[Documentation template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/documentation.yml)
+for doc issues.
 
 ## Repository Organization Guidelines
 
 Follow our
-[Repository Structure Standards](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_STRUCTURE.md) when
-adding files.
+[Repository Structure Standards](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_STRUCTURE.md)
+when adding files.
 
 ### File Placement
 
@@ -142,8 +143,9 @@ Run the validation script before submitting:
 ./scripts/validate-repository-structure.sh
 ```
 
-See the [Quick Reference](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_ORGANIZATION_QUICK_REF.md) for
-more details.
+See the
+[Quick Reference](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_ORGANIZATION_QUICK_REF.md)
+for more details.
 
 ## Code Style Guidelines
 
@@ -314,7 +316,8 @@ def test1():
 - 💬
   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
   \- Ask questions
-- 📚 [Documentation](https://github.com/ivviiviivvi/.github/blob/main/README.md) - Read the docs
+- 📚 [Documentation](https://github.com/ivviiviivvi/.github/blob/main/README.md)
+  \- Read the docs
 - 🐛
   [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
   \- Report bugs

@@ -451,7 +451,8 @@ Have a configuration for a framework not listed here? We welcome contributions!
 1. Submit a PR with your example
 1. Update this README
 
-See [Contributing Guidelines](../../docs/CONTRIBUTING.md) for details.
+See [Contributing Guidelines](../../docs/governance/CONTRIBUTING.md) for
+details.
 
 ______________________________________________________________________
 

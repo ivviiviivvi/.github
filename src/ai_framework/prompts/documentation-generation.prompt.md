@@ -146,7 +146,7 @@ Create a project README with these sections:
 
 - [API Reference](./docs/api.md)
 - [User Guide](./docs/guide.md)
-- [Contributing](./CONTRIBUTING.md)
+- [Contributing](../../../docs/governance/CONTRIBUTING.md)
 
 ## Configuration
 

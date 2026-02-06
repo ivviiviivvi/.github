@@ -194,8 +194,7 @@ ______________________________________________________________________
 
 ### NEW
 
-- [NEW_REPOS_CLASSIFICATION.md](./NEW_REPOS_CLASSIFICATION.md) - Detailed
-  analysis of all 10 new repos
+- NEW_REPOS_CLASSIFICATION.md - Detailed analysis of all 10 new repos
 
 ### UPDATED
 

@@ -724,7 +724,7 @@ ______________________________________________________________________
 ### Documentation
 
 - [Testing Best Practices](testing-best-practices.md)
-- [Workflow Optimization Guide](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+- [Workflow Optimization Guide](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 - [GitHub Actions Documentation](https://docs.github.com/actions)<!-- link:docs.github_actions_root -->
 
 ### Workflows

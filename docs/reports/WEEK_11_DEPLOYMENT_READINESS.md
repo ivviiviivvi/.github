@@ -61,7 +61,7 @@ ______________________________________________________________________
 
 - **Solution**: Manual label deployment via Web UI (15 min)
 - **Guide**:
-  [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
+  [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
 - **Quick Ref**:
   [WEEK_11_NEXT_STEPS_QUICK_REF.md](WEEK_11_NEXT_STEPS_QUICK_REF.md)
 
@@ -476,7 +476,7 @@ python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.
 - 🎯 Exit codes for scripting integration
 
 **Documentation**:
-[automation/scripts/README_VALIDATION.md](../automation/scripts/README_VALIDATION.md)
+[automation/scripts/README_VALIDATION.md](../../src/automation/scripts/README_VALIDATION.md)
 
 This tool can:
 

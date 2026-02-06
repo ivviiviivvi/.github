@@ -482,8 +482,8 @@ ______________________________________________________________________
 ## Additional Resources
 
 - [GitHub Projects Automation Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project)
-- [Project Implementation Guide](/workspace/docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
-- [Project Deployment Guide](/workspace/docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+- [Project Implementation Guide](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
+- [Project Deployment Guide](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 
 ______________________________________________________________________
 

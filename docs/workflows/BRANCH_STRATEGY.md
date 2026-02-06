@@ -551,7 +551,7 @@ ______________________________________________________________________
 - [SEMANTIC_VERSIONING.md](../reference/SEMANTIC_VERSIONING.md) - Version
   numbering rules
 - [RELEASE_PROCESS.md](RELEASE_PROCESS.md) - Creating and managing releases
-- [BRANCH_PROTECTION.md](../BRANCH_PROTECTION.md) - Protection rule
+- [BRANCH_PROTECTION.md](../governance/BRANCH_PROTECTION.md) - Protection rule
   configuration
 
 ______________________________________________________________________

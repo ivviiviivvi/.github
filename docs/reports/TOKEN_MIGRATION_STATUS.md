@@ -486,11 +486,12 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
+- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../analysis/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
   \- Comprehensive analysis
-- [TOKEN_REGISTRY.md](TOKEN_REGISTRY.md) - Token management registry
-- [MASTER_ORG_TOKEN_QUICK_ACTION.md](MASTER_ORG_TOKEN_QUICK_ACTION.md) - Quick
-  reference
+- [TOKEN_REGISTRY.md](../reference/TOKEN_REGISTRY.md) - Token management
+  registry
+- [MASTER_ORG_TOKEN_QUICK_ACTION.md](../analysis/MASTER_ORG_TOKEN_QUICK_ACTION.md)
+  \- Quick reference
 
 ### Automation Tools
 

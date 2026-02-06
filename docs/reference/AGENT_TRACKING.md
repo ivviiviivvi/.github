@@ -549,16 +549,13 @@ ______________________________________________________________________
 
 ## Related Documentation
 
-- [JULES_CASCADE_PREVENTION.md](JULES_CASCADE_PREVENTION.md) - Daily
-  orchestrator and PR consolidation
-- [JULES_CASCADE_PREVENTION_QUICK_REF.md](JULES_CASCADE_PREVENTION_QUICK_REF.md)
-  \- Quick reference guide
-- [JULES_IMPLEMENTATION_SUMMARY.md](JULES_IMPLEMENTATION_SUMMARY.md) -
-  Implementation details
-- [README.agents.md](README.agents.md) - Custom agent registry
-- [AGENT_ARCHITECTURE_GUIDE.md](AGENT_ARCHITECTURE_GUIDE.md) - Building custom
-  agents
-- [MOUTHPIECE_SYSTEM.md](MOUTHPIECE_SYSTEM.md) - Mouthpiece filter documentation
+- JULES_CASCADE_PREVENTION.md - Daily orchestrator and PR consolidation
+- JULES_CASCADE_PREVENTION_QUICK_REF.md - Quick reference guide
+- JULES_IMPLEMENTATION_SUMMARY.md - Implementation details
+- [README.agents.md](../README.agents.md) - Custom agent registry
+- [AGENT_ARCHITECTURE_GUIDE.md](../guides/AGENT_ARCHITECTURE_GUIDE.md) -
+  Building custom agents
+- MOUTHPIECE_SYSTEM.md - Mouthpiece filter documentation
 
 ______________________________________________________________________
 

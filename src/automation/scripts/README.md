@@ -890,14 +890,15 @@ ______________________________________________________________________
 
 ## 📚 Related Documentation
 
-- [AGENT_TRACKING.md](../../docs/AGENT_TRACKING.md) - Agent system architecture
-  (Phase 3.1)
-- [CLEANUP_ROADMAP.md](../../CLEANUP_ROADMAP.md) - Codebase cleanup plan
-- [.jules/bolt.md](../../.jules/bolt.md) - Performance optimization learnings
-- [.jules/sentinel.md](../../.jules/sentinel.md) - Security learnings
-- [AI Implementation Guide](../../docs/AI_IMPLEMENTATION_GUIDE.md)
-- [for-ai-implementation.txt](../../for-ai-implementation.txt) - Complete AI
-  protocol
+- [AGENT_TRACKING.md](../../../docs/reference/AGENT_TRACKING.md) - Agent system
+  architecture (Phase 3.1)
+- [CLEANUP_ROADMAP.md](../../../docs/archive/CLEANUP_ROADMAP.md) - Codebase
+  cleanup plan
+- [.jules/bolt.md](../../../.config/jules/bolt.md) - Performance optimization
+  learnings
+- [.jules/sentinel.md](../../../.config/jules/sentinel.md) - Security learnings
+- [AI Implementation Guide](../../../docs/guides/AI_IMPLEMENTATION_GUIDE.md)
+- for-ai-implementation.txt - Complete AI protocol
 
 ______________________________________________________________________
 

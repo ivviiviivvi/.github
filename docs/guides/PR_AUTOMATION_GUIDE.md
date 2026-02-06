@@ -386,7 +386,7 @@ const trustedAgents = [
 
 - [PR Automation Config](pr-automation.yml)
 - [Dependabot Config](dependabot.yml)
-- [Workflow Optimization Guide](../WORKFLOW_OPTIMIZATION_ROADMAP.md)
+- [Workflow Optimization Guide](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
 - [Branch Lifecycle](workflows/branch-lifecycle.yml)
 
 ## 🔄 Migration Guide

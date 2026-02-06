@@ -332,8 +332,8 @@ ______________________________________________________________________
    - Usage examples and configuration
    - Troubleshooting
 
-1. **[UNIFIED_NOTIFICATION_SYSTEM.md](UNIFIED_NOTIFICATION_SYSTEM.md)** (700+
-   lines)
+1. **[UNIFIED_NOTIFICATION_SYSTEM.md](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)**
+   (700+ lines)
 
    - Architecture and design
    - Configuration guide
@@ -610,7 +610,7 @@ ______________________________________________________________________
 ### Documentation
 
 - [Week 9 Advanced Automation Guide](WEEK_9_ADVANCED_AUTOMATION.md)
-- [Unified Notification System](UNIFIED_NOTIFICATION_SYSTEM.md)
+- [Unified Notification System](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)
 - [Notification Integration Guide](WEEK_9_NOTIFICATION_INTEGRATION.md)
 - [Migration Complete Report](NOTIFICATION_MIGRATION_COMPLETE.md)
 - [Architecture Documentation](WEEK9_ARCHITECTURE.md)

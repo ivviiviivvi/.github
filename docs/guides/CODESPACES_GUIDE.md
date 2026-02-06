@@ -558,7 +558,7 @@ services:
 
 ## Support
 
-- 📖 [Documentation](INDEX.md)
+- 📖 [Documentation](../INDEX.md)
 - 💬
   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
 - 🐛

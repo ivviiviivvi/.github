@@ -401,15 +401,16 @@ ______________________________________________________________________
 ### Internal Resources
 
 - **Quick Reference**:
-  [`WORKFLOW_QUICK_REFERENCE.md`](WORKFLOW_QUICK_REFERENCE.md) - Copy-paste
-  solutions
-- **Security Audit**: [`WORKFLOW_SECURITY_AUDIT.md`](WORKFLOW_SECURITY_AUDIT.md)
-  \- Security best practices
+  [`WORKFLOW_QUICK_REFERENCE.md`](../docs/workflows/WORKFLOW_QUICK_REFERENCE.md)
+  \- Copy-paste solutions
+- **Security Audit**:
+  [`WORKFLOW_SECURITY_AUDIT.md`](../docs/workflows/WORKFLOW_SECURITY_AUDIT.md) -
+  Security best practices
 - **Implementation Guide**:
-  [`NEXT_STEPS_IMPLEMENTATION.md`](NEXT_STEPS_IMPLEMENTATION.md) - Step-by-step
-  optimization
+  [`NEXT_STEPS_IMPLEMENTATION.md`](../docs/analysis/NEXT_STEPS_IMPLEMENTATION.md)
+  \- Step-by-step optimization
 - **Full Analysis**:
-  [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+  [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../docs/workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
   \- Complete review
 
 ### External Resources
@@ -507,8 +508,9 @@ Add comments for complex logic:
 
 ______________________________________________________________________
 
-**Questions?** Check the [Quick Reference](WORKFLOW_QUICK_REFERENCE.md) or open
-an issue!
+**Questions?** Check the
+[Quick Reference](../docs/workflows/WORKFLOW_QUICK_REFERENCE.md) or open an
+issue!
 
 **Last Updated**: 2025-12-23\
 **Maintained By**: Workflow Optimization Team

@@ -223,13 +223,11 @@ ______________________________________________________________________
 
 ## 📚 Full Documentation
 
-- **[About Section Standards](standards/ABOUT_SECTION_STANDARDS.md)** - Complete
-  guide (9,000+ words)
-- **[README Template Standards](standards/README_TEMPLATE_STANDARDS.md)** -
-  Complete guide (16,000+ words)
+- **About Section Standards** - Complete guide (9,000+ words)
+- **README Template Standards** - Complete guide (16,000+ words)
 - **[README Minimal Template](templates/README-minimal.md)** - Basic template
-- **[Repository Setup Checklist](REPOSITORY_SETUP_CHECKLIST.md)** - Complete
-  setup guide
+- **[Repository Setup Checklist](../runbooks/REPOSITORY_SETUP_CHECKLIST.md)** -
+  Complete setup guide
 
 ______________________________________________________________________
 

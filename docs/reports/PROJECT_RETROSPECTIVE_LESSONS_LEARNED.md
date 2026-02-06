@@ -507,11 +507,11 @@ ______________________________________________________________________
 ### A. Related Documentation
 
 - [CLEANUP_ROADMAP.md](../archive/CLEANUP_ROADMAP.md) - Complete project plan
-- [Phase 7 Completion Plan](guides/PHASE_7_COMPLETION_PLAN.md) - Final phase
+- [Phase 7 Completion Plan](../guides/PHASE_7_COMPLETION_PLAN.md) - Final phase
   strategy
-- [Issue Templates Guide](guides/issue-templates.md) - Template usage
+- [Issue Templates Guide](../guides/issue-templates.md) - Template usage
   documentation
-- [Testing Best Practices](guides/testing-best-practices.md) - Testing
+- [Testing Best Practices](../guides/testing-best-practices.md) - Testing
   guidelines
 
 ### B. Contact

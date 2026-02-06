@@ -459,13 +459,13 @@ ______________________________________________________________________
 ## Resources
 
 - [TOKEN_REGISTRY.md](TOKEN_REGISTRY.md) - Token management procedures
-- [TOKEN_MIGRATION_STATUS.md](TOKEN_MIGRATION_STATUS.md) - Migration guide
-- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
+- [TOKEN_MIGRATION_STATUS.md](../reports/TOKEN_MIGRATION_STATUS.md) - Migration
+  guide
+- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../analysis/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
   \- Full analysis
-- [scripts/validate-tokens.py](../scripts/validate-tokens.py) - Validation
-  script
-- [scripts/rotate-token.sh](../scripts/rotate-token.sh) - Rotation automation
-- [.github/workflows/token-health-check.yml](../.github/workflows/token-health-check.yml)
+- scripts/validate-tokens.py - Validation script
+- scripts/rotate-token.sh - Rotation automation
+- [.github/workflows/token-health-check.yml](../../.github/workflows/token-health-check.yml)
   \- Daily CI/CD check
 
 ______________________________________________________________________

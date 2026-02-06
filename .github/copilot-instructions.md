@@ -264,8 +264,8 @@ ______________________________________________________________________
     - See
       [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../docs/analysis/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
       for comprehensive analysis
-    - See [TOKEN_REGISTRY.md](../docs/reference/TOKEN_REGISTRY.md) for token management
-      guidelines
+    - See [TOKEN_REGISTRY.md](../docs/reference/TOKEN_REGISTRY.md) for token
+      management guidelines
     - **Migration Plan:** Replace single master token with purpose-specific
       tokens by 2026-02-18
     - GitHub Personal Access Tokens (Classic) REQUIRE the Web UI.

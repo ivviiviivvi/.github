@@ -145,7 +145,8 @@ Our security workflows run automatically on every push and pull request:
 - **📦 Dependency Review** -
   [`.github/workflows/dependency-review.yml`](https://github.com/ivviiviivvi/.github/blob/main/.github/workflows/dependency-review.yml)
 
-View all security workflows: [Security Workflows](https://github.com/ivviiviivvi/.github/tree/main/.github/workflows)
+View all security workflows:
+[Security Workflows](https://github.com/ivviiviivvi/.github/tree/main/.github/workflows)
 
 ## Security Best Practices
 

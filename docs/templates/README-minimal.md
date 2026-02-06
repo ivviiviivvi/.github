@@ -111,8 +111,8 @@ ______________________________________________________________________
 ### Community
 
 - [GitHub Discussions](https://github.com/org/repo/discussions) - Ask questions
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- [Contributing Guide](../governance/CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md) - Community standards
 
 ______________________________________________________________________
 
@@ -125,16 +125,17 @@ We welcome contributions! Here's how you can help:
 1. **Submit PRs**: Fork, create a branch, and submit a pull request
 1. **Improve Docs**: Documentation improvements are always appreciated
 
-See our [Contributing Guide](CONTRIBUTING.md) for detailed guidelines.
+See our [Contributing Guide](../governance/CONTRIBUTING.md) for detailed
+guidelines.
 
 **Code of Conduct**: Please read and follow our
-[Code of Conduct](CODE_OF_CONDUCT.md).
+[Code of Conduct](../governance/CODE_OF_CONDUCT.md).
 
 ______________________________________________________________________
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](../../LICENSE).
 
 Copyright © 2026 \[Organization Name\]
 

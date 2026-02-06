@@ -296,7 +296,7 @@ For enterprise support, training, or consulting:
 ### Learning Resources
 
 - **[Documentation Index](../INDEX.md)** - Entry point to all docs
-- **[Workflow Design Guide](../guides/WORKFLOW_DESIGN.md)** - Deep dive on
+- **[Workflow Design Guide](../workflows/WORKFLOW_DESIGN.md)** - Deep dive on
   automation patterns
 - **[Common Tasks Runbook](../guides/common-tasks-runbook.md)** - Step-by-step
   operations playbooks

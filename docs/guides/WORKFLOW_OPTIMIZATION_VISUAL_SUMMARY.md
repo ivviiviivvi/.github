@@ -445,6 +445,7 @@ ______________________________________________________________________
 **Next Review**: Follow roadmap
 milestones
 
-**Start with**: [`EXECUTIVE_SUMMARY.md`](../EXECUTIVE_SUMMARY.md)\
-**Navigate
-via**: [`WORKFLOW_OPTIMIZATION_INDEX.md`](WORKFLOW_OPTIMIZATION_INDEX.md)
+**Start with**:
+[`EXECUTIVE_SUMMARY.md`](../reports/EXECUTIVE_SUMMARY.md)\
+**Navigate via**:
+[`WORKFLOW_OPTIMIZATION_INDEX.md`](WORKFLOW_OPTIMIZATION_INDEX.md)

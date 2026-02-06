@@ -12,10 +12,9 @@ with best practices.
 - [ ] Topics/tags added for discoverability (5-10 relevant topics)
 - [ ] Website URL set (documentation, demo, or homepage)
 - [ ] Social preview image configured (for public repos)
-- [ ] Ontological title defined (see
-  [About Section Standards](standards/ABOUT_SECTION_STANDARDS.md))
-- [ ] README.md created with problem → approach → outcome narrative (see
-  [README Standards](standards/README_TEMPLATE_STANDARDS.md))
+- [ ] Ontological title defined (see About Section Standards)
+- [ ] README.md created with problem → approach → outcome narrative (see README
+  Standards)
 - [ ] LICENSE file added (MIT or organization standard)
 - [ ] .gitignore configured for language/framework
 

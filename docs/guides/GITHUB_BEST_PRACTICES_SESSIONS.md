@@ -994,11 +994,11 @@ ______________________________________________________________________
 
 ### Internal Resources
 
-- [Best Practices Guide](./BEST_PRACTICES.md)
-- [Workflow Optimization Guide](../WORKFLOW_OPTIMIZATION_INDEX.md)
-- [Security Best Practices](../WORKFLOW_SECURITY_AUDIT.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
-- [Community Standards](../CODE_OF_CONDUCT.md)
+- Best Practices Guide
+- Workflow Optimization Guide
+- [Security Best Practices](../workflows/WORKFLOW_SECURITY_AUDIT.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
+- [Community Standards](../governance/CODE_OF_CONDUCT.md)
 
 ### GitHub Documentation
 
@@ -1016,9 +1016,9 @@ ______________________________________________________________________
 ### Templates
 
 - [Issue Templates](../../.github/ISSUE_TEMPLATE/)
-- [PR Templates](../PULL_REQUEST_TEMPLATE.md)
+- PR Templates
 - [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
-- [Workflow Templates](../../automation/workflow-templates/)
+- [Workflow Templates](../../.github/workflow-templates/)
 
 ______________________________________________________________________
 
@@ -1144,7 +1144,7 @@ Need help planning or running a session?
 - 🎫 **Open an
   [Issue](https://github.com/ivi374forivi/.github/issues/new/choose)** using the
   "Best Practices Review" template
-- 📖 **Review** the [Best Practices Guide](./BEST_PRACTICES.md)
+- 📖 **Review** the Best Practices Guide
 - 🤝 **Connect** with session facilitators in your organization
 
 ______________________________________________________________________
@@ -1159,7 +1159,8 @@ Have ideas for improving these session guides? We welcome contributions!
 - Suggest new session types
 - Improve existing content
 
-See our [Contributing Guidelines](../CONTRIBUTING.md) for more information.
+See our [Contributing Guidelines](../governance/CONTRIBUTING.md) for more
+information.
 
 ______________________________________________________________________
 

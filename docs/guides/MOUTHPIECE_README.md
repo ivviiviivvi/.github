@@ -59,13 +59,13 @@ In Copilot Chat:
 
 ## Components
 
-| Component                                                         | Purpose                   | When to Use                              |
-| ----------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
-| **[Filter Script](../automation/scripts/mouthpiece_filter.py)**   | CLI transformation engine | Programmatic use, scripting, automation  |
-| **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** | Interactive AI persona    | Conversational transformation, iteration |
-| **[Prompt Template](README.prompts.md)**                          | Quick transformation      | Fast, one-off transformations            |
-| **[Documentation](MOUTHPIECE_SYSTEM.md)**                         | Complete guide            | Learning, reference, integration         |
-| **[Examples](mouthpiece-examples.md)**                            | Real transformations      | Inspiration, patterns, learning          |
+| Component                                                              | Purpose                   | When to Use                              |
+| ---------------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
+| **[Filter Script](../../src/automation/scripts/mouthpiece_filter.py)** | CLI transformation engine | Programmatic use, scripting, automation  |
+| **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)**      | Interactive AI persona    | Conversational transformation, iteration |
+| **[Prompt Template](README.prompts.md)**                               | Quick transformation      | Fast, one-off transformations            |
+| **[Documentation](MOUTHPIECE_SYSTEM.md)**                              | Complete guide            | Learning, reference, integration         |
+| **[Examples](mouthpiece-examples.md)**                                 | Real transformations      | Inspiration, patterns, learning          |
 
 ## Features
 
@@ -343,7 +343,7 @@ Want to improve Mouthpiece?
 - Integration examples
 - Documentation improvements
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for guidelines.
 
 ## Examples Gallery
 

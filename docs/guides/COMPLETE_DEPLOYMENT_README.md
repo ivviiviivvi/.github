@@ -374,7 +374,7 @@ ______________________________________________________________________
 ## 📄 License
 
 This ecosystem is part of the organization's internal tooling. See
-[LICENSE](../LICENSE) for details.
+[LICENSE](../../LICENSE) for details.
 
 ______________________________________________________________________
 
