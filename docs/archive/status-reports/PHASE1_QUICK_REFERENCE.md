@@ -23,8 +23,8 @@ ______________________________________________________________________
 # Quick health check (run every 2-6 hours)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh workflow list --repo "ivviiviivvi/$repo" | grep -E "(health-check|pr-quality|stale)"
-  gh run list --repo "ivviiviivvi/$repo" --limit 3
+  gh workflow list --repo "{{ORG_NAME}}/$repo" | grep -E "(health-check|pr-quality|stale)"
+  gh run list --repo "{{ORG_NAME}}/$repo" --limit 3
   echo ""
 done
 ```
@@ -36,7 +36,7 @@ done
 
 ```bash
 # Verify all 12 labels present
-gh label list --repo ivviiviivvi/theoretical-specifications-first | \
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first | \
   grep -E "(status:|priority:|type:|deployment:|automation:)"
 ```
 
@@ -48,7 +48,7 @@ gh label list --repo ivviiviivvi/theoretical-specifications-first | \
 # Check for any workflow runs
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh run list --repo "ivviiviivvi/$repo" --limit 5 --json conclusion,name,status
+  gh run list --repo "{{ORG_NAME}}/$repo" --limit 5 --json conclusion,name,status
 done
 ```
 
@@ -90,10 +90,10 @@ ______________________________________________________________________
 
 ```bash
 # Check workflow status
-gh workflow view repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+gh workflow view repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
 
 # Manually trigger if needed
-gh workflow run repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+gh workflow run repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 ### Label Missing?
@@ -101,7 +101,7 @@ gh workflow run repository-health-check.yml --repo ivviiviivvi/theoretical-speci
 ```bash
 # Re-run label deployment
 cd /workspace/automation/scripts
-python validate_labels.py --owner ivviiviivvi --repo theoretical-specifications-first --fix
+python validate_labels.py --owner {{ORG_NAME}} --repo theoretical-specifications-first --fix
 ```
 
 ### Permission Error?
@@ -160,7 +160,7 @@ ______________________________________________________________________
 # One-liner status check
 for r in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   printf "%-40s " "$r:";
-  gh api "repos/ivviiviivvi/$r/actions/workflows" | \
+  gh api "repos/{{ORG_NAME}}/$r/actions/workflows" | \
     jq -r '.workflows | map(select(.name | test("health|quality|stale"))) | length';
 done
 ```
@@ -178,9 +178,9 @@ python pre_deployment_checklist.py --phase 2
 ```bash
 # Remove deployed workflows (emergency only)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh api -X DELETE "repos/ivviiviivvi/$repo/contents/.github/workflows/repository-health-check.yml"
-  gh api -X DELETE "repos/ivviiviivvi/$repo/contents/.github/workflows/enhanced-pr-quality.yml"
-  gh api -X DELETE "repos/ivviiviivvi/$repo/contents/.github/workflows/stale-management.yml"
+  gh api -X DELETE "repos/{{ORG_NAME}}/$repo/contents/.github/workflows/repository-health-check.yml"
+  gh api -X DELETE "repos/{{ORG_NAME}}/$repo/contents/.github/workflows/enhanced-pr-quality.yml"
+  gh api -X DELETE "repos/{{ORG_NAME}}/$repo/contents/.github/workflows/stale-management.yml"
 done
 ```
 

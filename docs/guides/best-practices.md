@@ -1,7 +1,7 @@
 # Best Practices Guide
 
 > **Comprehensive best practices for contributing to and maintaining the
-> ivviiviivvi/.github repository**
+> {{ORG_NAME}}/.github repository**
 
 This guide consolidates best practices across all areas: code quality,
 documentation, workflows, testing, security, and collaboration.
@@ -895,7 +895,7 @@ ______________________________________________________________________
 - [Testing Best Practices](testing-best-practices.md)
 - [Monitoring Guide](monitoring.md)
 - [Common Tasks Runbook](common-tasks-runbook.md)
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

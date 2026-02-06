@@ -54,7 +54,7 @@ cdaade6 - google-labs-jules[bot], 3 days ago : feat: enhance SSRF protection in 
 9366d15 - google-labs-jules[bot], 3 days ago : 🎨 UX: Add legend to Active Workflows in Dashboard (#170)
 b63ed4c - google-labs-jules[bot], 3 days ago : 🛡️ Sentinel: [CRITICAL] Fix command injection in validate-standards.sh (#169)
 f2f2c94 - google-labs-jules[bot], 3 days ago : ⚡ Bolt: Optimize web crawler requests and cleanup (#168)
-4bbc092 - google-labs-jules[bot], 3 days ago : ⚡ Bolt: Optimize regex calls in mouthpiece_filter.py (#167)
+4bbc092 - google-labs-jules[bot], 3 days ago : ⚡ Bolt: Optimize regex calls in natural_language_prompt_filter.py (#167)
 50661ed - google-labs-jules[bot], 3 days ago : 🛡️ Sentinel: [CRITICAL] Fix code injection in batch-pr-lifecycle.yml (#165)
 bbbd2b9 - google-labs-jules[bot], 3 days ago : 🎨 Palette: Group Active Workflows by Category in Dashboard (#164)
 84da381 - Copilot, 3 days ago : Fix AI assistant and GitHub App summoning when draft PRs auto-convert to ready (#163)

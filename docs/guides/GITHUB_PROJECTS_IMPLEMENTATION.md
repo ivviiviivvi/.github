@@ -1,6 +1,6 @@
 # GitHub Projects Implementation Plan
 
-> **Comprehensive project management structure for the ivviiviivvi
+> **Comprehensive project management structure for the {{ORG_NAME}}
 > organization**
 
 **Last Updated:** January 18, 2026\
@@ -1761,7 +1761,7 @@ ______________________________________________________________________
 ```bash
 # Create a project
 gh project create \
-  --org ivviiviivvi \
+  --org {{ORG_NAME}} \
   --title "🤖 AI Framework Development" \
   --body "Development and maintenance of AI agents, MCP servers, and custom instructions"
 
@@ -1790,8 +1790,8 @@ gh api graphql -f query='
 
 # Add item to project
 gh project item-add PROJECT_NUMBER \
-  --owner ivviiviivvi \
-  --url "https://github.com/ivviiviivvi/.github/issues/123"
+  --owner {{ORG_NAME}} \
+  --url "https://github.com/{{ORG_NAME}}/.github/issues/123"
 ```
 
 ### Automation Workflow Example
@@ -1814,14 +1814,14 @@ jobs:
         if: contains(github.event.issue.labels.*.name, 'agent') || contains(github.event.issue.labels.*.name, 'mcp')
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/orgs/ivviiviivvi/projects/1
+          project-url: https://github.com/orgs/{{ORG_NAME}}/projects/1
           github-token: ${{ secrets.PROJECT_TOKEN }}
 
       - name: Add to Documentation project
         if: contains(github.event.issue.labels.*.name, 'documentation')
         uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/orgs/ivviiviivvi/projects/2
+          project-url: https://github.com/orgs/{{ORG_NAME}}/projects/2
           github-token: ${{ secrets.PROJECT_TOKEN }}
 ```
 
@@ -1852,7 +1852,7 @@ ______________________________________________________________________
 ```graphql
 # Get project statistics
 query {
-  organization(login: "ivviiviivvi") {
+  organization(login: "{{ORG_NAME}}") {
     projectV2(number: 1) {
       title
       items(first: 100) {
@@ -1952,7 +1952,7 @@ ______________________________________________________________________
 
 - Open an issue with label `project-management`
 - Ask in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - Reach out to project admins
 
 **Feedback:**
@@ -1964,8 +1964,8 @@ ______________________________________________________________________
 **Documentation:**
 
 - [GitHub Projects Configuration](GITHUB_PROJECTS_CONFIGURATION.md)
-- [Workflow System](WORKFLOW_DESIGN.md)
-- [Contributing Guide](CONTRIBUTING.md)
+- [Workflow System](../workflows/WORKFLOW_DESIGN.md)
+- [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

@@ -3,13 +3,13 @@
 # This file tracks all live app deployments
 
 # Sample structure:
-# - repository: "ivviiviivvi/example-app"
+# - repository: '{{ORG_NAME}}/example-app'
 #   app_type: "frontend"
 #   deployment_strategy: "pages-direct"
-#   deployment_url: "https://ivviiviivvi.github.io/example-app"
+#   deployment_url: "https://{{ORG_NAME}}.github.io/example-app"
 #   deployed_at: "2025-12-22T00:00:00Z"
 #   status: "active"
-#   health_check_url: "https://ivviiviivvi.github.io/example-app"
+#   health_check_url: "https://{{ORG_NAME}}.github.io/example-app"
 #   language: "JavaScript"
 #   framework: "React"
 

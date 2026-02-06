@@ -115,8 +115,8 @@ installs it:
 
 **Example badges:**
 
-- [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)](install-link)
-- [![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square)](install-link)
+- ![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)
+- ![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square)
 
 #### Option 2: Repository-Level Installation
 
@@ -581,11 +581,12 @@ ______________________________________________________________________
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
   \- Share instruction ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+- [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
   \- Report issues or request features
-- [Contributing Guide](CONTRIBUTING.md) - Contribute new instructions
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute new
+  instructions
 
 ______________________________________________________________________
 

@@ -100,9 +100,9 @@ workflow_dirs = [
 **Test Results**:
 
 ```
-✓ Successfully onboarded ivviiviivvi/theoretical-specifications-first
-✓ Successfully onboarded ivviiviivvi/system-governance-framework
-✓ Successfully onboarded ivviiviivvi/trade-perpetual-future
+✓ Successfully onboarded {{ORG_NAME}}/theoretical-specifications-first
+✓ Successfully onboarded {{ORG_NAME}}/system-governance-framework
+✓ Successfully onboarded {{ORG_NAME}}/trade-perpetual-future
 
 Total repositories: 3
 Successful: 3
@@ -238,9 +238,9 @@ ______________________________________________________________________
 
 ```yaml
 repositories:
-  - "ivviiviivvi/theoretical-specifications-first"
-  - "ivviiviivvi/system-governance-framework"
-  - "ivviiviivvi/trade-perpetual-future"
+  - "{{ORG_NAME}}/theoretical-specifications-first"
+  - "{{ORG_NAME}}/system-governance-framework"
+  - "{{ORG_NAME}}/trade-perpetual-future"
 
 workflows: [] # Deferred due to path resolution issue
 

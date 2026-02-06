@@ -17,10 +17,10 @@ echo ""
 
 # Phase 3 repositories
 REPOS=(
-  "ivviiviivvi/4-ivi374-F0Rivi4"
-  "ivviiviivvi/a-context7"
-  "ivviiviivvi/reverse-engine-recursive-run"
-  "ivviiviivvi/universal-node-network"
+  "{{ORG_NAME}}/4-ivi374-F0Rivi4"
+  "{{ORG_NAME}}/a-context7"
+  "{{ORG_NAME}}/reverse-engine-recursive-run"
+  "{{ORG_NAME}}/universal-node-network"
 )
 
 # Workflow templates (with SHA-pinned actions)

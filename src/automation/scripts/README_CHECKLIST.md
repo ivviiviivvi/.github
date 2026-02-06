@@ -298,11 +298,11 @@ exists.
 ## See Also
 
 - [validate_labels.py](README_VALIDATION.md) - Label validation and deployment
-- [batch_onboard_repositories.py](../../docs/WEEK_11_PHASE1_STATUS.md) - Main
-  deployment script
-- [WEEK_11_DEPLOYMENT_READINESS.md](../../docs/WEEK_11_DEPLOYMENT_READINESS.md)
+- [batch_onboard_repositories.py](../../../docs/reports/WEEK_11_PHASE1_STATUS.md)
+  \- Main deployment script
+- [WEEK_11_DEPLOYMENT_READINESS.md](../../../docs/reports/WEEK_11_DEPLOYMENT_READINESS.md)
   \- Complete deployment plan
-- [WEEK_11_NEXT_STEPS_QUICK_REF.md](../../docs/WEEK_11_NEXT_STEPS_QUICK_REF.md)
+- [WEEK_11_NEXT_STEPS_QUICK_REF.md](../../../docs/reports/WEEK_11_NEXT_STEPS_QUICK_REF.md)
   \- Quick reference guide
 
 ## Examples

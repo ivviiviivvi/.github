@@ -77,7 +77,7 @@ Comprehensive nightly maintenance and cleanup.
 
 ### 3. Bulk PR Operations
 
-**File:** `.github/workflows/bulk-pr-operations.yml`
+**File:** `.github/workflows/batch-pr-operations.yml`
 
 Emergency bulk actions for handling large numbers of PRs.
 
@@ -199,17 +199,17 @@ When you have 100+ PRs to handle:
 
 ```bash
 # 1. Approve all Dependabot PRs (dry run first)
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=approve-all-dependabot \
   -f dry_run=true
 
 # 2. Review the dry run output, then run for real
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=approve-all-dependabot \
   -f dry_run=false
 
 # 3. Merge all ready PRs
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=merge-all-ready \
   -f dry_run=false \
   -f max_prs=100
@@ -386,7 +386,7 @@ const trustedAgents = [
 
 - [PR Automation Config](pr-automation.yml)
 - [Dependabot Config](dependabot.yml)
-- [Workflow Optimization Guide](../WORKFLOW_OPTIMIZATION_ROADMAP.md)
+- [Workflow Optimization Guide](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
 - [Branch Lifecycle](workflows/branch-lifecycle.yml)
 
 ## 🔄 Migration Guide
@@ -396,7 +396,7 @@ const trustedAgents = [
 1. **Enable auto-merge labels** on existing PRs:
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=label-all-dependencies \
      -f dry_run=false
    ```
@@ -404,7 +404,7 @@ const trustedAgents = [
 1. **Convert draft PRs**:
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=convert-all-drafts \
      -f dry_run=false
    ```

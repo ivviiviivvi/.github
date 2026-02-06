@@ -38,7 +38,7 @@ echo "============================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
   stale_runs=$(gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --workflow="stale-management.yml" \
     --limit 5 \
     --json status,conclusion,createdAt,databaseId \
@@ -58,7 +58,7 @@ echo "=================================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
   gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --limit 10 \
     --json status,conclusion,name,createdAt,databaseId \
     --jq '.[] | "  [\(.status)] \(.name) - \(.conclusion // "in_progress") (Run \(.databaseId))"' \
@@ -72,9 +72,9 @@ echo "===================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
-  issues=$(gh api "repos/ivviiviivvi/$repo" --jq '.open_issues_count')
-  prs=$(gh pr list --repo "ivviiviivvi/$repo" --limit 1 --json number | jq 'length')
-  last_commit=$(gh api "repos/ivviiviivvi/$repo/commits?per_page=1" --jq '.[0].commit.author.date')
+  issues=$(gh api "repos/{{ORG_NAME}}/$repo" --jq '.open_issues_count')
+  prs=$(gh pr list --repo "{{ORG_NAME}}/$repo" --limit 1 --json number | jq 'length')
+  last_commit=$(gh api "repos/{{ORG_NAME}}/$repo/commits?per_page=1" --jq '.[0].commit.author.date')
 
   echo "  Open Issues: $issues"
   echo "  Open PRs: $prs"
@@ -86,7 +86,7 @@ done
 echo "🏷️  LABEL VERIFICATION"
 echo "====================="
 for repo in "${REPOS[@]}"; do
-  label_count=$(gh label list --repo "ivviiviivvi/$repo" --limit 100 --json name | jq 'length')
+  label_count=$(gh label list --repo "{{ORG_NAME}}/$repo" --limit 100 --json name | jq 'length')
   echo "Repository: $repo - $label_count labels"
 done
 echo ""
@@ -151,7 +151,7 @@ ______________________________________________________________________
 # Verify all 3 workflows still present in each repo
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh api "repos/ivviiviivvi/$repo/contents/.github/workflows" \
+  gh api "repos/{{ORG_NAME}}/$repo/contents/.github/workflows" \
     --jq '.[] | "  \(.name) (\(.size) bytes)"'
 done
 ```
@@ -161,7 +161,7 @@ done
 ```bash
 # Verify all 12 labels present in each repo
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  count=$(gh label list --repo "ivviiviivvi/$repo" --limit 100 --json name | jq 'length')
+  count=$(gh label list --repo "{{ORG_NAME}}/$repo" --limit 100 --json name | jq 'length')
   echo "$repo: $count labels"
 done
 ```
@@ -322,23 +322,23 @@ ______________________________________________________________________
 ```bash
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh run list -R "ivviiviivvi/$repo" -w stale-management.yml -L 3
+  gh run list -R "{{ORG_NAME}}/$repo" -w stale-management.yml -L 3
 done
 ```
 
 ### Manual Trigger (if needed)
 
 ```bash
-gh workflow run stale-management.yml -R ivviiviivvi/theoretical-specifications-first
-gh workflow run stale-management.yml -R ivviiviivvi/system-governance-framework
-gh workflow run stale-management.yml -R ivviiviivvi/trade-perpetual-future
+gh workflow run stale-management.yml -R {{ORG_NAME}}/theoretical-specifications-first
+gh workflow run stale-management.yml -R {{ORG_NAME}}/system-governance-framework
+gh workflow run stale-management.yml -R {{ORG_NAME}}/trade-perpetual-future
 ```
 
 ### View Workflow Logs
 
 ```bash
 # Get run ID from list, then:
-gh run view <run_id> --repo ivviiviivvi/<repo> --log
+gh run view <run_id> --repo {{ORG_NAME}}/<repo> --log
 ```
 
 ### Emergency Redeploy

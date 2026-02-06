@@ -329,7 +329,7 @@ ______________________________________________________________________
 
 #### Proposed Implementation
 
-1. **Create GitHub App** "ivviiviivvi Automation Hub"
+1. **Create GitHub App** "{{ORG_NAME}} Automation Hub"
 
    - Permissions: Choose minimal per operation type
    - Webhook: Optional for event-driven automation
@@ -538,7 +538,7 @@ TOKENS = {
     },
     "org-repo-analysis-token": {
         "scopes": ["repo:status", "read:org"],
-        "test_endpoint": "/users/ivviiviivvi/repos",
+        "test_endpoint": "/users/{{ORG_NAME}}/repos",
     },
     "org-onboarding-token": {
         "scopes": ["repo", "workflow", "admin:org"],
@@ -755,7 +755,7 @@ ______________________________________________________________________
 
 **Actions:**
 
-1. Create "ivviiviivvi Automation Hub" GitHub App
+1. Create "{{ORG_NAME}} Automation Hub" GitHub App
 1. Implement app authentication module
 1. Migrate high-value operations first
 1. Gradually replace PATs with app tokens

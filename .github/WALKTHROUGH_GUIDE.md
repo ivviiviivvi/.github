@@ -657,8 +657,8 @@ ______________________________________________________________________
 
 ### Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](../docs/CONTRIBUTING.md) for
-guidelines.
+Contributions are welcome! See
+[CONTRIBUTING.md](../docs/governance/CONTRIBUTING.md) for guidelines.
 
 ______________________________________________________________________
 

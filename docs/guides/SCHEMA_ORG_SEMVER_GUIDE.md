@@ -249,9 +249,9 @@ Organization-level metadata:
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://github.com/ivviiviivvi",
-  "name": "ivviiviivvi",
-  "url": "https://github.com/ivviiviivvi",
+  "@id": "https://github.com/{{ORG_NAME}}",
+  "name": "{{ORG_NAME}}",
+  "url": "https://github.com/{{ORG_NAME}}",
   "description": "...",
   "foundingDate": "2024",
   "contactPoint": { ... },
@@ -267,10 +267,10 @@ Repository metadata:
 {
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
-  "@id": "https://github.com/ivviiviivvi/.github",
+  "@id": "https://github.com/{{ORG_NAME}}/.github",
   "name": ".github Repository",
   "version": "1.0.0",
-  "codeRepository": "https://github.com/ivviiviivvi/.github.git",
+  "codeRepository": "https://github.com/{{ORG_NAME}}/.github.git",
   "programmingLanguage": [...],
   "featureList": [...],
   "keywords": [...]
@@ -285,7 +285,7 @@ AI framework specifics:
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "@id": "https://github.com/ivviiviivvi/.github/tree/main/ai_framework",
+  "@id": "https://github.com/{{ORG_NAME}}/.github/tree/main/ai_framework",
   "name": "AI Framework",
   "version": "1.0.0",
   "applicationCategory": "DeveloperApplication",
@@ -302,7 +302,7 @@ Documentation metadata:
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "@id": "https://github.com/ivviiviivvi/.github/tree/main/docs",
+  "@id": "https://github.com/{{ORG_NAME}}/.github/tree/main/docs",
   "name": "Organization Documentation",
   "version": "1.0.0",
   "numberOfPages": 133,
@@ -616,12 +616,11 @@ ______________________________________________________________________
 
 ### Internal Docs
 
-- [SEMANTIC_VERSIONING.md](reference/SEMANTIC_VERSIONING.md) - Detailed semver
-  guide
-- [AI_CODE_INTELLIGENCE.md](architecture/AI_CODE_INTELLIGENCE.md) - AI
+- SEMANTIC_VERSIONING.md - Detailed semver guide
+- [AI_CODE_INTELLIGENCE.md](../architecture/AI_CODE_INTELLIGENCE.md) - AI
   integration
-- [VERSION_CONTROL_STANDARDS.md](.github/VERSION_CONTROL_STANDARDS.md) - Branch
-  naming
+- [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) -
+  Branch naming
 
 ### Tools
 
@@ -649,16 +648,16 @@ ______________________________________________________________________
 
 Need help?
 
-- 📖 Check [CONTRIBUTING.md](../CONTRIBUTING.md)
+- 📖 Check [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬 Start a
-  [Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛 Open an
-  [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 📧 Contact maintainers via GitHub
 
 ______________________________________________________________________
 
 **Version**: 1.0.0\
 **Last Updated**: 2026-01-18\
-**Maintained by**: ivviiviivvi
-organization
+**Maintained by**:
+{{ORG_NAME}} organization

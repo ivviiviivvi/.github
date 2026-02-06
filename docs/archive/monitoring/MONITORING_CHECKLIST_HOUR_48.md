@@ -46,7 +46,7 @@ for repo in "${REPOS[@]}"; do
 
   # Get all runs since deployment
   all_runs=$(gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --limit 100 \
     --json status,conclusion,name,createdAt,databaseId)
 
@@ -108,7 +108,7 @@ for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
   stale_runs=$(gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --workflow="stale-management.yml" \
     --limit 10 \
     --json status,conclusion,createdAt,databaseId)
@@ -140,15 +140,15 @@ echo "================================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
-  repo_info=$(gh api "repos/ivviiviivvi/$repo")
+  repo_info=$(gh api "repos/{{ORG_NAME}}/$repo")
   issues=$(echo "$repo_info" | jq '.open_issues_count')
 
-  prs=$(gh pr list --repo "ivviiviivvi/$repo" --limit 100 --json number | jq 'length')
+  prs=$(gh pr list --repo "{{ORG_NAME}}/$repo" --limit 100 --json number | jq 'length')
 
-  last_commit=$(gh api "repos/ivviiviivvi/$repo/commits?per_page=1" --jq '.[0].commit.author.date')
+  last_commit=$(gh api "repos/{{ORG_NAME}}/$repo/commits?per_page=1" --jq '.[0].commit.author.date')
 
   # Check for any unexpected changes in 48h
-  commits_48h=$(gh api "repos/ivviiviivvi/$repo/commits?per_page=100" \
+  commits_48h=$(gh api "repos/{{ORG_NAME}}/$repo/commits?per_page=100" \
     --jq --arg since "$(date -u -d '48 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-48H '+%Y-%m-%dT%H:%M:%SZ')" \
     '[.[] | select(.commit.author.date >= $since)] | length')
 
@@ -173,7 +173,7 @@ all_workflows_ok=true
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
-  workflows=$(gh api "repos/ivviiviivvi/$repo/contents/.github/workflows" --jq '.')
+  workflows=$(gh api "repos/{{ORG_NAME}}/$repo/contents/.github/workflows" --jq '.')
   workflow_count=$(echo "$workflows" | jq 'length')
 
   if [ $workflow_count -eq 3 ]; then
@@ -213,7 +213,7 @@ echo "=============================="
 all_labels_ok=true
 
 for repo in "${REPOS[@]}"; do
-  label_count=$(gh label list --repo "ivviiviivvi/$repo" --limit 100 --json name | jq 'length')
+  label_count=$(gh label list --repo "{{ORG_NAME}}/$repo" --limit 100 --json name | jq 'length')
 
   if [ $label_count -eq 12 ]; then
     echo "✅ $repo: $label_count labels (expected 12)"
@@ -323,7 +323,7 @@ for repo in theoretical-specifications-first system-governance-framework trade-p
   echo "=== $repo FULL ANALYSIS ==="
 
   # Overall stats
-  gh run list -R "ivviiviivvi/$repo" -L 100 --json name,conclusion \
+  gh run list -R "{{ORG_NAME}}/$repo" -L 100 --json name,conclusion \
     --jq 'group_by(.name) | map({workflow: .[0].name, total: length, success: [.[] | select(.conclusion == "success")] | length}) | .[] | "\(.workflow): \(.success)/\(.total) (\((.success * 100 / .total))%)"'
 
   echo ""
@@ -336,7 +336,7 @@ done
 # Verify both stale runs (Jan 18 & 19 at 01:00 UTC)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo Stale Runs ==="
-  gh run list -R "ivviiviivvi/$repo" -w stale-management.yml -L 5 \
+  gh run list -R "{{ORG_NAME}}/$repo" -w stale-management.yml -L 5 \
     --json createdAt,conclusion,databaseId \
     --jq '.[] | "\(.createdAt): \(.conclusion) (Run \(.databaseId))"'
   echo ""
@@ -358,11 +358,11 @@ done
 # Export all failure logs for review
 mkdir -p /tmp/phase1_failures
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh run list -R "ivviiviivvi/$repo" --json conclusion,databaseId,name \
+  gh run list -R "{{ORG_NAME}}/$repo" --json conclusion,databaseId,name \
     --jq '.[] | select(.conclusion == "failure") | "\(.databaseId),\(.name)"' | \
     while IFS=, read -r run_id name; do
       echo "Exporting failure: $repo - $name (Run $run_id)"
-      gh run view $run_id -R "ivviiviivvi/$repo" --log > "/tmp/phase1_failures/${repo}_${name}_${run_id}.log"
+      gh run view $run_id -R "{{ORG_NAME}}/$repo" --log > "/tmp/phase1_failures/${repo}_${name}_${run_id}.log"
     done
 done
 
@@ -459,14 +459,14 @@ bash DEPLOY_PHASE2.sh | tee /tmp/phase2_deployment_$(date +%Y%m%d_%H%M%S).log
 
 ```bash
 # Test first 2 Phase 2 repositories
-gh workflow run repository-health-check.yml -R ivviiviivvi/intelligent-artifice-ark
-gh workflow run repository-health-check.yml -R ivviiviivvi/render-second-amendment
+gh workflow run repository-health-check.yml -R {{ORG_NAME}}/intelligent-artifice-ark
+gh workflow run repository-health-check.yml -R {{ORG_NAME}}/render-second-amendment
 
 sleep 15
 
 # Verify execution
-gh run list -R ivviiviivvi/intelligent-artifice-ark -L 1
-gh run list -R ivviiviivvi/render-second-amendment -L 1
+gh run list -R {{ORG_NAME}}/intelligent-artifice-ark -L 1
+gh run list -R {{ORG_NAME}}/render-second-amendment -L 1
 ```
 
 1. **Begin Phase 2 Monitoring**:
@@ -554,7 +554,7 @@ mkdir -p /workspace/phase1_investigation
 
 # All runs data
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh run list -R "ivviiviivvi/$repo" -L 100 --json databaseId,name,status,conclusion,createdAt,updatedAt \
+  gh run list -R "{{ORG_NAME}}/$repo" -L 100 --json databaseId,name,status,conclusion,createdAt,updatedAt \
     > "/workspace/phase1_investigation/${repo}_runs.json"
 done
 
@@ -565,7 +565,7 @@ cp -r /tmp/phase1_failures /workspace/phase1_investigation/
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   mkdir -p "/workspace/phase1_investigation/${repo}_workflows"
   for workflow in repository-health-check.yml enhanced-pr-quality.yml stale-management.yml; do
-    gh api "repos/ivviiviivvi/$repo/contents/.github/workflows/$workflow" \
+    gh api "repos/{{ORG_NAME}}/$repo/contents/.github/workflows/$workflow" \
       --jq '.content' | base64 -d > "/workspace/phase1_investigation/${repo}_workflows/$workflow"
   done
 done
@@ -803,7 +803,7 @@ bash /tmp/hour48_checkpoint.sh | tee /tmp/hour48_results.txt
 # All runs across all repos
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh run list -R "ivviiviivvi/$repo" -L 100 --json name,conclusion | \
+  gh run list -R "{{ORG_NAME}}/$repo" -L 100 --json name,conclusion | \
     jq -r 'group_by(.name) | map({workflow: .[0].name, total: length, success: ([.[] | select(.conclusion == "success")] | length)}) | .[] | "\(.workflow): \(.success)/\(.total)"'
 done
 ```

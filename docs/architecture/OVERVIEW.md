@@ -1,6 +1,6 @@
 # Architecture Overview
 
-System architecture and design principles for the ivviiviivvi GitHub template.
+System architecture and design principles for the {{ORG_NAME}} GitHub template.
 
 ______________________________________________________________________
 

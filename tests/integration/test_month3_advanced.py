@@ -94,12 +94,12 @@ class TestIntelligentRouting:
 
     def test_routing_algorithm_exists(self):
         """Verify intelligent routing script is present."""
-        script = "src/automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/issue_assignment_router.py"
         assert os.path.exists(script), f"Routing script not found: {script}"
 
     def test_routing_factors_all_present(self):
         """Test that routing considers all 5 factors."""
-        script = "src/automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/issue_assignment_router.py"
         with open(script) as f:
             content = f.read()
 
@@ -118,7 +118,7 @@ class TestIntelligentRouting:
 
     def test_routing_load_balancing(self):
         """Test that routing implements load balancing."""
-        script = "src/automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/issue_assignment_router.py"
         with open(script) as f:
             content = f.read()
 
@@ -126,7 +126,7 @@ class TestIntelligentRouting:
 
     def test_routing_fallback_mechanism(self):
         """Verify fallback when no ideal assignee found."""
-        script = "src/automation/scripts/intelligent_routing.py"
+        script = "src/automation/scripts/issue_assignment_router.py"
         with open(script) as f:
             content = f.read()
 
@@ -469,9 +469,9 @@ class TestMonth3Integration:
         assert os.path.exists(auto_merge)
         assert os.path.exists(analytics)
 
-    def test_intelligent_routing_uses_analytics(self):
+    def test_issue_assignment_router_uses_analytics(self):
         """Verify intelligent routing leverages analytics data."""
-        routing = "src/automation/scripts/intelligent_routing.py"
+        routing = "src/automation/scripts/issue_assignment_router.py"
         if not os.path.exists(routing):
             pytest.skip("Routing script not found")
 
@@ -543,7 +543,7 @@ class TestMonth3Integration:
         month3_files = [
             ".github/workflows/auto-merge.yml",
             "src/automation/scripts/check_auto_merge_eligibility.py",
-            "src/automation/scripts/intelligent_routing.py",
+            "src/automation/scripts/issue_assignment_router.py",
             ".github/workflows/self-healing.yml",
             "src/automation/scripts/schedule_maintenance.py",
             ".github/workflows/proactive-maintenance.yml",

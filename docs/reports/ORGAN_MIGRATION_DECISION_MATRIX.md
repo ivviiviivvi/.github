@@ -17,7 +17,7 @@ ______________________________________________________________________
 │                         CURRENT ECOSYSTEM                            │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  🏛️  ivviiviivvi (Theory Org)                                        │
+│  🏛️  {{ORG_NAME}} (Theory Org)                                        │
 │  ├─ 47 repositories, ~5.2 GB                                        │
 │  ├─ Status: MIXED PURPOSE (needs purification)                      │
 │  └─ Contains: Theory + Art + Commerce + Infrastructure              │
@@ -59,34 +59,34 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## ORGAN I: ivviiviivvi (Theory) - Keep Pure Conceptual Work
+## ORGAN I: {{ORG_NAME}} (Theory) - Keep Pure Conceptual Work
 
-### Repositories to KEEP in ivviiviivvi
+### Repositories to KEEP in {{ORG_NAME}}
 
-| Status | Repo Name                          | Current     | Suggested | Size   | Rationale                                                                                         |
-| ------ | ---------------------------------- | ----------- | --------- | ------ | ------------------------------------------------------------------------------------------------- |
-| ⬜     | **.github**                        | ivviiviivvi | `STAY`    | 6.9 GB | Core org infrastructure, AI framework (26+ agents, 11+ MCP servers, 100+ instructions, 133+ docs) |
-| ⬜     | **auto-revision-epistemic-engine** | ivviiviivvi | `STAY`    | 202 KB | Self-governing orchestration framework - pure theory                                              |
-| ⬜     | **cognitive-archaelogy-tribunal**  | ivviiviivvi | `STAY`    | 3.6 MB | Multi-layer cognitive excavation - conceptual tool                                                |
-| ⬜     | **collective-persona-operations**  | ivviiviivvi | `STAY`    | 8 KB   | Multi-agent identity systems - theoretical model                                                  |
-| ⬜     | **system-governance-framework**    | ivviiviivvi | `STAY`    | 226 KB | Autonomous governance architecture - theory                                                       |
-| ⬜     | **universal-node-network**         | ivviiviivvi | `STAY`    | 8 KB   | Distributed node infrastructure theory                                                            |
-| ⬜     | **4-ivi374-F0Rivi4**               | ivviiviivvi | `STAY`    | 17 KB  | Recursive generative organ body - conceptual                                                      |
-| ⬜     | **a-recursive-root**               | ivviiviivvi | `STAY`    | 793 KB | Root recursive system architecture                                                                |
-| ⬜     | **nexus--babel-alexandria-**       | ivviiviivvi | `STAY`    | 194 KB | Knowledge nexus architecture                                                                      |
-| ⬜     | **petasum-super-petasum**          | ivviiviivvi | `STAY`    | 270 KB | Hat on a hat, recursive abundance                                                                 |
-| ⬜     | **reverse-engine-recursive-run**   | ivviiviivvi | `STAY`    | 151 KB | Recursive execution engine theory                                                                 |
+| Status | Repo Name                          | Current      | Suggested | Size   | Rationale                                                                                         |
+| ------ | ---------------------------------- | ------------ | --------- | ------ | ------------------------------------------------------------------------------------------------- |
+| ⬜     | **.github**                        | {{ORG_NAME}} | `STAY`    | 6.9 GB | Core org infrastructure, AI framework (26+ agents, 11+ MCP servers, 100+ instructions, 133+ docs) |
+| ⬜     | **auto-revision-epistemic-engine** | {{ORG_NAME}} | `STAY`    | 202 KB | Self-governing orchestration framework - pure theory                                              |
+| ⬜     | **cognitive-archaelogy-tribunal**  | {{ORG_NAME}} | `STAY`    | 3.6 MB | Multi-layer cognitive excavation - conceptual tool                                                |
+| ⬜     | **collective-persona-operations**  | {{ORG_NAME}} | `STAY`    | 8 KB   | Multi-agent identity systems - theoretical model                                                  |
+| ⬜     | **system-governance-framework**    | {{ORG_NAME}} | `STAY`    | 226 KB | Autonomous governance architecture - theory                                                       |
+| ⬜     | **universal-node-network**         | {{ORG_NAME}} | `STAY`    | 8 KB   | Distributed node infrastructure theory                                                            |
+| ⬜     | **4-ivi374-F0Rivi4**               | {{ORG_NAME}} | `STAY`    | 17 KB  | Recursive generative organ body - conceptual                                                      |
+| ⬜     | **a-recursive-root**               | {{ORG_NAME}} | `STAY`    | 793 KB | Root recursive system architecture                                                                |
+| ⬜     | **nexus--babel-alexandria-**       | {{ORG_NAME}} | `STAY`    | 194 KB | Knowledge nexus architecture                                                                      |
+| ⬜     | **petasum-super-petasum**          | {{ORG_NAME}} | `STAY`    | 270 KB | Hat on a hat, recursive abundance                                                                 |
+| ⬜     | **reverse-engine-recursive-run**   | {{ORG_NAME}} | `STAY`    | 151 KB | Recursive execution engine theory                                                                 |
 
 **Theory Forks to Keep:**
 
-| Status | Repo Name                            | Current     | Suggested | Size    | Rationale                           |
-| ------ | ------------------------------------ | ----------- | --------- | ------- | ----------------------------------- |
-| ⬜     | **auto-ontological-schema**          | ivviiviivvi | `STAY`    | 234 MB  | Schema.org - ontological structures |
-| ⬜     | **theoretical-specifications-first** | ivviiviivvi | `STAY`    | 2.8 MB  | SpecStory - spec-driven development |
-| ⬜     | **semantic-pedantic-grep**           | ivviiviivvi | `STAY`    | 93 MB   | Semgrep - semantic code analysis    |
-| ⬜     | **docs-et-cet-alia**                 | ivviiviivvi | `STAY`    | 2.2 GB  | GitHub docs - reference material    |
-| ⬜     | **skills**                           | ivviiviivvi | `STAY`    | 3.1 MB  | GitHub skills - meta-learning       |
-| ⬜     | **log-commit-preserve**              | ivviiviivvi | `STAY`    | 18.8 MB | Commitizen - semantic versioning    |
+| Status | Repo Name                            | Current      | Suggested | Size    | Rationale                           |
+| ------ | ------------------------------------ | ------------ | --------- | ------- | ----------------------------------- |
+| ⬜     | **auto-ontological-schema**          | {{ORG_NAME}} | `STAY`    | 234 MB  | Schema.org - ontological structures |
+| ⬜     | **theoretical-specifications-first** | {{ORG_NAME}} | `STAY`    | 2.8 MB  | SpecStory - spec-driven development |
+| ⬜     | **semantic-pedantic-grep**           | {{ORG_NAME}} | `STAY`    | 93 MB   | Semgrep - semantic code analysis    |
+| ⬜     | **docs-et-cet-alia**                 | {{ORG_NAME}} | `STAY`    | 2.2 GB  | GitHub docs - reference material    |
+| ⬜     | **skills**                           | {{ORG_NAME}} | `STAY`    | 3.1 MB  | GitHub skills - meta-learning       |
+| ⬜     | **log-commit-preserve**              | {{ORG_NAME}} | `STAY`    | 18.8 MB | Commitizen - semantic versioning    |
 
 ### 🆕 NEW Theory Candidates (from Jan 20-23 discoveries)
 
@@ -140,13 +140,13 @@ ______________________________________________________________________
 
 ### Suggested Migrations TO omni-dromenon-machina
 
-| Status | Repo Name                   | Current     | Suggested | Size    | Rationale                                                                                   | Your Decision                   |
-| ------ | --------------------------- | ----------- | --------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
-| 🟨     | **a-i-council--coliseum**   | ivviiviivvi | `MOVE?`   | 556 KB  | 24/7 AI agent debate streaming - performance/event-based. May connect to metasystem-master? | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
-| 🟨     | **classroom-rpg-aetheria**  | ivviiviivvi | `MOVE?`   | 2.7 MB  | Educational RPG - experiential system                                                       | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
-| 🟨     | **virgil-training-overlay** | ivviiviivvi | `MOVE?`   | 159 KB  | Clippy-as-Virgil Divine Comedy guide - ritual/experiential                                  | ⬜ MOVE / ⬜ STAY / ⬜ DELETE   |
-| 🟨     | **supercollider**           | ivviiviivvi | `MOVE?`   | 169 MB  | Audio synthesis - connects to audio-synthesis-bridge?                                       | ⬜ MOVE / ⬜ STAY               |
-| 🟨     | **quarks**                  | ivviiviivvi | `MOVE?`   | 13.5 MB | SuperCollider extensions - audio performance                                                | ⬜ MOVE / ⬜ STAY               |
+| Status | Repo Name                   | Current      | Suggested | Size    | Rationale                                                                                   | Your Decision                   |
+| ------ | --------------------------- | ------------ | --------- | ------- | ------------------------------------------------------------------------------------------- | ------------------------------- |
+| 🟨     | **a-i-council--coliseum**   | {{ORG_NAME}} | `MOVE?`   | 556 KB  | 24/7 AI agent debate streaming - performance/event-based. May connect to metasystem-master? | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
+| 🟨     | **classroom-rpg-aetheria**  | {{ORG_NAME}} | `MOVE?`   | 2.7 MB  | Educational RPG - experiential system                                                       | ⬜ MOVE / ⬜ STAY / ⬜ COMMERCE |
+| 🟨     | **virgil-training-overlay** | {{ORG_NAME}} | `MOVE?`   | 159 KB  | Clippy-as-Virgil Divine Comedy guide - ritual/experiential                                  | ⬜ MOVE / ⬜ STAY / ⬜ DELETE   |
+| 🟨     | **supercollider**           | {{ORG_NAME}} | `MOVE?`   | 169 MB  | Audio synthesis - connects to audio-synthesis-bridge?                                       | ⬜ MOVE / ⬜ STAY               |
+| 🟨     | **quarks**                  | {{ORG_NAME}} | `MOVE?`   | 13.5 MB | SuperCollider extensions - audio performance                                                | ⬜ MOVE / ⬜ STAY               |
 
 **Questions to Answer:**
 
@@ -161,30 +161,30 @@ ______________________________________________________________________
 
 ### Currently EMPTY - Suggested Migrations
 
-| Status | Repo Name                                   | Current     | Suggested | Size    | Revenue Model                        | Your Decision                 |
-| ------ | ------------------------------------------- | ----------- | --------- | ------- | ------------------------------------ | ----------------------------- |
-| ⬜     | **trade-perpetual-future**                  | ivviiviivvi | `MOVE`    | 13.8 MB | Trading fees, subscriptions          | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **search-local--happy-hour**                | ivviiviivvi | `MOVE`    | 902 KB  | Affiliate marketing, listings        | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **sovereign-ecosystem--real-estate-luxury** | ivviiviivvi | `MOVE`    | 1.6 MB  | Commissions, listing fees            | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **fetch-familiar-friends**                  | ivviiviivvi | `MOVE`    | 3.3 MB  | SaaS subscriptions, premium features | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **gamified-coach-interface**                | ivviiviivvi | `MOVE`    | 8.3 MB  | Coaching fees, subscriptions         | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **tab-bookmark-manager**                    | ivviiviivvi | `MOVE`    | 316 KB  | Freemium model, premium features     | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **solve-et-coagula**                        | ivviiviivvi | `MOVE`    | 31.4 MB | Data consulting, API access          | ⬜ MOVE / ⬜ STAY / ⬜ THEORY |
-| ⬜     | **public-record-data-scrapper**             | ivviiviivvi | `MOVE`    | 7.7 MB  | Data subscriptions, API              | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **a-i-chat--exporter**                      | ivviiviivvi | `MOVE`    | 1.7 MB  | Premium exports, enterprise          | ⬜ MOVE / ⬜ STAY             |
-| ⬜     | **a-mavs-olevm**                            | ivviiviivvi | `MOVE`    | 970 MB  | etceter4.com hosting/services        | ⬜ MOVE / ⬜ STAY             |
+| Status | Repo Name                                   | Current      | Suggested | Size    | Revenue Model                        | Your Decision                 |
+| ------ | ------------------------------------------- | ------------ | --------- | ------- | ------------------------------------ | ----------------------------- |
+| ⬜     | **trade-perpetual-future**                  | {{ORG_NAME}} | `MOVE`    | 13.8 MB | Trading fees, subscriptions          | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **search-local--happy-hour**                | {{ORG_NAME}} | `MOVE`    | 902 KB  | Affiliate marketing, listings        | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **sovereign-ecosystem--real-estate-luxury** | {{ORG_NAME}} | `MOVE`    | 1.6 MB  | Commissions, listing fees            | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **fetch-familiar-friends**                  | {{ORG_NAME}} | `MOVE`    | 3.3 MB  | SaaS subscriptions, premium features | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **gamified-coach-interface**                | {{ORG_NAME}} | `MOVE`    | 8.3 MB  | Coaching fees, subscriptions         | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **tab-bookmark-manager**                    | {{ORG_NAME}} | `MOVE`    | 316 KB  | Freemium model, premium features     | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **solve-et-coagula**                        | {{ORG_NAME}} | `MOVE`    | 31.4 MB | Data consulting, API access          | ⬜ MOVE / ⬜ STAY / ⬜ THEORY |
+| ⬜     | **public-record-data-scrapper**             | {{ORG_NAME}} | `MOVE`    | 7.7 MB  | Data subscriptions, API              | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **a-i-chat--exporter**                      | {{ORG_NAME}} | `MOVE`    | 1.7 MB  | Premium exports, enterprise          | ⬜ MOVE / ⬜ STAY             |
+| ⬜     | **a-mavs-olevm**                            | {{ORG_NAME}} | `MOVE`    | 970 MB  | etceter4.com hosting/services        | ⬜ MOVE / ⬜ STAY             |
 
 **Applied Tool Forks (Commerce):**
 
-| Status | Repo Name                  | Current     | Suggested | Size    | Purpose                               | Your Decision     |
-| ------ | -------------------------- | ----------- | --------- | ------- | ------------------------------------- | ----------------- |
-| ⬜     | **are-is-clone-cloud**     | ivviiviivvi | `MOVE`    | 214 MB  | rclone - infrastructure for services  | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **codex-a-i**              | ivviiviivvi | `MOVE`    | 24.2 MB | Terminal coding agent - productizable | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **gemini-cli**             | ivviiviivvi | `MOVE`    | 50.7 MB | Gemini terminal agent                 | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **github-mcp-server**      | ivviiviivvi | `MOVE`    | 19.5 MB | MCP server - client infrastructure    | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **iGOR**                   | ivviiviivvi | `MOVE`    | 23.7 MB | Private AI assistant - productizable  | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **mcpb**                   | ivviiviivvi | `MOVE`    | 1.9 MB  | MCP browser extensions - product      | ⬜ MOVE / ⬜ STAY |
-| ⬜     | **jvpiter-inquiry-labors** | ivviiviivvi | `MOVE`    | 8.2 MB  | Jupyter - consulting tool             | ⬜ MOVE / ⬜ STAY |
+| Status | Repo Name                  | Current      | Suggested | Size    | Purpose                               | Your Decision     |
+| ------ | -------------------------- | ------------ | --------- | ------- | ------------------------------------- | ----------------- |
+| ⬜     | **are-is-clone-cloud**     | {{ORG_NAME}} | `MOVE`    | 214 MB  | rclone - infrastructure for services  | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **codex-a-i**              | {{ORG_NAME}} | `MOVE`    | 24.2 MB | Terminal coding agent - productizable | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **gemini-cli**             | {{ORG_NAME}} | `MOVE`    | 50.7 MB | Gemini terminal agent                 | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **github-mcp-server**      | {{ORG_NAME}} | `MOVE`    | 19.5 MB | MCP server - client infrastructure    | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **iGOR**                   | {{ORG_NAME}} | `MOVE`    | 23.7 MB | Private AI assistant - productizable  | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **mcpb**                   | {{ORG_NAME}} | `MOVE`    | 1.9 MB  | MCP browser extensions - product      | ⬜ MOVE / ⬜ STAY |
+| ⬜     | **jvpiter-inquiry-labors** | {{ORG_NAME}} | `MOVE`    | 8.2 MB  | Jupyter - consulting tool             | ⬜ MOVE / ⬜ STAY |
 
 **Total Commerce Candidates: 17 (~1.4 GB)**
 
@@ -253,20 +253,20 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## Other ivviiviivvi Repos - Need Classification
+## Other {{ORG_NAME}} Repos - Need Classification
 
 ### Infrastructure & Research (Unclear Purpose)
 
-| Status | Repo Name                      | Current     | Suggested | Size    | Question                                                         | Your Decision                       |
-| ------ | ------------------------------ | ----------- | --------- | ------- | ---------------------------------------------------------------- | ----------------------------------- |
-| 🟨     | **anon-hookup-now**            | ivviiviivvi | `REVIEW`  | 46.9 MB | Anonymous hookup platform - Commerce? Art? Research?             | ⬜ COMMERCE / ⬜ ART / ⬜ DELETE    |
-| 🟨     | **a-context7**                 | ivviiviivvi | `REVIEW`  | 4.7 MB  | MCP Server fork - Theory tool or Commerce product?               | ⬜ THEORY / ⬜ COMMERCE             |
-| 🟨     | **claude-cookbooks**           | ivviiviivvi | `REVIEW`  | 180 MB  | Anthropic cookbooks - Theory reference or Commerce product base? | ⬜ THEORY / ⬜ COMMERCE             |
-| 🟨     | **intelligent-artifice-ark**   | ivviiviivvi | `REVIEW`  | 1.9 MB  | ChatGPT Exporter fork - Commerce tool?                           | ⬜ COMMERCE / ⬜ THEORY             |
-| 🟨     | **input-keys-log**             | ivviiviivvi | `REVIEW`  | 19 KB   | Python keylogger - Research/security tool or delete?             | ⬜ THEORY / ⬜ DELETE               |
-| 🟨     | **render-second-amendment**    | ivviiviivvi | `REVIEW`  | 2.2 GB  | 3D printed firearms - Research/archive or delete?                | ⬜ THEORY / ⬜ DELETE / ⬜ ARCHIVE  |
-| 🟨     | **train-neural-network**       | ivviiviivvi | `REVIEW`  | 1.2 GB  | TensorFlow fork - Theory reference?                              | ⬜ THEORY / ⬜ DELETE               |
-| 🟨     | **select-or-left-or-right-or** | ivviiviivvi | `REVIEW`  | 63.7 MB | Selection utility - Purpose unclear                              | ⬜ THEORY / ⬜ COMMERCE / ⬜ DELETE |
+| Status | Repo Name                      | Current      | Suggested | Size    | Question                                                         | Your Decision                       |
+| ------ | ------------------------------ | ------------ | --------- | ------- | ---------------------------------------------------------------- | ----------------------------------- |
+| 🟨     | **anon-hookup-now**            | {{ORG_NAME}} | `REVIEW`  | 46.9 MB | Anonymous hookup platform - Commerce? Art? Research?             | ⬜ COMMERCE / ⬜ ART / ⬜ DELETE    |
+| 🟨     | **a-context7**                 | {{ORG_NAME}} | `REVIEW`  | 4.7 MB  | MCP Server fork - Theory tool or Commerce product?               | ⬜ THEORY / ⬜ COMMERCE             |
+| 🟨     | **claude-cookbooks**           | {{ORG_NAME}} | `REVIEW`  | 180 MB  | Anthropic cookbooks - Theory reference or Commerce product base? | ⬜ THEORY / ⬜ COMMERCE             |
+| 🟨     | **intelligent-artifice-ark**   | {{ORG_NAME}} | `REVIEW`  | 1.9 MB  | ChatGPT Exporter fork - Commerce tool?                           | ⬜ COMMERCE / ⬜ THEORY             |
+| 🟨     | **input-keys-log**             | {{ORG_NAME}} | `REVIEW`  | 19 KB   | Python keylogger - Research/security tool or delete?             | ⬜ THEORY / ⬜ DELETE               |
+| 🟨     | **render-second-amendment**    | {{ORG_NAME}} | `REVIEW`  | 2.2 GB  | 3D printed firearms - Research/archive or delete?                | ⬜ THEORY / ⬜ DELETE / ⬜ ARCHIVE  |
+| 🟨     | **train-neural-network**       | {{ORG_NAME}} | `REVIEW`  | 1.2 GB  | TensorFlow fork - Theory reference?                              | ⬜ THEORY / ⬜ DELETE               |
+| 🟨     | **select-or-left-or-right-or** | {{ORG_NAME}} | `REVIEW`  | 63.7 MB | Selection utility - Purpose unclear                              | ⬜ THEORY / ⬜ COMMERCE / ⬜ DELETE |
 
 ______________________________________________________________________
 
@@ -276,7 +276,7 @@ ______________________________________________________________________
 
 | Organ                               | Original (Jan 18)  | Current (Jan 23)   | After Migration         | Change     | Character                    |
 | ----------------------------------- | ------------------ | ------------------ | ----------------------- | ---------- | ---------------------------- |
-| **ivviiviivvi (Theory)**            | 47 repos, 5.2 GB   | 47 repos, 5.2 GB   | 21-23 repos, ~9.7 GB    | -24 to -26 | Pure conceptual work         |
+| **{{ORG_NAME}} (Theory)**           | 47 repos, 5.2 GB   | 47 repos, 5.2 GB   | 21-23 repos, ~9.7 GB    | -24 to -26 | Pure conceptual work         |
 | **omni-dromenon-machina (Art)**     | 14 repos, 645 KB   | 14 repos, 645 KB   | 20-21 repos?, ~1.3 MB?  | +6 to +7   | Performance & temporal works |
 | **labores-profani-crux (Commerce)** | 0 repos, 0 GB      | 0 repos, 0 GB      | 17-19 repos?, ~1.4 GB   | +17 to +19 | Revenue-generating           |
 | **4444J99 (Personal)**              | 56 repos, 8.7 GB   | 66 repos, 12.7 GB  | 58-61 repos, ~8-9 GB    | -5 to -8   | Incubation & learning        |
@@ -298,7 +298,7 @@ ______________________________________________________________________
 
 ### 1. **solve-et-coagula** - Theory or Commerce?
 
-**Current:** ivviiviivvi\
+**Current:** {{ORG_NAME}}\
 **Description:** Alchemical transformation engine for
 data synthesis
 
@@ -318,7 +318,7 @@ ______________________________________________________________________
 
 ### 2. **a-i-council--coliseum** - Art or Commerce?
 
-**Current:** ivviiviivvi\
+**Current:** {{ORG_NAME}}\
 **Description:** 24/7 AI agent debate streaming
 platform
 
@@ -338,7 +338,7 @@ ______________________________________________________________________
 
 ### 3. **classroom-rpg-aetheria** - Art or Commerce?
 
-**Current:** ivviiviivvi\
+**Current:** {{ORG_NAME}}\
 **Description:** Educational RPG system
 
 **Option A:** Art (Experiential)
@@ -357,7 +357,7 @@ ______________________________________________________________________
 
 ### 4. **supercollider/quarks** - Connect to omni-dromenon-machina?
 
-**Current:** ivviiviivvi (forks)\
+**Current:** {{ORG_NAME}} (forks)\
 **Question:** Do these audio tools integrate
 with omni's audio-synthesis-bridge?
 
@@ -403,7 +403,7 @@ KB\
 **Description:** "Polymorphic Agent Swarm Architecture - Model-agnostic,
 self-organizing multi-agent system"
 
-**Option A:** Theory (ivviiviivvi)
+**Option A:** Theory ({{ORG_NAME}})
 
 - Reason: Architectural/conceptual model
 - "Polymorphic" and "model-agnostic" suggest design patterns
@@ -428,7 +428,7 @@ KB\
 **Description:** "RE:GE - Recursive Engine: Generative Entity - A symbolic
 OS for myth, identity, ritual, and recursive systems"
 
-**Option A:** Theory (ivviiviivvi)
+**Option A:** Theory ({{ORG_NAME}})
 
 - Reason: "Symbolic OS" = conceptual framework
 - Recursive systems theory
@@ -463,7 +463,7 @@ ______________________________________________________________________
 - Dataset? Research corpus? Framework + examples?
 - Is it theoretical linguistics or applied NLP?
 
-**Option A:** Theory (ivviiviivvi)
+**Option A:** Theory ({{ORG_NAME}})
 
 - Reason: "Linguistic atomization" = breaking language into fundamental units
 - Theoretical framework for language analysis
@@ -520,7 +520,7 @@ ______________________________________________________________________
 
 ### Phase 2: Theory Purification
 
-- [ ] Confirm 17 repos to keep in ivviiviivvi
+- [ ] Confirm 17 repos to keep in {{ORG_NAME}}
 - [ ] Migrate art repos to omni-dromenon-machina
 - [ ] Migrate commerce repos to labores-profani-crux
 - [ ] Archive/delete unwanted repos
@@ -578,7 +578,7 @@ ______________________________________________________________________
 
 **About relationships:**
 
-- Which ivviiviivvi repos feed INTO omni?
+- Which {{ORG_NAME}} repos feed INTO omni?
 - Which repos are completely separate?
 - Are there dependencies we need to preserve?
 

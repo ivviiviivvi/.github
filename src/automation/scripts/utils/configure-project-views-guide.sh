@@ -87,7 +87,7 @@ configure_view() {
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button (top right)
@@ -126,7 +126,7 @@ EOF
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button
@@ -172,7 +172,7 @@ EOF
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button
@@ -218,7 +218,7 @@ EOF
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button
@@ -262,7 +262,7 @@ EOF
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button
@@ -309,7 +309,7 @@ EOF
 ───────────────────────────────────────────────────────────────
 
 Step 1: Navigate to Project
-   → Open: https://github.com/orgs/ivviiviivvi/projects/$PROJECT_NUM
+   → Open: https://github.com/orgs/{{ORG_NAME}}/projects/$PROJECT_NUM
 
 Step 2: Create New View
    → Click "+ New view" button
@@ -356,7 +356,7 @@ EOF
     echo ""
     echo -e "${YELLOW}───────────────────────────────────────────────────────────────${NC}"
     echo -e "${YELLOW}Replace ${PURPLE}\$PROJECT_NUM${YELLOW} with: ${GREEN}$project_num${NC}"
-    echo -e "${YELLOW}Project URL: ${BLUE}https://github.com/orgs/ivviiviivvi/projects/$project_num${NC}"
+    echo -e "${YELLOW}Project URL: ${BLUE}https://github.com/orgs/{{ORG_NAME}}/projects/$project_num${NC}"
     echo -e "${YELLOW}───────────────────────────────────────────────────────────────${NC}"
     echo ""
 

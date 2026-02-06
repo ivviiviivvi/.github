@@ -767,7 +767,7 @@ class TestGetCurrentRepo:
 
             repo = predictor._get_current_repo()
 
-            assert repo == "ivviiviivvi/.github"
+            assert repo == "{{ORG_NAME}}/.github"
 
 
 @pytest.mark.unit

@@ -13,15 +13,16 @@ ______________________________________________________________________
 
 ### Documentation Review
 
-- [ ] Read [WORKFLOW_DESIGN.md](../../docs/WORKFLOW_DESIGN.md) - Architecture
-  overview
+- [ ] Read [WORKFLOW_DESIGN.md](../../docs/workflows/WORKFLOW_DESIGN.md) -
+  Architecture overview
 - [ ] Review
-  [WORKFLOW_IMPLEMENTATION_SUMMARY.md](../../docs/WORKFLOW_IMPLEMENTATION_SUMMARY.md)
+  [WORKFLOW_IMPLEMENTATION_SUMMARY.md](../../docs/reports/WORKFLOW_IMPLEMENTATION_SUMMARY.md)
   \- Deployment guide
-- [ ] Check [CONTRIBUTOR_WORKFLOW.md](../../docs/CONTRIBUTOR_WORKFLOW.md) -
+- [ ] Check
+  [CONTRIBUTOR_WORKFLOW.md](../../docs/workflows/CONTRIBUTOR_WORKFLOW.md) -
   User-facing guide
-- [ ] Read [MAINTAINER_WORKFLOW.md](../../docs/MAINTAINER_WORKFLOW.md) -
-  Operations guide
+- [ ] Read [MAINTAINER_WORKFLOW.md](../../docs/workflows/MAINTAINER_WORKFLOW.md)
+  \- Operations guide
 
 ### Environment Preparation
 
@@ -201,7 +202,8 @@ ______________________________________________________________________
   - [ ] Manual intervention points
   - [ ] Monitoring workflows
   - [ ] Handling edge cases
-- [ ] Walk through [MAINTAINER_WORKFLOW.md](../../docs/MAINTAINER_WORKFLOW.md)
+- [ ] Walk through
+  [MAINTAINER_WORKFLOW.md](../../docs/workflows/MAINTAINER_WORKFLOW.md)
 - [ ] Q&A session
 - [ ] Record session for future reference
 

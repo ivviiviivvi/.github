@@ -2,7 +2,7 @@
 
 **Project:** Comprehensive Codebase Cleanup & Consolidation
 Roadmap\
-**Repository:** ivviiviivvi/.github\
+**Repository:** {{ORG_NAME}}/.github\
 **Duration:** January 13-15, 2026
 (3 days)\
 **Status:** ✅ 100% Complete (10/10 phases)
@@ -507,11 +507,11 @@ ______________________________________________________________________
 ### A. Related Documentation
 
 - [CLEANUP_ROADMAP.md](../archive/CLEANUP_ROADMAP.md) - Complete project plan
-- [Phase 7 Completion Plan](guides/PHASE_7_COMPLETION_PLAN.md) - Final phase
+- [Phase 7 Completion Plan](../guides/PHASE_7_COMPLETION_PLAN.md) - Final phase
   strategy
-- [Issue Templates Guide](guides/issue-templates.md) - Template usage
+- [Issue Templates Guide](../guides/issue-templates.md) - Template usage
   documentation
-- [Testing Best Practices](guides/testing-best-practices.md) - Testing
+- [Testing Best Practices](../guides/testing-best-practices.md) - Testing
   guidelines
 
 ### B. Contact
@@ -519,11 +519,11 @@ ______________________________________________________________________
 For questions about this retrospective or the cleanup project:
 
 - **GitHub Discussions:**
-  [Ask Questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Ask Questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Issues:**
-  [Report Problems](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report Problems](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Documentation:**
-  [Browse Docs](https://github.com/ivviiviivvi/.github/tree/main/docs)
+  [Browse Docs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/docs)
 
 ### C. Acknowledgments
 

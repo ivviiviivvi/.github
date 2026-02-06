@@ -97,11 +97,11 @@
 - /workspace/docs/AGENT_REGISTRY.md: ../agents/github-org-manager.agent.md
   (missing: /workspace/docs/../agents/github-org-manager.agent.md)
 - /workspace/docs/AGENT_REGISTRY.md:
-  ../agents/greener-grass-workflow-benchmark.agent.md (missing:
-  /workspace/docs/../agents/greener-grass-workflow-benchmark.agent.md)
+  ../agents/workflow-best-practice-benchmark.agent.md (missing:
+  /workspace/docs/../agents/workflow-best-practice-benchmark.agent.md)
 - /workspace/docs/AGENT_REGISTRY.md:
-  ../agents/greener-grass-workflow-benchmark.agent.md (missing:
-  /workspace/docs/../agents/greener-grass-workflow-benchmark.agent.md)
+  ../agents/workflow-best-practice-benchmark.agent.md (missing:
+  /workspace/docs/../agents/workflow-best-practice-benchmark.agent.md)
 - /workspace/docs/AGENT_REGISTRY.md: ../agents/jfrog-sec.agent.md (missing:
   /workspace/docs/../agents/jfrog-sec.agent.md)
 - /workspace/docs/AGENT_REGISTRY.md: ../agents/jfrog-sec.agent.md (missing:
@@ -124,10 +124,10 @@
 - /workspace/docs/AGENT_REGISTRY.md:
   ../agents/neon-optimization-analyzer.agent.md (missing:
   /workspace/docs/../agents/neon-optimization-analyzer.agent.md)
-- /workspace/docs/AGENT_REGISTRY.md: ../agents/nervous-archaeologist.agent.md
-  (missing: /workspace/docs/../agents/nervous-archaeologist.agent.md)
-- /workspace/docs/AGENT_REGISTRY.md: ../agents/nervous-archaeologist.agent.md
-  (missing: /workspace/docs/../agents/nervous-archaeologist.agent.md)
+- /workspace/docs/AGENT_REGISTRY.md: ../agents/exhaustive-repo-scanner.agent.md
+  (missing: /workspace/docs/../agents/exhaustive-repo-scanner.agent.md)
+- /workspace/docs/AGENT_REGISTRY.md: ../agents/exhaustive-repo-scanner.agent.md
+  (missing: /workspace/docs/../agents/exhaustive-repo-scanner.agent.md)
 - /workspace/docs/AGENT_REGISTRY.md:
   ../agents/octopus-deploy-release-notes-mcp.agent.md (missing:
   /workspace/docs/../agents/octopus-deploy-release-notes-mcp.agent.md)
@@ -186,11 +186,11 @@
   https://agentsphere.example.com/demo/your-repo (URLError: \<urlopen error
   \[Errno -5\] No address associated with hostname>)
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
-  https://github.com/ivviiviivvi/.github/issues` (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/issues` (HTTPError 404)
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
-  https://github.com/ivviiviivvi/.github/issues` (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/issues` (HTTPError 404)
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
-  https://ivviiviivvi.github.io/.github` (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github\` (HTTPError 404)
 - /workspace/docs/BRANCH_PROTECTION.md:
   https://api.github.com/repos/OWNER/REPO/branches/main/protection (HTTPError
   401\)
@@ -377,9 +377,9 @@
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md: ./docs/WALKTHROUGH_GUIDE.md
   (missing: /workspace/docs/docs/WALKTHROUGH_GUIDE.md)
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md:
-  https://github.com/ivviiviivvi/.github/pull/[NUMBER (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/pull/[NUMBER (HTTPError 404)
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md:
-  https://ivviiviivvi.github.io/.github (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github (HTTPError 404)
 - /workspace/docs/DEPLOYMENT_SUMMARY.md: https://\[user (ValueError: Invalid
   IPv6 URL)
 - /workspace/docs/DEVELOPMENT_ENVIRONMENT_SETUP.md: ../.gitconfig (missing:
@@ -404,16 +404,16 @@
   404\)
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://github.com/4444JPP (HTTPError
   404\)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://ivviiviivvi.github.io/.github/
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://ivviiviivvi.github.io/.github/
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://ivviiviivvi.github.io/.github/
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md:
-  https://ivviiviivvi.github.io/.github/_data/api/walkthroughs.json` (HTTPError
-  404\)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.ivviiviivvi.dev
+  https://{{ORG_NAME}}.github.io/.github/\_data/api/walkthroughs.json\`
+  (HTTPError 404)
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.{{ORG_NAME}}.dev
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/ISSUE_TAXONOMY.md: PROJECT_PLANNING.md (missing:
   /workspace/docs/PROJECT_PLANNING.md)
@@ -476,37 +476,41 @@
   /workspace/docs/../prompts/typescript-mcp-server-generator.prompt.md)
 - /workspace/docs/MCP_SERVER_SETUP.md: https://your-server.example.com/mcp
   (URLError: \<urlopen error \[Errno -5\] No address associated with hostname>)
-- /workspace/docs/MOUTHPIECE_README.md: chatmodes/mouthpiece.chatmode.md
-  (missing: /workspace/docs/chatmodes/mouthpiece.chatmode.md)
-- /workspace/docs/MOUTHPIECE_README.md: chatmodes/mouthpiece.chatmode.md
-  (missing: /workspace/docs/chatmodes/mouthpiece.chatmode.md)
-- /workspace/docs/MOUTHPIECE_README.md: chatmodes/mouthpiece.chatmode.md
-  (missing: /workspace/docs/chatmodes/mouthpiece.chatmode.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/MOUTHPIECE_SYSTEM.md (missing:
-  /workspace/docs/docs/MOUTHPIECE_SYSTEM.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/MOUTHPIECE_SYSTEM.md (missing:
-  /workspace/docs/docs/MOUTHPIECE_SYSTEM.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/MOUTHPIECE_SYSTEM.md (missing:
-  /workspace/docs/docs/MOUTHPIECE_SYSTEM.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
+  /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
+  /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
+  /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: prompts/mouthpiece-transform.prompt.md
+- /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/MOUTHPIECE_README.md: prompts/mouthpiece-transform.prompt.md
+- /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/MOUTHPIECE_README.md: prompts/mouthpiece-transform.prompt.md
+- /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/MOUTHPIECE_README.md: scripts/mouthpiece_filter.py (missing:
-  /workspace/docs/scripts/mouthpiece_filter.py)
-- /workspace/docs/MOUTHPIECE_SYSTEM.md: ../CONTRIBUTING.md (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  scripts/natural_language_prompt_filter.py (missing:
+  /workspace/docs/scripts/natural_language_prompt_filter.py)
+- /workspace/docs/NLP_FILTER_SYSTEM.md: ../CONTRIBUTING.md (missing:
   /workspace/docs/../CONTRIBUTING.md)
 - /workspace/docs/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md:
   .github/project-templates/bug-triage.json (missing:
@@ -643,8 +647,8 @@
 - /workspace/docs/README.agents.md: ../agents/github-org-manager.agent.md
   (missing: /workspace/docs/../agents/github-org-manager.agent.md)
 - /workspace/docs/README.agents.md:
-  ../agents/greener-grass-workflow-benchmark.agent.md (missing:
-  /workspace/docs/../agents/greener-grass-workflow-benchmark.agent.md)
+  ../agents/workflow-best-practice-benchmark.agent.md (missing:
+  /workspace/docs/../agents/workflow-best-practice-benchmark.agent.md)
 - /workspace/docs/README.agents.md: ../agents/jfrog-sec.agent.md (missing:
   /workspace/docs/../agents/jfrog-sec.agent.md)
 - /workspace/docs/README.agents.md: ../agents/launchdarkly-flag-cleanup.agent.md
@@ -654,8 +658,8 @@
 - /workspace/docs/README.agents.md:
   ../agents/neon-optimization-analyzer.agent.md (missing:
   /workspace/docs/../agents/neon-optimization-analyzer.agent.md)
-- /workspace/docs/README.agents.md: ../agents/nervous-archaeologist.agent.md
-  (missing: /workspace/docs/../agents/nervous-archaeologist.agent.md)
+- /workspace/docs/README.agents.md: ../agents/exhaustive-repo-scanner.agent.md
+  (missing: /workspace/docs/../agents/exhaustive-repo-scanner.agent.md)
 - /workspace/docs/README.agents.md:
   ../agents/octopus-deploy-release-notes-mcp.agent.md (missing:
   /workspace/docs/../agents/octopus-deploy-release-notes-mcp.agent.md)
@@ -729,10 +733,11 @@
 - /workspace/docs/README.chatmodes.md: ../chatmodes/bicep-plan.chatmode.md
   (missing: /workspace/docs/../chatmodes/bicep-plan.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
-  ../chatmodes/blueprint-mode-codex.chatmode.md (missing:
-  /workspace/docs/../chatmodes/blueprint-mode-codex.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/blueprint-mode.chatmode.md
-  (missing: /workspace/docs/../chatmodes/blueprint-mode.chatmode.md)
+  ../chatmodes/structured-workflow-executor-codex.chatmode.md (missing:
+  /workspace/docs/../chatmodes/structured-workflow-executor-codex.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/structured-workflow-executor.chatmode.md (missing:
+  /workspace/docs/../chatmodes/structured-workflow-executor.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/clojure-interactive-programming.chatmode.md (missing:
   /workspace/docs/../chatmodes/clojure-interactive-programming.chatmode.md)
@@ -742,8 +747,8 @@
   ../chatmodes/critical-thinking.chatmode.md (missing:
   /workspace/docs/../chatmodes/critical-thinking.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
-  ../chatmodes/csharp-dotnet-janitor.chatmode.md (missing:
-  /workspace/docs/../chatmodes/csharp-dotnet-janitor.chatmode.md)
+  ../chatmodes/csharp-dotnet-codebase-cleanup.chatmode.md (missing:
+  /workspace/docs/../chatmodes/csharp-dotnet-codebase-cleanup.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/csharp-mcp-expert.chatmode.md (missing:
   /workspace/docs/../chatmodes/csharp-mcp-expert.chatmode.md)
@@ -771,16 +776,18 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/expert-react-frontend-engineer.chatmode.md (missing:
   /workspace/docs/../chatmodes/expert-react-frontend-engineer.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/gilfoyle.chatmode.md
-  (missing: /workspace/docs/../chatmodes/gilfoyle.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/sardonic-code-review.chatmode.md (missing:
+  /workspace/docs/../chatmodes/sardonic-code-review.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/go-mcp-expert.chatmode.md
   (missing: /workspace/docs/../chatmodes/go-mcp-expert.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/gpt-5-beast-mode.chatmode.md
   (missing: /workspace/docs/../chatmodes/gpt-5-beast-mode.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/hlbpa.chatmode.md (missing:
-  /workspace/docs/../chatmodes/hlbpa.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/janitor.chatmode.md
-  (missing: /workspace/docs/../chatmodes/janitor.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/high-level-architectural-review.chatmode.md (missing:
+  /workspace/docs/../chatmodes/high-level-architectural-review.chatmode.md)
+- /workspace/docs/README.chatmodes.md: ../chatmodes/codebase-cleanup.chatmode.md
+  (missing: /workspace/docs/../chatmodes/codebase-cleanup.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/java-mcp-expert.chatmode.md
   (missing: /workspace/docs/../chatmodes/java-mcp-expert.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
@@ -831,8 +838,9 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/power-platform-mcp-integration-expert.chatmode.md (missing:
   /workspace/docs/../chatmodes/power-platform-mcp-integration-expert.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/prd.chatmode.md (missing:
-  /workspace/docs/../chatmodes/prd.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/product-requirements-document.chatmode.md (missing:
+  /workspace/docs/../chatmodes/product-requirements-document.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/principal-software-engineer.chatmode.md (missing:
   /workspace/docs/../chatmodes/principal-software-engineer.chatmode.md)
@@ -900,10 +908,11 @@
   ../chatmodes/voidbeast-gpt41enhanced.chatmode.md (missing:
   /workspace/docs/../chatmodes/voidbeast-gpt41enhanced.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
-  ../chatmodes/wg-code-alchemist.chatmode.md (missing:
-  /workspace/docs/../chatmodes/wg-code-alchemist.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/wg-code-sentinel.chatmode.md
-  (missing: /workspace/docs/../chatmodes/wg-code-sentinel.chatmode.md)
+  ../chatmodes/clean-code-refactorer.chatmode.md (missing:
+  /workspace/docs/../chatmodes/clean-code-refactorer.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/security-code-reviewer.chatmode.md (missing:
+  /workspace/docs/../chatmodes/security-code-reviewer.chatmode.md)
 - /workspace/docs/README.collections.md: ../collections/awesome-copilot.md
   (missing: /workspace/docs/../collections/awesome-copilot.md)
 - /workspace/docs/README.collections.md:
@@ -1706,11 +1715,11 @@
 - /workspace/docs/architecture/AI_CODE_INTELLIGENCE.md:
   https://github.com/user/repo (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io (HTTPError 404)
+  https://{{ORG_NAME}}.github.io (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io/.github/apps/my-react-app (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github/apps/my-react-app (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io/.github/apps/my-react-app/ (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github/apps/my-react-app/ (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
   https://{org}.github.io/{repo} (URLError: \<urlopen error \[Errno -2\] Name or
   service not known>)
@@ -1783,35 +1792,35 @@
   /workspace/docs/governance/examples)
 - /workspace/docs/governance/SUPPORT.md: examples/ (missing:
   /workspace/docs/governance/examples)
-- /workspace/docs/governance/SUPPORT.md: https://cookbook.ivviiviivvi.com
+- /workspace/docs/governance/SUPPORT.md: https://cookbook.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
-- /workspace/docs/governance/SUPPORT.md: https://cookbook.ivviiviivvi.com
+- /workspace/docs/governance/SUPPORT.md: https://cookbook.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/awesome-ivviiviivvi (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}} (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/awesome-ivviiviivvi (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}} (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-a (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/project-a (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-a (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/project-a (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-b (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/project-b (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-b (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://ivviiviivvi.com/support
+  https://github.com/{{ORG_NAME}}/project-b (HTTPError 404)
+- /workspace/docs/governance/SUPPORT.md: https://{{ORG_NAME}}.com/support
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
-- /workspace/docs/governance/SUPPORT.md: https://tutorials.ivviiviivvi.com
+- /workspace/docs/governance/SUPPORT.md: https://tutorials.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
-- /workspace/docs/governance/SUPPORT.md: https://tutorials.ivviiviivvi.com
+- /workspace/docs/governance/SUPPORT.md: https://tutorials.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
-- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@ivviiviivvi
+- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@{{ORG_NAME}}
   (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@ivviiviivvi
+- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@{{ORG_NAME}}
   (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@ivviiviivvi
+- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@{{ORG_NAME}}
   (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@ivviiviivvi
+- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@{{ORG_NAME}}
   (HTTPError 404)
 - /workspace/docs/guides/BEST_PRACTICES.md: https://github.com/ivi374forivi
   (HTTPError 404)
@@ -1844,7 +1853,7 @@
   https://github.com/org/cache-examples (HTTPError 404)
 - /workspace/docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md:
   https://github.com/org/cache-examples (HTTPError 404)
-- /workspace/docs/guides/CLAUDE.md: https://github.com/ivviiviivvi/new-repo.git
+- /workspace/docs/guides/CLAUDE.md: https://github.com/{{ORG_NAME}}/new-repo.git
   (HTTPError 404)
 - /workspace/docs/guides/ECOSYSTEM_README.md: .github/docs/AGENTSPHERE_SETUP.md
   (missing: /workspace/docs/guides/.github/docs/AGENTSPHERE_SETUP.md)
@@ -1855,12 +1864,12 @@
   /workspace/docs/guides/.github/docs/LIVE_DEPLOYMENT_GUIDE.md)
 - /workspace/docs/guides/ECOSYSTEM_README.md: https://api.example.com (URLError:
   \<urlopen error \[Errno -5\] No address associated with hostname>)
-- /workspace/docs/guides/ECOSYSTEM_README.md: https://ivviiviivvi.github.io
+- /workspace/docs/guides/ECOSYSTEM_README.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
-- /workspace/docs/guides/ECOSYSTEM_README.md: https://ivviiviivvi.github.io
+- /workspace/docs/guides/ECOSYSTEM_README.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
 - /workspace/docs/guides/ECOSYSTEM_README.md:
-  https://ivviiviivvi.github.io/react-app (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/react-app (HTTPError 404)
 - /workspace/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md:
   ../../ISSUE_TEMPLATE/ (missing: /workspace/docs/guides/../../ISSUE_TEMPLATE)
 - /workspace/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md:
@@ -1939,11 +1948,11 @@
 - /workspace/docs/guides/STYLE_GUIDE.md: screenshot.png (missing:
   /workspace/docs/guides/screenshot.png)
 - /workspace/docs/guides/WORKFLOW_DIAGRAM.md:
-  https://agentsphere.dev/ivviiviivvi/[repo (HTTPError 404)
-- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://ivviiviivvi.github.io
+  https://agentsphere.dev/{{ORG_NAME}}/[repo (HTTPError 404)
+- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
 - /workspace/docs/guides/WORKFLOW_DIAGRAM.md:
-  https://ivviiviivvi.github.io/[repo (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/\[repo (HTTPError 404)
 - /workspace/docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md: ./CODEOWNERS (missing:
   /workspace/docs/guides/CODEOWNERS)
 - /workspace/docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md:

@@ -53,13 +53,13 @@ The Pages site is built and updated through multiple workflows:
 
    - Uploads built site as artifact
    - Deploys to GitHub Pages
-   - Site available at `https://ivviiviivvi.github.io`
+   - Site available at `https://{{ORG_NAME}}.github.io`
 
 ## Accessing the Walkthrough Gallery
 
 ### Main Gallery Page
 
-Visit the gallery at: **https://ivviiviivvi.github.io**
+Visit the gallery at: **https://{{ORG_NAME}}.github.io**
 
 The homepage displays:
 
@@ -70,7 +70,7 @@ The homepage displays:
 
 ### Tutorials Section
 
-Browse all video tutorials: **https://ivviiviivvi.github.io/tutorials/**
+Browse all video tutorials: **https://{{ORG_NAME}}.github.io/tutorials/**
 
 Features:
 
@@ -81,7 +81,7 @@ Features:
 
 ### Live Apps Section
 
-Access live application demos: **https://ivviiviivvi.github.io/apps/**
+Access live application demos: **https://{{ORG_NAME}}.github.io/apps/**
 
 Each app page includes:
 
@@ -93,7 +93,7 @@ Each app page includes:
 
 ### Directory Page
 
-Complete application listing: **https://ivviiviivvi.github.io/directory/**
+Complete application listing: **https://{{ORG_NAME}}.github.io/directory/**
 
 Shows:
 
@@ -132,8 +132,8 @@ Click filter buttons to show only apps using specific technologies:
 Filter via URL (useful for sharing links):
 
 ```
-https://ivviiviivvi.github.io/?tech=react
-https://ivviiviivvi.github.io/tutorials/?filter=python
+https://{{ORG_NAME}}.github.io/?tech=react
+https://{{ORG_NAME}}.github.io/tutorials/?filter=python
 ```
 
 ## Embedding Gallery Elsewhere
@@ -144,7 +144,7 @@ Embed the entire gallery in another website:
 
 ```html
 <iframe
-  src="https://ivviiviivvi.github.io"
+  src="https://{{ORG_NAME}}.github.io"
   width="100%"
   height="800px"
   frameborder="0"
@@ -159,7 +159,7 @@ Embed a single tutorial page:
 
 ```html
 <iframe
-  src="https://ivviiviivvi.github.io/tutorials/my-app"
+  src="https://{{ORG_NAME}}.github.io/tutorials/my-app"
   width="100%"
   height="600px"
   frameborder="0"
@@ -180,7 +180,7 @@ Use the gallery include in your own Jekyll site:
 Load gallery data via JavaScript:
 
 ```javascript
-fetch("https://ivviiviivvi.github.io/data/walkthroughs.json")
+fetch("https://{{ORG_NAME}}.github.io/data/walkthroughs.json")
   .then((response) => response.json())
   .then((data) => {
     // Process walkthrough data
@@ -197,7 +197,7 @@ fetch("https://ivviiviivvi.github.io/data/walkthroughs.json")
    ```
    Type: CNAME
    Name: apps (or your subdomain)
-   Value: ivviiviivvi.github.io
+   Value: {{ORG_NAME}}.github.io
    ```
 
 1. **Update repository settings**:
@@ -219,7 +219,7 @@ Wait for DNS propagation (up to 48 hours), then verify:
 
 ```bash
 dig apps.yourdomain.com +short
-# Should return: ivviiviivvi.github.io
+# Should return: {{ORG_NAME}}.github.io
 ```
 
 ## Site Analytics
@@ -460,7 +460,7 @@ GitHub Pages automatically caches static assets with proper headers.
 
 ## Related Documentation
 
-- [AgentSphere Setup Guide](AGENTSPHERE_SETUP.md)
+- AgentSphere Setup Guide
 - [Live Deployment Guide](LIVE_DEPLOYMENT_GUIDE.md)
 - [Jekyll Documentation](https://jekyllrb.com/docs/)
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)
@@ -468,7 +468,7 @@ GitHub Pages automatically caches static assets with proper headers.
 ## Getting Help
 
 - **Issues**:
-  [Create an issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Create an issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Join the discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation**: [Main README](../README.md)
+  [Join the discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
+- **Documentation**: [Main README](../../README.md)

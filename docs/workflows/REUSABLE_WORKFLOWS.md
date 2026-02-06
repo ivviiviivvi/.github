@@ -56,13 +56,13 @@ on: [push, pull_request]
 
 jobs:
   test:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@main
     with:
       python-version: "3.11"
       pytest-args: "--cov --cov-report=xml --cov-report=html"
 
   test-matrix:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@main
     with:
       python-version-matrix: '["3.10", "3.11", "3.12"]'
       test-command: "pytest tests/"
@@ -113,7 +113,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/nodejs-setup-build.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/nodejs-setup-build.yml@main
     with:
       node-version: "20"
       package-manager: "npm"
@@ -121,7 +121,7 @@ jobs:
       test-command: "npm run test:ci"
 
   build-matrix:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/nodejs-setup-build.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/nodejs-setup-build.yml@main
     with:
       node-version-matrix: '["18", "20", "21"]'
       package-manager: "pnpm"
@@ -182,7 +182,7 @@ on:
 
 jobs:
   build:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/docker-build-push.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/docker-build-push.yml@main
     with:
       image-name: "myorg/myapp"
       platforms: "linux/amd64,linux/arm64"
@@ -250,7 +250,7 @@ on:
 jobs:
   auto-merge-dependabot:
     if: github.actor == 'dependabot[bot]'
-    uses: ivviiviivvi/.github/.github/workflows/reusable/github-cli-pr-ops.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/github-cli-pr-ops.yml@main
     with:
       operation: "auto-merge"
       merge-method: "squash"
@@ -258,7 +258,7 @@ jobs:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
   add-review:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/github-cli-pr-ops.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/github-cli-pr-ops.yml@main
     with:
       operation: "review"
       pr-number: ${{ github.event.pull_request.number }}
@@ -314,7 +314,7 @@ on:
 
 jobs:
   codeql:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main
     with:
       scan-type: "codeql"
       languages: "python,javascript"
@@ -323,14 +323,14 @@ jobs:
       security-events: write
 
   trivy:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main
     with:
       scan-type: "trivy"
       trivy-scan-type: "fs"
       trivy-severity: "CRITICAL,HIGH,MEDIUM"
 
   full-scan:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main
     with:
       scan-type: "all"
     permissions:
@@ -385,7 +385,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm run build
-      - uses: ivviiviivvi/.github/.github/workflows/reusable/artifact-management.yml@main
+      - uses: {{ORG_NAME}}/.github/.github/workflows/reusable/artifact-management.yml@main
         with:
           operation: "upload"
           artifact-name: "build-output"
@@ -397,7 +397,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ivviiviivvi/.github/.github/workflows/reusable/artifact-management.yml@main
+      - uses: {{ORG_NAME}}/.github/.github/workflows/reusable/artifact-management.yml@main
         with:
           operation: "download"
           artifact-name: "build-output"
@@ -449,7 +449,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: ivviiviivvi/.github/.github/actions/checkout@main
+      - uses: {{ORG_NAME}}/.github/.github/actions/checkout@main
         with:
           fetch-depth: 0 # Full history
           submodules: true
@@ -522,7 +522,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@main
     with:
       python-version: "3.11"
       pytest-args: "--cov --cov-report=xml"
@@ -565,7 +565,7 @@ Update your repository's documentation to reference the reusable workflows:
 ```markdown
 ## CI/CD
 
-This repository uses [organization reusable workflows](https://github.com/ivviiviivvi/.github/blob/main/docs/workflows/REUSABLE_WORKFLOWS.md):
+This repository uses [organization reusable workflows](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/workflows/REUSABLE_WORKFLOWS.md):
 
 - Python testing: `python-setup-test.yml`
 - Docker builds: `docker-build-push.yml`
@@ -607,19 +607,19 @@ ______________________________________________________________________
 **Use commit SHA for production:**
 
 ```yaml
-uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@abc1234
+uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@abc1234
 ```
 
 **Use branch for development:**
 
 ```yaml
-uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@main
+uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@main
 ```
 
 **Use tags for releases:**
 
 ```yaml
-uses: ivviiviivvi/.github/.github/workflows/reusable/python-setup-test.yml@v1.0.0
+uses: {{ORG_NAME}}/.github/.github/workflows/reusable/python-setup-test.yml@v1.0.0
 ```
 
 ### Permissions
@@ -629,7 +629,7 @@ Always specify permissions explicitly:
 ```yaml
 jobs:
   security-scan:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main
     with:
       scan-type: "codeql"
     permissions:
@@ -645,7 +645,7 @@ Pass secrets explicitly (they don't inherit):
 ```yaml
 jobs:
   docker-build:
-    uses: ivviiviivvi/.github/.github/workflows/reusable/docker-build-push.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable/docker-build-push.yml@main
     with:
       image-name: "myorg/myapp"
     secrets:
@@ -680,16 +680,15 @@ ______________________________________________________________________
 
 - **[Workflow Optimization Guide](./WORKFLOW_OPTIMIZATION.md)** - Performance
   tips
-- **[Security Best Practices](../SECURITY_BEST_PRACTICES.md)** - Security
-  guidelines
-- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute
+- **Security Best Practices** - Security guidelines
+- **[Contributing Guide](../governance/CONTRIBUTING.md)** - How to contribute
 
 ______________________________________________________________________
 
 ## 🤝 Contributing
 
 Have ideas for new reusable workflows? See our
-[Contributing Guide](../CONTRIBUTING.md).
+[Contributing Guide](../governance/CONTRIBUTING.md).
 
 **Common workflow patterns to contribute:**
 
@@ -732,11 +731,11 @@ ______________________________________________________________________
 **Questions or Issues?**
 
 - 📖
-  [View Examples](https://github.com/ivviiviivvi/.github/tree/main/.github/workflows/reusable)
+  [View Examples](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/.github/workflows/reusable)
 - 💬
-  [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Report an Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report an Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

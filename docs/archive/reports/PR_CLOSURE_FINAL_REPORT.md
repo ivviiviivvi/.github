@@ -1,7 +1,7 @@
 # PR Closure and Final Cleanup Report
 
 **Date**: January 15, 2026\
-**Repository**: ivviiviivvi/.github\
+**Repository**: {{ORG_NAME}}/.github\
 **Action**:
 Closed all open PRs and completed repository cleanup
 

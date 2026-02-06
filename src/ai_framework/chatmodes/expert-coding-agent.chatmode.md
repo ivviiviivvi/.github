@@ -1,5 +1,5 @@
 ---
-name: Enhanced Reasoning
+name: Expert Coding Agent
 description: GPT-4.1 as a top-notch coding agent with enhanced reasoning capabilities.
 tools:
   - '*'

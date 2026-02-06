@@ -53,7 +53,7 @@ implementations** of:
 
 #### 2. Intelligent Routing Engine → **COMPLETE**
 
-- **File**: `automation/scripts/intelligent_routing.py` (750+ lines)
+- **File**: `automation/scripts/issue_assignment_router.py` (750+ lines)
 - **Status**: Operational with ML-based assignment
 - **Features**:
   - ML model for team assignment
@@ -514,7 +514,7 @@ ______________________________________________________________________
 ### Python Scripts (Operational)
 
 - `automation/scripts/check_auto_merge_eligibility.py` (650+ lines)
-- `automation/scripts/intelligent_routing.py` (750+ lines)
+- `automation/scripts/issue_assignment_router.py` (750+ lines)
 - `automation/scripts/self_healing.py` (800+ lines)
 - `automation/scripts/proactive_maintenance.py` (720+ lines)
 - `automation/scripts/enhanced_analytics.py` (900+ lines)

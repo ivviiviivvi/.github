@@ -86,8 +86,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # JavaScript embedded in Python strings causes false positives
 "src/automation/scripts/generate_pilot_workflows.py" = ["F821"]
-# Hyphenated filename can't be renamed (used by workflows)
-"src/automation/scripts/auto-docs.py" = ["N999"]
+# auto_docs module name (matches module convention)
+"src/automation/scripts/auto_docs.py" = ["N999"]
 # ML code uses X, X_train, X_test by convention
 "src/automation/scripts/enhanced_analytics.py" = ["N806"]
 "src/automation/scripts/predict_workflow_failures.py" = ["N806"]

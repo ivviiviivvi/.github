@@ -106,7 +106,7 @@ ______________________________________________________________________
 
 ### Example: Board View for Project #8
 
-1. Go to: <https://github.com/orgs/ivviiviivvi/projects/8>
+1. Go to: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>
 1. Click "+ New view" → Select "Board"
 1. Configure:
    - **Name:** Board
@@ -135,7 +135,7 @@ ______________________________________________________________________
 
 ### Example: "New items → Planned status" (Project #8)
 
-1. Go to: <https://github.com/orgs/ivviiviivvi/projects/8/settings>
+1. Go to: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8/settings>
 1. Click "Workflows" in sidebar
 1. Click "+ New workflow"
 1. Configure:
@@ -313,7 +313,7 @@ After completing all configuration:
 
    ```bash
    # Add items to test all projects
-   python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo .github
+   python3 scripts/add-items-to-projects.py --org {{ORG_NAME}} --repo .github
    ```
 
 1. **Document your setup:**

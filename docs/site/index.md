@@ -5,7 +5,7 @@ ______________________________________________________________________
 # 🚀 Ivviiviivvi Organization Hub
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)<!-- link:badges.version -->](VERSION)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)<!-- link:badges.live_demo -->](https://demo-ivviiviivvi-.github.agentsphere.dev)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)<!-- link:badges.live_demo -->](https://demo-%7B%7BORG_NAME%7D%7D-.github.agentsphere.dev)
 [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)<!-- link:badges.docs -->](docs/INDEX.md)
 
 > **AI-Driven Development Infrastructure for the Modern Organization**
@@ -90,10 +90,10 @@ ______________________________________________________________________
 ## 🔗 External Links
 
 - **GitHub Organization**:
-  [github.com/ivviiviivvi](https://github.com/ivviiviivvi)<!-- link:github.org -->
+  [github.com/{{ORG_NAME}}](https://github.com/%7B%7BORG_NAME%7D%7D)<!-- link:github.org -->
 - **Live Demo**:
-  [AgentSphere Demo](https://demo-ivviiviivvi-.github.agentsphere.dev)
-- **Support**: <support@ivviiviivvi.dev>
+  [AgentSphere Demo](https://demo-%7B%7BORG_NAME%7D%7D-.github.agentsphere.dev)
+- **Support**: \<support@{{ORG_NAME}}.dev>
 
 ______________________________________________________________________
 

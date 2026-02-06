@@ -279,7 +279,7 @@ Pages.
 title: "AgentSphere - Application Gallery"
 description: "Automated walkthrough gallery"
 baseurl: "/.github"
-url: "https://ivviiviivvi.github.io"
+url: "https://{{ORG_NAME}}.github.io"
 
 plugins:
   - jekyll-feed
@@ -387,7 +387,7 @@ https://{org}.github.io/{repo}/apps/{app-name}/
 **Example:**
 
 ```
-https://ivviiviivvi.github.io/.github/apps/my-react-app/
+https://{{ORG_NAME}}.github.io/.github/apps/my-react-app/
 ```
 
 ### Registry File
@@ -405,7 +405,7 @@ deployments:
     workflow_run: "12345678"
     status: "deployed"
     health_endpoint: "/health"
-    pages_url: "https://ivviiviivvi.github.io/.github/apps/my-react-app"
+    pages_url: "https://{{ORG_NAME}}.github.io/.github/apps/my-react-app"
 ```
 
 ______________________________________________________________________

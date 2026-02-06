@@ -2,7 +2,7 @@
 # Simple label sync using gh CLI
 # Usage: ./sync_labels_gh.sh
 
-ORG="ivviiviivvi"
+ORG="{{ORG_NAME}}"
 
 echo "Fetching repositories from $ORG..."
 repos=$(gh repo list "$ORG" --limit 1000 --json name,isArchived -q '.[] | select(.isArchived == false) | .name')

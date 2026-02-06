@@ -1,4 +1,4 @@
-"""Unit tests for ecosystem_visualizer.py
+"""Unit tests for org_health_visualizer.py
 Focus: Diagram generation, workflow categorization, path calculation.
 """
 
@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation" / "scripts"))
-from ecosystem_visualizer import EcosystemVisualizer
+from org_health_visualizer import EcosystemVisualizer
 
 
 class TestEcosystemVisualizer:
@@ -1039,10 +1039,10 @@ class TestMainFunction:
     def test_no_report_shows_error(self, capsys, monkeypatch):
         """Test main shows error when no report specified."""
         # Mock argparse to return no report
-        monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py"])
+        monkeypatch.setattr("sys.argv", ["org_health_visualizer.py"])
 
         # Import and run main
-        from ecosystem_visualizer import main
+        from org_health_visualizer import main
 
         main()
 
@@ -1053,9 +1053,9 @@ class TestMainFunction:
         """Test find-latest with missing reports directory."""
         # Change to temp directory where there's no reports/ folder
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py", "--find-latest"])
+        monkeypatch.setattr("sys.argv", ["org_health_visualizer.py", "--find-latest"])
 
-        from ecosystem_visualizer import main
+        from org_health_visualizer import main
 
         main()
 
@@ -1069,9 +1069,9 @@ class TestMainFunction:
         reports_dir.mkdir()
 
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py", "--find-latest"])
+        monkeypatch.setattr("sys.argv", ["org_health_visualizer.py", "--find-latest"])
 
-        from ecosystem_visualizer import main
+        from org_health_visualizer import main
 
         main()
 
@@ -1093,9 +1093,9 @@ class TestMainFunction:
         report_file.write_text(json.dumps(report_data))
 
         monkeypatch.chdir(tmp_path)
-        monkeypatch.setattr("sys.argv", ["ecosystem_visualizer.py", "--find-latest"])
+        monkeypatch.setattr("sys.argv", ["org_health_visualizer.py", "--find-latest"])
 
-        from ecosystem_visualizer import main
+        from org_health_visualizer import main
 
         main()
 

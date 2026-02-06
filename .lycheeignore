@@ -1,11 +1,102 @@
+# Existing org URLs (non-existent)
 https://aka.ms/awesome-copilot/
 https://github.com/apps/
-https://discord.gg/ivviiviivvi
-https://youtube.com/@ivviiviivvi
-https://ivviiviivvi.com/
-https://ivviiviivvi.com/support
-https://cookbook.ivviiviivvi.com/
-https://tutorials.ivviiviivvi.com/
-https://github.com/ivviiviivvi/project-a
-https://github.com/ivviiviivvi/project-b
-https://github.com/ivviiviivvi/awesome-ivviiviivvi
+https://discord.gg/{{DISCORD_INVITE}}
+https://youtube.com/@{{ORG_NAME}}
+https://{{ORG_WEBSITE}}/
+https://{{ORG_WEBSITE}}/support
+https://cookbook.{{ORG_WEBSITE}}/
+https://tutorials.{{ORG_WEBSITE}}/
+https://github.com/{{ORG_NAME}}/project-a
+https://github.com/{{ORG_NAME}}/project-b
+https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}}
+
+# GitHub awesome-copilot (rate-limited, 429 errors)
+https://github.com/github/awesome-copilot/
+
+# GitHub user repos (don't exist)
+https://github.com/4444J99/
+https://github.com/4444JPP
+https://github.com/ivi374forivi
+
+# GitHub placeholder/example URLs
+https://github.com/org/
+https://github.com/user/
+https://github.com/YOUR_ORG/
+https://github.com/OWNER/
+https://github.com/organization/
+https://github.com/username/
+https://github.com/your-org/
+https://org.github.io/
+
+# GitHub auth-required URLs
+https://github.com/settings/
+https://github.com/organizations/
+https://github.com/orgs/{{ORG_NAME}}/projects/
+
+# GitHub misc (identicons, assets, community)
+https://github.com/identicons/
+https://github.githubassets.com/
+https://github.community/
+
+# GitHub URLs with template variables
+https://github.com/%7B
+https://hub.docker.com/r/%7B
+
+# API endpoints (require auth)
+https://api.github.com/
+https://api.openai.com/
+https://api.anthropic.com/
+https://api.elevenlabs.io/
+https://api.agentsphere.dev/
+https://generativelanguage.googleapis.com
+
+# Domains that don't resolve
+https://walkthroughs.{{ORG_NAME}}.dev
+https://gui-rs.org
+https://get.project.com
+
+# Rate-limited sites
+https://developer.hashicorp.com
+https://registry.terraform.io
+
+# Sites that block bots
+https://reddit.com
+https://www.mend.io
+https://platform.openai.com
+https://www.npmjs.com/package/@org/
+
+# GitHub {{ORG_NAME}} repos (non-existent, referenced in docs)
+https://github.com/{{ORG_NAME}}/new-repo
+https://github.com/{{ORG_NAME}}/example-repo
+
+# Placeholder/example URLs
+https://via.placeholder.com
+https://agentsphere.dev/{{ORG_NAME}}/
+https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/
+
+# Template placeholders (will resolve after setup)
+\{\{
+
+# Code-server (local dev URLs)
+http://code-server
+
+# GitHub actions/advisories/claude (generic)
+https://github.com/actions
+https://github.com/advisories
+https://github.com/claude
+
+# MCP endpoints
+https://mcp.pagerduty.com
+https://pia1134d.dev.apps.dynatracelabs.com
+
+# GitHub coder/code-server download (template var in URL)
+https://github.com/coder/code-server/releases/download/v$
+
+# Misc
+https://github.com/marketplace/all-contributors
+https://github.com/omni-dromenon-machina/
+https://github.com/mcp/pagerduty/
+https://dev.mysql.com/
+https://www.postgresql.org/
+https://learn.microsoft.com/

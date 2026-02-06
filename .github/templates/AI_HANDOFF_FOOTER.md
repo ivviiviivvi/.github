@@ -49,8 +49,8 @@ External Dependencies:
 SUPPORT & ESCALATION
 
 Questions? Issues? Need clarification?
-  - GitHub Issues: https://github.com/ivviiviivvi/.github/issues
-  - Discussions: https://github.com/ivviiviivvi/.github/discussions
+  - GitHub Issues: https://github.com/{{ORG_NAME}}/.github/issues
+  - Discussions: https://github.com/{{ORG_NAME}}/.github/discussions
   - Security: SECURITY.md
 
 Document Processing Status: {STATUS}

@@ -14,7 +14,7 @@ ______________________________________________________________________
 
 ### 1. Design Documentation
 
-#### [WORKFLOW_DESIGN.md](WORKFLOW_DESIGN.md)
+#### [WORKFLOW_DESIGN.md](../workflows/WORKFLOW_DESIGN.md)
 
 Complete workflow architecture including:
 
@@ -38,7 +38,7 @@ ______________________________________________________________________
 
 #### Core Workflows Implemented
 
-##### [issue-triage.yml](.github/workflows/issue-triage.yml)
+##### [issue-triage.yml](../../.github/workflows/issue-triage.yml)
 
 **Purpose**: Automate issue triage process
 
@@ -53,7 +53,7 @@ ______________________________________________________________________
 
 **Triggers**: Issue opened, reopened, labeled, daily check
 
-##### [auto-assign-reviewers.yml](.github/workflows/auto-assign-reviewers.yml)
+##### [auto-assign-reviewers.yml](../../.github/workflows/auto-assign-reviewers.yml)
 
 **Purpose**: Automatically assign reviewers based on CODEOWNERS
 
@@ -69,7 +69,7 @@ ______________________________________________________________________
 
 **Triggers**: PR opened, ready for review, reopened
 
-##### [status-sync.yml](.github/workflows/status-sync.yml)
+##### [status-sync.yml](../../.github/workflows/status-sync.yml)
 
 **Purpose**: Synchronize status between issues and PRs
 
@@ -84,7 +84,7 @@ ______________________________________________________________________
 
 **Triggers**: PR/issue state changes, assignment changes
 
-##### [stale-management.yml](.github/workflows/stale-management.yml)
+##### [stale-management.yml](../../.github/workflows/stale-management.yml)
 
 **Purpose**: Handle inactive issues and PRs
 
@@ -104,7 +104,7 @@ ______________________________________________________________________
 
 ### 3. User Documentation
 
-#### [CONTRIBUTOR_WORKFLOW.md](CONTRIBUTOR_WORKFLOW.md)
+#### [CONTRIBUTOR_WORKFLOW.md](../workflows/CONTRIBUTOR_WORKFLOW.md)
 
 **Purpose**: Guide contributors through the contribution process
 
@@ -125,7 +125,7 @@ ______________________________________________________________________
 
 **Target Audience**: First-time and regular contributors
 
-#### [MAINTAINER_WORKFLOW.md](MAINTAINER_WORKFLOW.md)
+#### [MAINTAINER_WORKFLOW.md](../workflows/MAINTAINER_WORKFLOW.md)
 
 **Purpose**: Guide maintainers in managing the workflow
 
@@ -401,9 +401,12 @@ ______________________________________________________________________
 
 For contributors and maintainers unfamiliar with this system:
 
-1. **Start Here**: [CONTRIBUTOR_WORKFLOW.md](CONTRIBUTOR_WORKFLOW.md)
-1. **For Maintainers**: [MAINTAINER_WORKFLOW.md](MAINTAINER_WORKFLOW.md)
-1. **Architecture Details**: [WORKFLOW_DESIGN.md](WORKFLOW_DESIGN.md)
+1. **Start Here**:
+   [CONTRIBUTOR_WORKFLOW.md](../workflows/CONTRIBUTOR_WORKFLOW.md)
+1. **For Maintainers**:
+   [MAINTAINER_WORKFLOW.md](../workflows/MAINTAINER_WORKFLOW.md)
+1. **Architecture Details**:
+   [WORKFLOW_DESIGN.md](../workflows/WORKFLOW_DESIGN.md)
 1. **GitHub Docs**:
    [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 
@@ -411,10 +414,12 @@ ______________________________________________________________________
 
 ## 📞 Support & Feedback
 
-- **Questions**: Open a [Discussion](../../discussions)
-- **Issues**: Report in [Issues](../../issues)
+- **Questions**: Open a
+  [Discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)
+- **Issues**: Report in
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)
 - **Improvements**: Submit a PR
-- **Urgent Matters**: Contact @ivviiviivvi/maintainers
+- **Urgent Matters**: Contact @{{ORG_NAME}}/maintainers
 
 ______________________________________________________________________
 

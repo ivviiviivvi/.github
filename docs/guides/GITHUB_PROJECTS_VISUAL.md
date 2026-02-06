@@ -441,7 +441,7 @@ Views: Timeline | Current Quarter | Strategic | Critical Path
 ├────────────────────────────────────────────┤
 │                                            │
 │  🌐 WEB INTERFACE                          │
-│  github.com/orgs/ivviiviivvi/projects     │
+│  github.com/orgs/{{ORG_NAME}}/projects     │
 │                                            │
 │  📱 MOBILE APP                             │
 │  GitHub Mobile → Projects tab              │
@@ -464,13 +464,14 @@ Views: Timeline | Current Quarter | Strategic | Critical Path
   [GITHUB_PROJECTS_IMPLEMENTATION.md](GITHUB_PROJECTS_IMPLEMENTATION.md)
 - **Quick Reference:**
   [GITHUB_PROJECTS_QUICKREF.md](GITHUB_PROJECTS_QUICKREF.md)
-- **Scripts:** [../scripts/README_PROJECTS.md](../scripts/README_PROJECTS.md)
+- **Scripts:**
+  [../scripts/README_PROJECTS.md](../../src/automation/scripts/utils/README_PROJECTS.md)
 - **Configuration:**
   [GITHUB_PROJECTS_CONFIGURATION.md](GITHUB_PROJECTS_CONFIGURATION.md)
 
 ______________________________________________________________________
 
-**Ready to start?** Visit: https://github.com/orgs/ivviiviivvi/projects
+**Ready to start?** Visit: https://github.com/orgs/{{ORG_NAME}}/projects
 
 ______________________________________________________________________
 

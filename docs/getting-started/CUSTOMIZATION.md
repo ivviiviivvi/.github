@@ -1,6 +1,6 @@
 # Customization Guide
 
-How to customize the ivviiviivvi GitHub template for your organization.
+How to customize the {{ORG_NAME}} GitHub template for your organization.
 
 ______________________________________________________________________
 
@@ -22,7 +22,7 @@ Update these files with your organization's branding:
 ```bash
 # Replace all template variables
 sed -i '' 's/{{ORG_NAME}}/your-org-name/g' README.md
-sed -i '' 's/ivviiviivvi/Your Organization/g' README.md
+sed -i '' 's/{{ORG_NAME}}/Your Organization/g' README.md
 ```
 
 ### Community Health Files

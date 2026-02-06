@@ -16,8 +16,7 @@ ______________________________________________________________________
 
 **Changes:**
 
-- Updated [docs/INDEX.md](../docs/INDEX.md) to include all new workflow
-  documentation
+- Updated [docs/INDEX.md](../INDEX.md) to include all new workflow documentation
 - Added prominent section under "Guides → Workflow & Automation"
 - Included references to:
   - WORKFLOW_DESIGN.md
@@ -35,7 +34,7 @@ ______________________________________________________________________
 **Status:** Complete\
 **Files Created:** 1\
 **File:**
-[.github/ISSUE_TEMPLATE/workflow-deployment.md](.github/ISSUE_TEMPLATE/workflow-deployment.md)\
+[.github/ISSUE_TEMPLATE/workflow-deployment.md](../../.github/ISSUE_TEMPLATE/workflow-deployment.md)\
 **Size:**
 9.0 KB
 
@@ -73,7 +72,7 @@ ______________________________________________________________________
 **Status:** Complete\
 **Files Created:** 1\
 **File:**
-[.github/workflows/workflow-metrics.yml](.github/workflows/workflow-metrics.yml)\
+[.github/workflows/workflow-metrics.yml](../../.github/workflows/workflow-metrics.yml)\
 **Size:**
 14 KB
 
@@ -124,8 +123,9 @@ ______________________________________________________________________
 **Status:** Complete\
 **Files Created:** 1\
 **File:**
-[docs/WORKFLOW_ONBOARDING.md](../docs/WORKFLOW_ONBOARDING.md)\
-**Size:** 16 KB
+[docs/WORKFLOW_ONBOARDING.md](../workflows/WORKFLOW_ONBOARDING.md)\
+**Size:** 16
+KB
 
 **Contents:**
 
@@ -177,7 +177,7 @@ ______________________________________________________________________
 **Status:** Complete\
 **Files Created:** 1\
 **File:**
-[docs/WORKFLOW_TESTING_GUIDE.md](../docs/WORKFLOW_TESTING_GUIDE.md)\
+[docs/WORKFLOW_TESTING_GUIDE.md](../guides/WORKFLOW_TESTING_GUIDE.md)\
 **Size:**
 14 KB
 
@@ -251,7 +251,7 @@ ______________________________________________________________________
 **Status:** Complete\
 **Files Created:** 1\
 **File:**
-[docs/GITHUB_PROJECTS_CONFIGURATION.md](../docs/GITHUB_PROJECTS_CONFIGURATION.md)\
+[docs/GITHUB_PROJECTS_CONFIGURATION.md](../guides/GITHUB_PROJECTS_CONFIGURATION.md)\
 **Size:**
 17 KB
 
@@ -408,14 +408,14 @@ ______________________________________________________________________
 
 | Document                                                     | Purpose       | Size  |
 | ------------------------------------------------------------ | ------------- | ----- |
-| [Workflow Design](../docs/WORKFLOW_DESIGN.md)                | Architecture  | 17 KB |
-| [Contributor Guide](../docs/CONTRIBUTOR_WORKFLOW.md)         | User manual   | 12 KB |
-| [Maintainer Guide](../docs/MAINTAINER_WORKFLOW.md)           | Operations    | 14 KB |
-| [Testing Guide](../docs/WORKFLOW_TESTING_GUIDE.md)           | QA            | 14 KB |
-| [Onboarding](../docs/WORKFLOW_ONBOARDING.md)                 | Training      | 16 KB |
-| [Projects Setup](../docs/GITHUB_PROJECTS_CONFIGURATION.md)   | Visualization | 17 KB |
-| [Implementation](../docs/WORKFLOW_IMPLEMENTATION_SUMMARY.md) | Overview      | 13 KB |
-| [Visualization](../docs/WORKFLOW_VISUALIZATION.md)           | Diagrams      | 26 KB |
+| [Workflow Design](../workflows/WORKFLOW_DESIGN.md)           | Architecture  | 17 KB |
+| [Contributor Guide](../workflows/CONTRIBUTOR_WORKFLOW.md)    | User manual   | 12 KB |
+| [Maintainer Guide](../workflows/MAINTAINER_WORKFLOW.md)      | Operations    | 14 KB |
+| [Testing Guide](../guides/WORKFLOW_TESTING_GUIDE.md)         | QA            | 14 KB |
+| [Onboarding](../workflows/WORKFLOW_ONBOARDING.md)            | Training      | 16 KB |
+| [Projects Setup](../guides/GITHUB_PROJECTS_CONFIGURATION.md) | Visualization | 17 KB |
+| [Implementation](WORKFLOW_IMPLEMENTATION_SUMMARY.md)         | Overview      | 13 KB |
+| [Visualization](../workflows/WORKFLOW_VISUALIZATION.md)      | Diagrams      | 26 KB |
 
 ### Workflow Files
 
@@ -477,17 +477,18 @@ ______________________________________________________________________
 
 **Getting Started:**
 
-1. Read [Workflow Design](../docs/WORKFLOW_DESIGN.md) for architecture
-1. Review [Testing Guide](../docs/WORKFLOW_TESTING_GUIDE.md) for validation
+1. Read [Workflow Design](../workflows/WORKFLOW_DESIGN.md) for architecture
+1. Review [Testing Guide](../guides/WORKFLOW_TESTING_GUIDE.md) for validation
 1. Create deployment issue from template
-1. Follow [Deployment Checklist](.github/ISSUE_TEMPLATE/workflow-deployment.md)
+1. Follow
+   [Deployment Checklist](../../.github/ISSUE_TEMPLATE/workflow-deployment.md)
 
 **For Teams:**
 
 1. Schedule training using
-   [Onboarding Materials](../docs/WORKFLOW_ONBOARDING.md)
-1. Set up [GitHub Projects](../docs/GITHUB_PROJECTS_CONFIGURATION.md)
-1. Monitor via [Metrics Dashboard](.github/workflows/workflow-metrics.yml)
+   [Onboarding Materials](../workflows/WORKFLOW_ONBOARDING.md)
+1. Set up [GitHub Projects](../guides/GITHUB_PROJECTS_CONFIGURATION.md)
+1. Monitor via [Metrics Dashboard](../../.github/workflows/workflow-metrics.yml)
 
 **Support:**
 

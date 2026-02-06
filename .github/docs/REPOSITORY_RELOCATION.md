@@ -8,12 +8,12 @@ organizational structure.
 ### metasystem-master
 
 **Current Location:** `omni-dromenon-machina/metasystem-master` **Target
-Location:** `ivviiviivvi/metasystem-master`
+Location:** `{{ORG_NAME}}/metasystem-master`
 
 **Reason for Relocation:** The `metasystem-master` repository is a development
-orchestrator that manages multiple projects across the ivviiviivvi ecosystem. It
-does not belong in the `omni-dromenon-machina` organization, which is focused on
-the artistic performance platform (Omni-Dromenon Engine).
+orchestrator that manages multiple projects across the {{ORG_NAME}} ecosystem.
+It does not belong in the `omni-dromenon-machina` organization, which is focused
+on the artistic performance platform (Omni-Dromenon Engine).
 
 **Contents:**
 
@@ -36,7 +36,7 @@ the artistic performance platform (Omni-Dromenon Engine).
 1. Go to: https://github.com/omni-dromenon-machina/metasystem-master/settings
 1. Scroll to "Danger Zone"
 1. Click "Transfer repository"
-1. Enter `ivviiviivvi` as the new owner
+1. Enter `{{ORG_NAME}}` as the new owner
 1. Confirm the transfer
 
 **Note:** You must have owner/admin permissions on both organizations.
@@ -45,16 +45,16 @@ the artistic performance platform (Omni-Dromenon Engine).
 
 If transfer is not possible:
 
-1. Fork to ivviiviivvi:
+1. Fork to {{ORG_NAME}}:
 
    ```bash
-   gh repo fork omni-dromenon-machina/metasystem-master --org ivviiviivvi
+   gh repo fork omni-dromenon-machina/metasystem-master --org {{ORG_NAME}}
    ```
 
 1. Update the fork to be independent:
 
    ```bash
-   cd ivviiviivvi/metasystem-master
+   cd {{ORG_NAME}}/metasystem-master
    git remote remove upstream
    ```
 
@@ -84,7 +84,7 @@ ______________________________________________________________________
 
 ## Organization Structure Reference
 
-### ivviiviivvi (Main Organization)
+### {{ORG_NAME}} (Main Organization)
 
 - `.github` - Organization configuration and automation
 - Infrastructure and orchestration tools

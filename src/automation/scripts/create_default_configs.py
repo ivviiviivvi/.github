@@ -22,7 +22,7 @@ def create_defaults():
             }
         },
         ".github/routing.yml": {
-            "intelligent_routing": {
+            "issue_assignment_router": {
                 "enabled": True,
                 "factors": {
                     "expertise": 0.35,

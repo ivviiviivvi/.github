@@ -132,7 +132,7 @@ curl -H "Authorization: bearer $GH_TOKEN" \
 ### "Not Found" error
 
 - Organization name might be wrong
-- Verify: `gh api orgs/ivviiviivvi`
+- Verify: `gh api orgs/{{ORG_NAME}}`
 
 ### 1Password CLI not working
 
@@ -184,5 +184,5 @@ export GH_TOKEN="ghp_your_token"
 
 - [GitHub PAT Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 - [1Password CLI Guide](./1PASSWORD_QUICK_START.md)
-- [Deployment Guide](../docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+- [Deployment Guide](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 - [Ready to Deploy](./READY_TO_DEPLOY.md)

@@ -1,6 +1,7 @@
 # Security Best Practices Guide
 
-> **Comprehensive security guidelines for the ivviiviivvi/.github organization**
+> **Comprehensive security guidelines for the {{ORG_NAME}}/.github
+> organization**
 
 **Last Updated:** 2026-01-14
 
@@ -22,7 +23,7 @@ ______________________________________________________________________
 ## Overview
 
 This guide provides comprehensive security best practices for all repositories
-in the ivviiviivvi organization. All contributors must follow these guidelines
+in the {{ORG_NAME}} organization. All contributors must follow these guidelines
 to maintain the security posture of our projects.
 
 ### Security Principles
@@ -43,7 +44,8 @@ ______________________________________________________________________
 
 1. **Navigate to Security Advisories**:
 
-   - Go to: <https://github.com/ivviiviivvi/.github/security/advisories/new>
+   - Go to:
+     <https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new>
 
 1. **Fill Out the Advisory Form**:
 
@@ -565,8 +567,8 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [SECURITY.md](../SECURITY.md) - Security disclosure policy
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](../governance/SECURITY.md) - Security disclosure policy
+- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - Contribution guidelines
 - [Dependency Management Guide](dependency-management.md) - Dependency best
   practices
 
@@ -592,10 +594,11 @@ ______________________________________________________________________
 ## Questions or Concerns?
 
 - **Security Issues**: Use
-  [private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
+  [private security advisory](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new)<!-- link:github.security_advisory -->
 - **General Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation Improvements**: Submit a [pull request](../CONTRIBUTING.md)
+  [discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
+- **Documentation Improvements**: Submit a
+  [pull request](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 

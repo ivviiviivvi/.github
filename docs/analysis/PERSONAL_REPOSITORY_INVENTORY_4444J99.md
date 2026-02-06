@@ -14,7 +14,7 @@ ______________________________________________________________________
 - [Forked Repositories](#forked-repositories)
 - [Repository Categories](#repository-categories)
 - [Maintenance Status](#maintenance-status)
-- [Relationship to ivviiviivvi Org](#relationship-to-ivviiviivvi-org)
+- [Relationship to {{ORG_NAME}} Org](#relationship-to-%7B%7BORG_NAME%7D%7D-org)
 
 ______________________________________________________________________
 
@@ -693,7 +693,7 @@ Most forks haven't been synced since initial fork. Consider:
 
 ______________________________________________________________________
 
-## Relationship to ivviiviivvi Org
+## Relationship to {{ORG_NAME}} Org
 
 ### Shared Interests & Overlap
 
@@ -753,7 +753,7 @@ Both accounts show strong interest in:
 
 ### Differences
 
-| Aspect                | Personal (4444J99)                      | Organization (ivviiviivvi)                                |
+| Aspect                | Personal (4444J99)                      | Organization ({{ORG_NAME}})                               |
 | --------------------- | --------------------------------------- | --------------------------------------------------------- |
 | **Fork Ratio**        | 85.7% forks                             | 42.6% forks                                               |
 | **Original Projects** | 8 (mostly personal)                     | 27 (mostly systems)                                       |
@@ -831,7 +831,7 @@ ______________________________________________________________________
    - Consider archiving forks you're not actively using
    - Focus on forks aligned with org projects
 
-1. **Integration with ivviiviivvi Org**
+1. **Integration with {{ORG_NAME}} Org**
 
    - Contribute MCP development insights to org
    - Share AI cookbook learnings
@@ -896,7 +896,7 @@ ______________________________________________________________________
 - Active personal knowledge management
 - Strong AI/MCP collection
 
-**ivviiviivvi Org:**
+**{{ORG_NAME}} Org:**
 
 - 47 repos (42.6% forks)
 - Production & infrastructure focus

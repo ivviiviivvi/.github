@@ -29,7 +29,7 @@ encountered a permissions issue during actual deployment:
    - ✅ Python 3.11.14 with requests
    - ✅ GitHub CLI 2.85.0 (authenticated as 4444J99)
    - ✅ 1Password CLI 2.32.0
-   - ✅ Organization access to ivviiviivvi
+   - ✅ Organization access to {{ORG_NAME}}
 
 1. **Testing Completed**
 
@@ -182,7 +182,7 @@ See **[TOKEN_SETUP_GUIDE.md](TOKEN_SETUP_GUIDE.md)** for:
 
 ```bash
 # The script will:
-# 1. Create 7 projects in ivviiviivvi organization
+# 1. Create 7 projects in {{ORG_NAME}} organization
 # 2. Add 75 custom fields across all projects
 # 3. Generate project URLs for you
 # 4. Log all operations

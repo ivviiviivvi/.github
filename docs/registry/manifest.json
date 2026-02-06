@@ -1,9 +1,9 @@
 {
   "$schema": "./manifest.schema.json",
-  "generated": "2026-01-31T02:22:36.727689+00:00",
+  "generated": "2026-02-06T17:06:16.335313+00:00",
   "generator": "generate_manifest.py",
   "version": "1.0.0",
-  "organization": "ivviiviivvi",
+  "organization": "{{ORG_NAME}}",
   "statistics": {
     "workflows": {
       "total": 134,
@@ -33,7 +33,7 @@
   },
   "health": {
     "orphaned_metadata": [],
-    "missing_metadata_count": 0
+    "missing_metadata_count": 2
   },
   "components": {
     "agents": [
@@ -88,14 +88,14 @@
         "description": "The Dynatrace Expert Agent integrates observability and security capabilities directly into GitHub workflows, enabling development teams to investigate incidents, validate deployments, triage errors, detect performance regressions, validate releases, and manage security vulnerabilities by autonomously analysing traces, logs, and Dynatrace findings."
       },
       {
+        "file": "exhaustive-repo-scanner.agent.md",
+        "name": "exhaustive-repo-scanner",
+        "description": "Exhaustive Repo Scanner Agent - Comprehensive data excavation and analysis specialist that exhaustively scans repositories, generates actionable tasks, creates persistent memories, and produces comprehensive reports while ensuring no data is overlooked"
+      },
+      {
         "file": "github-org-manager.agent.md",
         "name": "github-org-manager",
         "description": "AI GitHub Organization Manager - Assists with implementing the 8-module AI GitHub Management Protocol for organization governance and automation"
-      },
-      {
-        "file": "greener-grass-workflow-benchmark.agent.md",
-        "name": "Greener Grass Workflow Benchmark",
-        "description": "Greener Grass Workflow Benchmark Agent - Compares your GitHub Actions workflows against industry best practices and successful patterns to identify improvement opportunities"
       },
       {
         "file": "jfrog-sec.agent.md",
@@ -118,11 +118,6 @@
         "description": "Identify and fix slow Postgres queries automatically using Neon's branching workflow. Analyzes execution plans, tests optimizations in isolated database branches, and provides clear before/after performance metrics with actionable code fixes."
       },
       {
-        "file": "nervous-archaeologist.agent.md",
-        "name": "nervous-archaeologist",
-        "description": "Nervous Archaeologist Agent - Compulsive data excavation and archaeological analysis specialist that exhaustively scans repositories, generates actionable tasks, creates persistent memories, and produces comprehensive reports while ensuring no data is overlooked"
-      },
-      {
         "file": "octopus-deploy-release-notes-mcp.agent.md",
         "name": "octopus-release-notes-with-mcp",
         "description": "Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs."
@@ -136,6 +131,11 @@
         "file": "pr-branch-cleanup.agent.md",
         "name": "PR Branch Cleanup",
         "description": "Deep analysis and cleanup of pull requests, branches, and related artifacts to maintain optimal repository health and hygiene."
+      },
+      {
+        "file": "repository-setup.agent.md",
+        "name": "repository-setup",
+        "description": "Repository Setup Agent - Automates the creation and configuration of new repositories following organization standards and best practices"
       }
     ],
     "chatmodes_count": 85,

@@ -102,7 +102,7 @@ python automation/scripts/batch_onboard_repositories.py \
 ```bash
 # Onboard specific repositories without config file
 python automation/scripts/batch_onboard_repositories.py \
-  --repos ivviiviivvi/repo1 ivviiviivvi/repo2 ivviiviivvi/repo3 \
+  --repos {{ORG_NAME}}/repo1 {{ORG_NAME}}/repo2 {{ORG_NAME}}/repo3 \
   --max-concurrent 3
 ```
 
@@ -276,9 +276,9 @@ ______________________________________________________________________
 ```yaml
 # config.yml
 repositories:
-  - "ivviiviivvi/project-alpha"
-  - "ivviiviivvi/project-beta"
-  - "ivviiviivvi/project-gamma"
+  - "{{ORG_NAME}}/project-alpha"
+  - "{{ORG_NAME}}/project-beta"
+  - "{{ORG_NAME}}/project-gamma"
 
 workflows:
   - "pr-automation.yml"
@@ -298,9 +298,9 @@ python automation/scripts/batch_onboard_repositories.py \
 ```yaml
 # labels-config.yml
 repositories:
-  - "ivviiviivvi/frontend"
-  - "ivviiviivvi/backend"
-  - "ivviiviivvi/docs"
+  - "{{ORG_NAME}}/frontend"
+  - "{{ORG_NAME}}/backend"
+  - "{{ORG_NAME}}/docs"
 
 labels:
   "Priority: Critical":
@@ -321,7 +321,7 @@ max_concurrent: 5
 ```yaml
 # protection-config.yml
 repositories:
-  - "ivviiviivvi/production-app"
+  - "{{ORG_NAME}}/production-app"
 
 branch_protection:
   branch: "main"
@@ -340,7 +340,7 @@ branch_protection:
 ```yaml
 # complete-onboarding.yml
 repositories:
-  - "ivviiviivvi/new-project"
+  - "{{ORG_NAME}}/new-project"
 
 workflows:
   - "workflow-validation.yml"
@@ -694,15 +694,17 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [Week 10 Reconciliation](WEEK_10_RECONCILIATION.md) - Planning overview
-- [Week 10 Decision Brief](WEEK_10_DECISION_BRIEF.md) - Implementation decision
-- [Month 3 Master Plan](MONTH3_MASTER_PLAN.md) - Overall roadmap
+- [Week 10 Reconciliation](../reports/WEEK_10_RECONCILIATION.md) - Planning
+  overview
+- [Week 10 Decision Brief](../reports/WEEK_10_DECISION_BRIEF.md) -
+  Implementation decision
+- [Month 3 Master Plan](../reports/MONTH3_MASTER_PLAN.md) - Overall roadmap
 
 ### Getting Help
 
 - **Issues**: Open an issue in this repository
 - **Discussions**: Join
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Slack**: Contact the DevOps team
 
 ______________________________________________________________________

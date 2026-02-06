@@ -2,7 +2,7 @@
 
 ## Overview
 
-The ivviiviivvi/.github repository uses multiple agent tracking systems to
+The {{ORG_NAME}}/.github repository uses multiple agent tracking systems to
 coordinate automation, capture organizational knowledge, and prevent task
 duplication. This document describes each system, their relationships, and their
 purposes.
@@ -98,7 +98,7 @@ to improve readability and visual hierarchy.
 ```markdown
 ## 2025-02-18 - [Fix Code Injection in GitHub Actions]
 
-**Vulnerability:** Unmitigated Code Injection in bulk-pr-operations.yml via
+**Vulnerability:** Unmitigated Code Injection in batch-pr-operations.yml via
 direct interpolation in github-script action.
 
 **Learning:** Direct interpolation of inputs in github-script allows code
@@ -115,7 +115,7 @@ ______________________________________________________________________
 **Purpose:** Transforms natural human writing into structured AI prompts while
 preserving voice and intent
 
-**Location:** `automation/scripts/mouthpiece_filter.py` (641 lines)
+**Location:** `automation/scripts/natural_language_prompt_filter.py` (641 lines)
 
 **Relationship to Jules:** While not directly part of Jules tracking, Mouthpiece
 Filter enables humans to communicate naturally with agents, which Jules and
@@ -158,13 +158,13 @@ class MouthpieceFilter:
 
 ```bash
 # Transform natural writing
-python3 mouthpiece_filter.py "your natural writing here"
+python3 natural_language_prompt_filter.py "your natural writing here"
 
 # From file
-python3 mouthpiece_filter.py --file input.txt
+python3 natural_language_prompt_filter.py --file input.txt
 
 # From stdin
-echo "your text" | python3 mouthpiece_filter.py --stdin
+echo "your text" | python3 natural_language_prompt_filter.py --stdin
 ```
 
 ______________________________________________________________________
@@ -549,16 +549,13 @@ ______________________________________________________________________
 
 ## Related Documentation
 
-- [JULES_CASCADE_PREVENTION.md](JULES_CASCADE_PREVENTION.md) - Daily
-  orchestrator and PR consolidation
-- [JULES_CASCADE_PREVENTION_QUICK_REF.md](JULES_CASCADE_PREVENTION_QUICK_REF.md)
-  \- Quick reference guide
-- [JULES_IMPLEMENTATION_SUMMARY.md](JULES_IMPLEMENTATION_SUMMARY.md) -
-  Implementation details
-- [README.agents.md](README.agents.md) - Custom agent registry
-- [AGENT_ARCHITECTURE_GUIDE.md](AGENT_ARCHITECTURE_GUIDE.md) - Building custom
-  agents
-- [MOUTHPIECE_SYSTEM.md](MOUTHPIECE_SYSTEM.md) - Mouthpiece filter documentation
+- JULES_CASCADE_PREVENTION.md - Daily orchestrator and PR consolidation
+- JULES_CASCADE_PREVENTION_QUICK_REF.md - Quick reference guide
+- JULES_IMPLEMENTATION_SUMMARY.md - Implementation details
+- [README.agents.md](../README.agents.md) - Custom agent registry
+- [AGENT_ARCHITECTURE_GUIDE.md](../guides/AGENT_ARCHITECTURE_GUIDE.md) -
+  Building custom agents
+- NLP_FILTER_SYSTEM.md - Mouthpiece filter documentation
 
 ______________________________________________________________________
 

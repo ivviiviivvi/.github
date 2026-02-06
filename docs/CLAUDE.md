@@ -5,11 +5,11 @@ code in this repository.
 
 ## Repository Purpose
 
-Organization-level `.github` repository for ivviiviivvi providing:
+Organization-level `.github` repository for {{ORG_NAME}} providing:
 
 - Default community health files inherited by all org repositories
-- 131 GitHub Actions workflows
-- 26 production AI agents in `src/ai_framework/`
+- {{WORKFLOW_COUNT}} GitHub Actions workflows
+- {{AGENT_COUNT}} production AI agents in `src/ai_framework/`
 - GitHub Copilot customizations (instructions, prompts, chatmodes, collections)
 
 ## Essential Commands
@@ -70,8 +70,8 @@ pre-commit install
 ```
 .github/
 ├── .config/               # ALL configs (devcontainer, vscode, jules, pre-commit, etc.)
-├── .github/workflows/     # 131 automation workflows
-│   └── reusable/          # 12 reusable workflow templates
+├── .github/workflows/     # {{WORKFLOW_COUNT}} automation workflows
+│   └── reusable/          # {{REUSABLE_TEMPLATE_COUNT}} reusable workflow templates
 ├── docs/                  # ALL documentation
 │   ├── archive/           # Historical reports and results
 │   ├── registry/          # Workflow registry
@@ -80,12 +80,12 @@ pre-commit install
 │   └── CLAUDE.md          # This file
 ├── src/
 │   ├── ai_framework/      # AI agents, chatmodes, instructions, prompts
-│   │   ├── agents/        # 26 production AI agents
+│   │   ├── agents/        # {{AGENT_COUNT}} production AI agents
 │   │   ├── chatmodes/     # Copilot chat modes
 │   │   ├── instructions/  # 100+ coding instructions
 │   │   └── prompts/       # Task-specific prompts
 │   └── automation/        # Python automation scripts
-│       ├── scripts/       # 44 Python automation scripts
+│       ├── scripts/       # {{SCRIPT_COUNT}} Python automation scripts
 │       │   └── utils/     # Utility scripts (update-action-pins.py, etc.)
 │       └── project_meta/  # Project metadata and context handoffs
 ├── tests/

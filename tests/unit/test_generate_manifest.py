@@ -435,7 +435,7 @@ name: Test Mode
         result = build_manifest(tmp_path, output)
 
         assert result["version"] == "1.0.0"
-        assert result["organization"] == "ivviiviivvi"
+        assert result["organization"] == "{{ORG_NAME}}"
         assert result["statistics"]["agents"]["total"] == 1
         assert result["statistics"]["chatmodes"]["total"] == 1
 

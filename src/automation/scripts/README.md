@@ -91,7 +91,7 @@ python scripts/resolve_link_placeholders.py --write --annotate
 
 ______________________________________________________________________
 
-### 🎨 `ecosystem_visualizer.py` ✅
+### 🎨 `org_health_visualizer.py` ✅
 
 **Status**: 812 lines, fully type-hinted, mypy --strict compliant\
 **Phase
@@ -126,13 +126,13 @@ ______________________________________________________________________
 
 ```bash
 # Generate dashboard from latest report
-python scripts/ecosystem_visualizer.py --find-latest
+python scripts/org_health_visualizer.py --find-latest
 
 # Generate from specific report
-python scripts/ecosystem_visualizer.py --report reports/org_health_20241116.json
+python scripts/org_health_visualizer.py --report reports/org_health_20241116.json
 
 # Custom output location
-python scripts/ecosystem_visualizer.py --find-latest --output reports/MY_DASHBOARD.md
+python scripts/org_health_visualizer.py --find-latest --output reports/MY_DASHBOARD.md
 ```
 
 **Output**:
@@ -163,20 +163,20 @@ YAML definition file
 
 ```bash
 # Dry run (preview changes)
-python sync_labels.py --org ivviiviivvi --dry-run
+python sync_labels.py --org {{ORG_NAME}} --dry-run
 
 # Actually sync labels
-python sync_labels.py --org ivviiviivvi --token $GITHUB_TOKEN
+python sync_labels.py --org {{ORG_NAME}} --token $GITHUB_TOKEN
 
 # Exclude specific repositories
-python sync_labels.py --org ivviiviivvi --exclude repo1,repo2
+python sync_labels.py --org {{ORG_NAME}} --exclude repo1,repo2
 ```
 
 **Configuration**: `seed.yaml` - Label definitions (name, color, description)
 
 ______________________________________________________________________
 
-### 🎨 `mouthpiece_filter.py`
+### 🎨 `natural_language_prompt_filter.py`
 
 **Status**: 641 lines, well-documented, performance-optimized
 
@@ -197,13 +197,13 @@ preserving voice and intent
 
 ```bash
 # Transform text inline
-python mouthpiece_filter.py "your natural writing here"
+python natural_language_prompt_filter.py "your natural writing here"
 
 # From file
-python mouthpiece_filter.py --file input.txt
+python natural_language_prompt_filter.py --file input.txt
 
 # From stdin
-echo "your text" | python mouthpiece_filter.py --stdin
+echo "your text" | python natural_language_prompt_filter.py --stdin
 ```
 
 ______________________________________________________________________
@@ -682,7 +682,7 @@ python update_agent_docs.py
 
 ______________________________________________________________________
 
-### `auto-docs.py`
+### `auto_docs.py`
 
 **Status**: 17KB, needs type hint review
 
@@ -727,11 +727,11 @@ pip install pytest mypy flake8 bandit black
 
 ## 🎯 AI GitHub Management Protocol Mapping
 
-| Module                             | Script                                      | Workflow                                     |
-| ---------------------------------- | ------------------------------------------- | -------------------------------------------- |
-| **AI-GH-06**: Ecosystem Monitoring | `web_crawler.py`, `ecosystem_visualizer.py` | `org-health-crawler.yml`                     |
-| **AI-GH-07**: System Health        | `web_crawler.py`                            | `org-health-crawler.yml`, `repo-metrics.yml` |
-| **AI-GH-08**: Risk Analysis        | `web_crawler.py`                            | `org-health-crawler.yml`                     |
+| Module                             | Script                                       | Workflow                                     |
+| ---------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| **AI-GH-06**: Ecosystem Monitoring | `web_crawler.py`, `org_health_visualizer.py` | `org-health-crawler.yml`                     |
+| **AI-GH-07**: System Health        | `web_crawler.py`                             | `org-health-crawler.yml`, `repo-metrics.yml` |
+| **AI-GH-08**: Risk Analysis        | `web_crawler.py`                             | `org-health-crawler.yml`                     |
 
 ## 📈 Health Scoring
 
@@ -782,7 +782,7 @@ Critical findings trigger automated GitHub issues with:
 
 **Current Status**:
 
-- `ecosystem_visualizer.py`: ✅ mypy --strict compliant
+- `org_health_visualizer.py`: ✅ mypy --strict compliant
 - `sync_labels.py`: ✅ Type annotations complete
 - `web_crawler.py`: 🔄 In progress (28 mypy errors remaining)
 - Other scripts: ⏸️ Pending audit
@@ -831,10 +831,10 @@ export GITHUB_REPOSITORY=owner/repo
 python scripts/web_crawler.py --base-dir .
 
 # Generate dashboard
-python scripts/ecosystem_visualizer.py --find-latest
+python scripts/org_health_visualizer.py --find-latest
 
 # Run type checking
-mypy --strict ecosystem_visualizer.py
+mypy --strict org_health_visualizer.py
 mypy --strict sync_labels.py
 
 # Run tests
@@ -854,7 +854,7 @@ Improvements to these scripts should:
 
 ### Test Scripts
 
-- `test_ecosystem_visualizer.py`: Unit tests for dashboard generation
+- `test_org_health_visualizer.py`: Unit tests for dashboard generation
 - `test_web_crawler_security.py`: Security tests for SSRF protection
 - `test_ssrf_logic.py`: SSRF protection logic validation
 - `test_ssrf_protection.py`: Additional SSRF tests
@@ -877,12 +877,12 @@ pytest automation/scripts/ --cov=automation/scripts --cov-report=html
 
 **Current Status**:
 
-- `ecosystem_visualizer.py`: ✅ Tests exist
+- `org_health_visualizer.py`: ✅ Tests exist
 - `web_crawler.py`: ✅ Security tests comprehensive
 - `sync_labels.py`: ⚠️ Needs tests
-- `auto-docs.py`: ⚠️ Needs tests
+- `auto_docs.py`: ⚠️ Needs tests
 - `quota_manager.py`: ✅ Lock tests exist
-- `mouthpiece_filter.py`: ⚠️ Needs tests
+- `natural_language_prompt_filter.py`: ⚠️ Needs tests
 
 **Target**: 80%+ coverage for all production scripts
 
@@ -890,14 +890,15 @@ ______________________________________________________________________
 
 ## 📚 Related Documentation
 
-- [AGENT_TRACKING.md](../../docs/AGENT_TRACKING.md) - Agent system architecture
-  (Phase 3.1)
-- [CLEANUP_ROADMAP.md](../../CLEANUP_ROADMAP.md) - Codebase cleanup plan
-- [.jules/bolt.md](../../.jules/bolt.md) - Performance optimization learnings
-- [.jules/sentinel.md](../../.jules/sentinel.md) - Security learnings
-- [AI Implementation Guide](../../docs/AI_IMPLEMENTATION_GUIDE.md)
-- [for-ai-implementation.txt](../../for-ai-implementation.txt) - Complete AI
-  protocol
+- [AGENT_TRACKING.md](../../../docs/reference/AGENT_TRACKING.md) - Agent system
+  architecture (Phase 3.1)
+- [CLEANUP_ROADMAP.md](../../../docs/archive/CLEANUP_ROADMAP.md) - Codebase
+  cleanup plan
+- [.jules/bolt.md](../../../.config/jules/bolt.md) - Performance optimization
+  learnings
+- [.jules/sentinel.md](../../../.config/jules/sentinel.md) - Security learnings
+- [AI Implementation Guide](../../../docs/guides/AI_IMPLEMENTATION_GUIDE.md)
+- for-ai-implementation.txt - Complete AI protocol
 
 ______________________________________________________________________
 

@@ -1,6 +1,6 @@
 # GitHub Projects Quick Reference
 
-> **One-page guide for using GitHub Projects in the ivviiviivvi organization**
+> **One-page guide for using GitHub Projects in the {{ORG_NAME}} organization**
 
 ## 🎯 Available Projects
 
@@ -14,7 +14,7 @@
 | 👥   | **Community & Engagement**    | Support, contributors, community             |
 | 🚀   | **Product Roadmap**           | Features, releases, strategy                 |
 
-**Access:** https://github.com/orgs/ivviiviivvi/projects
+**Access:** https://github.com/orgs/{{ORG_NAME}}/projects
 
 ______________________________________________________________________
 
@@ -273,7 +273,7 @@ ______________________________________________________________________
 ### Personal Dashboard
 
 ```
-https://github.com/orgs/ivviiviivvi/projects?query=is:open+assignee:@me
+https://github.com/orgs/{{ORG_NAME}}/projects?query=is:open+assignee:@me
 ```
 
 Shows all items assigned to you across all projects
@@ -378,17 +378,17 @@ ______________________________________________________________________
 
 **Documentation:**
 
-- [Full Implementation Guide](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
-- [Setup Instructions](README_PROJECTS.md)
+- [Full Implementation Guide](GITHUB_PROJECTS_IMPLEMENTATION.md)
+- [Setup Instructions](../../src/automation/scripts/utils/README_PROJECTS.md)
 - [GitHub's Projects Docs](https://docs.github.com/en/issues/planning-and-tracking-with-projects)<!-- link:docs.github_projects -->
 
 **Support:**
 
 - Ask in
-  [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - Open an
-  [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
-- Check [Workflow Documentation](../docs/WORKFLOW_DESIGN.md)
+  [Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
+- Check [Workflow Documentation](../workflows/WORKFLOW_DESIGN.md)
 
 **Training:**
 
@@ -434,7 +434,7 @@ ______________________________________________________________________
 
 **🎉 You're ready to use GitHub Projects!**
 
-Start by browsing projects at: https://github.com/orgs/ivviiviivvi/projects
+Start by browsing projects at: https://github.com/orgs/{{ORG_NAME}}/projects
 
 ______________________________________________________________________
 

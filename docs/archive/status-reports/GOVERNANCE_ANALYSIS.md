@@ -1,7 +1,7 @@
 # Governance Analysis and Framework
 
 This document outlines the governance framework, decision-making processes,
-roles and responsibilities, and compliance requirements for the ivviiviivvi
+roles and responsibilities, and compliance requirements for the {{ORG_NAME}}
 organization.
 
 ## Table of Contents
@@ -17,7 +17,7 @@ organization.
 
 ## Governance Overview
 
-The ivviiviivvi organization operates under a transparent, community-driven
+The {{ORG_NAME}} organization operates under a transparent, community-driven
 governance model designed to ensure accountability, security, and sustainable
 growth.
 
@@ -117,7 +117,7 @@ We prefer **lazy consensus** for most decisions:
 
 ### Leadership Team
 
-**Role**: @ivviiviivvi/leadership
+**Role**: @{{ORG_NAME}}/leadership
 
 **Responsibilities:**
 
@@ -172,7 +172,7 @@ We prefer **lazy consensus** for most decisions:
 
 ### Engineering Teams
 
-**Roles**: @ivviiviivvi/frontend, @ivviiviivvi/backend, @ivviiviivvi/devops
+**Roles**: @{{ORG_NAME}}/frontend, @{{ORG_NAME}}/backend, @{{ORG_NAME}}/devops
 
 **Responsibilities:**
 
@@ -196,7 +196,7 @@ We prefer **lazy consensus** for most decisions:
 
 ### Security Committee
 
-**Role**: @ivviiviivvi/security
+**Role**: @{{ORG_NAME}}/security
 
 **Responsibilities:**
 
@@ -519,11 +519,11 @@ Published quarterly in governance reports.
 
 For governance-related questions:
 
-- **General Governance**: governance@ivviiviivvi.com
-- **Leadership Team**: leadership@ivviiviivvi.com
-- **Technical Steering Committee**: tsc@ivviiviivvi.com
-- **Security Committee**: security@ivviiviivvi.com
-- **Community Council**: community@ivviiviivvi.com
+- **General Governance**: governance@{{ORG_NAME}}.com
+- **Leadership Team**: leadership@{{ORG_NAME}}.com
+- **Technical Steering Committee**: tsc@{{ORG_NAME}}.com
+- **Security Committee**: security@{{ORG_NAME}}.com
+- **Community Council**: community@{{ORG_NAME}}.com
 
 ______________________________________________________________________
 

@@ -104,9 +104,9 @@ ______________________________________________________________________
 
 1. **[Project Retrospective: Lessons Learned](PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md)**
    \- Comprehensive insights from the entire project
-1. **[Phase 7 Completion Plan](guides/PHASE_7_COMPLETION_PLAN.md)** - Strategic
-   approach to final phase
-1. **[Issue Templates Guide](guides/issue-templates.md)** - How to use all 17
+1. **[Phase 7 Completion Plan](../guides/PHASE_7_COMPLETION_PLAN.md)** -
+   Strategic approach to final phase
+1. **[Issue Templates Guide](../guides/issue-templates.md)** - How to use all 17
    templates
 1. **[Cleanup Roadmap (Archived)](../archive/CLEANUP_ROADMAP.md)** - Complete
    project plan (now archived)
@@ -208,7 +208,7 @@ ______________________________________________________________________
 - **Found an issue?** Create an issue using our comprehensive templates
 - **Have ideas?** Share them in the Ideas category
 - **Want to contribute?** Check out our
-  [Contributing Guide](governance/CONTRIBUTING.md)
+  [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 
@@ -220,13 +220,13 @@ _For technical details, see:_
 
 - [CLEANUP_ROADMAP.md (archived)](../archive/CLEANUP_ROADMAP.md)
 - [Project Retrospective](PROJECT_RETROSPECTIVE_LESSONS_LEARNED.md)
-- [Phase 7 Summary](guides/PHASE_7_EXECUTION_SUMMARY.md)
+- Phase 7 Summary
 
 ______________________________________________________________________
 
 ## How to Post
 
 1. Navigate to:
-   <https://github.com/ivviiviivvi/.github/discussions/new?category=announcements>
+   <https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions/new?category=announcements>
 1. Copy the title and body above
 1. Click "Start discussion"

@@ -43,9 +43,9 @@ GitHub push protection is blocking our push due to secrets found in git history.
 
 1. **Allow the secrets** via GitHub's web interface:
 
-   - https://github.com/ivviiviivvi/.github/security/secret-scanning/unblock-secret/38ODhFYy1wQcprCpGebukHsodl1
-   - https://github.com/ivviiviivvi/.github/security/secret-scanning/unblock-secret/38OOCmlfQjgYfCwunz8PcpwB2jn
-   - https://github.com/ivviiviivvi/.github/security/secret-scanning/unblock-secret/38OOCmd6ZFgED1BzCbLrID4O8OQ
+   - https://github.com/{{ORG_NAME}}/.github/security/secret-scanning/unblock-secret/38ODhFYy1wQcprCpGebukHsodl1
+   - https://github.com/{{ORG_NAME}}/.github/security/secret-scanning/unblock-secret/38OOCmlfQjgYfCwunz8PcpwB2jn
+   - https://github.com/{{ORG_NAME}}/.github/security/secret-scanning/unblock-secret/38OOCmd6ZFgED1BzCbLrID4O8OQ
 
 1. **Revoke the exposed token** in GitHub settings immediately after push
 

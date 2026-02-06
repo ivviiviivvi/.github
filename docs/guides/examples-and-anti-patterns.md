@@ -3,7 +3,7 @@
 > **Learn by example: Common use cases and mistakes to avoid**
 
 This guide provides practical examples of both good practices and common
-pitfalls to avoid in the ivviiviivvi/.github repository.
+pitfalls to avoid in the {{ORG_NAME}}/.github repository.
 
 ______________________________________________________________________
 
@@ -460,9 +460,9 @@ feature_x:
 
 ## Related Resources
 
-- [API Documentation](api-docs.md)
-- [Configuration Reference](config-reference.md)
-- [GitHub Actions Integration](github-actions.md)
+- API Documentation
+- Configuration Reference
+- GitHub Actions Integration
 
 ______________________________________________________________________
 

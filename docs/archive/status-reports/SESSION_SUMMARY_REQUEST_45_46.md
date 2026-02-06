@@ -453,9 +453,9 @@ ______________________________________________________________________
 
 **Repositories** (3 total):
 
-- ✅ ivviiviivvi/theoretical-specifications-first
-- ✅ ivviiviivvi/system-governance-framework
-- ✅ ivviiviivvi/trade-perpetual-future
+- ✅ {{ORG_NAME}}/theoretical-specifications-first
+- ✅ {{ORG_NAME}}/system-governance-framework
+- ✅ {{ORG_NAME}}/trade-perpetual-future
 
 **Labels** (36 total = 12 per repo):
 

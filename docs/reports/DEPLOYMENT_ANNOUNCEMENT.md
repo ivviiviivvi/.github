@@ -17,7 +17,7 @@ ______________________________________________________________________
 
 ## 🎯 What You Get
 
-Starting today, every repository in the `ivviiviivvi` organization can
+Starting today, every repository in the `{{ORG_NAME}}` organization can
 automatically:
 
 ### 1. 🎬 Auto-Generate Professional Video Walkthroughs
@@ -143,10 +143,10 @@ cp .github/.github/app-deployment-config.yml your-repo/.github/
 
 **Monitor Everything:**
 
-- **Approval Dashboard**: https://github.com/ivviiviivvi/.github/issues (label:
+- **Approval Dashboard**: https://github.com/{{ORG_NAME}}/.github/issues (label:
   `approval-dashboard`)
 - **Usage Reports**: `.github/reports/usage/latest.md`
-- **Gallery**: https://ivviiviivvi.github.io/.github
+- **Gallery**: https://{{ORG_NAME}}.github.io/.github
 
 **Weekly Tasks** (automated):
 
@@ -161,15 +161,14 @@ ______________________________________________________________________
 
 ### Must-Read
 
-- **[Complete Integration Guide](AUTONOMOUS_ECOSYSTEM_GUIDE.md)** - Everything
-  you need to know
+- **Complete Integration Guide** - Everything you need to know
 - **[Deployment Summary](DEPLOYMENT_SUMMARY.md)** - What was deployed and why
 
 ### Additional Resources
 
 - [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
-- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
-- [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
+- AgentSphere Documentation
+- GitHub Pages Setup
 
 ______________________________________________________________________
 
@@ -239,7 +238,7 @@ ______________________________________________________________________
 ### Something Not Working?
 
 1. **Check the documentation**: `docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md`
-1. **Look for existing issues**: https://github.com/ivviiviivvi/.github/issues
+1. **Look for existing issues**: https://github.com/{{ORG_NAME}}/.github/issues
 1. **Create a new issue**: Use label `help-wanted`
 1. **Ask in Discussions**: For general questions
 
@@ -346,10 +345,7 @@ ______________________________________________________________________
 **Approved by**: @4444JPP\
 **Date**:
 2025-12-22\
-**PR**:
-https://github.com/ivviiviivvi/.github/pull/[NUMBER]\
-**Organization**:
-ivviiviivvi
+**PR**: TBD **Organization**: {{ORG_NAME}}
 
 ______________________________________________________________________
 
@@ -363,7 +359,7 @@ chat channels!
 ```
 🎉 Big news! We've deployed a complete autonomous ecosystem for generating
 video walkthroughs, live demos, and documentation. Check it out:
-https://github.com/ivviiviivvi/.github/blob/main/docs/DEPLOYMENT_ANNOUNCEMENT.md
+https://github.com/{{ORG_NAME}}/.github/blob/main/docs/DEPLOYMENT_ANNOUNCEMENT.md
 ```
 
 ______________________________________________________________________

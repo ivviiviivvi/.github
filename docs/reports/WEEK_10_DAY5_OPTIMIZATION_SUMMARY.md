@@ -192,9 +192,9 @@ ______________________________________________________________________
 
 repositories:
   # Pilot repositories (Day 1)
-  - "ivviiviivvi/repo-1"
-  - "ivviiviivvi/repo-2"
-  - "ivviiviivvi/repo-3"
+  - "{{ORG_NAME}}/repo-1"
+  - "{{ORG_NAME}}/repo-2"
+  - "{{ORG_NAME}}/repo-3"
 
 workflow_deployment:
   enabled: true

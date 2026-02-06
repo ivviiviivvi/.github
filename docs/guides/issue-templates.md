@@ -221,7 +221,7 @@ When updating templates:
 **Need help choosing a template?**
 
 - Post in
-  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - Ask in the #help channel (if applicable)
 - Use the `question.md` template
 

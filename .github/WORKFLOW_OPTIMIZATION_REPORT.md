@@ -1,7 +1,7 @@
 # Workflow Optimization Report
 
 **Date**: 2026-01-31 (Updated)\
-**Repository**: ivviiviivvi/.github\
+**Repository**: {{ORG_NAME}}/.github\
 **Total
 Workflows**: 129
 

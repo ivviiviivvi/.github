@@ -354,7 +354,7 @@ ______________________________________________________________________
   ```json
   {
     "workflow": "issue-triage",
-    "repository": "ivviiviivvi/.github",
+    "repository": "{{ORG_NAME}}/.github",
     "failure_probability": 0.23,
     "risk_level": "HIGH",
     "confidence": 0.89,
@@ -983,8 +983,8 @@ GRAND TOTAL: 28 files, 11,061 lines
 
 ### References
 
-- [Month 1 Completion Summary](WEEK4_COMPLETION_SUMMARY.md)
-- [Production Integration Guide](PRODUCTION_WORKFLOW_INTEGRATION.md)
+- Month 1 Completion Summary
+- [Production Integration Guide](../workflows/PRODUCTION_WORKFLOW_INTEGRATION.md)
 - [Month 2 Master Plan](MONTH2_MASTER_PLAN.md)
 - [Week 7-8 Enhancement Plan](WEEK7_8_ENHANCEMENT_PLAN.md)
 - [ML Research Report](WEEK8_ML_RESEARCH_REPORT.md)

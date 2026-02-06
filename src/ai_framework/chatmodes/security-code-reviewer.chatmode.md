@@ -1,6 +1,7 @@
 ______________________________________________________________________
 
-name: WG Code Sentinel description: Review code for security issues. tools:
+name: Security Code Reviewer description: Review code for security issues.
+tools:
 
 - changes
 - codebase

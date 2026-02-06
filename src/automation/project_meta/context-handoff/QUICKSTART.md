@@ -346,7 +346,7 @@ ______________________________________________________________________
 
 - **Full Documentation**: See [README.md](README.md)
 - **Integration Guide**: See [docs/INTEGRATION.md](docs/INTEGRATION.md)
-- **Schema Reference**: See [docs/SCHEMA.md](docs/SCHEMA.md)
+- **Schema Reference**: See docs/SCHEMA.md (not yet created)
 - **Example State**: See
   [examples/.orchestrator_state.json](examples/.orchestrator_state.json)
 

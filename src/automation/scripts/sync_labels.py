@@ -31,7 +31,7 @@ except ImportError:
 
 
 # Label definitions with colors and descriptions
-# These match the labels already created in ivviiviivvi/.github
+# These match the labels already created in {{ORG_NAME}}/.github
 LABEL_DEFINITIONS = {
     # Priority Labels
     "priority: critical": {

@@ -93,9 +93,9 @@ Create `automation/config/batch-onboard-production.yml`:
 # Repositories to onboard (start with pilot batch)
 repositories:
   # Pilot Phase (3 repositories)
-  - "ivviiviivvi/repo-1"
-  - "ivviiviivvi/repo-2"
-  - "ivviiviivvi/repo-3"
+  - "{{ORG_NAME}}/repo-1"
+  - "{{ORG_NAME}}/repo-2"
+  - "{{ORG_NAME}}/repo-3"
 
 # Workflow deployment
 workflow_deployment:
@@ -249,9 +249,9 @@ python3 automation/scripts/batch_onboard_repositories.py \
 
 # Expected output:
 # ✅ Processing 3 repositories
-# ✅ Repository 1/3: ivviiviivvi/repo-1 - SUCCESS (5.8s)
-# ✅ Repository 2/3: ivviiviivvi/repo-2 - SUCCESS (5.8s)
-# ✅ Repository 3/3: ivviiviivvi/repo-3 - SUCCESS (5.8s)
+# ✅ Repository 1/3: {{ORG_NAME}}/repo-1 - SUCCESS (5.8s)
+# ✅ Repository 2/3: {{ORG_NAME}}/repo-2 - SUCCESS (5.8s)
+# ✅ Repository 3/3: {{ORG_NAME}}/repo-3 - SUCCESS (5.8s)
 #
 # Summary:
 # - Successful: 3
@@ -268,14 +268,14 @@ cat deployment-results-pilot.json | python3 -m json.tool
 # Validate workflow deployment
 for repo in repo-1 repo-2 repo-3; do
   echo "=== Checking $repo ==="
-  gh api repos/ivviiviivvi/$repo/contents/.github/workflows | \
+  gh api repos/{{ORG_NAME}}/$repo/contents/.github/workflows | \
     jq -r '.[].name' | grep -E "(pr-validation|merge-related)"
 done
 
 # Validate label configuration
 for repo in repo-1 repo-2 repo-3; do
   echo "=== Labels in $repo ==="
-  gh label list --repo ivviiviivvi/$repo | \
+  gh label list --repo {{ORG_NAME}}/$repo | \
     grep -E "(status|priority|type)"
 done
 ```
@@ -293,16 +293,16 @@ Add 5 more repositories to configuration:
 ```yaml
 repositories:
   # Pilot Phase (validated)
-  - "ivviiviivvi/repo-1"
-  - "ivviiviivvi/repo-2"
-  - "ivviiviivvi/repo-3"
+  - "{{ORG_NAME}}/repo-1"
+  - "{{ORG_NAME}}/repo-2"
+  - "{{ORG_NAME}}/repo-3"
 
   # Expansion Phase
-  - "ivviiviivvi/repo-4"
-  - "ivviiviivvi/repo-5"
-  - "ivviiviivvi/repo-6"
-  - "ivviiviivvi/repo-7"
-  - "ivviiviivvi/repo-8"
+  - "{{ORG_NAME}}/repo-4"
+  - "{{ORG_NAME}}/repo-5"
+  - "{{ORG_NAME}}/repo-6"
+  - "{{ORG_NAME}}/repo-7"
+  - "{{ORG_NAME}}/repo-8"
 ```
 
 #### Execution
@@ -340,7 +340,7 @@ For each repository, validate:
 
 ```bash
 # Check workflow files exist
-REPO="ivviiviivvi/your-repo"
+REPO="{{ORG_NAME}}/your-repo"
 gh api repos/$REPO/contents/.github/workflows | jq -r '.[].name'
 
 # Expected workflows:
@@ -393,9 +393,9 @@ gh run list --repo $REPO --limit 5
 # validate-deployment.sh
 
 REPOS=(
-  "ivviiviivvi/repo-1"
-  "ivviiviivvi/repo-2"
-  "ivviiviivvi/repo-3"
+  "{{ORG_NAME}}/repo-1"
+  "{{ORG_NAME}}/repo-2"
+  "{{ORG_NAME}}/repo-3"
 )
 
 for REPO in "${REPOS[@]}"; do
@@ -488,7 +488,7 @@ If automated rollback fails or manual intervention needed:
 
 ```bash
 # List workflows to remove
-REPO="ivviiviivvi/your-repo"
+REPO="{{ORG_NAME}}/your-repo"
 gh api repos/$REPO/contents/.github/workflows | \
   jq -r '.[] | select(.name | contains("batch-onboarding")) | .name'
 

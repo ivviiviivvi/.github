@@ -261,11 +261,11 @@ jobs:
           "repository": "$REPO_NAME",
           "repository_url": "$REPO_URL",
           "commit_sha": "$COMMIT_SHA",
-          "branch": "${{ github.ref_name }}",
-          "app_type": "${{ steps.detect-app.outputs.app_type }}",
-          "startup_command": "${{ steps.detect-app.outputs.startup_command }}",
-          "build_command": "${{ steps.detect-app.outputs.build_command }}",
-          "port": "${{ steps.detect-app.outputs.port }}",
+          "branch": ${{ github.ref_name }},
+          "app_type": ${{ steps.detect-app.outputs.app_type }},
+          "startup_command": ${{ steps.detect-app.outputs.startup_command }},
+          "build_command": ${{ steps.detect-app.outputs.build_command }},
+          "port": ${{ steps.detect-app.outputs.port }},
           "timeout": ${{ steps.load-config.outputs.startup_timeout }}
         }
         EOF

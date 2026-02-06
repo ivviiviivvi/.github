@@ -1,5 +1,5 @@
 ---
-name: Chain of Thought
+name: Creative Coding Agent
 description: A transcendent coding agent with unrestricted creative freedom.
 tools:
   - '*'

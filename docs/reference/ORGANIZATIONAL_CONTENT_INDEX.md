@@ -81,9 +81,9 @@ gh repo edit owner/repo \
 Read the guide relevant to what you're setting up:
 
 - [Issue Taxonomy](ISSUE_TAXONOMY.md) - Issue classification
-- [Discussion Guide](DISCUSSION_GUIDE.md) - Discussion framework
-- [Projects Guide](PROJECTS_GUIDE.md) - Project management
-- [Wiki Guide](WIKI_GUIDE.md) - Wiki structure
+- [Discussion Guide](../guides/DISCUSSION_GUIDE.md) - Discussion framework
+- [Projects Guide](../guides/PROJECTS_GUIDE.md) - Project management
+- [Wiki Guide](../guides/WIKI_GUIDE.md) - Wiki structure
 
 **3. Deploy Templates** (15 minutes)
 
@@ -140,14 +140,14 @@ See the relevant guide for standards and conventions.
 
 ### Core Guides
 
-| Document                                                            | Purpose                            | Audience                  | Length       |
-| ------------------------------------------------------------------- | ---------------------------------- | ------------------------- | ------------ |
-| [🚀 Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)             | Get started in 15 minutes          | Everyone                  | ~5 min read  |
-| [🛠️ Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) | Step-by-step deployment            | Administrators            | ~45 min read |
-| [📝 Issue Taxonomy](ISSUE_TAXONOMY.md)                              | Comprehensive issue classification | Maintainers, Contributors | ~25 min read |
-| [💬 Discussion Guide](DISCUSSION_GUIDE.md)                          | Discussion framework and templates | Community Managers        | ~40 min read |
-| [📊 Projects Guide](PROJECTS_GUIDE.md)                              | Project management best practices  | Project Managers          | ~50 min read |
-| [📚 Wiki Guide](WIKI_GUIDE.md)                                      | Wiki structure and maintenance     | Documentation Team        | ~60 min read |
+| Document                                                                        | Purpose                            | Audience                  | Length       |
+| ------------------------------------------------------------------------------- | ---------------------------------- | ------------------------- | ------------ |
+| [🚀 Quick Start](../guides/ORGANIZATIONAL_CONTENT_QUICK_START.md)               | Get started in 15 minutes          | Everyone                  | ~5 min read  |
+| [🛠️ Implementation Guide](../analysis/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) | Step-by-step deployment            | Administrators            | ~45 min read |
+| [📝 Issue Taxonomy](ISSUE_TAXONOMY.md)                                          | Comprehensive issue classification | Maintainers, Contributors | ~25 min read |
+| [💬 Discussion Guide](../guides/DISCUSSION_GUIDE.md)                            | Discussion framework and templates | Community Managers        | ~40 min read |
+| [📊 Projects Guide](../guides/PROJECTS_GUIDE.md)                                | Project management best practices  | Project Managers          | ~50 min read |
+| [📚 Wiki Guide](../guides/WIKI_GUIDE.md)                                        | Wiki structure and maintenance     | Documentation Team        | ~60 min read |
 
 ### Quick References
 
@@ -161,9 +161,9 @@ See the relevant guide for standards and conventions.
 ### Supporting Documentation
 
 - [Labels Guide](LABELS.md) - Standard label taxonomy
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
-- [Governance](GOVERNANCE.md) - Decision-making process
+- [Contributing Guide](../governance/CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md) - Community standards
+- [Governance](../governance/GOVERNANCE.md) - Decision-making process
 
 ## Templates & Tools
 
@@ -307,7 +307,7 @@ gh workflow run create-organizational-content.yml \
 - **Project Sync**: Auto-add issues to projects
 - **Wiki Backup**: Automated wiki backups
 
-See [Automation Guide](automation/) for details.
+See [Automation Guide](../automation/) for details.
 
 ## Best Practices
 
@@ -544,7 +544,7 @@ open https://github.com/org/repo/wiki
 **For Users**:
 
 - 💬
-  [Ask in Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Ask in Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 📖 Read the documentation guides
 - 🔍 Search existing issues and discussions
 
@@ -556,11 +556,11 @@ open https://github.com/org/repo/wiki
 
 **For Contributors**:
 
-- 🤝 [Contributing Guide](CONTRIBUTING.md)
+- 🤝 [Contributing Guide](../governance/CONTRIBUTING.md)
 - 💬
-  [Community Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Community Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ### Feedback & Improvements
 
@@ -575,10 +575,10 @@ This framework is continuously evolving. We welcome:
 
 **Internal**:
 
-- [Organization README](../README.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Security Policy](SECURITY.md)
+- [Organization README](../../README.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
+- [Security Policy](../governance/SECURITY.md)
 
 **External**:
 
@@ -595,7 +595,7 @@ This framework is continuously evolving. We welcome:
 
 ## Maintenance
 
-**Document Owner**: @ivviiviivvi/documentation-team\
+**Document Owner**: @{{ORG_NAME}}/documentation-team\
 **Review Frequency**:
 Quarterly\
 **Last Reviewed**: 2025-12-28\
@@ -603,11 +603,12 @@ Quarterly\
 
 ______________________________________________________________________
 
-**📝 Contribute**: See [CONTRIBUTING.md](CONTRIBUTING.md)\
-**💬 Discuss**:
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->\
+**📝 Contribute**: See [CONTRIBUTING.md](../governance/CONTRIBUTING.md)\
+**💬
+Discuss**:
+[GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->\
 **🐛
 Report Issues**:
-[GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+[GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 **Built with ❤️ by the Ivviiviivvi community**

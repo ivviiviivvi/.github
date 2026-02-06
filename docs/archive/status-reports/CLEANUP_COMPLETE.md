@@ -103,7 +103,7 @@ ______________________________________________________________________
 
 ### Performance ✅
 
-- **Regex optimization** in mouthpiece_filter.py
+- **Regex optimization** in natural_language_prompt_filter.py
 - Consolidated duplicate patterns
 - 30-35% performance improvement
 
@@ -178,7 +178,7 @@ ______________________________________________________________________
 
 - **Local branch refs** still exist (safe to delete when ready)
 - **Optional improvements** documented for future consideration:
-  - Better comments in mouthpiece_filter.py (branch 6)
+  - Better comments in natural_language_prompt_filter.py (branch 6)
   - Dashboard icons (branch 7)
 
 ______________________________________________________________________

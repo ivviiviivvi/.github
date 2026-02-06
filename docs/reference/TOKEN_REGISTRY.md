@@ -1,7 +1,7 @@
 # GitHub Token Registry
 
 > **Central registry for all GitHub Personal Access Tokens and authentication
-> mechanisms used in the ivviiviivvi organization**
+> mechanisms used in the {{ORG_NAME}} organization**
 
 **Last Updated:** 2026-01-18\
 **Owner:** Organization Security Team\
@@ -556,7 +556,8 @@ All token operations are logged:
 
 - **GitHub Audit Log**: All API calls made with each token
 
-  - View at: <https://github.com/organizations/ivviiviivvi/settings/audit-log>
+  - View at:
+    <https://github.com/organizations/%7B%7BORG_NAME%7D%7D/settings/audit-log>
   - Retention: 90 days (GitHub Team), 180 days (GitHub Enterprise)
 
 - **1Password Activity Log**: All secret retrievals
@@ -612,11 +613,12 @@ ______________________________________________________________________
 
 ## Related Documentation
 
-- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
+- [MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md](../analysis/MASTER_ORG_TOKEN_CONTEXTUAL_AWARENESS_ANALYSIS.md)
   \- Detailed analysis and migration plan
-- [SECRET_MANAGEMENT_GUIDE.md](SECRET_MANAGEMENT_GUIDE.md) - Universal secret
-  management practices
-- [SECRETS_SETUP.md](SECRETS_SETUP.md) - GitHub Actions secrets configuration
+- [SECRET_MANAGEMENT_GUIDE.md](../guides/SECRET_MANAGEMENT_GUIDE.md) - Universal
+  secret management practices
+- [SECRETS_SETUP.md](../guides/SECRETS_SETUP.md) - GitHub Actions secrets
+  configuration
 - `scripts/rotate-token.sh` - Automated token rotation script
 - `scripts/validate-tokens.py` - Token health validation script
 
@@ -627,9 +629,9 @@ ______________________________________________________________________
 **Questions about tokens?**
 
 - 💬 Slack: #security-engineering
-- 📧 Email: <security@ivviiviivvi.org>
+- 📧 Email: \<security@{{ORG_NAME}}.org>
 - 📝 Issues:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 **Token issues?**
 

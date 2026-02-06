@@ -24,21 +24,21 @@ Before asking for help, please:
 
 ### When to Use What
 
-| Situation                     | Where to Go                                                                                              |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Questions, ideas, discussions | [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions --> |
-| Bug reports                   | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->                |
-| Feature requests              | [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->                |
-| Security vulnerabilities      | [Security Policy](SECURITY.md)                                                                           |
-| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                                                    |
-| Code of Conduct violations    | conduct@ivviiviivvi.com                                                                                  |
+| Situation                     | Where to Go                                                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Questions, ideas, discussions | [GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions --> |
+| Bug reports                   | [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->                |
+| Feature requests              | [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->                |
+| Security vulnerabilities      | [Security Policy](SECURITY.md)                                                                                    |
+| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                                                             |
+| Code of Conduct violations    | conduct@{{ORG_NAME}}.com                                                                                          |
 
 ## GitHub Discussions
 
 **Best for**: Questions, ideas, general help, and community discussion
 
 👉
-**[Start a Discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->**
+**[Start a Discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->**
 
 ### Discussion Categories
 
@@ -168,10 +168,10 @@ welcome:
 A:
 
 1. Look for issues labeled
-   [`good first issue`](https://github.com/ivviiviivvi/.github/labels/good%20first%20issue)
+   [`good first issue`](https://github.com/%7B%7BORG_NAME%7D%7D/.github/labels/good%20first%20issue)
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
 1. Ask questions in
-   [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+   [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 1. Join our upcoming community calls (announced in Discussions)
 
 #### Security
@@ -179,7 +179,7 @@ A:
 **Q: I found a security vulnerability. Where do I report it?**
 
 A: **Do NOT create a public issue.** Follow our [Security Policy](SECURITY.md)
-to report privately to security@ivviiviivvi.com.
+to report privately to security@{{ORG_NAME}}.com.
 
 **Q: What is your security response timeline?**
 
@@ -271,8 +271,8 @@ We use labels to track issue status:
 
 For enterprise support, training, or consulting:
 
-- **Email**: enterprise@ivviiviivvi.com
-- **Support Portal**: Contact enterprise@ivviiviivvi.com for scheduling
+- **Email**: enterprise@{{ORG_NAME}}.com
+- **Support Portal**: Contact enterprise@{{ORG_NAME}}.com for scheduling
 
 ### Enterprise Support Includes
 
@@ -285,30 +285,30 @@ For enterprise support, training, or consulting:
 
 ## Contact Information
 
-- **General Support**: support@ivviiviivvi.com
-- **Security Issues**: security@ivviiviivvi.com
-- **Code of Conduct**: conduct@ivviiviivvi.com
-- **Enterprise Support**: enterprise@ivviiviivvi.com
-- **Press/Media**: press@ivviiviivvi.com
+- **General Support**: support@{{ORG_NAME}}.com
+- **Security Issues**: security@{{ORG_NAME}}.com
+- **Code of Conduct**: conduct@{{ORG_NAME}}.com
+- **Enterprise Support**: enterprise@{{ORG_NAME}}.com
+- **Press/Media**: press@{{ORG_NAME}}.com
 
 ## Additional Resources
 
 ### Learning Resources
 
 - **[Documentation Index](../INDEX.md)** - Entry point to all docs
-- **[Workflow Design Guide](../guides/WORKFLOW_DESIGN.md)** - Deep dive on
+- **[Workflow Design Guide](../workflows/WORKFLOW_DESIGN.md)** - Deep dive on
   automation patterns
 - **[Common Tasks Runbook](../guides/common-tasks-runbook.md)** - Step-by-step
   operations playbooks
 
 ### Related Projects
 
-- [Organization Hub Repository](https://github.com/ivviiviivvi/.github)
-- [Workflow Templates](https://github.com/ivviiviivvi/.github/tree/main/workflow-templates)
+- [Organization Hub Repository](https://github.com/%7B%7BORG_NAME%7D%7D/.github)
+- [Workflow Templates](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/workflow-templates)
 
 ______________________________________________________________________
 
-**Need more help?** Contact us at support@ivviiviivvi.com
+**Need more help?** Contact us at support@{{ORG_NAME}}.com
 
 ## Show Your Support
 

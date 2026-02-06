@@ -5,7 +5,7 @@
 **Issue**: 🚨 Security Alert: Potential Secrets Detected in Code\
 **Workflow
 Run**:
-[#20510017480](https://github.com/ivviiviivvi/.github/actions/runs/20510017480)\
+[#20510017480](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/runs/20510017480)\
 **Date**:
 2025-12-25\
 **Status**: ✅ RESOLVED
@@ -194,7 +194,7 @@ fixed\
 - [GitHub Secret Scanning Documentation](https://docs.github.com/en/code-security/secret-scanning)
 - [Gitleaks Documentation](https://github.com/gitleaks/gitleaks)
 - [detect-secrets Documentation](https://github.com/Yelp/detect-secrets)<!-- link:github.detect_secrets -->
-- [Secret Scanning Guide](SECRET_SCANNING_GUIDE.md)
+- [Secret Scanning Guide](../guides/SECRET_SCANNING_GUIDE.md)
 
 ## Summary
 

@@ -15,19 +15,19 @@ ______________________________________________________________________
 ## Quick Access Links
 
 - **Project #8**:
-  [AI Framework Development](https://github.com/orgs/ivviiviivvi/projects/8)
+  [AI Framework Development](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8)
 - **Project #9**:
-  [Documentation & Knowledge](https://github.com/orgs/ivviiviivvi/projects/9)
+  [Documentation & Knowledge](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/9)
 - **Project #10**:
-  [Workflow Automation](https://github.com/orgs/ivviiviivvi/projects/10)
+  [Workflow Automation](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/10)
 - **Project #11**:
-  [Security & Compliance](https://github.com/orgs/ivviiviivvi/projects/11)
+  [Security & Compliance](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/11)
 - **Project #12**:
-  [Infrastructure & DevOps](https://github.com/orgs/ivviiviivvi/projects/12)
+  [Infrastructure & DevOps](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/12)
 - **Project #13**:
-  [Community & Support](https://github.com/orgs/ivviiviivvi/projects/13)
+  [Community & Support](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/13)
 - **Project #14**:
-  [Product Roadmap](https://github.com/orgs/ivviiviivvi/projects/14)
+  [Product Roadmap](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/14)
 
 ______________________________________________________________________
 
@@ -89,7 +89,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/8
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/8
 2. Click ⋮ → Workflows
 3. For each rule above:
    - Click "+ New workflow"
@@ -136,7 +136,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/9
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/9
 2. Click ⋮ → Workflows
 3. For each rule above:
    - Click "+ New workflow"
@@ -187,7 +187,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/10
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/10
 2. Click ⋮ → Workflows
 3. Follow standard workflow creation steps
 ```
@@ -232,7 +232,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/11
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/11
 2. Click ⋮ → Workflows
 3. Follow standard workflow creation steps
 ```
@@ -279,7 +279,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/12
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/12
 2. Click ⋮ → Workflows
 3. Follow standard workflow creation steps
 ```
@@ -326,7 +326,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/13
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/13
 2. Click ⋮ → Workflows
 3. Follow standard workflow creation steps
 ```
@@ -371,7 +371,7 @@ ______________________________________________________________________
 **Setup Steps:**
 
 ```
-1. Go to https://github.com/orgs/ivviiviivvi/projects/14
+1. Go to https://github.com/orgs/{{ORG_NAME}}/projects/14
 2. Click ⋮ → Workflows
 3. Follow standard workflow creation steps
 ```
@@ -482,8 +482,8 @@ ______________________________________________________________________
 ## Additional Resources
 
 - [GitHub Projects Automation Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project)
-- [Project Implementation Guide](/workspace/docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
-- [Project Deployment Guide](/workspace/docs/GITHUB_PROJECTS_DEPLOYMENT.md)
+- [Project Implementation Guide](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
+- [Project Deployment Guide](../../../../docs/guides/GITHUB_PROJECTS_DEPLOYMENT.md)
 
 ______________________________________________________________________
 

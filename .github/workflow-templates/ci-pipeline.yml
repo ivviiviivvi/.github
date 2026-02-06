@@ -16,7 +16,7 @@ permissions:
 jobs:
   ci:
     name: CI
-    uses: ivviiviivvi/.github/.github/workflows/reusable/ci-pipeline.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/ci-pipeline.yml@main'
     with:
       language: both
       python-versions: '["3.12"]'

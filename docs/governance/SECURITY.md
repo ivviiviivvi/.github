@@ -36,13 +36,13 @@ GitHub Security Advisories allow us to:
 - Credit you for the discovery
 
 **Report URL:**
-[https://github.com/ivviiviivvi/.github/security/advisories/new](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
+[https://github.com/{{ORG_NAME}}/.github/security/advisories/new](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ### Alternative: Security Contact Email
 
 If you prefer email or cannot use GitHub Security Advisories, email us at:
 
-**📧 security@ivviiviivvi.com**
+**📧 security@{{ORG_NAME}}.com**
 
 Please include:
 
@@ -60,7 +60,7 @@ For security issues that are:
 - Security enhancements or hardening suggestions
 
 You may create a public issue using our
-[Security Vulnerability template](https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml)<!-- link:github.security_vulnerability -->.
+[Security Vulnerability template](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=security_vulnerability.yml)<!-- link:github.security_vulnerability -->.
 
 ## Response Timeline
 
@@ -106,7 +106,7 @@ who responsibly disclose vulnerabilities. Details will be published here when
 available.
 
 Interested in participating? Watch this repository or contact us at
-security@ivviiviivvi.com.
+security@{{ORG_NAME}}.com.
 
 ## Security Scanning Tools
 
@@ -139,13 +139,14 @@ We use the following automated security tools to detect vulnerabilities:
 Our security workflows run automatically on every push and pull request:
 
 - **🔒 Secret Scanning** -
-  [`.github/workflows/security-scan.yml`](../../.github/workflows/security-scan.yml)
+  [`.github/workflows/security-scan.yml`](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/.github/workflows/security-scan.yml)
 - **🔍 Code Scanning (CodeQL)** -
-  [`.github/workflows/codeql-analysis.yml`](../../.github/workflows/codeql-analysis.yml)
+  [`.github/workflows/codeql-analysis.yml`](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/.github/workflows/codeql-analysis.yml)
 - **📦 Dependency Review** -
-  [`.github/workflows/dependency-review.yml`](../../.github/workflows/dependency-review.yml)
+  [`.github/workflows/dependency-review.yml`](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/.github/workflows/dependency-review.yml)
 
-View all security workflows: [Security Workflows](../../.github/workflows/)
+View all security workflows:
+[Security Workflows](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/.github/workflows)
 
 ## Security Best Practices
 
@@ -160,10 +161,10 @@ When contributing to this project:
 
 ## Security Contacts
 
-- **General Security Issues:** security@ivviiviivvi.com
-- **Security Team:** @ivviiviivvi/security
+- **General Security Issues:** security@{{ORG_NAME}}.com
+- **Security Team:** @{{ORG_NAME}}/security
 - **Emergency Contact:**
-  [Create a private security advisory](https://github.com/ivviiviivvi/.github/security/advisories/new)<!-- link:github.security_advisory -->
+  [Create a private security advisory](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new)<!-- link:github.security_advisory -->
 
 ## Hall of Fame
 
@@ -179,4 +180,4 @@ ______________________________________________________________________
 **Last Updated:** January 12, 2026
 
 For general questions about this policy, please contact
-security@ivviiviivvi.com.
+security@{{ORG_NAME}}.com.

@@ -1,19 +1,44 @@
 # Template Configuration
 # =====================
-# Replace these values when adopting this template for your organization.
-# Run: find . -type f \( -name "*.yml" -o -name "*.md" -o -name "*.json" \) -exec sed -i '' 's/{{ORG_NAME}}/your-org/g' {} \;
+# Edit this file with your organization details, then run:
+#   python src/automation/scripts/setup_template.py
+#
+# The setup script reads this config AND computes dynamic counts from the
+# filesystem, so you only need to fill in identity/contact fields here.
 
 # Organization Settings
 org:
-  name: '{{ORG_NAME}}'                    # GitHub org/user name (e.g., "my-company")
-  display_name: '{{ORG_DISPLAY_NAME}}'    # Human-readable name (e.g., "My Company")
-  github_url: https://github.com/{{ORG_NAME}}
-  website: '{{ORG_WEBSITE}}'              # Optional: organization website
+  name: '{{ORG_NAME}}' # GitHub org/user name (e.g., "my-company")
+  display_name: '{{ORG_DISPLAY_NAME}}' # Human-readable name (e.g., "My Company")
+  website: '{{ORG_WEBSITE}}' # Organization website (e.g., "https://example.com")
+  email_domain: '{{ORG_EMAIL_DOMAIN}}' # Email domain (e.g., "example.com")
+
+# Repository Settings
+repo:
+  name: '{{REPO_NAME}}' # Repository name (default: ".github")
+  npm_scope: '{{NPM_SCOPE}}' # npm scope without @ (e.g., "my-company")
+
+# Social/Community
+social:
+  discord_invite: '{{DISCORD_INVITE}}' # Discord invite code (e.g., "abcdef123")
+
+# Contact Emails (derived from email_domain if not overridden)
+emails:
+  support: support@{{ORG_EMAIL_DOMAIN}}
+  security: security@{{ORG_EMAIL_DOMAIN}}
+  conduct: conduct@{{ORG_EMAIL_DOMAIN}}
+
+# Team Names (used in CODEOWNERS)
+teams:
+  leadership: '{{TEAM_LEADERSHIP}}' # e.g., "leadership"
+  engineering: '{{TEAM_ENGINEERING}}' # e.g., "engineering"
+  devops: '{{TEAM_DEVOPS}}' # e.g., "devops"
+  security: '{{TEAM_SECURITY}}' # e.g., "security"
 
 # Product/Application Settings (for demo workflows)
 product:
-  name: '{{PRODUCT_NAME}}'                # Main product name if applicable
-  api_endpoint: '{{API_ENDPOINT}}'        # API base URL if applicable
+  name: '{{PRODUCT_NAME}}' # Main product name if applicable
+  api_endpoint: '{{API_ENDPOINT}}' # API base URL if applicable
 
 # Default Tool Versions
 # These should match your repository variables for consistency
@@ -32,20 +57,10 @@ template:
 # Feature Flags
 # Enable/disable optional features when adopting the template
 features:
-  ai_agents: true                         # AI framework with agents, chatmodes, prompts
-  advanced_ci: true                       # Advanced CI with mutation testing, a11y
-  security_scanning: true                 # Security workflows (CodeQL, Trivy, etc.)
-  automated_releases: true                # Semantic release automation
-  documentation_site: false               # Jekyll documentation site
-  slack_notifications: false              # Slack integration (requires SLACK_WEBHOOK)
-  ml_workflows: false                     # ML-specific workflows
-
-# Adoption Checklist
-# After copying this template:
-# 1. Replace all {{ORG_NAME}} placeholders with your org name
-# 2. Replace all {{ORG_DISPLAY_NAME}} with your display name
-# 3. Update .github/CODEOWNERS with your team structure
-# 4. Configure repository variables (PYTHON_VERSION_DEFAULT, etc.)
-# 5. Set up required secrets (GITHUB_TOKEN is automatic)
-# 6. Review and enable desired feature flags above
-# 7. Delete this checklist section
+  ai_agents: true # AI framework with agents, chatmodes, prompts
+  advanced_ci: true # Advanced CI with mutation testing, a11y
+  security_scanning: true # Security workflows (CodeQL, Trivy, etc.)
+  automated_releases: true # Semantic release automation
+  documentation_site: false # Jekyll documentation site
+  slack_notifications: false # Slack integration (requires SLACK_WEBHOOK)
+  ml_workflows: false # ML-specific workflows

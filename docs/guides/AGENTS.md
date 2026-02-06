@@ -2,7 +2,7 @@
 
 Global policy: /Users/4jp/AGENTS.md applies and cannot be overridden.
 
-Complete guide to working with AI agents in the ivviiviivvi template.
+Complete guide to working with AI agents in the {{ORG_NAME}} template.
 
 ______________________________________________________________________
 
@@ -94,7 +94,7 @@ ______________________________________________________________________
 | ------------------------------------------- | ------------------------------ |
 | `github-org-manager.agent.md`               | GitHub organization management |
 | `pr-branch-cleanup.agent.md`                | Stale branch cleanup           |
-| `greener-grass-workflow-benchmark.agent.md` | Workflow benchmarking          |
+| `workflow-best-practice-benchmark.agent.md` | Workflow benchmarking          |
 
 ______________________________________________________________________
 

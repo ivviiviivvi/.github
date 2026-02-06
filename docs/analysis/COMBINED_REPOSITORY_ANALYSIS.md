@@ -1,4 +1,4 @@
-# Combined Repository Analysis: 4444J99 & ivviiviivvi
+# Combined Repository Analysis: 4444J99 & {{ORG_NAME}}
 
 **Generated:** January 18, 2026\
 **Purpose:** Comparative analysis and
@@ -10,29 +10,29 @@ ______________________________________________________________________
 
 ### Overview
 
-| Account         | Type         | Total Repos | Original   | Forks      | Total Size   | Primary Focus              |
-| --------------- | ------------ | ----------- | ---------- | ---------- | ------------ | -------------------------- |
-| **ivviiviivvi** | Organization | 47          | 27 (57.4%) | 20 (42.6%) | ~5.2 GB      | Production Infrastructure  |
-| **4444J99**     | Personal     | 56          | 8 (14.3%)  | 48 (85.7%) | ~8.7 GB      | Learning & Experimentation |
-| **Combined**    | -            | **103**     | **35**     | **68**     | **~13.9 GB** | Ecosystem Development      |
+| Account          | Type         | Total Repos | Original   | Forks      | Total Size   | Primary Focus              |
+| ---------------- | ------------ | ----------- | ---------- | ---------- | ------------ | -------------------------- |
+| **{{ORG_NAME}}** | Organization | 47          | 27 (57.4%) | 20 (42.6%) | ~5.2 GB      | Production Infrastructure  |
+| **4444J99**      | Personal     | 56          | 8 (14.3%)  | 48 (85.7%) | ~8.7 GB      | Learning & Experimentation |
+| **Combined**     | -            | **103**     | **35**     | **68**     | **~13.9 GB** | Ecosystem Development      |
 
 ### Key Differences
 
 #### Fork Strategy
 
-- **ivviiviivvi:** Selective forking (42.6%) - forks serve specific
+- **{{ORG_NAME}}:** Selective forking (42.6%) - forks serve specific
   infrastructure needs
 - **4444J99:** Reference library approach (85.7%) - forks for learning and
   research
 
 #### Original Projects
 
-- **ivviiviivvi:** 27 production-ready systems and applications
+- **{{ORG_NAME}}:** 27 production-ready systems and applications
 - **4444J99:** 8 personal management and experimental projects
 
 #### Development Philosophy
 
-- **ivviiviivvi:** Build for production, public infrastructure
+- **{{ORG_NAME}}:** Build for production, public infrastructure
 - **4444J99:** Learn, experiment, integrate insights
 
 ______________________________________________________________________
@@ -142,7 +142,7 @@ ______________________________________________________________________
 
 ## Unique Strengths
 
-### ivviiviivvi Organization Strengths
+### {{ORG_NAME}} Organization Strengths
 
 #### 1. Production Infrastructure (27 original projects)
 
@@ -517,7 +517,7 @@ ______________________________________________________________________
 
 ### Summary
 
-The **4444J99 personal** and **ivviiviivvi organization** accounts represent
+The **4444J99 personal** and **{{ORG_NAME}} organization** accounts represent
 complementary approaches to software development:
 
 - **Personal:** Learning laboratory, research, experimentation
@@ -550,7 +550,7 @@ production systems, we can:
 
 ______________________________________________________________________
 
-**Maintained by:** 4444J99 / ivviiviivvi\
+**Maintained by:** 4444J99 / {{ORG_NAME}}\
 **Last Updated:** January 18,
 2026\
 **Next Review:** February 18, 2026

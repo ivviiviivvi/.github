@@ -1,6 +1,6 @@
 # Comprehensive Codebase Cleanup & Consolidation Roadmap
 
-# Organization: ivviiviivvi/.github
+# Organization: {{ORG_NAME}}/.github
 
 # Generated: 2026-01-13 | Completed: 2026-01-15
 
@@ -335,7 +335,7 @@ ______________________________________________________________________
 ```
 .jules/          # Jules agent tracker (bolt, palette, sentinel)
 .Jules/          # Duplicate case variant (RESOLVED in Phase 1.2)
-automation/scripts/mouthpiece_filter.py  # Separate agent tracker?
+automation/scripts/natural_language_prompt_filter.py  # Separate agent tracker?
 ```
 
 **Actions:**
@@ -370,12 +370,12 @@ ai_agents/
 **Scripts in `automation/scripts/`:**
 
 ```
-✅ ecosystem_visualizer.py    (812 lines) - mypy --strict COMPLIANT
+✅ org_health_visualizer.py    (812 lines) - mypy --strict COMPLIANT
 ✅ sync_labels.py             (369 lines) - Type annotations COMPLETE
 🔄 web_crawler.py            (790 lines) - Security-hardened, 43 mypy errors remain
-✅ mouthpiece_filter.py       (641 lines) - Well-documented, performance-optimized
+✅ natural_language_prompt_filter.py       (641 lines) - Well-documented, performance-optimized
 ✅ test_*.py                  (5 files) - Comprehensive test coverage
-⚠️ auto-docs.py               (17KB) - Needs review
+⚠️ auto_docs.py               (17KB) - Needs review
 ⚠️ quota_manager.py           - Needs type hint audit
 ⚠️ aicommit.sh                (9KB)  - Deprecated?
 ⚠️ bootstrap-walkthrough-org.sh (17KB) - One-time use?
@@ -383,7 +383,7 @@ ai_agents/
 
 **Phase 3.2 Accomplishments:**
 
-- ✅ **ecosystem_visualizer.py**: Added `-> None` return type, passes mypy
+- ✅ **org_health_visualizer.py**: Added `-> None` return type, passes mypy
   --strict
 - ✅ **sync_labels.py**: Added return types (`-> Dict[str, int]`, `-> None`)
 - ✅ **web_crawler.py**: Fixed implicit Optional violations, added security docs
@@ -403,7 +403,7 @@ ai_agents/
 
 **Actions:**
 
-- [x] Add type hints to ecosystem_visualizer.py (mypy --strict compliant)
+- [x] Add type hints to org_health_visualizer.py (mypy --strict compliant)
 - [x] Add return types to sync_labels.py methods
 - [x] Fix implicit Optional violations in web_crawler.py
 - [x] Install types-requests stub package
@@ -954,7 +954,7 @@ ______________________________________________________________________
 - **Workaround**: Reusable workflows are designed for consumption by OTHER
   repositories
 - **Documentation**: Clear examples show correct usage:
-  `ivviiviivvi/.github/.github/workflows/reusable/[workflow].yml@main`
+  `{{ORG_NAME}}/.github/.github/workflows/reusable/[workflow].yml@main`
 
 **Actions:**
 
@@ -1369,11 +1369,11 @@ best practices guide
 
    - `tests/unit/test_web_crawler.py` (315 lines) - SSRF protection, link
      extraction, validation
-   - `tests/unit/test_ecosystem_visualizer.py` (305 lines) - Diagram generation,
-     categorization
+   - `tests/unit/test_org_health_visualizer.py` (305 lines) - Diagram
+     generation, categorization
    - `tests/unit/test_sync_labels.py` (277 lines) - Label sync, API interaction
-   - `tests/unit/test_mouthpiece_filter.py` (92 lines) - Content filtering,
-     safety checks
+   - `tests/unit/test_natural_language_prompt_filter.py` (92 lines) - Content
+     filtering, safety checks
 
 1. **CI Workflow (.github/workflows/test-coverage.yml)**:
 
@@ -1422,11 +1422,11 @@ critical scripts
 - [x] ✅ Create `tests/` directory structure matching `automation/scripts/`
 - [x] ✅ Write tests for critical scripts:
   - ✅ `web_crawler.py` (security-critical) - 315 lines of tests
-  - ✅ `ecosystem_visualizer.py` - 305 lines of tests
+  - ✅ `org_health_visualizer.py` - 305 lines of tests
   - ✅ `sync_labels.py` - 277 lines of tests
-  - ✅ `mouthpiece_filter.py` - 92 lines of tests
+  - ✅ `natural_language_prompt_filter.py` - 92 lines of tests
   - ⏸️ `quota_manager.py` - deferred (lower priority)
-  - ⏸️ `auto-docs.py` - deferred (lower priority)
+  - ⏸️ `auto_docs.py` - deferred (lower priority)
 - [x] ✅ Add coverage reporting to CI (.github/workflows/test-coverage.yml)
 - [x] ✅ Configure coverage thresholds (70% minimum, 80% target)
 - [x] ✅ Add conftest.py with shared fixtures
@@ -1439,9 +1439,9 @@ tests/
 ├── conftest.py              # Shared fixtures (150 lines)
 ├── unit/                    # Unit tests
 │   ├── test_web_crawler.py          # 315 lines (SSRF, validation, concurrency)
-│   ├── test_ecosystem_visualizer.py # 305 lines (diagrams, categorization)
+│   ├── test_org_health_visualizer.py # 305 lines (diagrams, categorization)
 │   ├── test_sync_labels.py          # 277 lines (GitHub API, label sync)
-│   └── test_mouthpiece_filter.py    # 92 lines (content filtering)
+│   └── test_natural_language_prompt_filter.py    # 92 lines (content filtering)
 ├── integration/             # Integration tests
 │   └── test_agent_tracking.py       # 309 lines (agent system validation)
 └── fixtures/                # Test data (future)
@@ -1472,7 +1472,7 @@ needed
 **Actions:**
 
 - [ ] Benchmark web crawler performance (future enhancement)
-- [ ] Measure ecosystem_visualizer execution time (future enhancement)
+- [ ] Measure org_health_visualizer execution time (future enhancement)
 - [ ] Identify slow workflows (future enhancement)
 - [ ] Add performance regression tests (future enhancement)
 - [ ] Document performance SLAs (future enhancement)
@@ -1940,10 +1940,10 @@ ______________________________________________________________________
 ```
 automation/scripts/
 ├── aicommit.sh                   # Purpose: ? - Document or remove
-├── auto-docs.py                  # Purpose: Auto documentation - Keep, test
+├── auto_docs.py                  # Purpose: Auto documentation - Keep, test
 ├── bootstrap-walkthrough-org.sh  # Purpose: One-time setup? - Archive?
-├── ecosystem_visualizer.py       # Purpose: Dashboard generator - CRITICAL
-├── mouthpiece_filter.py          # Purpose: ? - Document or remove
+├── org_health_visualizer.py       # Purpose: Dashboard generator - CRITICAL
+├── natural_language_prompt_filter.py          # Purpose: ? - Document or remove
 ├── quota_manager.py              # Purpose: Quota management - Keep, test
 ├── sync_labels.py                # Purpose: Label sync - CRITICAL
 └── web_crawler.py                # Purpose: Web crawling - SECURITY CRITICAL
@@ -1953,16 +1953,16 @@ automation/scripts/
 
 **Phase Owners:**
 
-- Phase 1-5: @ivviiviivvi/devops + @ivviiviivvi/security
-- Phase 6: @ivviiviivvi/ai-framework
-- Phase 7-8: @ivviiviivvi/engineering
-- Phase 9-10: @ivviiviivvi/documentation
+- Phase 1-5: @{{ORG_NAME}}/devops + @{{ORG_NAME}}/security
+- Phase 6: @{{ORG_NAME}}/ai-framework
+- Phase 7-8: @{{ORG_NAME}}/engineering
+- Phase 9-10: @{{ORG_NAME}}/documentation
 
 **Escalation:**
 
-- Technical issues → @ivviiviivvi/technical-steering-committee
-- Security concerns → @ivviiviivvi/security
-- Policy questions → @ivviiviivvi/leadership
+- Technical issues → @{{ORG_NAME}}/technical-steering-committee
+- Security concerns → @{{ORG_NAME}}/security
+- Policy questions → @{{ORG_NAME}}/leadership
 
 ### C. Related Documents
 

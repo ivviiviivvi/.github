@@ -5,10 +5,10 @@
 
 # Test repositories for integration testing
 repositories:
-- ivviiviivvi/.github
+- '{{ORG_NAME}}/.github'
   # Add more test repositories here as needed
-  # - "ivviiviivvi/test-repo-1"
-  # - "ivviiviivvi/test-repo-2"
+  # - '{{ORG_NAME}}/test-repo-1'
+  # - '{{ORG_NAME}}/test-repo-2'
 
 # Workflow deployment for integration testing
 workflows:

@@ -1,5 +1,5 @@
 # Intelligent Routing Configuration
-# Used by automation/scripts/intelligent_routing.py
+# Used by automation/scripts/issue_assignment_router.py
 #
 # Scaling: Supports 15+ repositories with multi-repo configuration
 # Each repository can have custom routing rules or use global defaults

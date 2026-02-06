@@ -13,7 +13,7 @@ ______________________________________________________________________
 
 - [ ] **GitHub Account Access**
 
-  - [ ] Organization admin permissions for `ivviiviivvi`
+  - [ ] Organization admin permissions for `{{ORG_NAME}}`
   - [ ] Verified two-factor authentication enabled
   - [ ] Access to organization settings
 
@@ -40,7 +40,8 @@ ______________________________________________________________________
     [GITHUB_PROJECTS_IMPLEMENTATION.md](GITHUB_PROJECTS_IMPLEMENTATION.md)
   - [ ] Reviewed [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
   - [ ] Understood [Visual Overview](GITHUB_PROJECTS_VISUAL.md)
-  - [ ] Read [Scripts README](../scripts/README_PROJECTS.md)
+  - [ ] Read
+    [Scripts README](../../src/automation/scripts/utils/README_PROJECTS.md)
 
 ______________________________________________________________________
 
@@ -72,7 +73,7 @@ ______________________________________________________________________
   ```bash
   cd /workspace/scripts
   python3 configure-github-projects.py \
-    --org ivviiviivvi \
+    --org {{ORG_NAME}} \
     --dry-run
   ```
 
@@ -87,7 +88,7 @@ ______________________________________________________________________
 
   ```bash
   gh api user --jq '.login'  # Should show your username
-  gh api orgs/ivviiviivvi --jq '.login'  # Should show org name
+  gh api orgs/{{ORG_NAME}} --jq '.login'  # Should show org name
   ```
 
 **If dry run succeeds:** ✅ Proceed to Phase 2\
@@ -124,7 +125,7 @@ ______________________________________________________________________
   ```bash
   export GH_TOKEN=$(op read "op://Private/GitHub PAT/credential")
   python3 configure-github-projects.py \
-    --org ivviiviivvi \
+    --org {{ORG_NAME}} \
     2>&1 | tee projects-setup.log
   ```
 
@@ -132,7 +133,7 @@ ______________________________________________________________________
 
   ```bash
   python3 configure-github-projects.py \
-    --org ivviiviivvi \
+    --org {{ORG_NAME}} \
     2>&1 | tee projects-setup.log
   ```
 
@@ -145,7 +146,7 @@ ______________________________________________________________________
 
 - [ ] **Verify project creation**
 
-  - [ ] Open: https://github.com/orgs/ivviiviivvi/projects
+  - [ ] Open: https://github.com/orgs/{{ORG_NAME}}/projects
   - [ ] Count: Should see 7 new projects
   - [ ] Check: Each project has correct title and icon
 
@@ -617,10 +618,10 @@ ______________________________________________________________________
 
   ```bash
   # List open issues
-  gh issue list --repo ivviiviivvi/.github --limit 1000 --json number,title,labels
+  gh issue list --repo {{ORG_NAME}}/.github --limit 1000 --json number,title,labels
 
   # List open PRs
-  gh pr list --repo ivviiviivvi/.github --limit 1000 --json number,title,labels
+  gh pr list --repo {{ORG_NAME}}/.github --limit 1000 --json number,title,labels
   ```
 
 - [ ] **Bulk add to projects**
@@ -628,7 +629,7 @@ ______________________________________________________________________
   ```bash
   # Add issues with specific labels
   for issue in $(gh issue list --label agent --json number --jq '.[].number'); do
-    gh project item-add PROJECT_NUMBER --owner ivviiviivvi --url "https://github.com/ivviiviivvi/.github/issues/$issue"
+    gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url "https://github.com/{{ORG_NAME}}/.github/issues/$issue"
   done
   ```
 
@@ -791,15 +792,16 @@ ______________________________________________________________________
 
 **Questions?**
 
-- Review [Troubleshooting](../scripts/README_PROJECTS.md#troubleshooting)
+- Review
+  [Troubleshooting](../../src/automation/scripts/utils/README_PROJECTS.md#troubleshooting)
 - Check [Quick Reference](GITHUB_PROJECTS_QUICKREF.md)
 - Ask in
-  [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 **Issues?**
 
 - Open
-  [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - Tag with `project-management` label
 - Provide error logs and screenshots
 

@@ -1,6 +1,6 @@
 # CLAUDE.md - AI Assistant Guide for .github Repository
 
-> **Comprehensive guide for AI assistants working with the ivviiviivvi
+> **Comprehensive guide for AI assistants working with the {{ORG_NAME}}
 > organization's .github repository**
 
 ## Table of Contents
@@ -23,8 +23,8 @@ ______________________________________________________________________
 
 ### Purpose
 
-This is the **organization-level .github repository** for ivviiviivvi. It serves
-as the central hub for:
+This is the **organization-level .github repository** for {{ORG_NAME}}. It
+serves as the central hub for:
 
 - **Default community health files** that apply to all repositories in the
   organization
@@ -1283,7 +1283,7 @@ git push origin v1.2.3
 # 1. Create repository via GitHub UI
 
 # 2. Clone locally
-git clone https://github.com/ivviiviivvi/new-repo.git
+git clone https://github.com/{{ORG_NAME}}/new-repo.git
 cd new-repo
 
 # 3. Initialize with standard files (optional - inherited from .github)
@@ -1471,5 +1471,5 @@ implementation** for organization-level GitHub management with:
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-11-18 **Maintained by**: ivviiviivvi organization
+**Last Updated**: 2025-11-18 **Maintained by**: {{ORG_NAME}} organization
 **License**: MIT

@@ -21,9 +21,9 @@ ______________________________________________________________________
 
 ## Affected Repositories
 
-1. **ivviiviivvi/theoretical-specifications-first** (Score: 87)
-1. **ivviiviivvi/system-governance-framework** (Score: 69)
-1. **ivviiviivvi/trade-perpetual-future** (Score: 63)
+1. **{{ORG_NAME}}/theoretical-specifications-first** (Score: 87)
+1. **{{ORG_NAME}}/system-governance-framework** (Score: 69)
+1. **{{ORG_NAME}}/trade-perpetual-future** (Score: 63)
 
 ______________________________________________________________________
 
@@ -74,7 +74,7 @@ ______________________________________________________________________
 **Steps for each repository**:
 
 1. Navigate to repository:
-   `https://github.com/ivviiviivvi/<repository-name>/labels`
+   `https://github.com/{{ORG_NAME}}/<repository-name>/labels`
 1. Click **"New label"** button
 1. For each label:
    - Enter **Name** (e.g., `status: in progress`)
@@ -85,9 +85,9 @@ ______________________________________________________________________
 
 **Direct Links**:
 
-- [theoretical-specifications-first labels](https://github.com/ivviiviivvi/theoretical-specifications-first/labels)
-- [system-governance-framework labels](https://github.com/ivviiviivvi/system-governance-framework/labels)
-- [trade-perpetual-future labels](https://github.com/ivviiviivvi/trade-perpetual-future/labels)
+- [theoretical-specifications-first labels](https://github.com/%7B%7BORG_NAME%7D%7D/theoretical-specifications-first/labels)
+- [system-governance-framework labels](https://github.com/%7B%7BORG_NAME%7D%7D/system-governance-framework/labels)
+- [trade-perpetual-future labels](https://github.com/%7B%7BORG_NAME%7D%7D/trade-perpetual-future/labels)
 
 ### Option 2: GitHub CLI with Personal Access Token
 
@@ -143,9 +143,9 @@ After deployment, verify labels were created successfully:
 ### Using gh CLI:
 
 ```bash
-gh label list --repo ivviiviivvi/theoretical-specifications-first
-gh label list --repo ivviiviivvi/system-governance-framework
-gh label list --repo ivviiviivvi/trade-perpetual-future
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
+gh label list --repo {{ORG_NAME}}/system-governance-framework
+gh label list --repo {{ORG_NAME}}/trade-perpetual-future
 ```
 
 ### Using Web Interface:

@@ -129,7 +129,7 @@ cd .github/scripts
 
 **Step 3**: Monitor via dashboard
 
-- Visit: `https://github.com/ivviiviivvi/.github/issues`
+- Visit: `https://github.com/{{ORG_NAME}}/.github/issues`
 - Look for: "📋 Approval Dashboard" issue (created automatically)
 
 ______________________________________________________________________
@@ -527,11 +527,11 @@ ______________________________________________________________________
 
 ### Dashboard Locations
 
-1. **Approval Dashboard**: `https://github.com/ivviiviivvi/.github/issues`
+1. **Approval Dashboard**: `https://github.com/{{ORG_NAME}}/.github/issues`
    (label: `approval-dashboard`)
 1. **Usage Reports**: `.github/reports/usage/latest.md`
 1. **Health Status**: Workflow runs in Actions tab
-1. **Gallery**: `https://ivviiviivvi.github.io/.github`
+1. **Gallery**: `https://{{ORG_NAME}}.github.io/.github`
 
 ### Key Metrics
 
@@ -610,7 +610,7 @@ ______________________________________________________________________
 
 ```bash
 # Check quota
-gh api /orgs/ivviiviivvi/settings/billing/actions
+gh api /orgs/{{ORG_NAME}}/settings/billing/actions
 
 # Reduce repository size
 echo "dist/" >> .gitignore
@@ -655,7 +655,7 @@ gh run view --log
 
 ```bash
 # Enable Pages
-gh api -X PATCH /repos/ivviiviivvi/.github \
+gh api -X PATCH /repos/{{ORG_NAME}}/.github \
   -f pages[source][branch]=main \
   -f pages[source][path]=/docs
 
@@ -757,10 +757,10 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [Walkthrough Setup Guide](WALKTHROUGH_ANNOUNCEMENT.md)
-- [AgentSphere Documentation](AGENTSPHERE_SETUP.md)
+- [Walkthrough Setup Guide](../reports/WALKTHROUGH_ANNOUNCEMENT.md)
+- AgentSphere Documentation
 - [GitHub Pages Setup](GITHUB_PAGES_SETUP.md)
-- [Security Best Practices](SECURITY.md)
+- [Security Best Practices](../governance/SECURITY.md)
 
 ### Workflow Files
 
@@ -788,13 +788,13 @@ ______________________________________________________________________
 
 ### Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for guidelines
 
 ### Feedback
 
 - Feature requests: Create issue with `enhancement` label
 - Bug reports: Create issue with `bug` label
-- Security issues: See [SECURITY.md](SECURITY.md)
+- Security issues: See [SECURITY.md](../governance/SECURITY.md)
 
 ______________________________________________________________________
 
@@ -811,7 +811,7 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 **Maintained by**: @4444JPP\
-**Organization**: ivviiviivvi\
+**Organization**: {{ORG_NAME}}\
 **License**: See
-[LICENSE](../LICENSE)\
+[LICENSE](../../LICENSE)\
 **Last Updated**: 2025-12-22

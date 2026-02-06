@@ -9,67 +9,67 @@
 ##############################
 
 # Default owners for everything in the repo
-* @ivviiviivvi/leadership
+* @{{ORG_NAME}}/leadership
 
 ##############################
 # Engineering
 ##############################
 
 # Engineering owns code
-/src/ @ivviiviivvi/engineering
-*.py @ivviiviivvi/engineering
-*.js @ivviiviivvi/engineering
-*.ts @ivviiviivvi/engineering
-*.tsx @ivviiviivvi/engineering
-*.jsx @ivviiviivvi/engineering
-*.java @ivviiviivvi/engineering
-*.go @ivviiviivvi/engineering
-*.rs @ivviiviivvi/engineering
+/src/ @{{ORG_NAME}}/engineering
+*.py @{{ORG_NAME}}/engineering
+*.js @{{ORG_NAME}}/engineering
+*.ts @{{ORG_NAME}}/engineering
+*.tsx @{{ORG_NAME}}/engineering
+*.jsx @{{ORG_NAME}}/engineering
+*.java @{{ORG_NAME}}/engineering
+*.go @{{ORG_NAME}}/engineering
+*.rs @{{ORG_NAME}}/engineering
 
 ##############################
 # DevOps and Infrastructure
 ##############################
 
 # DevOps owns infrastructure
-/.github/workflows/ @ivviiviivvi/devops
-/infrastructure/ @ivviiviivvi/devops
-*.yml @ivviiviivvi/devops
-*.yaml @ivviiviivvi/devops
-Dockerfile @ivviiviivvi/devops
-docker-compose.yml @ivviiviivvi/devops
-.dockerignore @ivviiviivvi/devops
+/.github/workflows/ @{{ORG_NAME}}/devops
+/infrastructure/ @{{ORG_NAME}}/devops
+*.yml @{{ORG_NAME}}/devops
+*.yaml @{{ORG_NAME}}/devops
+Dockerfile @{{ORG_NAME}}/devops
+docker-compose.yml @{{ORG_NAME}}/devops
+.dockerignore @{{ORG_NAME}}/devops
 
 ##############################
 # Security
 ##############################
 
 # Security team for security files
-/SECURITY.md @ivviiviivvi/security
-/.github/SECURITY.md @ivviiviivvi/security
-/.github/CLAUDE_SECURITY.md @ivviiviivvi/security
-/.github/workflows/codeql*.yml @ivviiviivvi/security
-/.github/workflows/security-*.yml @ivviiviivvi/security
-/.github/workflows/scan-*.yml @ivviiviivvi/security
+/SECURITY.md @{{ORG_NAME}}/security
+/.github/SECURITY.md @{{ORG_NAME}}/security
+/.github/CLAUDE_SECURITY.md @{{ORG_NAME}}/security
+/.github/workflows/codeql*.yml @{{ORG_NAME}}/security
+/.github/workflows/security-*.yml @{{ORG_NAME}}/security
+/.github/workflows/scan-*.yml @{{ORG_NAME}}/security
 
 ##############################
 # Organization Profile
 ##############################
 
 # Organization profile README
-/profile/ @ivviiviivvi/leadership
+/profile/ @{{ORG_NAME}}/leadership
 
 ##############################
 # Workflow Templates
 ##############################
 
 # Starter workflow templates for org repos
-/.github/workflow-templates/ @ivviiviivvi/devops
+/.github/workflow-templates/ @{{ORG_NAME}}/devops
 
 ##############################
 # Organization Documentation
 ##############################
 
 # Documentation
-*.md @ivviiviivvi/leadership @ivviiviivvi/engineering
-/docs/ @ivviiviivvi/engineering
-/README.md @ivviiviivvi/leadership
+*.md @{{ORG_NAME}}/leadership @{{ORG_NAME}}/engineering
+/docs/ @{{ORG_NAME}}/engineering
+/README.md @{{ORG_NAME}}/leadership

@@ -1,7 +1,7 @@
 # New Contributor Guide
 
 > **Welcome! This guide will help you get started contributing to the
-> ivviiviivvi/.github organization repository**
+> {{ORG_NAME}}/.github organization repository**
 
 **Estimated Time to Setup**: 30-45 minutes
 
@@ -52,7 +52,7 @@ ______________________________________________________________________
 
 ```bash
 # 1. Fork and clone
-gh repo fork ivviiviivvi/.github --clone
+gh repo fork {{ORG_NAME}}/.github --clone
 
 # 2. Open in VS Code with DevContainer (recommended)
 cd .github
@@ -108,7 +108,7 @@ Install these tools before starting:
 1. **Clone and Open**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -144,7 +144,7 @@ Install these tools before starting:
 1. **Clone Repository**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    ```
 
@@ -246,9 +246,9 @@ ai_framework/              # AI agent system
 automation/
 ├── scripts/              # Python automation scripts
 │   ├── web_crawler.py           # Security-critical web crawler
-│   ├── ecosystem_visualizer.py  # Workflow visualization
+│   ├── org_health_visualizer.py  # Workflow visualization
 │   ├── sync_labels_gh.py        # Label synchronization
-│   ├── mouthpiece_filter.py     # Content filtering
+│   ├── natural_language_prompt_filter.py     # Content filtering
 │   └── update_agent_docs.py     # Agent documentation
 └── workflow-templates/   # Workflow templates for copy
 
@@ -265,9 +265,9 @@ docs/
 tests/
 ├── unit/                # Unit tests (4 files, 989 lines)
 │   ├── test_web_crawler.py
-│   ├── test_ecosystem_visualizer.py
+│   ├── test_org_health_visualizer.py
 │   ├── test_sync_labels.py
-│   └── test_mouthpiece_filter.py
+│   └── test_natural_language_prompt_filter.py
 ├── integration/         # Integration tests
 │   └── test_agent_tracking.py
 ├── conftest.py          # Shared fixtures
@@ -1096,33 +1096,33 @@ ______________________________________________________________________
 
 **Documentation**:
 
-- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 - [Testing Best Practices](testing-best-practices.md)
 - [Monitoring Guide](monitoring.md)
-- [Copilot Quick Start](../COPILOT_QUICK_START.md)
+- [Copilot Quick Start](COPILOT_QUICK_START.md)
 
 **Reference**:
 
-- [Agent Registry](../AGENT_REGISTRY.md) - Catalog of all agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Catalog of all agents
 - [Documentation Index](../INDEX.md) - Complete documentation list
-- [Cleanup Roadmap](../../CLEANUP_ROADMAP.md) - Project status
+- [Cleanup Roadmap](../archive/CLEANUP_ROADMAP.md) - Project status
 
 ### Community
 
 **GitHub Discussions**:
 
-- [Ask Questions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- [Ask Questions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
   \- Get help from the community
-- [Ideas](https://github.com/orgs/ivviiviivvi/discussions/categories/ideas) -
-  Share suggestions
-- [Show and Tell](https://github.com/orgs/ivviiviivvi/discussions/categories/show-and-tell)
+- [Ideas](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions/categories/ideas)
+  \- Share suggestions
+- [Show and Tell](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions/categories/show-and-tell)
   \- Share your work
 
 **GitHub Issues**:
 
-- [Report Bugs](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
-- [Request Features](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
-- [Improve Docs](https://github.com/ivviiviivvi/.github/issues/new?template=documentation.yml)
+- [Report Bugs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+- [Request Features](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
+- [Improve Docs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=documentation.yml)
 
 ### Direct Support
 
@@ -1154,19 +1154,19 @@ Now that you've read this guide:
 **For new contributors**:
 
 1. This guide (you're here!)
-1. [Contributing Guidelines](../CONTRIBUTING.md)
+1. [Contributing Guidelines](../governance/CONTRIBUTING.md)
 1. [Testing Best Practices](testing-best-practices.md)
 
 **For AI framework contributors**:
 
-1. [Agent Architecture Guide](../AGENT_ARCHITECTURE_GUIDE.md)
-1. [Agent Registry](../AGENT_REGISTRY.md)
-1. [Copilot Quick Start](../COPILOT_QUICK_START.md)
+1. [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md)
+1. [Agent Registry](../reference/AGENT_REGISTRY.md)
+1. [Copilot Quick Start](COPILOT_QUICK_START.md)
 
 **For workflow developers**:
 
 1. [Monitoring Guide](monitoring.md)
-1. [Workflow Optimization Analysis](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+1. [Workflow Optimization Analysis](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 
 ______________________________________________________________________
 

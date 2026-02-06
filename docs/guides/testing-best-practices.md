@@ -65,9 +65,9 @@ tests/
 ├── conftest.py              # Shared fixtures and configuration
 ├── unit/                    # Unit tests (fast, isolated)
 │   ├── test_web_crawler.py
-│   ├── test_ecosystem_visualizer.py
+│   ├── test_org_health_visualizer.py
 │   ├── test_sync_labels.py
-│   ├── test_mouthpiece_filter.py
+│   ├── test_natural_language_prompt_filter.py
 │   └── test_quota_manager.py
 ├── integration/             # Integration tests (slower)
 │   ├── test_agent_tracking.py
@@ -488,11 +488,11 @@ ______________________________________________________________________
 
 ### Organization Resources
 
-- [pytest.ini](../../pytest.ini) - Test configuration
+- [pyproject.toml](../../pyproject.toml) - Test configuration
 - [conftest.py](../../tests/conftest.py) - Shared fixtures
 - [Test Coverage Workflow](../../.github/workflows/test-coverage.yml) - CI
   configuration
-- [CLEANUP_ROADMAP.md](../../CLEANUP_ROADMAP.md) - Phase 8 details
+- [CLEANUP_ROADMAP.md](../archive/CLEANUP_ROADMAP.md) - Phase 8 details
 
 ______________________________________________________________________
 
@@ -502,7 +502,7 @@ ______________________________________________________________________
 
 - [x] ✅ `pytest.ini` configured with 80% coverage target
 - [x] ✅ Test directory structure created (`unit/`, `integration/`, `fixtures/`)
-- [x] ✅ Unit tests for critical scripts (web_crawler, ecosystem_visualizer,
+- [x] ✅ Unit tests for critical scripts (web_crawler, org_health_visualizer,
   sync_labels)
 - [x] ✅ Shared fixtures in `conftest.py`
 - [x] ✅ CI workflow for automated testing

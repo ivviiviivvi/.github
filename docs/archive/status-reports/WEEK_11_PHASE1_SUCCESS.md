@@ -74,21 +74,21 @@ ______________________________________________________________________
 
 ### Repositories Deployed
 
-1. **ivviiviivvi/theoretical-specifications-first**
+1. **{{ORG_NAME}}/theoretical-specifications-first**
 
    - Duration: 17.89 seconds
    - Labels: 12 deployed
    - Workflows: 3 deployed
    - Status: ✅ SUCCESS
 
-1. **ivviiviivvi/system-governance-framework**
+1. **{{ORG_NAME}}/system-governance-framework**
 
    - Duration: 17.63 seconds
    - Labels: 12 deployed
    - Workflows: 3 deployed
    - Status: ✅ SUCCESS
 
-1. **ivviiviivvi/trade-perpetual-future**
+1. **{{ORG_NAME}}/trade-perpetual-future**
 
    - Duration: 17.84 seconds
    - Labels: 12 deployed
@@ -180,7 +180,7 @@ ______________________________________________________________________
 All 12 labels confirmed present via GitHub API:
 
 ```bash
-gh label list --repo ivviiviivvi/theoretical-specifications-first
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 **Results**:

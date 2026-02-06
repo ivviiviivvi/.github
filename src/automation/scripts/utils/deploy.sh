@@ -32,22 +32,22 @@ echo -e "${GREEN}✓${NC} Token retrieved from GitHub CLI"
 if [[ "$1" == "--dry-run" ]]; then
     echo -e "${YELLOW}⚠${NC} DRY RUN MODE (no changes will be made)"
     echo ""
-    python3 configure-github-projects.py --org ivviiviivvi --dry-run
+    python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 else
-    echo -e "${GREEN}✓${NC} Deploying to organization: ivviiviivvi"
+    echo -e "${GREEN}✓${NC} Deploying to organization: {{ORG_NAME}}"
     echo ""
 
     # Create log file
     LOG_FILE="deployment-$(date +%Y%m%d-%H%M%S).log"
 
     # Run deployment
-    python3 configure-github-projects.py --org ivviiviivvi 2>&1 | tee "$LOG_FILE"
+    python3 configure-github-projects.py --org {{ORG_NAME}} 2>&1 | tee "$LOG_FILE"
 
     echo ""
     echo -e "${GREEN}✓${NC} Deployment complete! Log saved to: $LOG_FILE"
     echo ""
     echo "Next steps:"
-    echo "  1. View projects: https://github.com/orgs/ivviiviivvi/projects"
+    echo "  1. View projects: https://github.com/orgs/{{ORG_NAME}}/projects"
     echo "  2. Configure views (see GITHUB_PROJECTS_DEPLOYMENT.md)"
     echo "  3. Set up automation rules"
     echo ""

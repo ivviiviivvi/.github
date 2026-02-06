@@ -29,7 +29,7 @@ organizational domains:
 export GH_TOKEN="your_github_personal_access_token"
 
 # Run the Python configuration script
-python3 scripts/configure-github-projects.py --org ivviiviivvi
+python3 scripts/configure-github-projects.py --org {{ORG_NAME}}
 
 # This will:
 # - Create all 7 projects
@@ -39,10 +39,10 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
 
 ### Option 2: Manual Setup via GitHub UI
 
-1. Navigate to https://github.com/orgs/ivviiviivvi/projects
+1. Navigate to https://github.com/orgs/{{ORG_NAME}}/projects
 1. Click "New project"
 1. Follow the configuration guide in
-   [GITHUB_PROJECTS_IMPLEMENTATION.md](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
+   [GITHUB_PROJECTS_IMPLEMENTATION.md](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
 
 ### Option 3: Bash Script (Basic Setup)
 
@@ -53,7 +53,7 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
 
 ## 📚 Documentation
 
-- **[GITHUB_PROJECTS_IMPLEMENTATION.md](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)**
+- **[GITHUB_PROJECTS_IMPLEMENTATION.md](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)**
   \- Complete implementation guide with:
 
   - Detailed project configurations
@@ -62,7 +62,7 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
   - Automation rules
   - Implementation checklist
 
-- **[GITHUB_PROJECTS_CONFIGURATION.md](../docs/GITHUB_PROJECTS_CONFIGURATION.md)**
+- **[GITHUB_PROJECTS_CONFIGURATION.md](../../../../docs/guides/GITHUB_PROJECTS_CONFIGURATION.md)**
   \- Step-by-step configuration guide
 
 ## 🔧 Scripts
@@ -83,14 +83,14 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
 ```bash
 # Create all projects
 export GH_TOKEN="your_token"
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # Create specific projects only
-python3 configure-github-projects.py --org ivviiviivvi \
+python3 configure-github-projects.py --org {{ORG_NAME}} \
     --projects ai-framework documentation
 
 # Dry run (show what would be done)
-python3 configure-github-projects.py --org ivviiviivvi --dry-run
+python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 ```
 
 **Requirements:**
@@ -473,7 +473,7 @@ success_rate = successful_transitions / rule_executions * 100
 ### Dashboard Queries
 
 See
-[GITHUB_PROJECTS_IMPLEMENTATION.md](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md#success-metrics)
+[GITHUB_PROJECTS_IMPLEMENTATION.md](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md#success-metrics)
 for GraphQL queries.
 
 ## 🐛 Troubleshooting
@@ -535,15 +535,15 @@ ______________________________________________________________________
 **Questions?**
 
 - Open an issue:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - Start a discussion:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 **Documentation:**
 
-- [Complete Implementation Guide](../docs/GITHUB_PROJECTS_IMPLEMENTATION.md)
-- [Configuration Guide](../docs/GITHUB_PROJECTS_CONFIGURATION.md)
-- [Workflow Documentation](../docs/WORKFLOW_DESIGN.md)
+- [Complete Implementation Guide](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
+- [Configuration Guide](../../../../docs/guides/GITHUB_PROJECTS_CONFIGURATION.md)
+- [Workflow Documentation](../../../../docs/workflows/WORKFLOW_DESIGN.md)
 
 **GitHub Resources:**
 

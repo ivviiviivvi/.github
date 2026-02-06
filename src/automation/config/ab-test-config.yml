@@ -100,7 +100,7 @@ rollback:
 # Monitoring
 monitoring:
   frequency: daily
-  dashboard: https://github.com/ivviiviivvi/.github/actions
+  dashboard: https://github.com/{{ORG_NAME}}/.github/actions
   alerts:
   - channel: '#workflow-alerts'
     priority: P1

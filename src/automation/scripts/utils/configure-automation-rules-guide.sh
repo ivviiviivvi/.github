@@ -101,7 +101,7 @@ configure_rule() {
     echo -e "${YELLOW}───────────────────────────────────────────────────────────────${NC}"
     echo ""
     echo "1. Navigate to project settings:"
-    echo -e "   ${BLUE}https://github.com/orgs/ivviiviivvi/projects/$project/settings${NC}"
+    echo -e "   ${BLUE}https://github.com/orgs/{{ORG_NAME}}/projects/$project/settings${NC}"
     echo ""
     echo "2. Click 'Workflows' in the left sidebar"
     echo ""

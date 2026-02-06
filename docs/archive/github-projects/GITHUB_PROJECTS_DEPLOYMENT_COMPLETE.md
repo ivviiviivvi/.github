@@ -2,7 +2,7 @@
 
 **Date:** January 18, 2026, 19:19 UTC\
 **Organization:**
-ivviiviivvi\
+{{ORG_NAME}}\
 **Status:** Infrastructure 100% Complete, Manual Config
 Available\
 **Overall Progress:** 85% Complete
@@ -215,15 +215,16 @@ ______________________________________________________________________
 
 ## 🔗 Quick Access Links
 
-- **All Projects:** https://github.com/orgs/ivviiviivvi/projects
-- **Project #8 (AI Framework):** https://github.com/orgs/ivviiviivvi/projects/8
-- **Project #9 (Documentation):** https://github.com/orgs/ivviiviivvi/projects/9
-- **Project #10 (Workflow):** https://github.com/orgs/ivviiviivvi/projects/10
-- **Project #11 (Security):** https://github.com/orgs/ivviiviivvi/projects/11
+- **All Projects:** https://github.com/orgs/{{ORG_NAME}}/projects
+- **Project #8 (AI Framework):** https://github.com/orgs/{{ORG_NAME}}/projects/8
+- **Project #9 (Documentation):**
+  https://github.com/orgs/{{ORG_NAME}}/projects/9
+- **Project #10 (Workflow):** https://github.com/orgs/{{ORG_NAME}}/projects/10
+- **Project #11 (Security):** https://github.com/orgs/{{ORG_NAME}}/projects/11
 - **Project #12 (Infrastructure):**
-  https://github.com/orgs/ivviiviivvi/projects/12
-- **Project #13 (Community):** https://github.com/orgs/ivviiviivvi/projects/13
-- **Project #14 (Roadmap):** https://github.com/orgs/ivviiviivvi/projects/14
+  https://github.com/orgs/{{ORG_NAME}}/projects/12
+- **Project #13 (Community):** https://github.com/orgs/{{ORG_NAME}}/projects/13
+- **Project #14 (Roadmap):** https://github.com/orgs/{{ORG_NAME}}/projects/14
 
 ______________________________________________________________________
 
@@ -291,6 +292,6 @@ Manual configuration provides:
 ______________________________________________________________________
 
 **Last Updated:** January 18, 2026, 19:19 UTC\
-**Maintained By:** ivviiviivvi
+**Maintained By:** {{ORG_NAME}}
 organization\
-**Repository:** https://github.com/ivviiviivvi/.github
+**Repository:** https://github.com/{{ORG_NAME}}/.github

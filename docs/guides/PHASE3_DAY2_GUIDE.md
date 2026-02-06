@@ -105,7 +105,7 @@ cd /workspace
 # Analyze organization repositories
 python3 automation/scripts/web_crawler.py \
   --token-name org-repo-analysis-token \
-  --org ivviiviivvi \
+  --org {{ORG_NAME}} \
   --output /tmp/repo-analysis.json
 
 # Expected output:
@@ -153,7 +153,7 @@ cd /workspace
 export GH_TOKEN=$(echo $ORG_PROJECT_ADMIN_TOKEN)
 
 # Test project access (list existing projects)
-gh project list --owner ivviiviivvi --limit 5
+gh project list --owner {{ORG_NAME}} --limit 5
 
 # Expected output:
 # - ✅ List of organization projects
@@ -364,7 +364,7 @@ env | grep ORG_
 python3 automation/scripts/sync_labels.py --dry-run --repo .github
 
 # Test repo analysis
-python3 automation/scripts/web_crawler.py --org ivviiviivvi
+python3 automation/scripts/web_crawler.py --org {{ORG_NAME}}
 
 # Check rate limits
 /tmp/check-rates.sh

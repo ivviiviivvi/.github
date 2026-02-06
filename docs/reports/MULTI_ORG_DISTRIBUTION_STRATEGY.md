@@ -37,7 +37,7 @@ that prevents collapse when energy increases. Each organ has defined:
 
 | Entity                    | Type         | Repos | Size    | Current Status                  |
 | ------------------------- | ------------ | ----- | ------- | ------------------------------- |
-| **ivviiviivvi**           | Organization | 47    | 5.2 GB  | Active - Mixed purpose          |
+| **{{ORG_NAME}}**          | Organization | 47    | 5.2 GB  | Active - Mixed purpose          |
 | **omni-dromenon-machina** | Organization | 0     | 0 GB    | Undefined - Ready for migration |
 | **labores-profani-crux**  | Organization | 0     | 0 GB    | Undefined - Ready for migration |
 | **4444J99**               | Personal     | 56    | 8.7 GB  | Active - Incubation zone        |
@@ -47,7 +47,7 @@ ______________________________________________________________________
 
 ## Organ Definitions & Repository Mapping
 
-### ORGAN I: ivviiviivvi — Meta-Form-Meme
+### ORGAN I: {{ORG_NAME}} — Meta-Form-Meme
 
 **Function:** Conceptual / Symbolic Engine\
 **Upstream of all other organs**
@@ -125,7 +125,7 @@ time and meets bodies**
 
 #### Repositories to Migrate Here
 
-**From ivviiviivvi:**
+**From {{ORG_NAME}}:**
 
 - 🔄 **a-i-council--coliseum** (556 KB) - 24/7 AI agent debate streaming
   - This is performance/enactment, not commerce
@@ -180,7 +180,7 @@ profane necessity of income**
 
 #### Repositories to Migrate Here
 
-**Money-Making Applications from ivviiviivvi:**
+**Money-Making Applications from {{ORG_NAME}}:**
 
 - 🔄 **trade-perpetual-future** (13.8 MB) - Crypto perpetual futures trading
   - Clear commercial application
@@ -268,7 +268,7 @@ without creating**
 
 #### Repository Location
 
-**Lives within ivviiviivvi/.github as subdirectory:**
+**Lives within {{ORG_NAME}}/.github as subdirectory:**
 
 - `/docs/orchestration/` - Decision logs, graduation protocols
 - `/project_meta/governance/` - System integrity documentation
@@ -300,11 +300,11 @@ visible without resolving it**
 
 #### Target State
 
-**Centralized in ivviiviivvi/.github with clear boundaries**
+**Centralized in {{ORG_NAME}}/.github with clear boundaries**
 
 #### Repository Location
 
-**Lives within ivviiviivvi/.github:**
+**Lives within {{ORG_NAME}}/.github:**
 
 - `/docs/public-process/` - Essays, fragments, notebooks
 - `/docs/marginalia/` - Annotations, rehearsal traces
@@ -341,7 +341,7 @@ ______________________________________________________________________
 
 #### Target State
 
-**Private GitHub Discussions in ivviiviivvi/.github**
+**Private GitHub Discussions in {{ORG_NAME}}/.github**
 
 #### Activation Criteria
 
@@ -440,7 +440,7 @@ ______________________________________________________________________
 
 **When something stabilizes, orchestration moves it:**
 
-- Theory → ivviiviivvi
+- Theory → {{ORG_NAME}}
 - Art → omni-dromenon-machina
 - Commerce → labores-profani-crux
 
@@ -505,21 +505,21 @@ ______________________________________________________________________
 
 ### Phase 1: Theory Consolidation (Week 1-2)
 
-**Goal:** Purify ivviiviivvi to pure conceptual work
+**Goal:** Purify {{ORG_NAME}} to pure conceptual work
 
 **Actions:**
 
 1. **Identify commercial apps** (17 repos → labores-profani-crux)
 1. **Identify art/performance** (6 repos → omni-dromenon-machina)
-1. **Keep theory/infrastructure** (16 repos stay in ivviiviivvi)
+1. **Keep theory/infrastructure** (16 repos stay in {{ORG_NAME}})
 1. **Transfer ownership** via GitHub transfer feature
 
 **Migration Script:**
 
 ```bash
 # automation/scripts/migrate-to-org.sh
-gh repo transfer ivviiviivvi/trade-perpetual-future labores-profani-crux
-gh repo transfer ivviiviivvi/a-i-council--coliseum omni-dromenon-machina
+gh repo transfer {{ORG_NAME}}/trade-perpetual-future labores-profani-crux
+gh repo transfer {{ORG_NAME}}/a-i-council--coliseum omni-dromenon-machina
 # ... repeat for all identified repos
 ```
 
@@ -644,7 +644,7 @@ def check_personal_profile(repo):
 
 **When does something move from Personal to an Organ?**
 
-#### To Theory (ivviiviivvi)
+#### To Theory ({{ORG_NAME}})
 
 - ✅ Conceptual framework is formalized
 - ✅ Has explanatory power beyond original use case
@@ -737,7 +737,7 @@ ______________________________________________________________________
 
 | Organ                               | Repos           | Size     | Character              |
 | ----------------------------------- | --------------- | -------- | ---------------------- |
-| **ivviiviivvi** (Theory)            | 16              | ~9.7 GB  | Pure conceptual work   |
+| **{{ORG_NAME}}** (Theory)           | 16              | ~9.7 GB  | Pure conceptual work   |
 | **omni-dromenon-machina** (Art)     | 6               | ~346 MB  | Temporal, experiential |
 | **labores-profani-crux** (Commerce) | 17              | ~1.4 GB  | Revenue-generating     |
 | **4444J99** (Personal)              | 54 (-2 deleted) | ~8.7 GB  | Incubation, learning   |
@@ -745,7 +745,7 @@ ______________________________________________________________________
 
 ### Migration Tracking
 
-**From ivviiviivvi to labores-profani-crux:**
+**From {{ORG_NAME}} to labores-profani-crux:**
 
 - trade-perpetual-future
 - search-local--happy-hour
@@ -759,7 +759,7 @@ ______________________________________________________________________
 - a-mavs-olevm
 - (+ 7 applied tool forks)
 
-**From ivviiviivvi to omni-dromenon-machina:**
+**From {{ORG_NAME}} to omni-dromenon-machina:**
 
 - a-i-council--coliseum
 - classroom-rpg-aetheria

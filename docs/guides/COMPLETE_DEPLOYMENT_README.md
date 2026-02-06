@@ -358,7 +358,7 @@ We want to hear from you! Please share:
 1. **How has this impacted your workflow?**
 
 Post in
-[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+[GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 or create an issue.
 
 ______________________________________________________________________
@@ -374,7 +374,7 @@ ______________________________________________________________________
 ## 📄 License
 
 This ecosystem is part of the organization's internal tooling. See
-[LICENSE](../LICENSE) for details.
+[LICENSE](../../LICENSE) for details.
 
 ______________________________________________________________________
 

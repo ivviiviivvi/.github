@@ -203,7 +203,7 @@ availability.
 File: `.github/routing.yml`
 
 ```yaml
-intelligent_routing:
+issue_assignment_router:
   enabled: true
   scoring_weights:
     expertise: 0.40
@@ -218,11 +218,11 @@ intelligent_routing:
 
 ```bash
 # Get recommended reviewers
-python automation/scripts/intelligent_routing.py \
+python automation/scripts/issue_assignment_router.py \
   --owner ORG --repo REPO --pr-number 123
 
 # Assign reviewers
-python automation/scripts/intelligent_routing.py \
+python automation/scripts/issue_assignment_router.py \
   --owner ORG --repo REPO --pr-number 123 --assign
 ```
 
@@ -1018,7 +1018,7 @@ automation/scripts/
 ├── models.py               # Shared data models (750+ lines)
 ├── utils.py                # Common utilities (500+ lines)
 ├── auto_merge.py           # Auto-merge checker (600+ lines)
-├── intelligent_routing.py  # Routing algorithm (700+ lines)
+├── issue_assignment_router.py  # Routing algorithm (700+ lines)
 ├── self_healing.py         # Self-healing engine (750+ lines)
 ├── maintenance_scheduler.py # Maintenance planner (650+ lines)
 ├── enhanced_analytics.py   # ML prediction (650+ lines)
@@ -1051,7 +1051,7 @@ pip install joblib==1.3.2
 
 ### C. API Reference
 
-See [API_REFERENCE.md](API_REFERENCE.md) for detailed API documentation.
+See API_REFERENCE.md for detailed API documentation.
 
 ### D. Change Log
 

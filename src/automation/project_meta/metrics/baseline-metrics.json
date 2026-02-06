@@ -1,7 +1,7 @@
 {
   "created_date": "2025-12-23",
   "analysis_version": "1.0",
-  "repository": "ivviiviivvi/.github",
+  "repository": "{{ORG_NAME}}/.github",
   "baseline_metrics": {
     "workflows_total": 76,
     "workflows_analyzed": 76,

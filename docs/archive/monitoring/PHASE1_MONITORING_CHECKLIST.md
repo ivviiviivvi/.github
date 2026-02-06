@@ -22,22 +22,22 @@ Run these commands to get a quick overview:
 ```bash
 # Check workflow status across all 3 Phase 1 repos
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Repository: ivviiviivvi/$repo ==="
-  gh workflow list --repo "ivviiviivvi/$repo" | grep -E "(repository-health|enhanced-pr|stale-management)"
+  echo "=== Repository: {{ORG_NAME}}/$repo ==="
+  gh workflow list --repo "{{ORG_NAME}}/$repo" | grep -E "(repository-health|enhanced-pr|stale-management)"
   echo ""
 done
 
 # Check recent workflow runs (last 5 per repo)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Recent runs: ivviiviivvi/$repo ==="
-  gh run list --repo "ivviiviivvi/$repo" --limit 5 --json conclusion,name,status,createdAt | jq -r '.[] | "\(.name): \(.status) (\(.conclusion // "running"))"'
+  echo "=== Recent runs: {{ORG_NAME}}/$repo ==="
+  gh run list --repo "{{ORG_NAME}}/$repo" --limit 5 --json conclusion,name,status,createdAt | jq -r '.[] | "\(.name): \(.status) (\(.conclusion // "running"))"'
   echo ""
 done
 
 # Verify labels exist
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Labels: ivviiviivvi/$repo ==="
-  gh label list --repo "ivviiviivvi/$repo" | grep -E "(status:|priority:|type:|deployment:|automation:)"
+  echo "=== Labels: {{ORG_NAME}}/$repo ==="
+  gh label list --repo "{{ORG_NAME}}/$repo" | grep -E "(status:|priority:|type:|deployment:|automation:)"
   echo ""
 done
 ```
@@ -59,10 +59,10 @@ ______________________________________________________________________
 
 ```bash
 # Check for workflow failures
-gh run list --repo ivviiviivvi/theoretical-specifications-first --status failure --limit 10
+gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --status failure --limit 10
 
 # Verify label counts (should show 12+ labels including our new ones)
-gh label list --repo ivviiviivvi/theoretical-specifications-first --json name | jq '. | length'
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first --json name | jq '. | length'
 ```
 
 ### Hour 6-24 (First Day)
@@ -78,11 +78,11 @@ gh label list --repo ivviiviivvi/theoretical-specifications-first --json name | 
 
 ```bash
 # Check workflow execution history
-gh run list --repo ivviiviivvi/theoretical-specifications-first --workflow repository-health-check.yml --limit 5
+gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --workflow repository-health-check.yml --limit 5
 
 # Check for issues/PRs using new labels
-gh issue list --repo ivviiviivvi/theoretical-specifications-first --label "status: in progress"
-gh pr list --repo ivviiviivvi/theoretical-specifications-first --label "status: ready for review"
+gh issue list --repo {{ORG_NAME}}/theoretical-specifications-first --label "status: in progress"
+gh pr list --repo {{ORG_NAME}}/theoretical-specifications-first --label "status: ready for review"
 ```
 
 ### Hour 24-48 (Second Day)
@@ -99,8 +99,8 @@ gh pr list --repo ivviiviivvi/theoretical-specifications-first --label "status: 
 ```bash
 # Get comprehensive workflow summary
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Workflow Health: ivviiviivvi/$repo ==="
-  gh api "repos/ivviiviivvi/$repo/actions/workflows" | jq -r '.workflows[] | select(.name | test("repository-health|enhanced-pr|stale-management")) | "\(.name): \(.state)"'
+  echo "=== Workflow Health: {{ORG_NAME}}/$repo ==="
+  gh api "repos/{{ORG_NAME}}/$repo/actions/workflows" | jq -r '.workflows[] | select(.name | test("repository-health|enhanced-pr|stale-management")) | "\(.name): \(.state)"'
   echo ""
 done
 ```
@@ -113,7 +113,7 @@ ______________________________________________________________________
 
 #### Labels Verification
 
-Run: `gh label list --repo ivviiviivvi/theoretical-specifications-first`
+Run: `gh label list --repo {{ORG_NAME}}/theoretical-specifications-first`
 
 - [ ] `status: in progress` (1d76db)
 - [ ] `status: ready for review` (0e8a16)
@@ -130,7 +130,7 @@ Run: `gh label list --repo ivviiviivvi/theoretical-specifications-first`
 
 #### Workflows Verification
 
-Run: `gh workflow list --repo ivviiviivvi/theoretical-specifications-first`
+Run: `gh workflow list --repo {{ORG_NAME}}/theoretical-specifications-first`
 
 - [ ] `repository-health-check.yml` exists and enabled
 - [ ] `enhanced-pr-quality.yml` exists and enabled
@@ -139,7 +139,7 @@ Run: `gh workflow list --repo ivviiviivvi/theoretical-specifications-first`
 #### Workflow Executions
 
 Run:
-`gh run list --repo ivviiviivvi/theoretical-specifications-first --workflow repository-health-check.yml --limit 1`
+`gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --workflow repository-health-check.yml --limit 1`
 
 - [ ] Repository Health Check executed successfully at least once
 - [ ] Enhanced PR Quality executed successfully (if PRs exist)
@@ -148,7 +148,7 @@ Run:
 #### Label Usage
 
 Run:
-`gh issue list --repo ivviiviivvi/theoretical-specifications-first --json labels | jq '[.[] | .labels[]] | unique | .[].name'`
+`gh issue list --repo {{ORG_NAME}}/theoretical-specifications-first --json labels | jq '[.[] | .labels[]] | unique | .[].name'`
 
 - [ ] Labels are being applied to issues
 - [ ] Labels are being applied to PRs
@@ -158,13 +158,13 @@ Run:
 
 #### Labels Verification
 
-Run: `gh label list --repo ivviiviivvi/system-governance-framework`
+Run: `gh label list --repo {{ORG_NAME}}/system-governance-framework`
 
 - [ ] All 12 labels present (same as above)
 
 #### Workflows Verification
 
-Run: `gh workflow list --repo ivviiviivvi/system-governance-framework`
+Run: `gh workflow list --repo {{ORG_NAME}}/system-governance-framework`
 
 - [ ] `repository-health-check.yml` exists and enabled
 - [ ] `enhanced-pr-quality.yml` exists and enabled
@@ -172,7 +172,7 @@ Run: `gh workflow list --repo ivviiviivvi/system-governance-framework`
 
 #### Workflow Executions
 
-Run: `gh run list --repo ivviiviivvi/system-governance-framework --limit 5`
+Run: `gh run list --repo {{ORG_NAME}}/system-governance-framework --limit 5`
 
 - [ ] At least one workflow executed
 - [ ] No unexpected failures
@@ -187,13 +187,13 @@ Run: `gh run list --repo ivviiviivvi/system-governance-framework --limit 5`
 
 #### Labels Verification
 
-Run: `gh label list --repo ivviiviivvi/trade-perpetual-future`
+Run: `gh label list --repo {{ORG_NAME}}/trade-perpetual-future`
 
 - [ ] All 12 labels present (same as above)
 
 #### Workflows Verification
 
-Run: `gh workflow list --repo ivviiviivvi/trade-perpetual-future`
+Run: `gh workflow list --repo {{ORG_NAME}}/trade-perpetual-future`
 
 - [ ] `repository-health-check.yml` exists and enabled
 - [ ] `enhanced-pr-quality.yml` exists and enabled
@@ -201,7 +201,7 @@ Run: `gh workflow list --repo ivviiviivvi/trade-perpetual-future`
 
 #### Workflow Executions
 
-Run: `gh run list --repo ivviiviivvi/trade-perpetual-future --limit 5`
+Run: `gh run list --repo {{ORG_NAME}}/trade-perpetual-future --limit 5`
 
 - [ ] At least one workflow executed
 - [ ] No unexpected failures
@@ -223,8 +223,8 @@ Track these metrics during the monitoring period:
 ```bash
 # Get workflow execution times
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Workflow Performance: ivviiviivvi/$repo ==="
-  gh api "repos/ivviiviivvi/$repo/actions/runs?per_page=20" | \
+  echo "=== Workflow Performance: {{ORG_NAME}}/$repo ==="
+  gh api "repos/{{ORG_NAME}}/$repo/actions/runs?per_page=20" | \
     jq -r '.workflow_runs[] | select(.name | test("repository-health|enhanced-pr|stale-management")) | "\(.name): \(.conclusion) in \((.updated_at | fromdate) - (.created_at | fromdate))s"'
   echo ""
 done
@@ -255,8 +255,8 @@ done
 ```bash
 # Count label usage
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Label Usage: ivviiviivvi/$repo ==="
-  gh issue list --repo "ivviiviivvi/$repo" --json labels --limit 100 | \
+  echo "=== Label Usage: {{ORG_NAME}}/$repo ==="
+  gh issue list --repo "{{ORG_NAME}}/$repo" --json labels --limit 100 | \
     jq -r '[.[] | .labels[] | .name] | group_by(.) | map({label: .[0], count: length}) | .[]'
   echo ""
 done
@@ -278,8 +278,8 @@ done
 ```bash
 # Check for workflow failures
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Failures: ivviiviivvi/$repo ==="
-  gh run list --repo "ivviiviivvi/$repo" --status failure --limit 10 --json name,conclusion,createdAt
+  echo "=== Failures: {{ORG_NAME}}/$repo ==="
+  gh run list --repo "{{ORG_NAME}}/$repo" --status failure --limit 10 --json name,conclusion,createdAt
   echo ""
 done
 ```
@@ -306,7 +306,7 @@ ______________________________________________________________________
 **Check:**
 
 ```bash
-gh workflow view repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+gh workflow view repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 **Possible Causes:**
@@ -319,10 +319,10 @@ gh workflow view repository-health-check.yml --repo ivviiviivvi/theoretical-spec
 
 ```bash
 # Enable workflow if disabled
-gh workflow enable repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+gh workflow enable repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
 
 # Manually trigger to test
-gh workflow run repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+gh workflow run repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 #### Issue: Permission Errors
@@ -335,7 +335,7 @@ gh workflow run repository-health-check.yml --repo ivviiviivvi/theoretical-speci
 **Check:**
 
 ```bash
-gh run view [RUN_ID] --repo ivviiviivvi/theoretical-specifications-first --log
+gh run view [RUN_ID] --repo {{ORG_NAME}}/theoretical-specifications-first --log
 ```
 
 **Resolution:**
@@ -353,7 +353,7 @@ gh run view [RUN_ID] --repo ivviiviivvi/theoretical-specifications-first --log
 **Check:**
 
 ```bash
-gh label list --repo ivviiviivvi/theoretical-specifications-first | grep "status: in progress"
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first | grep "status: in progress"
 ```
 
 **Resolution:**
@@ -361,7 +361,7 @@ gh label list --repo ivviiviivvi/theoretical-specifications-first | grep "status
 ```bash
 # Re-run label deployment if needed
 cd /workspace/automation/scripts
-python validate_labels.py --owner ivviiviivvi --repo theoretical-specifications-first --fix
+python validate_labels.py --owner {{ORG_NAME}} --repo theoretical-specifications-first --fix
 ```
 
 ______________________________________________________________________
@@ -392,24 +392,24 @@ Run these final validation commands:
 ```bash
 # 1. Verify all repositories accessible
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh repo view "ivviiviivvi/$repo" --json name,visibility,isArchived | jq -r '"\(.name): \(.visibility) (archived: \(.isArchived))"'
+  gh repo view "{{ORG_NAME}}/$repo" --json name,visibility,isArchived | jq -r '"\(.name): \(.visibility) (archived: \(.isArchived))"'
 done
 
 # 2. Count successful workflow runs
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  echo "=== Success Count: ivviiviivvi/$repo ==="
-  gh api "repos/ivviiviivvi/$repo/actions/runs?status=success&per_page=100" | jq '.total_count'
+  echo "=== Success Count: {{ORG_NAME}}/$repo ==="
+  gh api "repos/{{ORG_NAME}}/$repo/actions/runs?status=success&per_page=100" | jq '.total_count'
 done
 
 # 3. Verify no open incidents
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh issue list --repo "ivviiviivvi/$repo" --label "incident" --state open
+  gh issue list --repo "{{ORG_NAME}}/$repo" --label "incident" --state open
 done
 
 # 4. Check deployment label presence (should exist on automated items)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh issue list --repo "ivviiviivvi/$repo" --label "deployment: week-11-phase-1" | wc -l
-  gh pr list --repo "ivviiviivvi/$repo" --label "deployment: week-11-phase-1" | wc -l
+  gh issue list --repo "{{ORG_NAME}}/$repo" --label "deployment: week-11-phase-1" | wc -l
+  gh pr list --repo "{{ORG_NAME}}/$repo" --label "deployment: week-11-phase-1" | wc -l
 done
 ```
 
@@ -490,14 +490,14 @@ ______________________________________________________________________
 
 ```bash
 # Quick status
-gh workflow list --repo ivviiviivvi/theoretical-specifications-first
-gh label list --repo ivviiviivvi/theoretical-specifications-first
+gh workflow list --repo {{ORG_NAME}}/theoretical-specifications-first
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
 
 # Check failures
-gh run list --repo ivviiviivvi/theoretical-specifications-first --status failure
+gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --status failure
 
 # View workflow logs
-gh run view [RUN_ID] --repo ivviiviivvi/theoretical-specifications-first --log
+gh run view [RUN_ID] --repo {{ORG_NAME}}/theoretical-specifications-first --log
 
 # Deploy Phase 2 (after validation)
 cd /workspace && ./DEPLOY_PHASE2.sh

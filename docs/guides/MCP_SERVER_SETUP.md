@@ -122,7 +122,7 @@ Use the provided installation badges to automatically install MCP resources:
 1. **Clone this repository** (or copy the relevant files):
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    ```
 
 1. **Copy MCP resources** to your project or VS Code settings directory:
@@ -685,7 +685,7 @@ ______________________________________________________________________
 
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Building custom
   agents
-- [Agent Registry](AGENT_REGISTRY.md) - Catalog of available agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Catalog of available agents
 - [Custom Instructions Guide](CUSTOM_INSTRUCTIONS_SETUP.md) - Setting up coding
   standards
 - [Development Environment Setup](DEVELOPMENT_ENVIRONMENT_SETUP.md) -
@@ -703,11 +703,12 @@ Each language collection includes:
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
   \- Ask questions and share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+- [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
   \- Report bugs or request features
-- [Contributing Guide](CONTRIBUTING.md) - Contribute to this documentation
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this
+  documentation
 
 ______________________________________________________________________
 

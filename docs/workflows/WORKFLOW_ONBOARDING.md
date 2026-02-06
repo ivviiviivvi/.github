@@ -224,8 +224,7 @@ ______________________________________________________________________
 >
 > "If you have questions:
 >
-> 1. **Read the guide**:
->    [CONTRIBUTOR_WORKFLOW.md](../../docs/CONTRIBUTOR_WORKFLOW.md)
+> 1. **Read the guide**: [CONTRIBUTOR_WORKFLOW.md](CONTRIBUTOR_WORKFLOW.md)
 > 1. **Ask in discussions**: General Q&A category
 > 1. **Tag a maintainer**: Use @mention in your issue/PR
 > 1. **Check FAQs**: Common questions answered
@@ -307,19 +306,20 @@ ______________________________________________________________________
 >
 > **For Triage:**
 >
-> - [Needs triage](../../issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
-> - [Critical items](../../issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
-> - [Blocked items](../../issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
+> - [Needs triage](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
+> - [Critical items](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
+> - [Blocked items](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
 >
 > **For Reviews:**
 >
-> - [Awaiting review](../../pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
-> - [Changes requested](../../pulls?q=is%3Apr+is%3Aopen+label%3Achanges-requested)
+> - [Awaiting review](https://github.com/%7B%7BORG_NAME%7D%7D/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
+> - [Changes requested](https://github.com/%7B%7BORG_NAME%7D%7D/.github/pulls?q=is%3Apr+is%3Aopen+label%3Achanges-requested)
 >
 > **For Monitoring:**
 >
-> - [Actions tab](../../actions) - workflow runs
-> - [Metrics report](../../docs/WORKFLOW_METRICS_REPORT.md) - daily stats
+> - [Actions tab](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions) -
+>   workflow runs
+> - Metrics report - daily stats
 >
 > **Demo:** \[Navigate through filters\]"
 
@@ -421,18 +421,18 @@ ______________________________________________________________________
 >
 > **For Everyone:**
 >
-> - [Workflow Design](../../docs/WORKFLOW_DESIGN.md) - Complete architecture
-> - [Visualization](../../docs/WORKFLOW_VISUALIZATION.md) - Flow diagrams
+> - [Workflow Design](WORKFLOW_DESIGN.md) - Complete architecture
+> - [Visualization](WORKFLOW_VISUALIZATION.md) - Flow diagrams
 >
 > **For Contributors:**
 >
-> - [Contributor Guide](../../docs/CONTRIBUTOR_WORKFLOW.md) - Step-by-step
+> - [Contributor Guide](CONTRIBUTOR_WORKFLOW.md) - Step-by-step
 > - [Contributing](../../CONTRIBUTING.md) - General guidelines
 >
 > **For Maintainers:**
 >
-> - [Maintainer Guide](../../docs/MAINTAINER_WORKFLOW.md) - Operations manual
-> - [Implementation Summary](../../docs/WORKFLOW_IMPLEMENTATION_SUMMARY.md) -
+> - [Maintainer Guide](MAINTAINER_WORKFLOW.md) - Operations manual
+> - [Implementation Summary](../reports/WORKFLOW_IMPLEMENTATION_SUMMARY.md) -
 >   Deployment
 >
 > **Bookmarks:** Save these links!"
