@@ -174,7 +174,7 @@ class TestMainFunction:
 
         assert result == 1
         captured = capsys.readouterr()
-        assert "Missing ai_framework/chatmodes" in captured.out
+        assert "Missing src/ai_framework/chatmodes" in captured.out
 
     def test_validates_valid_chatmodes(self, tmp_path, monkeypatch, capsys):
         """Test validates valid chatmodes successfully."""

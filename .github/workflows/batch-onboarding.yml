@@ -159,7 +159,7 @@ jobs:
         print(f'- **Total repositories:** {total}')
         print(f'- **Successful:** {successful}')
         print(f'- **Failed:** {failed}')
-        print(f'- **Mode:** ${{ github.event.inputs.dry_run && \"Dry Run\" || \"Live\" }}')
+        print(f'- **Mode:** ${{ github.event.inputs.dry_run == true && 'Dry Run' || 'Live' }}')
         print(f'')
 
         if failed > 0:

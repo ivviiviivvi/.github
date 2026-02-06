@@ -102,7 +102,7 @@ class TestMainFunction:
 
         assert result == 1
         captured = capsys.readouterr()
-        assert "Missing ai_framework/collections" in captured.out
+        assert "Missing src/ai_framework/collections" in captured.out
 
     def test_validates_valid_collections(self, tmp_path, monkeypatch, capsys):
         """Test validates valid collections successfully."""
