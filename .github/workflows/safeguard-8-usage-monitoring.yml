@@ -470,6 +470,7 @@ jobs:
         LOOKBACK_DAYS: ${{ steps.fetch_runs.outputs.lookback_days }}
 
     - name: Commit report to repository
+      continue-on-error: true
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"

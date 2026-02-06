@@ -9,30 +9,62 @@ from pathlib import Path
 COLLECTIONS_DIR = Path("src/ai_framework/collections")
 REQUIRED_KEYS = {"name", "description"}
 ALLOWED_TAGS: set[str] = set()
+_DELIMITER_RE = re.compile(r"^(?:---|_{5,})$")
+_KNOWN_KEYS = {"name", "description", "model", "tools", "tags", "updated"}
+_INLINE_KEY_RE = re.compile(r"\b(" + "|".join(sorted(_KNOWN_KEYS)) + r"):", re.IGNORECASE)
 
 
 def _parse_frontmatter(lines: list[str]) -> tuple[dict[str, str], int]:
-    if not lines or lines[0].strip() != "---":
+    if not lines or not _DELIMITER_RE.match(lines[0].strip()):
         return {}, -1
+    is_yaml = lines[0].strip() == "---"
+
+    if is_yaml:
+        # Standard YAML: require closing ---
+        end_index = -1
+        for i in range(1, len(lines)):
+            if lines[i].strip() == "---":
+                end_index = i
+                break
+        if end_index == -1:
+            return {}, -1
+        block = lines[1:end_index]
+        frontmatter: dict[str, str] = {}
+        for line in block:
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            if ":" in stripped:
+                key = stripped.split(":", 1)[0].strip()
+                if key:
+                    frontmatter.setdefault(key, "")
+        return frontmatter, end_index
+
+    # Concatenated format (______): find end at closing delimiter or heading
     end_index = -1
     for i in range(1, len(lines)):
-        if lines[i].strip() == "---":
+        stripped = lines[i].strip()
+        if _DELIMITER_RE.match(stripped):
+            end_index = i
+            break
+        if stripped.startswith("# ") and not stripped.startswith("## "):
             end_index = i
             break
     if end_index == -1:
-        return {}, -1
+        end_index = len(lines)
     block = lines[1:end_index]
-    frontmatter: dict[str, str] = {}
+    frontmatter = {}
     for line in block:
-        if not line.strip() or line.lstrip().startswith("#"):
+        cleaned = re.sub(r"^##\s+", "", line.strip())
+        if not cleaned:
             continue
-        if re.match(r"^[a-z0-9_-]+:\s*$", line):
-            key = line.split(":", 1)[0].strip()
-            frontmatter[key] = ""
-            continue
-        if ":" in line:
-            key = line.split(":", 1)[0].strip()
-            if key:
+        found = _INLINE_KEY_RE.findall(cleaned)
+        if found:
+            for key in found:
+                frontmatter.setdefault(key.lower(), "")
+        elif ":" in cleaned:
+            key = cleaned.split(":", 1)[0].strip()
+            if key and not key.startswith("#"):
                 frontmatter.setdefault(key, "")
     return frontmatter, end_index
 

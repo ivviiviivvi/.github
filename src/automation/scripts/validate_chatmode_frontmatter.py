@@ -8,14 +8,17 @@ from pathlib import Path
 
 CHATMODES_DIR = Path("src/ai_framework/chatmodes")
 REQUIRED_KEYS = {"name", "description", "tools"}
+_DELIMITER_RE = re.compile(r"^(?:---|_{5,})$")
+_KNOWN_KEYS = {"name", "description", "model", "tools", "tags", "updated"}
+_INLINE_KEY_RE = re.compile(r"\b(" + "|".join(sorted(_KNOWN_KEYS)) + r"):", re.IGNORECASE)
 
 
 def _parse_frontmatter(lines: list[str]) -> tuple[dict[str, str], int]:
-    if not lines or lines[0].strip() != "---":
+    if not lines or not _DELIMITER_RE.match(lines[0].strip()):
         return {}, -1
     end_index = -1
     for i in range(1, len(lines)):
-        if lines[i].strip() == "---":
+        if _DELIMITER_RE.match(lines[i].strip()):
             end_index = i
             break
     if end_index == -1:
@@ -25,11 +28,12 @@ def _parse_frontmatter(lines: list[str]) -> tuple[dict[str, str], int]:
     for line in block:
         if not line.strip() or line.lstrip().startswith("#"):
             continue
-        if re.match(r"^[a-z0-9_-]+:\s*$", line):
-            key = line.split(":", 1)[0].strip()
-            frontmatter[key] = ""
-            continue
-        if ":" in line:
+        # Extract all known keys from the line (handles concatenated keys)
+        found = _INLINE_KEY_RE.findall(line)
+        if found:
+            for key in found:
+                frontmatter.setdefault(key.lower(), "")
+        elif ":" in line:
             key = line.split(":", 1)[0].strip()
             if key:
                 frontmatter.setdefault(key, "")

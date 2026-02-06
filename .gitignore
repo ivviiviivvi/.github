@@ -76,6 +76,7 @@ coverage.xml
 # Runtime-generated files
 .github/incidents/
 .github/notifications/
+generated_workflows/
 
 # Local tool configuration
 .serena/

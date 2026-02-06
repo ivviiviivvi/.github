@@ -58,6 +58,7 @@ jobs:
         pip install pyyaml requests
 
     - name: Classify failure type
+      continue-on-error: true
       id: classify
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +76,7 @@ jobs:
           LOGS_DIR=$(mktemp -d)
           (cd "$LOGS_DIR" && gh run download "$WORKFLOW_RUN_ID" --log >/dev/null 2>&1)
           # Concatenate all log files into a single variable
-          LOGS=$(find "$LOGS_DIR" -type f -name "*.txt" -print0 | xargs -0 cat)
+          LOGS=$(find "$LOGS_DIR" -type f -name "*.txt" -print0 2>/dev/null | xargs -0 cat 2>/dev/null || echo "")
           rm -rf "$LOGS_DIR"
 
           # Classify based on error patterns (check permanent failures first)

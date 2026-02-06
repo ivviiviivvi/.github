@@ -24,7 +24,7 @@ class TestJulesJournalFormat:
 
     JULES_DIR = Path(".jules")
     JOURNAL_FILES = ["bolt.md", "palette.md", "sentinel.md"]
-    ENTRY_PATTERN = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s+-\s+\[(.+?)\]\s*$", re.MULTILINE)
+    ENTRY_PATTERN = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s+-\s+\\?\[(.+?)\\?\]\s*$", re.MULTILINE)
 
     def test_jules_directory_exists(self):
         """Verify .jules/ directory exists."""
@@ -92,7 +92,7 @@ class TestJulesJournalFormat:
 
             # Split by entry headers
             entries = re.split(
-                r"^##\s+\d{4}-\d{2}-\d{2}\s+-\s+\[.+?\]\s*$",
+                r"^##\s+\d{4}-\d{2}-\d{2}\s+-\s+\\?\[.+?\\?\]\s*$",
                 content,
                 flags=re.MULTILINE,
             )

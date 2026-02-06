@@ -142,9 +142,12 @@ jobs:
 
     - name: Generate summary
       if: always()
+      env:
+        RUN_MODE: ${{ github.event.inputs.dry_run == 'true' && 'Dry Run' || 'Live' }}
       run: |
         python -c "
         import json
+        import os
         import sys
 
         with open('onboarding_results.json', 'r') as f:
@@ -154,12 +157,13 @@ jobs:
         successful = sum(1 for r in results if r['success'])
         failed = total - successful
 
+        run_mode = os.environ.get('RUN_MODE', 'Unknown')
         print(f'## Batch Onboarding Summary')
         print(f'')
         print(f'- **Total repositories:** {total}')
         print(f'- **Successful:** {successful}')
         print(f'- **Failed:** {failed}')
-        print(f'- **Mode:** ${{ github.event.inputs.dry_run == true && 'Dry Run' || 'Live' }}')
+        print(f'- **Mode:** {run_mode}')
         print(f'')
 
         if failed > 0:

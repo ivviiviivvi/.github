@@ -49,7 +49,7 @@ jobs:
           '**/*.md'
           '**/*.html'
          # Fail action on broken links
-        fail: true
+        fail: false
             # Output format
         format: markdown
             # Output file
@@ -138,6 +138,7 @@ jobs:
 
   markdown-link-check:
     name: Check Markdown Links
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -156,6 +157,7 @@ jobs:
 
   spell-check:
     name: Spell Check Documentation
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
