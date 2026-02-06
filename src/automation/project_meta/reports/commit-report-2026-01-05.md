@@ -43,7 +43,7 @@ ff159a4 - 4444JPP, 4 days ago : docs: update repository statistics [skip ci]
 20f2063 - Copilot, 4 days ago : feat: Implement organization-wide GitHub best practices framework (#145)
 624d262 - Copilot, 5 days ago : Fix broken documentation links and optimize link checker config (#146)
 f27cee9 - Copilot, 5 days ago : Add comprehensive GitHub Copilot enhancement documentation (#144)
-cd9d45b - Copilot, 5 days ago : Fix indentation errors and remove unnecessary f-strings in ecosystem_visualizer.py (#143)
+cd9d45b - Copilot, 5 days ago : Fix indentation errors and remove unnecessary f-strings in org_health_visualizer.py (#143)
 c7c7d25 - Copilot, 5 days ago : Fix indentation inconsistencies in placeholder messages (#142)
 b2ab133 - Copilot, 5 days ago : Implement automated PR/dependency batching and bulk operations for all automated sources with enterprise-grade security and scalability (#141)
 07d4e93 - google-labs-jules[bot], 5 days ago : 🎨 Improve Dashboard Empty States & Fix Broken Links (#139)
@@ -53,7 +53,7 @@ ba0dbbd - google-labs-jules[bot], 5 days ago : 🛡️ Sentinel: Integrate Semgr
 3d9ceef - google-labs-jules[bot], 5 days ago : 🎨 Palette: Improved dashboard empty states for missing data (#137)
 3f67e07 - Copilot, 6 days ago : Add @copilot reviewer assignment to PR workflow automation (#135)
 4528185 - --4444-j--PP----, 7 days ago : Clear README.md content
-b569646 - Copilot, 7 days ago : Fix syntax error and missing import in ecosystem_visualizer.py (#134)
+b569646 - Copilot, 7 days ago : Fix syntax error and missing import in org_health_visualizer.py (#134)
 932bd06 - Copilot, 7 days ago : No changes required - comment was acknowledgment only (#133)
 6db742a - Copilot, 7 days ago : Centralize workflow path construction in EcosystemVisualizer (#131)
 11c25e5 - Copilot, 7 days ago : Fix dynamic relative path generation in ecosystem visualizer (#129)

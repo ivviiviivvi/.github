@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   audit-completeness:
-    uses: ivviiviivvi/.github/.github/workflows/bio-description-completions.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/bio-description-completions.yml@main'
     with:
       scope: ${{ inputs.scope || 'all' }}
       auto_fix: ${{ inputs.auto_fix || false }}

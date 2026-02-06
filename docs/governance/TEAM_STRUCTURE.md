@@ -11,7 +11,7 @@ describes the recommended team hierarchy and how to manage it.
 
 ## Recommended Team Hierarchy
 
-### Leadership Team (@ivviiviivvi/leadership)
+### Leadership Team (@{{ORG_NAME}}/leadership)
 
 **Purpose**: Executive oversight and strategic decisions
 
@@ -34,14 +34,14 @@ describes the recommended team hierarchy and how to manage it.
 **CODEOWNERS Patterns**:
 
 ```
-* @ivviiviivvi/leadership
-*.md @ivviiviivvi/leadership
-/docs/ @ivviiviivvi/leadership
+* @{{ORG_NAME}}/leadership
+*.md @{{ORG_NAME}}/leadership
+/docs/ @{{ORG_NAME}}/leadership
 ```
 
 ______________________________________________________________________
 
-### Engineering Team (@ivviiviivvi/engineering)
+### Engineering Team (@{{ORG_NAME}}/engineering)
 
 **Purpose**: Code development and technical implementation
 
@@ -64,18 +64,18 @@ ______________________________________________________________________
 **CODEOWNERS Patterns**:
 
 ```
-/src/ @ivviiviivvi/engineering
-*.py @ivviiviivvi/engineering
-*.js @ivviiviivvi/engineering
-*.ts @ivviiviivvi/engineering
-*.java @ivviiviivvi/engineering
-*.go @ivviiviivvi/engineering
-/docs/ @ivviiviivvi/engineering
+/src/ @{{ORG_NAME}}/engineering
+*.py @{{ORG_NAME}}/engineering
+*.js @{{ORG_NAME}}/engineering
+*.ts @{{ORG_NAME}}/engineering
+*.java @{{ORG_NAME}}/engineering
+*.go @{{ORG_NAME}}/engineering
+/docs/ @{{ORG_NAME}}/engineering
 ```
 
 ______________________________________________________________________
 
-### DevOps Team (@ivviiviivvi/devops)
+### DevOps Team (@{{ORG_NAME}}/devops)
 
 **Purpose**: Infrastructure, CI/CD, and deployment automation
 
@@ -101,18 +101,18 @@ configurations
 **CODEOWNERS Patterns**:
 
 ```
-/.github/workflows/ @ivviiviivvi/devops
-/infrastructure/ @ivviiviivvi/devops
-*.yml @ivviiviivvi/devops
-*.yaml @ivviiviivvi/devops
-Dockerfile @ivviiviivvi/devops
-docker-compose.yml @ivviiviivvi/devops
-.dockerignore @ivviiviivvi/devops
+/.github/workflows/ @{{ORG_NAME}}/devops
+/infrastructure/ @{{ORG_NAME}}/devops
+*.yml @{{ORG_NAME}}/devops
+*.yaml @{{ORG_NAME}}/devops
+Dockerfile @{{ORG_NAME}}/devops
+docker-compose.yml @{{ORG_NAME}}/devops
+.dockerignore @{{ORG_NAME}}/devops
 ```
 
 ______________________________________________________________________
 
-### Security Team (@ivviiviivvi/security)
+### Security Team (@{{ORG_NAME}}/security)
 
 **Purpose**: Security oversight and vulnerability management
 
@@ -137,16 +137,16 @@ on security policies
 **CODEOWNERS Patterns**:
 
 ```
-/SECURITY.md @ivviiviivvi/security
-/.github/SECURITY.md @ivviiviivvi/security
-/.github/workflows/codeql*.yml @ivviiviivvi/security
-/.github/workflows/security-*.yml @ivviiviivvi/security
-/.github/workflows/scan-*.yml @ivviiviivvi/security
+/SECURITY.md @{{ORG_NAME}}/security
+/.github/SECURITY.md @{{ORG_NAME}}/security
+/.github/workflows/codeql*.yml @{{ORG_NAME}}/security
+/.github/workflows/security-*.yml @{{ORG_NAME}}/security
+/.github/workflows/scan-*.yml @{{ORG_NAME}}/security
 ```
 
 ______________________________________________________________________
 
-### QA Team (@ivviiviivvi/qa) \[Optional\]
+### QA Team (@{{ORG_NAME}}/qa) \[Optional\]
 
 **Purpose**: Quality assurance and testing
 
@@ -169,14 +169,14 @@ ______________________________________________________________________
 **CODEOWNERS Patterns**:
 
 ```
-/tests/ @ivviiviivvi/qa
-/e2e/ @ivviiviivvi/qa
-*test*.py @ivviiviivvi/qa
+/tests/ @{{ORG_NAME}}/qa
+/e2e/ @{{ORG_NAME}}/qa
+*test*.py @{{ORG_NAME}}/qa
 ```
 
 ______________________________________________________________________
 
-### Frontend Team (@ivviiviivvi/frontend) \[Optional\]
+### Frontend Team (@{{ORG_NAME}}/frontend) \[Optional\]
 
 **Purpose**: Frontend development and UI/UX implementation
 
@@ -198,17 +198,17 @@ ______________________________________________________________________
 **CODEOWNERS Patterns**:
 
 ```
-/frontend/ @ivviiviivvi/frontend
-/ui/ @ivviiviivvi/frontend
-*.tsx @ivviiviivvi/frontend
-*.jsx @ivviiviivvi/frontend
-*.css @ivviiviivvi/frontend
-*.scss @ivviiviivvi/frontend
+/frontend/ @{{ORG_NAME}}/frontend
+/ui/ @{{ORG_NAME}}/frontend
+*.tsx @{{ORG_NAME}}/frontend
+*.jsx @{{ORG_NAME}}/frontend
+*.css @{{ORG_NAME}}/frontend
+*.scss @{{ORG_NAME}}/frontend
 ```
 
 ______________________________________________________________________
 
-### Backend Team (@ivviiviivvi/backend) \[Optional\]
+### Backend Team (@{{ORG_NAME}}/backend) \[Optional\]
 
 **Purpose**: Backend development and API implementation
 
@@ -230,9 +230,9 @@ ______________________________________________________________________
 **CODEOWNERS Patterns**:
 
 ```
-/backend/ @ivviiviivvi/backend
-/api/ @ivviiviivvi/backend
-/services/ @ivviiviivvi/backend
+/backend/ @{{ORG_NAME}}/backend
+/api/ @{{ORG_NAME}}/backend
+/services/ @{{ORG_NAME}}/backend
 ```
 
 ______________________________________________________________________

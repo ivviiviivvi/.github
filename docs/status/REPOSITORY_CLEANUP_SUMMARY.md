@@ -195,10 +195,11 @@ grep -r "DEPLOY_PHASE" --include="*.md" --include="*.yml" --include="*.sh"
 
 ## 📚 Related Documentation
 
-- [Archive README](archive/README.md) - Complete archive documentation
-- [Documentation Index](docs/INDEX.md) - All active documentation
-- [Contributing Guide](docs/governance/CONTRIBUTING.md) - How to contribute
-- [Development Setup](docs/DEVELOPMENT_ENVIRONMENT_SETUP.md) - Environment setup
+- [Archive README](../../README.md) - Complete archive documentation
+- [Documentation Index](../INDEX.md) - All active documentation
+- [Contributing Guide](../governance/CONTRIBUTING.md) - How to contribute
+- [Development Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md) - Environment
+  setup
 
 ## ✅ Verification
 

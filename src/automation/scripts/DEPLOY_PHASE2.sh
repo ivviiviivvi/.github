@@ -17,11 +17,11 @@ echo ""
 
 # Phase 2 repositories
 REPOS=(
-  "ivviiviivvi/intelligent-artifice-ark"
-  "ivviiviivvi/render-second-amendment"
-  "ivviiviivvi/a-mavs-olevm"
-  "ivviiviivvi/a-recursive-root"
-  "ivviiviivvi/collective-persona-operations"
+  "{{ORG_NAME}}/intelligent-artifice-ark"
+  "{{ORG_NAME}}/render-second-amendment"
+  "{{ORG_NAME}}/a-mavs-olevm"
+  "{{ORG_NAME}}/a-recursive-root"
+  "{{ORG_NAME}}/collective-persona-operations"
 )
 
 # Workflow templates (with SHA-pinned actions)

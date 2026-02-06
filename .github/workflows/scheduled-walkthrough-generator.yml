@@ -213,7 +213,7 @@ jobs:
       uses: NBprojekt/gource-action@57256d303c5a9a5e72ed92ba13e3e83c5ec8b257  # ratchet:NBprojekt/gource-action@v1.3.0
       with:
         gource_title: ${{ matrix.repo.name }}
-        gource_resolution: '1080p'
+        gource_resolution: 1080p
         gource_fps: '60'
         gource_seconds_per_day: '0.5'
         gource_auto_skip_seconds: '1'

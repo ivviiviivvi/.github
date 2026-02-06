@@ -894,14 +894,14 @@ ______________________________________________________________________
 **Descriptive Links**:
 
 ```
-Read the [installation guide](../WORKSPACE_QUICK_START.md).
+Read the [installation guide](WORKSPACE_QUICK_START.md).
 ```
 
 **Avoid**:
 
 ```
-Click [here](../WORKSPACE_QUICK_START.md).
-Read more [here](../WORKSPACE_QUICK_START.md).
+Click [here](WORKSPACE_QUICK_START.md).
+Read more [here](WORKSPACE_QUICK_START.md).
 ```
 
 ### Color

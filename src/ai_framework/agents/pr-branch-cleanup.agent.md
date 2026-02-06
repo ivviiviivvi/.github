@@ -608,9 +608,9 @@ ______________________________________________________________________
 ### Getting Help
 
 - **Documentation**: See
-  [Branch Lifecycle Management](../docs/workflows/AI_RAPID_WORKFLOW.md)
+  [Branch Lifecycle Management](../../../docs/workflows/AI_RAPID_WORKFLOW.md)
 - **Policy Reference**:
-  [Logical Branch Policy](../.github/logical-branch-policy.md)
+  [Logical Branch Policy](../../../.github/logical-branch-policy.md)
 - **Issues**: Report problems in repository issues with `agent:deep-cleaner`
   label
 - **Discussions**: Share feedback in GitHub Discussions
@@ -639,5 +639,5 @@ ______________________________________________________________________
 
 _This agent follows the ivi374forivi organization's standards for code quality,
 security, and community health. For questions or support, see our
-[Contributing Guidelines](../CONTRIBUTING.md) and
-[Code of Conduct](../CODE_OF_CONDUCT.md)._
+[Contributing Guidelines](../../../docs/governance/CONTRIBUTING.md) and
+[Code of Conduct](../../../docs/governance/CODE_OF_CONDUCT.md)._

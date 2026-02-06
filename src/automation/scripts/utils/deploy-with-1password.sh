@@ -104,7 +104,7 @@ if [[ "$1" == "--dry-run" ]]; then
 fi
 
 # Get organization name
-ORG_NAME="${ORG_NAME:-ivviiviivvi}"
+ORG_NAME="${ORG_NAME:-{{ORG_NAME}}}"
 log_info "Target organization: $ORG_NAME"
 
 # Confirm before proceeding (unless dry run)

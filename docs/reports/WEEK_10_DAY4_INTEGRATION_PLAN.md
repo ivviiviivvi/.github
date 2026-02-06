@@ -33,7 +33,7 @@ For integration testing, we'll use controlled test repositories:
 
 **Primary Test Repository**:
 
-- `ivviiviivvi/.github` (this repository) - already used in Day 3
+- `{{ORG_NAME}}/.github` (this repository) - already used in Day 3
 
 **Additional Test Repositories** (to be added):
 
@@ -90,13 +90,13 @@ work correctly.
 
 ```bash
 # Check workflows deployed
-gh api repos/ivviiviivvi/.github/actions/workflows | jq '.workflows[] | select(.path | contains("batch")) | {name, path}'
+gh api repos/{{ORG_NAME}}/.github/actions/workflows | jq '.workflows[] | select(.path | contains("batch")) | {name, path}'
 
 # Check labels created
-gh label list --repo ivviiviivvi/.github | grep "Test:"
+gh label list --repo {{ORG_NAME}}/.github | grep "Test:"
 
 # Check branch protection
-gh api repos/ivviiviivvi/.github/branches/test-branch/protection 2>/dev/null || echo "Not protected"
+gh api repos/{{ORG_NAME}}/.github/branches/test-branch/protection 2>/dev/null || echo "Not protected"
 ```
 
 #### Scenario 2: Multiple Repositories Parallel Execution

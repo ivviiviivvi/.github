@@ -113,7 +113,7 @@ Configure automatic walkthrough generation on each release:
 ```yaml
 # Add to your .github/workflows/release.yml
 - name: Generate Walkthrough
-  uses: ivviiviivvi/.github/walkthrough-action@v1
+  uses: {{ORG_NAME}}/.github/walkthrough-action@v1
   with:
     app-url: https://your-app.com
     duration: 5
@@ -229,8 +229,8 @@ VOICE_CLONE_API_KEY   # For custom voice cloning
 STORAGE_API_KEY       # For long-term artifact storage
 ```
 
-📚 **Complete Setup Guide**: See [SECRETS_SETUP.md](./SECRETS_SETUP.md) for
-detailed instructions.
+📚 **Complete Setup Guide**: See [SECRETS_SETUP.md](../guides/SECRETS_SETUP.md)
+for detailed instructions.
 
 ## 🐛 Troubleshooting
 
@@ -238,7 +238,7 @@ detailed instructions.
 
 **Issue**: Workflow fails with authentication error **Solution**: Verify your
 `GITHUB_TOKEN` has proper permissions. See
-[SECRETS_SETUP.md](./SECRETS_SETUP.md#troubleshooting).
+[SECRETS_SETUP.md](../guides/SECRETS_SETUP.md#troubleshooting).
 
 **Issue**: Video quality is poor **Solution**: Ensure your application is fully
 loaded before recording starts. Adjust the `initial-delay` parameter.
@@ -257,7 +257,7 @@ Increase the `timeout-minutes` in your workflow configuration.
 
 - 📖 **Documentation**: Check our [comprehensive guides](./)
 - 💬 **Discussions**: Ask questions in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛 **Bug Reports**: File an issue using our bug report template
 - 📧 **Direct Support**: Contact @4444JPP for urgent issues
 
@@ -298,16 +298,16 @@ Increase the `timeout-minutes` in your workflow configuration.
 - Monitor API usage for optional services
 
 📚 **Security Guide**: See
-[SECRETS_SETUP.md - Security Best Practices](./SECRETS_SETUP.md#security-best-practices)
+[SECRETS_SETUP.md - Security Best Practices](../guides/SECRETS_SETUP.md#security-best-practices)
 
 ## 📚 Documentation Resources
 
 - 📋
-  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
-- 🔐 [Secrets Setup Guide](./SECRETS_SETUP.md)
-- 🏗️ [Architecture Documentation](./AI_IMPLEMENTATION_GUIDE.md)
-- 🤝 [Contributing Guidelines](./CONTRIBUTING.md)
-- 📜 [Code of Conduct](./CODE_OF_CONDUCT.md)
+  [Walkthrough Request Template](../../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
+- 🔐 [Secrets Setup Guide](../guides/SECRETS_SETUP.md)
+- 🏗️ [Architecture Documentation](../guides/AI_IMPLEMENTATION_GUIDE.md)
+- 🤝 [Contributing Guidelines](../governance/CONTRIBUTING.md)
+- 📜 [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
 
 ## 🎯 Use Cases & Examples
 
@@ -349,7 +349,8 @@ We want to hear from you!
 
 1. **Comment below** with your feedback
 1. **Submit feature requests** using our issue template
-1. **Contribute** to the codebase (see [CONTRIBUTING.md](./CONTRIBUTING.md))
+1. **Contribute** to the codebase (see
+   [CONTRIBUTING.md](../governance/CONTRIBUTING.md))
 1. **Share examples** of walkthroughs you've generated
 1. **Help others** by answering questions in discussions
 
@@ -364,7 +365,7 @@ contributors and early testers!
 Have questions or need help getting started?
 
 - 💬 **Start a discussion** in the
-  [Discussions tab](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussions tab](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 📧 **Contact** @4444JPP for direct support
 - 🐛 **Report issues** using the bug report template
 - 📖 **Check the docs** at [our documentation hub](./)
@@ -374,8 +375,8 @@ ______________________________________________________________________
 **Ready to create your first walkthrough?**
 
 👉
-[Create a Walkthrough Request Issue](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
-👉 [Read the Setup Guide](./SECRETS_SETUP.md) 👉
-[Join the Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[Create a Walkthrough Request Issue](../../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
+👉 [Read the Setup Guide](../guides/SECRETS_SETUP.md) 👉
+[Join the Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 Happy walkthrough generating! 🎬✨

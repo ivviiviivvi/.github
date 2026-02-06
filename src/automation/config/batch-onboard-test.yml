@@ -5,10 +5,10 @@
 
 # Test repositories (using actual .github repo and mock examples)
 repositories:
-- ivviiviivvi/.github
+- '{{ORG_NAME}}/.github'
     # Add 2-4 additional test repositories here for parallel testing
-    # - "ivviiviivvi/test-repo-1"
-    # - "ivviiviivvi/test-repo-2"
+    # - '{{ORG_NAME}}/test-repo-1'
+    # - '{{ORG_NAME}}/test-repo-2'
 
 # Test workflow deployment (minimal set for testing)
 # Using empty list for initial testing - add workflows after validation

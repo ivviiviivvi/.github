@@ -7,7 +7,7 @@ Discussion in the Ivviiviivvi organization.
 
 1. **Navigate to Organization Discussions**
 
-   - Go to: https://github.com/orgs/ivviiviivvi/discussions
+   - Go to: https://github.com/orgs/{{ORG_NAME}}/discussions
 
 1. **Create New Discussion**
 
@@ -38,7 +38,7 @@ cd /path/to/.github
 gh api \
   --method POST \
   -H "Accept: application/vnd.github+json" \
-  /orgs/ivviiviivvi/discussions \
+  /orgs/{{ORG_NAME}}/discussions \
   -f title='🎬 Introducing: Autonomous Walkthrough Generation for All Repos' \
   -f body="$(cat docs/WALKTHROUGH_ANNOUNCEMENT.md)" \
   -f category_id='<CATEGORY_ID_FOR_ANNOUNCEMENTS>'
@@ -47,7 +47,7 @@ gh api \
 To find the category ID:
 
 ```bash
-gh api /orgs/ivviiviivvi/discussion-categories
+gh api /orgs/{{ORG_NAME}}/discussion-categories
 ```
 
 ## After Posting

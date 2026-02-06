@@ -41,9 +41,9 @@ ______________________________________________________________________
 
 **Repositories**:
 
-1. `ivviiviivvi/theoretical-specifications-first` (Score: 87)
-1. `ivviiviivvi/system-governance-framework` (Score: 69)
-1. `ivviiviivvi/trade-perpetual-future` (Score: 63)
+1. `{{ORG_NAME}}/theoretical-specifications-first` (Score: 87)
+1. `{{ORG_NAME}}/system-governance-framework` (Score: 69)
+1. `{{ORG_NAME}}/trade-perpetual-future` (Score: 63)
 
 **Configuration**: `automation/config/batch-onboard-week11-phase1-pilot.yml`
 
@@ -61,7 +61,7 @@ ______________________________________________________________________
 
 - **Solution**: Manual label deployment via Web UI (15 min)
 - **Guide**:
-  [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
+  [WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
 - **Quick Ref**:
   [WEEK_11_NEXT_STEPS_QUICK_REF.md](WEEK_11_NEXT_STEPS_QUICK_REF.md)
 
@@ -77,11 +77,11 @@ ______________________________________________________________________
 
 **Repositories**:
 
-1. `ivviiviivvi/intelligent-artifice-ark`
-1. `ivviiviivvi/render-second-amendment`
-1. `ivviiviivvi/a-mavs-olevm`
-1. `ivviiviivvi/a-recursive-root`
-1. `ivviiviivvi/collective-persona-operations`
+1. `{{ORG_NAME}}/intelligent-artifice-ark`
+1. `{{ORG_NAME}}/render-second-amendment`
+1. `{{ORG_NAME}}/a-mavs-olevm`
+1. `{{ORG_NAME}}/a-recursive-root`
+1. `{{ORG_NAME}}/collective-persona-operations`
 
 **Configuration**: `automation/config/batch-onboard-week11-phase2-expansion.yml`
 
@@ -113,10 +113,10 @@ ______________________________________________________________________
 
 **Repositories**:
 
-1. `ivviiviivvi/4-ivi374-F0Rivi4`
-1. `ivviiviivvi/a-context7`
-1. `ivviiviivvi/reverse-engine-recursive-run`
-1. `ivviiviivvi/universal-node-network`
+1. `{{ORG_NAME}}/4-ivi374-F0Rivi4`
+1. `{{ORG_NAME}}/a-context7`
+1. `{{ORG_NAME}}/reverse-engine-recursive-run`
+1. `{{ORG_NAME}}/universal-node-network`
 
 **Configuration**: `automation/config/batch-onboard-week11-phase3-final.yml`
 
@@ -476,7 +476,7 @@ python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.
 - 🎯 Exit codes for scripting integration
 
 **Documentation**:
-[automation/scripts/README_VALIDATION.md](../automation/scripts/README_VALIDATION.md)
+[automation/scripts/README_VALIDATION.md](../../src/automation/scripts/README_VALIDATION.md)
 
 This tool can:
 

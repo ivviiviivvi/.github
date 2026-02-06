@@ -54,7 +54,7 @@
   https://{org}.github.io/.github\` (URLError: \<urlopen error \[Errno -2\] Name
   or service not known>)
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md:
-  https://github.com/ivviiviivvi/.github/pull/[NUMBER (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/pull/[NUMBER (HTTPError 404)
 - /workspace/docs/DRAFT_TO_READY_AUTOMATION_FIX.md: https://github.com/${{
   (HTTPError 404)
 - /workspace/docs/MCP_SERVER_SETUP.md: https://your-server.example.com/mcp

@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [$default-branch]
   schedule:
-    - cron: '0 6 * * 1'
+  - cron: 0 6 * * 1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,7 +19,7 @@ permissions:
 jobs:
   security:
     name: Security Scan
-    uses: ivviiviivvi/.github/.github/workflows/reusable/security-scanning.yml@main
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main'
     with:
       scan-type: all
       severity-threshold: MEDIUM

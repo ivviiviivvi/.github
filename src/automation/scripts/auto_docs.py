@@ -16,13 +16,13 @@ Features:
 
 Usage:
     # Generate API docs from source directory
-    python scripts/auto-docs.py --src-dir src --output-dir docs/api
+    python scripts/auto_docs.py --src-dir src --output-dir docs/api
 
     # Update README with module summary
-    python scripts/auto-docs.py --src-dir src --update-readme
+    python scripts/auto_docs.py --src-dir src --update-readme
 
     # Generate docs and update README
-    python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
+    python scripts/auto_docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
 
 Requirements:
     Python 3.11+
@@ -494,13 +494,13 @@ def main() -> None:
         epilog="""
 Examples:
   # Generate API docs
-  python scripts/auto-docs.py --src-dir src --output-dir docs/api
+  python scripts/auto_docs.py --src-dir src --output-dir docs/api
 
   # Update README
-  python scripts/auto-docs.py --src-dir src --update-readme
+  python scripts/auto_docs.py --src-dir src --update-readme
 
   # Both
-  python scripts/auto-docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
+  python scripts/auto_docs.py --src-dir src --output-dir docs/api --update-readme  # noqa: E501
         """,
     )
 

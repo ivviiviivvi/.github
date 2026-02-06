@@ -702,8 +702,7 @@ ______________________________________________________________________
 - [MONTH2_MASTER_PLAN.md](MONTH2_MASTER_PLAN.md) - This document
 - [WEEK5_COMPLETION_SUMMARY.md](WEEK5_COMPLETION_SUMMARY.md) - Week 5
   deliverables
-- [WEEK6_REPOSITORY_EXPANSION_GUIDE.md](WEEK6_REPOSITORY_EXPANSION_GUIDE.md) -
-  Week 6 strategy
+- WEEK6_REPOSITORY_EXPANSION_GUIDE.md - Week 6 strategy
 - [WEEK7_8_ENHANCEMENT_PLAN.md](WEEK7_8_ENHANCEMENT_PLAN.md) - Weeks 7-8 roadmap
 
 ### Implementation Guides
@@ -712,17 +711,17 @@ ______________________________________________________________________
   integration deployment
 - [WEEK6_DEPLOYMENT_CHECKLIST.md](WEEK6_DEPLOYMENT_CHECKLIST.md) - Pilot repo
   deployment
-- [WEEK6_IMPLEMENTATION_GUIDE.md](WEEK6_IMPLEMENTATION_GUIDE.md) - Repository
-  expansion guide
-- [PRODUCTION_WORKFLOW_INTEGRATION.md](PRODUCTION_WORKFLOW_INTEGRATION.md) -
-  Integration patterns
+- [WEEK6_IMPLEMENTATION_GUIDE.md](../guides/WEEK6_IMPLEMENTATION_GUIDE.md) -
+  Repository expansion guide
+- [PRODUCTION_WORKFLOW_INTEGRATION.md](../workflows/PRODUCTION_WORKFLOW_INTEGRATION.md)
+  \- Integration patterns
 
 ### Configuration Guides
 
-- [SLACK_INTEGRATION_CONFIGURATION.md](SLACK_INTEGRATION_CONFIGURATION.md) -
-  Slack setup
-- [SLACK_INTEGRATION_TRAINING.md](SLACK_INTEGRATION_TRAINING.md) - Training
-  materials
+- [SLACK_INTEGRATION_CONFIGURATION.md](../guides/SLACK_INTEGRATION_CONFIGURATION.md)
+  \- Slack setup
+- [SLACK_INTEGRATION_TRAINING.md](../guides/SLACK_INTEGRATION_TRAINING.md) -
+  Training materials
 
 ### Code and Scripts
 
@@ -736,7 +735,7 @@ ______________________________________________________________________
 
 ### Month 1 Reference
 
-- [MONTH1_COMPLETION_REPORT.md](reports/month1-completion.md) - Month 1 results
+- MONTH1_COMPLETION_REPORT.md - Month 1 results
 - [DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md) - Deployment history
 - [FINAL_PROJECT_SUMMARY.md](FINAL_PROJECT_SUMMARY.md) - Month 1 summary
 

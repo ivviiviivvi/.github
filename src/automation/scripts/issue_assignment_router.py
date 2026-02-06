@@ -9,7 +9,7 @@ Optimizes issue and PR assignment using multi-factor scoring:
 - Performance: Success rate and quality metrics
 
 Usage:
-    python intelligent_routing.py --owner ORG --repo REPO --issue ISSUE_NUMBER
+    python issue_assignment_router.py --owner ORG --repo REPO --issue ISSUE_NUMBER
 
 Environment Variables:
     GITHUB_TOKEN: GitHub API token with repo access
@@ -617,7 +617,7 @@ def main():
         config_loader = ConfigLoader()
         try:
             config_dict = config_loader.load("routing.yml")
-            config = RoutingConfig(**config_dict.get("intelligent_routing", {}))
+            config = RoutingConfig(**config_dict.get("issue_assignment_router", {}))
         except FileNotFoundError:
             logger.warning("No routing config found, using defaults")
             config = RoutingConfig()

@@ -48,7 +48,7 @@
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md: ./docs/WALKTHROUGH_GUIDE.md
   (missing: /workspace/docs/docs/WALKTHROUGH_GUIDE.md)
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
-  https://ivviiviivvi.github.io/.github (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github (HTTPError 404)
 - /workspace/docs/BRANCH_PROTECTION.md:
   https://api.github.com/repos/OWNER/REPO/branches/main/protection (HTTPError
   401\)
@@ -73,7 +73,7 @@
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md: ./docs/WALKTHROUGH_GUIDE.md
   (missing: /workspace/docs/docs/WALKTHROUGH_GUIDE.md)
 - /workspace/docs/DEPLOYMENT_ANNOUNCEMENT.md:
-  https://ivviiviivvi.github.io/.github (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github (HTTPError 404)
 - /workspace/docs/DEVELOPMENT_ENVIRONMENT_SETUP.md: ../.gitconfig (missing:
   /workspace/docs/../.gitconfig)
 - /workspace/docs/DISCUSSION_GUIDE.md: COMMUNITY_MANAGEMENT.md (missing:
@@ -88,26 +88,28 @@
   https://generativelanguage.googleapis.com (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://github.com/4444JPP (HTTPError
   404\)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://ivviiviivvi.github.io/.github/
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md:
-  https://ivviiviivvi.github.io/.github/_data/api/walkthroughs.json (HTTPError
+  https://{{ORG_NAME}}.github.io/.github/\_data/api/walkthroughs.json (HTTPError
   404\)
-- /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.ivviiviivvi.dev
+- /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.{{ORG_NAME}}.dev
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/ISSUE_TAXONOMY.md: PROJECT_PLANNING.md (missing:
   /workspace/docs/PROJECT_PLANNING.md)
-- /workspace/docs/MOUTHPIECE_README.md: chatmodes/mouthpiece.chatmode.md
-  (missing: /workspace/docs/chatmodes/mouthpiece.chatmode.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/MOUTHPIECE_SYSTEM.md (missing:
-  /workspace/docs/docs/MOUTHPIECE_SYSTEM.md)
-- /workspace/docs/MOUTHPIECE_README.md: docs/mouthpiece-examples.md (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
+  /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
+- /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
-- /workspace/docs/MOUTHPIECE_README.md: prompts/mouthpiece-transform.prompt.md
+- /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/MOUTHPIECE_README.md: scripts/mouthpiece_filter.py (missing:
-  /workspace/docs/scripts/mouthpiece_filter.py)
-- /workspace/docs/MOUTHPIECE_SYSTEM.md: ../CONTRIBUTING.md (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  scripts/natural_language_prompt_filter.py (missing:
+  /workspace/docs/scripts/natural_language_prompt_filter.py)
+- /workspace/docs/NLP_FILTER_SYSTEM.md: ../CONTRIBUTING.md (missing:
   /workspace/docs/../CONTRIBUTING.md)
 - /workspace/docs/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md:
   .github/project-templates/bug-triage.json (missing:
@@ -250,9 +252,9 @@
 - /workspace/docs/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md: ../SECURITY.md
   (missing: /workspace/docs/../SECURITY.md)
 - /workspace/docs/\_data/app-deployments.yml:
-  https://ivviiviivvi.github.io/example-app (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/example-app (HTTPError 404)
 - /workspace/docs/\_data/walkthroughs.yml:
-  https://github.com/ivviiviivvi/example-repo (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/example-repo (HTTPError 404)
 - /workspace/docs/architecture/AGENTSPHERE_GITHUB_PAGES_IMPLEMENTATION.md:
   docs/AGENTSPHERE_SETUP.md (missing:
   /workspace/docs/architecture/docs/AGENTSPHERE_SETUP.md)
@@ -264,11 +266,11 @@
 - /workspace/docs/architecture/AI_CODE_INTELLIGENCE.md:
   https://github.com/user/repo (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io (HTTPError 404)
+  https://{{ORG_NAME}}.github.io (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io/.github/apps/my-react-app (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github/apps/my-react-app (HTTPError 404)
 - /workspace/docs/architecture/AUTONOMOUS_ECOSYSTEM_ARCHITECTURE.md:
-  https://ivviiviivvi.github.io/.github/apps/my-react-app/ (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github/apps/my-react-app/ (HTTPError 404)
 - /workspace/docs/automation/PR_AUTOMATION.md: BRANCH_PROTECTION.md (missing:
   /workspace/docs/automation/BRANCH_PROTECTION.md)
 - /workspace/docs/automation/PR_AUTOMATION.md: CONTRIBUTING.md (missing:
@@ -320,21 +322,21 @@
   /workspace/docs/governance/docs/troubleshooting.md)
 - /workspace/docs/governance/SUPPORT.md: examples/ (missing:
   /workspace/docs/governance/examples)
-- /workspace/docs/governance/SUPPORT.md: https://cookbook.ivviiviivvi.com
+- /workspace/docs/governance/SUPPORT.md: https://cookbook.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/awesome-ivviiviivvi (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}} (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-a (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/project-a (HTTPError 404)
 - /workspace/docs/governance/SUPPORT.md:
-  https://github.com/ivviiviivvi/project-b (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://ivviiviivvi.com/support
+  https://github.com/{{ORG_NAME}}/project-b (HTTPError 404)
+- /workspace/docs/governance/SUPPORT.md: https://{{ORG_NAME}}.com/support
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/governance/SUPPORT.md:
-  https://linkedin.com/company/ivviiviivvi (HTTPError 404)
-- /workspace/docs/governance/SUPPORT.md: https://tutorials.ivviiviivvi.com
+  https://linkedin.com/company/{{ORG_NAME}} (HTTPError 404)
+- /workspace/docs/governance/SUPPORT.md: https://tutorials.{{ORG_NAME}}.com
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
-- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@ivviiviivvi
+- /workspace/docs/governance/SUPPORT.md: https://youtube.com/@{{ORG_NAME}}
   (HTTPError 404)
 - /workspace/docs/guides/BEST_PRACTICES.md: https://github.com/ivi374forivi
   (HTTPError 404)
@@ -355,7 +357,7 @@
   ../../ISSUE_TEMPLATE/ (missing: /workspace/docs/guides/../../ISSUE_TEMPLATE)
 - /workspace/docs/guides/BEST_PRACTICES_QUICK_REFERENCE.md:
   https://github.com/org/cache-examples (HTTPError 404)
-- /workspace/docs/guides/CLAUDE.md: https://github.com/ivviiviivvi/new-repo.git
+- /workspace/docs/guides/CLAUDE.md: https://github.com/{{ORG_NAME}}/new-repo.git
   (HTTPError 404)
 - /workspace/docs/guides/ECOSYSTEM_README.md: .github/docs/AGENTSPHERE_SETUP.md
   (missing: /workspace/docs/guides/.github/docs/AGENTSPHERE_SETUP.md)
@@ -364,10 +366,10 @@
 - /workspace/docs/guides/ECOSYSTEM_README.md:
   .github/docs/LIVE_DEPLOYMENT_GUIDE.md (missing:
   /workspace/docs/guides/.github/docs/LIVE_DEPLOYMENT_GUIDE.md)
-- /workspace/docs/guides/ECOSYSTEM_README.md: https://ivviiviivvi.github.io
+- /workspace/docs/guides/ECOSYSTEM_README.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
 - /workspace/docs/guides/ECOSYSTEM_README.md:
-  https://ivviiviivvi.github.io/react-app (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/react-app (HTTPError 404)
 - /workspace/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md:
   ../../ISSUE_TEMPLATE/ (missing: /workspace/docs/guides/../../ISSUE_TEMPLATE)
 - /workspace/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md:
@@ -427,10 +429,10 @@
 - /workspace/docs/guides/STYLE_GUIDE.md: screenshot.png (missing:
   /workspace/docs/guides/screenshot.png)
 - /workspace/docs/guides/WORKFLOW_DIAGRAM.md:
-  https://agentsphere.dev/ivviiviivvi/ (HTTPError 404)
-- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://ivviiviivvi.github.io
+  https://agentsphere.dev/{{ORG_NAME}}/ (HTTPError 404)
+- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
-- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://ivviiviivvi.github.io/
+- /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://{{ORG_NAME}}.github.io/
   (HTTPError 404)
 - /workspace/docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md: ./CODEOWNERS (missing:
   /workspace/docs/guides/CODEOWNERS)
@@ -474,13 +476,13 @@
 - /workspace/docs/guides/examples-and-anti-patterns.md:
   https://github.com/org/repo/issues/new (HTTPError 404)
 - /workspace/docs/guides/monitoring.md:
-  https://github.com/ivviiviivvi/.github/actions/runs/123456789 (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/actions/runs/123456789 (HTTPError 404)
 - /workspace/docs/guides/monitoring.md:
-  https://github.com/ivviiviivvi/.github/tree/main/metrics (HTTPError 404)
+  https://github.com/{{ORG_NAME}}/.github/tree/main/metrics (HTTPError 404)
 - /workspace/docs/guides/monitoring.md:
-  https://ivviiviivvi.github.io/.github/metrics-dashboard.html (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github/metrics-dashboard.html (HTTPError 404)
 - /workspace/docs/guides/monitoring.md:
-  https://raw.githubusercontent.com/ivviiviivvi/.github/main/metrics/baseline-metrics.json
+  https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/baseline-metrics.json
   (HTTPError 404)
 - /workspace/docs/guides/testing-best-practices.md: ../CLEANUP_ROADMAP.md
   (missing: /workspace/docs/guides/../CLEANUP_ROADMAP.md)

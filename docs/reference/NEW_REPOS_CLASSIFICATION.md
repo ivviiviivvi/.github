@@ -38,7 +38,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ⬜ **ivviiviivvi (Theory)** - If it's architectural/conceptual model
+- ⬜ **{{ORG_NAME}} (Theory)** - If it's architectural/conceptual model
 - ⬜ **labores-profani-crux (Commerce)** - If it's implementation for
   productization
 - ⬜ **Stay Personal** - If still experimental
@@ -66,7 +66,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ✅ **ivviiviivvi (Theory)** - Ontological convention, symbolic nomenclature
+- ✅ **{{ORG_NAME}} (Theory)** - Ontological convention, symbolic nomenclature
 
 **Your Decision:**
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -91,7 +91,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ⬜ **ivviiviivvi (Theory)** - If it's linguistic theory/ontology
+- ⬜ **{{ORG_NAME}} (Theory)** - If it's linguistic theory/ontology
 - ⬜ **Stay Personal** - If it's experimental/incomplete
 - ⚠️ **Need to inspect** - Size suggests significant content
 
@@ -169,7 +169,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ✅ **ivviiviivvi (Theory)** - Philosophical ontology/morphology
+- ✅ **{{ORG_NAME}} (Theory)** - Philosophical ontology/morphology
 
 **Your Decision:**
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -208,7 +208,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ⬜ **ivviiviivvi (Theory)** - If it's the conceptual "OS"
+- ⬜ **{{ORG_NAME}} (Theory)** - If it's the conceptual "OS"
 - ⬜ **omni-dromenon-machina (Art)** - If it's ritual/performance infrastructure
 - ⬜ **Both** - Theory provides model, Art enacts it (requires orchestration)
 
@@ -236,7 +236,7 @@ ______________________________________________________________________
 
 **Suggested Classification:**
 
-- ✅ **ivviiviivvi (Theory)** - Alchemical/symbolic framework
+- ✅ **{{ORG_NAME}} (Theory)** - Alchemical/symbolic framework
 
 **Your Decision:**
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -366,7 +366,7 @@ ______________________________________________________________________
 
 ### Immediate (High Confidence)
 
-1. **Move to Theory (ivviiviivvi):**
+1. **Move to Theory ({{ORG_NAME}}):**
 
    - call-function--ontological
    - organon-noumenon--ontogenetic-morphe

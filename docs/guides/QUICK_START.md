@@ -189,10 +189,10 @@ cat >> README.md << EOF
 ## Development
 
 See our comprehensive guides:
-- [Best Practices](docs/guides/BEST_PRACTICES.md)
-- [Git Workflow](docs/workflows/GIT_WORKFLOW.md)
+- Best Practices
+- [Git Workflow](../workflows/GIT_WORKFLOW.md)
 - [Security](docs/reference/SECURITY_ADVANCED.md)
-- [Docker](docs/guides/DOCKER_BEST_PRACTICES.md)
+- [Docker](DOCKER_BEST_PRACTICES.md)
 EOF
 ```
 
@@ -461,7 +461,7 @@ After initial setup:
 
 ### Learn More
 
-- [BEST_PRACTICES.md](BEST_PRACTICES.md) - Comprehensive guide
+- BEST_PRACTICES.md - Comprehensive guide
 - [GIT_WORKFLOW.md](../workflows/GIT_WORKFLOW.md) - Branching and commits
 - [SECURITY_ADVANCED.md](../reference/SECURITY_ADVANCED.md) - Security details
 - [DOCKER_BEST_PRACTICES.md](DOCKER_BEST_PRACTICES.md) - Container guide

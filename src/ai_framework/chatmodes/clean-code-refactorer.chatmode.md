@@ -1,7 +1,7 @@
 ______________________________________________________________________
 
-name: WG Code Alchemist description: Transform code with Clean Code principles
-and SOLID design. tools:
+name: Clean Code Refactorer description: Transform code with Clean Code
+principles and SOLID design. tools:
 
 - changes
 - search/codebase

@@ -76,6 +76,10 @@ jobs:
             BADGE_STYLE=$(yq eval '.badge_style // "flat-square"' "$CONFIG_FILE")
             POSITION=$(yq eval '.position // "top"' "$CONFIG_FILE")
             AUTO_DETECT=$(yq eval '.auto_detect // true' "$CONFIG_FILE")
+            INCLUDE_LANGUAGE=$(yq eval '.include.language // true' "$CONFIG_FILE")
+            INCLUDE_STATS=$(yq eval '.include.stats // true' "$CONFIG_FILE")
+            INCLUDE_DOCKER=$(yq eval '.include.docker // true' "$CONFIG_FILE")
+            INCLUDE_CONTRIBUTORS=$(yq eval '.include.contributors // true' "$CONFIG_FILE")
           fi
         else
           echo "ℹ️ No badge configuration file found, using defaults"
@@ -85,12 +89,20 @@ jobs:
         echo "badge_style=$BADGE_STYLE" >> $GITHUB_OUTPUT
         echo "position=$POSITION" >> $GITHUB_OUTPUT
         echo "auto_detect=$AUTO_DETECT" >> $GITHUB_OUTPUT
+        echo "include_language=${INCLUDE_LANGUAGE:-true}" >> $GITHUB_OUTPUT
+        echo "include_stats=${INCLUDE_STATS:-true}" >> $GITHUB_OUTPUT
+        echo "include_docker=${INCLUDE_DOCKER:-true}" >> $GITHUB_OUTPUT
+        echo "include_contributors=${INCLUDE_CONTRIBUTORS:-true}" >> $GITHUB_OUTPUT
 
         echo "Badge configuration loaded:"
         echo "  Enabled: $ENABLED"
         echo "  Style: $BADGE_STYLE"
         echo "  Position: $POSITION"
         echo "  Auto-detect: $AUTO_DETECT"
+        echo "  Include language: ${INCLUDE_LANGUAGE:-true}"
+        echo "  Include stats: ${INCLUDE_STATS:-true}"
+        echo "  Include docker: ${INCLUDE_DOCKER:-true}"
+        echo "  Include contributors: ${INCLUDE_CONTRIBUTORS:-true}"
 
     - name: Detect repository characteristics
       id: detect-repo
@@ -193,6 +205,10 @@ jobs:
       id: generate-badges
       env:
         BADGE_STYLE: ${{ steps.load-config.outputs.badge_style }}
+        INCLUDE_LANGUAGE: ${{ steps.load-config.outputs.include_language }}
+        INCLUDE_STATS: ${{ steps.load-config.outputs.include_stats }}
+        INCLUDE_DOCKER: ${{ steps.load-config.outputs.include_docker }}
+        INCLUDE_CONTRIBUTORS: ${{ steps.load-config.outputs.include_contributors }}
         LANGUAGES: ${{ steps.detect-repo.outputs.languages }}
         HAS_WORKFLOWS: ${{ steps.detect-repo.outputs.has_workflows }}
         HAS_TESTS: ${{ steps.detect-repo.outputs.has_tests }}
@@ -216,50 +232,56 @@ jobs:
           BADGES="${BADGES}[![License](https://img.shields.io/github/license/${REPO_NAME}?style=${BADGE_STYLE})](LICENSE) "
         fi
 
-        # Language badges
-        IFS=',' read -ra LANG_ARRAY <<< "$LANGUAGES"
-        for lang in "${LANG_ARRAY[@]}"; do
-          case "$lang" in
-            javascript)
-              BADGES="${BADGES}[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=${BADGE_STYLE}&logo=javascript&logoColor=black)](#) "
-              ;;
-            python)
-              BADGES="${BADGES}[![Python](https://img.shields.io/badge/Python-3776AB?style=${BADGE_STYLE}&logo=python&logoColor=white)](#) "
-              ;;
-            rust)
-              BADGES="${BADGES}[![Rust](https://img.shields.io/badge/Rust-000000?style=${BADGE_STYLE}&logo=rust&logoColor=white)](#) "
-              ;;
-            go)
-              BADGES="${BADGES}[![Go](https://img.shields.io/badge/Go-00ADD8?style=${BADGE_STYLE}&logo=go&logoColor=white)](#) "
-              ;;
-            java)
-              BADGES="${BADGES}[![Java](https://img.shields.io/badge/Java-ED8B00?style=${BADGE_STYLE}&logo=openjdk&logoColor=white)](#) "
-              ;;
-            php)
-              BADGES="${BADGES}[![PHP](https://img.shields.io/badge/PHP-777BB4?style=${BADGE_STYLE}&logo=php&logoColor=white)](#) "
-              ;;
-            ruby)
-              BADGES="${BADGES}[![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=${BADGE_STYLE}&logo=ruby&logoColor=white)](#) "
-              ;;
-            csharp)
-              BADGES="${BADGES}[![C#](https://img.shields.io/badge/C%23-239120?style=${BADGE_STYLE}&logo=c-sharp&logoColor=white)](#) "
-              ;;
-          esac
-        done
+        # Language badges (conditional on config)
+        if [ "$INCLUDE_LANGUAGE" = "true" ]; then
+          IFS=',' read -ra LANG_ARRAY <<< "$LANGUAGES"
+          for lang in "${LANG_ARRAY[@]}"; do
+            case "$lang" in
+              javascript)
+                BADGES="${BADGES}[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=${BADGE_STYLE}&logo=javascript&logoColor=black)](#) "
+                ;;
+              python)
+                BADGES="${BADGES}[![Python](https://img.shields.io/badge/Python-3776AB?style=${BADGE_STYLE}&logo=python&logoColor=white)](#) "
+                ;;
+              rust)
+                BADGES="${BADGES}[![Rust](https://img.shields.io/badge/Rust-000000?style=${BADGE_STYLE}&logo=rust&logoColor=white)](#) "
+                ;;
+              go)
+                BADGES="${BADGES}[![Go](https://img.shields.io/badge/Go-00ADD8?style=${BADGE_STYLE}&logo=go&logoColor=white)](#) "
+                ;;
+              java)
+                BADGES="${BADGES}[![Java](https://img.shields.io/badge/Java-ED8B00?style=${BADGE_STYLE}&logo=openjdk&logoColor=white)](#) "
+                ;;
+              php)
+                BADGES="${BADGES}[![PHP](https://img.shields.io/badge/PHP-777BB4?style=${BADGE_STYLE}&logo=php&logoColor=white)](#) "
+                ;;
+              ruby)
+                BADGES="${BADGES}[![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=${BADGE_STYLE}&logo=ruby&logoColor=white)](#) "
+                ;;
+              csharp)
+                BADGES="${BADGES}[![C#](https://img.shields.io/badge/C%23-239120?style=${BADGE_STYLE}&logo=c-sharp&logoColor=white)](#) "
+                ;;
+            esac
+          done
+        fi
 
-        # GitHub stats badges
-        BADGES="${BADGES}[![Stars](https://img.shields.io/github/stars/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/stargazers) "
-        BADGES="${BADGES}[![Issues](https://img.shields.io/github/issues/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/issues) "
-        BADGES="${BADGES}[![Pull Requests](https://img.shields.io/github/issues-pr/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/pulls) "
-        BADGES="${BADGES}[![Last Commit](https://img.shields.io/github/last-commit/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/commits) "
+        # GitHub stats badges (conditional on config)
+        if [ "$INCLUDE_STATS" = "true" ]; then
+          BADGES="${BADGES}[![Stars](https://img.shields.io/github/stars/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/stargazers) "
+          BADGES="${BADGES}[![Issues](https://img.shields.io/github/issues/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/issues) "
+          BADGES="${BADGES}[![Pull Requests](https://img.shields.io/github/issues-pr/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/pulls) "
+          BADGES="${BADGES}[![Last Commit](https://img.shields.io/github/last-commit/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/commits) "
+        fi
 
-        # Docker badge
-        if [ "$HAS_DOCKER" = "true" ]; then
+        # Docker badge (conditional on config and detection)
+        if [ "$INCLUDE_DOCKER" = "true" ] && [ "$HAS_DOCKER" = "true" ]; then
           BADGES="${BADGES}[![Docker](https://img.shields.io/badge/Docker-2496ED?style=${BADGE_STYLE}&logo=docker&logoColor=white)](#) "
         fi
 
-        # Contributors badge
-        BADGES="${BADGES}[![Contributors](https://img.shields.io/github/contributors/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/graphs/contributors) "
+        # Contributors badge (conditional on config)
+        if [ "$INCLUDE_CONTRIBUTORS" = "true" ]; then
+          BADGES="${BADGES}[![Contributors](https://img.shields.io/github/contributors/${REPO_NAME}?style=${BADGE_STYLE})](https://github.com/${REPO_NAME}/graphs/contributors) "
+        fi
 
         echo "Generated badges: $BADGES"
 

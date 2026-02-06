@@ -35,10 +35,10 @@ The Mouthpiece Filter bridges the gap:
 
 ```bash
 # Transform natural writing into structured prompts
-python scripts/mouthpiece_filter.py "your natural writing here"
+python scripts/natural_language_prompt_filter.py "your natural writing here"
 
 # Example
-python scripts/mouthpiece_filter.py "need something that watches our APIs and screams when they die, like a canary in a coal mine but for microservices"
+python scripts/natural_language_prompt_filter.py "need something that watches our APIs and screams when they die, like a canary in a coal mine but for microservices"
 ```
 
 ### 2. Use the Chat Mode
@@ -46,7 +46,7 @@ python scripts/mouthpiece_filter.py "need something that watches our APIs and sc
 In GitHub Copilot or Claude:
 
 ```
-Load the mouthpiece.chatmode.md and chat naturally!
+Load the natural-language-prompt-translator.chatmode.md and chat naturally!
 ```
 
 ### 3. Use the Prompt Template
@@ -59,13 +59,13 @@ In Copilot Chat:
 
 ## Components
 
-| Component                                                         | Purpose                   | When to Use                              |
-| ----------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
-| **[Filter Script](../automation/scripts/mouthpiece_filter.py)**   | CLI transformation engine | Programmatic use, scripting, automation  |
-| **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** | Interactive AI persona    | Conversational transformation, iteration |
-| **[Prompt Template](README.prompts.md)**                          | Quick transformation      | Fast, one-off transformations            |
-| **[Documentation](MOUTHPIECE_SYSTEM.md)**                         | Complete guide            | Learning, reference, integration         |
-| **[Examples](mouthpiece-examples.md)**                            | Real transformations      | Inspiration, patterns, learning          |
+| Component                                                                                 | Purpose                   | When to Use                              |
+| ----------------------------------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
+| **[Filter Script](../../src/automation/scripts/natural_language_prompt_filter.py)**       | CLI transformation engine | Programmatic use, scripting, automation  |
+| **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)** | Interactive AI persona    | Conversational transformation, iteration |
+| **[Prompt Template](README.prompts.md)**                                                  | Quick transformation      | Fast, one-off transformations            |
+| **[Documentation](NLP_FILTER_SYSTEM.md)**                                                 | Complete guide            | Learning, reference, integration         |
+| **[Examples](mouthpiece-examples.md)**                                                    | Real transformations      | Inspiration, patterns, learning          |
 
 ## Features
 
@@ -170,30 +170,30 @@ See **[more examples](mouthpiece-examples.md)** for additional transformations.
 
 ```bash
 # Basic usage
-python scripts/mouthpiece_filter.py "your text here"
+python scripts/natural_language_prompt_filter.py "your text here"
 
 # From a file
-python scripts/mouthpiece_filter.py --file thoughts.txt
+python scripts/natural_language_prompt_filter.py --file thoughts.txt
 
 # From stdin
-echo "your text" | python scripts/mouthpiece_filter.py --stdin
+echo "your text" | python scripts/natural_language_prompt_filter.py --stdin
 
 # JSON output
-python scripts/mouthpiece_filter.py "text" --format json
+python scripts/natural_language_prompt_filter.py "text" --format json
 
 # Save to file
-python scripts/mouthpiece_filter.py "text" --output result.md
+python scripts/natural_language_prompt_filter.py "text" --output result.md
 
 # Custom config
-python scripts/mouthpiece_filter.py "text" --config my-config.json
+python scripts/natural_language_prompt_filter.py "text" --config my-config.json
 
 # Disable poetry preservation
-python scripts/mouthpiece_filter.py "text" --no-poetry
+python scripts/natural_language_prompt_filter.py "text" --no-poetry
 ```
 
 ### Configuration
 
-Create a `mouthpiece-config.json`:
+Create a `nlp-filter-config.json`:
 
 ```json
 {
@@ -233,7 +233,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Transform
         run: |
-          python scripts/mouthpiece_filter.py "${{ github.event.issue.body }}"
+          python scripts/natural_language_prompt_filter.py "${{ github.event.issue.body }}"
 ```
 
 ### Pre-commit Hook
@@ -241,14 +241,14 @@ jobs:
 ```bash
 #!/bin/bash
 MSG=$(cat $1)
-TRANSFORMED=$(python .github/scripts/mouthpiece_filter.py "$MSG" --format prompt_only)
+TRANSFORMED=$(python .github/scripts/natural_language_prompt_filter.py "$MSG" --format prompt_only)
 echo "$TRANSFORMED" > $1
 ```
 
 ### API (Python)
 
 ```python
-from scripts.mouthpiece_filter import MouthpieceFilter
+from scripts.natural_language_prompt_filter import MouthpieceFilter
 
 filter = MouthpieceFilter(config={"style": "technical"})
 result = filter.transform("your natural text")
@@ -292,10 +292,10 @@ systems with your ideas while staying rooted in your authentic expression.
 
 ## Documentation
 
-- **[Complete Guide](MOUTHPIECE_SYSTEM.md)** - Full system documentation
+- **[Complete Guide](NLP_FILTER_SYSTEM.md)** - Full system documentation
 - **[Examples](mouthpiece-examples.md)** - Real-world transformations
-- **[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** -
-  Interactive persona
+- **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)**
+  \- Interactive persona
 - **[Prompt Template](README.prompts.md)** - Quick reference
 
 ## Best Practices
@@ -343,7 +343,7 @@ Want to improve Mouthpiece?
 - Integration examples
 - Documentation improvements
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](../governance/CONTRIBUTING.md) for guidelines.
 
 ## Examples Gallery
 
@@ -388,7 +388,7 @@ ______________________________________________________________________
 
 ```bash
 # Try it!
-python scripts/mouthpiece_filter.py "your natural thoughts here"
+python scripts/natural_language_prompt_filter.py "your natural thoughts here"
 ```
 
 **Write like a human. Let the filter handle the rest.**
@@ -399,10 +399,10 @@ ______________________________________________________________________
 
 <div align="center">
 
-**[Documentation](MOUTHPIECE_SYSTEM.md)** •
+**[Documentation](NLP_FILTER_SYSTEM.md)** •
 **[Examples](mouthpiece-examples.md)** •
-**[Chat Mode](../ai_framework/chatmodes/mouthpiece.chatmode.md)** •
-**[Prompt](README.prompts.md)**
+**[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)**
+• **[Prompt](README.prompts.md)**
 
 _Built with ❤️ for humans who want to stay human_
 

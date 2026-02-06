@@ -159,14 +159,14 @@ No setup required! Uses GitHub token automatically:
 
 ```bash
 # Pull the image
-docker pull ghcr.io/ivviiviivvi/my-app:latest
+docker pull ghcr.io/{{ORG_NAME}}/my-app:latest
 
 # Run the container
 docker run -d \
   --name my-app \
   -p 3000:3000 \
   -e NODE_ENV=production \
-  ghcr.io/ivviiviivvi/my-app:latest
+  ghcr.io/{{ORG_NAME}}/my-app:latest
 
 # View logs
 docker logs -f my-app
@@ -715,7 +715,7 @@ USER node
 
 ## Related Documentation
 
-- [AgentSphere Setup Guide](AGENTSPHERE_SETUP.md)
+- AgentSphere Setup Guide
 - [GitHub Pages Setup Guide](GITHUB_PAGES_SETUP.md)
 - [Docker Documentation](https://docs.docker.com)
 - [GitHub Codespaces Documentation](https://docs.github.com/en/codespaces)
@@ -724,7 +724,7 @@ USER node
 ## Getting Help
 
 - **Issues:**
-  [Report a problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report a problem](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions:**
-  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-- **Documentation:** [Main README](../README.md)
+  [Ask questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
+- **Documentation:** [Main README](../../README.md)

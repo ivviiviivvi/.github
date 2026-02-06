@@ -179,10 +179,10 @@ Registry Files (in .github repo):
 └── docs/tutorials/index.md
 
 Live Outputs:
-├── https://agentsphere.dev/ivviiviivvi/[repo]
-├── https://ivviiviivvi.github.io
-├── https://ivviiviivvi.github.io/[repo] (Strategy A)
-└── ghcr.io/ivviiviivvi/[repo]:latest (Strategy B)
+├── https://agentsphere.dev/{{ORG_NAME}}/[repo]
+├── https://{{ORG_NAME}}.github.io
+├── https://{{ORG_NAME}}.github.io/[repo] (Strategy A)
+└── ghcr.io/{{ORG_NAME}}/[repo]:latest (Strategy B)
 ```
 
 ______________________________________________________________________

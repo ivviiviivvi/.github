@@ -137,7 +137,7 @@ body:
   attributes:
     label: Acknowledgment
     options:
-    - label: I have reviewed the [Best Practices Guide](https://github.com/ivviiviivvi/.github/blob/main/docs/guides/BEST_PRACTICES.md)
+    - label: I have reviewed the [Best Practices Guide](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/guides/BEST_PRACTICES.md)
       required: true
     - label: I have CODEOWNERS or maintainer permission for this repository
       required: true

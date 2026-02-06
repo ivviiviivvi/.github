@@ -95,7 +95,7 @@ For the fastest, most consistent setup:
 1. **Open in container**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -115,7 +115,7 @@ For developers who prefer local development:
 1. **Clone and copy configurations**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
 
    # Copy VS Code settings
    cp .github/.vscode/settings.json ~/.vscode/settings.json
@@ -243,7 +243,7 @@ code --folder-uri vscode-remote://dev-container+$(pwd | sed 's/\//%2F/g')/worksp
 
 ```bash
 # Create a codespace (uses the same devcontainer.json)
-gh codespace create --repo ivviiviivvi/.github
+gh codespace create --repo {{ORG_NAME}}/.github
 ```
 
 #### First-Time Setup
@@ -843,14 +843,16 @@ ______________________________________________________________________
   standards
 - [MCP Server Setup](MCP_SERVER_SETUP.md) - Integrate MCP servers
 - [Agent Architecture Guide](AGENT_ARCHITECTURE_GUIDE.md) - Build custom agents
-- [Contributing Guide](CONTRIBUTING.md) - Contribute to this repository
+- [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this
+  repository
 
 ### Templates
 
-- [DevContainer Template](../.devcontainer/devcontainer.json) - Base
+- [DevContainer Template](../../.devcontainer/devcontainer.json) - Base
   configuration
-- [VS Code Settings Template](../.vscode/settings.json) - Recommended settings
-- [Git Configuration Template](../.gitconfig) - Git setup examples
+- [VS Code Settings Template](../../.vscode/settings.json) - Recommended
+  settings
+- Git Configuration Template - Git setup examples
 
 ______________________________________________________________________
 

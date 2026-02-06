@@ -2,7 +2,7 @@
 
 This document lists all secrets referenced by workflows in this repository.
 
-> **Repository:** https://github.com/ivviiviivvi/.github.git
+> **Repository:** https://github.com/{{ORG_NAME}}/.github.git
 
 ## Secret Categories
 

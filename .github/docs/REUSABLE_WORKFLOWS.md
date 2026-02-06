@@ -22,7 +22,7 @@ on:
 
 jobs:
   label:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-labeler.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-labeler.yml@main
     with:
       config-path: ".github/labeler.yml"
       sync-labels: true
@@ -56,7 +56,7 @@ on:
 
 jobs:
   lint:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-pr-title.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-pr-title.yml@main
     with:
       requireScope: false
     secrets:
@@ -97,7 +97,7 @@ on:
 
 jobs:
   release:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-release.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-release.yml@main
     with:
       publish: true
       release-config-name: "release-drafter.yml"
@@ -144,7 +144,7 @@ on:
 
 jobs:
   update-tag:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-major-version-updater.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-major-version-updater.yml@main
     with:
       tag-name: ${{ github.event.release.tag_name }}
     secrets:

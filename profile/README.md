@@ -1,30 +1,35 @@
-# ivviiviivvi
+<div align="center">
+
+# {{ORG_NAME}}
 
 **AI-Driven Development Infrastructure for the Modern Organization**
 
-We build open-source tooling that scales AI-assisted development across teams and repositories.
+[Configuration Hub](https://github.com/%7B%7BORG_NAME%7D%7D/.github) |
+[Documentation](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/docs/INDEX.md)
+| [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)
 
-## What We Do
+</div>
 
-- **Organization Automation** -- Centralized CI/CD, security scanning, and governance workflows
-- **AI Development Agents** -- Production-ready agents for code review, documentation, and infrastructure tasks
-- **GitHub Copilot Customizations** -- Chatmodes, prompts, and coding instructions tailored to org standards
+______________________________________________________________________
 
-## Quick Links
+We build open-source tooling that scales AI-assisted development across teams
+and repositories.
 
-| | |
-|---|---|
-| [Contributing](https://github.com/ivviiviivvi/.github/blob/main/CONTRIBUTING.md) | How to get involved |
-| [Documentation](https://github.com/ivviiviivvi/.github/blob/main/docs/INDEX.md) | Guides and references |
-| [Discussions](https://github.com/orgs/ivviiviivvi/discussions) | Questions and ideas |
-| [Security Policy](https://github.com/ivviiviivvi/.github/blob/main/SECURITY.md) | Reporting vulnerabilities |
+|                                  |                                                    |
+| :------------------------------: | :------------------------------------------------: |
+| **{{WORKFLOW_COUNT}}** Workflows |           **{{AGENT_COUNT}}** AI Agents            |
+| **{{CHATMODE_COUNT}}** Chatmodes | **{{REUSABLE_TEMPLATE_COUNT}}** Reusable Templates |
 
-## By the Numbers
+### What We Ship
 
-**131** GitHub Actions workflows | **26** production AI agents | **12** reusable workflow templates
+- **Organization Automation** — Centralized CI/CD, security scanning, and
+  governance workflows
+- **AI Development Agents** — Production-ready agents for code review,
+  documentation, and infrastructure tasks
+- **GitHub Copilot Customizations** — Chatmodes, prompts, and coding
+  instructions tailored to org standards
 
----
+______________________________________________________________________
 
-[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/blob/main/LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors)
+[![CI](https://img.shields.io/github/actions/workflow/status/%7B%7BORG_NAME%7D%7D/.github/ci.yml?style=flat-square&label=CI)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/%7B%7BORG_NAME%7D%7D/.github?style=flat-square)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/LICENSE)

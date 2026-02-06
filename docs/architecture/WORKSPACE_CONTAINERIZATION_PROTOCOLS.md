@@ -241,7 +241,7 @@ ______________________________________________________________________
    # Repository → Code → Codespaces → Create codespace
 
    # Via GitHub CLI
-   gh codespace create --repo ivviiviivvi/.github
+   gh codespace create --repo {{ORG_NAME}}/.github
    ```
 
 1. **Access Methods**:
@@ -474,7 +474,7 @@ ______________________________________________________________________
 ```bash
 # Press '.' on any GitHub repo
 # Or change .com to .dev in URL
-# https://github.dev/ivviiviivvi/.github
+# https://github.dev/{{ORG_NAME}}/.github
 ```
 
 **Features**:
@@ -492,7 +492,7 @@ ______________________________________________________________________
 
 ```bash
 # Open project in StackBlitz
-https://stackblitz.com/github/ivviiviivvi/.github
+https://stackblitz.com/github/{{ORG_NAME}}/.github
 ```
 
 **Features**:
@@ -510,7 +510,7 @@ https://stackblitz.com/github/ivviiviivvi/.github
 
 ```bash
 # Prefix repo URL
-https://gitpod.io/#https://github.com/ivviiviivvi/.github
+https://gitpod.io/#https://github.com/{{ORG_NAME}}/.github
 ```
 
 **Configuration** (`.gitpod.yml`):
@@ -1633,19 +1633,19 @@ architecture** - Grow with your needs
 
 ### Additional Resources
 
-- [Development Environment Setup](./DEVELOPMENT_ENVIRONMENT_SETUP.md)
-- [Docker Best Practices](./guides/DOCKER_BEST_PRACTICES.md)
-- [Security Guide](SECURITY.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
+- [Development Environment Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+- [Docker Best Practices](../guides/DOCKER_BEST_PRACTICES.md)
+- [Security Guide](../governance/SECURITY.md)
+- [Contributing Guidelines](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________
 
 **Questions or Issues?**
 
-- 📖 [Documentation](../docs/)
+- 📖 [Documentation](../)
 - 💬
-  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 _Last Updated: 2024-01-01_

@@ -424,7 +424,7 @@ More information in the [API reference][api].
 ```markdown
 See [Installation](#installation) section.
 
-See [Contributing Guide](../CONTRIBUTING.md).
+See [Contributing Guide](../governance/CONTRIBUTING.md).
 ```
 
 #### Managed Links
@@ -432,7 +432,7 @@ See [Contributing Guide](../CONTRIBUTING.md).
 For links that should stay consistent across the repo, add a link key comment:
 
 ```markdown
-[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+[GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 ```
 
 Update all managed links with:
@@ -451,13 +451,13 @@ python automation/scripts/resolve_link_placeholders.py --write --annotate
 **Good**:
 
 ```markdown
-Read the [installation guide](../WORKSPACE_QUICK_START.md) for setup instructions.
+Read the [installation guide](WORKSPACE_QUICK_START.md) for setup instructions.
 ```
 
 **Bad**:
 
 ```markdown
-Click [here](../WORKSPACE_QUICK_START.md) to install.
+Click [here](WORKSPACE_QUICK_START.md) to install.
 ```
 
 ### Code Blocks
@@ -1027,9 +1027,9 @@ git commit -m "message"
 
 ### 4. Poor Link Text
 
-**Wrong**: "Click [here](../WORKSPACE_QUICK_START.md) for more information"
+**Wrong**: "Click [here](WORKSPACE_QUICK_START.md) for more information"
 
-**Right**: "See the [installation guide](../WORKSPACE_QUICK_START.md) for more
+**Right**: "See the [installation guide](WORKSPACE_QUICK_START.md) for more
 information"
 
 ### 5. Walls of Text
@@ -1074,7 +1074,7 @@ ______________________________________________________________________
 
 ## Related Documentation
 
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contributing guidelines
+- [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - Contributing guidelines
 - [VERSION_CONTROL_STANDARDS.md](../reference/VERSION_CONTROL_STANDARDS.md) -
   Version control standards
 - [README.md](../../README.md) - Repository overview

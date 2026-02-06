@@ -550,7 +550,7 @@ Agents integrate with GitHub Copilot through:
 
 **Via VS Code:**
 
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)](install-link)
+![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square)
 
 **Via Direct Download:** Download `.agent.md` files to your repository's
 `agents/` directory.

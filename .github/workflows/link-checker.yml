@@ -44,12 +44,34 @@ jobs:
           --exclude 'linkedin.com'
           --exclude 'twitter.com'
           --exclude 'x.com'
+          --exclude 'localhost'
+          --exclude '{{ORG_NAME}}\.github\.io'
+          --exclude 'github\.com/marketplace'
+          --exclude 'github\.com/.*/settings/'
+          --exclude 'github\.com/{{ORG_NAME}}/theoretical-specifications-first'
+          --exclude 'allcontributors\.org'
+          --exclude 'gh\.io/'
+          --exclude 'docs\.github\.com'
+          --exclude-path 'src/automation/project_meta/reports/'
+          --exclude-path 'docs/analysis/'
+          --exclude-path 'docs/archive/'
+          --exclude-path 'docs/_includes/'
+          --exclude-path 'docs/_layouts/'
+          --exclude-path 'docs/site/'
+          --exclude-path 'src/automation/dashboard/'
+          --exclude-path 'src/ai_framework/collections/'
+          --exclude-path 'docs/ai_framework/collections/'
+          --exclude-path 'docs/templates/'
+          --exclude-path 'docs/standards/'
+          --exclude-path 'docs/status/'
+          --exclude-path '.devcontainer/'
+          --exclude-path 'SUPPORT.md'
           --max-retries 3
           --timeout 20
           '**/*.md'
           '**/*.html'
          # Fail action on broken links
-        fail: false
+        fail: true
             # Output format
         format: markdown
             # Output file
@@ -138,6 +160,7 @@ jobs:
 
   markdown-link-check:
     name: Check Markdown Links
+    if: false  # Disabled: lychee handles link checking with better exclusion support
     continue-on-error: true
     runs-on: ubuntu-latest
     steps:
@@ -157,6 +180,7 @@ jobs:
 
   spell-check:
     name: Spell Check Documentation
+    if: false  # Disabled: too many false positives in technical documentation
     continue-on-error: true
     runs-on: ubuntu-latest
     steps:

@@ -66,9 +66,7 @@ def parse_frontmatter(lines: list[str]) -> dict[str, object]:
             value_end = positions[idx + 1][0] if idx + 1 < len(positions) else len(joined)
             raw = joined[end:value_end].strip()
             list_items = re.findall(r"^-\s+(.+)$", raw, re.MULTILINE)
-            if list_items and (not raw or raw.startswith("-") or raw.startswith("\n")):
-                data[key] = list_items
-            elif list_items and "\n-" in raw:
+            if list_items and (not raw or raw.startswith("-") or raw.startswith("\n")) or list_items and "\n-" in raw:
                 data[key] = list_items
             else:
                 value = " ".join(raw.split())

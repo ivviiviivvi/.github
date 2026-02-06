@@ -1,6 +1,6 @@
 # Configuration Guide
 
-Complete reference for configuring the ivviiviivvi GitHub template.
+Complete reference for configuring the {{ORG_NAME}} GitHub template.
 
 ______________________________________________________________________
 
@@ -14,7 +14,7 @@ them with your organization-specific values.
 | Variable       | Description              | Example           |
 | -------------- | ------------------------ | ----------------- |
 | `{{ORG_NAME}}` | GitHub organization slug | `my-company`      |
-| `ivviiviivvi`  | Human-readable org name  | `My Company Inc.` |
+| `{{ORG_NAME}}` | Human-readable org name  | `My Company Inc.` |
 
 ### Replacement Script
 
@@ -32,7 +32,7 @@ find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.js
 
 find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.json" \) \
   ! -path "./.git/*" \
-  -exec sed -i '' "s/ivviiviivvi/${ORG_DISPLAY}/g" {} \;
+  -exec sed -i '' "s/{{ORG_NAME}}/${ORG_DISPLAY}/g" {} \;
 
 echo "Template variables replaced successfully"
 ```

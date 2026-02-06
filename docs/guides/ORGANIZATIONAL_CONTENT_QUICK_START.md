@@ -164,8 +164,8 @@ git add . && git commit -m "Initialize wiki" && git push
 
 1. **Read Documentation**:
 
-   - [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - 20 min
-   - [Issue Taxonomy](ISSUE_TAXONOMY.md) - 25 min
+   - [Master Index](../reference/ORGANIZATIONAL_CONTENT_INDEX.md) - 20 min
+   - [Issue Taxonomy](../reference/ISSUE_TAXONOMY.md) - 25 min
    - Skim other guides as needed
 
 1. **Engage Your Team**:
@@ -207,13 +207,14 @@ git add . && git commit -m "Initialize wiki" && git push
 
 ### Documentation
 
-- 🗂️ [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) - Start here
-- 📝 [Issue Taxonomy](ISSUE_TAXONOMY.md) - Issue types and guidelines
+- 🗂️ [Master Index](../reference/ORGANIZATIONAL_CONTENT_INDEX.md) - Start here
+- 📝 [Issue Taxonomy](../reference/ISSUE_TAXONOMY.md) - Issue types and
+  guidelines
 - 💬 [Discussion Guide](DISCUSSION_GUIDE.md) - Discussion framework
 - 📊 [Projects Guide](PROJECTS_GUIDE.md) - Project templates
 - 📚 [Wiki Guide](WIKI_GUIDE.md) - Wiki structure
-- 🚀 [Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md) - Full
-  deployment
+- 🚀 [Implementation Guide](../analysis/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md)
+  \- Full deployment
 
 ### Templates
 
@@ -283,7 +284,7 @@ git add . && git commit -m "Update" && git push
 
 ### Quick Answers
 
-- 📖 Check [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md)
+- 📖 Check [Master Index](../reference/ORGANIZATIONAL_CONTENT_INDEX.md)
 - 🔍 Search documentation
 - 💬 Browse discussions
 
@@ -351,5 +352,5 @@ You now have:
 
 ______________________________________________________________________
 
-**Questions?** See [Master Index](ORGANIZATIONAL_CONTENT_INDEX.md) or ask in
-[Discussions](https://github.com/your-org/your-repo/discussions)
+**Questions?** See [Master Index](../reference/ORGANIZATIONAL_CONTENT_INDEX.md)
+or ask in [Discussions](https://github.com/your-org/your-repo/discussions)

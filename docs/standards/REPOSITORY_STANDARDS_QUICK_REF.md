@@ -223,13 +223,11 @@ ______________________________________________________________________
 
 ## 📚 Full Documentation
 
-- **[About Section Standards](standards/ABOUT_SECTION_STANDARDS.md)** - Complete
-  guide (9,000+ words)
-- **[README Template Standards](standards/README_TEMPLATE_STANDARDS.md)** -
-  Complete guide (16,000+ words)
+- **About Section Standards** - Complete guide (9,000+ words)
+- **README Template Standards** - Complete guide (16,000+ words)
 - **[README Minimal Template](templates/README-minimal.md)** - Basic template
-- **[Repository Setup Checklist](REPOSITORY_SETUP_CHECKLIST.md)** - Complete
-  setup guide
+- **[Repository Setup Checklist](../runbooks/REPOSITORY_SETUP_CHECKLIST.md)** -
+  Complete setup guide
 
 ______________________________________________________________________
 
@@ -239,7 +237,7 @@ ______________________________________________________________________
 
 ```yaml
 Description: "Organization policies repository - Community health files, AI framework (26+ agents), and workflow automation"
-Website: "https://github.com/ivviiviivvi/.github"
+Website: "https://github.com/{{ORG_NAME}}/.github"
 Topics:
   - github
   - organization-policies
@@ -309,9 +307,9 @@ ______________________________________________________________________
 ## 🆘 Need Help?
 
 - **Questions?**
-  [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues?**
-  [Report a Problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report a Problem](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Documentation**: See [Full Standards](standards/)
 
 ______________________________________________________________________

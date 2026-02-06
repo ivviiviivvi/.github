@@ -40,7 +40,7 @@ Choose your path based on your preferences and project needs:
 1. **Open project in container**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -68,7 +68,7 @@ Choose your path based on your preferences and project needs:
 1. **Install custom instructions**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    mkdir -p ~/.config/github-copilot-instructions
    cp .github/instructions/*.instructions.md ~/.config/github-copilot-instructions/
    ```
@@ -272,11 +272,11 @@ Specialized AI assistants that extend Copilot for specific domains:
 
 ### Available Agents
 
-Browse all 26+ agents: [Agent Registry](AGENT_REGISTRY.md)
+Browse all 26+ agents: [Agent Registry](../reference/AGENT_REGISTRY.md)
 
 **Popular agents**:
 
-- [`CSharpExpert`](../ai_framework/agents/CSharpExpert.agent.md) - C# and .NET
+- `CSharpExpert` - C# and .NET
 - [`terraform`](../ai_framework/agents/terraform.agent.md) - Infrastructure
 - [`security-audit`](../ai_framework/agents/security-audit.agent.md) - Security
 - [`adr-generator`](../ai_framework/agents/adr-generator.agent.md) -
@@ -426,7 +426,7 @@ ______________________________________________________________________
 
 ### Quick References
 
-- [Agent Registry](AGENT_REGISTRY.md) - Complete catalog of agents
+- [Agent Registry](../reference/AGENT_REGISTRY.md) - Complete catalog of agents
 - [README.agents.md](README.agents.md) - Agent documentation
 - [README.instructions.md](README.instructions.md) - Instructions documentation
 - [README.prompts.md](README.prompts.md) - Prompts documentation
@@ -473,9 +473,9 @@ ______________________________________________________________________
   [Custom Instructions](CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting) |
   [Dev Environment](DEVELOPMENT_ENVIRONMENT_SETUP.md#troubleshooting)
 - Open an issue:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - Ask in discussions:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 ______________________________________________________________________
 
@@ -536,17 +536,18 @@ ______________________________________________________________________
 
 ### Resources
 
-- **Documentation**: [README.md](../README.md) - Complete repository overview
-- **Agent Registry**: [AGENT_REGISTRY.md](AGENT_REGISTRY.md) - Catalog of all
-  agents
-- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md) - How to contribute
+- **Documentation**: [README.md](../../README.md) - Complete repository overview
+- **Agent Registry**: [AGENT_REGISTRY.md](../reference/AGENT_REGISTRY.md) -
+  Catalog of all agents
+- **Contributing**: [CONTRIBUTING.md](../governance/CONTRIBUTING.md) - How to
+  contribute
 
 ### Community
 
 - **Questions**:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues**:
-  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Feedback**: Open a discussion or issue
 
 ### Organization

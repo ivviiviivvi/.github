@@ -70,7 +70,7 @@ def generate_table(agents):
         install_url = (
             "https://aka.ms/awesome-copilot/install/agent?"
             "url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2F"
-            f"raw.githubusercontent.com%2Fivviiviivvi%2F.github%2Fmain%2F"
+            f"raw.githubusercontent.com%2F{{ORG_NAME}}%2F.github%2Fmain%2F"
             f"agents%2F{agent['filename']}"
         )
         badge = (

@@ -3,7 +3,7 @@
 **Date:** 2026-01-15\
 **Validator:** \[To be completed\]\
 **Repository:**
-ivviiviivvi/.github\
+{{ORG_NAME}}/.github\
 **Templates Tested:** 17
 
 ______________________________________________________________________

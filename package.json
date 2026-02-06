@@ -1,10 +1,10 @@
 {
-  "name": "@ivviiviivvi/github-org-policies",
+  "name": "@{{NPM_SCOPE}}/github-org-policies",
   "version": "1.0.0",
-  "description": "Community health files and organization-wide policies for the ivviiviivvi GitHub organization",
+  "description": "Community health files and organization-wide policies for the {{ORG_NAME}} GitHub organization",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ivviiviivvi/.github.git"
+    "url": "https://github.com/{{ORG_NAME}}/.github.git"
   },
   "keywords": [
     "github",
@@ -15,11 +15,11 @@
     "ai-framework",
     "governance"
   ],
-  "author": "ivviiviivvi",
+  "author": "{{ORG_NAME}}",
   "license": "MIT",
-  "homepage": "https://github.com/ivviiviivvi/.github#readme",
+  "homepage": "https://github.com/{{ORG_NAME}}/.github#readme",
   "bugs": {
-    "url": "https://github.com/ivviiviivvi/.github/issues"
+    "url": "https://github.com/{{ORG_NAME}}/.github/issues"
   },
   "engines": {
     "node": ">=20.0.0"

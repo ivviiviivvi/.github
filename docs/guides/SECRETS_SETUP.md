@@ -3,7 +3,7 @@
 > Comprehensive guide for configuring API keys and optional integrations
 
 **Last Updated:** December 21, 2025 **Maintainer:** @4444JPP **Support:**
-[GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 ______________________________________________________________________
 
@@ -167,7 +167,7 @@ Enhance voiceover quality with OpenAI's text-to-speech API.
 
 ```bash
 # Using GitHub CLI
-gh secret set OPENAI_API_KEY --org ivviiviivvi --body "sk-..."
+gh secret set OPENAI_API_KEY --org {{ORG_NAME}} --body "sk-..."
 
 # Or via Web UI:
 # Settings → Secrets and variables → Actions → New organization secret
@@ -245,10 +245,10 @@ Use your own voice or a custom voice profile.
 
 ```bash
 # API Key
-gh secret set ELEVENLABS_API_KEY --org ivviiviivvi
+gh secret set ELEVENLABS_API_KEY --org {{ORG_NAME}}
 
 # Voice ID
-gh secret set ELEVENLABS_VOICE_ID --org ivviiviivvi
+gh secret set ELEVENLABS_VOICE_ID --org {{ORG_NAME}}
 ```
 
 **Step 4: Configure Workflow**
@@ -288,10 +288,10 @@ Store walkthroughs long-term beyond GitHub's 90-day artifact retention.
 **Add Secrets:**
 
 ```bash
-gh secret set AWS_ACCESS_KEY_ID --org ivviiviivvi
-gh secret set AWS_SECRET_ACCESS_KEY --org ivviiviivvi
-gh secret set AWS_S3_BUCKET --org ivviiviivvi --body "walkthrough-videos"
-gh secret set AWS_REGION --org ivviiviivvi --body "us-east-1"
+gh secret set AWS_ACCESS_KEY_ID --org {{ORG_NAME}}
+gh secret set AWS_SECRET_ACCESS_KEY --org {{ORG_NAME}}
+gh secret set AWS_S3_BUCKET --org {{ORG_NAME}} --body "walkthrough-videos"
+gh secret set AWS_REGION --org {{ORG_NAME}} --body "us-east-1"
 ```
 
 **IAM Policy (Minimal Permissions):**
@@ -321,8 +321,8 @@ gh secret set AWS_REGION --org ivviiviivvi --body "us-east-1"
 
 ```bash
 # Upload the entire JSON key as a secret
-gh secret set GCP_SERVICE_ACCOUNT_KEY --org ivviiviivvi < key.json
-gh secret set GCS_BUCKET --org ivviiviivvi --body "walkthrough-videos"
+gh secret set GCP_SERVICE_ACCOUNT_KEY --org {{ORG_NAME}} < key.json
+gh secret set GCS_BUCKET --org {{ORG_NAME}} --body "walkthrough-videos"
 ```
 
 #### Option 3: Azure Blob Storage
@@ -336,8 +336,8 @@ gh secret set GCS_BUCKET --org ivviiviivvi --body "walkthrough-videos"
 **Add Secret:**
 
 ```bash
-gh secret set AZURE_STORAGE_CONNECTION_STRING --org ivviiviivvi
-gh secret set AZURE_CONTAINER --org ivviiviivvi --body "walkthroughs"
+gh secret set AZURE_STORAGE_CONNECTION_STRING --org {{ORG_NAME}}
+gh secret set AZURE_CONTAINER --org {{ORG_NAME}} --body "walkthroughs"
 ```
 
 #### Option 4: GitHub Releases (Free!)
@@ -427,13 +427,13 @@ Share secrets across all repositories in the organization.
 
 ```bash
 # Set organization secret
-gh secret set SECRET_NAME --org ivviiviivvi --body "secret-value"
+gh secret set SECRET_NAME --org {{ORG_NAME}} --body "secret-value"
 
 # Set organization secret from file
-gh secret set SECRET_NAME --org ivviiviivvi < secret-file.txt
+gh secret set SECRET_NAME --org {{ORG_NAME}} < secret-file.txt
 
 # List organization secrets
-gh secret list --org ivviiviivvi
+gh secret list --org {{ORG_NAME}}
 ```
 
 ### Repository-Level Secrets
@@ -452,13 +452,13 @@ For repository-specific configurations.
 
 ```bash
 # Set repository secret
-gh secret set SECRET_NAME --repo ivviiviivvi/repository-name --body "value"
+gh secret set SECRET_NAME --repo {{ORG_NAME}}/repository-name --body "value"
 
 # Set from file
-gh secret set SECRET_NAME --repo ivviiviivvi/repository-name < file.txt
+gh secret set SECRET_NAME --repo {{ORG_NAME}}/repository-name < file.txt
 
 # List repository secrets
-gh secret list --repo ivviiviivvi/repository-name
+gh secret list --repo {{ORG_NAME}}/repository-name
 ```
 
 ### Environment-Level Secrets
@@ -607,7 +607,7 @@ Error: Secret OPENAI_API_KEY not found
 1. **Verify Secret Exists:**
 
    ```bash
-   gh secret list --org ivviiviivvi
+   gh secret list --org {{ORG_NAME}}
    ```
 
 1. **Check Repository Access:**
@@ -623,7 +623,7 @@ Error: Secret OPENAI_API_KEY not found
 1. **Redeploy Secret:**
 
    ```bash
-   gh secret set OPENAI_API_KEY --org ivviiviivvi --body "new-value"
+   gh secret set OPENAI_API_KEY --org {{ORG_NAME}} --body "new-value"
    ```
 
 #### Issue: "Workflow permission denied"
@@ -873,16 +873,16 @@ ______________________________________________________________________
 ### Documentation
 
 - 📋
-  [Walkthrough Request Template](../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
-- 📢 [Announcement & Quick Start](./WALKTHROUGH_ANNOUNCEMENT.md)
+  [Walkthrough Request Template](../../.github/ISSUE_TEMPLATE/walkthrough-request.yml)
+- 📢 [Announcement & Quick Start](../reports/WALKTHROUGH_ANNOUNCEMENT.md)
 - 🏗️ [System Architecture](./AI_IMPLEMENTATION_GUIDE.md)
-- 🤝 [Contributing Guide](./CONTRIBUTING.md)
+- 🤝 [Contributing Guide](../governance/CONTRIBUTING.md)
 
 ### Getting Help
 
 - 💬 **GitHub Discussions**:
-  [Ask the community](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
-- 🐛 **Bug Reports**: [File an issue](../.github/ISSUE_TEMPLATE/)
+  [Ask the community](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
+- 🐛 **Bug Reports**: [File an issue](../../.github/ISSUE_TEMPLATE/)
 - 📧 **Direct Support**: Contact @4444JPP
 - 📖 **Documentation Hub**: [View all docs](./)
 
@@ -901,13 +901,13 @@ ______________________________________________________________________
 
 ```bash
 # List secrets
-gh secret list --org ivviiviivvi
+gh secret list --org {{ORG_NAME}}
 
 # Set secret
-gh secret set SECRET_NAME --org ivviiviivvi --body "value"
+gh secret set SECRET_NAME --org {{ORG_NAME}} --body "value"
 
 # Delete secret
-gh secret delete SECRET_NAME --org ivviiviivvi
+gh secret delete SECRET_NAME --org {{ORG_NAME}}
 
 # Test API key
 curl -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -936,7 +936,7 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 ______________________________________________________________________
 
 **Last Updated:** December 21, 2025 **Version:** 1.0.0 **Feedback:**
-[Submit suggestions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[Submit suggestions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 ______________________________________________________________________
 

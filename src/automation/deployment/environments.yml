@@ -5,9 +5,9 @@
 staging:
   # Target repositories for staging
   repositories:
-  - ivviiviivvi/.github
-  - ivviiviivvi/test-repo-1
-  - ivviiviivvi/test-repo-2
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/test-repo-1'
+  - '{{ORG_NAME}}/test-repo-2'
 
   # Phased rollout configuration
   canary_percentage: 33 # 1 of 3 repos
@@ -30,7 +30,7 @@ staging:
   # Feature flags
   features:
     auto_merge: true
-    intelligent_routing: true
+    issue_assignment_router: true
     self_healing: true
     proactive_maintenance: true
     ml_predictions: true
@@ -38,12 +38,12 @@ staging:
 production:
   # Target repositories for production
   repositories:
-  - ivviiviivvi/.github
-  - ivviiviivvi/production-repo-1
-  - ivviiviivvi/production-repo-2
-  - ivviiviivvi/production-repo-3
-  - ivviiviivvi/production-repo-4
-  - ivviiviivvi/production-repo-5
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/production-repo-1'
+  - '{{ORG_NAME}}/production-repo-2'
+  - '{{ORG_NAME}}/production-repo-3'
+  - '{{ORG_NAME}}/production-repo-4'
+  - '{{ORG_NAME}}/production-repo-5'
     # Add more repositories as needed
 
   # Phased rollout configuration (more conservative)
@@ -71,7 +71,7 @@ production:
   # Feature flags (more conservative rollout)
   features:
     auto_merge: false # Disabled initially
-    intelligent_routing: true
+    issue_assignment_router: true
     self_healing: true
     proactive_maintenance: false # Disabled initially
     ml_predictions: true
@@ -91,7 +91,7 @@ production:
 # Development environment (for local testing)
 development:
   repositories:
-  - ivviiviivvi/.github
+  - '{{ORG_NAME}}/.github'
 
   canary_percentage: 100
   progressive_percentage: 100
@@ -105,7 +105,7 @@ development:
 
   features:
     auto_merge: true
-    intelligent_routing: true
+    issue_assignment_router: true
     self_healing: true
     proactive_maintenance: true
     ml_predictions: true

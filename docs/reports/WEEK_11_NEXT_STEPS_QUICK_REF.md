@@ -32,9 +32,9 @@ ______________________________________________________________________
 
 1. **Open browser tabs** for each repository's labels page:
 
-   - [theoretical-specifications-first/labels](https://github.com/ivviiviivvi/theoretical-specifications-first/labels)
-   - [system-governance-framework/labels](https://github.com/ivviiviivvi/system-governance-framework/labels)
-   - [trade-perpetual-future/labels](https://github.com/ivviiviivvi/trade-perpetual-future/labels)
+   - [theoretical-specifications-first/labels](https://github.com/%7B%7BORG_NAME%7D%7D/theoretical-specifications-first/labels)
+   - [system-governance-framework/labels](https://github.com/%7B%7BORG_NAME%7D%7D/system-governance-framework/labels)
+   - [trade-perpetual-future/labels](https://github.com/%7B%7BORG_NAME%7D%7D/trade-perpetual-future/labels)
 
 1. **For each repository**, click "New label" and create 12 labels:
 
@@ -56,9 +56,9 @@ ______________________________________________________________________
 1. **Verify labels created**:
 
    ```bash
-   gh label list --repo ivviiviivvi/theoretical-specifications-first
-   gh label list --repo ivviiviivvi/system-governance-framework
-   gh label list --repo ivviiviivvi/trade-perpetual-future
+   gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
+   gh label list --repo {{ORG_NAME}}/system-governance-framework
+   gh label list --repo {{ORG_NAME}}/trade-perpetual-future
    ```
 
 **Time**: 15 minutes\
@@ -104,9 +104,9 @@ ______________________________________________________________________
 1. **Verify deployment**:
 
    ```bash
-   gh label list --repo ivviiviivvi/theoretical-specifications-first
-   gh label list --repo ivviiviivvi/system-governance-framework
-   gh label list --repo ivviiviivvi/trade-perpetual-future
+   gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
+   gh label list --repo {{ORG_NAME}}/system-governance-framework
+   gh label list --repo {{ORG_NAME}}/trade-perpetual-future
    ```
 
 **Time**: 10 minutes (plus 5 min for token generation)\
@@ -140,7 +140,7 @@ ______________________________________________________________________
 1. **Verify**:
 
    ```bash
-   gh label list --repo ivviiviivvi/theoretical-specifications-first
+   gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
    ```
 
 **Time**: 5 minutes\
@@ -178,13 +178,13 @@ python3 batch_onboard_repositories.py \
 1. **Check labels** (should see 12 per repo):
 
    ```bash
-   gh label list --repo ivviiviivvi/theoretical-specifications-first
+   gh label list --repo {{ORG_NAME}}/theoretical-specifications-first
    ```
 
 1. **Check workflows** (should see 3 per repo):
 
    ```bash
-   gh api repos/ivviiviivvi/theoretical-specifications-first/contents/.github/workflows
+   gh api repos/{{ORG_NAME}}/theoretical-specifications-first/contents/.github/workflows
    ```
 
 1. **Test workflow execution**:
@@ -226,11 +226,11 @@ ______________________________________________________________________
 
 ```bash
 # Check if labels exist
-gh label list --repo ivviiviivvi/theoretical-specifications-first | wc -l
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first | wc -l
 # Should show 12+ lines (labels + header)
 
 # Check if workflows exist
-gh api repos/ivviiviivvi/theoretical-specifications-first/contents/.github/workflows 2>&1 | grep -q "repository-health-check.yml"
+gh api repos/{{ORG_NAME}}/theoretical-specifications-first/contents/.github/workflows 2>&1 | grep -q "repository-health-check.yml"
 echo $?  # Should be 0 if workflow exists
 
 # Run dry-run to test
@@ -244,7 +244,7 @@ ______________________________________________________________________
 ## Documentation References
 
 - **Full Manual Guide**:
-  [docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
+  [docs/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md](../guides/WEEK_11_PHASE1_MANUAL_DEPLOYMENT_GUIDE.md)
 - **Phase 1 Status**: [docs/WEEK_11_PHASE1_STATUS.md](WEEK_11_PHASE1_STATUS.md)
 - **Session Summary**:
   [docs/WEEK_11_SESSION_SUMMARY.md](WEEK_11_SESSION_SUMMARY.md)

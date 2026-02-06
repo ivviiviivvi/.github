@@ -1,6 +1,6 @@
 # Related Repositories
 
-This document catalogs repositories across the ivviiviivvi ecosystem and their
+This document catalogs repositories across the {{ORG_NAME}} ecosystem and their
 relationships to this `.github` organization repository.
 
 ## Repository Categories
@@ -9,11 +9,11 @@ relationships to this `.github` organization repository.
 
 These repositories have been consolidated into this `.github` repo:
 
-| Repository                  | Source      | Status     | Notes                                    |
-| --------------------------- | ----------- | ---------- | ---------------------------------------- |
-| ospo-reusable-workflows     | 4444J99     | Integrated | Reusable workflow patterns extracted     |
-| system-governance-framework | ivviiviivvi | Integrated | Governance templates and AI handoff docs |
-| log-commit-preserve         | ivviiviivvi | Integrated | Commitizen configuration and workflows   |
+| Repository                  | Source       | Status     | Notes                                    |
+| --------------------------- | ------------ | ---------- | ---------------------------------------- |
+| ospo-reusable-workflows     | 4444J99      | Integrated | Reusable workflow patterns extracted     |
+| system-governance-framework | {{ORG_NAME}} | Integrated | Governance templates and AI handoff docs |
+| log-commit-preserve         | {{ORG_NAME}} | Integrated | Commitizen configuration and workflows   |
 
 ### Active Dependencies
 
@@ -31,30 +31,30 @@ These serve distinct purposes and should remain independent:
 
 #### auto-revision-epistemic-engine
 
-- **URL:** https://github.com/ivviiviivvi/auto-revision-epistemic-engine
+- **URL:** https://github.com/{{ORG_NAME}}/auto-revision-epistemic-engine
 - **Purpose:** Self-governing orchestration framework with 8 phases
 - **Features:** Human Review Gates (HRGs), RBAC, SLA enforcement, ethical audits
 - **Use Case:** Advanced scenarios requiring governance-first orchestration
 
 #### theoretical-specifications-first
 
-- **URL:** https://github.com/ivviiviivvi/theoretical-specifications-first
+- **URL:** https://github.com/{{ORG_NAME}}/theoretical-specifications-first
 - **Purpose:** Spec-Driven Development (SDD) toolkit
 - **Features:** `specify` CLI, template generation, AI agent integration
 - **Use Case:** Development methodology for spec-first approaches
 
 #### cognitive-archaelogy-tribunal
 
-- **URL:** https://github.com/ivviiviivvi/cognitive-archaelogy-tribunal
+- **URL:** https://github.com/{{ORG_NAME}}/cognitive-archaelogy-tribunal
 - **Purpose:** Ecosystem archaeology and audit tool
 - **Features:** Archive scanning, AI context aggregation, knowledge graphs
 - **Use Case:** Organizational discovery and knowledge management
 
 ### Pending Relocation
 
-| Repository        | Current Location      | Target      | Reason                                     |
-| ----------------- | --------------------- | ----------- | ------------------------------------------ |
-| metasystem-master | omni-dromenon-machina | ivviiviivvi | Development orchestrator, not art platform |
+| Repository        | Current Location      | Target       | Reason                                     |
+| ----------------- | --------------------- | ------------ | ------------------------------------------ |
+| metasystem-master | omni-dromenon-machina | {{ORG_NAME}} | Development orchestrator, not art platform |
 
 See [REPOSITORY_RELOCATION.md](./REPOSITORY_RELOCATION.md) for transfer
 instructions.
@@ -81,7 +81,7 @@ ______________________________________________________________________
 ```yaml
 jobs:
   label:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-labeler.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-labeler.yml@main
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -92,17 +92,17 @@ For advanced governance needs:
 
 ```bash
 # Clone the epistemic engine for local use
-gh repo clone ivviiviivvi/auto-revision-epistemic-engine
+gh repo clone {{ORG_NAME}}/auto-revision-epistemic-engine
 
 # Use SDD toolkit
-gh repo clone ivviiviivvi/theoretical-specifications-first
+gh repo clone {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 ### Running Ecosystem Analysis
 
 ```bash
 # Audit your organizational history
-gh repo clone ivviiviivvi/cognitive-archaelogy-tribunal
+gh repo clone {{ORG_NAME}}/cognitive-archaelogy-tribunal
 cd cognitive-archaelogy-tribunal
 python -m tribunal.scan --sources all
 ```

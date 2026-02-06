@@ -451,23 +451,23 @@ git add . && git commit -m "Update" && git push
 
 ### Documentation
 
-- [📖 Master Index](ORGANIZATIONAL_CONTENT_INDEX.md)
-- [🚀 Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)
-- [🛠️ Implementation Guide](ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md)
-- [📝 Issue Taxonomy](ISSUE_TAXONOMY.md)
-- [💬 Discussion Guide](DISCUSSION_GUIDE.md)
-- [📊 Projects Guide](PROJECTS_GUIDE.md)
-- [📚 Wiki Guide](WIKI_GUIDE.md)
+- [📖 Master Index](../reference/ORGANIZATIONAL_CONTENT_INDEX.md)
+- [🚀 Quick Start](../guides/ORGANIZATIONAL_CONTENT_QUICK_START.md)
+- [🛠️ Implementation Guide](../analysis/ORGANIZATIONAL_CONTENT_IMPLEMENTATION.md)
+- [📝 Issue Taxonomy](../reference/ISSUE_TAXONOMY.md)
+- [💬 Discussion Guide](../guides/DISCUSSION_GUIDE.md)
+- [📊 Projects Guide](../guides/PROJECTS_GUIDE.md)
+- [📚 Wiki Guide](../guides/WIKI_GUIDE.md)
 
 ### Templates
 
-- [Discussion Templates](../.github/DISCUSSION_TEMPLATE/)
-- [Project Templates](../.github/project-templates/)
-- [Wiki Templates](../.github/wiki-templates/)
+- [Discussion Templates](../../.github/DISCUSSION_TEMPLATE/)
+- [Project Templates](../../.github/project-templates/)
+- [Wiki Templates](../../.github/wiki-templates/)
 
 ### Automation
 
-- [Creation Workflow](../.github/workflows/create-organizational-content.yml)
+- [Creation Workflow](../../.github/workflows/create-organizational-content.yml)
 
 ### External Resources
 
@@ -505,7 +505,7 @@ git add . && git commit -m "Update" && git push
 ### For Administrators
 
 1. ✅ Review this summary
-1. ✅ Read [Quick Start](ORGANIZATIONAL_CONTENT_QUICK_START.md)
+1. ✅ Read [Quick Start](../guides/ORGANIZATIONAL_CONTENT_QUICK_START.md)
 1. ✅ Choose implementation path
 1. ✅ Deploy to pilot repository
 1. ✅ Gather feedback
@@ -553,9 +553,9 @@ git add . && git commit -m "Update" && git push
 ### Getting Help
 
 - 💬
-  [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Report Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 📧 Contact organization maintainers
 - 📖 Review documentation guides
 
@@ -584,13 +584,13 @@ This framework was built on best practices from:
 ______________________________________________________________________
 
 **Status**: ✅ Complete and Production-Ready\
-**Maintained By**: @ivviiviivvi
+**Maintained By**: @{{ORG_NAME}}
 organization\
 **License**: MIT (same as repository)\
 **Last Updated**:
 2025-12-28
 
 **Ready to get started?** →
-[Quick Start Guide](ORGANIZATIONAL_CONTENT_QUICK_START.md)
+[Quick Start Guide](../guides/ORGANIZATIONAL_CONTENT_QUICK_START.md)
 
 **Built with ❤️ for the Ivviiviivvi community**

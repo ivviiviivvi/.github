@@ -87,7 +87,7 @@ export GH_TOKEN=$(op read "op://Private/GitHub PAT/credential")
 
 # 2. Run the Python setup script
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # 3. Done! Projects created automatically
 ```
@@ -100,7 +100,7 @@ export GH_TOKEN="your_github_personal_access_token_here"
 
 # 2. Run the Python setup script
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # 3. Done! Projects created automatically
 ```
@@ -111,7 +111,7 @@ python3 configure-github-projects.py --org ivviiviivvi
 # Test without making changes
 export GH_TOKEN="your_token"
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi --dry-run
+python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 ```
 
 ### Option 3: Manual Step-by-Step
@@ -253,7 +253,7 @@ You'll know the deployment succeeded when:
 
 ### Week 1: Setup Complete
 
-- ✅ All 7 projects visible at `https://github.com/orgs/ivviiviivvi/projects`
+- ✅ All 7 projects visible at `https://github.com/orgs/{{ORG_NAME}}/projects`
 - ✅ Each project has configured fields with correct options and colors
 - ✅ All views created (Board, Table, Roadmap)
 - ✅ Automation rules enabled and tested
@@ -306,9 +306,9 @@ ______________________________________________________________________
 - **Documentation:** Review [README_PROJECTS.md](scripts/README_PROJECTS.md)
   troubleshooting section
 - **Discussions:** Ask in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues:** Report in
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Logs:** Check script output and GitHub UI for error messages
 
 ______________________________________________________________________
@@ -412,7 +412,7 @@ ______________________________________________________________________
 **Your next command:**
 
 ```bash
-export GH_TOKEN="your_token" && python3 scripts/configure-github-projects.py --org ivviiviivvi
+export GH_TOKEN="your_token" && python3 scripts/configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ______________________________________________________________________
@@ -429,9 +429,9 @@ _Status: 100% Ready for
 Deployment_
 
 **Questions?** Open an
-[issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+[issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 or
-[discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->.
+[discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->.
 
 **Ready to deploy?** Start with
 [GITHUB_PROJECTS_DEPLOYMENT.md](docs/GITHUB_PROJECTS_DEPLOYMENT.md).

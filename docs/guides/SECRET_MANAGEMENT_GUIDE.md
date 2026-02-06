@@ -129,7 +129,7 @@ default=get_secret_with_fallback(
 
 ### Medium Priority
 
-1. **`intelligent_routing.py`**
+1. **`issue_assignment_router.py`**
 
    - Documents `GITHUB_TOKEN` requirement
    - Should use `secret_manager.py`
@@ -400,7 +400,7 @@ jobs:
 | `sync_labels.py`                      | ✅ Integrated        | -        |
 | `archive/deployment/DEPLOY_PHASE1.sh` | ✅ Integrated        | -        |
 | `secret_manager.py`                   | ✅ Complete          | -        |
-| `intelligent_routing.py`              | ⚠️ Optional          | Low      |
+| `issue_assignment_router.py`          | ⚠️ Optional          | Low      |
 | Other shell scripts                   | ⚠️ Needs review      | Low      |
 | Test files                            | ✅ OK (dummy tokens) | Low      |
 
@@ -422,7 +422,7 @@ jobs:
 - [ ] Integrate `web_crawler.py`
 - [ ] Integrate `utils.py`
 - [ ] Integrate `sync_labels.py`
-- [ ] Integrate `intelligent_routing.py`
+- [ ] Integrate `issue_assignment_router.py`
 - [ ] Review all shell scripts
 
 ### Phase 3: CI/CD Integration (📋 Planned)
@@ -458,6 +458,6 @@ When adding new automation:
 ______________________________________________________________________
 
 **Last Updated**: 2026-01-17\
-**Maintainer**: @ivviiviivvi\
+**Maintainer**: @{{ORG_NAME}}\
 **Status**: Active
 Development

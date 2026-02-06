@@ -1,6 +1,6 @@
 # Governance Reference Guide
 
-This document consolidates governance best practices for the ivviiviivvi
+This document consolidates governance best practices for the {{ORG_NAME}}
 organization, derived from the system-governance-framework.
 
 ## Repository Settings Checklist
@@ -174,8 +174,9 @@ ______________________________________________________________________
 ## Related Resources
 
 - [REUSABLE_WORKFLOWS.md](./REUSABLE_WORKFLOWS.md) - Reusable GitHub Actions
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
-- [SECURITY.md](../SECURITY.md) - Security policy
+- [CONTRIBUTING.md](../../docs/governance/CONTRIBUTING.md) - Contribution
+  guidelines
+- [SECURITY.md](../../docs/governance/SECURITY.md) - Security policy
 - [CODEOWNERS](../CODEOWNERS) - Code ownership
 
 ______________________________________________________________________

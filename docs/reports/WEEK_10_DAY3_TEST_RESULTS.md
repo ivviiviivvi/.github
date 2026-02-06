@@ -59,7 +59,7 @@ Running: Batch onboarding dry-run
 Command: python3 automation/scripts/batch_onboard_repositories.py --config automation/config/batch-onboard-test.yml --dry-run --output test-results-dryrun.json
 ✓ Batch onboarding dry-run - SUCCESS
 ✓ Dry-run completed: 1 repositories processed
-✓   ivviiviivvi/.github: 2 steps (dry-run)
+✓   {{ORG_NAME}}/.github: 2 steps (dry-run)
 
 ============================================================
 TEST 4: Results Format Validation
@@ -170,7 +170,7 @@ python3 automation/scripts/batch_onboard_repositories.py \
 ```json
 [
   {
-    "repository": "ivviiviivvi/.github",
+    "repository": "{{ORG_NAME}}/.github",
     "success": true,
     "steps_completed": [
       "configure_labels (dry-run)",

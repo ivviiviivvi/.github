@@ -1,7 +1,7 @@
 # Branch and PR Cleanup Report
 
 **Date**: January 15, 2026\
-**Repository**: ivviiviivvi/.github\
+**Repository**: {{ORG_NAME}}/.github\
 **Executed
 By**: Automated Cleanup Process
 
@@ -326,9 +326,9 @@ Once the merge queue completes:
 The `.github` repository is now clean and ready for maintenance mode. The
 cleanup process and scripts can be applied to other organization repositories:
 
-- **ivviiviivvi/repository-1**
-- **ivviiviivvi/repository-2**
-- **ivviiviivvi/repository-3**
+- **{{ORG_NAME}}/repository-1**
+- **{{ORG_NAME}}/repository-2**
+- **{{ORG_NAME}}/repository-3**
 - etc.
 
 ______________________________________________________________________

@@ -10,7 +10,7 @@ ______________________________________________________________________
 ## 📦 Package Contents
 
 This complete implementation package includes everything needed to deploy
-comprehensive GitHub Projects for the ivviiviivvi organization.
+comprehensive GitHub Projects for the {{ORG_NAME}} organization.
 
 ### 📋 Documentation (7 Files)
 
@@ -261,10 +261,10 @@ export GH_TOKEN=$(op read "op://Private/GitHub PAT/credential")
 
 # 2. Run setup script
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # 3. Verify projects created
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 ```
 
 **Or with manual token:**
@@ -275,10 +275,10 @@ export GH_TOKEN="your_github_personal_access_token"
 
 # 2. Run setup script
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # 3. Verify projects created
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 ```
 
 ### Option 2: Manual Setup
@@ -350,7 +350,7 @@ jobs:
     steps:
       - uses: actions/add-to-project@v0.5.0
         with:
-          project-url: https://github.com/orgs/ivviiviivvi/projects/1
+          project-url: https://github.com/orgs/{{ORG_NAME}}/projects/1
           github-token: ${{ secrets.PROJECT_TOKEN }}
 ```
 
@@ -443,7 +443,7 @@ ______________________________________________________________________
 # Get project statistics
 gh api graphql -f query='
   query {
-    organization(login: "ivviiviivvi") {
+    organization(login: "{{ORG_NAME}}") {
       projectV2(number: 1) {
         title
         items(first: 100) {
@@ -506,14 +506,14 @@ ______________________________________________________________________
 gh auth status
 
 # List projects
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 
 # View project details
-gh project view PROJECT_NUMBER --owner ivviiviivvi
+gh project view PROJECT_NUMBER --owner {{ORG_NAME}}
 
 # Test API access
 gh api user --jq '.login'
-gh api orgs/ivviiviivvi --jq '.login'
+gh api orgs/{{ORG_NAME}} --jq '.login'
 ```
 
 ______________________________________________________________________
@@ -558,9 +558,9 @@ ______________________________________________________________________
 ### Community
 
 - **Questions:**
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - **Issues:**
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Chat:** Organization Slack/Teams (if available)
 
 ### External Resources
@@ -689,7 +689,7 @@ ______________________________________________________________________
 ## 🙏 Acknowledgments
 
 This comprehensive GitHub Projects implementation was created to support the
-ivviiviivvi organization's workflow and automation needs. It builds upon best
+{{ORG_NAME}} organization's workflow and automation needs. It builds upon best
 practices from:
 
 - GitHub's official Projects V2 documentation
@@ -705,10 +705,11 @@ ______________________________________________________________________
 **Questions or Feedback?**
 
 - Open an
-  [issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - Start a
-  [discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
-- Contribute improvements via [PR](https://github.com/ivviiviivvi/.github/pulls)
+  [discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
+- Contribute improvements via
+  [PR](https://github.com/%7B%7BORG_NAME%7D%7D/.github/pulls)
 
 ______________________________________________________________________
 

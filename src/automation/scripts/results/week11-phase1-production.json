@@ -1,6 +1,6 @@
 [
   {
-    "repository": "ivviiviivvi/theoretical-specifications-first",
+    "repository": "{{ORG_NAME}}/theoretical-specifications-first",
     "success": true,
     "steps_completed": ["deploy_workflows", "configure_labels"],
     "error": null,
@@ -8,7 +8,7 @@
     "timestamp": "2026-01-17T15:34:20.710233"
   },
   {
-    "repository": "ivviiviivvi/system-governance-framework",
+    "repository": "{{ORG_NAME}}/system-governance-framework",
     "success": true,
     "steps_completed": ["deploy_workflows", "configure_labels"],
     "error": null,
@@ -16,7 +16,7 @@
     "timestamp": "2026-01-17T15:34:38.603648"
   },
   {
-    "repository": "ivviiviivvi/trade-perpetual-future",
+    "repository": "{{ORG_NAME}}/trade-perpetual-future",
     "success": true,
     "steps_completed": ["deploy_workflows", "configure_labels"],
     "error": null,

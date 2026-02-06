@@ -5,11 +5,11 @@ project:
   codename: organization-standard-governance
   description: Organization-wide GitHub configuration and community health files.
   owners:
-  - handle: ivviiviivvi
+  - handle: '{{ORG_NAME}}'
     role: steward
   repo:
     monorepo: false
-    org: ivviiviivvi
+    org: '{{ORG_NAME}}'
     type: generic
     role: mythos/research
 

@@ -30,7 +30,7 @@ ______________________________________________________________________
 
 Using controlled test set:
 
-1. `ivviiviivvi/.github` (this repository)
+1. `{{ORG_NAME}}/.github` (this repository)
 1. Additional test repositories (TBD)
 
 ### Test Phases

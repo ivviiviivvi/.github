@@ -34,7 +34,7 @@ token) which has:
 
 ```
 HTTP 403: Resource not accessible by integration
-(https://api.github.com/repos/ivviiviivvi/intelligent-artifice-ark/labels)
+(https://api.github.com/repos/{{ORG_NAME}}/intelligent-artifice-ark/labels)
 ```
 
 **Attempts Made**:
@@ -202,8 +202,8 @@ ______________________________________________________________________
    # Check repositories
    for repo in intelligent-artifice-ark render-second-amendment a-mavs-olevm a-recursive-root collective-persona-operations; do
      echo "📦 $repo"
-     gh api repos/ivviiviivvi/$repo/labels --jq 'length'
-     gh api repos/ivviiviivvi/$repo/contents/.github/workflows --jq 'length'
+     gh api repos/{{ORG_NAME}}/$repo/labels --jq 'length'
+     gh api repos/{{ORG_NAME}}/$repo/contents/.github/workflows --jq 'length'
    done
    ```
 
@@ -212,7 +212,7 @@ ______________________________________________________________________
    ```bash
    # Trigger health check on each repo
    for repo in intelligent-artifice-ark render-second-amendment a-mavs-olevm a-recursive-root collective-persona-operations; do
-     gh workflow run repository-health-check.yml -R "ivviiviivvi/$repo"
+     gh workflow run repository-health-check.yml -R "{{ORG_NAME}}/$repo"
    done
    ```
 

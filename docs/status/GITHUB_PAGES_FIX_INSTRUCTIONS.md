@@ -25,11 +25,12 @@ Actions".**
 
 1. **Go to Repository Settings**
 
-   - Navigate to: <https://github.com/ivviiviivvi/.github/settings>
+   - Navigate to: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/settings>
 
 1. **Click on "Pages" in the left sidebar**
 
-   - Direct link: <https://github.com/ivviiviivvi/.github/settings/pages>
+   - Direct link:
+     <https://github.com/%7B%7BORG_NAME%7D%7D/.github/settings/pages>
 
 1. **Change the Build and deployment source:**
 
@@ -46,7 +47,8 @@ Actions".**
 
 1. **Trigger a new deployment (optional)**
 
-   - Go to Actions tab: <https://github.com/ivviiviivvi/.github/actions>
+   - Go to Actions tab:
+     <https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions>
    - Click on "Deploy Jekyll site to Pages" workflow
    - Click "Run workflow" → "Run workflow" button
    - OR just wait for the next push to trigger it automatically
@@ -65,7 +67,7 @@ After making this change:
 
 1. The Pages status will change from "legacy" to "workflow"
 1. The next deployment will use the GitHub Actions workflow
-1. Your site will be live at: <https://ivviiviivvi.github.io/.github/>
+1. Your site will be live at: <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 1. The 404 errors will be resolved
 
 ### Verification
@@ -74,7 +76,7 @@ After changing the settings, you can verify with:
 
 ```bash
 # Check Pages status
-gh api repos/ivviiviivvi/.github/pages --jq '.status, .build_type'
+gh api repos/{{ORG_NAME}}/.github/pages --jq '.status, .build_type'
 
 # Should show:
 # built (or building)
@@ -83,7 +85,7 @@ gh api repos/ivviiviivvi/.github/pages --jq '.status, .build_type'
 
 ```bash
 # Test the site
-curl -I https://ivviiviivvi.github.io/.github/
+curl -I https://{{ORG_NAME}}.github.io/.github/
 
 # Should show:
 # HTTP/2 200

@@ -2,11 +2,11 @@ blank_issues_enabled: false
 
 contact_links:
 - name: 🔒 Security Issue
-  url: https://github.com/ivviiviivvi/.github/security/advisories/new
+  url: https://github.com/{{ORG_NAME}}/.github/security/advisories/new
   about: Please report security vulnerabilities privately
 - name: 💬 Discussions
-  url: https://github.com/ivviiviivvi/.github/discussions
+  url: https://github.com/{{ORG_NAME}}/.github/discussions
   about: Ask questions and discuss ideas with the community
 - name: 📚 Best Practices Sessions
-  url: https://github.com/ivviiviivvi/.github/blob/main/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md
+  url: https://github.com/{{ORG_NAME}}/.github/blob/main/docs/guides/GITHUB_BEST_PRACTICES_SESSIONS.md
   about: Learn about GitHub best practices sessions and how to participate

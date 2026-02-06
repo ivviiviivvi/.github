@@ -77,7 +77,7 @@ ______________________________________________________________________
 The gallery is available at:
 
 ```
-https://ivviiviivvi.github.io/.github/
+https://{{ORG_NAME}}.github.io/.github/
 ```
 
 ### Gallery Features
@@ -139,7 +139,7 @@ Embed the entire gallery in your website:
 
 ```html
 <iframe
-  src="https://ivviiviivvi.github.io/.github/"
+  src="https://{{ORG_NAME}}.github.io/.github/"
   width="100%"
   height="800px"
   frameborder="0"
@@ -167,7 +167,7 @@ For responsive embedding that adapts to screen size:
   style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;"
 >
   <iframe
-    src="https://ivviiviivvi.github.io/.github/"
+    src="https://{{ORG_NAME}}.github.io/.github/"
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
     frameborder="0"
   ></iframe>
@@ -180,7 +180,7 @@ ______________________________________________________________________
 
 ### Configuring a Custom Domain
 
-To use a custom domain (e.g., `walkthroughs.ivviiviivvi.dev`):
+To use a custom domain (e.g., `walkthroughs.{{ORG_NAME}}.dev`):
 
 **Step 1: Add CNAME Record**
 
@@ -189,14 +189,14 @@ Add a CNAME record in your DNS settings:
 ```
 Type: CNAME
 Name: walkthroughs
-Value: ivviiviivvi.github.io
+Value: {{ORG_NAME}}.github.io
 TTL: 3600
 ```
 
 **Step 2: Configure GitHub Pages**
 
 1. Go to repository Settings → Pages
-1. Enter custom domain: `walkthroughs.ivviiviivvi.dev`
+1. Enter custom domain: `walkthroughs.{{ORG_NAME}}.dev`
 1. Enable "Enforce HTTPS"
 1. Save settings
 
@@ -205,7 +205,7 @@ TTL: 3600
 Update `_config.yml`:
 
 ```yaml
-url: "https://walkthroughs.ivviiviivvi.dev"
+url: "https://walkthroughs.{{ORG_NAME}}.dev"
 baseurl: ""
 ```
 
@@ -243,7 +243,7 @@ Configuration example:
 analytics:
   enabled: true
   provider: "plausible"
-  domain: "walkthroughs.ivviiviivvi.dev"
+  domain: "walkthroughs.{{ORG_NAME}}.dev"
 ```
 
 ______________________________________________________________________
@@ -442,7 +442,7 @@ Extend walkthrough metadata:
 ```yaml
 # docs/_data/walkthroughs.yml
 - title: "My Walkthrough"
-  repository: "ivviiviivvi/myrepo"
+  repository: "{{ORG_NAME}}/myrepo"
   custom_field: "Custom Value"
   rating: 5
   views: 1234
@@ -456,7 +456,7 @@ Expose walkthrough data via API:
 # _data/api/walkthroughs.json
 ```
 
-Access at: `https://ivviiviivvi.github.io/.github/_data/api/walkthroughs.json`
+Access at: `https://{{ORG_NAME}}.github.io/.github/_data/api/walkthroughs.json`
 
 ______________________________________________________________________
 
@@ -466,9 +466,9 @@ Need help? Contact:
 
 - 💬 **GitHub**:
   [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
-- 📚 **Documentation**: [AgentSphere Setup](./AGENTSPHERE_SETUP.md)
+- 📚 **Documentation**: AgentSphere Setup
 - 🐛 **Issues**:
-  [Report a bug](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report a bug](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 📖 **Jekyll Docs**: https://jekyllrb.com/docs/
 
 ______________________________________________________________________

@@ -299,7 +299,7 @@ auto_merge:
 
 ```yaml
 # .github/routing.yml
-intelligent_routing:
+issue_assignment_router:
   enabled: true
 
   # Routing factors and weights
@@ -522,7 +522,7 @@ def check_eligibility(
 ### 2. Intelligent Routing API
 
 ```python
-# automation/scripts/intelligent_routing.py
+# automation/scripts/issue_assignment_router.py
 
 def calculate_assignment(
     issue: dict,
@@ -793,7 +793,7 @@ class RateLimiter:
     "timestamp": "2026-04-01T12:00:00Z",
     "action": "auto_merge_executed",
     "actor": "github-actions[bot]",
-    "repository": "ivviiviivvi/.github",
+    "repository": "{{ORG_NAME}}/.github",
     "pr_number": 123,
     "details": {
         "checks_passed": {...},

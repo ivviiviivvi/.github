@@ -1,7 +1,7 @@
 # Gitleaks configuration for managing false positives
 # https://github.com/gitleaks/gitleaks
 
-title = "Gitleaks Configuration for ivviiviivvi/.github"
+title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
 
 # Global allowlist for false positives
 [allowlist]

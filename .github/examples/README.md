@@ -434,9 +434,9 @@ ______________________________________________________________________
 
 - **Quick Start Guide**: [Get started in 5 minutes](../docs/QUICK_START.md)
 - **GitHub Issues**:
-  [Report problems](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report problems](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Ask questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Ask questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Contact**:
   [@4444JPP](https://github.com/4444JPP)<!-- link:examples.sample_profile -->
 
@@ -451,7 +451,8 @@ Have a configuration for a framework not listed here? We welcome contributions!
 1. Submit a PR with your example
 1. Update this README
 
-See [Contributing Guidelines](../../docs/CONTRIBUTING.md) for details.
+See [Contributing Guidelines](../../docs/governance/CONTRIBUTING.md) for
+details.
 
 ______________________________________________________________________
 

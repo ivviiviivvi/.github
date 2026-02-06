@@ -29,7 +29,7 @@ body. **Prevention:** For status checks on untrusted URLs, always use
 ## 2025-02-17 - \[Fix Code Injection in GitHub Actions\]
 
 **Vulnerability:** Unmitigated Code Injection in
-`.github/workflows/bulk-pr-operations.yml`. The workflow interpolated user
+`.github/workflows/batch-pr-operations.yml`. The workflow interpolated user
 inputs directly into a JavaScript code block executed by
 `actions/github-script`. A malicious user with workflow dispatch permissions
 could inject arbitrary JavaScript code. **Learning:** GitHub Actions

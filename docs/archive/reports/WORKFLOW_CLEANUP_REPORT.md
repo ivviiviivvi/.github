@@ -344,7 +344,7 @@ ______________________________________________________________________
 1. ✅ `.github/workflows/reset_quotas.yml`
 1. ✅ `.github/workflows/admin-approval-dashboard.yml`
 1. ✅ `.github/workflows/semgrep.yml`
-1. ✅ `.github/workflows/daily-master-orchestrator.yml`
+1. ✅ `.github/workflows/daily-orchestrator.yml`
 1. ✅ `.github/workflows/build-pages-site.yml`
 1. ✅ `.github/workflows/health-check-live-apps.yml`
 1. ✅ `.github/workflows/security-scan.yml`

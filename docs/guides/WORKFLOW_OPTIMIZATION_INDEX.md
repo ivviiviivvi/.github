@@ -3,7 +3,7 @@
 ## 📑 Overview
 
 This comprehensive analysis examines all 76 GitHub Actions workflows in the
-ivviiviivvi/.github repository across 9 critical dimensions: Critique, Logic,
+{{ORG_NAME}}/.github repository across 9 critical dimensions: Critique, Logic,
 Logos, Pathos, Ethos, Blindspots, Shatter-points, Bloom, and Evolve.
 
 **Analysis Date**: 2025-12-23\
@@ -19,7 +19,8 @@ ______________________________________________________________________
 
 ### 0. Next Steps Implementation (START HERE!) 🚀
 
-**File**: [`NEXT_STEPS_IMPLEMENTATION.md`](../NEXT_STEPS_IMPLEMENTATION.md)
+**File**:
+[`NEXT_STEPS_IMPLEMENTATION.md`](../analysis/NEXT_STEPS_IMPLEMENTATION.md)
 
 **Purpose**: Concrete, actionable implementation guide
 
@@ -40,7 +41,7 @@ ______________________________________________________________________
 
 ### 1. Executive Summary (Overview) 📊
 
-**File**: [`EXECUTIVE_SUMMARY.md`](../EXECUTIVE_SUMMARY.md)
+**File**: [`EXECUTIVE_SUMMARY.md`](../reports/EXECUTIVE_SUMMARY.md)
 
 **Purpose**: High-level overview for decision-makers
 
@@ -61,7 +62,7 @@ ______________________________________________________________________
 ### 2. Comprehensive Analysis (Deep Dive) 🔬
 
 **File**:
-[`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+[`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 
 **Purpose**: Exhaustive 9-dimensional analysis
 
@@ -86,7 +87,7 @@ ______________________________________________________________________
 ### 3. Implementation Roadmap (Action Plan) 🗺️
 
 **File**:
-[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md)
+[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
 
 **Purpose**: Step-by-step implementation guide
 
@@ -108,7 +109,8 @@ ______________________________________________________________________
 
 ### 4. Security Audit Report (Security Focus) 🔒
 
-**File**: [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md)
+**File**:
+[`WORKFLOW_SECURITY_AUDIT.md`](../workflows/WORKFLOW_SECURITY_AUDIT.md)
 
 **Purpose**: Comprehensive security analysis
 
@@ -160,7 +162,7 @@ ______________________________________________________________________
 
 ### For Executives & Decision Makers
 
-1. ✅ Read: [`EXECUTIVE_SUMMARY.md`](../EXECUTIVE_SUMMARY.md)
+1. ✅ Read: [`EXECUTIVE_SUMMARY.md`](../reports/EXECUTIVE_SUMMARY.md)
 1. Review the decision matrix and ROI
 1. Approve recommended option
 1. Assign ownership and resources
@@ -171,13 +173,13 @@ ______________________________________________________________________
 
 ### For Technical Leaders
 
-1. ✅ Read: [`EXECUTIVE_SUMMARY.md`](../EXECUTIVE_SUMMARY.md)
+1. ✅ Read: [`EXECUTIVE_SUMMARY.md`](../reports/EXECUTIVE_SUMMARY.md)
 1. ✅ Deep dive:
-   [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+   [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 1. ✅ Review security:
-   [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md)
+   [`WORKFLOW_SECURITY_AUDIT.md`](../workflows/WORKFLOW_SECURITY_AUDIT.md)
 1. ✅ Plan implementation:
-   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md)
+   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
 
 **Time Investment**: 2-3 hours
 
@@ -185,9 +187,9 @@ ______________________________________________________________________
 
 ### For Implementation Teams
 
-1. ✅ Skim: [`EXECUTIVE_SUMMARY.md`](../EXECUTIVE_SUMMARY.md)
+1. ✅ Skim: [`EXECUTIVE_SUMMARY.md`](../reports/EXECUTIVE_SUMMARY.md)
 1. ✅ Focus on:
-   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md)
+   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
 1. ✅ Keep handy: [`WORKFLOW_QUICK_REFERENCE.md`](./WORKFLOW_QUICK_REFERENCE.md)
 1. Use roadmap as task list and checklist
 
@@ -197,7 +199,8 @@ ______________________________________________________________________
 
 ### For Security Teams
 
-1. ✅ Read: [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md)
+1. ✅ Read:
+   [`WORKFLOW_SECURITY_AUDIT.md`](../workflows/WORKFLOW_SECURITY_AUDIT.md)
 1. Review critical findings in Section 1
 1. Implement immediate actions in Section 10
 1. Set up monitoring from Section 11
@@ -249,8 +252,9 @@ ______________________________________________________________________
 
 ### Action 1: Fix Critical Security Issue (30 minutes)
 
-**File to read**: [`WORKFLOW_SECURITY_AUDIT.md`](../WORKFLOW_SECURITY_AUDIT.md)
-\- Section 1
+**File to read**:
+[`WORKFLOW_SECURITY_AUDIT.md`](../workflows/WORKFLOW_SECURITY_AUDIT.md) -
+Section 1
 
 **What to do**:
 
@@ -289,8 +293,8 @@ ______________________________________________________________________
 ### Action 3: Create Contributor Guide (1 hour)
 
 **File to read**:
-[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md) -
-Phase 1
+[`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
+\- Phase 1
 
 **What to do**: Create `.github/WORKFLOW_GUIDE.md` using template from roadmap
 
@@ -338,8 +342,8 @@ ______________________________________________________________________
 ### Level 2: Optimization (Month 1)
 
 1. Read:
-   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../WORKFLOW_OPTIMIZATION_ROADMAP.md) -
-   Phase 2
+   [`WORKFLOW_OPTIMIZATION_ROADMAP.md`](../workflows/WORKFLOW_OPTIMIZATION_ROADMAP.md)
+   \- Phase 2
 1. Extract: Create reusable workflows
 1. Monitor: Set up metrics tracking
 1. Enhance: Add retry logic
@@ -347,7 +351,7 @@ ______________________________________________________________________
 ### Level 3: Advanced (Quarter 1)
 
 1. Read:
-   [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
+   [`COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md`](../workflows/COMPREHENSIVE_WORKFLOW_OPTIMIZATION_ANALYSIS.md)
 1. Implement: Smart test selection
 1. Build: Workflow dashboard
 1. Deploy: Progressive deployment
@@ -479,7 +483,7 @@ ______________________________________________________________________
 
 - **GitHub Issues**: Technical problems or bugs
 - **GitHub Discussions**: General questions and ideas
-- **Stack Overflow**: Tag `github-actions` and `ivviiviivvi`
+- **Stack Overflow**: Tag `github-actions` and `{{ORG_NAME}}`
 
 ### For Strategic Discussions
 

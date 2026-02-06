@@ -1,6 +1,6 @@
 {
   "timestamp": "2026-01-15T18:53:07.511685+00:00",
-  "organization": "ivviiviivvi",
+  "organization": "{{ORG_NAME}}",
   "link_validation": {
     "total_links": 2018,
     "valid": 399,
@@ -67,7 +67,7 @@
         "status": 400
       },
       {
-        "url": "https://stackblitz.com/github/ivviiviivvi/.github",
+        "url": "https://stackblitz.com/github/{{ORG_NAME}}/.github",
         "status": 408
       },
       {
@@ -171,7 +171,7 @@
         "status": 401
       },
       {
-        "url": "https://ivviiviivvi.github.io/react-app",
+        "url": "https://{{ORG_NAME}}.github.io/react-app",
         "status": 404
       },
       {
@@ -207,7 +207,7 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github/metrics-dashboard.html",
+        "url": "https://{{ORG_NAME}}.github.io/.github/metrics-dashboard.html",
         "status": 404
       },
       {
@@ -343,11 +343,11 @@
         "status": 400
       },
       {
-        "url": "https://tutorials.ivviiviivvi.com",
+        "url": "https://tutorials.{{ORG_NAME}}.com",
         "status": 404
       },
       {
-        "url": "https://github.com/ivviiviivvi/project-b",
+        "url": "https://github.com/{{ORG_NAME}}/project-b",
         "status": 404
       },
       {
@@ -407,7 +407,7 @@
         "status": 404
       },
       {
-        "url": "https://ivviiviivvi.github.io/",
+        "url": "https://{{ORG_NAME}}.github.io/",
         "status": 404
       },
       {
@@ -799,11 +799,11 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github/",
+        "url": "https://{{ORG_NAME}}.github.io/.github/",
         "status": 404
       },
       {
-        "url": "https://ivviiviivvi.com/support",
+        "url": "https://{{ORG_NAME}}.com/support",
         "status": 404
       },
       {
@@ -975,7 +975,7 @@
         "status": 400
       },
       {
-        "url": "https://github.com/ivviiviivvi/new-repo.git",
+        "url": "https://github.com/{{ORG_NAME}}/new-repo.git",
         "status": 404
       },
       {
@@ -1567,7 +1567,7 @@
         "status": 400
       },
       {
-        "url": "https://github.com/ivviiviivvi/awesome-ivviiviivvi",
+        "url": "https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}}",
         "status": 404
       },
       {
@@ -1603,7 +1603,7 @@
         "status": 400
       },
       {
-        "url": "https://walkthroughs.ivviiviivvi.dev",
+        "url": "https://walkthroughs.{{ORG_NAME}}.dev",
         "status": 404
       },
       {
@@ -1635,7 +1635,7 @@
         "status": 400
       },
       {
-        "url": "https://raw.githubusercontent.com/ivviiviivvi/.github/main/metrics/baseline-metrics.json",
+        "url": "https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/baseline-metrics.json",
         "status": 404
       },
       {
@@ -1811,7 +1811,7 @@
         "status": 400
       },
       {
-        "url": "https://github.com/ivviiviivvi/.github/tree/main/metrics",
+        "url": "https://github.com/{{ORG_NAME}}/.github/tree/main/metrics",
         "status": 404
       },
       {
@@ -1871,7 +1871,7 @@
         "status": 404
       },
       {
-        "url": "https://youtube.com/@ivviiviivvi",
+        "url": "https://youtube.com/@{{ORG_NAME}}",
         "status": 404
       },
       {
@@ -2143,7 +2143,7 @@
         "status": 400
       },
       {
-        "url": "https://github.com/ivviiviivvi/.github/actions/runs/123456789",
+        "url": "https://github.com/{{ORG_NAME}}/.github/actions/runs/123456789",
         "status": 404
       },
       {
@@ -2307,7 +2307,7 @@
         "status": 400
       },
       {
-        "url": "https://github.com/ivviiviivvi/project-a",
+        "url": "https://github.com/{{ORG_NAME}}/project-a",
         "status": 404
       },
       {
@@ -2391,7 +2391,7 @@
         "status": 400
       },
       {
-        "url": "https://linkedin.com/company/ivviiviivvi",
+        "url": "https://linkedin.com/company/{{ORG_NAME}}",
         "status": 404
       },
       {
@@ -2403,7 +2403,7 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io",
+        "url": "https://{{ORG_NAME}}.github.io",
         "status": 404
       },
       {
@@ -2459,7 +2459,7 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github/apps/my-react-app/",
+        "url": "https://{{ORG_NAME}}.github.io/.github/apps/my-react-app/",
         "status": 404
       },
       {
@@ -2607,7 +2607,7 @@
         "status": 408
       },
       {
-        "url": "https://cookbook.ivviiviivvi.com",
+        "url": "https://cookbook.{{ORG_NAME}}.com",
         "status": 404
       },
       {
@@ -2931,7 +2931,7 @@
         "status": 400
       },
       {
-        "url": "https://agentsphere.dev/ivviiviivvi/",
+        "url": "https://agentsphere.dev/{{ORG_NAME}}/",
         "status": 404
       },
       {
@@ -3003,7 +3003,7 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github/_data/api/walkthroughs.json",
+        "url": "https://{{ORG_NAME}}.github.io/.github/_data/api/walkthroughs.json",
         "status": 404
       },
       {
@@ -3035,11 +3035,11 @@
         "status": 400
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github/apps/my-react-app",
+        "url": "https://{{ORG_NAME}}.github.io/.github/apps/my-react-app",
         "status": 404
       },
       {
-        "url": "https://ivviiviivvi.github.io/.github",
+        "url": "https://{{ORG_NAME}}.github.io/.github",
         "status": 404
       },
       {
@@ -3089,7 +3089,7 @@
     "repositories": [
       {
         "name": "a-mavs-olevm",
-        "full_name": "ivviiviivvi/a-mavs-olevm",
+        "full_name": "{{ORG_NAME}}/a-mavs-olevm",
         "is_active": true,
         "days_since_update": 35,
         "stars": 1,
@@ -3101,7 +3101,7 @@
       },
       {
         "name": "solve-et-coagula",
-        "full_name": "ivviiviivvi/solve-et-coagula",
+        "full_name": "{{ORG_NAME}}/solve-et-coagula",
         "is_active": true,
         "days_since_update": 3,
         "stars": 0,
@@ -3113,7 +3113,7 @@
       },
       {
         "name": "auto-ontological-schema",
-        "full_name": "ivviiviivvi/auto-ontological-schema",
+        "full_name": "{{ORG_NAME}}/auto-ontological-schema",
         "is_active": true,
         "days_since_update": 73,
         "stars": 0,
@@ -3125,7 +3125,7 @@
       },
       {
         "name": "docs-et-cet-alia",
-        "full_name": "ivviiviivvi/docs-et-cet-alia",
+        "full_name": "{{ORG_NAME}}/docs-et-cet-alia",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3137,7 +3137,7 @@
       },
       {
         "name": "codex-a-i",
-        "full_name": "ivviiviivvi/codex-a-i",
+        "full_name": "{{ORG_NAME}}/codex-a-i",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3149,7 +3149,7 @@
       },
       {
         "name": "universal-node-network",
-        "full_name": "ivviiviivvi/universal-node-network",
+        "full_name": "{{ORG_NAME}}/universal-node-network",
         "is_active": true,
         "days_since_update": 60,
         "stars": 1,
@@ -3161,7 +3161,7 @@
       },
       {
         "name": "intelligent-artifice-ark",
-        "full_name": "ivviiviivvi/intelligent-artifice-ark",
+        "full_name": "{{ORG_NAME}}/intelligent-artifice-ark",
         "is_active": true,
         "days_since_update": 15,
         "stars": 1,
@@ -3173,7 +3173,7 @@
       },
       {
         "name": "collective-persona-operations",
-        "full_name": "ivviiviivvi/collective-persona-operations",
+        "full_name": "{{ORG_NAME}}/collective-persona-operations",
         "is_active": true,
         "days_since_update": 60,
         "stars": 1,
@@ -3185,7 +3185,7 @@
       },
       {
         "name": "system-governance-framework",
-        "full_name": "ivviiviivvi/system-governance-framework",
+        "full_name": "{{ORG_NAME}}/system-governance-framework",
         "is_active": true,
         "days_since_update": 35,
         "stars": 1,
@@ -3197,7 +3197,7 @@
       },
       {
         "name": "theoretical-specifications-first",
-        "full_name": "ivviiviivvi/theoretical-specifications-first",
+        "full_name": "{{ORG_NAME}}/theoretical-specifications-first",
         "is_active": true,
         "days_since_update": 35,
         "stars": 1,
@@ -3209,7 +3209,7 @@
       },
       {
         "name": "log-commit-preserve",
-        "full_name": "ivviiviivvi/log-commit-preserve",
+        "full_name": "{{ORG_NAME}}/log-commit-preserve",
         "is_active": true,
         "days_since_update": 73,
         "stars": 0,
@@ -3221,7 +3221,7 @@
       },
       {
         "name": "semantic-pedantic-grep",
-        "full_name": "ivviiviivvi/semantic-pedantic-grep",
+        "full_name": "{{ORG_NAME}}/semantic-pedantic-grep",
         "is_active": true,
         "days_since_update": 73,
         "stars": 0,
@@ -3233,7 +3233,7 @@
       },
       {
         "name": "train-neural-network",
-        "full_name": "ivviiviivvi/train-neural-network",
+        "full_name": "{{ORG_NAME}}/train-neural-network",
         "is_active": true,
         "days_since_update": 73,
         "stars": 0,
@@ -3245,7 +3245,7 @@
       },
       {
         "name": "render-second-amendment",
-        "full_name": "ivviiviivvi/render-second-amendment",
+        "full_name": "{{ORG_NAME}}/render-second-amendment",
         "is_active": true,
         "days_since_update": 70,
         "stars": 1,
@@ -3257,7 +3257,7 @@
       },
       {
         "name": "a-context7",
-        "full_name": "ivviiviivvi/a-context7",
+        "full_name": "{{ORG_NAME}}/a-context7",
         "is_active": true,
         "days_since_update": 60,
         "stars": 1,
@@ -3269,7 +3269,7 @@
       },
       {
         "name": "reverse-engine-recursive-run",
-        "full_name": "ivviiviivvi/reverse-engine-recursive-run",
+        "full_name": "{{ORG_NAME}}/reverse-engine-recursive-run",
         "is_active": true,
         "days_since_update": 60,
         "stars": 1,
@@ -3281,7 +3281,7 @@
       },
       {
         "name": "a-recursive-root",
-        "full_name": "ivviiviivvi/a-recursive-root",
+        "full_name": "{{ORG_NAME}}/a-recursive-root",
         "is_active": true,
         "days_since_update": 35,
         "stars": 1,
@@ -3293,7 +3293,7 @@
       },
       {
         "name": "fetch-familiar-friends",
-        "full_name": "ivviiviivvi/fetch-familiar-friends",
+        "full_name": "{{ORG_NAME}}/fetch-familiar-friends",
         "is_active": true,
         "days_since_update": 4,
         "stars": 0,
@@ -3305,7 +3305,7 @@
       },
       {
         "name": "4-ivi374-F0Rivi4",
-        "full_name": "ivviiviivvi/4-ivi374-F0Rivi4",
+        "full_name": "{{ORG_NAME}}/4-ivi374-F0Rivi4",
         "is_active": true,
         "days_since_update": 81,
         "stars": 1,
@@ -3317,7 +3317,7 @@
       },
       {
         "name": "public-record-data-scrapper",
-        "full_name": "ivviiviivvi/public-record-data-scrapper",
+        "full_name": "{{ORG_NAME}}/public-record-data-scrapper",
         "is_active": true,
         "days_since_update": 16,
         "stars": 0,
@@ -3329,7 +3329,7 @@
       },
       {
         "name": "auto-revision-epistemic-engine",
-        "full_name": "ivviiviivvi/auto-revision-epistemic-engine",
+        "full_name": "{{ORG_NAME}}/auto-revision-epistemic-engine",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3341,7 +3341,7 @@
       },
       {
         "name": ".github",
-        "full_name": "ivviiviivvi/.github",
+        "full_name": "{{ORG_NAME}}/.github",
         "is_active": true,
         "days_since_update": 0,
         "stars": 0,
@@ -3353,7 +3353,7 @@
       },
       {
         "name": "anon-hookup-now",
-        "full_name": "ivviiviivvi/anon-hookup-now",
+        "full_name": "{{ORG_NAME}}/anon-hookup-now",
         "is_active": true,
         "days_since_update": 76,
         "stars": 0,
@@ -3365,7 +3365,7 @@
       },
       {
         "name": "github-mcp-server",
-        "full_name": "ivviiviivvi/github-mcp-server",
+        "full_name": "{{ORG_NAME}}/github-mcp-server",
         "is_active": true,
         "days_since_update": 60,
         "stars": 0,
@@ -3377,7 +3377,7 @@
       },
       {
         "name": "petasum-super-petasum",
-        "full_name": "ivviiviivvi/petasum-super-petasum",
+        "full_name": "{{ORG_NAME}}/petasum-super-petasum",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3389,7 +3389,7 @@
       },
       {
         "name": "trade-perpetual-future",
-        "full_name": "ivviiviivvi/trade-perpetual-future",
+        "full_name": "{{ORG_NAME}}/trade-perpetual-future",
         "is_active": true,
         "days_since_update": 17,
         "stars": 1,
@@ -3401,7 +3401,7 @@
       },
       {
         "name": "jvpiter-inquiry-labors",
-        "full_name": "ivviiviivvi/jvpiter-inquiry-labors",
+        "full_name": "{{ORG_NAME}}/jvpiter-inquiry-labors",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3413,7 +3413,7 @@
       },
       {
         "name": "tab-bookmark-manager",
-        "full_name": "ivviiviivvi/tab-bookmark-manager",
+        "full_name": "{{ORG_NAME}}/tab-bookmark-manager",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3425,7 +3425,7 @@
       },
       {
         "name": "select-or-left-or-right-or",
-        "full_name": "ivviiviivvi/select-or-left-or-right-or",
+        "full_name": "{{ORG_NAME}}/select-or-left-or-right-or",
         "is_active": true,
         "days_since_update": 26,
         "stars": 0,
@@ -3437,7 +3437,7 @@
       },
       {
         "name": "cognitive-archaelogy-tribunal",
-        "full_name": "ivviiviivvi/cognitive-archaelogy-tribunal",
+        "full_name": "{{ORG_NAME}}/cognitive-archaelogy-tribunal",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3449,7 +3449,7 @@
       },
       {
         "name": "gemini-cli",
-        "full_name": "ivviiviivvi/gemini-cli",
+        "full_name": "{{ORG_NAME}}/gemini-cli",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3461,7 +3461,7 @@
       },
       {
         "name": "are-is-clone-cloud",
-        "full_name": "ivviiviivvi/are-is-clone-cloud",
+        "full_name": "{{ORG_NAME}}/are-is-clone-cloud",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3473,7 +3473,7 @@
       },
       {
         "name": "skills",
-        "full_name": "ivviiviivvi/skills",
+        "full_name": "{{ORG_NAME}}/skills",
         "is_active": true,
         "days_since_update": 72,
         "stars": 0,
@@ -3485,7 +3485,7 @@
       },
       {
         "name": "mcpb",
-        "full_name": "ivviiviivvi/mcpb",
+        "full_name": "{{ORG_NAME}}/mcpb",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3497,7 +3497,7 @@
       },
       {
         "name": "claude-cookbooks",
-        "full_name": "ivviiviivvi/claude-cookbooks",
+        "full_name": "{{ORG_NAME}}/claude-cookbooks",
         "is_active": true,
         "days_since_update": 72,
         "stars": 0,
@@ -3509,7 +3509,7 @@
       },
       {
         "name": "input-keys-log",
-        "full_name": "ivviiviivvi/input-keys-log",
+        "full_name": "{{ORG_NAME}}/input-keys-log",
         "is_active": true,
         "days_since_update": 17,
         "stars": 0,
@@ -3521,7 +3521,7 @@
       },
       {
         "name": "gamified-coach-interface",
-        "full_name": "ivviiviivvi/gamified-coach-interface",
+        "full_name": "{{ORG_NAME}}/gamified-coach-interface",
         "is_active": true,
         "days_since_update": 23,
         "stars": 0,
@@ -3533,7 +3533,7 @@
       },
       {
         "name": "iGOR",
-        "full_name": "ivviiviivvi/iGOR",
+        "full_name": "{{ORG_NAME}}/iGOR",
         "is_active": true,
         "days_since_update": 67,
         "stars": 0,
@@ -3545,7 +3545,7 @@
       },
       {
         "name": "search-local--happy-hour",
-        "full_name": "ivviiviivvi/search-local--happy-hour",
+        "full_name": "{{ORG_NAME}}/search-local--happy-hour",
         "is_active": true,
         "days_since_update": 26,
         "stars": 0,
@@ -3557,7 +3557,7 @@
       },
       {
         "name": "jules-awesome-list",
-        "full_name": "ivviiviivvi/jules-awesome-list",
+        "full_name": "{{ORG_NAME}}/jules-awesome-list",
         "is_active": true,
         "days_since_update": 64,
         "stars": 0,
@@ -3569,7 +3569,7 @@
       },
       {
         "name": "virgil-training-overlay",
-        "full_name": "ivviiviivvi/virgil-training-overlay",
+        "full_name": "{{ORG_NAME}}/virgil-training-overlay",
         "is_active": true,
         "days_since_update": 3,
         "stars": 0,
@@ -3581,7 +3581,7 @@
       },
       {
         "name": "nexus--babel-alexandria-",
-        "full_name": "ivviiviivvi/nexus--babel-alexandria-",
+        "full_name": "{{ORG_NAME}}/nexus--babel-alexandria-",
         "is_active": true,
         "days_since_update": 48,
         "stars": 0,
@@ -3593,7 +3593,7 @@
       },
       {
         "name": "classroom-rpg-aetheria",
-        "full_name": "ivviiviivvi/classroom-rpg-aetheria",
+        "full_name": "{{ORG_NAME}}/classroom-rpg-aetheria",
         "is_active": true,
         "days_since_update": 8,
         "stars": 0,
@@ -3605,7 +3605,7 @@
       },
       {
         "name": "a-i-chat--exporter",
-        "full_name": "ivviiviivvi/a-i-chat--exporter",
+        "full_name": "{{ORG_NAME}}/a-i-chat--exporter",
         "is_active": true,
         "days_since_update": 35,
         "stars": 0,
@@ -3617,7 +3617,7 @@
       },
       {
         "name": "a-i-council--coliseum",
-        "full_name": "ivviiviivvi/a-i-council--coliseum",
+        "full_name": "{{ORG_NAME}}/a-i-council--coliseum",
         "is_active": true,
         "days_since_update": 7,
         "stars": 0,
@@ -3629,7 +3629,7 @@
       },
       {
         "name": "sovereign-ecosystem--real-estate-luxury",
-        "full_name": "ivviiviivvi/sovereign-ecosystem--real-estate-luxury",
+        "full_name": "{{ORG_NAME}}/sovereign-ecosystem--real-estate-luxury",
         "is_active": true,
         "days_since_update": 23,
         "stars": 0,
@@ -3641,7 +3641,7 @@
       },
       {
         "name": "supercollider",
-        "full_name": "ivviiviivvi/supercollider",
+        "full_name": "{{ORG_NAME}}/supercollider",
         "is_active": true,
         "days_since_update": 27,
         "stars": 0,
@@ -3653,7 +3653,7 @@
       },
       {
         "name": "quarks",
-        "full_name": "ivviiviivvi/quarks",
+        "full_name": "{{ORG_NAME}}/quarks",
         "is_active": true,
         "days_since_update": 27,
         "stars": 0,

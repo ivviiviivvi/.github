@@ -1,5 +1,5 @@
 ---
-name: Deep Analysis
+name: Autonomous Developer Agent
 description: Advanced autonomous developer agent with multi-mode capabilities.
 tools:
   - changes

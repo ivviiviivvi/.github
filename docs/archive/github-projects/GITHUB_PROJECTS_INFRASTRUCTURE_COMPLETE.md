@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-**Mission:** Create extensive GitHub Projects for ivviiviivvi
+**Mission:** Create extensive GitHub Projects for {{ORG_NAME}}
 organization\
 **Status:** ✅ **Infrastructure Complete** | ⚠️ **Deployment
 Ready** (Token setup required)\
@@ -88,7 +88,7 @@ ______________________________________________________________________
 - ✅ requests library available
 - ✅ GitHub CLI 2.85.0 authenticated (user: 4444J99)
 - ✅ 1Password CLI 2.32.0 installed
-- ✅ Organization access verified (ivviiviivvi)
+- ✅ Organization access verified ({{ORG_NAME}})
 - ✅ Scripts tested successfully
 - ✅ Dry-run validation passed
 
@@ -102,7 +102,7 @@ GitHub Projects Deployment (DRY RUN)
 ✓ Token retrieved from GitHub CLI
 ⚠ DRY RUN MODE (no changes will be made)
 
-ℹ Configuring projects for organization: ivviiviivvi
+ℹ Configuring projects for organization: {{ORG_NAME}}
 ℹ Creating project: 🤖 AI Framework Development
 ℹ   Would create: 🤖 AI Framework Development
 ℹ   Fields: 7
@@ -167,7 +167,7 @@ cd /workspace/scripts
 
 **What happens:**
 
-- Creates 7 projects in ivviiviivvi organization
+- Creates 7 projects in {{ORG_NAME}} organization
 - Adds 75 custom fields across all projects
 - Generates project URLs
 - Logs all operations to timestamped file
@@ -204,7 +204,7 @@ automation sections
 Add existing issues/PRs to projects:
 
 ```bash
-gh project item-add PROJECT_NUMBER --owner ivviiviivvi --url "issue_url"
+gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url "issue_url"
 ```
 
 ______________________________________________________________________
@@ -287,7 +287,7 @@ ______________________________________________________________________
 
 ### After Deployment
 
-1. **Verify:** Check https://github.com/orgs/ivviiviivvi/projects
+1. **Verify:** Check https://github.com/orgs/{{ORG_NAME}}/projects
 1. **Configure:** Create views and automation rules (1-2 hours)
 1. **Migrate:** Add existing issues/PRs to projects
 1. **Announce:** Share with organization
@@ -411,6 +411,6 @@ _Infrastructure created: 2026-01-18_\
 _Agent: GitHub Copilot_\
 _User:
 4444J99_\
-_Organization: ivviiviivvi_\
+_Organization: {{ORG_NAME}}_\
 _Status: ✅ Complete | ⚠️ Deployment
 Ready_

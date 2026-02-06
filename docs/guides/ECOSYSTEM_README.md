@@ -63,7 +63,7 @@ docs/                                   # Jekyll site root
 
 1. **Access your app** through:
 
-   - Gallery: https://ivviiviivvi.github.io
+   - Gallery: https://{{ORG_NAME}}.github.io
    - Direct live demo: Check PR description for URL
    - AgentSphere: Badge added to your README
 
@@ -83,7 +83,7 @@ docs/                                   # Jekyll site root
 
 1. **Monitor the Gallery**:
 
-   - Visit https://ivviiviivvi.github.io
+   - Visit https://{{ORG_NAME}}.github.io
    - Check that new apps appear automatically
    - Review deployment statuses
 
@@ -118,13 +118,13 @@ graph TD
 
 - **For:** React, Vue, Angular, Static HTML
 - **Output:** Live URL on GitHub Pages
-- **Example:** https://ivviiviivvi.github.io/react-app
+- **Example:** https://{{ORG_NAME}}.github.io/react-app
 
 ### Strategy B: Docker
 
 - **For:** Express, Flask, Django APIs
 - **Output:** Docker image in GHCR
-- **Run:** `docker run -p 3000:3000 ghcr.io/ivviiviivvi/app`
+- **Run:** `docker run -p 3000:3000 ghcr.io/{{ORG_NAME}}/app`
 
 ### Strategy C: Codespaces
 
@@ -282,7 +282,7 @@ google_analytics: UA-XXXXXXXXX-X
 
 ## 📚 Documentation
 
-- [AgentSphere Setup Guide](../../.github/docs/AGENTSPHERE_SETUP.md)
+- AgentSphere Setup Guide
 - [GitHub Pages Setup Guide](../../.github/docs/GITHUB_PAGES_SETUP.md)
 - [Live Deployment Guide](../../.github/docs/LIVE_DEPLOYMENT_GUIDE.md)
 

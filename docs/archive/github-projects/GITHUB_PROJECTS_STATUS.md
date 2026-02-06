@@ -2,7 +2,7 @@
 
 **Date:** January 18, 2026, 17:27 UTC\
 **Organization:**
-ivviiviivvi\
+{{ORG_NAME}}\
 **Status:** ✅ Infrastructure Complete - Ready for Manual
 Configuration
 
@@ -22,15 +22,15 @@ ______________________________________________________________________
 
 ### Projects Live at GitHub
 
-| #   | Project                      | URL                                               |
-| --- | ---------------------------- | ------------------------------------------------- |
-| 8   | 🤖 AI Framework Development  | <https://github.com/orgs/ivviiviivvi/projects/8>  |
-| 9   | 📚 Documentation & Knowledge | <https://github.com/orgs/ivviiviivvi/projects/9>  |
-| 10  | 🔄 Workflow Automation       | <https://github.com/orgs/ivviiviivvi/projects/10> |
-| 11  | 🔒 Security & Compliance     | <https://github.com/orgs/ivviiviivvi/projects/11> |
-| 12  | 🏗️ Infrastructure & DevOps   | <https://github.com/orgs/ivviiviivvi/projects/12> |
-| 13  | 👥 Community & Support       | <https://github.com/orgs/ivviiviivvi/projects/13> |
-| 14  | 🎯 Product Roadmap           | <https://github.com/orgs/ivviiviivvi/projects/14> |
+| #   | Project                      | URL                                                        |
+| --- | ---------------------------- | ---------------------------------------------------------- |
+| 8   | 🤖 AI Framework Development  | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>  |
+| 9   | 📚 Documentation & Knowledge | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/9>  |
+| 10  | 🔄 Workflow Automation       | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/10> |
+| 11  | 🔒 Security & Compliance     | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/11> |
+| 12  | 🏗️ Infrastructure & DevOps   | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/12> |
+| 13  | 👥 Community & Support       | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/13> |
+| 14  | 🎯 Product Roadmap           | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/14> |
 
 ### Tools Created
 
@@ -64,7 +64,8 @@ projects\
 
 **How to Configure:**
 
-1. Go to project page (e.g., <https://github.com/orgs/ivviiviivvi/projects/8>)
+1. Go to project page (e.g.,
+   <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>)
 1. Click "+ New view" button
 1. Select layout type (Board/Table/Roadmap)
 1. Configure grouping, sorting, filters
@@ -144,7 +145,7 @@ projects\
 **How to Configure:**
 
 1. Go to project settings (e.g.,
-   <https://github.com/orgs/ivviiviivvi/projects/8/settings>)
+   <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8/settings>)
 1. Click "Workflows" in left sidebar
 1. Enable built-in workflows or create custom
 1. Configure triggers and actions
@@ -175,14 +176,14 @@ created
 
 ```bash
 # Add all items from .github repo
-python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo .github
+python3 scripts/add-items-to-projects.py --org {{ORG_NAME}} --repo .github
 
 # Dry-run to preview
-python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo .github --dry-run
+python3 scripts/add-items-to-projects.py --org {{ORG_NAME}} --repo .github --dry-run
 
 # Add from multiple repos
 for repo in repo1 repo2 repo3; do
-  python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo $repo
+  python3 scripts/add-items-to-projects.py --org {{ORG_NAME}} --repo $repo
 done
 ```
 
@@ -218,10 +219,10 @@ ______________________________________________________________________
 
 ```bash
 # List all projects
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 
 # View specific project
-gh project view 8 --owner ivviiviivvi
+gh project view 8 --owner {{ORG_NAME}}
 
 # Quick reference
 bash scripts/projects-quick-ref.sh
@@ -234,7 +235,7 @@ bash scripts/projects-quick-ref.sh
 bash scripts/complete-project-setup.sh
 
 # Direct migration
-python3 scripts/add-items-to-projects.py --org ivviiviivvi --repo .github
+python3 scripts/add-items-to-projects.py --org {{ORG_NAME}} --repo .github
 ```
 
 ### Validate Token Health

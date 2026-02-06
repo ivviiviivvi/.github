@@ -601,9 +601,9 @@ logger.info(f"User login attempt: {username}")
 
 ## Resources
 
-- [Organization Contributing Guide](CONTRIBUTING.md)
-- [Security Policy](SECURITY.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Organization Contributing Guide](../governance/CONTRIBUTING.md)
+- [Security Policy](../governance/SECURITY.md)
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
 - [Python Error Handling Best Practices](https://docs.python.org/3/tutorial/errors.html)
 - [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)
 - [Qodo Merge Compliance Documentation](https://qodo-merge-docs.qodo.ai/tools/compliance/)

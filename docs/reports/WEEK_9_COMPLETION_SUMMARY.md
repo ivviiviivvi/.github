@@ -53,7 +53,7 @@ ______________________________________________________________________
 **Status**: Operational\
 **Commit**: \[Earlier Week 9 commit\]\
 **File**:
-`automation/scripts/intelligent_routing.py`
+`automation/scripts/issue_assignment_router.py`
 
 **Features**:
 
@@ -332,8 +332,8 @@ ______________________________________________________________________
    - Usage examples and configuration
    - Troubleshooting
 
-1. **[UNIFIED_NOTIFICATION_SYSTEM.md](UNIFIED_NOTIFICATION_SYSTEM.md)** (700+
-   lines)
+1. **[UNIFIED_NOTIFICATION_SYSTEM.md](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)**
+   (700+ lines)
 
    - Architecture and design
    - Configuration guide
@@ -610,7 +610,7 @@ ______________________________________________________________________
 ### Documentation
 
 - [Week 9 Advanced Automation Guide](WEEK_9_ADVANCED_AUTOMATION.md)
-- [Unified Notification System](UNIFIED_NOTIFICATION_SYSTEM.md)
+- [Unified Notification System](../guides/UNIFIED_NOTIFICATION_SYSTEM.md)
 - [Notification Integration Guide](WEEK_9_NOTIFICATION_INTEGRATION.md)
 - [Migration Complete Report](NOTIFICATION_MIGRATION_COMPLETE.md)
 - [Architecture Documentation](WEEK9_ARCHITECTURE.md)
@@ -624,9 +624,9 @@ ______________________________________________________________________
 
 ### Support
 
-- Issues: <https://github.com/ivviiviivvi/.github/issues>
-- Discussions: <https://github.com/orgs/ivviiviivvi/discussions>
-- Wiki: <https://github.com/ivviiviivvi/.github/wiki>
+- Issues: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues>
+- Discussions: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions>
+- Wiki: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/wiki>
 
 ______________________________________________________________________
 

@@ -337,7 +337,7 @@ jobs:
 
           const checks = {
             title: {
-              enabled: ${{ inputs.enforce-conventional-commits }},
+              enabled: "${{ inputs.enforce-conventional-commits }},"
               valid: '${{ steps.title-check.outputs.valid }}' === 'true',
               message: '${{ steps.title-check.outputs.message }}'
             },
@@ -347,17 +347,17 @@ jobs:
               message: '${{ steps.description-check.outputs.message }}'
             },
             issueLink: {
-              enabled: ${{ inputs.require-issue-link }},
+              enabled: "${{ inputs.require-issue-link }},"
               valid: '${{ steps.issue-check.outputs.valid }}' === 'true',
               message: '${{ steps.issue-check.outputs.message }}'
             },
             checklist: {
-              enabled: ${{ inputs.require-checklist-completion }},
+              enabled: "${{ inputs.require-checklist-completion }},"
               valid: '${{ steps.checklist-check.outputs.valid }}' === 'true',
               message: '${{ steps.checklist-check.outputs.message }}'
             },
             conflicts: {
-              enabled: ${{ inputs.check-merge-conflicts }},
+              enabled: "${{ inputs.check-merge-conflicts }},"
               valid: '${{ steps.conflict-check.outputs.has-conflicts }}' !== 'true',
               message: '${{ steps.conflict-check.outputs.message }}'
             }

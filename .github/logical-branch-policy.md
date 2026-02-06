@@ -833,7 +833,7 @@ $BRANCHES
 3. **Archive** if work is abandoned but valuable (reply to this issue)
 4. **Delete** if no longer needed (reply to this issue)
 
-See: [Logical Branch Policy](.github/logical-branch-policy.md)
+See: [Logical Branch Policy](logical-branch-policy.md)
 
 Branches not addressed within 7 days will be automatically archived or deleted.
 "
@@ -1511,18 +1511,18 @@ ______________________________________________________________________
 
 ### Internal Docs (This Repository)
 
-- [BRANCH_STRATEGY.md](../BRANCH_STRATEGY.md) - Comprehensive branching strategy
-  (alternative to "main only")
-- [GIT_WORKFLOW.md](../GIT_WORKFLOW.md) - Git workflow and branch strategy
-  details
-- [VERSION_CONTROL_STANDARDS.md](../VERSION_CONTROL_STANDARDS.md) - Version
-  control standards
-- [CONTRIBUTING.md](../docs/CONTRIBUTING.md) - Contribution guidelines and
-  commit conventions
-- [SECURITY.md](../docs/SECURITY.md) - Security policy and vulnerability
-  reporting
-- [CODE_OF_CONDUCT.md](../docs/CODE_OF_CONDUCT.md) - Community standards (if
-  available)
+- [BRANCH_STRATEGY.md](../docs/workflows/BRANCH_STRATEGY.md) - Comprehensive
+  branching strategy (alternative to "main only")
+- [GIT_WORKFLOW.md](../docs/workflows/GIT_WORKFLOW.md) - Git workflow and branch
+  strategy details
+- [VERSION_CONTROL_STANDARDS.md](../docs/reference/VERSION_CONTROL_STANDARDS.md)
+  \- Version control standards
+- [CONTRIBUTING.md](../docs/governance/CONTRIBUTING.md) - Contribution
+  guidelines and commit conventions
+- [SECURITY.md](../docs/governance/SECURITY.md) - Security policy and
+  vulnerability reporting
+- [CODE_OF_CONDUCT.md](../docs/governance/CODE_OF_CONDUCT.md) - Community
+  standards (if available)
 
 ### GitHub Documentation
 
@@ -1562,4 +1562,4 @@ ______________________________________________________________________
 Review**: 2025-03-15 (quarterly)
 
 **Questions or Feedback?** Open an issue or contact the maintainers via
-[CONTRIBUTING.md](../docs/CONTRIBUTING.md).
+[CONTRIBUTING.md](../docs/governance/CONTRIBUTING.md).

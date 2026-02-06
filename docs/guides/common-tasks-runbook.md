@@ -1,6 +1,6 @@
 # Common Tasks Runbook
 
-> **Quick reference for frequently performed tasks in the ivviiviivvi/.github
+> **Quick reference for frequently performed tasks in the {{ORG_NAME}}/.github
 > repository**
 
 This runbook provides step-by-step instructions for common maintenance and
@@ -31,7 +31,7 @@ ______________________________________________________________________
 
 ```bash
 # 1. Fork and clone
-gh repo fork ivviiviivvi/.github --clone
+gh repo fork {{ORG_NAME}}/.github --clone
 
 # 2. Navigate to directory
 cd .github
@@ -54,7 +54,7 @@ pytest tests/ -v
 
 ```bash
 # 1. Add upstream remote (one-time)
-git remote add upstream https://github.com/ivviiviivvi/.github.git
+git remote add upstream https://github.com/{{ORG_NAME}}/.github.git
 
 # 2. Fetch upstream changes
 git fetch upstream
@@ -246,14 +246,14 @@ cat .github/reports/usage/latest-usage.json | jq .
 gh workflow run usage-monitoring.yml
 
 # 3. Check specific workflow consumption
-gh api /repos/ivviiviivvi/.github/actions/workflows -q '.workflows[] | {name, path}' | \
+gh api /repos/{{ORG_NAME}}/.github/actions/workflows -q '.workflows[] | {name, path}' | \
   while read -r workflow; do
     echo "=== $workflow ==="
-    gh api "/repos/ivviiviivvi/.github/actions/workflows/$(basename $workflow)/timing" --jq '.billable.UBUNTU.total_ms'
+    gh api "/repos/{{ORG_NAME}}/.github/actions/workflows/$(basename $workflow)/timing" --jq '.billable.UBUNTU.total_ms'
   done
 
 # 4. View monthly summary
-gh api /repos/ivviiviivvi/.github/actions/billing/usage
+gh api /repos/{{ORG_NAME}}/.github/actions/billing/usage
 ```
 
 **Expected Result**: Usage statistics displayed
@@ -919,7 +919,8 @@ ______________________________________________________________________
 - [New Contributor Guide](NEW_CONTRIBUTOR_GUIDE.md) - Getting started
 - [Monitoring Guide](monitoring.md) - Detailed monitoring runbooks
 - [Testing Best Practices](testing-best-practices.md) - Testing standards
-- [Contributing Guidelines](../CONTRIBUTING.md) - Contribution process
+- [Contributing Guidelines](../governance/CONTRIBUTING.md) - Contribution
+  process
 
 ______________________________________________________________________
 

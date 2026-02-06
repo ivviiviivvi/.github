@@ -294,42 +294,42 @@ jobs:
 
         cat << EOF > health-reports/health-check-$(date +%Y%m%d-%H%M%S).json
         {
-          "repository": "${{ github.repository }}",
+          "repository": ${{ github.repository }},
           "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-          "check_type": "${{ github.event.inputs.check_type || 'scheduled' }}",
+          "check_type": ${{ github.event.inputs.check_type || 'scheduled' }},
           "checks": {
             "readme": {
-              "status": "${{ steps.check-readme.outputs.status }}",
-              "severity": "${{ steps.check-readme.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-readme.outputs.status }},
+              "severity": ${{ steps.check-readme.outputs.severity || 'none' }}
             },
             "license": {
-              "status": "${{ steps.check-license.outputs.status }}",
-              "severity": "${{ steps.check-license.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-license.outputs.status }},
+              "severity": ${{ steps.check-license.outputs.severity || 'none' }}
             },
             "contributing": {
-              "status": "${{ steps.check-contributing.outputs.status }}",
-              "severity": "${{ steps.check-contributing.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-contributing.outputs.status }},
+              "severity": ${{ steps.check-contributing.outputs.severity || 'none' }}
             },
             "workflows": {
-              "status": "${{ steps.check-workflows.outputs.status }}",
+              "status": ${{ steps.check-workflows.outputs.status }},
               "count": ${{ steps.check-workflows.outputs.count || 0 }},
-              "severity": "${{ steps.check-workflows.outputs.severity || 'none' }}"
+              "severity": ${{ steps.check-workflows.outputs.severity || 'none' }}
             },
             "security": {
-              "status": "${{ steps.check-security.outputs.status }}",
-              "severity": "${{ steps.check-security.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-security.outputs.status }},
+              "severity": ${{ steps.check-security.outputs.severity || 'none' }}
             },
             "code_of_conduct": {
-              "status": "${{ steps.check-coc.outputs.status }}",
-              "severity": "${{ steps.check-coc.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-coc.outputs.status }},
+              "severity": ${{ steps.check-coc.outputs.severity || 'none' }}
             },
             "dependabot": {
-              "status": "${{ steps.check-dependabot.outputs.status }}",
-              "severity": "${{ steps.check-dependabot.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-dependabot.outputs.status }},
+              "severity": ${{ steps.check-dependabot.outputs.severity || 'none' }}
             },
             "branch_protection": {
-              "status": "${{ steps.check-branch-protection.outputs.status }}",
-              "severity": "${{ steps.check-branch-protection.outputs.severity || 'none' }}"
+              "status": ${{ steps.check-branch-protection.outputs.status }},
+              "severity": ${{ steps.check-branch-protection.outputs.severity || 'none' }}
             }
           }
         }

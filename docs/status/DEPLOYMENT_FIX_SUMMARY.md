@@ -82,7 +82,7 @@ ______________________________________________________________________
 1. **Navigate to Repository Settings**
 
    ```
-   https://github.com/ivviiviivvi/.github/settings/pages
+   https://github.com/{{ORG_NAME}}/.github/settings/pages
    ```
 
 1. **Change Build Source**
@@ -94,7 +94,7 @@ ______________________________________________________________________
 1. **Verify the Change**
 
    ```bash
-   gh api repos/ivviiviivvi/.github/pages --jq '.build_type'
+   gh api repos/{{ORG_NAME}}/.github/pages --jq '.build_type'
    # Should output: workflow (not legacy)
    ```
 
@@ -106,7 +106,7 @@ ______________________________________________________________________
 
 ### Expected Results
 
-- ✅ Site live at: <https://ivviiviivvi.github.io/.github/>
+- ✅ Site live at: <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 - ✅ 200 OK status (not 404)
 - ✅ Beautiful landing page with navigation
 - ✅ All internal links working
@@ -117,17 +117,17 @@ ______________________________________________________________________
 
 ```bash
 # Check Pages API status
-gh api repos/ivviiviivvi/.github/pages
+gh api repos/{{ORG_NAME}}/.github/pages
 
 # Current status (before fix):
 # {
 #   "status": "built",
 #   "build_type": "legacy",  ← NEEDS TO CHANGE TO "workflow"
-#   "html_url": "https://ivviiviivvi.github.io/.github/"
+#   "html_url": "https://{{ORG_NAME}}.github.io/.github/"
 # }
 
 # Test site accessibility
-curl -I https://ivviiviivvi.github.io/.github/
+curl -I https://{{ORG_NAME}}.github.io/.github/
 
 # Current: HTTP/2 404 ← WILL CHANGE TO 200 after fix
 ```
@@ -163,24 +163,24 @@ ______________________________________________________________________
 
 ### Main Landing Page
 
-- <https://ivviiviivvi.github.io/.github/>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 
 ### Documentation
 
-- <https://ivviiviivvi.github.io/.github/docs/INDEX.html>
-- <https://ivviiviivvi.github.io/.github/docs/reference/SEMANTIC_VERSIONING.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/docs/INDEX.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/docs/reference/SEMANTIC_VERSIONING.html>
 
 ### AI Framework
 
-- <https://ivviiviivvi.github.io/.github/ai_framework/INDEX.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/ai_framework/INDEX.html>
 
 ### Automation
 
-- <https://ivviiviivvi.github.io/.github/automation/dashboard/index.html>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/automation/dashboard/index.html>
 
 ### Reports
 
-- <https://ivviiviivvi.github.io/.github/reports/>
+- <https://%7B%7BORG_NAME%7D%7D.github.io/.github/reports/>
 
 ______________________________________________________________________
 
@@ -191,7 +191,7 @@ After changing the Pages settings to "GitHub Actions":
 ### 1. Verify Settings Changed
 
 ```bash
-gh api repos/ivviiviivvi/.github/pages --jq '.build_type'
+gh api repos/{{ORG_NAME}}/.github/pages --jq '.build_type'
 # Expected: workflow
 ```
 
@@ -205,13 +205,13 @@ gh run list --workflow=pages.yml --limit 1
 ### 3. Test Site
 
 ```bash
-curl -I https://ivviiviivvi.github.io/.github/
+curl -I https://{{ORG_NAME}}.github.io/.github/
 # Expected: HTTP/2 200
 ```
 
 ### 4. Visual Check
 
-Open in browser: <https://ivviiviivvi.github.io/.github/>
+Open in browser: <https://%7B%7BORG_NAME%7D%7D.github.io/.github/>
 
 - Should see: "🚀 Ivviiviivvi Organization Hub"
 - Should see: Navigation cards for Docs, AI Framework, Automation, Reports

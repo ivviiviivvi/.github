@@ -13,7 +13,7 @@ import pytest
 class MockGitHubAPIClient:
     """Mock GitHub API client for integration testing without live API."""
 
-    def __init__(self, token: Optional[str] = None, repo: str = "ivviiviivvi/.github"):
+    def __init__(self, token: Optional[str] = None, repo: str = "{{ORG_NAME}}/.github"):  # allow-secret
         # "mock_token" is for testing only - not used for real API calls
         self.token = token or "mock_token"
         self.repo = repo
@@ -275,7 +275,7 @@ def mock_issue_data():
         "assignees": [{"login": "test-user"}],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "html_url": "https://github.com/ivviiviivvi/.github/issues/42",
+        "html_url": "https://github.com/{{ORG_NAME}}/.github/issues/42",
     }
 
 

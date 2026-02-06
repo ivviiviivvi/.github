@@ -59,15 +59,15 @@ ______________________________________________________________________
 
    ```bash
    # Trigger repository health check in all 3 repos
-   gh workflow run repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
-   gh workflow run repository-health-check.yml --repo ivviiviivvi/system-governance-framework
-   gh workflow run repository-health-check.yml --repo ivviiviivvi/trade-perpetual-future
+   gh workflow run repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
+   gh workflow run repository-health-check.yml --repo {{ORG_NAME}}/system-governance-framework
+   gh workflow run repository-health-check.yml --repo {{ORG_NAME}}/trade-perpetual-future
    ```
 
 1. **Check execution results**:
 
    ```bash
-   gh run list --repo ivviiviivvi/theoretical-specifications-first --workflow=repository-health-check.yml --limit 3
+   gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --workflow=repository-health-check.yml --limit 3
    ```
 
 1. **Monitor for errors**:

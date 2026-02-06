@@ -1,4 +1,4 @@
-"""Unit tests for mouthpiece_filter.py
+"""Unit tests for natural_language_prompt_filter.py
 Focus: Content filtering, safety checks, error handling.
 """
 

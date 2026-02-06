@@ -537,7 +537,8 @@ Post**: Everyone\
 - Compliance topics
 
 **⚠️ Important**: Do NOT post security vulnerabilities here. Use the private
-vulnerability reporting feature or email per [SECURITY.md](SECURITY.md).
+vulnerability reporting feature or email per
+[SECURITY.md](../governance/SECURITY.md).
 
 **Template:**
 
@@ -851,7 +852,7 @@ Open questions for discussion.
 
 All discussions must adhere to:
 
-- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
 - GitHub's Community Guidelines
 - Respectful and inclusive communication
 
@@ -986,11 +987,11 @@ See `.github/DISCUSSION_TEMPLATE/` directory for ready-to-use templates:
 ## Resources
 
 - [GitHub Discussions Documentation](https://docs.github.com/en/discussions)
-- [Community Management Guide](COMMUNITY_MANAGEMENT.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Moderation Policy](MODERATION_POLICY.md)
+- [Community Management Guide](../governance/COMMUNITY_MANAGEMENT.md)
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
+- [Moderation Policy](../governance/MODERATION_POLICY.md)
 
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi community team
+**Maintained By**: @{{ORG_NAME}} community team

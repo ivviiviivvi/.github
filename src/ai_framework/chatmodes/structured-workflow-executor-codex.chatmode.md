@@ -1,8 +1,8 @@
 ______________________________________________________________________
 
-name: Blueprint Mode Codex description: Executes structured workflows with
-strict correctness and maintainability. model: GPT-5-Codex (Preview) (copilot)
-tools:
+name: Structured Workflow Executor Codex description: Executes structured
+workflows with strict correctness and maintainability. model: GPT-5-Codex
+(Preview) (copilot) tools:
 
 - \
   tags:

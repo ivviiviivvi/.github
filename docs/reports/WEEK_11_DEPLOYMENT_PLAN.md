@@ -618,7 +618,7 @@ ______________________________________________________________________
 **For Each Repository**:
 
 ```bash
-REPO="ivviiviivvi/repo-name"
+REPO="{{ORG_NAME}}/repo-name"
 
 # 1. Check workflows deployed
 gh api repos/$REPO/contents/.github/workflows | jq -r '.[].name'
@@ -653,18 +653,18 @@ gh workflow list --repo $REPO
 # validate-week11-deployment.sh
 
 REPOS=(
-  "ivviiviivvi/theoretical-specifications-first"
-  "ivviiviivvi/system-governance-framework"
-  "ivviiviivvi/trade-perpetual-future"
-  "ivviiviivvi/intelligent-artifice-ark"
-  "ivviiviivvi/render-second-amendment"
-  "ivviiviivvi/a-mavs-olevm"
-  "ivviiviivvi/a-recursive-root"
-  "ivviiviivvi/collective-persona-operations"
-  "ivviiviivvi/4-ivi374-F0Rivi4"
-  "ivviiviivvi/a-context7"
-  "ivviiviivvi/reverse-engine-recursive-run"
-  "ivviiviivvi/universal-node-network"
+  "{{ORG_NAME}}/theoretical-specifications-first"
+  "{{ORG_NAME}}/system-governance-framework"
+  "{{ORG_NAME}}/trade-perpetual-future"
+  "{{ORG_NAME}}/intelligent-artifice-ark"
+  "{{ORG_NAME}}/render-second-amendment"
+  "{{ORG_NAME}}/a-mavs-olevm"
+  "{{ORG_NAME}}/a-recursive-root"
+  "{{ORG_NAME}}/collective-persona-operations"
+  "{{ORG_NAME}}/4-ivi374-F0Rivi4"
+  "{{ORG_NAME}}/a-context7"
+  "{{ORG_NAME}}/reverse-engine-recursive-run"
+  "{{ORG_NAME}}/universal-node-network"
 )
 
 echo "=== Week 11 Deployment Validation ==="
@@ -751,18 +751,18 @@ repository (Week 10 validated)\
 
 ```bash
 # Single repository rollback
-./automation/scripts/emergency-rollback.sh ivviiviivvi/repo-name
+./automation/scripts/emergency-rollback.sh {{ORG_NAME}}/repo-name
 
 # Bulk rollback (if needed)
 for repo in repo1 repo2 repo3; do
-  ./automation/scripts/emergency-rollback.sh ivviiviivvi/$repo
+  ./automation/scripts/emergency-rollback.sh {{ORG_NAME}}/$repo
 done
 ```
 
 **Manual Steps** (if script unavailable):
 
 ```bash
-REPO="ivviiviivvi/repo-name"
+REPO="{{ORG_NAME}}/repo-name"
 
 # 1. Remove workflows
 gh api -X DELETE repos/$REPO/contents/.github/workflows/pr-validation.yml \
@@ -886,7 +886,7 @@ python3 automation/scripts/batch_onboard_repositories.py \
 
 ```bash
 # Check single repository
-REPO="ivviiviivvi/repo-name"
+REPO="{{ORG_NAME}}/repo-name"
 gh api repos/$REPO/contents/.github/workflows | jq -r '.[].name'
 gh label list --repo $REPO
 gh workflow list --repo $REPO
@@ -905,7 +905,7 @@ gh api rate_limit | jq '.resources.core'
 cat week11-phase1-pilot-results.json | jq '.'
 
 # Check recent workflow runs
-gh run list --repo ivviiviivvi/repo-name --limit 10
+gh run list --repo {{ORG_NAME}}/repo-name --limit 10
 
 # Monitor API usage
 watch -n 10 'gh api rate_limit | jq ".resources.core"'
@@ -915,10 +915,10 @@ watch -n 10 'gh api rate_limit | jq ".resources.core"'
 
 ```bash
 # Emergency rollback single repo
-./automation/scripts/emergency-rollback.sh ivviiviivvi/repo-name
+./automation/scripts/emergency-rollback.sh {{ORG_NAME}}/repo-name
 
 # Check rollback status
-gh api repos/ivviiviivvi/repo-name/contents/.github/workflows
+gh api repos/{{ORG_NAME}}/repo-name/contents/.github/workflows
 
 # Contact support
 # [Emergency contact information]

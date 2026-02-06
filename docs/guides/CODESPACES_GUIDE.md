@@ -15,13 +15,13 @@ Complete guide for using GitHub Codespaces with this repository.
 **Via CLI**:
 
 ```bash
-gh codespace create --repo ivviiviivvi/.github
+gh codespace create --repo {{ORG_NAME}}/.github
 ```
 
 **Via URL**:
 
 ```
-https://github.dev/ivviiviivvi/.github
+https://github.dev/{{ORG_NAME}}/.github
 ```
 
 ## Configuration
@@ -100,7 +100,7 @@ Ports are automatically forwarded and accessible:
 
 ```bash
 # Via CLI
-gh secret set API_KEY --repos ivviiviivvi/.github
+gh secret set API_KEY --repos {{ORG_NAME}}/.github
 
 # Or via web
 # Settings → Codespaces → Codespace secrets
@@ -172,7 +172,7 @@ gh codespace code -c <codespace-name>
 Access via web:
 
 ```
-https://github.dev/ivviiviivvi/.github
+https://github.dev/{{ORG_NAME}}/.github
 ```
 
 Or from Codespace:
@@ -558,11 +558,11 @@ services:
 
 ## Support
 
-- 📖 [Documentation](INDEX.md)
+- 📖 [Documentation](../INDEX.md)
 - 💬
-  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

@@ -3,7 +3,7 @@
 ## Overview
 
 This document defines the standard README structure for all repositories in the
-ivviiviivvi organization. Every README must follow the **Problem → Approach →
+{{ORG_NAME}} organization. Every README must follow the **Problem → Approach →
 Outcome** narrative framework to ensure clarity, consistency, and effective
 communication.
 
@@ -355,7 +355,7 @@ Get up and running in 5 minutes:
    on: [push, pull_request]
    jobs:
      test:
-       uses: ivviiviivvi/python-automation-toolkit/.github/workflows/python-ci.yml@v2
+       uses: {{ORG_NAME}}/python-automation-toolkit/.github/workflows/python-ci.yml@v2
    ```
 
 1. **Commit and push**
@@ -377,7 +377,7 @@ Get up and running in 5 minutes:
    - See [Examples](examples/) for common customizations
 
 **Need help?** Check our [Documentation](docs/) or
-[open an issue](https://github.com/ivviiviivvi/python-automation-toolkit/issues).
+[open an issue](https://github.com/%7B%7BORG_NAME%7D%7D/python-automation-toolkit/issues).
 
 ````
 
@@ -407,8 +407,8 @@ Get up and running in 5 minutes:
 ### Community
 
 - [GitHub Discussions](link) - Ask questions and share ideas
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- [Contributing Guide](../governance/CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](../governance/CODE_OF_CONDUCT.md) - Community standards
 ````
 
 ### 7. Contributing Section
@@ -425,7 +425,7 @@ We welcome contributions! Here's how you can help:
 3. **Improve Docs**: Documentation improvements are always appreciated
 4. **Share Feedback**: Tell us what's working and what's not
 
-See our [Contributing Guide](CONTRIBUTING.md) for detailed guidelines.
+See our [Contributing Guide](../governance/CONTRIBUTING.md) for detailed guidelines.
 
 ### Development Setup
 
@@ -442,7 +442,7 @@ cd repo
 ````
 
 **Code of Conduct**: Please read and follow our
-[Code of Conduct](CODE_OF_CONDUCT.md).
+[Code of Conduct](../governance/CODE_OF_CONDUCT.md).
 
 ````
 
@@ -452,7 +452,7 @@ cd repo
 ```markdown
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](../../LICENSE).
 
 Copyright © 2026 [Organization Name]
 ````
@@ -548,7 +548,7 @@ See
 
 ### Real-World Examples
 
-- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
+- [{{ORG_NAME}}/.github](https://github.com/%7B%7BORG_NAME%7D%7D/.github)<!-- link:github.dotgithub -->
   \- Organization policies (comprehensive)
 - [Example: python-toolkit](link) - Python library (standard)
 - [Example: microservice](link) - Service/application (service-focused)
@@ -582,8 +582,8 @@ npm run create:readme [template-type]
 ### Related Documentation
 
 - [About Section Standards](./ABOUT_SECTION_STANDARDS.md)
-- [Schema.org Implementation](../SCHEMA_ORG_SEMVER_GUIDE.md)
-- [Repository Setup Checklist](../REPOSITORY_SETUP_CHECKLIST.md)
+- [Schema.org Implementation](../guides/SCHEMA_ORG_SEMVER_GUIDE.md)
+- [Repository Setup Checklist](../runbooks/REPOSITORY_SETUP_CHECKLIST.md)
 
 ### Tools
 
@@ -604,4 +604,4 @@ ______________________________________________________________________
 **Maintained By**:
 Organization Governance Team\
 **Questions?**
-[Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->

@@ -18,13 +18,13 @@ and development tasks.
 | [Data Sanitization](../src/ai_framework/agents/data-sanitization.agent.md)                                     | Sanitize sensitive data                |
 | [Dynatrace Expert](../src/ai_framework/agents/dynatrace-expert.agent.md)                                       | Dynatrace monitoring expertise         |
 | [GitHub Org Manager](../src/ai_framework/agents/github-org-manager.agent.md)                                   | Manage GitHub organizations            |
-| [Greener Grass Workflow Benchmark](../src/ai_framework/agents/greener-grass-workflow-benchmark.agent.md)       | Benchmark workflow performance         |
+| [Greener Grass Workflow Benchmark](../src/ai_framework/agents/workflow-best-practice-benchmark.agent.md)       | Benchmark workflow performance         |
 | [PR Branch Cleanup](../src/ai_framework/agents/pr-branch-cleanup.agent.md)                                     | Clean up PRs and branches              |
 | [JFrog Security](../src/ai_framework/agents/jfrog-sec.agent.md)                                                | JFrog security scanning                |
 | [LaunchDarkly Flag Cleanup](../src/ai_framework/agents/launchdarkly-flag-cleanup.agent.md)                     | Clean up feature flags                 |
 | [Neon Migration Specialist](../src/ai_framework/agents/neon-migration-specialist.agent.md)                     | Migrate to Neon database               |
 | [Neon Optimization Analyzer](../src/ai_framework/agents/neon-optimization-analyzer.agent.md)                   | Optimize Neon database                 |
-| [Nervous Archaeologist](../src/ai_framework/agents/nervous-archaeologist.agent.md)                             | Explore legacy code                    |
+| [Nervous Archaeologist](../src/ai_framework/agents/exhaustive-repo-scanner.agent.md)                           | Explore legacy code                    |
 | [Octopus Deploy Release Notes MCP](../src/ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)       | Generate Octopus release notes         |
 | [PagerDuty Incident Responder](../src/ai_framework/agents/pagerduty-incident-responder.agent.md)               | Respond to PagerDuty incidents         |
 | [Repository Setup](../src/ai_framework/agents/repository-setup.agent.md)                                       | Set up new repositories                |

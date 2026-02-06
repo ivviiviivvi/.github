@@ -303,10 +303,10 @@ ______________________________________________________________________
 
 ```bash
 # Generate API docs from Python docstrings
-python scripts/auto-docs.py --src-dir src --output-dir docs/api
+python scripts/auto_docs.py --src-dir src --output-dir docs/api
 
 # Update README with module summary
-python scripts/auto-docs.py --src-dir src --update-readme
+python scripts/auto_docs.py --src-dir src --update-readme
 ```
 
 ### Documentation Standards
@@ -390,7 +390,7 @@ gh pr create --label "auto-merge" --fill
 # (Edit docs with AI)
 
 # 2. Auto-generate API docs
-python scripts/auto-docs.py --src-dir src --update-readme
+python scripts/auto_docs.py --src-dir src --update-readme
 
 # 3. Commit and push
 ./scripts/aicommit.sh "docs: update API documentation"
@@ -534,8 +534,8 @@ ______________________________________________________________________
 
 ## References
 
-- [AI Rapid Workflow Guide](../AI_RAPID_WORKFLOW.md)
+- [AI Rapid Workflow Guide](../docs/workflows/AI_RAPID_WORKFLOW.md)
 - [Conventional Commits](https://www.conventionalcommits.org/)<!-- link:standards.conventional_commits -->
 - [Pre-commit Hooks](https://pre-commit.com/)
 - [GitHub Auto-merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
-- [Semantic Versioning](../SEMANTIC_VERSIONING.md)
+- Semantic Versioning

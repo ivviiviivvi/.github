@@ -3,7 +3,7 @@
 **Date:** January 18, 2026\
 **User:** 4444J99\
 **Organization:**
-ivviiviivvi\
+{{ORG_NAME}}\
 **Repository:** .github (main branch)
 
 ______________________________________________________________________
@@ -268,7 +268,7 @@ ______________________________________________________________________
 - **Automation:** GraphQL operations validated in dry-run
 - **1Password:** Integration ready (needs account config)
 - **GitHub CLI:** Authenticated and working
-- **Organization:** Access verified (ivviiviivvi)
+- **Organization:** Access verified ({{ORG_NAME}})
 
 ### What's Blocked ⚠️
 
@@ -347,7 +347,7 @@ ______________________________________________________________________
 
 ### After Deployment (10 minutes)
 
-1. **Verify projects created:** https://github.com/orgs/ivviiviivvi/projects
+1. **Verify projects created:** https://github.com/orgs/{{ORG_NAME}}/projects
 1. **Check project URLs** in deployment log
 1. **Review success message** and field counts
 
@@ -358,7 +358,8 @@ ______________________________________________________________________
 1. **Set up 35+ automation rules**
    - Guide: `docs/GITHUB_PROJECTS_IMPLEMENTATION.md` automation sections
 1. **Add existing issues/PRs** to projects
-   - Command: `gh project item-add PROJECT_NUMBER --owner ivviiviivvi --url URL`
+   - Command:
+     `gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url URL`
 
 ### Rollout (Ongoing)
 
@@ -468,4 +469,4 @@ _Session completed: 2026-01-18 12:35:00_\
 _Agent: GitHub Copilot_\
 _User:
 4444J99_\
-_Organization: ivviiviivvi_
+_Organization: {{ORG_NAME}}_

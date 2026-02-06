@@ -1,4 +1,4 @@
-"""Unit tests for automation/scripts/intelligent_routing.py
+"""Unit tests for automation/scripts/issue_assignment_router.py
 Focus: Routing algorithm, score calculations, fallback strategies.
 """
 
@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src" / "automation
 _original_secret_manager = sys.modules.get("secret_manager")
 sys.modules["secret_manager"] = MagicMock()
 
-from intelligent_routing import IntelligentRouter
+from issue_assignment_router import IntelligentRouter
 from models import RoutingConfig, RoutingFactorScores
 
 # Restore original module state after imports
@@ -854,7 +854,7 @@ class TestMainCLI:
 
         original_argv = sys.argv
         sys.argv = [
-            "intelligent_routing.py",
+            "issue_assignment_router.py",
             "--owner",
             "testorg",
             "--repo",
@@ -865,8 +865,8 @@ class TestMainCLI:
 
         try:
             # Mock all the dependencies
-            with patch("intelligent_routing.GitHubAPIClient") as mock_client_cls:
-                with patch("intelligent_routing.ConfigLoader") as mock_config_loader:
+            with patch("issue_assignment_router.GitHubAPIClient") as mock_client_cls:
+                with patch("issue_assignment_router.ConfigLoader") as mock_config_loader:
                     mock_client = MagicMock()
                     mock_client_cls.return_value = mock_client
 
@@ -888,7 +888,7 @@ class TestMainCLI:
                     # Mock config loader to raise FileNotFoundError (use defaults)
                     mock_config_loader.return_value.load.side_effect = FileNotFoundError()
 
-                    from intelligent_routing import main
+                    from issue_assignment_router import main
 
                     with pytest.raises(SystemExit) as exc_info:
                         main()
@@ -908,7 +908,7 @@ class TestMainCLI:
 
         original_argv = sys.argv
         sys.argv = [
-            "intelligent_routing.py",
+            "issue_assignment_router.py",
             "--owner",
             "testorg",
             "--repo",
@@ -919,8 +919,8 @@ class TestMainCLI:
         ]
 
         try:
-            with patch("intelligent_routing.GitHubAPIClient") as mock_client_cls:
-                with patch("intelligent_routing.ConfigLoader") as mock_config_loader:
+            with patch("issue_assignment_router.GitHubAPIClient") as mock_client_cls:
+                with patch("issue_assignment_router.ConfigLoader") as mock_config_loader:
                     mock_client = MagicMock()
                     mock_client_cls.return_value = mock_client
 
@@ -941,7 +941,7 @@ class TestMainCLI:
 
                     mock_config_loader.return_value.load.side_effect = FileNotFoundError()
 
-                    from intelligent_routing import main
+                    from issue_assignment_router import main
 
                     with pytest.raises(SystemExit) as exc_info:
                         main()
@@ -963,7 +963,7 @@ class TestMainCLI:
 
         original_argv = sys.argv
         sys.argv = [
-            "intelligent_routing.py",
+            "issue_assignment_router.py",
             "--owner",
             "testorg",
             "--repo",
@@ -973,10 +973,10 @@ class TestMainCLI:
         ]
 
         try:
-            with patch("intelligent_routing.GitHubAPIClient") as mock_client_cls:
+            with patch("issue_assignment_router.GitHubAPIClient") as mock_client_cls:
                 mock_client_cls.side_effect = Exception("Connection failed")
 
-                from intelligent_routing import main
+                from issue_assignment_router import main
 
                 with pytest.raises(SystemExit) as exc_info:
                     main()
@@ -992,7 +992,7 @@ class TestMainCLI:
 
         original_argv = sys.argv
         sys.argv = [
-            "intelligent_routing.py",
+            "issue_assignment_router.py",
             "--owner",
             "testorg",
             "--repo",
@@ -1003,8 +1003,8 @@ class TestMainCLI:
         ]
 
         try:
-            with patch("intelligent_routing.GitHubAPIClient") as mock_client_cls:
-                with patch("intelligent_routing.ConfigLoader") as mock_config_loader:
+            with patch("issue_assignment_router.GitHubAPIClient") as mock_client_cls:
+                with patch("issue_assignment_router.ConfigLoader") as mock_config_loader:
                     mock_client = MagicMock()
                     mock_client_cls.return_value = mock_client
 
@@ -1024,7 +1024,7 @@ class TestMainCLI:
 
                     mock_config_loader.return_value.load.side_effect = FileNotFoundError()
 
-                    from intelligent_routing import main
+                    from issue_assignment_router import main
 
                     with pytest.raises(SystemExit) as exc_info:
                         main()
@@ -1040,7 +1040,7 @@ class TestMainCLI:
 
         original_argv = sys.argv
         sys.argv = [
-            "intelligent_routing.py",
+            "issue_assignment_router.py",
             "--owner",
             "testorg",
             "--repo",
@@ -1050,8 +1050,8 @@ class TestMainCLI:
         ]
 
         try:
-            with patch("intelligent_routing.GitHubAPIClient") as mock_client_cls:
-                with patch("intelligent_routing.ConfigLoader") as mock_config_loader:
+            with patch("issue_assignment_router.GitHubAPIClient") as mock_client_cls:
+                with patch("issue_assignment_router.ConfigLoader") as mock_config_loader:
                     mock_client = MagicMock()
                     mock_client_cls.return_value = mock_client
 
@@ -1071,7 +1071,7 @@ class TestMainCLI:
 
                     # Return valid config
                     mock_config_loader.return_value.load.return_value = {
-                        "intelligent_routing": {
+                        "issue_assignment_router": {
                             "factors": {
                                 "expertise": 0.3,
                                 "workload": 0.3,
@@ -1082,7 +1082,7 @@ class TestMainCLI:
                         }
                     }
 
-                    from intelligent_routing import main
+                    from issue_assignment_router import main
 
                     with pytest.raises(SystemExit) as exc_info:
                         main()

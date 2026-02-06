@@ -1,5 +1,5 @@
 ---
-name: Transparent Thinking
+name: Cognitive Transparency Agent
 description: Ultimate Transparent Thinking Beast Mode with maximum creativity and cognitive overclocking.
 tools:
   - '*'

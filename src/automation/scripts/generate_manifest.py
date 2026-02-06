@@ -240,7 +240,7 @@ def build_manifest(root: Path, output: Path) -> dict[str, Any]:
         "generated": datetime.now(timezone.utc).isoformat(),
         "generator": "generate_manifest.py",
         "version": "1.0.0",
-        "organization": "ivviiviivvi",
+        "organization": "{{ORG_NAME}}",
         "statistics": {
             "workflows": {
                 "total": workflow_stats.get("total_workflows", workflow_stats.get("total", 0)),

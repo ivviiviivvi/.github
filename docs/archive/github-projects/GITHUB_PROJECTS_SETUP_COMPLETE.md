@@ -6,9 +6,9 @@ All GitHub Projects infrastructure has been successfully deployed and
 configured!
 
 **Date Completed:** January 18, 2026\
-**Organization:** ivviiviivvi\
+**Organization:** {{ORG_NAME}}\
 **Projects
-URL:** https://github.com/orgs/ivviiviivvi/projects
+URL:** https://github.com/orgs/{{ORG_NAME}}/projects
 
 ______________________________________________________________________
 
@@ -18,15 +18,15 @@ ______________________________________________________________________
 
 All 7 GitHub Projects successfully deployed:
 
-| #   | Project                      | URL                                                     | Fields | Status  |
-| --- | ---------------------------- | ------------------------------------------------------- | ------ | ------- |
-| 8   | 🤖 AI Framework Development  | [View](https://github.com/orgs/ivviiviivvi/projects/8)  | 7      | ✅ Live |
-| 9   | 📚 Documentation & Knowledge | [View](https://github.com/orgs/ivviiviivvi/projects/9)  | 7      | ✅ Live |
-| 10  | 🔄 Workflow Automation       | [View](https://github.com/orgs/ivviiviivvi/projects/10) | 7      | ✅ Live |
-| 11  | 🔒 Security & Compliance     | [View](https://github.com/orgs/ivviiviivvi/projects/11) | 7      | ✅ Live |
-| 12  | 🏗️ Infrastructure & DevOps   | [View](https://github.com/orgs/ivviiviivvi/projects/12) | 7      | ✅ Live |
-| 13  | 👥 Community & Support       | [View](https://github.com/orgs/ivviiviivvi/projects/13) | 7      | ✅ Live |
-| 14  | 🎯 Product Roadmap           | [View](https://github.com/orgs/ivviiviivvi/projects/14) | 7      | ✅ Live |
+| #   | Project                      | URL                                                              | Fields | Status  |
+| --- | ---------------------------- | ---------------------------------------------------------------- | ------ | ------- |
+| 8   | 🤖 AI Framework Development  | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8)  | 7      | ✅ Live |
+| 9   | 📚 Documentation & Knowledge | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/9)  | 7      | ✅ Live |
+| 10  | 🔄 Workflow Automation       | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/10) | 7      | ✅ Live |
+| 11  | 🔒 Security & Compliance     | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/11) | 7      | ✅ Live |
+| 12  | 🏗️ Infrastructure & DevOps   | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/12) | 7      | ✅ Live |
+| 13  | 👥 Community & Support       | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/13) | 7      | ✅ Live |
+| 14  | 🎯 Product Roadmap           | [View](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/14) | 7      | ✅ Live |
 
 **Custom Fields Created:** ~45 (Status/Type reserved names auto-created by
 GitHub)
@@ -453,10 +453,10 @@ ______________________________________________________________________
 
 ### Resources
 
-- **Project Home:** https://github.com/orgs/ivviiviivvi/projects
+- **Project Home:** https://github.com/orgs/{{ORG_NAME}}/projects
 - **Documentation:** `/workspace/docs/`
 - **Scripts:** `/workspace/scripts/`
-- **Issues:** https://github.com/ivviiviivvi/.github/issues
+- **Issues:** https://github.com/{{ORG_NAME}}/.github/issues
 
 ### Contacts
 

@@ -471,9 +471,9 @@ ______________________________________________________________________
 ### Getting Help
 
 - 💬 Slack: #security-engineering
-- 📧 Email: <security@ivviiviivvi.org>
+- 📧 Email: \<security@{{ORG_NAME}}.org>
 - 📝 Issues:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - 🆘 Emergency: Follow procedures in TOKEN_REGISTRY.md
 
 ______________________________________________________________________

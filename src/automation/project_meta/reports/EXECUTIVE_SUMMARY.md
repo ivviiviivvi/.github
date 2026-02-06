@@ -3,11 +3,11 @@
 ## Overview
 
 This document provides a high-level executive summary of the comprehensive
-workflow optimization analysis conducted on the ivviiviivvi/.github repository
+workflow optimization analysis conducted on the {{ORG_NAME}}/.github repository
 containing 76 GitHub Actions workflows.
 
 **Date**: 2025-12-23\
-**Repository**: ivviiviivvi/.github\
+**Repository**: {{ORG_NAME}}/.github\
 **Scope**: Complete
 9-dimensional analysis (Critique, Logic, Logos, Pathos, Ethos, Blindspots,
 Shatter-points, Bloom, Evolve)
@@ -423,7 +423,7 @@ ______________________________________________________________________
 
 ## Conclusion
 
-The ivviiviivvi/.github repository has a **strong foundation** with excellent
+The {{ORG_NAME}}/.github repository has a **strong foundation** with excellent
 security practices and comprehensive automation. With focused investment in
 performance optimization and operational excellence, it can become an
 **industry-leading CI/CD platform**.

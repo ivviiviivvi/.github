@@ -23,9 +23,9 @@ date -u
 echo ""
 
 REPOS=(
-  "ivviiviivvi/theoretical-specifications-first"
-  "ivviiviivvi/system-governance-framework"
-  "ivviiviivvi/trade-perpetual-future"
+  "{{ORG_NAME}}/theoretical-specifications-first"
+  "{{ORG_NAME}}/system-governance-framework"
+  "{{ORG_NAME}}/trade-perpetual-future"
 )
 
 # Check 1: Workflow Run History
@@ -262,22 +262,22 @@ ______________________________________________________________________
 # Check all workflow runs
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh run list -R ivviiviivvi/$repo --limit 3
+  gh run list -R {{ORG_NAME}}/$repo --limit 3
 done
 
 # Check repository health
-gh repo view ivviiviivvi/theoretical-specifications-first
-gh repo view ivviiviivvi/system-governance-framework
-gh repo view ivviiviivvi/trade-perpetual-future
+gh repo view {{ORG_NAME}}/theoretical-specifications-first
+gh repo view {{ORG_NAME}}/system-governance-framework
+gh repo view {{ORG_NAME}}/trade-perpetual-future
 
 # Verify labels
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh label list -R ivviiviivvi/$repo | wc -l
+  gh label list -R {{ORG_NAME}}/$repo | wc -l
 done
 
 # Check for errors in latest runs
-gh run view [RUN_ID] -R ivviiviivvi/[REPO] --log | grep -i error
+gh run view [RUN_ID] -R {{ORG_NAME}}/[REPO] --log | grep -i error
 ```
 
 ______________________________________________________________________
