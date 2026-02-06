@@ -31,21 +31,21 @@ python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.
 📋 Validating 12 labels across 3 repositories
 👀 VALIDATION MODE
 
-🔍 Validating ivviiviivvi/theoretical-specifications-first...
+🔍 Validating {{ORG_NAME}}/theoretical-specifications-first...
   ✅ Found: week11/phase1
   ✅ Found: priority/critical
   ✅ Found: priority/high
   ❌ Missing: priority/medium
   ❌ Missing: priority/low
   ...
-❌ 4 label issues found in ivviiviivvi/theoretical-specifications-first
+❌ 4 label issues found in {{ORG_NAME}}/theoretical-specifications-first
 
 ================================================================================
 📊 VALIDATION SUMMARY
 ================================================================================
-❌ FAIL ivviiviivvi/theoretical-specifications-first           (4 issues)
-✅ PASS ivviiviivvi/system-governance-framework                (0 issues)
-❌ FAIL ivviiviivvi/trade-perpetual-future                     (2 issues)
+❌ FAIL {{ORG_NAME}}/theoretical-specifications-first           (4 issues)
+✅ PASS {{ORG_NAME}}/system-governance-framework                (0 issues)
+❌ FAIL {{ORG_NAME}}/trade-perpetual-future                     (2 issues)
 ================================================================================
 ❌ 2/3 repositories have label issues
 
@@ -68,14 +68,14 @@ python3 validate_labels.py \
 📋 Validating 12 labels across 3 repositories
 🔧 FIX MODE ENABLED
 
-🔍 Validating ivviiviivvi/theoretical-specifications-first...
+🔍 Validating {{ORG_NAME}}/theoretical-specifications-first...
   ❌ Missing: priority/medium
   ❌ Missing: priority/low
 
-🔧 Fixing labels in ivviiviivvi/theoretical-specifications-first...
+🔧 Fixing labels in {{ORG_NAME}}/theoretical-specifications-first...
   ✅ Created: priority/medium
   ✅ Created: priority/low
-✅ All 12 labels validated for ivviiviivvi/theoretical-specifications-first
+✅ All 12 labels validated for {{ORG_NAME}}/theoretical-specifications-first
 ...
 
 ================================================================================

@@ -227,6 +227,6 @@ ______________________________________________________________________
 ## How to Post
 
 1. Navigate to:
-   <https://github.com/ivviiviivvi/.github/discussions/new?category=announcements>
+   <https://github.com/{{ORG_NAME}}/.github/discussions/new?category=announcements>
 1. Copy the title and body above
 1. Click "Start discussion"

@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-name: Janitor description: Perform janitorial tasks on any codebase including
+name: Codebase Cleanup description: Perform janitorial tasks on any codebase including
 cleanup, simplification, and tech debt remediation. tools:
 
 - changes

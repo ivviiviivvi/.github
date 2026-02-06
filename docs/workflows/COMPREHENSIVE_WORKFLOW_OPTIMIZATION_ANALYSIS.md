@@ -2,7 +2,7 @@
 
 ## Expansive & Exhaustive Review of GitHub Actions Workflows
 
-**Repository**: ivviiviivvi/.github\
+**Repository**: {{ORG_NAME}}/.github\
 **Total Workflows**: 76\
 **Analysis Date**:
 2025-12-23\
@@ -681,7 +681,7 @@ Commit → Test → Stage → Canary (10%) → Blue-Green Swap → Full Deploy
 **Opportunity**: Extract common patterns
 
 ```
-ivviiviivvi/.github/workflows/
+{{ORG_NAME}}/.github/workflows/
   ├── reusable/
   │   ├── app-detect.yml        # App type detection
   │   ├── badge-update.yml      # README badge management

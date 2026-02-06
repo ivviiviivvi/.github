@@ -1,6 +1,6 @@
 #!/bin/bash
 # GitHub Projects Creation Script
-# Creates all 7 comprehensive projects for the ivviiviivvi organization
+# Creates all 7 comprehensive projects for the {{ORG_NAME}} organization
 #
 # Prerequisites:
 # - GitHub CLI (gh) installed and authenticated
@@ -19,7 +19,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-ORG_NAME="ivviiviivvi"
+ORG_NAME="{{ORG_NAME}}"
 REPO_NAME=".github"
 
 # Project definitions

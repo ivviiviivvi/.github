@@ -2,7 +2,7 @@
 
 **Date:** 2025-12-22\
 **PR:**
-https://github.com/ivviiviivvi/.github/pull/82\
+https://github.com/{{ORG_NAME}}/.github/pull/82\
 **Status:** ✅ Resolved
 
 ## Problem
@@ -22,7 +22,7 @@ cannot automatically determine which version to keep because the branches have
 1. `.jules/palette.md` - Palette's learning journal
 1. `.github/workflows/deploy-to-pages-live.yml` - Live app deployment workflow
 1. `scripts/web_crawler.py` - Web crawler script
-1. `scripts/ecosystem_visualizer.py` - Ecosystem visualization script
+1. `scripts/org_health_visualizer.py` - Ecosystem visualization script
 
 ## Resolution Strategy
 
@@ -80,7 +80,7 @@ order
 
 **Rationale:** Performance improvements from PR #80 should be preserved
 
-### 4. `scripts/ecosystem_visualizer.py` ✅ KEPT MAIN VERSION
+### 4. `scripts/org_health_visualizer.py` ✅ KEPT MAIN VERSION
 
 **Conflict:** Different implementations
 
@@ -108,13 +108,13 @@ git merge --allow-unrelated-histories origin/main
 # Accept main branch versions for other files
 git checkout --theirs .github/workflows/deploy-to-pages-live.yml
 git checkout --theirs scripts/web_crawler.py
-git checkout --theirs scripts/ecosystem_visualizer.py
+git checkout --theirs scripts/org_health_visualizer.py
 
 # Stage all resolved files
 git add .jules/palette.md \
         .github/workflows/deploy-to-pages-live.yml \
         scripts/web_crawler.py \
-        scripts/ecosystem_visualizer.py
+        scripts/org_health_visualizer.py
 
 # Commit the merge
 git commit -m "Resolve merge conflicts with main branch
@@ -122,7 +122,7 @@ git commit -m "Resolve merge conflicts with main branch
 - Merged .jules/palette.md entries (kept both)
 - Kept main version of deploy-to-pages-live.yml (more sophisticated)
 - Kept main version of web_crawler.py (has parallelization)
-- Kept main version of ecosystem_visualizer.py (latest improvements)"
+- Kept main version of org_health_visualizer.py (latest improvements)"
 
 # Push to update PR
 git push origin copilot/complete-autonomous-ecosystem-deployment-again

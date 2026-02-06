@@ -209,9 +209,9 @@ ______________________________________________________________________
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
   \- Ask questions, share ideas
-- [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+- [Issue Tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
   \- Report bugs, request features
 - [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute to this
   repository
@@ -269,9 +269,9 @@ ______________________________________________________________________
   [Troubleshooting](../guides/CUSTOM_INSTRUCTIONS_SETUP.md#troubleshooting)
   sections in guides
 - **Questions**: Ask in
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 - **Issues**: Report in
-  [Issue Tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issue Tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - **Documentation Feedback**: Open a PR or issue
 
 ______________________________________________________________________

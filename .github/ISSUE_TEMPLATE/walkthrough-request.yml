@@ -20,7 +20,7 @@ body:
 
       Please fill out the form below to help us create the perfect walkthrough for your needs.
 
-      📚 **Need help?** Check out the [Secrets Setup Guide](https://github.com/ivviiviivvi/.github/blob/main/docs/SECRETS_SETUP.md) for configuration details.
+      📚 **Need help?** Check out the [Secrets Setup Guide](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/SECRETS_SETUP.md) for configuration details.
 
 - type: input
   id: app-name
@@ -191,7 +191,7 @@ body:
       required: false
     - label: Required API keys are configured in GitHub Secrets
       required: false
-    - label: I have reviewed the [Secrets Setup Guide](https://github.com/ivviiviivvi/.github/blob/main/docs/SECRETS_SETUP.md)
+    - label: I have reviewed the [Secrets Setup Guide](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/SECRETS_SETUP.md)
       required: false
 
 - type: checkboxes

@@ -38,13 +38,13 @@ specialized agents that extend GitHub Copilot's capabilities.
 | [Data Sanitization](#data-sanitization-agent)                                 | Security & Compliance        | Cleans data, removes PII, ensures compliance                                                       | github        | [agents/data-sanitization.agent.md](../ai_framework/agents/data-sanitization.agent.md)                                     |
 | [Dynatrace Expert](#dynatrace-expert)                                         | Development & Operations     | Observability and security incident response                                                       | dynatrace     | [agents/dynatrace-expert.agent.md](../ai_framework/agents/dynatrace-expert.agent.md)                                       |
 | [GitHub Org Manager](#github-organization-manager)                            | Infrastructure & DevOps      | Organization governance and automation                                                             | github        | [agents/github-org-manager.agent.md](../ai_framework/agents/github-org-manager.agent.md)                                   |
-| [Greener Grass Workflow Benchmark](#greener-grass-workflow-benchmark-agent)   | Infrastructure & DevOps      | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github        | [agents/greener-grass-workflow-benchmark.agent.md](../ai_framework/agents/greener-grass-workflow-benchmark.agent.md)       |
+| [Workflow Best Practice Benchmark](#workflow-best-practice-benchmark-agent)   | Infrastructure & DevOps      | Critiques workflows against peer benchmarks with scored gap analysis and safety-first improvements | github        | [agents/workflow-best-practice-benchmark.agent.md](../ai_framework/agents/workflow-best-practice-benchmark.agent.md)       |
 | [House-Keeping PR Branch Deep Cleaner](#house-keeping-pr-branch-deep-cleaner) | Infrastructure & DevOps      | Deep housekeeping for comprehensive PR and branch cleanup with task extraction                     | github        | agents/House-Keeping--Pull-Request--Branch--Deep-Cleaner.agent.md                                                          |
 | [JFrog Security](#jfrog-security-agent)                                       | Security & Compliance        | Application security remediation                                                                   | None          | [agents/jfrog-sec.agent.md](../ai_framework/agents/jfrog-sec.agent.md)                                                     |
 | [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup)                       | Development & Operations     | Automated feature flag cleanup                                                                     | launchdarkly  | [agents/launchdarkly-flag-cleanup.agent.md](../ai_framework/agents/launchdarkly-flag-cleanup.agent.md)                     |
 | [Neon Migration Specialist](#neon-migration-specialist)                       | Infrastructure & DevOps      | Zero-downtime Postgres migrations                                                                  | None          | [agents/neon-migration-specialist.agent.md](../ai_framework/agents/neon-migration-specialist.agent.md)                     |
 | [Neon Performance Analyzer](#neon-performance-analyzer)                       | Infrastructure & DevOps      | Postgres query optimization                                                                        | None          | [agents/neon-optimization-analyzer.agent.md](../ai_framework/agents/neon-optimization-analyzer.agent.md)                   |
-| [Nervous Archaeologist](#nervous-archaeologist)                               | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/nervous-archaeologist.agent.md](../ai_framework/agents/nervous-archaeologist.agent.md)                             |
+| [Exhaustive Repo Scanner](#exhaustive-repo-scanner)                               | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/exhaustive-repo-scanner.agent.md](../ai_framework/agents/exhaustive-repo-scanner.agent.md)                             |
 | [Octopus Release Notes](#octopus-deploy-release-notes)                        | Development & Operations     | Generates Octopus Deploy release notes                                                             | octopus       | [agents/octopus-deploy-release-notes-mcp.agent.md](../ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)       |
 | [PagerDuty Responder](#pagerduty-incident-responder)                          | Security & Compliance        | Incident response automation                                                                       | pagerduty     | [agents/pagerduty-incident-responder.agent.md](../ai_framework/agents/pagerduty-incident-responder.agent.md)               |
 | [Repository Setup](#repository-setup-agent)                                   | Infrastructure & DevOps      | New repository creation and configuration                                                          | github        | [agents/repository-setup.agent.md](../ai_framework/agents/repository-setup.agent.md)                                       |
@@ -628,11 +628,11 @@ practices and successful patterns to identify improvement opportunities.
 **Invocation Examples**:
 
 ```
-@greener-grass-workflow-benchmark analyze our CI/CD performance compared to similar projects
-@greener-grass-workflow-benchmark compare our workflows to next.js and identify gaps
-@greener-grass-workflow-benchmark how does our Actions spending compare to peer projects?
-@greener-grass-workflow-benchmark benchmark our workflow security against industry leaders
-@greener-grass-workflow-benchmark generate a comprehensive benchmark report
+@workflow-best-practice-benchmark analyze our CI/CD performance compared to similar projects
+@workflow-best-practice-benchmark compare our workflows to next.js and identify gaps
+@workflow-best-practice-benchmark how does our Actions spending compare to peer projects?
+@workflow-best-practice-benchmark benchmark our workflow security against industry leaders
+@workflow-best-practice-benchmark generate a comprehensive benchmark report
 ```
 
 **Integration Points**:
@@ -656,7 +656,7 @@ practices and successful patterns to identify improvement opportunities.
 - Workflow run history and metrics
 
 **Documentation**:
-[agents/greener-grass-workflow-benchmark.agent.md](../ai_framework/agents/greener-grass-workflow-benchmark.agent.md)
+[agents/workflow-best-practice-benchmark.agent.md](../ai_framework/agents/workflow-best-practice-benchmark.agent.md)
 
 ______________________________________________________________________
 
@@ -1115,10 +1115,10 @@ excavation, generates actionable tasks, and creates persistent memories.
 **Invocation Examples**:
 
 ```
-@nervous-archaeologist perform exhaustive repository analysis
-@nervous-archaeologist scan for overlooked patterns and artifacts
-@nervous-archaeologist generate comprehensive repository report
-@nervous-archaeologist identify historical trends in the codebase
+@exhaustive-repo-scanner perform exhaustive repository analysis
+@exhaustive-repo-scanner scan for overlooked patterns and artifacts
+@exhaustive-repo-scanner generate comprehensive repository report
+@exhaustive-repo-scanner identify historical trends in the codebase
 ```
 
 **Integration Points**:
@@ -1135,7 +1135,7 @@ excavation, generates actionable tasks, and creates persistent memories.
 - Technical debt analysis
 
 **Documentation**:
-[agents/nervous-archaeologist.agent.md](../ai_framework/agents/nervous-archaeologist.agent.md)
+[agents/exhaustive-repo-scanner.agent.md](../ai_framework/agents/exhaustive-repo-scanner.agent.md)
 
 ______________________________________________________________________
 
@@ -1370,9 +1370,9 @@ available for use.
 **Expected Use Cases**:
 
 ```
-@nervous-archaeologist analyze the repository structure
-@nervous-archaeologist find undocumented features
-@nervous-archaeologist trace the history of the authentication module
+@exhaustive-repo-scanner analyze the repository structure
+@exhaustive-repo-scanner find undocumented features
+@exhaustive-repo-scanner trace the history of the authentication module
 ```
 
 **Status**: Planned for Q1 2026
@@ -1387,11 +1387,11 @@ ______________________________________________________________________
 ### Questions or Issues?
 
 - **General Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 - **Bug Reports**: Create an
-  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+  [issue](https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
-  [issue](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
+  [issue](https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - **Security Issues**: See [SECURITY.md](../governance/SECURITY.md) for
   reporting procedures
 

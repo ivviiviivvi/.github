@@ -150,7 +150,7 @@ echo "Token: ${GH_TOKEN:0:4}..."
 
 # 4. Run Python script
 cd /workspace/scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ______________________________________________________________________

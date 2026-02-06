@@ -5,7 +5,7 @@
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                   WORKFLOW OPTIMIZATION ANALYSIS                      ║
-║                      ivviiviivvi/.github Repository                   ║
+║                      {{ORG_NAME}}/.github Repository                   ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 📅 Date: 2025-12-23

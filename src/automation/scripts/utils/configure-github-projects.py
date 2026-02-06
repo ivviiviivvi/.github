@@ -11,7 +11,7 @@ Prerequisites:
 
 Usage:
     export GH_TOKEN="your_github_token"
-    python3 configure-github-projects.py --org ivviiviivvi --repo .github
+    python3 configure-github-projects.py --org {{ORG_NAME}} --repo .github
 """
 
 import argparse

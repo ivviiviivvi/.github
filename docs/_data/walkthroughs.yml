@@ -4,12 +4,12 @@
 # Sample structure shown below for reference
 
 # - title: "Example Walkthrough"
-#   repository: "ivviiviivvi/example-repo"
+#   repository: "{{ORG_NAME}}/example-repo"
 #   description: "Demonstration of application features"
 #   video_url: "https://example.com/video.mp4"
 #   thumbnail_url: ""
 #   updated_at: "2025-12-21T00:00:00Z"
-#   repository_url: "https://github.com/ivviiviivvi/example-repo"
+#   repository_url: "https://github.com/{{ORG_NAME}}/example-repo"
 #   tags:
 #     - walkthrough
 #     - demo

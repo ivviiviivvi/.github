@@ -38,7 +38,7 @@ on:
 
 jobs:
   bootstrap:
-    uses: ivviiviivvi/.github/.github/workflows/repository-bootstrap.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main
     with:
       target_repository: ${{ github.repository }}
       enable_issues: true
@@ -182,9 +182,9 @@ When `create_project_board` is enabled:
 ```yaml
 jobs:
   bootstrap:
-    uses: ivviiviivvi/.github/.github/workflows/repository-bootstrap.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main
     with:
-      target_repository: "ivviiviivvi/new-project"
+      target_repository: "{{ORG_NAME}}/new-project"
       enable_issues: true
       enable_projects: true
       enable_discussions: true
@@ -202,9 +202,9 @@ jobs:
 ```yaml
 jobs:
   bootstrap:
-    uses: ivviiviivvi/.github/.github/workflows/repository-bootstrap.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main
     with:
-      target_repository: "ivviiviivvi/existing-project"
+      target_repository: "{{ORG_NAME}}/existing-project"
       enable_issues: false
       enable_projects: false
       enable_discussions: false
@@ -220,7 +220,7 @@ jobs:
 ```yaml
 jobs:
   bootstrap:
-    uses: ivviiviivvi/.github/.github/workflows/repository-bootstrap.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/repository-bootstrap.yml@main
     with:
       target_repository: ${{ github.repository }}
       enable_issues: false

@@ -99,15 +99,15 @@ Monitor the following metrics:
 1. **Workflow Executions**
 
    ```bash
-   gh workflow list --repo ivviiviivvi/theoretical-specifications-first
-   gh workflow view repository-health-check.yml --repo ivviiviivvi/theoretical-specifications-first
+   gh workflow list --repo {{ORG_NAME}}/theoretical-specifications-first
+   gh workflow view repository-health-check.yml --repo {{ORG_NAME}}/theoretical-specifications-first
    ```
 
 1. **Label Usage**
 
    ```bash
-   gh issue list --repo ivviiviivvi/theoretical-specifications-first --label "status: in progress"
-   gh pr list --repo ivviiviivvi/theoretical-specifications-first --label "priority: high"
+   gh issue list --repo {{ORG_NAME}}/theoretical-specifications-first --label "status: in progress"
+   gh pr list --repo {{ORG_NAME}}/theoretical-specifications-first --label "priority: high"
    ```
 
 1. **Repository Health**
@@ -278,11 +278,11 @@ If Phase 1 monitoring is successful:
 # Check deployed workflows
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh api repos/ivviiviivvi/$repo/contents/.github/workflows | jq -r '.[].name'
+  gh api repos/{{ORG_NAME}}/$repo/contents/.github/workflows | jq -r '.[].name'
 done
 
 # Check deployed labels
-gh label list --repo ivviiviivvi/theoretical-specifications-first | \
+gh label list --repo {{ORG_NAME}}/theoretical-specifications-first | \
   grep -E "(status|priority|type|deployment|automation)"
 
 # View deployment results
@@ -293,13 +293,13 @@ cat results/week11-phase1-production.json | jq
 
 ```bash
 # List all workflows
-gh workflow list --repo ivviiviivvi/theoretical-specifications-first
+gh workflow list --repo {{ORG_NAME}}/theoretical-specifications-first
 
 # View recent runs
-gh run list --repo ivviiviivvi/theoretical-specifications-first --limit 10
+gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --limit 10
 
 # Watch for new runs
-gh run watch --repo ivviiviivvi/theoretical-specifications-first
+gh run watch --repo {{ORG_NAME}}/theoretical-specifications-first
 ```
 
 ## Success Criteria

@@ -38,7 +38,7 @@ echo "════════════════════════�
 echo ""
 echo "1. Open: https://my.1password.com/developer-tools/service-accounts"
 echo "2. Click 'Create Service Account'"
-echo "3. Name: 'ivviiviivvi-automation-phase3'"
+echo "3. Name: '{{ORG_NAME}}-automation-phase3'"
 echo "4. Grant access to 'Personal' vault (or your tokens vault)"
 echo "5. Set permissions: Read-only (we only need to read tokens)"
 echo "6. Click 'Create Service Account'"

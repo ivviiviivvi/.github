@@ -53,7 +53,7 @@ ______________________________________________________________________
 **Status**: Operational\
 **Commit**: \[Earlier Week 9 commit\]\
 **File**:
-`automation/scripts/intelligent_routing.py`
+`automation/scripts/issue_assignment_router.py`
 
 **Features**:
 
@@ -624,9 +624,9 @@ ______________________________________________________________________
 
 ### Support
 
-- Issues: <https://github.com/ivviiviivvi/.github/issues>
-- Discussions: <https://github.com/orgs/ivviiviivvi/discussions>
-- Wiki: <https://github.com/ivviiviivvi/.github/wiki>
+- Issues: <https://github.com/{{ORG_NAME}}/.github/issues>
+- Discussions: <https://github.com/orgs/{{ORG_NAME}}/discussions>
+- Wiki: <https://github.com/{{ORG_NAME}}/.github/wiki>
 
 ______________________________________________________________________
 

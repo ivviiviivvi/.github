@@ -303,10 +303,10 @@ ______________________________________________________________________
 
 ```bash
 # Generate API docs from Python docstrings
-python scripts/auto-docs.py --src-dir src --output-dir docs/api
+python scripts/auto_docs.py --src-dir src --output-dir docs/api
 
 # Update README with module summary
-python scripts/auto-docs.py --src-dir src --update-readme
+python scripts/auto_docs.py --src-dir src --update-readme
 ```
 
 ### Documentation Standards
@@ -390,7 +390,7 @@ gh pr create --label "auto-merge" --fill
 # (Edit docs with AI)
 
 # 2. Auto-generate API docs
-python scripts/auto-docs.py --src-dir src --update-readme
+python scripts/auto_docs.py --src-dir src --update-readme
 
 # 3. Commit and push
 ./scripts/aicommit.sh "docs: update API documentation"

@@ -818,7 +818,7 @@ Query projects programmatically:
 
 ```graphql
 query OrgProjects {
-  organization(login: "ivviiviivvi") {
+  organization(login: "{{ORG_NAME}}") {
     projectsV2(first: 10) {
       nodes {
         title
@@ -862,5 +862,5 @@ query OrgProjects {
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi project management
+**Maintained By**: @{{ORG_NAME}} project management
 team

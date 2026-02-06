@@ -182,7 +182,7 @@ ______________________________________________________________________
 ### Performance Improvements ✅
 
 - **Regex optimization** (commit 2a8cf95)
-  - Consolidated duplicate regex patterns in mouthpiece_filter.py
+  - Consolidated duplicate regex patterns in natural_language_prompt_filter.py
   - 30-35% performance improvement
 
 ### Accessibility Enhancements ✅

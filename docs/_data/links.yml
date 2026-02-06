@@ -1,17 +1,17 @@
 github:
-  org: https://github.com/ivviiviivvi
+  org: https://github.com/{{ORG_NAME}}
   root: https://github.com
-  dotgithub: https://github.com/ivviiviivvi/.github
-  org_discussions: https://github.com/orgs/ivviiviivvi/discussions
+  dotgithub: https://github.com/{{ORG_NAME}}/.github
+  org_discussions: https://github.com/orgs/{{ORG_NAME}}/discussions
   legacy_discussions: https://github.com/ivi374forivi/.github/discussions
-  discussions: https://github.com/ivviiviivvi/.github/discussions
-  issues: https://github.com/ivviiviivvi/.github/issues
-  issues_new: https://github.com/ivviiviivvi/.github/issues/new/choose
-  good_first_issue: https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
-  bug_report: https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml
-  feature_request: https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml
-  security_vulnerability: https://github.com/ivviiviivvi/.github/issues/new?template=security_vulnerability.yml
-  security_advisory: https://github.com/ivviiviivvi/.github/security/advisories/new
+  discussions: https://github.com/{{ORG_NAME}}/.github/discussions
+  issues: https://github.com/{{ORG_NAME}}/.github/issues
+  issues_new: https://github.com/{{ORG_NAME}}/.github/issues/new/choose
+  good_first_issue: https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22
+  bug_report: https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml
+  feature_request: https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml
+  security_vulnerability: https://github.com/{{ORG_NAME}}/.github/issues/new?template=security_vulnerability.yml
+  security_advisory: https://github.com/{{ORG_NAME}}/.github/security/advisories/new
   dependabot: https://github.com/dependabot
   detect_secrets: https://github.com/Yelp/detect-secrets  # pragma: allowlist secret
   pip_audit: https://github.com/pypa/pip-audit
@@ -76,12 +76,12 @@ internal:
     data_sanitization: src/ai_framework/agents/data-sanitization.agent.md
     dynatrace_expert: src/ai_framework/agents/dynatrace-expert.agent.md
     github_org_manager: src/ai_framework/agents/github-org-manager.agent.md
-    greener_grass_benchmark: src/ai_framework/agents/greener-grass-workflow-benchmark.agent.md
+    greener_grass_benchmark: src/ai_framework/agents/workflow-best-practice-benchmark.agent.md
     jfrog_sec: src/ai_framework/agents/jfrog-sec.agent.md
     launchdarkly_cleanup: src/ai_framework/agents/launchdarkly-flag-cleanup.agent.md
     neon_migration: src/ai_framework/agents/neon-migration-specialist.agent.md
     neon_performance: src/ai_framework/agents/neon-optimization-analyzer.agent.md
-    nervous_archaeologist: src/ai_framework/agents/nervous-archaeologist.agent.md
+    nervous_archaeologist: src/ai_framework/agents/exhaustive-repo-scanner.agent.md
     octopus_release_notes: src/ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md
     pagerduty_responder: src/ai_framework/agents/pagerduty-incident-responder.agent.md
     repository_setup: src/ai_framework/agents/repository-setup.agent.md
@@ -136,9 +136,9 @@ internal:
     mcp_server_setup: docs/guides/MCP_SERVER_SETUP.md
     mcp_standardization: docs/guides/MCP_STANDARDIZATION_GUIDE.md
     monitoring: docs/guides/monitoring.md
-    mouthpiece: docs/guides/MOUTHPIECE_README.md
+    mouthpiece: docs/guides/NLP_FILTER_README.md
     mouthpiece_examples: docs/guides/mouthpiece-examples.md
-    mouthpiece_system: docs/guides/MOUTHPIECE_SYSTEM.md
+    mouthpiece_system: docs/guides/NLP_FILTER_SYSTEM.md
     new_contributor: docs/guides/NEW_CONTRIBUTOR_GUIDE.md
     organizational_content_quick_start: docs/guides/ORGANIZATIONAL_CONTENT_QUICK_START.md
     organizational_content_visual: docs/guides/ORGANIZATIONAL_CONTENT_VISUAL_GUIDE.md

@@ -1,7 +1,7 @@
 # GitHub Token Registry
 
 > **Central registry for all GitHub Personal Access Tokens and authentication
-> mechanisms used in the ivviiviivvi organization**
+> mechanisms used in the {{ORG_NAME}} organization**
 
 **Last Updated:** 2026-01-18\
 **Owner:** Organization Security Team\
@@ -556,7 +556,7 @@ All token operations are logged:
 
 - **GitHub Audit Log**: All API calls made with each token
 
-  - View at: <https://github.com/organizations/ivviiviivvi/settings/audit-log>
+  - View at: <https://github.com/organizations/{{ORG_NAME}}/settings/audit-log>
   - Retention: 90 days (GitHub Team), 180 days (GitHub Enterprise)
 
 - **1Password Activity Log**: All secret retrievals
@@ -628,9 +628,9 @@ ______________________________________________________________________
 **Questions about tokens?**
 
 - 💬 Slack: #security-engineering
-- 📧 Email: <security@ivviiviivvi.org>
+- 📧 Email: <security@{{ORG_NAME}}.org>
 - 📝 Issues:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 
 **Token issues?**
 

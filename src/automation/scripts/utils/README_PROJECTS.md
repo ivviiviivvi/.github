@@ -29,7 +29,7 @@ organizational domains:
 export GH_TOKEN="your_github_personal_access_token"
 
 # Run the Python configuration script
-python3 scripts/configure-github-projects.py --org ivviiviivvi
+python3 scripts/configure-github-projects.py --org {{ORG_NAME}}
 
 # This will:
 # - Create all 7 projects
@@ -39,7 +39,7 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
 
 ### Option 2: Manual Setup via GitHub UI
 
-1. Navigate to https://github.com/orgs/ivviiviivvi/projects
+1. Navigate to https://github.com/orgs/{{ORG_NAME}}/projects
 1. Click "New project"
 1. Follow the configuration guide in
    [GITHUB_PROJECTS_IMPLEMENTATION.md](../../../../docs/guides/GITHUB_PROJECTS_IMPLEMENTATION.md)
@@ -83,14 +83,14 @@ python3 scripts/configure-github-projects.py --org ivviiviivvi
 ```bash
 # Create all projects
 export GH_TOKEN="your_token"
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # Create specific projects only
-python3 configure-github-projects.py --org ivviiviivvi \
+python3 configure-github-projects.py --org {{ORG_NAME}} \
     --projects ai-framework documentation
 
 # Dry run (show what would be done)
-python3 configure-github-projects.py --org ivviiviivvi --dry-run
+python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 ```
 
 **Requirements:**
@@ -535,9 +535,9 @@ ______________________________________________________________________
 **Questions?**
 
 - Open an issue:
-  [GitHub Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [GitHub Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - Start a discussion:
-  [GitHub Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 
 **Documentation:**
 

@@ -25,28 +25,28 @@ gh workflow run pr-batch-merge.yml -f batch_label="batch:copilot"
 
 ```bash
 # Approve all automated PRs (Jules, Dependabot, etc.) - dry run first!
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=approve-all-automated \
   -f dry_run=true
 
 # Approve only Dependabot PRs
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=approve-all-dependabot \
   -f dry_run=false
 
 # Merge all ready PRs (up to 50)
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=merge-all-ready \
   -f dry_run=false \
   -f max_prs=50
 
 # Close stale PRs
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=close-all-stale \
   -f dry_run=false
 
 # Convert all drafts to ready
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=convert-all-drafts \
   -f dry_run=false
 ```
@@ -112,7 +112,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 1. **Approve all automated PRs (dry run):**
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=approve-all-automated \
      -f dry_run=true
    ```
@@ -120,7 +120,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 1. **Review dry run output**, then run for real:
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=approve-all-automated \
      -f dry_run=false
    ```
@@ -128,7 +128,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 1. **Wait for CI, then merge ready PRs:**
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=merge-all-ready \
      -f dry_run=false \
      -f max_prs=100
@@ -155,7 +155,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 1. **See what would be closed (dry run):**
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=close-all-stale \
      -f dry_run=true
    ```
@@ -163,7 +163,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 1. **Close stale PRs:**
 
    ```bash
-   gh workflow run bulk-pr-operations.yml \
+   gh workflow run batch-pr-operations.yml \
      -f operation=close-all-stale \
      -f dry_run=false
    ```
@@ -171,7 +171,7 @@ gh pr edit <PR_NUMBER> --add-label "keep-open"
 ### Scenario 4: Convert Multiple Draft PRs
 
 ```bash
-gh workflow run bulk-pr-operations.yml \
+gh workflow run batch-pr-operations.yml \
   -f operation=convert-all-drafts \
   -f dry_run=false
 ```
@@ -336,8 +336,8 @@ git push origin main
 1. **Use aliases** for common commands:
 
    ```bash
-   alias batch-approve='gh workflow run bulk-pr-operations.yml -f operation=approve-all-dependabot -f dry_run=false'
-   alias batch-merge='gh workflow run bulk-pr-operations.yml -f operation=merge-all-ready -f dry_run=false'
+   alias batch-approve='gh workflow run batch-pr-operations.yml -f operation=approve-all-dependabot -f dry_run=false'
+   alias batch-merge='gh workflow run batch-pr-operations.yml -f operation=merge-all-ready -f dry_run=false'
    ```
 
 1. **Monitor with watch**:

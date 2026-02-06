@@ -125,7 +125,7 @@ Proceed? [y/N]
 
 **Manual steps required:**
 
-- Visit <https://github.com/ivviiviivvi/.github/issues/new/choose>
+- Visit <https://github.com/{{ORG_NAME}}/.github/issues/new/choose>
 - Test each of 17 templates
 - Document results
 - Update validation report
@@ -384,7 +384,7 @@ ______________________________________________________________________
 
 For each template:
 
-1. **Navigate** to <https://github.com/ivviiviivvi/.github/issues/new/choose>
+1. **Navigate** to <https://github.com/{{ORG_NAME}}/.github/issues/new/choose>
 1. **Select** template from list
 1. **Verify** template loads without errors
 1. **Check** all fields render correctly

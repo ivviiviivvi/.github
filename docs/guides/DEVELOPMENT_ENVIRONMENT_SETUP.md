@@ -95,7 +95,7 @@ For the fastest, most consistent setup:
 1. **Open in container**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -115,7 +115,7 @@ For developers who prefer local development:
 1. **Clone and copy configurations**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
 
    # Copy VS Code settings
    cp .github/.vscode/settings.json ~/.vscode/settings.json
@@ -243,7 +243,7 @@ code --folder-uri vscode-remote://dev-container+$(pwd | sed 's/\//%2F/g')/worksp
 
 ```bash
 # Create a codespace (uses the same devcontainer.json)
-gh codespace create --repo ivviiviivvi/.github
+gh codespace create --repo {{ORG_NAME}}/.github
 ```
 
 #### First-Time Setup

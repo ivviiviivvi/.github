@@ -41,7 +41,7 @@
 
 #### 2. Daily Master Orchestrator
 
-**File:** `.github/workflows/daily-master-orchestrator.yml`
+**File:** `.github/workflows/daily-orchestrator.yml`
 
 - Runs once daily at 1:00 AM UTC
 - Checks if already ran today (prevents double-runs)
@@ -232,7 +232,7 @@
 
 If needed:
 
-1. Disable `daily-master-orchestrator.yml`
+1. Disable `daily-orchestrator.yml`
 1. Disable `daily-pr-consolidator.yml`
 1. Remove deduplication from `jules.yml` and `orchestrator.yml`
 1. Delete `task_state.json`
@@ -242,7 +242,7 @@ If needed:
 
 ### New Files (6)
 
-- `.github/workflows/daily-master-orchestrator.yml` (241 lines)
+- `.github/workflows/daily-orchestrator.yml` (241 lines)
 - `.github/workflows/daily-pr-consolidator.yml` (355 lines)
 - `.github/scripts/task_deduplicator.py` (195 lines)
 - `.github/scripts/get_daily_tasks.py` (70 lines)
@@ -267,7 +267,7 @@ If needed:
 ### Check Daily Status
 
 ```bash
-gh run list --workflow=daily-master-orchestrator.yml --limit 7
+gh run list --workflow=daily-orchestrator.yml --limit 7
 gh run list --workflow=daily-pr-consolidator.yml --limit 7
 gh pr list --label consolidated
 ```
@@ -282,7 +282,7 @@ cat .github/task_state.json | jq '.'
 
 ```bash
 # Force orchestrator run
-gh workflow run daily-master-orchestrator.yml -f force_run=true
+gh workflow run daily-orchestrator.yml -f force_run=true
 
 # Manually consolidate PRs
 gh workflow run daily-pr-consolidator.yml

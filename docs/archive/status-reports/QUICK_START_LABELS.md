@@ -22,14 +22,14 @@ export GITHUB_TOKEN=your_github_token_here
 ## Step 3: Run in dry-run mode first (safe - just shows what would change)
 
 ```bash
-cd /Users/4jp/Workspace/ivviiviivvi/.github
-python3 scripts/sync_labels.py --org ivviiviivvi --dry-run
+cd /Users/4jp/Workspace/{{ORG_NAME}}/.github
+python3 scripts/sync_labels.py --org {{ORG_NAME}} --dry-run
 ```
 
 ## Step 4: If dry-run looks good, run it for real
 
 ```bash
-python3 scripts/sync_labels.py --org ivviiviivvi
+python3 scripts/sync_labels.py --org {{ORG_NAME}}
 ```
 
 ## Alternative: Use gh CLI directly (no Python needed)
@@ -38,7 +38,7 @@ Create and run this script:
 
 ```bash
 #!/bin/bash
-ORG="ivviiviivvi"
+ORG="{{ORG_NAME}}"
 
 # Get all repos
 repos=$(gh repo list "$ORG" --limit 1000 --json name -q '.[].name')

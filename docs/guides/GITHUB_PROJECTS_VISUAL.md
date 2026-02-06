@@ -441,7 +441,7 @@ Views: Timeline | Current Quarter | Strategic | Critical Path
 ├────────────────────────────────────────────┤
 │                                            │
 │  🌐 WEB INTERFACE                          │
-│  github.com/orgs/ivviiviivvi/projects     │
+│  github.com/orgs/{{ORG_NAME}}/projects     │
 │                                            │
 │  📱 MOBILE APP                             │
 │  GitHub Mobile → Projects tab              │
@@ -471,7 +471,7 @@ Views: Timeline | Current Quarter | Strategic | Critical Path
 
 ______________________________________________________________________
 
-**Ready to start?** Visit: https://github.com/orgs/ivviiviivvi/projects
+**Ready to start?** Visit: https://github.com/orgs/{{ORG_NAME}}/projects
 
 ______________________________________________________________________
 

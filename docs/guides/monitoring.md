@@ -206,8 +206,8 @@ on:
 🚨 Workflow Failure Alert
 
 Workflow: agentsphere-deployment
-Repo: ivviiviivvi/.github
-Run: https://github.com/ivviiviivvi/.github/actions/runs/123456789
+Repo: {{ORG_NAME}}/.github
+Run: https://github.com/{{ORG_NAME}}/.github/actions/runs/123456789
 ```
 
 ______________________________________________________________________
@@ -265,10 +265,10 @@ metrics/
 ```bash
 # View latest metrics
 gh api -H "Accept: application/vnd.github.v3.raw" \
-  /repos/ivviiviivvi/.github/contents/metrics/baseline-metrics.json | jq .
+  /repos/{{ORG_NAME}}/.github/contents/metrics/baseline-metrics.json | jq .
 
 # Download metrics history
-gh api /repos/ivviiviivvi/.github/contents/metrics \
+gh api /repos/{{ORG_NAME}}/.github/contents/metrics \
   --jq '.[] | select(.name | endswith(".json")) | .download_url' | \
   xargs -n1 curl -O
 ```
@@ -277,12 +277,12 @@ gh api /repos/ivviiviivvi/.github/contents/metrics \
 
 ```bash
 curl -H "Authorization: token $GITHUB_TOKEN" \
-  https://raw.githubusercontent.com/ivviiviivvi/.github/main/metrics/baseline-metrics.json
+  https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/baseline-metrics.json
 ```
 
 **Via Web Interface**:
 
-Navigate to: `https://github.com/ivviiviivvi/.github/tree/main/metrics`
+Navigate to: `https://github.com/{{ORG_NAME}}/.github/tree/main/metrics`
 
 ______________________________________________________________________
 
@@ -358,7 +358,7 @@ ______________________________________________________________________
 ### Metrics Dashboard
 
 **URL** (if GitHub Pages enabled):
-`https://ivviiviivvi.github.io/.github/metrics-dashboard.html`
+`https://{{ORG_NAME}}.github.io/.github/metrics-dashboard.html`
 
 **Features**:
 
@@ -594,7 +594,7 @@ ______________________________________________________________________
 grep "workflows:" .github/workflows/alert-on-workflow-failure.yml
 
 # Check if Discussion #1 exists
-gh api /repos/ivviiviivvi/.github/discussions?per_page=1
+gh api /repos/{{ORG_NAME}}/.github/discussions?per_page=1
 
 # Verify permissions
 grep "permissions:" .github/workflows/alert-on-workflow-failure.yml

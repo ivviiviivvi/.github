@@ -28,18 +28,18 @@ export GH_TOKEN
 
 echo "✅ Token validated"
 echo ""
-echo "Running deployment to ivviiviivvi organization..."
+echo "Running deployment to {{ORG_NAME}} organization..."
 echo ""
 
 # Deploy
-python3 configure-github-projects.py --org ivviiviivvi 2>&1 | tee "deployment-$(date +%Y%m%d-%H%M%S).log"
+python3 configure-github-projects.py --org {{ORG_NAME}} 2>&1 | tee "deployment-$(date +%Y%m%d-%H%M%S).log"
 
 echo ""
 echo "════════════════════════════════════════════════════════"
 echo "✅ Deployment complete!"
 echo ""
 echo "Next steps:"
-echo "  1. View projects: https://github.com/orgs/ivviiviivvi/projects"
+echo "  1. View projects: https://github.com/orgs/{{ORG_NAME}}/projects"
 echo "  2. Configure views (see ../docs/GITHUB_PROJECTS_DEPLOYMENT.md)"
 echo "  3. Set up automation rules"
 echo "════════════════════════════════════════════════════════"

@@ -157,7 +157,7 @@ Create `_Footer.md` for consistent footers:
 ```markdown
 ---
 
-📚 **Ivviiviivvi Organization** | [Main Repo](https://github.com/ivviiviivvi/.github) | [Discussions](https://github.com/orgs/ivviiviivvi/discussions)
+📚 **Ivviiviivvi Organization** | [Main Repo](https://github.com/{{ORG_NAME}}/.github) | [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)
 
 Last updated: {{date}} | [Edit this page]({{page_url}}) | [View history]({{history_url}})
 
@@ -750,7 +750,7 @@ See [[Contributing]] for complete guidelines.
 
 ### I found a bug. What should I do?
 
-Please [open an issue](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report --> with:
+Please [open an issue](https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report --> with:
 - Bug description
 - Steps to reproduce
 - Expected vs actual behavior
@@ -758,7 +758,7 @@ Please [open an issue](https://github.com/ivviiviivvi/.github/issues/new?templat
 
 ### I have a feature request
 
-Great! Please [open a feature request](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request --> and describe:
+Great! Please [open a feature request](https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request --> and describe:
 - What problem it solves
 - How you envision it working
 - Any alternatives you've considered
@@ -790,7 +790,7 @@ You can support [Project] by:
 
 ---
 
-**Don't see your question?** [Ask it in Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+**Don't see your question?** [Ask it in Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 ````
 
 ### 7. Troubleshooting Guide Template
@@ -806,9 +806,9 @@ You can support [Project] by:
 
 If you can't find your issue here:
 
-1. Search [existing issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
-2. Ask in [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
-3. [Open a new issue](https://github.com/ivviiviivvi/.github/issues/new/choose)<!-- link:github.issues_new -->
+1. Search [existing issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+2. Ask in [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+3. [Open a new issue](https://github.com/{{ORG_NAME}}/.github/issues/new/choose)<!-- link:github.issues_new -->
 
 ## Diagnostic Steps
 
@@ -1080,9 +1080,9 @@ Include this when asking for help!
 
 ### Community Support
 
-- 💬 [Discussions](https://github.com/ivviiviivvi/.github/discussions) - Ask the
+- 💬 [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions) - Ask the
   community
-- 🐛 [Issues](https://github.com/ivviiviivvi/.github/issues) - Report bugs
+- 🐛 [Issues](https://github.com/{{ORG_NAME}}/.github/issues) - Report bugs
 - 📧 [Email](mailto:support@example.com) - Private support
 
 ## See Also
@@ -1527,4 +1527,4 @@ installation -windows    # Exclude term
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi documentation team
+**Maintained By**: @{{ORG_NAME}} documentation team

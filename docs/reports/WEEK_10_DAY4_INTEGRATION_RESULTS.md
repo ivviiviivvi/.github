@@ -38,7 +38,7 @@ ______________________________________________________________________
 
 ### Configuration
 
-- **Repository**: ivviiviivvi/.github
+- **Repository**: {{ORG_NAME}}/.github
 - **Configuration File**: automation/config/batch-onboard-integration.yml
 - **Token Permissions**: Standard GITHUB_TOKEN (read/write)
 - **Dry-Run Mode**: Disabled (real execution)
@@ -63,7 +63,7 @@ repository
 
 ```yaml
 repositories:
-  - "ivviiviivvi/.github"
+  - "{{ORG_NAME}}/.github"
 workflows:
   - "test-batch-onboarding-validation.yml"
 labels:
@@ -151,7 +151,7 @@ Duration: 5.56 seconds
 
 ```json
 {
-    "repository": "ivviiviivvi/.github",
+    "repository": "{{ORG_NAME}}/.github",
     "success": true,
     "steps_completed": ["deploy_workflows", "configure_labels"],
     "error": null,
@@ -641,7 +641,7 @@ configuration for production deployment.
 
 ### Test Configuration
 
-- Repository: ivviiviivvi/.github (single repo)
+- Repository: {{ORG_NAME}}/.github (single repo)
 - Workflows: 1 (test-batch-onboarding-validation.yml)
 - Labels: 3
 - Branch protection: Disabled

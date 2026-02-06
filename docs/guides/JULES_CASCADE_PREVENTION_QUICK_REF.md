@@ -34,7 +34,7 @@
 
 ```bash
 # Force run master orchestrator
-gh workflow run daily-master-orchestrator.yml -f force_run=true
+gh workflow run daily-orchestrator.yml -f force_run=true
 
 # Manually consolidate PRs
 gh workflow run daily-pr-consolidator.yml
@@ -47,7 +47,7 @@ python3 .github/scripts/task_deduplicator.py check "task_type" '{"data":"value"}
 
 ```bash
 # View recent orchestrator runs
-gh run list --workflow=daily-master-orchestrator.yml --limit 7
+gh run list --workflow=daily-orchestrator.yml --limit 7
 
 # View consolidated PRs
 gh pr list --label consolidated
@@ -60,7 +60,7 @@ cat .github/task_state.json | jq '.'
 
 ### New Files
 
-- `.github/workflows/daily-master-orchestrator.yml` - Main coordinator
+- `.github/workflows/daily-orchestrator.yml` - Main coordinator
 - `.github/workflows/daily-pr-consolidator.yml` - PR consolidation
 - `.github/scripts/task_deduplicator.py` - Deduplication engine
 - `docs/JULES_CASCADE_PREVENTION.md` - Full documentation

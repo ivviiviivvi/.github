@@ -77,7 +77,7 @@ ready to pollinate AI systems with your ideas.
 
 The Mouthpiece System consists of four main components:
 
-### 1. Core Filter Script (`scripts/mouthpiece_filter.py`)
+### 1. Core Filter Script (`scripts/natural_language_prompt_filter.py`)
 
 A Python-based transformation engine that:
 
@@ -88,7 +88,7 @@ A Python-based transformation engine that:
 
 **Use when**: You want programmatic transformation via CLI or scripts
 
-### 2. Mouthpiece Chat Mode (`chatmodes/mouthpiece.chatmode.md`)
+### 2. Mouthpiece Chat Mode (`chatmodes/natural-language-prompt-translator.chatmode.md`)
 
 An interactive AI persona specialized in natural language transformation:
 
@@ -136,7 +136,7 @@ Customizable settings to control:
 
    ```bash
    # Using the CLI
-   python scripts/mouthpiece_filter.py "need to build something that tracks user sessions and figures out what they're trying to do"
+   python scripts/natural_language_prompt_filter.py "need to build something that tracks user sessions and figures out what they're trying to do"
    ```
 
 1. **Review the Output**
@@ -155,10 +155,10 @@ installation needed!
 
 ```bash
 # Make it executable
-chmod +x scripts/mouthpiece_filter.py
+chmod +x scripts/natural_language_prompt_filter.py
 
 # Run it
-python scripts/mouthpiece_filter.py "your text here"
+python scripts/natural_language_prompt_filter.py "your text here"
 ```
 
 **To use in GitHub Copilot:**
@@ -381,28 +381,28 @@ not just database entries.
 
 ```bash
 # Basic transformation
-python scripts/mouthpiece_filter.py "build me a thing that sends emails when stuff happens"
+python scripts/natural_language_prompt_filter.py "build me a thing that sends emails when stuff happens"
 
 # From a file
-python scripts/mouthpiece_filter.py --file my_thoughts.txt
+python scripts/natural_language_prompt_filter.py --file my_thoughts.txt
 
 # From stdin
-echo "help me understand async/await" | python scripts/mouthpiece_filter.py --stdin
+echo "help me understand async/await" | python scripts/natural_language_prompt_filter.py --stdin
 
 # JSON output
-python scripts/mouthpiece_filter.py "create a user dashboard" --format json
+python scripts/natural_language_prompt_filter.py "create a user dashboard" --format json
 
 # Just the prompt (no metadata)
-python scripts/mouthpiece_filter.py "optimize our search" --format prompt_only
+python scripts/natural_language_prompt_filter.py "optimize our search" --format prompt_only
 
 # Save to file
-python scripts/mouthpiece_filter.py "add dark mode" --output task.md
+python scripts/natural_language_prompt_filter.py "add dark mode" --output task.md
 
 # Custom configuration
-python scripts/mouthpiece_filter.py "text here" --config my_config.json
+python scripts/natural_language_prompt_filter.py "text here" --config my_config.json
 
 # Disable poetry preservation
-python scripts/mouthpiece_filter.py "text here" --no-poetry
+python scripts/natural_language_prompt_filter.py "text here" --no-poetry
 ```
 
 ## Configuration
@@ -449,7 +449,7 @@ Create a JSON file with your preferences:
 Use it:
 
 ```bash
-python scripts/mouthpiece_filter.py "your text" --config my_config.json
+python scripts/natural_language_prompt_filter.py "your text" --config my_config.json
 ```
 
 ## Integration
@@ -473,7 +473,7 @@ jobs:
 
       - name: Transform Issue Description
         run: |
-          python scripts/mouthpiece_filter.py "${{ github.event.issue.body }}" \
+          python scripts/natural_language_prompt_filter.py "${{ github.event.issue.body }}" \
             --format markdown \
             --output transformed.md
 
@@ -505,7 +505,7 @@ COMMIT_MSG_FILE=$1
 MSG=$(cat $COMMIT_MSG_FILE)
 
 # Transform it
-TRANSFORMED=$(python .github/scripts/mouthpiece_filter.py "$MSG" --format prompt_only --no-poetry)
+TRANSFORMED=$(python .github/scripts/natural_language_prompt_filter.py "$MSG" --format prompt_only --no-poetry)
 
 # Write back
 echo "$TRANSFORMED" > $COMMIT_MSG_FILE
@@ -521,7 +521,7 @@ Create a task in `.vscode/tasks.json`:
   "type": "shell",
   "command": "python",
   "args": [
-    "${workspaceFolder}/.github/scripts/mouthpiece_filter.py",
+    "${workspaceFolder}/.github/scripts/natural_language_prompt_filter.py",
     "${selectedText}",
     "--format",
     "prompt_only"
@@ -642,7 +642,7 @@ unless you explicitly push it somewhere.
 
 ```bash
 # Natural → Structured → GitHub Issue Template
-python scripts/mouthpiece_filter.py "$(cat idea.txt)" \
+python scripts/natural_language_prompt_filter.py "$(cat idea.txt)" \
   --format markdown \
   --output temp.md
 
@@ -655,7 +655,7 @@ gh issue create --title "New Feature" --body-file temp.md
 ```bash
 # Transform all idea files
 for file in ideas/*.txt; do
-  python scripts/mouthpiece_filter.py \
+  python scripts/natural_language_prompt_filter.py \
     --file "$file" \
     --output "transformed/$(basename $file)"
 done
@@ -664,7 +664,7 @@ done
 ### API Mode (Future Feature)
 
 ```python
-from mouthpiece_filter import MouthpieceFilter
+from natural_language_prompt_filter import MouthpieceFilter
 
 filter = MouthpieceFilter(config={"style": "technical"})
 result = filter.transform("build a search feature")

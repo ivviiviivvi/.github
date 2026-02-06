@@ -1,6 +1,6 @@
 # Dependency Management Guide
 
-> **Best practices for managing dependencies across the ivviiviivvi
+> **Best practices for managing dependencies across the {{ORG_NAME}}
 > organization**
 
 **Last Updated:** 2026-01-14
@@ -24,7 +24,7 @@ ______________________________________________________________________
 ## Overview
 
 This guide establishes standards for dependency management across all projects
-in the ivviiviivvi organization. Proper dependency management ensures:
+in the {{ORG_NAME}} organization. Proper dependency management ensures:
 
 - **Security**: Known vulnerabilities are promptly addressed
 - **Stability**: Predictable builds and deployments
@@ -477,7 +477,7 @@ dev = [
 **go.mod**:
 
 ```go
-module github.com/ivviiviivvi/example
+module github.com/{{ORG_NAME}}/example
 
 go 1.21
 
@@ -763,9 +763,9 @@ ______________________________________________________________________
 ## Questions or Feedback?
 
 - **Questions**: Open a
-  [discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 - **Issues**: Report in
-  [issue tracker](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [issue tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - **Improvements**: Submit a [pull request](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________

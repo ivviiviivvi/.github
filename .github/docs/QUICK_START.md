@@ -10,7 +10,7 @@ walkthrough video in just 5 minutes.
 ### Step 1: Navigate to Your Repository
 
 1. Go to your repository on GitHub (e.g.,
-   `github.com/ivviiviivvi/your-repo-name`)
+   `github.com/{{ORG_NAME}}/your-repo-name`)
 1. Make sure your application has a working local development setup
 
 ### Step 2: Go to the Actions Tab
@@ -237,25 +237,25 @@ well for:
 
 **React Todo App** (60 seconds, professional)
 
-- Repository: `ivviiviivvi/example-react-todo`
+- Repository: `{{ORG_NAME}}/example-react-todo`
 - Focus: Task creation, editing, filtering
 - [View artifact](#) | [Download](#)
 
 **Python Flask API** (45 seconds, technical)
 
-- Repository: `ivviiviivvi/example-flask-api`
+- Repository: `{{ORG_NAME}}/example-flask-api`
 - Focus: REST endpoints, authentication, database
 - [View artifact](#) | [Download](#)
 
 **Vue.js Dashboard** (90 seconds, casual)
 
-- Repository: `ivviiviivvi/example-vue-dashboard`
+- Repository: `{{ORG_NAME}}/example-vue-dashboard`
 - Focus: Charts, data visualization, user flow
 - [View artifact](#) | [Download](#)
 
 **Full-Stack E-commerce** (120 seconds, professional)
 
-- Repository: `ivviiviivvi/example-fullstack-shop`
+- Repository: `{{ORG_NAME}}/example-fullstack-shop`
 - Focus: Product browsing, cart, checkout flow
 - [View artifact](#) | [Download](#)
 
@@ -270,19 +270,19 @@ available._
 - **Scheduled Automation**:
   [Automated Walkthrough Setup](../workflows/scheduled-walkthrough-generator.yml)
 - **Organization Repository**:
-  [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
+  [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
 
 ### Support Channels
 
 **GitHub Issues** - Report bugs or technical problems
 
-- Go to: `github.com/ivviiviivvi/.github/issues`
+- Go to: `github.com/{{ORG_NAME}}/.github/issues`
 - Use template: "Walkthrough Generator Issue"
 - Include: Workflow run link, error logs, expected behavior
 
 **Discussions** - Ask questions and share ideas
 
-- Go to: `github.com/ivviiviivvi/.github/discussions`
+- Go to: `github.com/{{ORG_NAME}}/.github/discussions`
 - Category: "Q&A" for questions
 - Category: "Show and Tell" for sharing your walkthroughs
 
@@ -321,10 +321,10 @@ available._
 ______________________________________________________________________
 
 **Questions?**
-[Open a discussion](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->.
+[Open a discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->.
 
 **Found a bug?**
-[Report it here](https://github.com/ivviiviivvi/.github/issues/new).
+[Report it here](https://github.com/{{ORG_NAME}}/.github/issues/new).
 
 ______________________________________________________________________
 

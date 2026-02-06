@@ -415,10 +415,10 @@ ______________________________________________________________________
 ## 📞 Support & Feedback
 
 - **Questions**: Open a
-  [Discussion](https://github.com/ivviiviivvi/.github/discussions)
-- **Issues**: Report in [Issues](https://github.com/ivviiviivvi/.github/issues)
+  [Discussion](https://github.com/{{ORG_NAME}}/.github/discussions)
+- **Issues**: Report in [Issues](https://github.com/{{ORG_NAME}}/.github/issues)
 - **Improvements**: Submit a PR
-- **Urgent Matters**: Contact @ivviiviivvi/maintainers
+- **Urgent Matters**: Contact @{{ORG_NAME}}/maintainers
 
 ______________________________________________________________________
 

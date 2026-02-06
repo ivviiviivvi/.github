@@ -46,8 +46,8 @@ class TestCreateDefaults:
         assert config_file.exists()
 
         config = yaml.safe_load(config_file.read_text())
-        assert "intelligent_routing" in config
-        assert config["intelligent_routing"]["factors"]["expertise"] == 0.35
+        assert "issue_assignment_router" in config
+        assert config["issue_assignment_router"]["factors"]["expertise"] == 0.35
 
     def test_creates_self_healing_config(self, tmp_path, monkeypatch):
         """Test creates self-healing.yml config."""

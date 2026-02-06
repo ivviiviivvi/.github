@@ -1,5 +1,5 @@
 ---
-name: Advanced Reasoning
+name: Iterative Problem Solver
 description: Beast Mode 2.0 tuned for GPT-5 to solve complex problems iteratively.
 tools:
   - edit/editFiles

@@ -18,7 +18,7 @@ minutes.
 1. **Clone and Open**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -40,7 +40,7 @@ ______________________________________________________________________
 1. **Create Codespace**:
 
    ```bash
-   gh codespace create --repo ivviiviivvi/.github
+   gh codespace create --repo {{ORG_NAME}}/.github
    ```
 
    Or via GitHub UI: Repository → Code → Codespaces → Create
@@ -99,17 +99,17 @@ ______________________________________________________________________
 1. **GitHub.dev** (instant):
 
    - Press `.` on any GitHub repository
-   - Or visit `https://github.dev/ivviiviivvi/.github`
+   - Or visit `https://github.dev/{{ORG_NAME}}/.github`
    - Edit files directly
 
 1. **StackBlitz** (for web projects):
 
-   - Visit `https://stackblitz.com/github/ivviiviivvi/.github`
+   - Visit `https://stackblitz.com/github/{{ORG_NAME}}/.github`
    - Full Node.js environment
 
 1. **GitPod**:
 
-   - Visit `https://gitpod.io/#https://github.com/ivviiviivvi/.github`
+   - Visit `https://gitpod.io/#https://github.com/{{ORG_NAME}}/.github`
    - Full cloud IDE
 
 **Time to productive**: Instant
@@ -283,9 +283,9 @@ ______________________________________________________________________
 ### Get Help
 
 - 💬
-  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

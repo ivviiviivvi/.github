@@ -41,7 +41,7 @@ python3 scripts/validate-tokens.py --verbose
 
 ```bash
 # Test each script in dry-run mode
-python3 automation/scripts/sync_labels.py --org ivviiviivvi --dry-run
+python3 automation/scripts/sync_labels.py --org {{ORG_NAME}} --dry-run
 python3 automation/scripts/web_crawler.py --dry-run
 bash scripts/complete-project-setup.sh # (check if supports --dry-run)
 ```
@@ -91,7 +91,7 @@ ______________________________________________________________________
 
 ```bash
 # Production run (label sync)
-python3 automation/scripts/sync_labels.py --org ivviiviivvi --repo .github
+python3 automation/scripts/sync_labels.py --org {{ORG_NAME}} --repo .github
 
 # Production run (repo analysis)
 python3 automation/scripts/web_crawler.py --output reports/health-$(date +%Y%m%d).json
@@ -377,11 +377,11 @@ gh workflow run token-health-check.yml
 
 ```bash
 # View recent API activity (requires org admin)
-gh api /orgs/ivviiviivvi/audit-log \
+gh api /orgs/{{ORG_NAME}}/audit-log \
   --jq '.[] | select(.action | contains("oauth")) | {timestamp, action, actor, token_id}'
 
 # Or visit web interface
-# https://github.com/organizations/ivviiviivvi/settings/audit-log
+# https://github.com/organizations/{{ORG_NAME}}/settings/audit-log
 ```
 
 ### Script Dry-Run Testing
@@ -389,7 +389,7 @@ gh api /orgs/ivviiviivvi/audit-log \
 ```bash
 # Label sync (dry-run)
 python3 automation/scripts/sync_labels.py \
-  --org ivviiviivvi \
+  --org {{ORG_NAME}} \
   --repo .github \
   --dry-run
 

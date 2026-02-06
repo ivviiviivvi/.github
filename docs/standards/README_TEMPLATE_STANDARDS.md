@@ -3,7 +3,7 @@
 ## Overview
 
 This document defines the standard README structure for all repositories in the
-ivviiviivvi organization. Every README must follow the **Problem → Approach →
+{{ORG_NAME}} organization. Every README must follow the **Problem → Approach →
 Outcome** narrative framework to ensure clarity, consistency, and effective
 communication.
 
@@ -355,7 +355,7 @@ Get up and running in 5 minutes:
    on: [push, pull_request]
    jobs:
      test:
-       uses: ivviiviivvi/python-automation-toolkit/.github/workflows/python-ci.yml@v2
+       uses: {{ORG_NAME}}/python-automation-toolkit/.github/workflows/python-ci.yml@v2
    ```
 
 1. **Commit and push**
@@ -377,7 +377,7 @@ Get up and running in 5 minutes:
    - See [Examples](examples/) for common customizations
 
 **Need help?** Check our [Documentation](docs/) or
-[open an issue](https://github.com/ivviiviivvi/python-automation-toolkit/issues).
+[open an issue](https://github.com/{{ORG_NAME}}/python-automation-toolkit/issues).
 
 ````
 
@@ -548,7 +548,7 @@ See
 
 ### Real-World Examples
 
-- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
+- [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
   \- Organization policies (comprehensive)
 - [Example: python-toolkit](link) - Python library (standard)
 - [Example: microservice](link) - Service/application (service-focused)
@@ -604,4 +604,4 @@ ______________________________________________________________________
 **Maintained By**:
 Organization Governance Team\
 **Questions?**
-[Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->

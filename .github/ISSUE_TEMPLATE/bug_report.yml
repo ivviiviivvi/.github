@@ -15,7 +15,7 @@ body:
       - **NO** Customer data or internal system details
       - **NO** Production credentials or connection strings
 
-      If your bug involves security concerns, use our [Security Advisory](https://github.com/ivviiviivvi/.github/security/advisories/new) instead.
+      If your bug involves security concerns, use our [Security Advisory](https://github.com/{{ORG_NAME}}/.github/security/advisories/new) instead.
 
 - type: input
   id: contact

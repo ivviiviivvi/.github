@@ -382,9 +382,9 @@ def generate_email(metrics_file: Path, events_file: Path, output_file: Path):
         trend_direction=trend_direction,
         trend_amount=trend_amount,
         trend_commentary=trend_commentary,
-        dashboard_url="https://github.com/ivviiviivvi/.github/actions",
-        repo_url="https://github.com/ivviiviivvi/.github",
-        repo_name="ivviiviivvi/.github",
+        dashboard_url="https://github.com/{{ORG_NAME}}/.github/actions",
+        repo_url="https://github.com/{{ORG_NAME}}/.github",
+        repo_name="{{ORG_NAME}}/.github",
     )
 
     # Write to file

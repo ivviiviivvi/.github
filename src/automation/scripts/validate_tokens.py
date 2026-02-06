@@ -24,7 +24,7 @@ TOKENS = {
     },
     "org-repo-analysis-token": {
         "scopes": ["repo:status", "read:org"],
-        "test_endpoint": "/users/ivviiviivvi/repos",
+        "test_endpoint": "/users/{{ORG_NAME}}/repos",
         "purpose": "Read-only analysis",
     },
     "org-onboarding-token": {

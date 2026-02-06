@@ -4709,7 +4709,7 @@
       "admin-approval-dashboard.yml",
       "semgrep.yml",
       "grok_workflow.yml",
-      "daily-master-orchestrator.yml",
+      "daily-orchestrator.yml",
       "gemini-dispatch.yml",
       "build-pages-site.yml",
       "auto-assign.yml",
@@ -4782,7 +4782,7 @@
       "validate-quality.yml",
       "auto-enable-merge.yml",
       "gemini_workflow.yml",
-      "bulk-pr-operations.yml"
+      "batch-pr-operations.yml"
     ],
     "copilot_agents": [],
     "copilot_instructions": [],

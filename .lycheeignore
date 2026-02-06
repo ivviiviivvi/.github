@@ -1,15 +1,15 @@
 # Existing org URLs (non-existent)
 https://aka.ms/awesome-copilot/
 https://github.com/apps/
-https://discord.gg/ivviiviivvi
-https://youtube.com/@ivviiviivvi
-https://ivviiviivvi.com/
-https://ivviiviivvi.com/support
-https://cookbook.ivviiviivvi.com/
-https://tutorials.ivviiviivvi.com/
-https://github.com/ivviiviivvi/project-a
-https://github.com/ivviiviivvi/project-b
-https://github.com/ivviiviivvi/awesome-ivviiviivvi
+https://discord.gg/{{DISCORD_INVITE}}
+https://youtube.com/@{{ORG_NAME}}
+https://{{ORG_WEBSITE}}/
+https://{{ORG_WEBSITE}}/support
+https://cookbook.{{ORG_WEBSITE}}/
+https://tutorials.{{ORG_WEBSITE}}/
+https://github.com/{{ORG_NAME}}/project-a
+https://github.com/{{ORG_NAME}}/project-b
+https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}}
 
 # GitHub awesome-copilot (rate-limited, 429 errors)
 https://github.com/github/awesome-copilot/
@@ -32,7 +32,7 @@ https://org.github.io/
 # GitHub auth-required URLs
 https://github.com/settings/
 https://github.com/organizations/
-https://github.com/orgs/ivviiviivvi/projects/
+https://github.com/orgs/{{ORG_NAME}}/projects/
 
 # GitHub misc (identicons, assets, community)
 https://github.com/identicons/
@@ -52,7 +52,7 @@ https://api.agentsphere.dev/
 https://generativelanguage.googleapis.com
 
 # Domains that don't resolve
-https://walkthroughs.ivviiviivvi.dev
+https://walkthroughs.{{ORG_NAME}}.dev
 https://gui-rs.org
 https://get.project.com
 
@@ -66,14 +66,17 @@ https://www.mend.io
 https://platform.openai.com
 https://www.npmjs.com/package/@org/
 
-# GitHub ivviiviivvi repos (non-existent, referenced in docs)
-https://github.com/ivviiviivvi/new-repo
-https://github.com/ivviiviivvi/example-repo
+# GitHub {{ORG_NAME}} repos (non-existent, referenced in docs)
+https://github.com/{{ORG_NAME}}/new-repo
+https://github.com/{{ORG_NAME}}/example-repo
 
 # Placeholder/example URLs
 https://via.placeholder.com
-https://agentsphere.dev/ivviiviivvi/
-https://raw.githubusercontent.com/ivviiviivvi/.github/main/metrics/
+https://agentsphere.dev/{{ORG_NAME}}/
+https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/
+
+# Template placeholders (will resolve after setup)
+\{\{
 
 # Code-server (local dev URLs)
 http://code-server

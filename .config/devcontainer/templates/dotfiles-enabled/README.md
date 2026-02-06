@@ -28,7 +28,7 @@ Reference the setup script from your own devcontainer:
 
 ```json
 {
-  "postCreateCommand": "curl -sL https://raw.githubusercontent.com/ivviiviivvi/.github/main/.devcontainer/templates/dotfiles-enabled/setup.sh | bash"
+  "postCreateCommand": "curl -sL https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/.devcontainer/templates/dotfiles-enabled/setup.sh | bash"
 }
 ```
 

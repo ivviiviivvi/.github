@@ -1685,7 +1685,7 @@ weeks\
 
 **Implementation:**
 
-- GitHub repo: ivviiviivvi/walkthrough-marketplace
+- GitHub repo: {{ORG_NAME}}/walkthrough-marketplace
 - GitHub Discussions for reviews
 - Automated import workflow
 

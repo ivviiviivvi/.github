@@ -179,11 +179,11 @@ Run health checks anytime:
 
 ```bash
 # Check all workflows in repository
-./health_checks.py --repo ivviiviivvi/.github
+./health_checks.py --repo {{ORG_NAME}}/.github
 
 # Check specific workflows
 ./health_checks.py \
-  --repo ivviiviivvi/.github \
+  --repo {{ORG_NAME}}/.github \
   --workflows issue-triage,auto-assign,status-sync
 
 # Check entire environment

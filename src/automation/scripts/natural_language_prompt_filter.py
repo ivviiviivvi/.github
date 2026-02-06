@@ -10,9 +10,9 @@ metaphors, and humanity - and transforms it into structured prompts optimized fo
 AI interaction.
 
 Usage:
-    python mouthpiece_filter.py "your natural writing here"
-    python mouthpiece_filter.py --file input.txt
-    echo "your text" | python mouthpiece_filter.py --stdin
+    python natural_language_prompt_filter.py "your natural writing here"
+    python natural_language_prompt_filter.py --file input.txt
+    echo "your text" | python natural_language_prompt_filter.py --stdin
 """
 
 import argparse
@@ -523,10 +523,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python mouthpiece_filter.py "build me a system to track stars"
-  python mouthpiece_filter.py --file my_thoughts.txt
-  echo "help me understand recursion" | python mouthpiece_filter.py --stdin
-  python mouthpiece_filter.py "create magic" --format prompt_only
+  python natural_language_prompt_filter.py "build me a system to track stars"
+  python natural_language_prompt_filter.py --file my_thoughts.txt
+  echo "help me understand recursion" | python natural_language_prompt_filter.py --stdin
+  python natural_language_prompt_filter.py "create magic" --format prompt_only
         """,
     )
 

@@ -31,7 +31,7 @@ pytestmark = pytest.mark.integration
 class GitHubAPIClient:
     """GitHub API client for integration testing."""
 
-    def __init__(self, token: Optional[str] = None, repo: str = "ivviiviivvi/.github"):
+    def __init__(self, token: Optional[str] = None, repo: str = "{{ORG_NAME}}/.github"):  # allow-secret
         self.token = token or os.environ.get("GITHUB_TOKEN")
         self.repo = repo
         self.base_url = "https://api.github.com"

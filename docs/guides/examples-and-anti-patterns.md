@@ -3,7 +3,7 @@
 > **Learn by example: Common use cases and mistakes to avoid**
 
 This guide provides practical examples of both good practices and common
-pitfalls to avoid in the ivviiviivvi/.github repository.
+pitfalls to avoid in the {{ORG_NAME}}/.github repository.
 
 ______________________________________________________________________
 

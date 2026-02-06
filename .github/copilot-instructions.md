@@ -132,9 +132,9 @@ ______________________________________________________________________
     1. **Address Shell Script Permissions:** Use `chmod +x script_name.py` to
        grant execute permissions to the relevant scripts. Example:
        ```bash
-       chmod +x automation/scripts/ecosystem_visualizer.py
+       chmod +x automation/scripts/org_health_visualizer.py
        chmod +x automation/scripts/update_agent_docs.py
-       chmod +x automation/scripts/mouthpiece_filter.py
+       chmod +x automation/scripts/natural_language_prompt_filter.py
        chmod +x project_meta/context-handoff/context_generator.py
        ```
     1. **Update pre-commit hooks:** Run `pre-commit autoupdate` to update
@@ -530,7 +530,7 @@ ______________________________________________________________________
        # 🚀 Ivviiviivvi Organization Hub
 
        [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](../pyproject.toml)
-       [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-ivviiviivvi-.github.agentsphere.dev)
+       [![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=for-the-badge)](https://demo-{{ORG_NAME}}-.github.agentsphere.dev)
        [![Documentation](https://img.shields.io/badge/docs-comprehensive-blue?logo=markdown)](../docs/INDEX.md)
 
        > **AI-Driven Development Infrastructure for the Modern Organization**
@@ -578,7 +578,7 @@ ______________________________________________________________________
        chmod +x /workspace/automation/scripts/schedule_maintenance.py
        chmod +x /workspace/project_meta/context-handoff/tests/validate_context.py
        chmod +x /workspace/tests/integration/test_agent_tracking.py
-       chmod +x /workspace/tests/unit/test_ecosystem_visualizer.py
+       chmod +x /workspace/tests/unit/test_org_health_visualizer.py
        ```
     1. **Gitleaks Configuration:**
        - Remove duplicate `allowlist` sections in `.gitleaks.toml`. Ensure that

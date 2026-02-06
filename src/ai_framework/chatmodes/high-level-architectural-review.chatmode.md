@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-name: HLBPA description: High-level architectural documentation and review
+name: High-Level Architectural Review description: High-level architectural documentation and review
 assistant. tools:
 
 - \

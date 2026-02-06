@@ -7,7 +7,7 @@
 ## 🎯 Implementation Summary
 
 Successfully implemented organization-wide schema.org structured data and
-semantic versioning (semver) standards across the ivviiviivvi organization.
+semantic versioning (semver) standards across the {{ORG_NAME}} organization.
 
 ______________________________________________________________________
 
@@ -51,7 +51,7 @@ ______________________________________________________________________
 
 #### Schema Types Implemented
 
-- ✅ **Organization** - ivviiviivvi org metadata
+- ✅ **Organization** - {{ORG_NAME}} org metadata
 - ✅ **SoftwareSourceCode** - Repository metadata
 - ✅ **SoftwareApplication** - AI framework (26+ agents, MCP servers)
 - ✅ **TechArticle** - Documentation (133+ files)
@@ -143,8 +143,8 @@ ______________________________________________________________________
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://github.com/ivviiviivvi",
-  "name": "ivviiviivvi",
+  "@id": "https://github.com/{{ORG_NAME}}",
+  "name": "{{ORG_NAME}}",
   "description": "AI-powered development workflows..."
 }
 ```
@@ -155,7 +155,7 @@ ______________________________________________________________________
 {
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
-  "@id": "https://github.com/ivviiviivvi/.github",
+  "@id": "https://github.com/{{ORG_NAME}}/.github",
   "name": ".github Repository",
   "version": "1.0.0",
   "programmingLanguage": ["Python", "TypeScript", "Shell", "YAML"]
@@ -168,7 +168,7 @@ ______________________________________________________________________
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "@id": "https://github.com/ivviiviivvi/.github/tree/main/ai_framework",
+  "@id": "https://github.com/{{ORG_NAME}}/.github/tree/main/ai_framework",
   "name": "AI Framework",
   "featureList": ["26+ specialized AI agents", "MCP servers for 11 languages"]
 }
@@ -410,9 +410,9 @@ ______________________________________________________________________
 
 - 📖 [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬
-  [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

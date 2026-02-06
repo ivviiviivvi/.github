@@ -235,7 +235,7 @@ When updating templates:
 ## Support
 
 **Need help choosing a template?**
-- Post in [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
+- Post in [GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)
 - Ask in the #help channel (if applicable)
 - Use the `question.md` template
 
@@ -260,7 +260,7 @@ cat > docs/guides/issue-template-validation-report.md << 'EOF'
 
 **Date:** 2026-01-15
 **Validator:** [To be completed]
-**Repository:** ivviiviivvi/.github
+**Repository:** {{ORG_NAME}}/.github
 **Templates Tested:** 17
 
 ---
@@ -471,7 +471,7 @@ echo ""
 echo "📋 Template Validation Instructions:"
 echo ""
 echo "Manual steps required:"
-echo "  1. Open https://github.com/ivviiviivvi/.github/issues/new/choose"
+echo "  1. Open https://github.com/{{ORG_NAME}}/.github/issues/new/choose"
 echo "  2. Test each template by:"
 echo "     - Selecting it from the list"
 echo "     - Verifying all fields render"

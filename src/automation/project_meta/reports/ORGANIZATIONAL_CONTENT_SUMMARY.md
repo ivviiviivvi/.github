@@ -552,8 +552,8 @@ git add . && git commit -m "Update" && git push
 
 ### Getting Help
 
-- 💬 [GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)
-- 🐛 [Report Issues](https://github.com/ivviiviivvi/.github/issues)
+- 💬 [GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)
+- 🐛 [Report Issues](https://github.com/{{ORG_NAME}}/.github/issues)
 - 📧 Contact organization maintainers
 - 📖 Review documentation guides
 
@@ -582,7 +582,7 @@ This framework was built on best practices from:
 ______________________________________________________________________
 
 **Status**: ✅ Complete and Production-Ready\
-**Maintained By**: @ivviiviivvi
+**Maintained By**: @{{ORG_NAME}}
 organization\
 **License**: MIT (same as repository)\
 **Last Updated**:

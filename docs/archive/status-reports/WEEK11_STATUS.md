@@ -140,11 +140,11 @@ ______________________________________________________________________
 
 **Repositories**:
 
-- ivviiviivvi/cognitive-automation-framework
-- ivviiviivvi/ai-core-framework
-- ivviiviivvi/autonomous-agent-architecture
-- ivviiviivvi/dynamic-context-engine
-- ivviiviivvi/learning-adaptation-system
+- {{ORG_NAME}}/cognitive-automation-framework
+- {{ORG_NAME}}/ai-core-framework
+- {{ORG_NAME}}/autonomous-agent-architecture
+- {{ORG_NAME}}/dynamic-context-engine
+- {{ORG_NAME}}/learning-adaptation-system
 
 ______________________________________________________________________
 
@@ -162,10 +162,10 @@ ______________________________________________________________________
 
 **Repositories**:
 
-- ivviiviivvi/meta-workflow-orchestration
-- ivviiviivvi/planning-strategy-generation
-- ivviiviivvi/reflection-improvement-loop
-- ivviiviivvi/jules-integration-hub
+- {{ORG_NAME}}/meta-workflow-orchestration
+- {{ORG_NAME}}/planning-strategy-generation
+- {{ORG_NAME}}/reflection-improvement-loop
+- {{ORG_NAME}}/jules-integration-hub
 
 ______________________________________________________________________
 

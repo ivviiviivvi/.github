@@ -994,4 +994,4 @@ See `.github/DISCUSSION_TEMPLATE/` directory for ready-to-use templates:
 ______________________________________________________________________
 
 **Last Updated**: 2025-12-28\
-**Maintained By**: @ivviiviivvi community team
+**Maintained By**: @{{ORG_NAME}} community team

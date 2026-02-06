@@ -278,7 +278,7 @@ jobs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: pr.number,
-                    body: `🧹 **Bulk Operation: Closing Stale PR**\n\nThis PR has been inactive for ${Math.floor(daysSinceUpdate)} days and is being closed.\n\n_Bulk operation by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`
+                    body: `🧹 **Bulk Operation: Closing Stale PR**\n\nThis PR has been inactive for ${Math.floor(daysSinceUpdate)} days and is being closed.\n\n_Bulk operation by [batch-pr-operations.yml](../.github/workflows/batch-pr-operations.yml)_`
                   });
 
                   await github.rest.pulls.update({
@@ -428,7 +428,7 @@ jobs:
               `- **Failed:** ${failed}\n\n` +
               `${errorSection}\n\n` +
               `---\n` +
-              `_Automated by [bulk-pr-operations.yml](../.github/workflows/bulk-pr-operations.yml)_`;
+              `_Automated by [batch-pr-operations.yml](../.github/workflows/batch-pr-operations.yml)_`;
 
             await github.rest.issues.create({
               owner: context.repo.owner,

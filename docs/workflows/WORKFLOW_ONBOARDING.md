@@ -306,18 +306,18 @@ ______________________________________________________________________
 >
 > **For Triage:**
 >
-> - [Needs triage](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
-> - [Critical items](https://github.com/ivviiviivvi/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
-> - [Blocked items](https://github.com/ivviiviivvi/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
+> - [Needs triage](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3Aneeds-triage)
+> - [Critical items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22priority%3A+critical%22)
+> - [Blocked items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aopen+label%3A%22status%3A+blocked%22)
 >
 > **For Reviews:**
 >
-> - [Awaiting review](https://github.com/ivviiviivvi/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
-> - [Changes requested](https://github.com/ivviiviivvi/.github/pulls?q=is%3Apr+is%3Aopen+label%3Achanges-requested)
+> - [Awaiting review](https://github.com/{{ORG_NAME}}/.github/pulls?q=is%3Apr+is%3Aopen+label%3Aawaiting-review)
+> - [Changes requested](https://github.com/{{ORG_NAME}}/.github/pulls?q=is%3Apr+is%3Aopen+label%3Achanges-requested)
 >
 > **For Monitoring:**
 >
-> - [Actions tab](https://github.com/ivviiviivvi/.github/actions) - workflow
+> - [Actions tab](https://github.com/{{ORG_NAME}}/.github/actions) - workflow
 >   runs
 > - Metrics report - daily stats
 >

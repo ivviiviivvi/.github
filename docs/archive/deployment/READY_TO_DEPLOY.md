@@ -63,9 +63,9 @@ cd /workspace
 
 **Repositories** (3 total):
 
-1. ivviiviivvi/test-repo-1
-1. ivviiviivvi/test-repo-2
-1. ivviiviivvi/test-repo-3
+1. {{ORG_NAME}}/test-repo-1
+1. {{ORG_NAME}}/test-repo-2
+1. {{ORG_NAME}}/test-repo-3
 
 **Labels** (12 per repo × 3 = 36 total):
 

@@ -1,4 +1,4 @@
-"""Unit tests for automation/scripts/auto-docs.py
+"""Unit tests for automation/scripts/auto_docs.py
 
 Focus: AST-based docstring extraction and documentation generation.
 """
@@ -17,7 +17,7 @@ import importlib.util
 
 spec = importlib.util.spec_from_file_location(
     "auto_docs",
-    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "auto-docs.py",
+    Path(__file__).parent.parent.parent / "src" / "automation" / "scripts" / "auto_docs.py",
 )
 auto_docs = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(auto_docs)
@@ -623,7 +623,7 @@ class TestMainFunction:
 
     def test_main_no_args(self, monkeypatch, capsys):
         """Test main with no arguments."""
-        monkeypatch.setattr(sys, "argv", ["auto-docs.py"])
+        monkeypatch.setattr(sys, "argv", ["auto_docs.py"])
 
         with pytest.raises(SystemExit) as exc:
             auto_docs.main()
@@ -632,7 +632,7 @@ class TestMainFunction:
 
     def test_main_missing_required_args(self, monkeypatch, capsys):
         """Test main without output-dir or update-readme."""
-        monkeypatch.setattr(sys, "argv", ["auto-docs.py", "--src-dir", "/some/path"])
+        monkeypatch.setattr(sys, "argv", ["auto_docs.py", "--src-dir", "/some/path"])
 
         with pytest.raises(SystemExit) as exc:
             auto_docs.main()
@@ -652,7 +652,7 @@ class TestMainFunction:
             sys,
             "argv",
             [
-                "auto-docs.py",
+                "auto_docs.py",
                 "--src-dir",
                 str(src_dir),
                 "--output-dir",
@@ -678,7 +678,7 @@ class TestMainFunction:
             sys,
             "argv",
             [
-                "auto-docs.py",
+                "auto_docs.py",
                 "--src-dir",
                 str(src_dir),
                 "--update-readme",
@@ -707,7 +707,7 @@ class TestMainFunction:
             sys,
             "argv",
             [
-                "auto-docs.py",
+                "auto_docs.py",
                 "--src-dir",
                 str(src_dir),
                 "--output-dir",

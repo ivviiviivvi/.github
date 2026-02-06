@@ -1,7 +1,7 @@
 # Commitizen Setup Guide
 
 This guide explains how to use Commitizen for standardized commit messages and
-automated version management in the ivviiviivvi organization.
+automated version management in the {{ORG_NAME}} organization.
 
 ## Overview
 
@@ -190,7 +190,7 @@ on:
 
 jobs:
   bump:
-    uses: ivviiviivvi/.github/.github/workflows/reusable-commitizen-bump.yml@main
+    uses: {{ORG_NAME}}/.github/.github/workflows/reusable-commitizen-bump.yml@main
     with:
       bump_type: ${{ inputs.bump_type }}
     secrets:

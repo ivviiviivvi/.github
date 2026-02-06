@@ -1,7 +1,7 @@
 # Best Practices Guide
 
 > **Comprehensive best practices for contributing to and maintaining the
-> ivviiviivvi/.github repository**
+> {{ORG_NAME}}/.github repository**
 
 This guide consolidates best practices across all areas: code quality,
 documentation, workflows, testing, security, and collaboration.

@@ -176,7 +176,7 @@ jobs:
 
         - 📖 Read our [Contributing Guide](docs/CONTRIBUTING.md)
         - 🤝 Review our [Code of Conduct](docs/CODE_OF_CONDUCT.md)
-        - 💡 Check out [Good First Issues](https://github.com/search?q=org:ivviiviivvi+label:"good+first+issue"+state:open&type=issues)
+        - 💡 Check out [Good First Issues](https://github.com/search?q=org:{{ORG_NAME}}+label:"good+first+issue"+state:open&type=issues)
 
         ## Introduce Yourself
 
@@ -820,7 +820,7 @@ jobs:
         ---
 
         **Status**: Content creation framework ready for deployment
-        **Maintained By**: @ivviiviivvi organization
+        **Maintained By**: @{{ORG_NAME}} organization
         **Last Updated**: $(date -u +"%Y-%m-%d")
         EOF
 

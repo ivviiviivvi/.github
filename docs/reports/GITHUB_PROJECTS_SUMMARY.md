@@ -161,13 +161,13 @@ export GH_TOKEN="your_personal_access_token"
 
 # 2. Run the Python script
 cd scripts
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 
 # 3. Wait for completion (2-3 minutes)
 # Creates all 7 projects with fields configured
 
 # 4. Open projects in browser
-# https://github.com/orgs/ivviiviivvi/projects
+# https://github.com/orgs/{{ORG_NAME}}/projects
 ```
 
 ### Option 2: Bash Script (Basic)
@@ -379,9 +379,9 @@ ______________________________________________________________________
 - Review
   [Troubleshooting](../../src/automation/scripts/utils/README_PROJECTS.md#troubleshooting)
 - Open an
-  [Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - Ask in
-  [Discussions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 
 **Issues?**
 
@@ -411,7 +411,7 @@ Run the setup script and transform your organization's project management:
 
 ```bash
 export GH_TOKEN="your_token"
-python3 scripts/configure-github-projects.py --org ivviiviivvi
+python3 scripts/configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ______________________________________________________________________

@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-name: PRD description: Generate a comprehensive PRD in Markdown with stories,
+name: Product Requirements Document description: Generate a comprehensive PRD in Markdown with stories,
 acceptance criteria, and metrics. tools:
 
 - codebase

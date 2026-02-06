@@ -3,7 +3,7 @@
 ## 📑 Overview
 
 This comprehensive analysis examines all 76 GitHub Actions workflows in the
-ivviiviivvi/.github repository across 9 critical dimensions: Critique, Logic,
+{{ORG_NAME}}/.github repository across 9 critical dimensions: Critique, Logic,
 Logos, Pathos, Ethos, Blindspots, Shatter-points, Bloom, and Evolve.
 
 **Analysis Date**: 2025-12-23\
@@ -483,7 +483,7 @@ ______________________________________________________________________
 
 - **GitHub Issues**: Technical problems or bugs
 - **GitHub Discussions**: General questions and ideas
-- **Stack Overflow**: Tag `github-actions` and `ivviiviivvi`
+- **Stack Overflow**: Tag `github-actions` and `{{ORG_NAME}}`
 
 ### For Strategic Discussions
 

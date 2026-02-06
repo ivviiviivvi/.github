@@ -45,7 +45,7 @@ for repo in "${REPOS[@]}"; do
 
   # Get all runs from the last 24 hours
   runs=$(gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --limit 100 \
     --json status,conclusion,name,createdAt,databaseId \
     --jq --arg since "$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-24H '+%Y-%m-%dT%H:%M:%SZ')" \
@@ -86,7 +86,7 @@ echo "=============================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
   stale_count=$(gh run list \
-    --repo "ivviiviivvi/$repo" \
+    --repo "{{ORG_NAME}}/$repo" \
     --workflow="stale-management.yml" \
     --limit 10 \
     --json databaseId | jq 'length')
@@ -107,11 +107,11 @@ echo "==========================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
-  issues=$(gh api "repos/ivviiviivvi/$repo" --jq '.open_issues_count')
-  prs=$(gh pr list --repo "ivviiviivvi/$repo" --limit 100 --json number | jq 'length')
+  issues=$(gh api "repos/{{ORG_NAME}}/$repo" --jq '.open_issues_count')
+  prs=$(gh pr list --repo "{{ORG_NAME}}/$repo" --limit 100 --json number | jq 'length')
 
   # Get commit activity
-  commits_24h=$(gh api "repos/ivviiviivvi/$repo/commits?per_page=100" \
+  commits_24h=$(gh api "repos/{{ORG_NAME}}/$repo/commits?per_page=100" \
     --jq --arg since "$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-24H '+%Y-%m-%dT%H:%M:%SZ')" \
     '[.[] | select(.commit.author.date >= $since)] | length')
 
@@ -127,10 +127,10 @@ echo "=========================="
 for repo in "${REPOS[@]}"; do
   echo "Repository: $repo"
 
-  workflows=$(gh api "repos/ivviiviivvi/$repo/contents/.github/workflows" \
+  workflows=$(gh api "repos/{{ORG_NAME}}/$repo/contents/.github/workflows" \
     --jq '.[] | "\(.name) (\(.size) bytes)"')
 
-  workflow_count=$(gh api "repos/ivviiviivvi/$repo/contents/.github/workflows" --jq 'length')
+  workflow_count=$(gh api "repos/{{ORG_NAME}}/$repo/contents/.github/workflows" --jq 'length')
 
   if [ $workflow_count -eq 3 ]; then
     echo "  ✅ All 3 workflows present"
@@ -144,7 +144,7 @@ done
 echo "🏷️  LABEL INTEGRITY"
 echo "=================="
 for repo in "${REPOS[@]}"; do
-  label_count=$(gh label list --repo "ivviiviivvi/$repo" --limit 100 --json name | jq 'length')
+  label_count=$(gh label list --repo "{{ORG_NAME}}/$repo" --limit 100 --json name | jq 'length')
 
   if [ $label_count -eq 12 ]; then
     echo "✅ $repo: $label_count labels (expected 12)"
@@ -194,8 +194,8 @@ ______________________________________________________________________
 
 ```bash
 # Success rate calculation
-total_runs=$(gh run list --repo ivviiviivvi/theoretical-specifications-first --limit 100 --json conclusion | jq 'length')
-successful=$(gh run list --repo ivviiviivvi/theoretical-specifications-first --limit 100 --json conclusion --jq '[.[] | select(.conclusion == "success")] | length')
+total_runs=$(gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --limit 100 --json conclusion | jq 'length')
+successful=$(gh run list --repo {{ORG_NAME}}/theoretical-specifications-first --limit 100 --json conclusion --jq '[.[] | select(.conclusion == "success")] | length')
 echo "Success rate: $(($successful * 100 / $total_runs))%"
 ```
 
@@ -214,7 +214,7 @@ echo "Success rate: $(($successful * 100 / $total_runs))%"
 # Sample execution duration analysis
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  gh run list -R "ivviiviivvi/$repo" -L 10 --json name,createdAt,updatedAt,conclusion \
+  gh run list -R "{{ORG_NAME}}/$repo" -L 10 --json name,createdAt,updatedAt,conclusion \
     --jq '.[] | "\(.name): \(.conclusion) (Duration: ~\((.updatedAt | fromdate) - (.createdAt | fromdate))s)"'
 done
 ```
@@ -324,8 +324,8 @@ ______________________________________________________________________
    ```bash
    # Export all failure logs
    for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-     gh run list -R "ivviiviivvi/$repo" --json conclusion,databaseId --jq '.[] | select(.conclusion == "failure") | .databaseId' | while read run_id; do
-       gh run view $run_id -R "ivviiviivvi/$repo" --log > "/tmp/failure_${repo}_${run_id}.log"
+     gh run list -R "{{ORG_NAME}}/$repo" --json conclusion,databaseId --jq '.[] | select(.conclusion == "failure") | .databaseId' | while read run_id; do
+       gh run view $run_id -R "{{ORG_NAME}}/$repo" --log > "/tmp/failure_${repo}_${run_id}.log"
      done
    done
    ```
@@ -460,8 +460,8 @@ ______________________________________________________________________
 # Success rate calculation (all repos)
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
   echo "=== $repo ==="
-  total=$(gh run list -R "ivviiviivvi/$repo" -L 100 --json conclusion | jq 'length')
-  success=$(gh run list -R "ivviiviivvi/$repo" -L 100 --json conclusion --jq '[.[] | select(.conclusion == "success")] | length')
+  total=$(gh run list -R "{{ORG_NAME}}/$repo" -L 100 --json conclusion | jq 'length')
+  success=$(gh run list -R "{{ORG_NAME}}/$repo" -L 100 --json conclusion --jq '[.[] | select(.conclusion == "success")] | length')
   if [ $total -gt 0 ]; then
     rate=$((success * 100 / total))
     echo "Success rate: $rate% ($success/$total)"
@@ -482,7 +482,7 @@ diff /tmp/hour6_results.txt /tmp/hour24_results.txt
 # For detailed failure analysis
 mkdir -p /tmp/hour24_logs
 for repo in theoretical-specifications-first system-governance-framework trade-perpetual-future; do
-  gh run list -R "ivviiviivvi/$repo" --json databaseId,name,conclusion \
+  gh run list -R "{{ORG_NAME}}/$repo" --json databaseId,name,conclusion \
     --jq '.[] | "\(.databaseId),\(.name),\(.conclusion)"' > "/tmp/hour24_logs/${repo}_runs.csv"
 done
 ```

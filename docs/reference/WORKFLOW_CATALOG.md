@@ -1,6 +1,6 @@
 # Workflow Catalog
 
-Complete reference catalog of all GitHub Actions workflows in the ivviiviivvi
+Complete reference catalog of all GitHub Actions workflows in the {{ORG_NAME}}
 template.
 
 ______________________________________________________________________
@@ -209,7 +209,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-### bulk-pr-operations.yml
+### batch-pr-operations.yml
 
 **Purpose**: Perform bulk operations on PRs.
 

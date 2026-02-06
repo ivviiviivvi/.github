@@ -67,7 +67,7 @@ jobs:
         from github import Github
 
         g = Github(os.environ['GITHUB_TOKEN'])
-        org = g.get_organization('ivviiviivvi')
+        org = g.get_organization('{{ORG_NAME}}')
 
         repos = []
         for repo in org.get_repos():
@@ -293,7 +293,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         BILLING=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-          "https://api.github.com/orgs/ivviiviivvi/settings/billing/actions")
+          "https://api.github.com/orgs/{{ORG_NAME}}/settings/billing/actions")
 
         TOTAL_MINUTES_USED=$(echo "$BILLING" | jq '.total_minutes_used')
         INCLUDED_MINUTES=$(echo "$BILLING" | jq '.included_minutes')

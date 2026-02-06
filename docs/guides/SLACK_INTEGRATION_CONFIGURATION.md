@@ -90,7 +90,7 @@ ______________________________________________________________________
 
 1. **Navigate to Repository Settings:**
 
-   - Go to: <https://github.com/ivviiviivvi/.github/settings/secrets/actions>
+   - Go to: <https://github.com/{{ORG_NAME}}/.github/settings/secrets/actions>
    - Or: Repository → Settings → Secrets and variables → Actions
 
 1. **Add First Secret:**
@@ -235,7 +235,7 @@ Test the automated daily performance summary.
 1. **Navigate to Actions:**
 
    - Go to:
-     <https://github.com/ivviiviivvi/.github/actions/workflows/slack-daily-summary.yml>
+     <https://github.com/{{ORG_NAME}}/.github/actions/workflows/slack-daily-summary.yml>
 
 1. **Run Workflow Manually:**
 

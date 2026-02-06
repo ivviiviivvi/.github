@@ -2,7 +2,7 @@
 
 **Project:** Comprehensive Codebase Cleanup & Consolidation
 Roadmap\
-**Repository:** ivviiviivvi/.github\
+**Repository:** {{ORG_NAME}}/.github\
 **Duration:** January 13-15, 2026
 (3 days)\
 **Status:** ✅ 100% Complete (10/10 phases)
@@ -519,11 +519,11 @@ ______________________________________________________________________
 For questions about this retrospective or the cleanup project:
 
 - **GitHub Discussions:**
-  [Ask Questions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Ask Questions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 - **Issues:**
-  [Report Problems](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report Problems](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - **Documentation:**
-  [Browse Docs](https://github.com/ivviiviivvi/.github/tree/main/docs)
+  [Browse Docs](https://github.com/{{ORG_NAME}}/.github/tree/main/docs)
 
 ### C. Acknowledgments
 

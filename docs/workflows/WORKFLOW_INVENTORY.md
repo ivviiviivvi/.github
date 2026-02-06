@@ -218,8 +218,8 @@ ______________________________________________________________________
 - `auto-batch-prs.yml` - Batch automated PRs
 - `nightly-cleanup.yml` - Nightly maintenance
 - `daily-pr-consolidator.yml` - Consolidate bot PRs
-- `daily-master-orchestrator.yml` - Daily task orchestration
-- `bulk-pr-operations.yml` - Bulk PR operations
+- `daily-orchestrator.yml` - Daily task orchestration
+- `batch-pr-operations.yml` - Bulk PR operations
 - `batch-pr-lifecycle.yml` - Batch PR management
 - `pr-suggestion-implementation.yml` - Implement PR suggestions
 - `staggered-scheduling.yml` - Quota-aware scheduling

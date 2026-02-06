@@ -1,6 +1,6 @@
 # Governance Reference Guide
 
-This document consolidates governance best practices for the ivviiviivvi
+This document consolidates governance best practices for the {{ORG_NAME}}
 organization, derived from the system-governance-framework.
 
 ## Repository Settings Checklist

@@ -237,7 +237,7 @@ ______________________________________________________________________
 
 ```yaml
 Description: "Organization policies repository - Community health files, AI framework (26+ agents), and workflow automation"
-Website: "https://github.com/ivviiviivvi/.github"
+Website: "https://github.com/{{ORG_NAME}}/.github"
 Topics:
   - github
   - organization-policies
@@ -307,9 +307,9 @@ ______________________________________________________________________
 ## 🆘 Need Help?
 
 - **Questions?**
-  [Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 - **Issues?**
-  [Report a Problem](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Report a Problem](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 - **Documentation**: See [Full Standards](standards/)
 
 ______________________________________________________________________

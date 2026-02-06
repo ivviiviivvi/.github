@@ -3,7 +3,7 @@
 ## Overview
 
 This document defines the standards for repository "About" sections across the
-ivviiviivvi organization. A complete About section is essential for
+{{ORG_NAME}} organization. A complete About section is essential for
 discoverability, professionalism, and clear communication of a repository's
 purpose.
 
@@ -31,7 +31,7 @@ Every repository must have a complete About section that includes:
 **Examples**:
 
 - ✅ **Good**: "Organization policies repository - Community health files, AI
-  framework (26+ agents), and workflow automation for the ivviiviivvi
+  framework (26+ agents), and workflow automation for the {{ORG_NAME}}
   organization"
 - ✅ **Good**: "Python automation toolkit - Streamlines CI/CD workflows with
   pre-built GitHub Actions templates"
@@ -61,7 +61,7 @@ Every repository must have a complete About section that includes:
 
 - ✅ `https://docs.example.com`
 - ✅ `https://demo.example.com`
-- ✅ `https://ivviiviivvi.github.io/project-name`
+- ✅ `https://{{ORG_NAME}}.github.io/project-name`
 
 ### 3. Topics (Tags)
 
@@ -324,9 +324,9 @@ The README.md should reflect About section information:
 
 See these repositories for reference:
 
-- [ivviiviivvi/.github](https://github.com/ivviiviivvi/.github)<!-- link:github.dotgithub -->
+- [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
   \- Organization policies
-- [Example compliance-complete repo](https://github.com/ivviiviivvi/) - Full
+- [Example compliance-complete repo](https://github.com/{{ORG_NAME}}/) - Full
   example
 
 ______________________________________________________________________
@@ -336,4 +336,4 @@ ______________________________________________________________________
 **Maintained By**:
 Organization Governance Team\
 **Questions?**
-[Open a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+[Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->

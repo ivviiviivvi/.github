@@ -26,21 +26,21 @@ pip install PyGithub
 
 ```bash
 # Dry run (preview changes)
-python scripts/sync_labels.py --org ivviiviivvi --dry-run
+python scripts/sync_labels.py --org {{ORG_NAME}} --dry-run
 
 # Actually sync labels
 export GITHUB_TOKEN=ghp_xxxxx
-python scripts/sync_labels.py --org ivviiviivvi
+python scripts/sync_labels.py --org {{ORG_NAME}}
 ```
 
 ### Advanced Usage
 
 ```bash
 # Exclude specific repositories
-python scripts/sync_labels.py --org ivviiviivvi --exclude repo1 repo2
+python scripts/sync_labels.py --org {{ORG_NAME}} --exclude repo1 repo2
 
 # Use token from command line
-python scripts/sync_labels.py --org ivviiviivvi --token ghp_xxxxx
+python scripts/sync_labels.py --org {{ORG_NAME}} --token ghp_xxxxx
 
 # List all label definitions
 python scripts/sync_labels.py --list-labels
@@ -114,7 +114,7 @@ Create a token at: https://github.com/settings/tokens
 ```
 🔍 DRY RUN MODE - No changes will be made
 
-Found 15 repositories in organization 'ivviiviivvi'
+Found 15 repositories in organization '{{ORG_NAME}}'
 
 📦 Processing repo1...
   Would create: priority: critical
@@ -168,7 +168,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
         run: |
-          python scripts/sync_labels.py --org ivviiviivvi
+          python scripts/sync_labels.py --org {{ORG_NAME}}
 ```
 
 ## Troubleshooting

@@ -1,6 +1,6 @@
 ______________________________________________________________________
 
-name: Mouthpiece description: Natural voice to AI prompt translator. tools:
+name: Natural Language Prompt Translator description: Natural voice to AI prompt translator. tools:
 
 - \
   tags:

@@ -31,7 +31,7 @@ ______________________________________________________________________
 **Welcome!** 👋 Here's your fastest path to contributing:
 
 1. Look for issues labeled
-   [`good-first-issue`](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
+   [`good-first-issue`](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
 1. Comment "I'd like to work on this"
 1. Wait for assignment (usually within 24 hours)
 1. Follow the
@@ -83,7 +83,7 @@ ______________________________________________________________________
 
 1. **Create a discussion** (if needed)
 
-   - Go to [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+   - Go to [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)
    - Choose appropriate category:
      - **Ideas**: New features or enhancements
      - **Q&A**: Questions about the project
@@ -113,10 +113,10 @@ ______________________________________________________________________
 
 1. **Browse available issues**
 
-   - [All open issues](https://github.com/ivviiviivvi/.github/issues)
-   - [Good first issues](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
-   - [Help wanted](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22help-wanted%22)
-   - [Backlog items](https://github.com/ivviiviivvi/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+backlog%22)
+   - [All open issues](https://github.com/{{ORG_NAME}}/.github/issues)
+   - [Good first issues](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22good-first-issue%22)
+   - [Help wanted](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22help-wanted%22)
+   - [Backlog items](https://github.com/{{ORG_NAME}}/.github/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+backlog%22)
 
 1. **Read the issue carefully**
 
@@ -155,7 +155,7 @@ ______________________________________________________________________
    cd REPO-NAME
 
    # Add upstream remote
-   git remote add upstream https://github.com/ivviiviivvi/REPO-NAME.git
+   git remote add upstream https://github.com/{{ORG_NAME}}/REPO-NAME.git
    ```
 
 1. **Create a feature branch**
@@ -445,14 +445,14 @@ ______________________________________________________________________
 
 1. **Join discussions**
 
-   - [Q&A Discussions](https://github.com/ivviiviivvi/.github/discussions/categories/q-a)
+   - [Q&A Discussions](https://github.com/{{ORG_NAME}}/.github/discussions/categories/q-a)
    - General community help
 
 1. **Contact maintainers**
 
    - As a last resort
    - For urgent/sensitive matters
-   - Via issue mention: @ivviiviivvi/maintainers
+   - Via issue mention: @{{ORG_NAME}}/maintainers
 
 ### Common Issues
 
@@ -485,7 +485,7 @@ ______________________________________________________________________
 ```bash
 # Fork workflow
 git clone https://github.com/YOUR-USERNAME/REPO.git
-git remote add upstream https://github.com/ivviiviivvi/REPO.git
+git remote add upstream https://github.com/{{ORG_NAME}}/REPO.git
 
 # Update branch
 git fetch upstream
@@ -500,9 +500,9 @@ git push --force-with-lease origin branch-name
 
 ### Helpful Links
 
-- [Issues](https://github.com/ivviiviivvi/.github/issues)
-- [Pull Requests](https://github.com/ivviiviivvi/.github/pulls)
-- [Discussions](https://github.com/ivviiviivvi/.github/discussions)
+- [Issues](https://github.com/{{ORG_NAME}}/.github/issues)
+- [Pull Requests](https://github.com/{{ORG_NAME}}/.github/pulls)
+- [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)
 - [Code of Conduct](../governance/CODE_OF_CONDUCT.md)
 - [Contributing Guide](../governance/CONTRIBUTING.md)
 - [Development Setup](../guides/DEVELOPMENT_ENVIRONMENT_SETUP.md)

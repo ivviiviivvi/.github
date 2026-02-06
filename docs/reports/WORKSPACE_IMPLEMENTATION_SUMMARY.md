@@ -496,10 +496,10 @@ git clone <repo>
 ### Community
 
 - 💬
-  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
-- 📚 [Wiki](https://github.com/ivviiviivvi/.github/wiki)
+  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+- 📚 [Wiki](https://github.com/{{ORG_NAME}}/.github/wiki)
 
 ### Training
 

@@ -443,7 +443,7 @@ monitoring, and automatic rollback.
 
 ```bash
 # Single repository
-./health_checks.py --repo ivviiviivvi/.github
+./health_checks.py --repo {{ORG_NAME}}/.github
 
 # Entire environment
 ./health_checks.py --env production --output health-report.json

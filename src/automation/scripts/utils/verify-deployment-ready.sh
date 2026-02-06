@@ -87,8 +87,8 @@ fi
 
 # Check 6: Organization access
 log_info "Checking organization access..."
-if gh api orgs/ivviiviivvi --jq .login &> /dev/null; then
-    log_success "Can access organization: ivviiviivvi"
+if gh api orgs/{{ORG_NAME}} --jq .login &> /dev/null; then
+    log_success "Can access organization: {{ORG_NAME}}"
     ((CHECKS_PASSED++))
 else
     log_warning "Cannot verify org access (may need proper token scopes)"
@@ -98,7 +98,7 @@ fi
 log_info "Checking for existing projects..."
 EXISTING_PROJECTS=$(gh api graphql -f query='
   query {
-    organization(login: "ivviiviivvi") {
+    organization(login: "{{ORG_NAME}}") {
       projectsV2(first: 100) {
         totalCount
       }

@@ -2,7 +2,7 @@
   "$schema": "https://example.com/schemas/workflow-registry.schema.json",
   "generated": "2026-01-24T17:47:32.164729+00:00",
   "generator": "workflow-registry-builder.py",
-  "root": "/Users/4jp/Workspace/ivviiviivvi/.github/.github/workflows",
+  "root": "/Users/4jp/Workspace/{{ORG_NAME}}/.github/.github/workflows",
   "statistics": {
     "total_workflows": 134,
     "with_metadata": 5,
@@ -212,8 +212,8 @@
       "hash": "3a26d73145b1184f64b8e0a44ddaa8a82564e6fbb1ad0a9c5c5a2261b191f4e8"
     },
     {
-      "name": "bulk-pr-operations.yml",
-      "path": "bulk-pr-operations.yml",
+      "name": "batch-pr-operations.yml",
+      "path": "batch-pr-operations.yml",
       "meta": null,
       "orphan": true,
       "hash": "00bbd289b0d7f23242444260a43a8216ae69a3527789ff194d2e8a0a143cb80b"
@@ -303,8 +303,8 @@
       "hash": "5a58e739df082344d3924c4d5d3d15a7fa3542bea5f69cacdb444159618e945a"
     },
     {
-      "name": "daily-master-orchestrator.yml",
-      "path": "daily-master-orchestrator.yml",
+      "name": "daily-orchestrator.yml",
+      "path": "daily-orchestrator.yml",
       "meta": null,
       "orphan": true,
       "hash": "752f4ebb5c676ec17bbdedf3532ab140a62de7b42fdbef93484aa570b7317520"

@@ -132,7 +132,7 @@ curl -H "Authorization: bearer $GH_TOKEN" \
 ### "Not Found" error
 
 - Organization name might be wrong
-- Verify: `gh api orgs/ivviiviivvi`
+- Verify: `gh api orgs/{{ORG_NAME}}`
 
 ### 1Password CLI not working
 

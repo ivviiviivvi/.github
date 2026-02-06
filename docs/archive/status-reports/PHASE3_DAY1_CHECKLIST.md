@@ -82,7 +82,7 @@ ______________________________________________________________________
 **Command**:
 
 ```bash
-python3 automation/scripts/sync_labels.py --org ivviiviivvi --repo .github --dry-run
+python3 automation/scripts/sync_labels.py --org {{ORG_NAME}} --repo .github --dry-run
 ```
 
 **Expected Result**: Script runs successfully with
@@ -210,7 +210,7 @@ ______________________________________________________________________
 gh auth status
 
 # Test a script that uses utils.py
-python3 automation/scripts/sync_labels.py --org ivviiviivvi --help
+python3 automation/scripts/sync_labels.py --org {{ORG_NAME}} --help
 ```
 
 **Expected Result**:

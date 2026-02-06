@@ -3,7 +3,7 @@
 **Status:** ✅ All prerequisites verified\
 **Date:** January 18,
 2026\
-**Organization:** ivviiviivvi
+**Organization:** {{ORG_NAME}}
 
 ______________________________________________________________________
 
@@ -36,11 +36,11 @@ cd /workspace/scripts
 
 # Dry run first (safe)
 export GH_TOKEN=$(gh auth token)
-python3 configure-github-projects.py --org ivviiviivvi --dry-run
+python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 
 # Deploy for real
 export GH_TOKEN=$(gh auth token)
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ### Option 2: Using 1Password CLI
@@ -83,7 +83,7 @@ cd /workspace/scripts
 export GH_TOKEN="ghp_your_token_here"
 
 # Deploy
-python3 configure-github-projects.py --org ivviiviivvi
+python3 configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ______________________________________________________________________
@@ -147,7 +147,7 @@ ______________________________________________________________________
 ```bash
 cd /workspace/scripts
 export GH_TOKEN=$(gh auth token)
-python3 configure-github-projects.py --org ivviiviivvi --dry-run
+python3 configure-github-projects.py --org {{ORG_NAME}} --dry-run
 ```
 
 Expected output:
@@ -160,7 +160,7 @@ Expected output:
 
 ```bash
 export GH_TOKEN=$(gh auth token)
-python3 configure-github-projects.py --org ivviiviivvi 2>&1 | tee deployment-$(date +%Y%m%d-%H%M%S).log
+python3 configure-github-projects.py --org {{ORG_NAME}} 2>&1 | tee deployment-$(date +%Y%m%d-%H%M%S).log
 ```
 
 This will:
@@ -173,10 +173,10 @@ This will:
 
 ```bash
 # List all projects
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 
 # Or visit in browser
-# https://github.com/orgs/ivviiviivvi/projects
+# https://github.com/orgs/{{ORG_NAME}}/projects
 ```
 
 ### Step 4: Configure Views (30-45 minutes)
@@ -212,13 +212,13 @@ ______________________________________________________________________
 # Full deployment (recommended)
 cd /workspace/scripts
 export GH_TOKEN=$(gh auth token)
-python3 configure-github-projects.py --org ivviiviivvi 2>&1 | tee deployment.log
+python3 configure-github-projects.py --org {{ORG_NAME}} 2>&1 | tee deployment.log
 
 # Check results
-gh project list --owner ivviiviivvi
+gh project list --owner {{ORG_NAME}}
 
 # View in browser
-open https://github.com/orgs/ivviiviivvi/projects
+open https://github.com/orgs/{{ORG_NAME}}/projects
 ```
 
 ______________________________________________________________________
@@ -293,7 +293,7 @@ ______________________________________________________________________
 **Deploy now:**
 
 ```bash
-cd /workspace/scripts && export GH_TOKEN=$(gh auth token) && python3 configure-github-projects.py --org ivviiviivvi
+cd /workspace/scripts && export GH_TOKEN=$(gh auth token) && python3 configure-github-projects.py --org {{ORG_NAME}}
 ```
 
 ______________________________________________________________________

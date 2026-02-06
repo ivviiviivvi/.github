@@ -432,7 +432,7 @@ See [Contributing Guide](../governance/CONTRIBUTING.md).
 For links that should stay consistent across the repo, add a link key comment:
 
 ```markdown
-[GitHub Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+[GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
 ```
 
 Update all managed links with:

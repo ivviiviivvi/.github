@@ -1,6 +1,6 @@
 [
   {
-    "repository": "ivviiviivvi/4-ivi374-F0Rivi4",
+    "repository": "{{ORG_NAME}}/4-ivi374-F0Rivi4",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -11,7 +11,7 @@
     "timestamp": "2026-01-16T21:16:07.955973"
   },
   {
-    "repository": "ivviiviivvi/a-context7",
+    "repository": "{{ORG_NAME}}/a-context7",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -22,7 +22,7 @@
     "timestamp": "2026-01-16T21:16:08.393545"
   },
   {
-    "repository": "ivviiviivvi/reverse-engine-recursive-run",
+    "repository": "{{ORG_NAME}}/reverse-engine-recursive-run",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -33,7 +33,7 @@
     "timestamp": "2026-01-16T21:16:08.958995"
   },
   {
-    "repository": "ivviiviivvi/universal-node-network",
+    "repository": "{{ORG_NAME}}/universal-node-network",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",

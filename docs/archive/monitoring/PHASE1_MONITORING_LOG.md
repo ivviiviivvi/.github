@@ -543,7 +543,7 @@ ______________________________________________________________________
 1. **Immediate Validation**:
 
    - Triggered workflow_dispatch manually on all 3 Phase 1 repositories
-   - Command: `gh workflow run stale-management.yml -R ivviiviivvi/<repo>`
+   - Command: `gh workflow run stale-management.yml -R {{ORG_NAME}}/<repo>`
    - Result: ✅ All 3 workflows triggered successfully (no HTTP 403 errors)
 
 1. **Execution Verification**:

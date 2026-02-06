@@ -1,7 +1,7 @@
 # New Contributor Guide
 
 > **Welcome! This guide will help you get started contributing to the
-> ivviiviivvi/.github organization repository**
+> {{ORG_NAME}}/.github organization repository**
 
 **Estimated Time to Setup**: 30-45 minutes
 
@@ -52,7 +52,7 @@ ______________________________________________________________________
 
 ```bash
 # 1. Fork and clone
-gh repo fork ivviiviivvi/.github --clone
+gh repo fork {{ORG_NAME}}/.github --clone
 
 # 2. Open in VS Code with DevContainer (recommended)
 cd .github
@@ -108,7 +108,7 @@ Install these tools before starting:
 1. **Clone and Open**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    code .
    ```
@@ -144,7 +144,7 @@ Install these tools before starting:
 1. **Clone Repository**:
 
    ```bash
-   git clone https://github.com/ivviiviivvi/.github.git
+   git clone https://github.com/{{ORG_NAME}}/.github.git
    cd .github
    ```
 
@@ -246,9 +246,9 @@ ai_framework/              # AI agent system
 automation/
 ├── scripts/              # Python automation scripts
 │   ├── web_crawler.py           # Security-critical web crawler
-│   ├── ecosystem_visualizer.py  # Workflow visualization
+│   ├── org_health_visualizer.py  # Workflow visualization
 │   ├── sync_labels_gh.py        # Label synchronization
-│   ├── mouthpiece_filter.py     # Content filtering
+│   ├── natural_language_prompt_filter.py     # Content filtering
 │   └── update_agent_docs.py     # Agent documentation
 └── workflow-templates/   # Workflow templates for copy
 
@@ -265,9 +265,9 @@ docs/
 tests/
 ├── unit/                # Unit tests (4 files, 989 lines)
 │   ├── test_web_crawler.py
-│   ├── test_ecosystem_visualizer.py
+│   ├── test_org_health_visualizer.py
 │   ├── test_sync_labels.py
-│   └── test_mouthpiece_filter.py
+│   └── test_natural_language_prompt_filter.py
 ├── integration/         # Integration tests
 │   └── test_agent_tracking.py
 ├── conftest.py          # Shared fixtures
@@ -1111,18 +1111,18 @@ ______________________________________________________________________
 
 **GitHub Discussions**:
 
-- [Ask Questions](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+- [Ask Questions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
   \- Get help from the community
-- [Ideas](https://github.com/orgs/ivviiviivvi/discussions/categories/ideas) -
+- [Ideas](https://github.com/orgs/{{ORG_NAME}}/discussions/categories/ideas) -
   Share suggestions
-- [Show and Tell](https://github.com/orgs/ivviiviivvi/discussions/categories/show-and-tell)
+- [Show and Tell](https://github.com/orgs/{{ORG_NAME}}/discussions/categories/show-and-tell)
   \- Share your work
 
 **GitHub Issues**:
 
-- [Report Bugs](https://github.com/ivviiviivvi/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
-- [Request Features](https://github.com/ivviiviivvi/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
-- [Improve Docs](https://github.com/ivviiviivvi/.github/issues/new?template=documentation.yml)
+- [Report Bugs](https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+- [Request Features](https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
+- [Improve Docs](https://github.com/{{ORG_NAME}}/.github/issues/new?template=documentation.yml)
 
 ### Direct Support
 

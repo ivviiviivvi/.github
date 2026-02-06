@@ -354,7 +354,7 @@ ______________________________________________________________________
   ```json
   {
     "workflow": "issue-triage",
-    "repository": "ivviiviivvi/.github",
+    "repository": "{{ORG_NAME}}/.github",
     "failure_probability": 0.23,
     "risk_level": "HIGH",
     "confidence": 0.89,

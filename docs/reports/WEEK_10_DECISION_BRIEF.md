@@ -16,7 +16,7 @@ creates a strategic decision point for how to proceed with Week 10.
 **5 of 7 Week 10 capabilities already operational:**
 
 1. ✅ Auto-merge system (`check_auto_merge_eligibility.py`) - 28 hrs saved
-1. ✅ Intelligent routing (`intelligent_routing.py`) - 28 hrs saved
+1. ✅ Intelligent routing (`issue_assignment_router.py`) - 28 hrs saved
 1. ✅ Self-healing engine (`self_healing.py`) - 32 hrs saved
 1. ✅ Proactive maintenance (`proactive_maintenance.py`) - 24 hrs saved
 1. ✅ Enhanced analytics backend (`enhanced_analytics.py`) - 32 hrs saved

@@ -5,11 +5,11 @@ code in this repository.
 
 ## Repository Purpose
 
-Organization-level `.github` repository for ivviiviivvi providing:
+Organization-level `.github` repository for {{ORG_NAME}} providing:
 
 - Default community health files inherited by all org repositories
-- 143 GitHub Actions workflows
-- 26 production AI agents in `src/ai_framework/`
+- {{WORKFLOW_COUNT}} GitHub Actions workflows
+- {{AGENT_COUNT}} production AI agents in `src/ai_framework/`
 - GitHub Copilot customizations (instructions, prompts, chatmodes, collections)
 
 ## Essential Commands
@@ -73,20 +73,20 @@ npm run version:sync
 ```
 .github/
 ├── .config/               # ALL configs (devcontainer, vscode, jules, pre-commit)
-├── .github/workflows/     # 143 automation workflows
-│   └── reusable/          # 12 reusable workflow templates
+├── .github/workflows/     # {{WORKFLOW_COUNT}} automation workflows
+│   └── reusable/          # {{REUSABLE_TEMPLATE_COUNT}} reusable workflow templates
 ├── docs/                  # ALL documentation (304+ files)
 │   ├── archive/           # Historical reports
 │   ├── guides/            # How-to guides (includes extended CLAUDE.md)
 │   └── registry/          # Workflow registry
 ├── src/
 │   ├── ai_framework/      # AI agents, chatmodes, prompts
-│   │   ├── agents/        # 26 production AI agents (*.agent.md)
-│   │   ├── chatmodes/     # 95+ chatmodes (*.chatmode.md)
+│   │   ├── agents/        # {{AGENT_COUNT}} production AI agents (*.agent.md)
+│   │   ├── chatmodes/     # {{CHATMODE_COUNT}} chatmodes (*.chatmode.md)
 │   │   ├── collections/   # Collection definitions
 │   │   └── prompts/       # Prompt templates (*.prompt.md)
 │   └── automation/        # Python automation scripts
-│       ├── scripts/       # 57 Python automation scripts
+│       ├── scripts/       # {{SCRIPT_COUNT}} Python automation scripts
 │       │   └── utils/     # Utility scripts (update-action-pins.py, etc.)
 │       └── project_meta/  # Project metadata and context handoffs
 ├── tests/

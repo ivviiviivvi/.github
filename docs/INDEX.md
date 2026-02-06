@@ -1,6 +1,6 @@
 # Documentation Portal
 
-> **Complete documentation for the ivviiviivvi GitHub Template**
+> **Complete documentation for the {{ORG_NAME}} GitHub Template**
 
 **Last Updated:** 2026-01-30
 
@@ -125,16 +125,16 @@ organization:
 
 | Variable      | Description                      |
 | ------------- | -------------------------------- |
-| `ivviiviivvi` | GitHub organization slug         |
-| `ivviiviivvi` | Human-readable organization name |
+| `{{ORG_NAME}}` | GitHub organization slug         |
+| `{{ORG_NAME}}` | Human-readable organization name |
 
 ______________________________________________________________________
 
 ## Support
 
-- **[Discussions](https://github.com/ivviiviivvi/.github/discussions)** - Ask
+- **[Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)** - Ask
   questions
-- **[Issues](https://github.com/ivviiviivvi/.github/issues)** - Report bugs
+- **[Issues](https://github.com/{{ORG_NAME}}/.github/issues)** - Report bugs
 - **[Support Guide](governance/SUPPORT.md)** - Full support options
 
 ______________________________________________________________________

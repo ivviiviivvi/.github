@@ -1,6 +1,6 @@
 [
   {
-    "repository": "ivviiviivvi/intelligent-artifice-ark",
+    "repository": "{{ORG_NAME}}/intelligent-artifice-ark",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -11,7 +11,7 @@
     "timestamp": "2026-01-16T21:15:58.802960"
   },
   {
-    "repository": "ivviiviivvi/render-second-amendment",
+    "repository": "{{ORG_NAME}}/render-second-amendment",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -22,7 +22,7 @@
     "timestamp": "2026-01-16T21:15:59.260841"
   },
   {
-    "repository": "ivviiviivvi/a-mavs-olevm",
+    "repository": "{{ORG_NAME}}/a-mavs-olevm",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -33,7 +33,7 @@
     "timestamp": "2026-01-16T21:15:59.763327"
   },
   {
-    "repository": "ivviiviivvi/a-recursive-root",
+    "repository": "{{ORG_NAME}}/a-recursive-root",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",
@@ -44,7 +44,7 @@
     "timestamp": "2026-01-16T21:16:00.203268"
   },
   {
-    "repository": "ivviiviivvi/collective-persona-operations",
+    "repository": "{{ORG_NAME}}/collective-persona-operations",
     "success": true,
     "steps_completed": [
       "deploy_workflows (dry-run)",

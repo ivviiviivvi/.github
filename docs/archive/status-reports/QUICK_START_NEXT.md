@@ -79,7 +79,7 @@ ______________________________________________________________________
 
 **Actions:**
 
-1. Creates 7 projects in ivviiviivvi organization
+1. Creates 7 projects in {{ORG_NAME}} organization
 1. Adds 75 custom fields across all projects
 1. Generates URLs for each project
 1. Logs all operations to timestamped file
@@ -130,7 +130,7 @@ Configure 35+ automation rules across projects:
 Add existing issues/PRs to projects:
 
 ```bash
-gh project item-add PROJECT_NUMBER --owner ivviiviivvi --url "issue_url"
+gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url "issue_url"
 ```
 
 ______________________________________________________________________
@@ -219,7 +219,7 @@ export GH_TOKEN="ghp_your_token"
 ./verify-deployment-ready.sh
 
 # View projects after deployment
-open "https://github.com/orgs/ivviiviivvi/projects"
+open "https://github.com/orgs/{{ORG_NAME}}/projects"
 ```
 
 ______________________________________________________________________

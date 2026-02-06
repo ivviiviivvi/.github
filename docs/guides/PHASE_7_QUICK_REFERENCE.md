@@ -44,7 +44,7 @@ bash automation/scripts/phase7-day2-templates.sh
 
 **Manual steps:**
 
-1. Visit <https://github.com/ivviiviivvi/.github/issues/new/choose>
+1. Visit <https://github.com/{{ORG_NAME}}/.github/issues/new/choose>
 1. Test each of 17 templates
 1. Update validation report with results
 

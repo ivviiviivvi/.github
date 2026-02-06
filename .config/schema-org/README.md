@@ -160,9 +160,9 @@ For questions or issues:
 - 📖 See
   [SCHEMA_ORG_SEMVER_GUIDE.md](../../docs/guides/SCHEMA_ORG_SEMVER_GUIDE.md)
 - 💬
-  [Start a Discussion](https://github.com/orgs/ivviiviivvi/discussions)<!-- link:github.org_discussions -->
+  [Start a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Open an Issue](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Open an Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

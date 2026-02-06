@@ -133,9 +133,9 @@ python3 validate_labels.py --config ../config/batch-onboard-week11-phase1-pilot.
 
 1. Open repository label pages:
 
-   - [theoretical-specifications-first/labels](https://github.com/ivviiviivvi/theoretical-specifications-first/labels)
-   - [system-governance-framework/labels](https://github.com/ivviiviivvi/system-governance-framework/labels)
-   - [trade-perpetual-future/labels](https://github.com/ivviiviivvi/trade-perpetual-future/labels)
+   - [theoretical-specifications-first/labels](https://github.com/{{ORG_NAME}}/theoretical-specifications-first/labels)
+   - [system-governance-framework/labels](https://github.com/{{ORG_NAME}}/system-governance-framework/labels)
+   - [trade-perpetual-future/labels](https://github.com/{{ORG_NAME}}/trade-perpetual-future/labels)
 
 1. Create 12 labels per repository (see quick ref for specifications)
 

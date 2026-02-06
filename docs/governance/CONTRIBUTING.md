@@ -43,7 +43,7 @@ channels.
 
 ```bash
 # Clone the repository
-git clone https://github.com/ivviiviivvi/.github.git
+git clone https://github.com/{{ORG_NAME}}/.github.git
 cd .github
 
 # Install Python dependencies
@@ -82,7 +82,7 @@ pre-commit run ruff --all-files
 ### Reporting Bugs
 
 Use our
-[Bug Report template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml)
+[Bug Report template](https://github.com/{{ORG_NAME}}/.github/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml)
 and include:
 
 - Clear description of the issue
@@ -93,7 +93,7 @@ and include:
 ### Suggesting Features
 
 Use our
-[Feature Request template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/feature_request.yml)
+[Feature Request template](https://github.com/{{ORG_NAME}}/.github/blob/main/.github/ISSUE_TEMPLATE/feature_request.yml)
 and include:
 
 - Problem statement
@@ -103,13 +103,13 @@ and include:
 ### Improving Documentation
 
 Documentation improvements are always welcome! Use our
-[Documentation template](https://github.com/ivviiviivvi/.github/blob/main/.github/ISSUE_TEMPLATE/documentation.yml)
+[Documentation template](https://github.com/{{ORG_NAME}}/.github/blob/main/.github/ISSUE_TEMPLATE/documentation.yml)
 for doc issues.
 
 ## Repository Organization Guidelines
 
 Follow our
-[Repository Structure Standards](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_STRUCTURE.md)
+[Repository Structure Standards](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/reference/REPOSITORY_STRUCTURE.md)
 when adding files.
 
 ### File Placement
@@ -144,7 +144,7 @@ Run the validation script before submitting:
 ```
 
 See the
-[Quick Reference](https://github.com/ivviiviivvi/.github/blob/main/docs/reference/REPOSITORY_ORGANIZATION_QUICK_REF.md)
+[Quick Reference](https://github.com/{{ORG_NAME}}/.github/blob/main/docs/reference/REPOSITORY_ORGANIZATION_QUICK_REF.md)
 for more details.
 
 ## Code Style Guidelines
@@ -314,12 +314,12 @@ def test1():
 ## Getting Help
 
 - 💬
-  [Discussions](https://github.com/ivviiviivvi/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
   \- Ask questions
-- 📚 [Documentation](https://github.com/ivviiviivvi/.github/blob/main/README.md)
+- 📚 [Documentation](https://github.com/{{ORG_NAME}}/.github/blob/main/README.md)
   \- Read the docs
 - 🐛
-  [Issues](https://github.com/ivviiviivvi/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
   \- Report bugs
 
 ## Recognition
