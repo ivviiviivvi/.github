@@ -5,12 +5,7 @@
 **Organization-wide infrastructure for CI/CD, AI agents, and community health**
 
 <!-- BADGES:START -->
-
-[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=flat-square&logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
-
+[![CI](https://img.shields.io/github/actions/workflow/status/ivviiviivvi/.github/ci.yml?style=flat-square&label=CI)](https://github.com/ivviiviivvi/.github/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/ivviiviivvi/.github?style=flat-square)](LICENSE) [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#) [![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![Stars](https://img.shields.io/github/stars/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/stargazers) [![Issues](https://img.shields.io/github/issues/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/issues) [![Pull Requests](https://img.shields.io/github/issues-pr/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/pulls) [![Last Commit](https://img.shields.io/github/last-commit/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/commits) [![Contributors](https://img.shields.io/github/contributors/ivviiviivvi/.github?style=flat-square)](https://github.com/ivviiviivvi/.github/graphs/contributors) 
 <!-- BADGES:END -->
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ivviiviivvi/.github?devcontainer_path=.devcontainer/devcontainer.json)
