@@ -165,9 +165,10 @@ jobs:
           FILTERED_REPOS="$CHANGED_REPOS"
         fi
 
-        # Output matrix
+        # Output matrix (compact JSON for GITHUB_OUTPUT compatibility)
         REPO_COUNT=$(echo "$FILTERED_REPOS" | jq 'length')
-        echo "repos=$FILTERED_REPOS" >> $GITHUB_OUTPUT
+        COMPACT_REPOS=$(echo "$FILTERED_REPOS" | jq -c '.')
+        echo "repos=$COMPACT_REPOS" >> $GITHUB_OUTPUT
         echo "count=$REPO_COUNT" >> $GITHUB_OUTPUT
 
         echo "Discovered $REPO_COUNT repositories for walkthrough generation"
