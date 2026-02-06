@@ -763,9 +763,9 @@ ______________________________________________________________________
 ## Questions or Feedback?
 
 - **Questions**: Open a
-  [discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Issues**: Report in
-  [issue tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [issue tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Improvements**: Submit a [pull request](../governance/CONTRIBUTING.md)
 
 ______________________________________________________________________

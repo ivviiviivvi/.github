@@ -400,7 +400,7 @@ jobs:
 | `sync_labels.py`                      | ✅ Integrated        | -        |
 | `archive/deployment/DEPLOY_PHASE1.sh` | ✅ Integrated        | -        |
 | `secret_manager.py`                   | ✅ Complete          | -        |
-| `issue_assignment_router.py`              | ⚠️ Optional          | Low      |
+| `issue_assignment_router.py`          | ⚠️ Optional          | Low      |
 | Other shell scripts                   | ⚠️ Needs review      | Low      |
 | Test files                            | ✅ OK (dummy tokens) | Low      |
 

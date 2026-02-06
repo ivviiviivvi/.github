@@ -24,7 +24,7 @@ and development tasks.
 | [LaunchDarkly Flag Cleanup](../src/ai_framework/agents/launchdarkly-flag-cleanup.agent.md)                     | Clean up feature flags                 |
 | [Neon Migration Specialist](../src/ai_framework/agents/neon-migration-specialist.agent.md)                     | Migrate to Neon database               |
 | [Neon Optimization Analyzer](../src/ai_framework/agents/neon-optimization-analyzer.agent.md)                   | Optimize Neon database                 |
-| [Nervous Archaeologist](../src/ai_framework/agents/exhaustive-repo-scanner.agent.md)                             | Explore legacy code                    |
+| [Nervous Archaeologist](../src/ai_framework/agents/exhaustive-repo-scanner.agent.md)                           | Explore legacy code                    |
 | [Octopus Deploy Release Notes MCP](../src/ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)       | Generate Octopus release notes         |
 | [PagerDuty Incident Responder](../src/ai_framework/agents/pagerduty-incident-responder.agent.md)               | Respond to PagerDuty incidents         |
 | [Repository Setup](../src/ai_framework/agents/repository-setup.agent.md)                                       | Set up new repositories                |

@@ -106,7 +106,7 @@ ______________________________________________________________________
 
 ### Example: Board View for Project #8
 
-1. Go to: <https://github.com/orgs/{{ORG_NAME}}/projects/8>
+1. Go to: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>
 1. Click "+ New view" → Select "Board"
 1. Configure:
    - **Name:** Board
@@ -135,7 +135,7 @@ ______________________________________________________________________
 
 ### Example: "New items → Planned status" (Project #8)
 
-1. Go to: <https://github.com/orgs/{{ORG_NAME}}/projects/8/settings>
+1. Go to: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8/settings>
 1. Click "Workflows" in sidebar
 1. Click "+ New workflow"
 1. Configure:

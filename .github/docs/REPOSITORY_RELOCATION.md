@@ -11,9 +11,9 @@ organizational structure.
 Location:** `{{ORG_NAME}}/metasystem-master`
 
 **Reason for Relocation:** The `metasystem-master` repository is a development
-orchestrator that manages multiple projects across the {{ORG_NAME}} ecosystem. It
-does not belong in the `omni-dromenon-machina` organization, which is focused on
-the artistic performance platform (Omni-Dromenon Engine).
+orchestrator that manages multiple projects across the {{ORG_NAME}} ecosystem.
+It does not belong in the `omni-dromenon-machina` organization, which is focused
+on the artistic performance platform (Omni-Dromenon Engine).
 
 **Contents:**
 

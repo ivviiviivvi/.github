@@ -10,11 +10,11 @@ ______________________________________________________________________
 
 ### Overview
 
-| Account         | Type         | Total Repos | Original   | Forks      | Total Size   | Primary Focus              |
-| --------------- | ------------ | ----------- | ---------- | ---------- | ------------ | -------------------------- |
+| Account          | Type         | Total Repos | Original   | Forks      | Total Size   | Primary Focus              |
+| ---------------- | ------------ | ----------- | ---------- | ---------- | ------------ | -------------------------- |
 | **{{ORG_NAME}}** | Organization | 47          | 27 (57.4%) | 20 (42.6%) | ~5.2 GB      | Production Infrastructure  |
-| **4444J99**     | Personal     | 56          | 8 (14.3%)  | 48 (85.7%) | ~8.7 GB      | Learning & Experimentation |
-| **Combined**    | -            | **103**     | **35**     | **68**     | **~13.9 GB** | Ecosystem Development      |
+| **4444J99**      | Personal     | 56          | 8 (14.3%)  | 48 (85.7%) | ~8.7 GB      | Learning & Experimentation |
+| **Combined**     | -            | **103**     | **35**     | **68**     | **~13.9 GB** | Ecosystem Development      |
 
 ### Key Differences
 

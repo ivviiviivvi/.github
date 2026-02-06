@@ -37,7 +37,7 @@ that prevents collapse when energy increases. Each organ has defined:
 
 | Entity                    | Type         | Repos | Size    | Current Status                  |
 | ------------------------- | ------------ | ----- | ------- | ------------------------------- |
-| **{{ORG_NAME}}**           | Organization | 47    | 5.2 GB  | Active - Mixed purpose          |
+| **{{ORG_NAME}}**          | Organization | 47    | 5.2 GB  | Active - Mixed purpose          |
 | **omni-dromenon-machina** | Organization | 0     | 0 GB    | Undefined - Ready for migration |
 | **labores-profani-crux**  | Organization | 0     | 0 GB    | Undefined - Ready for migration |
 | **4444J99**               | Personal     | 56    | 8.7 GB  | Active - Incubation zone        |
@@ -737,7 +737,7 @@ ______________________________________________________________________
 
 | Organ                               | Repos           | Size     | Character              |
 | ----------------------------------- | --------------- | -------- | ---------------------- |
-| **{{ORG_NAME}}** (Theory)            | 16              | ~9.7 GB  | Pure conceptual work   |
+| **{{ORG_NAME}}** (Theory)           | 16              | ~9.7 GB  | Pure conceptual work   |
 | **omni-dromenon-machina** (Art)     | 6               | ~346 MB  | Temporal, experiential |
 | **labores-profani-crux** (Commerce) | 17              | ~1.4 GB  | Revenue-generating     |
 | **4444J99** (Personal)              | 54 (-2 deleted) | ~8.7 GB  | Incubation, learning   |

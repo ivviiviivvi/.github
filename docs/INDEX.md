@@ -123,8 +123,8 @@ ______________________________________________________________________
 This documentation uses template variables that should be replaced for your
 organization:
 
-| Variable      | Description                      |
-| ------------- | -------------------------------- |
+| Variable       | Description                      |
+| -------------- | -------------------------------- |
 | `{{ORG_NAME}}` | GitHub organization slug         |
 | `{{ORG_NAME}}` | Human-readable organization name |
 
@@ -132,9 +132,10 @@ ______________________________________________________________________
 
 ## Support
 
-- **[Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)** - Ask
-  questions
-- **[Issues](https://github.com/{{ORG_NAME}}/.github/issues)** - Report bugs
+- **[Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)**
+  \- Ask questions
+- **[Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)** - Report
+  bugs
 - **[Support Guide](governance/SUPPORT.md)** - Full support options
 
 ______________________________________________________________________

@@ -519,11 +519,11 @@ ______________________________________________________________________
 For questions about this retrospective or the cleanup project:
 
 - **GitHub Discussions:**
-  [Ask Questions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Ask Questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Issues:**
-  [Report Problems](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report Problems](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Documentation:**
-  [Browse Docs](https://github.com/{{ORG_NAME}}/.github/tree/main/docs)
+  [Browse Docs](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/docs)
 
 ### C. Acknowledgments
 

@@ -552,8 +552,9 @@ git add . && git commit -m "Update" && git push
 
 ### Getting Help
 
-- 💬 [GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)
-- 🐛 [Report Issues](https://github.com/{{ORG_NAME}}/.github/issues)
+- 💬
+  [GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)
+- 🐛 [Report Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)
 - 📧 Contact organization maintainers
 - 📖 Review documentation guides
 

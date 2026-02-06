@@ -23,8 +23,8 @@ ______________________________________________________________________
 
 ### Purpose
 
-This is the **organization-level .github repository** for {{ORG_NAME}}. It serves
-as the central hub for:
+This is the **organization-level .github repository** for {{ORG_NAME}}. It
+serves as the central hub for:
 
 - **Default community health files** that apply to all repositories in the
   organization

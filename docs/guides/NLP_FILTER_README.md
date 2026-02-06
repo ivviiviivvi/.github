@@ -59,13 +59,13 @@ In Copilot Chat:
 
 ## Components
 
-| Component                                                              | Purpose                   | When to Use                              |
-| ---------------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
-| **[Filter Script](../../src/automation/scripts/natural_language_prompt_filter.py)** | CLI transformation engine | Programmatic use, scripting, automation  |
-| **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)**      | Interactive AI persona    | Conversational transformation, iteration |
-| **[Prompt Template](README.prompts.md)**                               | Quick transformation      | Fast, one-off transformations            |
-| **[Documentation](NLP_FILTER_SYSTEM.md)**                              | Complete guide            | Learning, reference, integration         |
-| **[Examples](mouthpiece-examples.md)**                                 | Real transformations      | Inspiration, patterns, learning          |
+| Component                                                                                 | Purpose                   | When to Use                              |
+| ----------------------------------------------------------------------------------------- | ------------------------- | ---------------------------------------- |
+| **[Filter Script](../../src/automation/scripts/natural_language_prompt_filter.py)**       | CLI transformation engine | Programmatic use, scripting, automation  |
+| **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)** | Interactive AI persona    | Conversational transformation, iteration |
+| **[Prompt Template](README.prompts.md)**                                                  | Quick transformation      | Fast, one-off transformations            |
+| **[Documentation](NLP_FILTER_SYSTEM.md)**                                                 | Complete guide            | Learning, reference, integration         |
+| **[Examples](mouthpiece-examples.md)**                                                    | Real transformations      | Inspiration, patterns, learning          |
 
 ## Features
 
@@ -294,8 +294,8 @@ systems with your ideas while staying rooted in your authentic expression.
 
 - **[Complete Guide](NLP_FILTER_SYSTEM.md)** - Full system documentation
 - **[Examples](mouthpiece-examples.md)** - Real-world transformations
-- **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)** -
-  Interactive persona
+- **[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)**
+  \- Interactive persona
 - **[Prompt Template](README.prompts.md)** - Quick reference
 
 ## Best Practices
@@ -401,8 +401,8 @@ ______________________________________________________________________
 
 **[Documentation](NLP_FILTER_SYSTEM.md)** •
 **[Examples](mouthpiece-examples.md)** •
-**[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)** •
-**[Prompt](README.prompts.md)**
+**[Chat Mode](../ai_framework/chatmodes/natural-language-prompt-translator.chatmode.md)**
+• **[Prompt](README.prompts.md)**
 
 _Built with ❤️ for humans who want to stay human_
 

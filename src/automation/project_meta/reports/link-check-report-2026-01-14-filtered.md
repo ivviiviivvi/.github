@@ -172,7 +172,7 @@
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
   https://github.com/{{ORG_NAME}}/.github/issues` (HTTPError 404)
 - /workspace/docs/AUTONOMOUS_ECOSYSTEM_GUIDE.md:
-  https://{{ORG_NAME}}.github.io/.github` (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/.github\` (HTTPError 404)
 - /workspace/docs/BRANCH_PROTECTION.md:
   https://api.github.com/repos/OWNER/REPO/branches/main/protection (HTTPError
   401\)
@@ -369,8 +369,8 @@
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md:
-  https://{{ORG_NAME}}.github.io/.github/_data/api/walkthroughs.json` (HTTPError
-  404\)
+  https://{{ORG_NAME}}.github.io/.github/\_data/api/walkthroughs.json\`
+  (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.{{ORG_NAME}}.dev
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/ISSUE_TAXONOMY.md: PROJECT_PLANNING.md (missing:
@@ -432,12 +432,15 @@
 - /workspace/docs/MCP_SERVER_SETUP.md:
   ../prompts/typescript-mcp-server-generator.prompt.md (missing:
   /workspace/docs/../prompts/typescript-mcp-server-generator.prompt.md)
-- /workspace/docs/NLP_FILTER_README.md: chatmodes/natural-language-prompt-translator.chatmode.md
-  (missing: /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
-- /workspace/docs/NLP_FILTER_README.md: chatmodes/natural-language-prompt-translator.chatmode.md
-  (missing: /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
-- /workspace/docs/NLP_FILTER_README.md: chatmodes/natural-language-prompt-translator.chatmode.md
-  (missing: /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
 - /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
   /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
 - /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
@@ -460,7 +463,8 @@
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
 - /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/NLP_FILTER_README.md: scripts/natural_language_prompt_filter.py (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  scripts/natural_language_prompt_filter.py (missing:
   /workspace/docs/scripts/natural_language_prompt_filter.py)
 - /workspace/docs/NLP_FILTER_SYSTEM.md: ../CONTRIBUTING.md (missing:
   /workspace/docs/../CONTRIBUTING.md)
@@ -687,8 +691,9 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/structured-workflow-executor-codex.chatmode.md (missing:
   /workspace/docs/../chatmodes/structured-workflow-executor-codex.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/structured-workflow-executor.chatmode.md
-  (missing: /workspace/docs/../chatmodes/structured-workflow-executor.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/structured-workflow-executor.chatmode.md (missing:
+  /workspace/docs/../chatmodes/structured-workflow-executor.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/clojure-interactive-programming.chatmode.md (missing:
   /workspace/docs/../chatmodes/clojure-interactive-programming.chatmode.md)
@@ -727,13 +732,15 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/expert-react-frontend-engineer.chatmode.md (missing:
   /workspace/docs/../chatmodes/expert-react-frontend-engineer.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/sardonic-code-review.chatmode.md
-  (missing: /workspace/docs/../chatmodes/sardonic-code-review.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/sardonic-code-review.chatmode.md (missing:
+  /workspace/docs/../chatmodes/sardonic-code-review.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/go-mcp-expert.chatmode.md
   (missing: /workspace/docs/../chatmodes/go-mcp-expert.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/gpt-5-beast-mode.chatmode.md
   (missing: /workspace/docs/../chatmodes/gpt-5-beast-mode.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/high-level-architectural-review.chatmode.md (missing:
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/high-level-architectural-review.chatmode.md (missing:
   /workspace/docs/../chatmodes/high-level-architectural-review.chatmode.md)
 - /workspace/docs/README.chatmodes.md: ../chatmodes/codebase-cleanup.chatmode.md
   (missing: /workspace/docs/../chatmodes/codebase-cleanup.chatmode.md)
@@ -787,7 +794,8 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/power-platform-mcp-integration-expert.chatmode.md (missing:
   /workspace/docs/../chatmodes/power-platform-mcp-integration-expert.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/product-requirements-document.chatmode.md (missing:
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/product-requirements-document.chatmode.md (missing:
   /workspace/docs/../chatmodes/product-requirements-document.chatmode.md)
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/principal-software-engineer.chatmode.md (missing:
@@ -858,8 +866,9 @@
 - /workspace/docs/README.chatmodes.md:
   ../chatmodes/clean-code-refactorer.chatmode.md (missing:
   /workspace/docs/../chatmodes/clean-code-refactorer.chatmode.md)
-- /workspace/docs/README.chatmodes.md: ../chatmodes/security-code-reviewer.chatmode.md
-  (missing: /workspace/docs/../chatmodes/security-code-reviewer.chatmode.md)
+- /workspace/docs/README.chatmodes.md:
+  ../chatmodes/security-code-reviewer.chatmode.md (missing:
+  /workspace/docs/../chatmodes/security-code-reviewer.chatmode.md)
 - /workspace/docs/README.collections.md: ../collections/awesome-copilot.md
   (missing: /workspace/docs/../collections/awesome-copilot.md)
 - /workspace/docs/README.collections.md:
@@ -1860,7 +1869,7 @@
 - /workspace/docs/guides/WORKFLOW_DIAGRAM.md: https://{{ORG_NAME}}.github.io
   (HTTPError 404)
 - /workspace/docs/guides/WORKFLOW_DIAGRAM.md:
-  https://{{ORG_NAME}}.github.io/[repo (HTTPError 404)
+  https://{{ORG_NAME}}.github.io/\[repo (HTTPError 404)
 - /workspace/docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md: ./CODEOWNERS (missing:
   /workspace/docs/guides/CODEOWNERS)
 - /workspace/docs/guides/WORKFLOW_OPTIMIZATION_INDEX.md:

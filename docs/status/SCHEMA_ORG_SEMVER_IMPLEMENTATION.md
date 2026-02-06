@@ -410,9 +410,9 @@ ______________________________________________________________________
 
 - 📖 [CONTRIBUTING.md](../governance/CONTRIBUTING.md)
 - 💬
-  [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

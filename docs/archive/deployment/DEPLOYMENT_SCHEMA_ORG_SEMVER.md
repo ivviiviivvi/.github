@@ -267,9 +267,9 @@ ______________________________________________________________________
 
 - 📖 [CONTRIBUTING.md](CONTRIBUTING.md)
 - 💬
-  [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 
@@ -352,9 +352,9 @@ Questions or issues?
 - 📖 Check the [Complete Guide](docs/SCHEMA_ORG_SEMVER_GUIDE.md)
 - 🔍 Review [Quick Reference](QUICK_REFERENCE_SCHEMA_SEMVER.md)
 - 💬
-  [Start a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Start a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 - 🐛
-  [Open an Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Open an Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 
 ______________________________________________________________________
 

@@ -188,7 +188,8 @@ ______________________________________________________________________
 
 ## Support
 
-- **[Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)** - Ask
-  questions
-- **[Issues](https://github.com/{{ORG_NAME}}/.github/issues)** - Report bugs
+- **[Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)**
+  \- Ask questions
+- **[Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)** - Report
+  bugs
 - **[Support Guide](../governance/SUPPORT.md)** - Full support options

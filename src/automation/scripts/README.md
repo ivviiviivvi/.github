@@ -727,11 +727,11 @@ pip install pytest mypy flake8 bandit black
 
 ## 🎯 AI GitHub Management Protocol Mapping
 
-| Module                             | Script                                      | Workflow                                     |
-| ---------------------------------- | ------------------------------------------- | -------------------------------------------- |
+| Module                             | Script                                       | Workflow                                     |
+| ---------------------------------- | -------------------------------------------- | -------------------------------------------- |
 | **AI-GH-06**: Ecosystem Monitoring | `web_crawler.py`, `org_health_visualizer.py` | `org-health-crawler.yml`                     |
-| **AI-GH-07**: System Health        | `web_crawler.py`                            | `org-health-crawler.yml`, `repo-metrics.yml` |
-| **AI-GH-08**: Risk Analysis        | `web_crawler.py`                            | `org-health-crawler.yml`                     |
+| **AI-GH-07**: System Health        | `web_crawler.py`                             | `org-health-crawler.yml`, `repo-metrics.yml` |
+| **AI-GH-08**: Risk Analysis        | `web_crawler.py`                             | `org-health-crawler.yml`                     |
 
 ## 📈 Health Scoring
 

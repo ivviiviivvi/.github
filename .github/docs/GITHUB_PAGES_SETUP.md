@@ -468,7 +468,7 @@ GitHub Pages automatically caches static assets with proper headers.
 ## Getting Help
 
 - **Issues**:
-  [Create an issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Create an issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions**:
-  [Join the discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Join the discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Documentation**: [Main README](../../README.md)

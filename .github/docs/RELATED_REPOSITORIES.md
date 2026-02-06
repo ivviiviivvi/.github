@@ -9,9 +9,9 @@ relationships to this `.github` organization repository.
 
 These repositories have been consolidated into this `.github` repo:
 
-| Repository                  | Source      | Status     | Notes                                    |
-| --------------------------- | ----------- | ---------- | ---------------------------------------- |
-| ospo-reusable-workflows     | 4444J99     | Integrated | Reusable workflow patterns extracted     |
+| Repository                  | Source       | Status     | Notes                                    |
+| --------------------------- | ------------ | ---------- | ---------------------------------------- |
+| ospo-reusable-workflows     | 4444J99      | Integrated | Reusable workflow patterns extracted     |
 | system-governance-framework | {{ORG_NAME}} | Integrated | Governance templates and AI handoff docs |
 | log-commit-preserve         | {{ORG_NAME}} | Integrated | Commitizen configuration and workflows   |
 
@@ -52,8 +52,8 @@ These serve distinct purposes and should remain independent:
 
 ### Pending Relocation
 
-| Repository        | Current Location      | Target      | Reason                                     |
-| ----------------- | --------------------- | ----------- | ------------------------------------------ |
+| Repository        | Current Location      | Target       | Reason                                     |
+| ----------------- | --------------------- | ------------ | ------------------------------------------ |
 | metasystem-master | omni-dromenon-machina | {{ORG_NAME}} | Development orchestrator, not art platform |
 
 See [REPOSITORY_RELOCATION.md](./REPOSITORY_RELOCATION.md) for transfer

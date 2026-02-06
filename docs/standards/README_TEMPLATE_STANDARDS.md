@@ -377,7 +377,7 @@ Get up and running in 5 minutes:
    - See [Examples](examples/) for common customizations
 
 **Need help?** Check our [Documentation](docs/) or
-[open an issue](https://github.com/{{ORG_NAME}}/python-automation-toolkit/issues).
+[open an issue](https://github.com/%7B%7BORG_NAME%7D%7D/python-automation-toolkit/issues).
 
 ````
 
@@ -548,7 +548,7 @@ See
 
 ### Real-World Examples
 
-- [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
+- [{{ORG_NAME}}/.github](https://github.com/%7B%7BORG_NAME%7D%7D/.github)<!-- link:github.dotgithub -->
   \- Organization policies (comprehensive)
 - [Example: python-toolkit](link) - Python library (standard)
 - [Example: microservice](link) - Service/application (service-focused)
@@ -604,4 +604,4 @@ ______________________________________________________________________
 **Maintained By**:
 Organization Governance Team\
 **Questions?**
-[Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+[Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->

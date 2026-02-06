@@ -127,7 +127,7 @@ ______________________________________________________________________
 
 | Organization                    | Before (Jan 18) | After (Jan 23) | Change  |
 | ------------------------------- | --------------- | -------------- | ------- |
-| {{ORG_NAME}} (Theory)            | 47 repos        | 47 repos       | 0       |
+| {{ORG_NAME}} (Theory)           | 47 repos        | 47 repos       | 0       |
 | omni-dromenon-machina (Art)     | 14 repos        | 14 repos       | 0       |
 | labores-profani-crux (Commerce) | 0 repos         | 0 repos        | 0       |
 | 4444J99 (Personal)              | 56 repos        | 66 repos       | +10     |
@@ -137,7 +137,7 @@ ______________________________________________________________________
 
 | Organization                    | Current | After Migrations | Change        |
 | ------------------------------- | ------- | ---------------- | ------------- |
-| {{ORG_NAME}} (Theory)            | 47      | 21-23            | -24 to -26    |
+| {{ORG_NAME}} (Theory)           | 47      | 21-23            | -24 to -26    |
 | omni-dromenon-machina (Art)     | 14      | 20-21            | +6 to +7      |
 | labores-profani-crux (Commerce) | 0       | 17-19            | +17 to +19    |
 | 4444J99 (Personal)              | 66      | 58-61            | -5 to -8      |

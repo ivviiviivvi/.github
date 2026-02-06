@@ -626,7 +626,7 @@ ______________________________________________________________________
 
 - See
   [Troubleshooting Guide](../guides/UNIFIED_NOTIFICATION_SYSTEM.md#troubleshooting)
-- Open issue: <https://github.com/{{ORG_NAME}}/.github/issues>
+- Open issue: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues>
 - Contact: <automation-team@example.com>
 
 ______________________________________________________________________

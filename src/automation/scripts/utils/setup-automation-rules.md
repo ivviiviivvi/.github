@@ -15,19 +15,19 @@ ______________________________________________________________________
 ## Quick Access Links
 
 - **Project #8**:
-  [AI Framework Development](https://github.com/orgs/{{ORG_NAME}}/projects/8)
+  [AI Framework Development](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8)
 - **Project #9**:
-  [Documentation & Knowledge](https://github.com/orgs/{{ORG_NAME}}/projects/9)
+  [Documentation & Knowledge](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/9)
 - **Project #10**:
-  [Workflow Automation](https://github.com/orgs/{{ORG_NAME}}/projects/10)
+  [Workflow Automation](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/10)
 - **Project #11**:
-  [Security & Compliance](https://github.com/orgs/{{ORG_NAME}}/projects/11)
+  [Security & Compliance](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/11)
 - **Project #12**:
-  [Infrastructure & DevOps](https://github.com/orgs/{{ORG_NAME}}/projects/12)
+  [Infrastructure & DevOps](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/12)
 - **Project #13**:
-  [Community & Support](https://github.com/orgs/{{ORG_NAME}}/projects/13)
+  [Community & Support](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/13)
 - **Project #14**:
-  [Product Roadmap](https://github.com/orgs/{{ORG_NAME}}/projects/14)
+  [Product Roadmap](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/14)
 
 ______________________________________________________________________
 

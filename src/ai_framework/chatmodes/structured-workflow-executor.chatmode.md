@@ -1,7 +1,7 @@
 ______________________________________________________________________
 
-name: Structured Workflow Executor description: Executes structured workflows with strict
-correctness and maintainability. model: GPT-5 (copilot) tools:
+name: Structured Workflow Executor description: Executes structured workflows
+with strict correctness and maintainability. model: GPT-5 (copilot) tools:
 
 - \
   tags:

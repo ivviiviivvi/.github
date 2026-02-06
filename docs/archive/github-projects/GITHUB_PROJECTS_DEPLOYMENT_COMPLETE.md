@@ -217,7 +217,8 @@ ______________________________________________________________________
 
 - **All Projects:** https://github.com/orgs/{{ORG_NAME}}/projects
 - **Project #8 (AI Framework):** https://github.com/orgs/{{ORG_NAME}}/projects/8
-- **Project #9 (Documentation):** https://github.com/orgs/{{ORG_NAME}}/projects/9
+- **Project #9 (Documentation):**
+  https://github.com/orgs/{{ORG_NAME}}/projects/9
 - **Project #10 (Workflow):** https://github.com/orgs/{{ORG_NAME}}/projects/10
 - **Project #11 (Security):** https://github.com/orgs/{{ORG_NAME}}/projects/11
 - **Project #12 (Infrastructure):**

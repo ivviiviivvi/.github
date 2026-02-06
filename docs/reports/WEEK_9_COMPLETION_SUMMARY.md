@@ -624,9 +624,9 @@ ______________________________________________________________________
 
 ### Support
 
-- Issues: <https://github.com/{{ORG_NAME}}/.github/issues>
-- Discussions: <https://github.com/orgs/{{ORG_NAME}}/discussions>
-- Wiki: <https://github.com/{{ORG_NAME}}/.github/wiki>
+- Issues: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues>
+- Discussions: <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions>
+- Wiki: <https://github.com/%7B%7BORG_NAME%7D%7D/.github/wiki>
 
 ______________________________________________________________________
 

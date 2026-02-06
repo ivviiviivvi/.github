@@ -91,21 +91,23 @@
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://{{ORG_NAME}}.github.io/.github/
   (HTTPError 404)
 - /workspace/docs/GITHUB_PAGES_SETUP.md:
-  https://{{ORG_NAME}}.github.io/.github/_data/api/walkthroughs.json (HTTPError
+  https://{{ORG_NAME}}.github.io/.github/\_data/api/walkthroughs.json (HTTPError
   404\)
 - /workspace/docs/GITHUB_PAGES_SETUP.md: https://walkthroughs.{{ORG_NAME}}.dev
   (URLError: \<urlopen error \[Errno -2\] Name or service not known>)
 - /workspace/docs/ISSUE_TAXONOMY.md: PROJECT_PLANNING.md (missing:
   /workspace/docs/PROJECT_PLANNING.md)
-- /workspace/docs/NLP_FILTER_README.md: chatmodes/natural-language-prompt-translator.chatmode.md
-  (missing: /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
+- /workspace/docs/NLP_FILTER_README.md:
+  chatmodes/natural-language-prompt-translator.chatmode.md (missing:
+  /workspace/docs/chatmodes/natural-language-prompt-translator.chatmode.md)
 - /workspace/docs/NLP_FILTER_README.md: docs/NLP_FILTER_SYSTEM.md (missing:
   /workspace/docs/docs/NLP_FILTER_SYSTEM.md)
 - /workspace/docs/NLP_FILTER_README.md: docs/mouthpiece-examples.md (missing:
   /workspace/docs/docs/mouthpiece-examples.md)
 - /workspace/docs/NLP_FILTER_README.md: prompts/mouthpiece-transform.prompt.md
   (missing: /workspace/docs/prompts/mouthpiece-transform.prompt.md)
-- /workspace/docs/NLP_FILTER_README.md: scripts/natural_language_prompt_filter.py (missing:
+- /workspace/docs/NLP_FILTER_README.md:
+  scripts/natural_language_prompt_filter.py (missing:
   /workspace/docs/scripts/natural_language_prompt_filter.py)
 - /workspace/docs/NLP_FILTER_SYSTEM.md: ../CONTRIBUTING.md (missing:
   /workspace/docs/../CONTRIBUTING.md)

@@ -163,6 +163,6 @@ See Template Development Guide
 - 📖
   [Main Protocols](../../../docs/architecture/WORKSPACE_CONTAINERIZATION_PROTOCOLS.md)
 - 💬
-  [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - 🐛
-  [Issues](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issues](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->

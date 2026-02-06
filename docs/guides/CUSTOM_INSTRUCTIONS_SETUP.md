@@ -581,9 +581,9 @@ ______________________________________________________________________
 
 ### Community
 
-- [GitHub Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+- [GitHub Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
   \- Share instruction ideas
-- [Issue Tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+- [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
   \- Report issues or request features
 - [Contributing Guide](../governance/CONTRIBUTING.md) - Contribute new
   instructions

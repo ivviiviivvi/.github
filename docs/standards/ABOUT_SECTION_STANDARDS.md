@@ -324,10 +324,10 @@ The README.md should reflect About section information:
 
 See these repositories for reference:
 
-- [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
+- [{{ORG_NAME}}/.github](https://github.com/%7B%7BORG_NAME%7D%7D/.github)<!-- link:github.dotgithub -->
   \- Organization policies
-- [Example compliance-complete repo](https://github.com/{{ORG_NAME}}/) - Full
-  example
+- [Example compliance-complete repo](https://github.com/%7B%7BORG_NAME%7D%7D/) -
+  Full example
 
 ______________________________________________________________________
 
@@ -336,4 +336,4 @@ ______________________________________________________________________
 **Maintained By**:
 Organization Governance Team\
 **Questions?**
-[Open a Discussion](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+[Open a Discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->

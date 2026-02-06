@@ -227,6 +227,6 @@ ______________________________________________________________________
 ## How to Post
 
 1. Navigate to:
-   <https://github.com/{{ORG_NAME}}/.github/discussions/new?category=announcements>
+   <https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions/new?category=announcements>
 1. Copy the title and body above
 1. Click "Start discussion"

@@ -22,15 +22,15 @@ ______________________________________________________________________
 
 ### Projects Live at GitHub
 
-| #   | Project                      | URL                                               |
-| --- | ---------------------------- | ------------------------------------------------- |
-| 8   | 🤖 AI Framework Development  | <https://github.com/orgs/{{ORG_NAME}}/projects/8>  |
-| 9   | 📚 Documentation & Knowledge | <https://github.com/orgs/{{ORG_NAME}}/projects/9>  |
-| 10  | 🔄 Workflow Automation       | <https://github.com/orgs/{{ORG_NAME}}/projects/10> |
-| 11  | 🔒 Security & Compliance     | <https://github.com/orgs/{{ORG_NAME}}/projects/11> |
-| 12  | 🏗️ Infrastructure & DevOps   | <https://github.com/orgs/{{ORG_NAME}}/projects/12> |
-| 13  | 👥 Community & Support       | <https://github.com/orgs/{{ORG_NAME}}/projects/13> |
-| 14  | 🎯 Product Roadmap           | <https://github.com/orgs/{{ORG_NAME}}/projects/14> |
+| #   | Project                      | URL                                                        |
+| --- | ---------------------------- | ---------------------------------------------------------- |
+| 8   | 🤖 AI Framework Development  | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>  |
+| 9   | 📚 Documentation & Knowledge | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/9>  |
+| 10  | 🔄 Workflow Automation       | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/10> |
+| 11  | 🔒 Security & Compliance     | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/11> |
+| 12  | 🏗️ Infrastructure & DevOps   | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/12> |
+| 13  | 👥 Community & Support       | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/13> |
+| 14  | 🎯 Product Roadmap           | <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/14> |
 
 ### Tools Created
 
@@ -64,7 +64,8 @@ projects\
 
 **How to Configure:**
 
-1. Go to project page (e.g., <https://github.com/orgs/{{ORG_NAME}}/projects/8>)
+1. Go to project page (e.g.,
+   <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8>)
 1. Click "+ New view" button
 1. Select layout type (Board/Table/Roadmap)
 1. Configure grouping, sorting, filters
@@ -144,7 +145,7 @@ projects\
 **How to Configure:**
 
 1. Go to project settings (e.g.,
-   <https://github.com/orgs/{{ORG_NAME}}/projects/8/settings>)
+   <https://github.com/orgs/%7B%7BORG_NAME%7D%7D/projects/8/settings>)
 1. Click "Workflows" in left sidebar
 1. Enable built-in workflows or create custom
 1. Configure triggers and actions

@@ -24,21 +24,21 @@ Before asking for help, please:
 
 ### When to Use What
 
-| Situation                     | Where to Go                                                                                              |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Questions, ideas, discussions | [GitHub Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions --> |
-| Bug reports                   | [Issue Tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->                |
-| Feature requests              | [Issue Tracker](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->                |
-| Security vulnerabilities      | [Security Policy](SECURITY.md)                                                                           |
-| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                                                    |
-| Code of Conduct violations    | conduct@{{ORG_NAME}}.com                                                                                  |
+| Situation                     | Where to Go                                                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Questions, ideas, discussions | [GitHub Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions --> |
+| Bug reports                   | [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->                |
+| Feature requests              | [Issue Tracker](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->                |
+| Security vulnerabilities      | [Security Policy](SECURITY.md)                                                                                    |
+| Contributing                  | [Contributing Guide](CONTRIBUTING.md)                                                                             |
+| Code of Conduct violations    | conduct@{{ORG_NAME}}.com                                                                                          |
 
 ## GitHub Discussions
 
 **Best for**: Questions, ideas, general help, and community discussion
 
 👉
-**[Start a Discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->**
+**[Start a Discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->**
 
 ### Discussion Categories
 
@@ -168,10 +168,10 @@ welcome:
 A:
 
 1. Look for issues labeled
-   [`good first issue`](https://github.com/{{ORG_NAME}}/.github/labels/good%20first%20issue)
+   [`good first issue`](https://github.com/%7B%7BORG_NAME%7D%7D/.github/labels/good%20first%20issue)
 1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
 1. Ask questions in
-   [Discussions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+   [Discussions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 1. Join our upcoming community calls (announced in Discussions)
 
 #### Security
@@ -303,8 +303,8 @@ For enterprise support, training, or consulting:
 
 ### Related Projects
 
-- [Organization Hub Repository](https://github.com/{{ORG_NAME}}/.github)
-- [Workflow Templates](https://github.com/{{ORG_NAME}}/.github/tree/main/workflow-templates)
+- [Organization Hub Repository](https://github.com/%7B%7BORG_NAME%7D%7D/.github)
+- [Workflow Templates](https://github.com/%7B%7BORG_NAME%7D%7D/.github/tree/main/workflow-templates)
 
 ______________________________________________________________________
 

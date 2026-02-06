@@ -379,9 +379,9 @@ ______________________________________________________________________
 - Review
   [Troubleshooting](../../src/automation/scripts/utils/README_PROJECTS.md#troubleshooting)
 - Open an
-  [Issue](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - Ask in
-  [Discussions](https://github.com/orgs/{{ORG_NAME}}/discussions)<!-- link:github.org_discussions -->
+  [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)<!-- link:github.org_discussions -->
 
 **Issues?**
 

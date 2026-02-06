@@ -270,7 +270,7 @@ available._
 - **Scheduled Automation**:
   [Automated Walkthrough Setup](../workflows/scheduled-walkthrough-generator.yml)
 - **Organization Repository**:
-  [{{ORG_NAME}}/.github](https://github.com/{{ORG_NAME}}/.github)<!-- link:github.dotgithub -->
+  [{{ORG_NAME}}/.github](https://github.com/%7B%7BORG_NAME%7D%7D/.github)<!-- link:github.dotgithub -->
 
 ### Support Channels
 
@@ -321,10 +321,10 @@ available._
 ______________________________________________________________________
 
 **Questions?**
-[Open a discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->.
+[Open a discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->.
 
 **Found a bug?**
-[Report it here](https://github.com/{{ORG_NAME}}/.github/issues/new).
+[Report it here](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new).
 
 ______________________________________________________________________
 

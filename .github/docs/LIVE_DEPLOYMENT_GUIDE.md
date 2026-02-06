@@ -724,7 +724,7 @@ USER node
 ## Getting Help
 
 - **Issues:**
-  [Report a problem](https://github.com/{{ORG_NAME}}/.github/issues)<!-- link:github.issues -->
+  [Report a problem](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues)<!-- link:github.issues -->
 - **Discussions:**
-  [Ask questions](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [Ask questions](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Documentation:** [Main README](../../README.md)

@@ -358,7 +358,8 @@ ______________________________________________________________________
 1. **Set up 35+ automation rules**
    - Guide: `docs/GITHUB_PROJECTS_IMPLEMENTATION.md` automation sections
 1. **Add existing issues/PRs** to projects
-   - Command: `gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url URL`
+   - Command:
+     `gh project item-add PROJECT_NUMBER --owner {{ORG_NAME}} --url URL`
 
 ### Rollout (Ongoing)
 

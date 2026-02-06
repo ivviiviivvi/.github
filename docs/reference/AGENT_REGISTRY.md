@@ -44,7 +44,7 @@ specialized agents that extend GitHub Copilot's capabilities.
 | [LaunchDarkly Flag Cleanup](#launchdarkly-flag-cleanup)                       | Development & Operations     | Automated feature flag cleanup                                                                     | launchdarkly  | [agents/launchdarkly-flag-cleanup.agent.md](../ai_framework/agents/launchdarkly-flag-cleanup.agent.md)                     |
 | [Neon Migration Specialist](#neon-migration-specialist)                       | Infrastructure & DevOps      | Zero-downtime Postgres migrations                                                                  | None          | [agents/neon-migration-specialist.agent.md](../ai_framework/agents/neon-migration-specialist.agent.md)                     |
 | [Neon Performance Analyzer](#neon-performance-analyzer)                       | Infrastructure & DevOps      | Postgres query optimization                                                                        | None          | [agents/neon-optimization-analyzer.agent.md](../ai_framework/agents/neon-optimization-analyzer.agent.md)                   |
-| [Exhaustive Repo Scanner](#exhaustive-repo-scanner)                               | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/exhaustive-repo-scanner.agent.md](../ai_framework/agents/exhaustive-repo-scanner.agent.md)                             |
+| [Exhaustive Repo Scanner](#exhaustive-repo-scanner)                           | Documentation & Analysis     | Exhaustive repository analysis and data excavation                                                 | github        | [agents/exhaustive-repo-scanner.agent.md](../ai_framework/agents/exhaustive-repo-scanner.agent.md)                         |
 | [Octopus Release Notes](#octopus-deploy-release-notes)                        | Development & Operations     | Generates Octopus Deploy release notes                                                             | octopus       | [agents/octopus-deploy-release-notes-mcp.agent.md](../ai_framework/agents/octopus-deploy-release-notes-mcp.agent.md)       |
 | [PagerDuty Responder](#pagerduty-incident-responder)                          | Security & Compliance        | Incident response automation                                                                       | pagerduty     | [agents/pagerduty-incident-responder.agent.md](../ai_framework/agents/pagerduty-incident-responder.agent.md)               |
 | [Repository Setup](#repository-setup-agent)                                   | Infrastructure & DevOps      | New repository creation and configuration                                                          | github        | [agents/repository-setup.agent.md](../ai_framework/agents/repository-setup.agent.md)                                       |
@@ -1387,11 +1387,11 @@ ______________________________________________________________________
 ### Questions or Issues?
 
 - **General Questions**: Open a
-  [discussion](https://github.com/{{ORG_NAME}}/.github/discussions)<!-- link:github.discussions -->
+  [discussion](https://github.com/%7B%7BORG_NAME%7D%7D/.github/discussions)<!-- link:github.discussions -->
 - **Bug Reports**: Create an
-  [issue](https://github.com/{{ORG_NAME}}/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
+  [issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=bug_report.yml)<!-- link:github.bug_report -->
 - **Feature Requests**: Create an
-  [issue](https://github.com/{{ORG_NAME}}/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
+  [issue](https://github.com/%7B%7BORG_NAME%7D%7D/.github/issues/new?template=feature_request.yml)<!-- link:github.feature_request -->
 - **Security Issues**: See [SECURITY.md](../governance/SECURITY.md) for
   reporting procedures
 
