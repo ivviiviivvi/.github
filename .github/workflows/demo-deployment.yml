@@ -47,7 +47,7 @@ jobs:
     with:
       app-type: ${{ inputs.app-type || '' }}
       hosting-provider: ${{ inputs.hosting-provider || '' }}
-      inject-badge: ${{ inputs.inject-badge == '' && true || inputs.inject-badge }}
+      inject-badge: ${{ github.event_name == 'workflow_dispatch' && inputs.inject-badge || true }}
       update-registry: true
       badge-style: for-the-badge
     secrets:

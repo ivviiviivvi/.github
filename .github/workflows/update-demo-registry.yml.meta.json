@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Update Demo Registry",
+  "identifier": "urn:uuid:b4d2e8f1-7a3c-4d5b-9e0f-6c1a2b3d4e5f",
+  "version": "1.0.0",
+  "description": "Updates the demo registry data files when a sandbox deployment completes. Triggered by repository_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.registry.update-demo-registry.yml",
+    "layer": "application",
+    "role": "registry",
+    "domain": "demo"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["repository_dispatch"],
+  "dateCreated": "2026-02-07T00:00:00Z",
+  "dateModified": "2026-02-07T00:00:00Z",
+  "dc:subject": ["application", "registry", "demo", "dispatch"]
+}

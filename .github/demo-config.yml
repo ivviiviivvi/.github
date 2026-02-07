@@ -6,8 +6,8 @@ enabled: true
 
 # Global settings
 global:
-  # API endpoint for demo deployment service (configure with your provider)
-  api_endpoint: https://api.example.dev/v1
+  # API endpoint — unused by sandbox system; set if using a custom deploy API
+  api_endpoint: ''
 
   # Timeout for application startup (seconds)
   startup_timeout: 60

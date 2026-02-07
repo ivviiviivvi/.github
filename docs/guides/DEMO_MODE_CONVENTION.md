@@ -177,3 +177,74 @@ Override via the `hosting-provider` input in the wrapper workflow.
 Sandbox environments on free tiers (Render, Cloudflare) may spin down after
 inactivity. The app should re-seed demo data on each cold start, not just on
 first deploy.
+
+## Demo Settings Panel (Optional)
+
+For apps that expose multiple demo-mode behaviors, consider adding a
+`/demo/settings` admin page so reviewers can toggle individual stubs on or off,
+view seed status, or trigger a re-seed without restarting the sandbox.
+
+### React Example
+
+```tsx
+// pages/demo/settings.tsx
+import { useState, useEffect } from 'react';
+
+interface DemoSettings {
+  stubPayments: boolean;
+  stubEmail: boolean;
+  stubAuth: boolean;
+  seedStatus: 'seeded' | 'pending' | 'error';
+}
+
+export default function DemoSettingsPanel() {
+  const [settings, setSettings] = useState<DemoSettings | null>(null);
+
+  useEffect(() => {
+    fetch('/api/demo/settings').then(r => r.json()).then(setSettings);
+  }, []);
+
+  if (!settings) return <p>Loading...</p>;
+
+  const toggle = (key: keyof DemoSettings) =>
+    fetch('/api/demo/settings', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ [key]: !settings[key] }),
+    })
+      .then(r => r.json())
+      .then(setSettings);
+
+  const reseed = () =>
+    fetch('/api/demo/seed', { method: 'POST' })
+      .then(r => r.json())
+      .then(() => location.reload());
+
+  return (
+    <div style={{ maxWidth: 480, margin: '2rem auto' }}>
+      <h2>Demo Settings</h2>
+      <label>
+        <input type="checkbox" checked={settings.stubPayments}
+          onChange={() => toggle('stubPayments')} />
+        Stub payment provider
+      </label>
+      <label>
+        <input type="checkbox" checked={settings.stubEmail}
+          onChange={() => toggle('stubEmail')} />
+        Stub email delivery
+      </label>
+      <label>
+        <input type="checkbox" checked={settings.stubAuth}
+          onChange={() => toggle('stubAuth')} />
+        Bypass auth (demo user)
+      </label>
+      <hr />
+      <p>Seed status: <strong>{settings.seedStatus}</strong></p>
+      <button onClick={reseed}>Re-seed demo data</button>
+    </div>
+  );
+}
+```
+
+This panel is only rendered when `DEMO_MODE=true` and should be excluded from
+production builds via tree-shaking or a build-time env check.

@@ -670,11 +670,25 @@ ______________________________________________________________________
 
 ### demo-deployment.yml
 
-**Purpose**: Deploy demo environment.
+**Purpose**: Wrapper workflow that deploys org repo apps to sandbox
+environments. Calls `reusable/demo-sandbox.yml` to auto-detect app type,
+select a hosting provider, deploy, and inject a README badge.
 
-| Property     | Value             |
-| ------------ | ----------------- |
-| **Triggers** | workflow_dispatch |
+| Property     | Value                           |
+| ------------ | ------------------------------- |
+| **Triggers** | Push to main, workflow_dispatch |
+
+______________________________________________________________________
+
+### update-demo-registry.yml
+
+**Purpose**: Receives `demo-registry-update` dispatch events from deployed
+sandboxes and updates `docs/_data/live_demos.yml` and
+`docs/_data/app-deployments.yml`.
+
+| Property     | Value               |
+| ------------ | ------------------- |
+| **Triggers** | repository_dispatch |
 
 ______________________________________________________________________
 
@@ -906,6 +920,30 @@ ______________________________________________________________________
 | ----------- | ------ | -------- | -------------- |
 | `operation` | string | required | Operation type |
 | `pr-number` | number | required | PR number      |
+
+______________________________________________________________________
+
+### demo-sandbox.yml
+
+**Purpose**: Reusable sandbox deployment. Auto-detects app type and framework,
+selects a hosting provider (Vercel, Cloudflare Pages, Render, or Codespaces),
+deploys with `DEMO_MODE=true`, optionally injects a README badge, and dispatches
+a registry update to the `.github` repo.
+
+| Input                    | Type    | Default        | Description                           |
+| ------------------------ | ------- | -------------- | ------------------------------------- |
+| `app-type`               | string  | '' (auto)      | Application type override             |
+| `hosting-provider`       | string  | '' (auto)      | Hosting provider override             |
+| `build-command`          | string  | '' (auto)      | Custom build command                  |
+| `start-command`          | string  | '' (auto)      | Custom start command                  |
+| `node-version`           | string  | '20'           | Node.js version for frontend builds   |
+| `python-version`         | string  | '3.12'         | Python version for backend builds     |
+| `demo-data-seed-command` | string  | ''             | Command to seed demo data at runtime  |
+| `inject-badge`           | boolean | true           | Create PR to add demo badge to README |
+| `update-registry`        | boolean | true           | Dispatch registry update event        |
+| `badge-style`            | string  | 'for-the-badge'| Shield.io badge style                 |
+
+**Outputs**: `sandbox_url`, `deployment_id`
 
 ______________________________________________________________________
 

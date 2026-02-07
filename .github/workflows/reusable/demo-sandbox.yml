@@ -292,8 +292,9 @@ jobs:
       id: select-provider
       env:
         INPUT_PROVIDER: ${{ inputs.hosting-provider }}
+        DETECTED_APP_TYPE: ${{ steps.detect.outputs.app_type }}
       run: |
-        APP_TYPE="${{ steps.detect.outputs.app_type }}"
+        APP_TYPE="$DETECTED_APP_TYPE"
         PROVIDER=""
 
         if [ -n "$INPUT_PROVIDER" ]; then
@@ -347,10 +348,10 @@ jobs:
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        REPO_SLUG: ${{ github.event.repository.name }}
       run: |
         npm install -g vercel@latest
 
-        REPO_SLUG="${{ github.event.repository.name }}"
         PROJECT_NAME="demo-${REPO_SLUG}"
 
         # Link or create project
@@ -375,16 +376,16 @@ jobs:
       env:
         CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        BUILD_CMD: ${{ needs.detect.outputs.build_command }}
+        REPO_SLUG: ${{ github.event.repository.name }}
       run: |
         npm install -g wrangler@latest
 
-        REPO_SLUG="${{ github.event.repository.name }}"
         PROJECT_NAME="demo-${REPO_SLUG}"
 
         # Build the frontend if a build command exists
-        BUILD_CMD="${{ needs.detect.outputs.build_command }}"
         if [ -n "$BUILD_CMD" ]; then
-          eval "$BUILD_CMD"
+          bash -c "$BUILD_CMD"
         fi
 
         # Determine output directory
@@ -407,8 +408,12 @@ jobs:
       if: needs.detect.outputs.provider == 'render'
       env:
         RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        REPO_SLUG: ${{ github.event.repository.name }}
+        REPO_FULL: ${{ github.repository }}
+        REF_NAME: ${{ github.ref_name }}
+        BUILD_CMD: ${{ needs.detect.outputs.build_command }}
+        START_CMD: ${{ needs.detect.outputs.start_command }}
       run: |
-        REPO_SLUG="${{ github.event.repository.name }}"
         SERVICE_NAME="demo-${REPO_SLUG}"
 
         # Check if service already exists
@@ -428,10 +433,10 @@ jobs:
           # Create new web service
           PAYLOAD=$(jq -n \
             --arg name "$SERVICE_NAME" \
-            --arg repo "https://github.com/${{ github.repository }}" \
-            --arg branch "${{ github.ref_name }}" \
-            --arg build "${{ needs.detect.outputs.build_command }}" \
-            --arg start "${{ needs.detect.outputs.start_command }}" \
+            --arg repo "https://github.com/${REPO_FULL}" \
+            --arg branch "$REF_NAME" \
+            --arg build "$BUILD_CMD" \
+            --arg start "$START_CMD" \
             '{
               type: "web_service",
               name: $name,
@@ -468,9 +473,10 @@ jobs:
     - name: Generate Codespaces deep link
       id: codespaces
       if: needs.detect.outputs.provider == 'codespaces'
+      env:
+        REPO: ${{ github.repository }}
+        REF: ${{ github.ref_name }}
       run: |
-        REPO="${{ github.repository }}"
-        REF="${{ github.ref_name }}"
 
         # Create demo-specific devcontainer if it doesn't exist
         mkdir -p .devcontainer/demo
@@ -500,24 +506,34 @@ jobs:
     # ── Run optional seed command ──
     - name: Seed demo data
       if: inputs.demo-data-seed-command != ''
+      env:
+        SEED_CMD: ${{ inputs.demo-data-seed-command }}
       run: |
         echo "Running demo data seed command..."
-        ${{ inputs.demo-data-seed-command }}
+        bash -c "$SEED_CMD"
 
     # ── Collect result ──
     - name: Collect deployment result
       id: result
+      env:
+        PROVIDER: ${{ needs.detect.outputs.provider }}
+        APP_TYPE: ${{ needs.detect.outputs.app_type }}
+        FRAMEWORK: ${{ needs.detect.outputs.framework }}
+        VERCEL_URL: ${{ steps.vercel.outputs.url }}
+        CLOUDFLARE_URL: ${{ steps.cloudflare.outputs.url }}
+        RENDER_URL: ${{ steps.render.outputs.url }}
+        CODESPACES_URL: ${{ steps.codespaces.outputs.url }}
+        RUN_ID: ${{ github.run_id }}
+        RUN_ATTEMPT: ${{ github.run_attempt }}
       run: |
-        PROVIDER="${{ needs.detect.outputs.provider }}"
-
         case "$PROVIDER" in
-          vercel)           URL="${{ steps.vercel.outputs.url }}" ;;
-          cloudflare-pages) URL="${{ steps.cloudflare.outputs.url }}" ;;
-          render)           URL="${{ steps.render.outputs.url }}" ;;
-          codespaces)       URL="${{ steps.codespaces.outputs.url }}" ;;
+          vercel)           URL="$VERCEL_URL" ;;
+          cloudflare-pages) URL="$CLOUDFLARE_URL" ;;
+          render)           URL="$RENDER_URL" ;;
+          codespaces)       URL="$CODESPACES_URL" ;;
         esac
 
-        DEPLOY_ID="demo-${{ github.run_id }}-${{ github.run_attempt }}"
+        DEPLOY_ID="demo-${RUN_ID}-${RUN_ATTEMPT}"
 
         {
           echo "sandbox_url=${URL}"
@@ -530,8 +546,8 @@ jobs:
           echo "| Field | Value |"
           echo "|-------|-------|"
           echo "| Provider | $PROVIDER |"
-          echo "| App Type | ${{ needs.detect.outputs.app_type }} |"
-          echo "| Framework | ${{ needs.detect.outputs.framework }} |"
+          echo "| App Type | $APP_TYPE |"
+          echo "| Framework | $FRAMEWORK |"
           echo "| Sandbox URL | $URL |"
         } >> "$GITHUB_STEP_SUMMARY"
 
@@ -549,14 +565,14 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Inject badge into README
+      env:
+        SANDBOX_URL: ${{ needs.deploy.outputs.sandbox_url }}
+        STYLE: ${{ inputs.badge-style }}
       run: |
         if [ ! -f "README.md" ]; then
           echo "No README.md found, skipping badge injection"
           exit 0
         fi
-
-        SANDBOX_URL="${{ needs.deploy.outputs.sandbox_url }}"
-        STYLE="${{ inputs.badge-style }}"
         BADGE="[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=${STYLE})](${SANDBOX_URL})"
 
         MARKER_START="<!-- DEMO:START -->"
@@ -615,16 +631,21 @@ jobs:
     - name: Dispatch registry update
       env:
         REGISTRY_PAT: ${{ secrets.REGISTRY_PAT }}
+        ORG: ${{ github.repository_owner }}
+        REPO_FULL: ${{ github.repository }}
+        SANDBOX_URL: ${{ needs.deploy.outputs.sandbox_url }}
+        APP_TYPE: ${{ needs.detect.outputs.app_type }}
+        FRAMEWORK: ${{ needs.detect.outputs.framework }}
+        PROVIDER: ${{ needs.detect.outputs.provider }}
       run: |
-        ORG="${{ github.repository_owner }}"
         TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
         PAYLOAD=$(jq -n \
-          --arg repo "${{ github.repository }}" \
-          --arg url "${{ needs.deploy.outputs.sandbox_url }}" \
-          --arg app_type "${{ needs.detect.outputs.app_type }}" \
-          --arg framework "${{ needs.detect.outputs.framework }}" \
-          --arg provider "${{ needs.detect.outputs.provider }}" \
+          --arg repo "$REPO_FULL" \
+          --arg url "$SANDBOX_URL" \
+          --arg app_type "$APP_TYPE" \
+          --arg framework "$FRAMEWORK" \
+          --arg provider "$PROVIDER" \
           --arg ts "$TIMESTAMP" \
           '{
             event_type: "demo-registry-update",
