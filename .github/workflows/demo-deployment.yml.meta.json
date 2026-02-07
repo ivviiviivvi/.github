@@ -1,21 +1,21 @@
 {
   "profile": "full",
-  "name": "Live Demo Deployment",
+  "name": "Demo Sandbox Deployment",
   "identifier": "urn:uuid:49a0531e-569f-5ffd-8daf-b9db5193766b",
-  "version": "1.0.0",
-  "description": "Deployment and release management. Triggered by push, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "version": "2.0.0",
+  "description": "Deploys org repo apps to sandbox environments (Vercel, Cloudflare Pages, Render, Codespaces). Triggered by push to main or workflow_dispatch, calls reusable/demo-sandbox.yml.",
   "functioncalled": {
-    "canonical": "application.deployment.demo.yml",
+    "canonical": "application.deployment.demo-sandbox.yml",
     "layer": "application",
     "role": "deployment",
-    "domain": "demo"
+    "domain": "demo-sandbox"
   },
   "schema:type": "SoftwareSourceCode",
   "encodingFormat": "application/x-yaml",
   "programmingLanguage": "YAML",
   "runtimePlatform": "GitHub Actions",
-  "triggers": ["push", "workflow_dispatch", "workflow_call"],
+  "triggers": ["push", "workflow_dispatch"],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2026-01-31T00:00:00Z",
-  "dc:subject": ["application", "deployment", "manual", "push-triggered"]
+  "dateModified": "2026-02-07T00:00:00Z",
+  "dc:subject": ["application", "deployment", "sandbox", "demo", "push-triggered"]
 }

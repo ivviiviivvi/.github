@@ -1,0 +1,59 @@
+name: Demo Sandbox Deployment
+
+on:
+  push:
+    branches:
+    - main
+    - master
+    paths:
+    - src/**
+    - public/**
+    - package*.json
+    - requirements*.txt
+    - Dockerfile
+    - docker-compose.yml
+    - .github/workflows/demo-deployment.yml
+  workflow_dispatch:
+    inputs:
+      app-type:
+        description: >-
+          App type override: frontend, backend, fullstack, static, cli-library
+          (leave blank to auto-detect)
+        required: false
+        type: string
+      hosting-provider:
+        description: >-
+          Hosting provider override: vercel, cloudflare-pages, render, codespaces
+          (leave blank to auto-select)
+        required: false
+        type: string
+      inject-badge:
+        description: Create PR to add demo badge to README
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sandbox:
+    uses: ./.github/workflows/reusable/demo-sandbox.yml
+    with:
+      app-type: ${{ inputs.app-type || '' }}
+      hosting-provider: ${{ inputs.hosting-provider || '' }}
+      inject-badge: ${{ inputs.inject-badge == '' && true || inputs.inject-badge }}
+      update-registry: true
+      badge-style: for-the-badge
+    secrets:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      REGISTRY_PAT: ${{ secrets.REGISTRY_PAT }}

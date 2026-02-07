@@ -68,6 +68,7 @@ tech_stacks:
     environment:
       NODE_ENV: production
       PORT: '3000'
+      DEMO_MODE: 'true'
     # Port to expose
     port: 3000
     # Build command (if needed)
@@ -94,6 +95,7 @@ tech_stacks:
       PYTHONUNBUFFERED: '1'
       FLASK_ENV: production
       PORT: '8000'
+      DEMO_MODE: 'true'
     port: 8000
     build_command: pip install -r requirements.txt
     health_check_path: /
@@ -111,6 +113,7 @@ tech_stacks:
     environment:
       NODE_ENV: production
       PORT: '8080'
+      DEMO_MODE: 'true'
     port: 8080
     build_command: npm install
     health_check_path: /
@@ -129,6 +132,7 @@ tech_stacks:
     environment:
       NODE_ENV: production
       PORT: '3000'
+      DEMO_MODE: 'true'
     port: 3000
     build_command: npm install
     health_check_path: /
@@ -148,6 +152,7 @@ tech_stacks:
     environment:
       JAVA_OPTS: -Xmx512m
       PORT: '8080'
+      DEMO_MODE: 'true'
     port: 8080
     build_command: mvn clean install -DskipTests
     health_check_path: /actuator/health
@@ -164,6 +169,7 @@ tech_stacks:
     - go run .
     environment:
       PORT: '8080'
+      DEMO_MODE: 'true'
     port: 8080
     build_command: go build -o main .
     health_check_path: /
@@ -181,6 +187,7 @@ tech_stacks:
     environment:
       RAILS_ENV: production
       PORT: '3000'
+      DEMO_MODE: 'true'
     port: 3000
     build_command: bundle install
     health_check_path: /
@@ -198,9 +205,56 @@ tech_stacks:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
       PORT: '5000'
+      DEMO_MODE: 'true'
     port: 5000
     build_command: dotnet restore && dotnet build
     health_check_path: /health
+
+# Sandbox deployment settings
+sandbox:
+  # DEMO_MODE contract — these env vars are injected into every sandbox
+  demo_mode:
+    env_vars:
+      DEMO_MODE: 'true'
+      DEMO_BANNER: 'true'
+      DEMO_AUTH_BYPASS: 'true'
+
+  # Provider priority per app type (first available wins)
+  hosting_priority:
+    frontend:
+    - cloudflare-pages
+    - vercel
+    backend:
+    - render
+    fullstack:
+    - render
+    static:
+    - cloudflare-pages
+    - vercel
+    default:
+    - codespaces
+
+  # Provider-specific settings
+  providers:
+    vercel:
+      project_prefix: demo-
+      region: iad1
+    cloudflare_pages:
+      project_prefix: demo-
+    render:
+      plan: free
+      region: oregon
+      health_check_path: /
+      health_check_timeout: 300
+    codespaces:
+      devcontainer_path: .devcontainer/demo/devcontainer.json
+
+  # Lifecycle settings
+  lifecycle:
+    always_on: false
+    # Cron expression to keep Render free tier warm (every 14 min)
+    keep_warm_cron: '*/14 * * * *'
+    data_reset_on_cold_start: true
 
 # Custom overrides (repository-specific)
 # Can be overridden by creating .demo-config.yml in the repository root

@@ -61,6 +61,7 @@ features:
   advanced_ci: true # Advanced CI with mutation testing, a11y
   security_scanning: true # Security workflows (CodeQL, Trivy, etc.)
   automated_releases: true # Semantic release automation
+  demo_sandbox: true # Demo sandbox deployment system
   documentation_site: false # Jekyll documentation site
   slack_notifications: false # Slack integration (requires SLACK_WEBHOOK)
   ml_workflows: false # ML-specific workflows

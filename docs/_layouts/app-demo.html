@@ -258,6 +258,7 @@ title: Live App Demo
         <div id="live-panel" class="demo-panel active">
           {% include live-app-embed.html
              deployment_url=page.deployment_url
+             sandbox_url=page.sandbox_url
              docker_image=page.docker_image
              deployment_strategy=page.deployment_strategy
           %}
@@ -317,6 +318,13 @@ title: Live App Demo
             <li>
               <span>Language:</span>
               <strong>{{ page.language }}</strong>
+            </li>
+            {% endif %}
+
+            {% if page.sandbox_url %}
+            <li>
+              <span>Sandbox:</span>
+              <a href="{{ page.sandbox_url }}" target="_blank">{{ page.sandbox_url | truncate: 40 }}</a>
             </li>
             {% endif %}
           </ul>

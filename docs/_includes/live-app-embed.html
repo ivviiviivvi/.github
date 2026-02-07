@@ -81,6 +81,31 @@
   </div>
 </div>
 
+{% elsif include.deployment_strategy contains 'sandbox' %}
+<!-- Sandbox Deployment (Vercel / Cloudflare / Render) -->
+<div class="sandbox-embed">
+  <div
+    class="demo-banner-bar"
+    style="
+      background: #fff3cd;
+      color: #856404;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      font-weight: 500;
+      border-bottom: 1px solid #ffc107;
+    "
+  >
+    Demo Environment &mdash; data resets periodically
+  </div>
+  <iframe
+    src="{{ include.sandbox_url | default: include.deployment_url }}"
+    class="app-frame"
+    title="Live Sandbox Demo"
+    sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
+    loading="lazy"
+  ></iframe>
+</div>
+
 {% elsif include.deployment_strategy == 'codespaces' %}
 <!-- GitHub Codespaces Integration -->
 <div class="codespaces-embed">

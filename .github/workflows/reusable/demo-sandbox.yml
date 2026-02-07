@@ -1,0 +1,647 @@
+name: Demo Sandbox (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      app-type:
+        description: >-
+          Application type override (auto-detected if empty).
+          Options: frontend, backend, fullstack, static, cli-library
+        required: false
+        type: string
+        default: ''
+      hosting-provider:
+        description: >-
+          Hosting provider override (auto-selected if empty).
+          Options: vercel, cloudflare-pages, render, codespaces
+        required: false
+        type: string
+        default: ''
+      build-command:
+        description: Custom build command (overrides auto-detected)
+        required: false
+        type: string
+        default: ''
+      start-command:
+        description: Custom start command (overrides auto-detected)
+        required: false
+        type: string
+        default: ''
+      node-version:
+        description: Node.js version for frontend builds
+        required: false
+        type: string
+        default: '20'
+      python-version:
+        description: Python version for backend builds
+        required: false
+        type: string
+        default: '3.12'
+      demo-data-seed-command:
+        description: >-
+          Command to seed demo data at runtime (runs with DEMO_MODE=true).
+          Leave empty if the app seeds data automatically via DEMO_MODE.
+        required: false
+        type: string
+        default: ''
+      inject-badge:
+        description: Create a PR to add a "Try Demo" badge to the README
+        required: false
+        type: boolean
+        default: true
+      update-registry:
+        description: Dispatch a registry update event to the .github repo
+        required: false
+        type: boolean
+        default: true
+      badge-style:
+        description: 'Shield.io badge style (flat, flat-square, for-the-badge, plastic)'
+        required: false
+        type: string
+        default: for-the-badge
+    secrets:
+      VERCEL_TOKEN:
+        description: Vercel deployment token
+        required: false
+      VERCEL_ORG_ID:
+        description: Vercel organization/team ID
+        required: false
+      RENDER_API_KEY:
+        description: Render API key for backend deployments
+        required: false
+      CLOUDFLARE_API_TOKEN:
+        description: Cloudflare Pages API token
+        required: false
+      CLOUDFLARE_ACCOUNT_ID:
+        description: Cloudflare account ID
+        required: false
+      REGISTRY_PAT:
+        description: PAT with repo scope to dispatch events to the .github repo
+        required: false
+
+concurrency:
+  group: demo-sandbox-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 1: Detect app type and select hosting provider
+  # ──────────────────────────────────────────────────────────────────────
+  detect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      app_type: ${{ steps.detect.outputs.app_type }}
+      framework: ${{ steps.detect.outputs.framework }}
+      provider: ${{ steps.select-provider.outputs.provider }}
+      build_command: ${{ steps.detect.outputs.build_command }}
+      start_command: ${{ steps.detect.outputs.start_command }}
+      port: ${{ steps.detect.outputs.port }}
+      has_frontend: ${{ steps.detect.outputs.has_frontend }}
+      has_backend: ${{ steps.detect.outputs.has_backend }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Load repo-level demo config
+      id: repo-config
+      run: |
+        CONFIG=".github/demo-config.yml"
+        if [ -f "$CONFIG" ]; then
+          echo "has_config=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "has_config=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Detect application type
+      id: detect
+      env:
+        INPUT_APP_TYPE: ${{ inputs.app-type }}
+        INPUT_BUILD_CMD: ${{ inputs.build-command }}
+        INPUT_START_CMD: ${{ inputs.start-command }}
+      run: |
+        APP_TYPE=""
+        FRAMEWORK=""
+        BUILD_CMD=""
+        START_CMD=""
+        PORT=""
+        HAS_FRONTEND=false
+        HAS_BACKEND=false
+
+        # ── Use explicit override if provided ──
+        if [ -n "$INPUT_APP_TYPE" ]; then
+          APP_TYPE="$INPUT_APP_TYPE"
+          echo "Using explicit app-type override: $APP_TYPE"
+        fi
+
+        # ── Auto-detect from project files ──
+        if [ -z "$APP_TYPE" ]; then
+
+          # Node.js / Frontend frameworks
+          if [ -f "package.json" ]; then
+            if grep -q '"next"' package.json 2>/dev/null; then
+              FRAMEWORK="nextjs"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            elif grep -q '"nuxt"' package.json 2>/dev/null; then
+              FRAMEWORK="nuxt"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            elif grep -q '"react"' package.json 2>/dev/null || [ -f "src/App.jsx" ] || [ -f "src/App.tsx" ]; then
+              FRAMEWORK="react"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            elif grep -q '"vue"' package.json 2>/dev/null || [ -f "vue.config.js" ]; then
+              FRAMEWORK="vue"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            elif grep -q '"angular"' package.json 2>/dev/null; then
+              FRAMEWORK="angular"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            elif grep -q '"svelte"' package.json 2>/dev/null; then
+              FRAMEWORK="svelte"; HAS_FRONTEND=true; APP_TYPE="frontend"
+            fi
+
+            # Node.js backend frameworks
+            if grep -q '"express"' package.json 2>/dev/null || grep -q '"fastify"' package.json 2>/dev/null || grep -q '"koa"' package.json 2>/dev/null || grep -q '"hono"' package.json 2>/dev/null; then
+              HAS_BACKEND=true
+              if [ "$HAS_FRONTEND" = "true" ]; then
+                APP_TYPE="fullstack"
+              else
+                APP_TYPE="backend"
+                FRAMEWORK="${FRAMEWORK:-nodejs}"
+              fi
+            fi
+
+            # Startup command from package.json
+            if grep -q '"start"' package.json; then START_CMD="npm start"
+            elif grep -q '"dev"' package.json; then START_CMD="npm run dev"
+            elif grep -q '"serve"' package.json; then START_CMD="npm run serve"
+            else START_CMD="node index.js"; fi
+
+            BUILD_CMD="npm ci"
+            PORT="3000"
+          fi
+
+          # Python frameworks
+          if [ -f "requirements.txt" ] || [ -f "Pipfile" ] || [ -f "pyproject.toml" ] || [ -f "setup.py" ]; then
+            if grep -qE "(fastapi|uvicorn)" requirements.txt 2>/dev/null || grep -qE "(fastapi|uvicorn)" pyproject.toml 2>/dev/null; then
+              FRAMEWORK="fastapi"; HAS_BACKEND=true
+              START_CMD="uvicorn app:app --host 0.0.0.0 --port 8000"
+            elif grep -q "flask" requirements.txt 2>/dev/null || grep -q "flask" pyproject.toml 2>/dev/null; then
+              FRAMEWORK="flask"; HAS_BACKEND=true
+              START_CMD="python -m flask run --host=0.0.0.0"
+            elif grep -q "django" requirements.txt 2>/dev/null || grep -q "django" pyproject.toml 2>/dev/null; then
+              FRAMEWORK="django"; HAS_BACKEND=true
+              START_CMD="python manage.py runserver 0.0.0.0:8000"
+            elif [ -f "app.py" ]; then
+              FRAMEWORK="python"; HAS_BACKEND=true
+              START_CMD="python app.py"
+            elif [ -f "main.py" ]; then
+              FRAMEWORK="python"; HAS_BACKEND=true
+              START_CMD="python main.py"
+            fi
+
+            if [ "$HAS_BACKEND" = "true" ] && [ "$HAS_FRONTEND" = "true" ]; then
+              APP_TYPE="fullstack"
+            elif [ "$HAS_BACKEND" = "true" ]; then
+              APP_TYPE="backend"
+            fi
+
+            BUILD_CMD="${BUILD_CMD:+$BUILD_CMD && }pip install -r requirements.txt"
+            PORT="${PORT:-8000}"
+          fi
+
+          # Java
+          if [ -f "pom.xml" ] || [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+            HAS_BACKEND=true
+            FRAMEWORK="java"
+            APP_TYPE="${APP_TYPE:-backend}"
+            if [ -f "pom.xml" ]; then
+              BUILD_CMD="mvn clean install -DskipTests"
+              START_CMD="java -jar target/*.jar"
+            else
+              BUILD_CMD="gradle build -x test"
+              START_CMD="gradle bootRun"
+            fi
+            PORT="${PORT:-8080}"
+          fi
+
+          # Go
+          if [ -f "go.mod" ] || [ -f "main.go" ]; then
+            HAS_BACKEND=true
+            FRAMEWORK="go"
+            APP_TYPE="${APP_TYPE:-backend}"
+            BUILD_CMD="go build -o main ."
+            START_CMD="./main"
+            PORT="${PORT:-8080}"
+          fi
+
+          # Ruby
+          if [ -f "Gemfile" ] || [ -f "config.ru" ]; then
+            HAS_BACKEND=true
+            FRAMEWORK="ruby"
+            APP_TYPE="${APP_TYPE:-backend}"
+            BUILD_CMD="bundle install"
+            if [ -f "config.ru" ]; then
+              START_CMD="bundle exec puma -p 3000"
+            else
+              START_CMD="ruby app.rb"
+            fi
+            PORT="${PORT:-3000}"
+          fi
+
+          # .NET
+          if ls ./*.csproj 1>/dev/null 2>&1 || ls ./*.sln 1>/dev/null 2>&1; then
+            HAS_BACKEND=true
+            FRAMEWORK="dotnet"
+            APP_TYPE="${APP_TYPE:-backend}"
+            BUILD_CMD="dotnet restore && dotnet build"
+            START_CMD="dotnet run"
+            PORT="${PORT:-5000}"
+          fi
+
+          # Static sites (fallback)
+          if [ -z "$APP_TYPE" ]; then
+            if [ -f "index.html" ] || [ -d "public" ] || [ -d "dist" ] || [ -d "build" ]; then
+              APP_TYPE="static"
+              FRAMEWORK="static"
+              HAS_FRONTEND=true
+            fi
+          fi
+        fi
+
+        APP_TYPE="${APP_TYPE:-unknown}"
+        FRAMEWORK="${FRAMEWORK:-unknown}"
+
+        # ── Apply explicit overrides ──
+        if [ -n "$INPUT_BUILD_CMD" ]; then BUILD_CMD="$INPUT_BUILD_CMD"; fi
+        if [ -n "$INPUT_START_CMD" ]; then START_CMD="$INPUT_START_CMD"; fi
+
+        {
+          echo "app_type=$APP_TYPE"
+          echo "framework=$FRAMEWORK"
+          echo "build_command=$BUILD_CMD"
+          echo "start_command=$START_CMD"
+          echo "port=${PORT:-3000}"
+          echo "has_frontend=$HAS_FRONTEND"
+          echo "has_backend=$HAS_BACKEND"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "Detected: type=$APP_TYPE framework=$FRAMEWORK provider will be selected next"
+
+    - name: Select hosting provider
+      id: select-provider
+      env:
+        INPUT_PROVIDER: ${{ inputs.hosting-provider }}
+      run: |
+        APP_TYPE="${{ steps.detect.outputs.app_type }}"
+        PROVIDER=""
+
+        if [ -n "$INPUT_PROVIDER" ]; then
+          PROVIDER="$INPUT_PROVIDER"
+          echo "Using explicit provider override: $PROVIDER"
+        else
+          case "$APP_TYPE" in
+            frontend|static)
+              PROVIDER="cloudflare-pages" ;;
+            backend)
+              PROVIDER="render" ;;
+            fullstack)
+              PROVIDER="render" ;;
+            *)
+              PROVIDER="codespaces" ;;
+          esac
+        fi
+
+        echo "provider=$PROVIDER" >> "$GITHUB_OUTPUT"
+        echo "Selected provider: $PROVIDER for app type: $APP_TYPE"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 2: Deploy to the selected provider
+  # ──────────────────────────────────────────────────────────────────────
+  deploy:
+    needs: detect
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      sandbox_url: ${{ steps.result.outputs.sandbox_url }}
+      deployment_id: ${{ steps.result.outputs.deployment_id }}
+    env:
+      DEMO_MODE: 'true'
+      DEMO_BANNER: 'true'
+      DEMO_AUTH_BYPASS: 'true'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    # ── Vercel ──
+    - name: Setup Node.js (Vercel / Cloudflare)
+      if: needs.detect.outputs.provider == 'vercel' || needs.detect.outputs.provider == 'cloudflare-pages'
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Deploy to Vercel
+      id: vercel
+      if: needs.detect.outputs.provider == 'vercel'
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      run: |
+        npm install -g vercel@latest
+
+        REPO_SLUG="${{ github.event.repository.name }}"
+        PROJECT_NAME="demo-${REPO_SLUG}"
+
+        # Link or create project
+        vercel link --yes --project "$PROJECT_NAME" --token "$VERCEL_TOKEN" 2>/dev/null || true
+
+        # Build with demo env vars
+        vercel build --prod --token "$VERCEL_TOKEN" \
+          -e DEMO_MODE=true \
+          -e DEMO_BANNER=true \
+          -e DEMO_AUTH_BYPASS=true
+
+        # Deploy prebuilt output
+        DEPLOY_URL=$(vercel deploy --prebuilt --prod --token "$VERCEL_TOKEN" 2>&1 | grep -oE 'https://[^ ]+')
+
+        echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+        echo "Deployed to Vercel: $DEPLOY_URL"
+
+    # ── Cloudflare Pages ──
+    - name: Deploy to Cloudflare Pages
+      id: cloudflare
+      if: needs.detect.outputs.provider == 'cloudflare-pages'
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      run: |
+        npm install -g wrangler@latest
+
+        REPO_SLUG="${{ github.event.repository.name }}"
+        PROJECT_NAME="demo-${REPO_SLUG}"
+
+        # Build the frontend if a build command exists
+        BUILD_CMD="${{ needs.detect.outputs.build_command }}"
+        if [ -n "$BUILD_CMD" ]; then
+          eval "$BUILD_CMD"
+        fi
+
+        # Determine output directory
+        OUTPUT_DIR="dist"
+        if [ -d "build" ] && [ ! -d "dist" ]; then OUTPUT_DIR="build"; fi
+        if [ -d "out" ] && [ ! -d "dist" ]; then OUTPUT_DIR="out"; fi
+        if [ -d "public" ] && [ ! -d "dist" ] && [ ! -d "build" ]; then OUTPUT_DIR="public"; fi
+
+        DEPLOY_URL=$(wrangler pages deploy "./$OUTPUT_DIR" \
+          --project-name "$PROJECT_NAME" \
+          --commit-hash "${{ github.sha }}" \
+          --branch main 2>&1 | grep -oE 'https://[^ ]+' | tail -1)
+
+        echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+        echo "Deployed to Cloudflare Pages: $DEPLOY_URL"
+
+    # ── Render ──
+    - name: Deploy to Render
+      id: render
+      if: needs.detect.outputs.provider == 'render'
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      run: |
+        REPO_SLUG="${{ github.event.repository.name }}"
+        SERVICE_NAME="demo-${REPO_SLUG}"
+
+        # Check if service already exists
+        EXISTING=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" \
+          "https://api.render.com/v1/services?name=$SERVICE_NAME&limit=1" | jq '.[0].service.id // empty' -r)
+
+        if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+          # Trigger redeploy of existing service
+          curl -s -X POST \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            "https://api.render.com/v1/services/$EXISTING/deploys" \
+            -d '{"clearCache":"do_not_clear"}' > /dev/null
+
+          SERVICE_ID="$EXISTING"
+        else
+          # Create new web service
+          PAYLOAD=$(jq -n \
+            --arg name "$SERVICE_NAME" \
+            --arg repo "https://github.com/${{ github.repository }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg build "${{ needs.detect.outputs.build_command }}" \
+            --arg start "${{ needs.detect.outputs.start_command }}" \
+            '{
+              type: "web_service",
+              name: $name,
+              repo: $repo,
+              branch: $branch,
+              autoDeploy: "yes",
+              buildCommand: $build,
+              startCommand: $start,
+              plan: "free",
+              envVars: [
+                { key: "DEMO_MODE", value: "true" },
+                { key: "DEMO_BANNER", value: "true" },
+                { key: "DEMO_AUTH_BYPASS", value: "true" }
+              ]
+            }')
+
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            "https://api.render.com/v1/services" \
+            -d "$PAYLOAD")
+
+          SERVICE_ID=$(echo "$RESPONSE" | jq -r '.service.id')
+        fi
+
+        # Build the public URL
+        DEPLOY_URL="https://${SERVICE_NAME}.onrender.com"
+
+        echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+        echo "service_id=$SERVICE_ID" >> "$GITHUB_OUTPUT"
+        echo "Deployed to Render: $DEPLOY_URL"
+
+    # ── Codespaces fallback ──
+    - name: Generate Codespaces deep link
+      id: codespaces
+      if: needs.detect.outputs.provider == 'codespaces'
+      run: |
+        REPO="${{ github.repository }}"
+        REF="${{ github.ref_name }}"
+
+        # Create demo-specific devcontainer if it doesn't exist
+        mkdir -p .devcontainer/demo
+        cat > .devcontainer/demo/devcontainer.json << 'DEVCONTAINER'
+        {
+          "name": "Demo Sandbox",
+          "image": "mcr.microsoft.com/devcontainers/universal:2",
+          "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "ghcr.io/devcontainers/features/python:1": {}
+          },
+          "containerEnv": {
+            "DEMO_MODE": "true",
+            "DEMO_BANNER": "true",
+            "DEMO_AUTH_BYPASS": "true"
+          },
+          "postCreateCommand": "echo 'Demo sandbox ready'",
+          "forwardPorts": [3000, 5000, 8000, 8080]
+        }
+        DEVCONTAINER
+
+        DEEP_LINK="https://codespaces.new/${REPO}?ref=${REF}&devcontainer_path=.devcontainer/demo/devcontainer.json"
+
+        echo "url=$DEEP_LINK" >> "$GITHUB_OUTPUT"
+        echo "Codespaces deep link: $DEEP_LINK"
+
+    # ── Run optional seed command ──
+    - name: Seed demo data
+      if: inputs.demo-data-seed-command != ''
+      run: |
+        echo "Running demo data seed command..."
+        ${{ inputs.demo-data-seed-command }}
+
+    # ── Collect result ──
+    - name: Collect deployment result
+      id: result
+      run: |
+        PROVIDER="${{ needs.detect.outputs.provider }}"
+
+        case "$PROVIDER" in
+          vercel)           URL="${{ steps.vercel.outputs.url }}" ;;
+          cloudflare-pages) URL="${{ steps.cloudflare.outputs.url }}" ;;
+          render)           URL="${{ steps.render.outputs.url }}" ;;
+          codespaces)       URL="${{ steps.codespaces.outputs.url }}" ;;
+        esac
+
+        DEPLOY_ID="demo-${{ github.run_id }}-${{ github.run_attempt }}"
+
+        {
+          echo "sandbox_url=${URL}"
+          echo "deployment_id=${DEPLOY_ID}"
+        } >> "$GITHUB_OUTPUT"
+
+        {
+          echo "## Demo Sandbox Deployed"
+          echo ""
+          echo "| Field | Value |"
+          echo "|-------|-------|"
+          echo "| Provider | $PROVIDER |"
+          echo "| App Type | ${{ needs.detect.outputs.app_type }} |"
+          echo "| Framework | ${{ needs.detect.outputs.framework }} |"
+          echo "| Sandbox URL | $URL |"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 3: PR to inject "Try Demo" badge into README
+  # ──────────────────────────────────────────────────────────────────────
+  badge:
+    needs: [detect, deploy]
+    if: inputs.inject-badge && needs.deploy.outputs.sandbox_url != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Inject badge into README
+      run: |
+        if [ ! -f "README.md" ]; then
+          echo "No README.md found, skipping badge injection"
+          exit 0
+        fi
+
+        SANDBOX_URL="${{ needs.deploy.outputs.sandbox_url }}"
+        STYLE="${{ inputs.badge-style }}"
+        BADGE="[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=${STYLE})](${SANDBOX_URL})"
+
+        MARKER_START="<!-- DEMO:START -->"
+        MARKER_END="<!-- DEMO:END -->"
+
+        if grep -q "$MARKER_START" README.md; then
+          # Replace content between markers (idempotent)
+          sed -i "/$MARKER_START/,/$MARKER_END/c\\$MARKER_START\n$BADGE\n$MARKER_END" README.md
+        elif grep -q "^# " README.md; then
+          # Insert after the first heading
+          sed -i "0,/^# /{s|^\(# .*\)|\1\n\n$MARKER_START\n$BADGE\n$MARKER_END|}" README.md
+        else
+          # Prepend to file
+          {
+            echo "$MARKER_START"
+            echo "$BADGE"
+            echo "$MARKER_END"
+            echo ""
+            cat README.md
+          } > README.md.tmp && mv README.md.tmp README.md
+        fi
+
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c  # ratchet:peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'feat: add "Try Demo" sandbox badge to README'
+        title: 'Add "Try Demo" sandbox badge'
+        body: |
+          ## Demo Sandbox Badge
+
+          Adds a **Try Demo** badge to the README linking to the live sandbox:
+
+          **Sandbox URL:** ${{ needs.deploy.outputs.sandbox_url }}
+          **Provider:** ${{ needs.detect.outputs.provider }}
+          **App Type:** ${{ needs.detect.outputs.app_type }}
+
+          The badge is wrapped in `<!-- DEMO:START -->` / `<!-- DEMO:END -->` markers
+          so future deployments update it in place.
+
+          ---
+          _Automated by the [demo-sandbox](.github/workflows/reusable/demo-sandbox.yml) reusable workflow._
+        branch: demo/add-sandbox-badge
+        delete-branch: true
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 4: Dispatch registry update to the .github repo
+  # ──────────────────────────────────────────────────────────────────────
+  registry:
+    needs: [detect, deploy]
+    if: inputs.update-registry && needs.deploy.outputs.sandbox_url != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Dispatch registry update
+      env:
+        REGISTRY_PAT: ${{ secrets.REGISTRY_PAT }}
+      run: |
+        ORG="${{ github.repository_owner }}"
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+        PAYLOAD=$(jq -n \
+          --arg repo "${{ github.repository }}" \
+          --arg url "${{ needs.deploy.outputs.sandbox_url }}" \
+          --arg app_type "${{ needs.detect.outputs.app_type }}" \
+          --arg framework "${{ needs.detect.outputs.framework }}" \
+          --arg provider "${{ needs.detect.outputs.provider }}" \
+          --arg ts "$TIMESTAMP" \
+          '{
+            event_type: "demo-registry-update",
+            client_payload: {
+              repository: $repo,
+              sandbox_url: $url,
+              app_type: $app_type,
+              framework: $framework,
+              provider: $provider,
+              timestamp: $ts
+            }
+          }')
+
+        curl -s -X POST \
+          -H "Authorization: token $REGISTRY_PAT" \
+          -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/${ORG}/.github/dispatches" \
+          -d "$PAYLOAD"
+
+        echo "Registry update dispatched to ${ORG}/.github"
