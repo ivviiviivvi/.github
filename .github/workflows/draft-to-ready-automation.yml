@@ -99,10 +99,12 @@ jobs:
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         INPUT_FORCE: ${{ github.event.inputs.force }}
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        PR_AUTHOR: ${{ steps.pr-details.outputs.author }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
-          const author = '${{ steps.pr-details.outputs.author }}';
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const author = process.env.PR_AUTHOR;
           const force = process.env.INPUT_FORCE === 'true';
 
           const { data: pr } = await github.rest.pulls.get({
@@ -151,10 +153,12 @@ jobs:
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         INPUT_FORCE: ${{ github.event.inputs.force }}
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_SHA: ${{ steps.pr-details.outputs.head_sha }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
-          const headSha = '${{ steps.pr-details.outputs.head_sha }}';
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const headSha = process.env.HEAD_SHA;
           const force = process.env.INPUT_FORCE === 'true';
 
           // Get combined status
@@ -216,9 +220,11 @@ jobs:
         steps.should-convert.outputs.should-convert == 'true' &&
         steps.check-status.outputs.should-proceed == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           console.log(`Converting PR #${prNumber} from draft to ready...`);
 
@@ -248,12 +254,17 @@ jobs:
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        IS_TRUSTED_AGENT: ${{ steps.should-convert.outputs.is-trusted-agent }}
+        CHECKS_PASSED: ${{ steps.check-status.outputs.checks-passed }}
+        IS_READY_FOR_REVIEW_EVENT: ${{ steps.pr-details.outputs.is_ready_for_review_event }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
-          const isTrustedAgent = '${{ steps.should-convert.outputs.is-trusted-agent }}' === 'true';
-          const checksPassed = '${{ steps.check-status.outputs.checks-passed }}' === 'true';
-          const isManualConversion = '${{ steps.pr-details.outputs.is_ready_for_review_event }}' === 'true';
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const isTrustedAgent = process.env.IS_TRUSTED_AGENT === 'true';
+          const checksPassed = process.env.CHECKS_PASSED === 'true';
+          const isManualConversion = process.env.IS_READY_FOR_REVIEW_EVENT === 'true';
 
           let reason = '';
           if (isManualConversion) {
@@ -285,9 +296,11 @@ jobs:
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           // Add auto-merge label to trigger auto-merge workflow
           await github.rest.issues.addLabels({
@@ -304,9 +317,11 @@ jobs:
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           console.log('🤖 Requesting reviews and notifying AI assistants for PR #' + prNumber);
 
@@ -369,9 +384,11 @@ jobs:
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           console.log('📋 Triggering pr-task-catcher workflow for PR #' + prNumber);
 
@@ -396,13 +413,13 @@ jobs:
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        GH_REPOSITORY: ${{ github.repository }}
       run: |
-        PR_NUMBER=${{ steps.pr-details.outputs.number }}
-
         echo "🤖 Attempting to enable auto-merge for PR #$PR_NUMBER"
 
         # Try to enable auto-merge (may fail if checks not complete yet)
-        if gh pr merge --auto --squash "https://github.com/${{ github.repository }}/pull/$PR_NUMBER" 2>/dev/null; then
+        if gh pr merge --auto --squash "https://github.com/$GH_REPOSITORY/pull/$PR_NUMBER" 2>/dev/null; then
           echo "✅ Auto-merge enabled successfully"
         else
           echo "⏳ Auto-merge not ready yet (checks may not be complete)"
@@ -420,30 +437,39 @@ jobs:
 
     - name: Summary
       if: always() && steps.pr-details.outputs.number
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        PR_TITLE: ${{ steps.pr-details.outputs.title }}
+        PR_AUTHOR: ${{ steps.pr-details.outputs.author }}
+        PR_DRAFT: ${{ steps.pr-details.outputs.draft }}
+        SHOULD_CONVERT: ${{ steps.should-convert.outputs.should-convert }}
+        SHOULD_PROCEED: ${{ steps.check-status.outputs.should-proceed }}
+        CONVERTED: ${{ steps.convert.outputs.converted }}
+        CHECKS_PASSED: ${{ steps.check-status.outputs.checks-passed }}
       run: |
         echo "### 🚀 Draft to Ready Automation Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**PR Number:** #${{ steps.pr-details.outputs.number }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Title:** ${{ steps.pr-details.outputs.title }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Author:** ${{ steps.pr-details.outputs.author }}" >> $GITHUB_STEP_SUMMARY
+        echo "**PR Number:** #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+        echo "**Title:** $PR_TITLE" >> $GITHUB_STEP_SUMMARY
+        echo "**Author:** $PR_AUTHOR" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ steps.pr-details.outputs.draft }}" != "true" ]; then
+        if [ "$PR_DRAFT" != "true" ]; then
           echo "ℹ️ PR is already ready (not a draft)" >> $GITHUB_STEP_SUMMARY
-        elif [ "${{ steps.should-convert.outputs.should-convert }}" != "true" ]; then
+        elif [ "$SHOULD_CONVERT" != "true" ]; then
           echo "⏭️ PR does not meet criteria for auto-conversion" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**To enable auto-conversion:**" >> $GITHUB_STEP_SUMMARY
           echo "- Add the \`auto-ready\` label" >> $GITHUB_STEP_SUMMARY
           echo "- Include \`[auto-ready]\` in PR title" >> $GITHUB_STEP_SUMMARY
           echo "- Have PR created by trusted AI agent" >> $GITHUB_STEP_SUMMARY
-        elif [ "${{ steps.check-status.outputs.should-proceed }}" != "true" ]; then
+        elif [ "$SHOULD_PROCEED" != "true" ]; then
           echo "⏳ Waiting for checks to pass before conversion" >> $GITHUB_STEP_SUMMARY
-        elif [ "${{ steps.convert.outputs.converted }}" == "true" ]; then
+        elif [ "$CONVERTED" == "true" ]; then
           echo "✅ **Successfully converted from draft to ready!**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Status:**" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check-status.outputs.checks-passed }}" == "true" ]; then
+          if [ "$CHECKS_PASSED" == "true" ]; then
             echo "- ✅ All checks passed" >> $GITHUB_STEP_SUMMARY
             echo "- 🎯 Ready for auto-merge" >> $GITHUB_STEP_SUMMARY
           else

@@ -11,7 +11,10 @@ DOTFILES_REPO="${DOTFILES_REPO:-4444J99/dotfiles}"
 
 echo "📦 Installing chezmoi..."
 if ! command -v chezmoi &>/dev/null; then
-  sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+  CHEZMOI_INSTALLER="$(mktemp)"
+  curl -fsLS get.chezmoi.io -o "$CHEZMOI_INSTALLER"
+  sh "$CHEZMOI_INSTALLER" -- -b /usr/local/bin
+  rm -f "$CHEZMOI_INSTALLER"
 fi
 
 echo "🏠 Applying dotfiles from ${DOTFILES_REPO}..."
@@ -56,7 +59,7 @@ if ! command -v eza &>/dev/null; then
   echo "📁 Installing eza..."
   sudo mkdir -p /etc/apt/keyrings
   wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-  echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+  echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] https://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
   sudo apt-get update
   sudo apt-get install -y eza
 fi

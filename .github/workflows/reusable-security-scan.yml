@@ -76,7 +76,7 @@ jobs:
         SEVERITY: ${{ inputs.severity }}
         SCAN_PATH: ${{ inputs.scan_path }}
       run: |
-        trivy fs --format sarif --output trivy-results.sarif --severity "$SEVERITY" --exit-code 0 "$SCAN_PATH"
+        trivy fs --format sarif --output trivy-results.sarif --severity "$SEVERITY" --exit-code 0 --skip-dirs usr,var,opt "$SCAN_PATH"
 
     - name: Run Semgrep scanner
       if: inputs.scan_type == 'semgrep' || inputs.scan_type == 'all'
@@ -167,7 +167,7 @@ jobs:
 
     - name: Upload Trivy SARIF to GitHub Security
       if: inputs.upload_sarif && always()
-      uses: github/codeql-action/upload-sarif@439137e1b50c27ba9e2f9befc93e43091b449c34  # ratchet:github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
       with:
         sarif_file: trivy-results.sarif
         category: trivy

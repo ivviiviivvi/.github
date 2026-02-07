@@ -101,10 +101,13 @@ jobs:
       id: check-eligibility
       if: steps.pr-details.outputs.number
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        PR_DRAFT: ${{ steps.pr-details.outputs.draft }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
-          const isDraft = '${{ steps.pr-details.outputs.draft }}' === 'true';
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const isDraft = process.env.PR_DRAFT === 'true';
 
           if (isDraft) {
             console.log('PR is in draft mode, skipping auto-merge');
@@ -160,9 +163,11 @@ jobs:
       id: check-conflicts
       if: steps.check-eligibility.outputs.eligible == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           const { data: pr } = await github.rest.pulls.get({
             owner: context.repo.owner,
@@ -187,11 +192,15 @@ jobs:
       id: fix-conflicts
       if: steps.check-conflicts.outputs.has-conflicts == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
-          const headBranch = '${{ steps.pr-details.outputs.head }}';
-          const baseBranch = '${{ steps.pr-details.outputs.base }}';
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const headBranch = process.env.HEAD_BRANCH;
+          const baseBranch = process.env.BASE_BRANCH;
 
           // Attempt to update branch (merge base into head)
           try {
@@ -230,9 +239,11 @@ jobs:
         steps.check-eligibility.outputs.eligible == 'true' &&
         (steps.check-conflicts.outputs.has-conflicts == 'false' || steps.fix-conflicts.outputs.fixed == 'true')
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           const { data: pr } = await github.rest.pulls.get({
             owner: context.repo.owner,
@@ -276,9 +287,11 @@ jobs:
       id: check-approvals
       if: steps.check-status.outputs.all-passed == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           // Get reviews
           const { data: reviews } = await github.rest.pulls.listReviews({
@@ -331,9 +344,11 @@ jobs:
         steps.check-status.outputs.all-passed == 'true' &&
         steps.check-approvals.outputs.approved == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
         script: |
-          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
 
           try {
             // Use GraphQL to enable auto-merge
@@ -383,9 +398,11 @@ jobs:
     - name: Cleanup merged branch
       if: steps.enable-auto-merge.outputs.merged == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
       with:
         script: |
-          const headBranch = '${{ steps.pr-details.outputs.head }}';
+          const headBranch = process.env.HEAD_BRANCH;
 
           // Don't delete main, develop, or master branches
           const protectedBranches = ['main', 'master', 'develop'];
@@ -408,23 +425,35 @@ jobs:
 
     - name: Summary
       if: always()
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
+        ELIGIBLE: ${{ steps.check-eligibility.outputs.eligible }}
+        HAS_CONFLICTS: ${{ steps.check-conflicts.outputs.has-conflicts }}
+        CONFLICTS_FIXED: ${{ steps.fix-conflicts.outputs.fixed }}
+        ALL_PASSED: ${{ steps.check-status.outputs.all-passed }}
+        APPROVED: ${{ steps.check-approvals.outputs.approved }}
+        APPROVAL_COUNT: ${{ steps.check-approvals.outputs.approval-count }}
+        MERGED: ${{ steps.enable-auto-merge.outputs.merged }}
+        MERGE_SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}
       run: |
         echo "### 🤖 Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ steps.pr-details.outputs.number }}" != "" ]; then
-          echo "**PR Number:** #${{ steps.pr-details.outputs.number }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** ${{ steps.pr-details.outputs.head }} → ${{ steps.pr-details.outputs.base }}" >> $GITHUB_STEP_SUMMARY
+        if [ "$PR_NUMBER" != "" ]; then
+          echo "**PR Number:** #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** $HEAD_BRANCH → $BASE_BRANCH" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if [ "${{ steps.check-eligibility.outputs.eligible }}" == "true" ]; then
+          if [ "$ELIGIBLE" == "true" ]; then
             echo "✅ Eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Not eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [ "${{ steps.check-conflicts.outputs.has-conflicts }}" == "true" ]; then
-            if [ "${{ steps.fix-conflicts.outputs.fixed }}" == "true" ]; then
+          if [ "$HAS_CONFLICTS" == "true" ]; then
+            if [ "$CONFLICTS_FIXED" == "true" ]; then
               echo "✅ Conflicts resolved automatically" >> $GITHUB_STEP_SUMMARY
             else
               echo "❌ Conflicts detected - manual resolution required" >> $GITHUB_STEP_SUMMARY
@@ -433,22 +462,22 @@ jobs:
             echo "✅ No merge conflicts" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [ "${{ steps.check-status.outputs.all-passed }}" == "true" ]; then
+          if [ "$ALL_PASSED" == "true" ]; then
             echo "✅ All status checks passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "⏳ Waiting for status checks" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [ "${{ steps.check-approvals.outputs.approved }}" == "true" ]; then
-            echo "✅ Required approvals obtained (${{ steps.check-approvals.outputs.approval-count }})" >> $GITHUB_STEP_SUMMARY
+          if [ "$APPROVED" == "true" ]; then
+            echo "✅ Required approvals obtained ($APPROVAL_COUNT)" >> $GITHUB_STEP_SUMMARY
           else
             echo "⏳ Waiting for approvals" >> $GITHUB_STEP_SUMMARY
           fi
 
-          if [ "${{ steps.enable-auto-merge.outputs.merged }}" == "true" ]; then
+          if [ "$MERGED" == "true" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "🎉 **PR Successfully Auto-Merged!**" >> $GITHUB_STEP_SUMMARY
-            echo "Merge SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}" >> $GITHUB_STEP_SUMMARY
+            echo "Merge SHA: $MERGE_SHA" >> $GITHUB_STEP_SUMMARY
           fi
         else
           echo "No PR found in event payload" >> $GITHUB_STEP_SUMMARY
@@ -456,6 +485,11 @@ jobs:
 
     - name: Send Slack notification on merge
       if: steps.enable-auto-merge.outputs.merged == 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
+        MERGE_SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}
       run: |
         if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
           --data "{
@@ -465,7 +499,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*PR #${{ steps.pr-details.outputs.number }} Auto-Merged*\n\nBranch: \`${{ steps.pr-details.outputs.head }}\` → \`${{ steps.pr-details.outputs.base }}\`\nMerge SHA: \`${{ steps.enable-auto-merge.outputs.merge-sha }}\`\"
+                  \"text\": \"*PR #${PR_NUMBER} Auto-Merged*\n\nBranch: \`${HEAD_BRANCH}\` → \`${BASE_BRANCH}\`\nMerge SHA: \`${MERGE_SHA}\`\"
                 }
               }
             ]
@@ -493,12 +527,15 @@ jobs:
     - name: Validate failure cause
       id: validate
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
       with:
         script: |
           // Check if failure is likely related to the merged changes
           // Look for new test failures, build errors, or other indicators
 
-          const prNumber = '${{ needs.auto-merge.outputs.pr-number }}';
+          const prNumber = process.env.PR_NUMBER;
           let shouldRevert = false;
           let reason = '';
 
@@ -514,7 +551,7 @@ jobs:
             // Check for failed required checks
             const failedRuns = workflowRuns.workflow_runs.filter(run =>
               run.conclusion === 'failure' &&
-              run.head_sha === '${{ needs.auto-merge.outputs.merge-sha }}'
+              run.head_sha === process.env.MERGE_SHA
             );
 
             if (failedRuns.length > 0) {
@@ -559,11 +596,15 @@ jobs:
       id: revert
       if: steps.validate.outputs.should_revert == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        BASE_BRANCH: ${{ needs.auto-merge.outputs.base-branch }}
       with:
         script: |
-          const mergeSha = '${{ needs.auto-merge.outputs.merge-sha }}';
-          const prNumber = '${{ needs.auto-merge.outputs.pr-number }}';
-          const baseBranch = '${{ needs.auto-merge.outputs.base-branch }}' || 'main';
+          const mergeSha = process.env.MERGE_SHA;
+          const prNumber = process.env.PR_NUMBER;
+          const baseBranch = process.env.BASE_BRANCH || 'main';
 
           if (!mergeSha) {
             console.log('No merge SHA found, skipping revert');
@@ -615,16 +656,20 @@ jobs:
 
     - name: Notify manual review needed
       if: steps.validate.outputs.should_revert != 'true'
+      env:
+        VALIDATE_REASON: ${{ steps.validate.outputs.reason }}
       run: |
-        echo "::warning title=Manual Review Required::${{ steps.validate.outputs.reason }}"
+        echo "::warning title=Manual Review Required::$VALIDATE_REASON"
         echo "## ⏸️ Auto-Revert Skipped" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Reason:** ${{ steps.validate.outputs.reason }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Reason:** $VALIDATE_REASON" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Action Required:** Please review the failures and determine if manual revert is needed." >> $GITHUB_STEP_SUMMARY
 
     - name: Send Slack notification on revert
       if: steps.revert.outputs.reverted == 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        REVERT_SHA: ${{ steps.revert.outputs.revert-sha }}
       run: |
         if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
           --data "{
@@ -634,7 +679,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*Auto-Revert Triggered*\\n\\nPR was automatically reverted due to post-merge CI failures.\\n\\nRevert SHA: \`${{ steps.revert.outputs.revert-sha }}\`\"
+                  \"text\": \"*Auto-Revert Triggered*\\n\\nPR was automatically reverted due to post-merge CI failures.\\n\\nRevert SHA: \`${REVERT_SHA}\`\"
                 }
               }
             ]
@@ -645,6 +690,9 @@ jobs:
 
     - name: Send Slack notification for manual review
       if: steps.validate.outputs.should_revert != 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        VALIDATE_REASON: ${{ steps.validate.outputs.reason }}
       run: |
         if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
           --data "{
@@ -654,7 +702,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*Auto-Revert Skipped - Manual Review Needed*\\n\\nPR #${{ needs.auto-merge.outputs.pr-number }}\\n\\n**Reason:** ${{ steps.validate.outputs.reason }}\"
+                  \"text\": \"*Auto-Revert Skipped - Manual Review Needed*\\n\\nPR #${PR_NUMBER}\\n\\n**Reason:** ${VALIDATE_REASON}\"
                 }
               }
             ]

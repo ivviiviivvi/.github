@@ -194,9 +194,11 @@ jobs:
     - name: Apply Batch Labels
       if: steps.find-prs.outputs.total > 0
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_GROUPS: ${{ steps.find-prs.outputs.groups }}
       with:
         script: |
-          const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+          const groups = JSON.parse(process.env.PR_GROUPS);
 
           // Create batch labels for each category with PRs
           for (const [category, prs] of Object.entries(groups)) {
@@ -242,9 +244,10 @@ jobs:
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         AUTO_MERGE: ${{ github.event.inputs.auto_merge }}
+        PR_GROUPS: ${{ steps.find-prs.outputs.groups }}
       with:
         script: |
-          const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+          const groups = JSON.parse(process.env.PR_GROUPS);
           const autoMerge = process.env.AUTO_MERGE !== 'false';
 
           for (const [category, prs] of Object.entries(groups)) {
@@ -284,9 +287,11 @@ jobs:
       id: check-ready
       if: steps.find-prs.outputs.total > 0 && github.event.inputs.auto_merge != 'false'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_GROUPS: ${{ steps.find-prs.outputs.groups }}
       with:
         script: |
-          const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
+          const groups = JSON.parse(process.env.PR_GROUPS);
 
           let readyBatches = [];
 
@@ -350,9 +355,11 @@ jobs:
     - name: Trigger Batch Merge
       if: steps.check-ready.outputs.has-ready == 'true'
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        READY_BATCHES: ${{ steps.check-ready.outputs.ready-batches }}
       with:
         script: |
-          const readyBatches = JSON.parse('${{ steps.check-ready.outputs.ready-batches }}');
+          const readyBatches = JSON.parse(process.env.READY_BATCHES);
 
           console.log('🚀 Triggering batch merge for ready batches...');
 
@@ -415,20 +422,23 @@ jobs:
 
     - name: Summary
       if: always()
+      env:
+        TOTAL_PRS: ${{ steps.find-prs.outputs.total }}
+        HAS_READY: ${{ steps.check-ready.outputs.has-ready }}
       run: |
         echo "### 🤖 Auto-Batch PRs Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Total Automated PRs:** ${{ steps.find-prs.outputs.total }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Total Automated PRs:** $TOTAL_PRS" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ steps.find-prs.outputs.total }}" -gt 0 ]; then
+        if [ "$TOTAL_PRS" -gt 0 ]; then
           echo "✅ PRs have been organized into batches by source/category" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Includes PRs from:** Dependabot, Jules, GitHub Actions, Renovate, Copilot, and manual PRs with auto-batch label" >> $GITHUB_STEP_SUMMARY
 
-          if [ "${{ steps.check-ready.outputs.has-ready }}" = "true" ]; then
+          if [ "$HAS_READY" = "true" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "🚀 **Ready batches triggered for merge**" >> $GITHUB_STEP_SUMMARY
           fi
