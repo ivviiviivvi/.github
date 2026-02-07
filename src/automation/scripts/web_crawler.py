@@ -55,7 +55,8 @@ class OrganizationCrawler:
         # Default is 10, which bottlenecks if max_workers > 10
         adapter = HTTPAdapter(pool_connections=max_workers, pool_maxsize=max_workers)
         self.session.mount("https://", adapter)
-        self.session.mount("http://", adapter)  # nosemgrep: python.lang.security.audit.network.http-not-https-connection.http-not-https-connection  # needed for redirect handling
+        # nosemgrep: python.lang.security.audit.network.http-not-https-connection.http-not-https-connection
+        self.session.mount("http://", adapter)  # needed for redirect handling
 
         # Create a single SSL context for reuse
         # This avoids reloading the system trust store for every request
@@ -255,7 +256,10 @@ class OrganizationCrawler:
                 server_hostname=hostname,
             )
         else:
-            return urllib3.HTTPConnectionPool(host=safe_ip, port=port, maxsize=self.max_workers)
+            # nosemgrep: python.lang.security.audit.network.http-not-https-connection.http-not-https-connection
+            return urllib3.HTTPConnectionPool(
+                host=safe_ip, port=port, maxsize=self.max_workers
+            )  # needed for redirect handling
 
     def _check_link(self, url: str, timeout: int = 10) -> int:
         """Check if a link is accessible with SSRF protection."""

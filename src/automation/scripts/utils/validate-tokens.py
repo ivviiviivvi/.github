@@ -179,7 +179,7 @@ def print_summary(results: list[dict[str, Any]], verbose: bool = False) -> bool:
             status_color = GREEN if result["valid"] else RED if result["status"] != "planned" else YELLOW
 
             # Mask token name to avoid leaking sensitive identifiers in logs
-            token_display = result['token']
+            token_display = result["token"]
             if len(token_display) > 8:
                 token_display = f"{token_display[:4]}...{token_display[-4:]}"
             print(f"{status_color}{status_icon}{NC} {token_display}")

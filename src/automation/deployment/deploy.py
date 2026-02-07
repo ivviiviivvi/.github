@@ -160,7 +160,7 @@ class DeploymentOrchestrator:
 
         for secret_name in required_secret_names:
             if not os.getenv(secret_name):
-                print(f"    Missing required secret environment variable (check deployment config)")
+                print("    Missing required secret environment variable (check deployment config)")
                 return False
 
         return True
