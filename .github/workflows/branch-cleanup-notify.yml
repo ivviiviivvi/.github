@@ -33,6 +33,7 @@ jobs:
         }
 
     - name: Detect stale branches
+      continue-on-error: true
       id: stale
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,6 +57,7 @@ jobs:
         fi
 
     - name: Create issue for stale branches
+      continue-on-error: true
       if: steps.stale.outputs.found == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

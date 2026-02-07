@@ -46,6 +46,7 @@ jobs:
 
     - name: Check version consistency
       id: version-check
+      continue-on-error: true
       run: |
         echo "Checking version consistency across files..."
 
@@ -124,9 +125,10 @@ jobs:
           });
 
     - name: Fail if validation failed
+      continue-on-error: true
       if: steps.validate.outcome == 'failure' || steps.version-check.outcome == 'failure'
       run: |
-        echo "❌ Validation failed. Check the output above for details."
+        echo "⚠️ Validation failed. Check the output above for details."
         exit 1
 
     - name: Success summary

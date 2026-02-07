@@ -159,13 +159,13 @@ jobs:
       with:
         payload: |
           {
-            "text": ${{ steps.details.outputs.emoji }} ${{ inputs.workflow_name }} ${{ inputs.status }},
+            "text": "${{ steps.details.outputs.emoji }} ${{ inputs.workflow_name }} ${{ inputs.status }}",
             "blocks": [
               {
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": ${{ steps.details.outputs.emoji }} ${{ steps.details.outputs.title }}
+                  "text": "${{ steps.details.outputs.emoji }} ${{ steps.details.outputs.title }}"
                 }
               },
               {
@@ -201,7 +201,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": ${{ inputs.message }}
+                  "text": "${{ inputs.message }}"
                 }
               },
               {
@@ -213,7 +213,7 @@ jobs:
                       "type": "plain_text",
                       "text": "View Workflow Run"
                     },
-                    "url": ${{ steps.details.outputs.run_url }}
+                    "url": "${{ steps.details.outputs.run_url }}"
                   }
                 ]
               }

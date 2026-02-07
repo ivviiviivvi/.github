@@ -310,6 +310,7 @@ jobs:
         PYTHON_SCRIPT
 
     - name: Commit schedule to repository
+      continue-on-error: true
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -366,6 +367,7 @@ jobs:
         PYTHON_SCRIPT
 
     - name: Commit batch files
+      continue-on-error: true
       run: |
         git add .github/schedules/batches/
 

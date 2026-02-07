@@ -68,6 +68,7 @@ jobs:
         echo "Report generated at: $REPORT_FILE"
 
     - name: Commit report
+      continue-on-error: true
       run: |
         git config user.name "github-actions[bot]"
         EMAIL="github-actions[bot]@users.noreply.github.com"

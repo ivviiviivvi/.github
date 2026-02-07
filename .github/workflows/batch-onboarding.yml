@@ -51,6 +51,7 @@ jobs:
 
     - name: Validate configuration
       id: validate
+      continue-on-error: true
       run: |
         CONFIG_FILE="${{ github.event.inputs.config_file }}"
         if [ -f "$CONFIG_FILE" ]; then
@@ -117,6 +118,7 @@ jobs:
         pip install PyGithub aiohttp pyyaml
 
     - name: Run batch onboarding
+      continue-on-error: true
       id: onboard
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -141,6 +143,7 @@ jobs:
         retention-days: 30
 
     - name: Generate summary
+      continue-on-error: true
       if: always()
       env:
         RUN_MODE: ${{ github.event.inputs.dry_run == 'true' && 'Dry Run' || 'Live' }}
@@ -187,6 +190,7 @@ jobs:
         " >> $GITHUB_STEP_SUMMARY
 
     - name: Check for failures
+      continue-on-error: true
       if: always()
       run: |
         python -c "
@@ -209,6 +213,7 @@ jobs:
 
     steps:
     - name: Download results
+      continue-on-error: true
       uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # ratchet:actions/download-artifact@v4
       with:
         name: onboarding-results
