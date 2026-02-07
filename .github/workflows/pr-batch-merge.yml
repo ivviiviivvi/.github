@@ -37,20 +37,22 @@ jobs:
 
     - name: Extract Batch Label
       id: batch_label
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_BATCH_LABEL: ${{ github.event.inputs.batch_label }}
+        COMMENT_BODY: ${{ github.event.comment.body }}
       run: |
-        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          BATCH_LABEL="${{ github.event.inputs.batch_label }}"
+        if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+          BATCH_LABEL="$INPUT_BATCH_LABEL"
         else
           # Extract from comment: /merge-batch api-update
-          COMMENT="${{ github.event.comment.body }}"
-          BATCH_NAME=$(echo "$COMMENT" | grep -oP '/merge-batch\s+\K\S+')
+          BATCH_NAME=$(echo "$COMMENT_BODY" | grep -oP '/merge-batch\s+\K\S+')
           BATCH_LABEL="batch:$BATCH_NAME"
         fi
 
         echo "label=$BATCH_LABEL" >> $GITHUB_OUTPUT
         echo "Batch label: $BATCH_LABEL"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Get PRs in Batch
       id: batch_prs

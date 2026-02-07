@@ -63,6 +63,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || inputs.workflow_run_id }}
+        REPOSITORY: ${{ github.repository }}
+        FORCE_RETRY: ${{ inputs.force_retry }}
       run: |
         # Determine failure classification
         FAILURE_TYPE="unknown"
@@ -98,12 +100,12 @@ jobs:
           fi
 
           # Get previous attempt count from annotations
-          CHECK_RUN_IDS=$(gh api "repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID/jobs" -q '.jobs[].check_run_url // empty' 2>/dev/null | sed 's/.*\/check-runs\///' || echo "")
+          CHECK_RUN_IDS=$(gh api "repos/$REPOSITORY/actions/runs/$WORKFLOW_RUN_ID/jobs" -q '.jobs[].check_run_url // empty' 2>/dev/null | sed 's/.*\/check-runs\///' || echo "")
           PREVIOUS_ATTEMPTS=0
           if [[ -n "$CHECK_RUN_IDS" ]]; then
             for CHECK_RUN_ID in $CHECK_RUN_IDS; do
               if [[ -n "$CHECK_RUN_ID" && "$CHECK_RUN_ID" =~ ^[0-9]+$ ]]; then
-                ATTEMPTS_ON_JOB=$(gh api "repos/${{ github.repository }}/check-runs/$CHECK_RUN_ID/annotations" --jq '[.[] | select(.title == "self-healing-attempt")] | length' 2>/dev/null || echo "0")
+                ATTEMPTS_ON_JOB=$(gh api "repos/$REPOSITORY/check-runs/$CHECK_RUN_ID/annotations" --jq '[.[] | select(.title == "self-healing-attempt")] | length' 2>/dev/null || echo "0")
                 # Ensure ATTEMPTS_ON_JOB is a valid number
                 if [[ "$ATTEMPTS_ON_JOB" =~ ^[0-9]+$ ]]; then
                   PREVIOUS_ATTEMPTS=$((PREVIOUS_ATTEMPTS + ATTEMPTS_ON_JOB))
@@ -123,7 +125,7 @@ jobs:
         fi
 
         # Force retry if requested
-        if [[ "${{ inputs.force_retry }}" == "true" ]]; then
+        if [[ "$FORCE_RETRY" == "true" ]]; then
           SHOULD_RETRY="true"
         fi
 
@@ -153,12 +155,12 @@ jobs:
     - name: Retry failed workflow
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || inputs.workflow_run_id }}
+        REPOSITORY: ${{ github.repository }}
       run: |
-        WORKFLOW_RUN_ID="${{ github.event.workflow_run.id || inputs.workflow_run_id }}"
-
         if [[ -n "$WORKFLOW_RUN_ID" ]]; then
           echo "Retrying workflow run $WORKFLOW_RUN_ID (attempt ${{ needs.classify-failure.outputs.attempt_number }})"
-          gh api -X POST repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID/rerun-failed-jobs
+          gh api -X POST "repos/$REPOSITORY/actions/runs/$WORKFLOW_RUN_ID/rerun-failed-jobs"
 
           # Create annotation to track attempt
           echo "::notice title=self-healing-attempt::Retry attempt ${{ needs.classify-failure.outputs.attempt_number }} initiated"
@@ -184,17 +186,17 @@ jobs:
       if: needs.classify-failure.outputs.failure_type == 'permanent'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WORKFLOW_NAME: ${{ github.event.workflow_run.name || 'Unknown' }}
+        WORKFLOW_URL: ${{ github.event.workflow_run.html_url || 'N/A' }}
+        FAILURE_TYPE: ${{ needs.classify-failure.outputs.failure_type }}
       run: |
-        WORKFLOW_NAME="${{ github.event.workflow_run.name || 'Unknown' }}"
-        WORKFLOW_URL="${{ github.event.workflow_run.html_url || 'N/A' }}"
-
         gh issue create \
           --title "🔴 Permanent workflow failure: $WORKFLOW_NAME" \
           --body "## Workflow Failure Requires Manual Intervention
 
         **Workflow:** $WORKFLOW_NAME
         **Run URL:** $WORKFLOW_URL
-        **Failure Type:** ${{ needs.classify-failure.outputs.failure_type }}
+        **Failure Type:** $FAILURE_TYPE
         **Classification:** Permanent (not auto-retriable)
 
         ### Action Required
@@ -216,20 +218,24 @@ jobs:
 
     - name: Notify via Slack
       if: steps.validate-notify.outputs.slack_valid == 'true'
+      env:
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        FAILURE_TYPE: ${{ needs.classify-failure.outputs.failure_type }}
+        ATTEMPT_NUMBER: ${{ needs.classify-failure.outputs.attempt_number }}
       run: |
         if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
-          --data '{
-            "text": "⚠️ Self-Healing Alert",
-            "blocks": [
+          --data "{
+            \"text\": \"⚠️ Self-Healing Alert\",
+            \"blocks\": [
               {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Self-Healing Alert*\nWorkflow: ${{ github.event.workflow_run.name }}\nFailure Type: ${{ needs.classify-failure.outputs.failure_type }}\nAttempts: ${{ needs.classify-failure.outputs.attempt_number }}"
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*Self-Healing Alert*\nWorkflow: ${WORKFLOW_RUN_NAME}\nFailure Type: ${FAILURE_TYPE}\nAttempts: ${ATTEMPT_NUMBER}\"
                 }
               }
             ]
-          }' \
+          }" \
           "$SLACK_WEBHOOK_URL"; then
           echo "::warning title=Slack notification failed::Self-healing notification failed"
         fi

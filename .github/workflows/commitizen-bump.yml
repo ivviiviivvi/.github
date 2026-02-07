@@ -56,14 +56,17 @@ jobs:
 
     - name: Run Version Bump
       id: bump
+      env:
+        BUMP_TYPE: ${{ inputs.bump_type }}
+        DRY_RUN: ${{ inputs.dry_run }}
       run: |
         ARGS="--changelog"
 
-        if [ "${{ inputs.bump_type }}" != "auto" ]; then
-          ARGS="$ARGS --increment ${{ inputs.bump_type }}"
+        if [ "$BUMP_TYPE" != "auto" ]; then
+          ARGS="$ARGS --increment $BUMP_TYPE"
         fi
 
-        if [ "${{ inputs.dry_run }}" == "true" ]; then
+        if [ "$DRY_RUN" == "true" ]; then
           ARGS="$ARGS --dry-run"
           echo "Running in dry-run mode..."
         fi
@@ -92,6 +95,9 @@ jobs:
         echo "New version: $VERSION"
 
     - name: Create Summary
+      env:
+        BUMP_TYPE: ${{ inputs.bump_type }}
+        DRY_RUN: ${{ inputs.dry_run }}
       run: |
         VERSION=$(cz version --project)
         {
@@ -99,11 +105,11 @@ jobs:
           echo ""
           echo "**New Version:** \`v$VERSION\`"
           echo ""
-          echo "**Bump Type:** ${{ inputs.bump_type }}"
+          echo "**Bump Type:** $BUMP_TYPE"
           echo ""
-          echo "**Dry Run:** ${{ inputs.dry_run }}"
+          echo "**Dry Run:** $DRY_RUN"
           echo ""
-          if [ "${{ inputs.dry_run }}" == "false" ]; then
+          if [ "$DRY_RUN" == "false" ]; then
             echo "### Next Steps"
             echo "- Create a release from the new tag"
             echo "- Review the updated CHANGELOG.md"

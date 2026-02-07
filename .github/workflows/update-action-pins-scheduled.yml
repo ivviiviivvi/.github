@@ -52,15 +52,18 @@ jobs:
       id: update
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DRY_RUN: ${{ inputs.dry_run }}
+        VERBOSE: ${{ inputs.verbose }}
+        EVENT_NAME: ${{ github.event_name }}
       run: |
         cd .github
 
         FLAGS=""
-        if [ "${{ inputs.dry_run }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+        if [ "$DRY_RUN" = "true" ] || [ "$EVENT_NAME" = "schedule" ]; then
           # Always dry run on schedule first to check for updates
           FLAGS="--dry-run"
         fi
-        if [ "${{ inputs.verbose }}" = "true" ]; then
+        if [ "$VERBOSE" = "true" ]; then
           FLAGS="$FLAGS --verbose"
         fi
 
@@ -120,12 +123,14 @@ jobs:
           chore
 
     - name: Summary
+      env:
+        DRY_RUN: ${{ inputs.dry_run }}
       run: |
         echo "## Action Pin Update Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         if [ "${{ steps.update.outputs.has_updates }}" = "true" ]; then
           echo "Updates available: ${{ steps.update.outputs.update_summary }}" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "> **Note:** This was a dry run. No changes were made." >> $GITHUB_STEP_SUMMARY
           fi

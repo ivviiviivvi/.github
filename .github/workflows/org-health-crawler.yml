@@ -56,10 +56,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_REPOSITORY: ${{ github.repository }}
+        VALIDATE_LINKS: ${{ github.event.inputs.validate_links }}
       run: |
+        EXTRA_FLAGS=""
+        if [ "$VALIDATE_LINKS" = "true" ]; then
+          EXTRA_FLAGS="--validate-links"
+        fi
         python src/automation/scripts/web_crawler.py \
           --base-dir . \
-          ${{ github.event.inputs.validate_links == 'true' && '--validate-links' || '' }}
+          $EXTRA_FLAGS
 
     - name: Upload Reports as Artifacts
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4

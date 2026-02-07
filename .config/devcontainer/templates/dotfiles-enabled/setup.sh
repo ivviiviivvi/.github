@@ -45,7 +45,10 @@ sudo ln -sf /usr/bin/batcat /usr/local/bin/bat 2>/dev/null || true
 # Install starship prompt
 if ! command -v starship &>/dev/null; then
   echo "⭐ Installing starship..."
-  curl -sS https://starship.rs/install.sh | sh -s -- -y
+  STARSHIP_INSTALLER="$(mktemp)"
+  curl -sS https://starship.rs/install.sh -o "$STARSHIP_INSTALLER"
+  sh "$STARSHIP_INSTALLER" -y
+  rm -f "$STARSHIP_INSTALLER"
 fi
 
 # Install eza (modern ls)
@@ -61,14 +64,20 @@ fi
 # Install zoxide (smart cd)
 if ! command -v zoxide &>/dev/null; then
   echo "📂 Installing zoxide..."
-  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+  ZOXIDE_INSTALLER="$(mktemp)"
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh -o "$ZOXIDE_INSTALLER"
+  bash "$ZOXIDE_INSTALLER"
+  rm -f "$ZOXIDE_INSTALLER"
   sudo mv ~/.local/bin/zoxide /usr/local/bin/ 2>/dev/null || true
 fi
 
 # Install atuin (shell history)
 if ! command -v atuin &>/dev/null; then
   echo "📜 Installing atuin..."
-  curl -sS https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh | bash
+  ATUIN_INSTALLER="$(mktemp)"
+  curl -sS https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh -o "$ATUIN_INSTALLER"
+  bash "$ATUIN_INSTALLER"
+  rm -f "$ATUIN_INSTALLER"
   sudo mv ~/.atuin/bin/atuin /usr/local/bin/ 2>/dev/null || true
 fi
 

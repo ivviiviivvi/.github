@@ -43,9 +43,11 @@ jobs:
 
     - name: Determine environment
       id: env
+      env:
+        INPUT_ENVIRONMENT: ${{ github.event.inputs.environment }}
       run: |
         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          ENV="${{ github.event.inputs.environment }}"
+          ENV="$INPUT_ENVIRONMENT"
         elif [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
           ENV="production"
         else

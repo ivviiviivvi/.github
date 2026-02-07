@@ -332,10 +332,10 @@ jobs:
     - name: Generate suggested descriptions
       if: steps.check-current-repo.outputs.repo_complete == 'false' && inputs.auto_fix == true
       id: generate-suggestions
+      env:
+        REPO_OWNER: ${{ github.repository_owner }}
       run: |
         echo "💡 Generating suggested descriptions based on repository content..."
-
-        REPO_NAME="${{ github.repository }}"
 
         # Analyze repository content to suggest description
         SUGGESTION=""
@@ -369,7 +369,7 @@ jobs:
         fi
 
         if [ -z "$SUGGESTION" ]; then
-          SUGGESTION="A project in the ${{ github.repository_owner }} organization"
+          SUGGESTION="A project in the $REPO_OWNER organization"
         fi
 
         echo "suggested_description=$SUGGESTION" >> $GITHUB_OUTPUT
@@ -410,12 +410,14 @@ jobs:
           || echo "Issue may already exist or could not be created"
 
     - name: Generate completion report
+      env:
+        INPUT_SCOPE: ${{ inputs.scope }}
       run: |
         echo "## 📊 Bio and Description Completions Report" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
         # Organization section
-        if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "organization" ]; then
+        if [ "$INPUT_SCOPE" = "all" ] || [ "$INPUT_SCOPE" = "organization" ]; then
           echo "### Organization Profile" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.check-org.outputs.org_complete }}" = "true" ]; then
             echo "✅ **Complete** - All organization profile fields are filled" >> $GITHUB_STEP_SUMMARY
@@ -427,7 +429,7 @@ jobs:
         fi
 
         # Current repository section
-        if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "current-repo" ]; then
+        if [ "$INPUT_SCOPE" = "all" ] || [ "$INPUT_SCOPE" = "current-repo" ]; then
           echo "### Current Repository" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.check-current-repo.outputs.repo_complete }}" = "true" ]; then
             echo "✅ **Complete** - Repository metadata is comprehensive" >> $GITHUB_STEP_SUMMARY
@@ -442,7 +444,7 @@ jobs:
         fi
 
         # All repositories section
-        if [ "${{ inputs.scope }}" = "all" ] || [ "${{ inputs.scope }}" = "repositories" ]; then
+        if [ "$INPUT_SCOPE" = "all" ] || [ "$INPUT_SCOPE" = "repositories" ]; then
           echo "### Organization Repositories" >> $GITHUB_STEP_SUMMARY
           echo "- **Total Repositories**: ${{ steps.check-all-repos.outputs.total_count }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Complete**: ${{ steps.check-all-repos.outputs.complete_count }}" >> $GITHUB_STEP_SUMMARY

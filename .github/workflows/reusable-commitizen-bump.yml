@@ -95,21 +95,25 @@ jobs:
     - name: Determine Bump Arguments
       id: args
       if: steps.check.outputs.has_commits == 'true'
+      env:
+        BUMP_TYPE: ${{ inputs.bump_type }}
+        DRY_RUN: ${{ inputs.dry_run }}
+        CHANGELOG: ${{ inputs.changelog }}
       run: |
         ARGS=""
 
         # Bump type
-        if [ "${{ inputs.bump_type }}" != "auto" ]; then
-          ARGS="$ARGS --increment ${{ inputs.bump_type }}"
+        if [ "$BUMP_TYPE" != "auto" ]; then
+          ARGS="$ARGS --increment $BUMP_TYPE"
         fi
 
         # Dry run
-        if [ "${{ inputs.dry_run }}" == "true" ]; then
+        if [ "$DRY_RUN" == "true" ]; then
           ARGS="$ARGS --dry-run"
         fi
 
         # Changelog
-        if [ "${{ inputs.changelog }}" == "true" ]; then
+        if [ "$CHANGELOG" == "true" ]; then
           ARGS="$ARGS --changelog"
         else
           ARGS="$ARGS --no-changelog"

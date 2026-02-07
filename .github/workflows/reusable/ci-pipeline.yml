@@ -173,9 +173,10 @@ jobs:
 
     - name: Determine Python version
       id: python-version
+      env:
+        MATRIX_VERSION: ${{ matrix.python-version }}
+        REPO_VAR_VERSION: ${{ vars.PYTHON_VERSION_DEFAULT }}
       run: |
-        MATRIX_VERSION="${{ matrix.python-version }}"
-        REPO_VAR_VERSION="${{ vars.PYTHON_VERSION_DEFAULT }}"
         DEFAULT_VERSION="3.12"
 
         if [ -n "$MATRIX_VERSION" ]; then
@@ -200,13 +201,16 @@ jobs:
 
     - name: Install dependencies
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PYTHON_REQUIREMENTS_FILE: ${{ inputs.python-requirements-file }}
+        PYTHON_DEV_REQUIREMENTS_FILE: ${{ inputs.python-dev-requirements-file }}
       run: |
         python -m pip install --upgrade pip wheel setuptools
-        if [ -f "${{ inputs.python-requirements-file }}" ]; then
-          pip install -r ${{ inputs.python-requirements-file }}
+        if [ -f "$PYTHON_REQUIREMENTS_FILE" ]; then
+          pip install -r "$PYTHON_REQUIREMENTS_FILE"
         fi
-        if [ -f "${{ inputs.python-dev-requirements-file }}" ]; then
-          pip install -r ${{ inputs.python-dev-requirements-file }}
+        if [ -f "$PYTHON_DEV_REQUIREMENTS_FILE" ]; then
+          pip install -r "$PYTHON_DEV_REQUIREMENTS_FILE"
         fi
         # Install package in editable mode if pyproject.toml exists
         if [ -f "pyproject.toml" ]; then
@@ -216,31 +220,39 @@ jobs:
     - name: Run linting
       if: inputs.enable-linting
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.python-lint-command }}
+      env:
+        PYTHON_LINT_COMMAND: ${{ inputs.python-lint-command }}
+      run: $PYTHON_LINT_COMMAND
 
     - name: Run type checking
       if: inputs.enable-type-checking
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.python-typecheck-command }}
+      env:
+        PYTHON_TYPECHECK_COMMAND: ${{ inputs.python-typecheck-command }}
+      run: $PYTHON_TYPECHECK_COMMAND
       continue-on-error: true
 
     - name: Run tests with coverage
       if: inputs.enable-tests
       id: test
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PYTHON_TEST_COMMAND: ${{ inputs.python-test-command }}
       run: |
-        ${{ inputs.python-test-command }}
+        $PYTHON_TEST_COMMAND
         echo "coverage-path=coverage.xml" >> $GITHUB_OUTPUT
 
     - name: Check coverage threshold
       if: inputs.enable-tests && inputs.coverage-threshold > 0
       working-directory: ${{ inputs.working-directory }}
+      env:
+        COVERAGE_THRESHOLD: ${{ inputs.coverage-threshold }}
       run: |
         if [ -f "coverage.xml" ]; then
           COVERAGE=$(python -c "import xml.etree.ElementTree as ET; tree = ET.parse('coverage.xml'); print(float(tree.getroot().get('line-rate', 0)) * 100)")
           echo "Coverage: $COVERAGE%"
-          if (( $(echo "$COVERAGE < ${{ inputs.coverage-threshold }}" | bc -l) )); then
-            echo "::error::Coverage $COVERAGE% is below threshold ${{ inputs.coverage-threshold }}%"
+          if (( $(echo "$COVERAGE < $COVERAGE_THRESHOLD" | bc -l) )); then
+            echo "::error::Coverage $COVERAGE% is below threshold $COVERAGE_THRESHOLD%"
             exit 1
           fi
         fi
@@ -248,7 +260,9 @@ jobs:
     - name: Build package
       if: inputs.enable-build
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.python-build-command }}
+      env:
+        PYTHON_BUILD_COMMAND: ${{ inputs.python-build-command }}
+      run: $PYTHON_BUILD_COMMAND
 
     - name: Upload coverage report
       if: inputs.enable-tests && inputs.upload-artifacts
@@ -290,9 +304,10 @@ jobs:
 
     - name: Determine Node.js version
       id: node-version
+      env:
+        MATRIX_VERSION: ${{ matrix.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
-        MATRIX_VERSION="${{ matrix.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
         DEFAULT_VERSION="20"
 
         if [ -n "$MATRIX_VERSION" ]; then
@@ -315,8 +330,10 @@ jobs:
 
     - name: Install dependencies
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
       run: |
-        case "${{ inputs.package-manager }}" in
+        case "$PACKAGE_MANAGER" in
           npm)
             npm ci
             ;;
@@ -328,7 +345,7 @@ jobs:
             pnpm install --frozen-lockfile
             ;;
           *)
-            echo "Unknown package manager: ${{ inputs.package-manager }}"
+            echo "Unknown package manager: $PACKAGE_MANAGER"
             exit 1
             ;;
         esac
@@ -336,27 +353,35 @@ jobs:
     - name: Run linting
       if: inputs.enable-linting
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.node-lint-command }}
+      env:
+        NODE_LINT_COMMAND: ${{ inputs.node-lint-command }}
+      run: $NODE_LINT_COMMAND
       continue-on-error: false
 
     - name: Run type checking
       if: inputs.enable-type-checking
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.node-typecheck-command }}
+      env:
+        NODE_TYPECHECK_COMMAND: ${{ inputs.node-typecheck-command }}
+      run: $NODE_TYPECHECK_COMMAND
       continue-on-error: true
 
     - name: Run tests with coverage
       if: inputs.enable-tests
       id: test
       working-directory: ${{ inputs.working-directory }}
+      env:
+        NODE_TEST_COMMAND: ${{ inputs.node-test-command }}
       run: |
-        ${{ inputs.node-test-command }}
+        $NODE_TEST_COMMAND
         echo "coverage-path=coverage/lcov.info" >> $GITHUB_OUTPUT
 
     - name: Build project
       if: inputs.enable-build
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.node-build-command }}
+      env:
+        NODE_BUILD_COMMAND: ${{ inputs.node-build-command }}
+      run: $NODE_BUILD_COMMAND
 
     - name: Upload coverage report
       if: inputs.enable-tests && inputs.upload-artifacts

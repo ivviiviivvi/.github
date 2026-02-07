@@ -130,9 +130,11 @@ jobs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.58.1
 
     - name: Scan container image for vulnerabilities
+      env:
+        IMAGE_TAGS: ${{ inputs.tags }}
       run: |
         # Get the first tag for scanning
-        IMAGE_TAG=$(echo "${{ inputs.tags }}" | head -n 1)
+        IMAGE_TAG=$(echo "$IMAGE_TAGS" | head -n 1)
         trivy image --format sarif --output trivy-image.sarif --severity CRITICAL,HIGH "$IMAGE_TAG" || true
 
     - name: Upload Trivy scan results
@@ -144,6 +146,9 @@ jobs:
         retention-days: 30
 
     - name: Output image information
+      env:
+        IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+        IMAGE_TAGS: ${{ inputs.tags }}
       run: |
-        echo "Image digest: ${{ steps.build.outputs.digest }}"
-        echo "Image tags: ${{ inputs.tags }}"
+        echo "Image digest: $IMAGE_DIGEST"
+        echo "Image tags: $IMAGE_TAGS"

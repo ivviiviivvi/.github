@@ -48,8 +48,9 @@ jobs:
 
     - name: Check Last Run
       id: check
+      env:
+        FORCE_RUN: ${{ github.event.inputs.force_run }}
       run: |
-        FORCE_RUN="${{ github.event.inputs.force_run }}"
         TODAY=$(date -u +%Y-%m-%d)
 
         # Check if we already ran today
@@ -193,8 +194,10 @@ jobs:
 
     steps:
     - name: Wait for Task Completion
+      env:
+        WAIT_TIME_MINUTES: ${{ github.event.inputs.wait_time_minutes || 30 }}
       run: |
-        WAIT_MINUTES="${{ github.event.inputs.wait_time_minutes || 30 }}"
+        WAIT_MINUTES="$WAIT_TIME_MINUTES"
         WAIT_SECONDS=$((WAIT_MINUTES * 60))
         echo "⏳ Waiting $WAIT_MINUTES minutes for tasks to complete and PRs to be created..."
         sleep $WAIT_SECONDS

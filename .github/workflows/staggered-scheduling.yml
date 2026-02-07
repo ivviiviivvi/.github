@@ -96,17 +96,20 @@ jobs:
 
     - name: Generate staggered schedule
       id: generate
+      env:
+        REPOSITORIES_PER_DAY: ${{ github.event.inputs.repositories_per_day || '10' }}
       run: |
         cat > generate_schedule.py << 'EOF'
         import json
         import math
+        import os
         from datetime import datetime, timedelta
 
         # Load repositories
         with open('repositories.json', 'r') as f:
             repos = json.load(f)
 
-        repos_per_day = int('${{ github.event.inputs.repositories_per_day }}' or '10')
+        repos_per_day = int(os.environ.get('REPOSITORIES_PER_DAY', '10'))
         total_repos = len(repos)
         days_needed = math.ceil(total_repos / repos_per_day)
 

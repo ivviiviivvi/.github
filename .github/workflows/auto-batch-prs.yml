@@ -42,11 +42,13 @@ jobs:
     - name: Find Automated PRs
       id: find-prs
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        INCLUDE_MANUAL_PRS: ${{ github.event.inputs.include_manual_prs }}
       with:
         script: |
           console.log('🔍 Finding automated PRs to batch...');
 
-          const includeManualPRs = '${{ github.event.inputs.include_manual_prs }}' === 'true';
+          const includeManualPRs = process.env.INCLUDE_MANUAL_PRS === 'true';
 
           // Fetch all open PRs with pagination
           let prs = [];
@@ -238,10 +240,12 @@ jobs:
     - name: Comment on Batches
       if: steps.find-prs.outputs.total > 0
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        AUTO_MERGE: ${{ github.event.inputs.auto_merge }}
       with:
         script: |
           const groups = JSON.parse('${{ steps.find-prs.outputs.groups }}');
-          const autoMerge = '${{ github.event.inputs.auto_merge }}' !== 'false';
+          const autoMerge = process.env.AUTO_MERGE !== 'false';
 
           for (const [category, prs] of Object.entries(groups)) {
             if (prs.length === 0) continue;

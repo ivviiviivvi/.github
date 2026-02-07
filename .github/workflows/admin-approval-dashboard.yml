@@ -274,11 +274,13 @@ jobs:
 
     - name: Process approval
       id: approve
+      env:
+        ACTION: ${{ github.event.inputs.action }}
+        VIDEO_ID: ${{ github.event.inputs.video_id }}
+        REASON: ${{ github.event.inputs.reason }}
+        ACTOR: ${{ github.actor }}
+        WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
-        ACTION="${{ github.event.inputs.action }}"
-        VIDEO_ID="${{ github.event.inputs.video_id }}"
-        REASON="${{ github.event.inputs.reason }}"
-
         APPROVED_COUNT=0
 
         if [ "$ACTION" = "approve-all" ]; then
@@ -291,9 +293,9 @@ jobs:
               # Add approval metadata
               cat "$pending_file" | jq ". += {
                 \"approved_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
-                \"approved_by\": \"${{ github.actor }}\",
+                \"approved_by\": \"$ACTOR\",
                 \"approval_reason\": \"$REASON\",
-                \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                \"workflow_run\": \"$WORKFLOW_RUN_URL\"
               }" > "${{ env.APPROVED_DIR }}/$filename"
 
               rm "$pending_file"
@@ -311,9 +313,9 @@ jobs:
             # Add approval metadata
             cat "$pending_file" | jq ". += {
               \"approved_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
-              \"approved_by\": \"${{ github.actor }}\",
+              \"approved_by\": \"$ACTOR\",
               \"approval_reason\": \"$REASON\",
-              \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              \"workflow_run\": \"$WORKFLOW_RUN_URL\"
             }" > "${{ env.APPROVED_DIR }}/${VIDEO_ID}.json"
 
             rm "$pending_file"
@@ -368,11 +370,13 @@ jobs:
 
     - name: Process rejection
       id: reject
+      env:
+        ACTION: ${{ github.event.inputs.action }}
+        VIDEO_ID: ${{ github.event.inputs.video_id }}
+        REASON: ${{ github.event.inputs.reason }}
+        ACTOR: ${{ github.actor }}
+        WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
-        ACTION="${{ github.event.inputs.action }}"
-        VIDEO_ID="${{ github.event.inputs.video_id }}"
-        REASON="${{ github.event.inputs.reason }}"
-
         REJECTED_COUNT=0
 
         if [ "$ACTION" = "reject-all" ]; then
@@ -385,9 +389,9 @@ jobs:
               # Add rejection metadata
               cat "$pending_file" | jq ". += {
                 \"rejected_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
-                \"rejected_by\": \"${{ github.actor }}\",
+                \"rejected_by\": \"$ACTOR\",
                 \"rejection_reason\": \"$REASON\",
-                \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                \"workflow_run\": \"$WORKFLOW_RUN_URL\"
               }" > "${{ env.REJECTED_DIR }}/$filename"
 
               rm "$pending_file"
@@ -405,9 +409,9 @@ jobs:
             # Add rejection metadata
             cat "$pending_file" | jq ". += {
               \"rejected_at\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\",
-              \"rejected_by\": \"${{ github.actor }}\",
+              \"rejected_by\": \"$ACTOR\",
               \"rejection_reason\": \"$REASON\",
-              \"workflow_run\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              \"workflow_run\": \"$WORKFLOW_RUN_URL\"
             }" > "${{ env.REJECTED_DIR }}/${VIDEO_ID}.json"
 
             rm "$pending_file"

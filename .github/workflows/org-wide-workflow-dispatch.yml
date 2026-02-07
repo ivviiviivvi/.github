@@ -198,15 +198,20 @@ jobs:
         PYTHON_SCRIPT
 
     - name: Generate discovery summary
+      env:
+        WORKFLOW_FILE: ${{ github.event.inputs.workflow_file }}
+        TARGET_REPOS: ${{ github.event.inputs.target_repos }}
+        TOTAL_COUNT: ${{ steps.filter-repos.outputs.total_count }}
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       run: |
         echo "## 🔍 Repository Discovery Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Workflow File:** \`${{ github.event.inputs.workflow_file }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "**Target Filter:** \`${{ github.event.inputs.target_repos }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "**Repositories Found:** ${{ steps.filter-repos.outputs.total_count }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow File:** \`$WORKFLOW_FILE\`" >> $GITHUB_STEP_SUMMARY
+        echo "**Target Filter:** \`$TARGET_REPOS\`" >> $GITHUB_STEP_SUMMARY
+        echo "**Repositories Found:** $TOTAL_COUNT" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+        if [ "$DRY_RUN" == "true" ]; then
           echo "🧪 **DRY RUN MODE** - No workflows will be triggered" >> $GITHUB_STEP_SUMMARY
         fi
 

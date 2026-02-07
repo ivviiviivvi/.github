@@ -59,10 +59,12 @@ jobs:
 
     - name: Determine Node.js version
       id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
         # Priority: input > repository variable > default
-        INPUT_VERSION="${{ inputs.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_NODE_VERSION"
         DEFAULT_VERSION="20"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -85,11 +87,14 @@ jobs:
 
     - name: Install dependencies
       working-directory: ${{ inputs.working-directory }}
+      env:
+        INSTALL_COMMAND: ${{ inputs.install-command }}
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
       run: |
-        if [ -n "${{ inputs.install-command }}" ]; then
-          ${{ inputs.install-command }}
+        if [ -n "$INSTALL_COMMAND" ]; then
+          $INSTALL_COMMAND
         else
-          case "${{ inputs.package-manager }}" in
+          case "$PACKAGE_MANAGER" in
             npm)
               npm ci
               ;;
@@ -100,7 +105,7 @@ jobs:
               pnpm install --frozen-lockfile
               ;;
             *)
-              echo "Unknown package manager: ${{ inputs.package-manager }}"
+              echo "Unknown package manager: $PACKAGE_MANAGER"
               exit 1
               ;;
           esac
@@ -110,14 +115,18 @@ jobs:
       if: inputs.build-command != ''
       id: build
       working-directory: ${{ inputs.working-directory }}
+      env:
+        BUILD_COMMAND: ${{ inputs.build-command }}
       run: |
-        ${{ inputs.build-command }}
+        $BUILD_COMMAND
         echo "build-path=dist" >> $GITHUB_OUTPUT
 
     - name: Run tests
       if: inputs.test-command != ''
       working-directory: ${{ inputs.working-directory }}
-      run: ${{ inputs.test-command }}
+      env:
+        TEST_COMMAND: ${{ inputs.test-command }}
+      run: $TEST_COMMAND
 
     - name: Upload build artifacts
       if: inputs.build-command != '' && hashFiles('dist/**') != ''

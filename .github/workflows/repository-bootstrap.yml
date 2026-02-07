@@ -143,11 +143,13 @@ jobs:
       id: target
       env:
         GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        INPUT_TARGET_REPOSITORY: ${{ inputs.target_repository }}
+        CURRENT_REPOSITORY: ${{ github.repository }}
       run: |
-        INPUT_REPO="${{ inputs.target_repository }}"
+        INPUT_REPO="$INPUT_TARGET_REPOSITORY"
 
         if [ "$INPUT_REPO" = "current" ]; then
-          TARGET_REPO="${{ github.repository }}"
+          TARGET_REPO="$CURRENT_REPOSITORY"
         else
           TARGET_REPO="$INPUT_REPO"
         fi
@@ -168,22 +170,26 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         TARGET_REPO: ${{ steps.target.outputs.repository }}
+        ENABLE_ISSUES: ${{ inputs.enable_issues }}
+        ENABLE_PROJECTS: ${{ inputs.enable_projects }}
+        ENABLE_WIKI: ${{ inputs.enable_wiki }}
+        ENABLE_DISCUSSIONS: ${{ inputs.enable_discussions }}
       run: |
         echo "🔧 Configuring repository features for $TARGET_REPO..."
 
         FEATURES=""
 
-        if [ "${{ inputs.enable_issues }}" = "true" ]; then
+        if [ "$ENABLE_ISSUES" = "true" ]; then
           FEATURES="$FEATURES --enable-issues"
           echo "  ✅ Enabling Issues"
         fi
 
-        if [ "${{ inputs.enable_projects }}" = "true" ]; then
+        if [ "$ENABLE_PROJECTS" = "true" ]; then
           FEATURES="$FEATURES --enable-projects"
           echo "  ✅ Enabling Projects"
         fi
 
-        if [ "${{ inputs.enable_wiki }}" = "true" ]; then
+        if [ "$ENABLE_WIKI" = "true" ]; then
           FEATURES="$FEATURES --enable-wiki"
           echo "  ✅ Enabling Wiki"
         fi
@@ -195,7 +201,7 @@ jobs:
         fi
 
         # Enable Discussions (requires separate API call)
-        if [ "${{ inputs.enable_discussions }}" = "true" ]; then
+        if [ "$ENABLE_DISCUSSIONS" = "true" ]; then
           echo "  ✅ Enabling Discussions"
           gh api --method PUT "/repos/$TARGET_REPO" \
             -f has_discussions=true || {
@@ -453,6 +459,14 @@ jobs:
     - name: Generate bootstrap summary
       env:
         TARGET_REPO: ${{ steps.target.outputs.repository }}
+        ENABLE_ISSUES: ${{ inputs.enable_issues }}
+        ENABLE_PROJECTS: ${{ inputs.enable_projects }}
+        ENABLE_DISCUSSIONS: ${{ inputs.enable_discussions }}
+        ENABLE_WIKI: ${{ inputs.enable_wiki }}
+        CREATE_LABELS: ${{ inputs.create_labels }}
+        CREATE_PROJECT_BOARD: ${{ inputs.create_project_board }}
+        COPY_WORKFLOW_TEMPLATES: ${{ inputs.copy_workflow_templates }}
+        CONFIGURE_BRANCH_PROTECTION: ${{ inputs.configure_branch_protection }}
       run: |
         echo "📊 Repository Bootstrap Summary"
         echo "================================"
@@ -461,35 +475,35 @@ jobs:
         echo ""
         echo "Features Configured:"
 
-        if [ "${{ inputs.enable_issues }}" = "true" ]; then
+        if [ "$ENABLE_ISSUES" = "true" ]; then
           echo "  ✅ Issues enabled"
         fi
 
-        if [ "${{ inputs.enable_projects }}" = "true" ]; then
+        if [ "$ENABLE_PROJECTS" = "true" ]; then
           echo "  ✅ Projects enabled"
         fi
 
-        if [ "${{ inputs.enable_discussions }}" = "true" ]; then
+        if [ "$ENABLE_DISCUSSIONS" = "true" ]; then
           echo "  ✅ Discussions enabled"
         fi
 
-        if [ "${{ inputs.enable_wiki }}" = "true" ]; then
+        if [ "$ENABLE_WIKI" = "true" ]; then
           echo "  ✅ Wiki enabled"
         fi
 
-        if [ "${{ inputs.create_labels }}" = "true" ]; then
+        if [ "$CREATE_LABELS" = "true" ]; then
           echo "  ✅ Standard labels created"
         fi
 
-        if [ "${{ inputs.create_project_board }}" = "true" ]; then
+        if [ "$CREATE_PROJECT_BOARD" = "true" ]; then
           echo "  ✅ Project board created"
         fi
 
-        if [ "${{ inputs.copy_workflow_templates }}" = "true" ]; then
+        if [ "$COPY_WORKFLOW_TEMPLATES" = "true" ]; then
           echo "  ✅ Workflow templates copied"
         fi
 
-        if [ "${{ inputs.configure_branch_protection }}" = "true" ]; then
+        if [ "$CONFIGURE_BRANCH_PROTECTION" = "true" ]; then
           echo "  ✅ Branch protection configured"
         fi
 

@@ -29,9 +29,11 @@ runs:
   - name: Determine Python version
     id: version
     shell: bash
+    env:
+      PYTHON_VERSION: ${{ inputs.python-version }}
     run: |
       # Priority: input > repository variable > default
-      INPUT_VERSION="${{ inputs.python-version }}"
+      INPUT_VERSION="$PYTHON_VERSION"
       REPO_VAR_VERSION="${{ vars.PYTHON_VERSION_DEFAULT }}"
       DEFAULT_VERSION="3.12"
 

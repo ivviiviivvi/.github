@@ -52,15 +52,18 @@ jobs:
     - name: Validate configuration
       id: validate
       continue-on-error: true
+      env:
+        CONFIG_FILE: ${{ github.event.inputs.config_file }}
       run: |
-        CONFIG_FILE="${{ github.event.inputs.config_file }}"
         if [ -f "$CONFIG_FILE" ]; then
           echo "Configuration file found: $CONFIG_FILE"
           python -c "
         import yaml
         import sys
+        import os
+        config_file = os.environ['CONFIG_FILE']
         try:
-            with open('$CONFIG_FILE', 'r') as f:
+            with open(config_file, 'r') as f:
                 config = yaml.safe_load(f)
             if config is None:
                 print('Error: Configuration file is empty')
@@ -122,15 +125,18 @@ jobs:
       id: onboard
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
+        CONFIG_FILE: ${{ github.event.inputs.config_file }}
+        MAX_CONCURRENT: ${{ github.event.inputs.max_concurrent }}
       run: |
         DRY_RUN_FLAG=""
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+        if [ "$DRY_RUN" = "true" ]; then
           DRY_RUN_FLAG="--dry-run"
         fi
 
         python src/automation/scripts/batch_onboard_repositories.py \
-          --config "${{ github.event.inputs.config_file }}" \
-          --max-concurrent "${{ github.event.inputs.max_concurrent }}" \
+          --config "$CONFIG_FILE" \
+          --max-concurrent "$MAX_CONCURRENT" \
           --output onboarding_results.json \
           $DRY_RUN_FLAG
 

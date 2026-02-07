@@ -33,9 +33,11 @@ runs:
   - name: Determine Node.js version
     id: version
     shell: bash
+    env:
+      NODE_VERSION: ${{ inputs.node-version }}
     run: |
       # Priority: input > repository variable > default
-      INPUT_VERSION="${{ inputs.node-version }}"
+      INPUT_VERSION="$NODE_VERSION"
       REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
       DEFAULT_VERSION="20"
 

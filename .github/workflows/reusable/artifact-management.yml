@@ -79,23 +79,28 @@ jobs:
     - name: List downloaded files
       if: inputs.operation == 'download'
       shell: bash
+      env:
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
       run: |
-        echo "Downloaded artifact to: ${{ inputs.artifact-path }}"
-        ls -lah "${{ inputs.artifact-path }}" || echo "No files found"
-        echo "download-path=${{ inputs.artifact-path }}" >> $GITHUB_OUTPUT
+        echo "Downloaded artifact to: $ARTIFACT_PATH"
+        ls -lah "$ARTIFACT_PATH" || echo "No files found"
+        echo "download-path=$ARTIFACT_PATH" >> $GITHUB_OUTPUT
 
     - name: Verify uploaded files
       if: inputs.operation == 'upload'
       shell: bash
+      env:
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+        IF_NO_FILES_FOUND: ${{ inputs.if-no-files-found }}
       run: |
-        echo "Uploaded files from: ${{ inputs.artifact-path }}"
-        if [ -f "${{ inputs.artifact-path }}" ]; then
-          ls -lh "${{ inputs.artifact-path }}"
-        elif [ -d "${{ inputs.artifact-path }}" ]; then
-          ls -lah "${{ inputs.artifact-path }}"
+        echo "Uploaded files from: $ARTIFACT_PATH"
+        if [ -f "$ARTIFACT_PATH" ]; then
+          ls -lh "$ARTIFACT_PATH"
+        elif [ -d "$ARTIFACT_PATH" ]; then
+          ls -lah "$ARTIFACT_PATH"
         else
-          echo "Path not found: ${{ inputs.artifact-path }}"
-          if [ "${{ inputs.if-no-files-found }}" = "error" ]; then
+          echo "Path not found: $ARTIFACT_PATH"
+          if [ "$IF_NO_FILES_FOUND" = "error" ]; then
             exit 1
           fi
         fi

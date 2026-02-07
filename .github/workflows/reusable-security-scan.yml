@@ -72,8 +72,11 @@ jobs:
 
     - name: Run Trivy vulnerability scanner
       if: inputs.scan_type == 'trivy' || inputs.scan_type == 'all'
+      env:
+        SEVERITY: ${{ inputs.severity }}
+        SCAN_PATH: ${{ inputs.scan_path }}
       run: |
-        trivy fs --format sarif --output trivy-results.sarif --severity ${{ inputs.severity }} --exit-code 0 ${{ inputs.scan_path }}
+        trivy fs --format sarif --output trivy-results.sarif --severity "$SEVERITY" --exit-code 0 "$SCAN_PATH"
 
     - name: Run Semgrep scanner
       if: inputs.scan_type == 'semgrep' || inputs.scan_type == 'all'
@@ -172,21 +175,21 @@ jobs:
 
     - name: Check fail threshold
       if: always()
+      env:
+        SCAN_STATUS: ${{ steps.analyze.outputs.scan_status }}
+        FAIL_ON_SEVERITY: ${{ inputs.fail_on_severity }}
       run: |
-        status="${{ steps.analyze.outputs.scan_status }}"
-        fail_on="${{ inputs.fail_on_severity }}"
-
-        echo "Scan status: $status"
-        echo "Fail threshold: $fail_on"
+        echo "Scan status: $SCAN_STATUS"
+        echo "Fail threshold: $FAIL_ON_SEVERITY"
 
         # Fail if threshold exceeded
-        if [ "$fail_on" == "CRITICAL" ] && [ "$status" == "fail" ]; then
+        if [ "$FAIL_ON_SEVERITY" == "CRITICAL" ] && [ "$SCAN_STATUS" == "fail" ]; then
           echo "❌ Critical vulnerabilities found. Failing workflow."
           exit 1
-        elif [ "$fail_on" == "HIGH" ] && ([ "$status" == "fail" ] || [ "$status" == "warn" ]); then
+        elif [ "$FAIL_ON_SEVERITY" == "HIGH" ] && ([ "$SCAN_STATUS" == "fail" ] || [ "$SCAN_STATUS" == "warn" ]); then
           echo "❌ High or critical vulnerabilities found. Failing workflow."
           exit 1
-        elif [ "$fail_on" == "MEDIUM" ] && [ "$status" != "pass" ]; then
+        elif [ "$FAIL_ON_SEVERITY" == "MEDIUM" ] && [ "$SCAN_STATUS" != "pass" ]; then
           echo "❌ Medium or higher vulnerabilities found. Failing workflow."
           exit 1
         else

@@ -179,9 +179,11 @@ jobs:
 
     - name: Determine Node.js version
       id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_NODE_VERSION"
         DEFAULT_VERSION="20"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -202,8 +204,10 @@ jobs:
 
     - name: Install dependencies
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
       run: |
-        case "${{ inputs.package-manager }}" in
+        case "$PACKAGE_MANAGER" in
           npm)
             npm ci
             ;;
@@ -224,18 +228,24 @@ jobs:
 
     - name: Start application
       working-directory: ${{ inputs.working-directory }}
+      env:
+        ACCESSIBILITY_START_COMMAND: ${{ inputs.accessibility-start-command }}
+        ACCESSIBILITY_WAIT_ON: ${{ inputs.accessibility-wait-on }}
       run: |
-        ${{ inputs.accessibility-start-command }} &
+        $ACCESSIBILITY_START_COMMAND &
         echo "Waiting for application to be ready..."
-        npx wait-on ${{ inputs.accessibility-wait-on }} --timeout 120000
+        npx wait-on "$ACCESSIBILITY_WAIT_ON" --timeout 120000
 
     - name: Run accessibility tests
       id: a11y-test
       working-directory: ${{ inputs.working-directory }}
+      env:
+        ACCESSIBILITY_URLS: ${{ inputs.accessibility-urls }}
+        ACCESSIBILITY_STANDARD: ${{ inputs.accessibility-standard }}
       run: |
         mkdir -p accessibility-reports
-        URLS='${{ inputs.accessibility-urls }}'
-        STANDARD="${{ inputs.accessibility-standard }}"
+        URLS="$ACCESSIBILITY_URLS"
+        STANDARD="$ACCESSIBILITY_STANDARD"
 
         echo "Testing accessibility for URLs: $URLS"
         echo "Using standard: $STANDARD"
@@ -294,9 +304,11 @@ jobs:
     - name: Determine Python version
       if: inputs.language == 'python'
       id: python-version
+      env:
+        INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+        REPO_VAR_VERSION: ${{ vars.PYTHON_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.python-version }}"
-        REPO_VAR_VERSION="${{ vars.PYTHON_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_PYTHON_VERSION"
         DEFAULT_VERSION="3.12"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -333,8 +345,10 @@ jobs:
       if: inputs.language == 'python'
       id: mutation-python
       working-directory: ${{ inputs.working-directory }}
+      env:
+        MUTATION_TARGET: ${{ inputs.mutation-target }}
       run: |
-        mutmut run --paths-to-mutate=${{ inputs.mutation-target }} --no-progress || true
+        mutmut run --paths-to-mutate="$MUTATION_TARGET" --no-progress || true
         mutmut results > mutation-report.txt
         mutmut html
 
@@ -347,9 +361,11 @@ jobs:
     - name: Determine Node.js version
       if: inputs.language == 'node'
       id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_NODE_VERSION"
         DEFAULT_VERSION="20"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -380,19 +396,23 @@ jobs:
       if: inputs.language == 'node'
       id: mutation-node
       working-directory: ${{ inputs.working-directory }}
+      env:
+        MUTATION_TARGET: ${{ inputs.mutation-target }}
+        MUTATION_THRESHOLD: ${{ inputs.mutation-threshold }}
       run: |
         # Create Stryker config if not exists
         if [ ! -f "stryker.conf.json" ] && [ ! -f "stryker.conf.js" ]; then
-          cat > stryker.conf.json << 'EOF'
-        {
-          "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-          "mutate": ["${{ inputs.mutation-target }}**/*.{ts,js}"],
-          "testRunner": "jest",
-          "reporters": ["html", "clear-text", "progress", "json"],
-          "coverageAnalysis": "perTest",
-          "thresholds": { "high": 80, "low": 60, "break": ${{ inputs.mutation-threshold }} }
-        }
-        EOF
+          jq -n \
+            --arg target "${MUTATION_TARGET}**/*.{ts,js}" \
+            --argjson threshold "$MUTATION_THRESHOLD" \
+            '{
+              "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+              "mutate": [$target],
+              "testRunner": "jest",
+              "reporters": ["html", "clear-text", "progress", "json"],
+              "coverageAnalysis": "perTest",
+              "thresholds": { "high": 80, "low": 60, "break": $threshold }
+            }' > stryker.conf.json
         fi
 
         npx stryker run || true
@@ -410,9 +430,10 @@ jobs:
 
     - name: Set combined mutation output
       id: mutation
+      env:
+        PYTHON_SCORE: ${{ steps.mutation-python.outputs.score }}
+        NODE_SCORE: ${{ steps.mutation-node.outputs.score }}
       run: |
-        PYTHON_SCORE="${{ steps.mutation-python.outputs.score }}"
-        NODE_SCORE="${{ steps.mutation-node.outputs.score }}"
         if [ -n "$PYTHON_SCORE" ]; then
           echo "score=$PYTHON_SCORE" >> $GITHUB_OUTPUT
         elif [ -n "$NODE_SCORE" ]; then
@@ -423,9 +444,10 @@ jobs:
 
     - name: Check mutation threshold
       if: inputs.mutation-threshold > 0
+      env:
+        SCORE: ${{ steps.mutation.outputs.score }}
+        THRESHOLD: ${{ inputs.mutation-threshold }}
       run: |
-        SCORE="${{ steps.mutation.outputs.score }}"
-        THRESHOLD="${{ inputs.mutation-threshold }}"
         if [ "$SCORE" -lt "$THRESHOLD" ]; then
           echo "::error::Mutation score $SCORE% is below threshold $THRESHOLD%"
           exit 1
@@ -484,9 +506,11 @@ jobs:
     - name: Determine Python version
       if: inputs.language == 'python'
       id: python-version
+      env:
+        INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+        REPO_VAR_VERSION: ${{ vars.PYTHON_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.python-version }}"
-        REPO_VAR_VERSION="${{ vars.PYTHON_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_PYTHON_VERSION"
         DEFAULT_VERSION="3.12"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -523,9 +547,11 @@ jobs:
     - name: Determine Node.js version
       if: inputs.language == 'node'
       id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_NODE_VERSION"
         DEFAULT_VERSION="20"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -548,8 +574,10 @@ jobs:
     - name: Install Node.js dependencies
       if: inputs.language == 'node'
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
       run: |
-        case "${{ inputs.package-manager }}" in
+        case "$PACKAGE_MANAGER" in
           npm)
             npm ci
             ;;
@@ -568,7 +596,8 @@ jobs:
       env:
         DATABASE_URL: postgresql://test:test@localhost:5432/test
         REDIS_URL: redis://localhost:6379
-      run: ${{ inputs.integration-setup-command }}
+        INTEGRATION_SETUP_COMMAND: ${{ inputs.integration-setup-command }}
+      run: $INTEGRATION_SETUP_COMMAND
 
     - name: Run integration tests
       id: integration
@@ -577,12 +606,14 @@ jobs:
         DATABASE_URL: postgresql://test:test@localhost:5432/test
         REDIS_URL: redis://localhost:6379
         CI: true
+        INTEGRATION_TEST_COMMAND: ${{ inputs.integration-test-command }}
+        LANGUAGE: ${{ inputs.language }}
       run: |
         mkdir -p integration-results
 
-        if [ -n "${{ inputs.integration-test-command }}" ]; then
-          ${{ inputs.integration-test-command }}
-        elif [ "${{ inputs.language }}" = "python" ]; then
+        if [ -n "$INTEGRATION_TEST_COMMAND" ]; then
+          $INTEGRATION_TEST_COMMAND
+        elif [ "$LANGUAGE" = "python" ]; then
           pytest tests/integration/ -v --junitxml=integration-results/junit.xml || pytest -m integration -v --junitxml=integration-results/junit.xml || true
         else
           npm run test:integration 2>/dev/null || npm test -- --testPathPattern=integration 2>/dev/null || true
@@ -618,9 +649,11 @@ jobs:
 
     - name: Determine Node.js version
       id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
       run: |
-        INPUT_VERSION="${{ inputs.node-version }}"
-        REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+        INPUT_VERSION="$INPUT_NODE_VERSION"
         DEFAULT_VERSION="20"
 
         if [ -n "$INPUT_VERSION" ]; then
@@ -641,8 +674,10 @@ jobs:
 
     - name: Install dependencies
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
       run: |
-        case "${{ inputs.package-manager }}" in
+        case "$PACKAGE_MANAGER" in
           npm)
             npm ci
             ;;
@@ -659,8 +694,10 @@ jobs:
     - name: Install Playwright browsers
       if: inputs.e2e-framework == 'playwright'
       working-directory: ${{ inputs.working-directory }}
+      env:
+        BROWSER: ${{ matrix.browser }}
       run: |
-        npx playwright install --with-deps ${{ matrix.browser }}
+        npx playwright install --with-deps "$BROWSER"
 
     # Cypress Setup
     - name: Install Cypress dependencies
@@ -672,8 +709,10 @@ jobs:
 
     - name: Start application
       working-directory: ${{ inputs.working-directory }}
+      env:
+        E2E_START_COMMAND: ${{ inputs.e2e-start-command }}
       run: |
-        ${{ inputs.e2e-start-command }} &
+        $E2E_START_COMMAND &
         sleep 10  # Wait for application to start
 
     - name: Run E2E tests
@@ -681,16 +720,19 @@ jobs:
       working-directory: ${{ inputs.working-directory }}
       env:
         CI: true
+        E2E_TEST_COMMAND: ${{ inputs.e2e-test-command }}
+        E2E_FRAMEWORK: ${{ inputs.e2e-framework }}
+        BROWSER: ${{ matrix.browser }}
       run: |
         mkdir -p e2e-results
 
-        if [ -n "${{ inputs.e2e-test-command }}" ]; then
-          ${{ inputs.e2e-test-command }}
-        elif [ "${{ inputs.e2e-framework }}" = "playwright" ]; then
-          npx playwright test --project=${{ matrix.browser }} --reporter=html,json
-        elif [ "${{ inputs.e2e-framework }}" = "cypress" ]; then
-          npx cypress run --browser ${{ matrix.browser }} --reporter json --reporter-options "output=e2e-results/results.json"
-        elif [ "${{ inputs.e2e-framework }}" = "puppeteer" ]; then
+        if [ -n "$E2E_TEST_COMMAND" ]; then
+          $E2E_TEST_COMMAND
+        elif [ "$E2E_FRAMEWORK" = "playwright" ]; then
+          npx playwright test --project="$BROWSER" --reporter=html,json
+        elif [ "$E2E_FRAMEWORK" = "cypress" ]; then
+          npx cypress run --browser "$BROWSER" --reporter json --reporter-options "output=e2e-results/results.json"
+        elif [ "$E2E_FRAMEWORK" = "puppeteer" ]; then
           npm run test:e2e 2>/dev/null || true
         fi
 

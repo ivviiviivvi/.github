@@ -112,7 +112,7 @@ class BatchOnboardingOrchestrator:
         if self.config.validate_before:
             validation_errors = await self._validate_configuration()
             if validation_errors:
-                logger.error(f"Configuration validation failed: {validation_errors}")
+                logger.error(f"Configuration validation failed with {len(validation_errors)} error(s)")
                 return []
 
         # Resolve dependencies

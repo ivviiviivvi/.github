@@ -62,12 +62,19 @@ jobs:
         retention-days: 90
 
     - name: Generate step summary
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        TARGET_BRANCH: ${{ inputs.target_branch }}
+        TITLE: ${{ inputs.title || github.event.repository.name }}
+        RESOLUTION: ${{ inputs.resolution || '1080p' }}
+        SECONDS_PER_DAY: ${{ inputs.seconds_per_day || '0.5' }}
+        RUN_NUMBER: ${{ github.run_number }}
       run: |
         echo "## Gource Visualization Generated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "- **Repository**: ${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Branch**: ${{ inputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Title**: ${{ inputs.title || github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Resolution**: ${{ inputs.resolution || '1080p' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Seconds per day**: ${{ inputs.seconds_per_day || '0.5' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Artifact**: walkthrough-${{ github.event.repository.name }}-${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repository**: $REPO_NAME" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: $TARGET_BRANCH" >> $GITHUB_STEP_SUMMARY
+        echo "- **Title**: $TITLE" >> $GITHUB_STEP_SUMMARY
+        echo "- **Resolution**: $RESOLUTION" >> $GITHUB_STEP_SUMMARY
+        echo "- **Seconds per day**: $SECONDS_PER_DAY" >> $GITHUB_STEP_SUMMARY
+        echo "- **Artifact**: walkthrough-${REPO_NAME}-${RUN_NUMBER}" >> $GITHUB_STEP_SUMMARY

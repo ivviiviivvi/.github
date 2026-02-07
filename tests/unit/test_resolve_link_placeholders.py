@@ -527,7 +527,7 @@ class TestMainFunction:
         assert result == 0
         # File should be updated
         content = doc.read_text()
-        assert "https://example.com" in content
+        assert "https://example.com" in content  # lgtm [py/incomplete-url-substring-sanitization]
 
     def test_main_check_mode_with_changes(self, tmp_path, monkeypatch, capsys):
         """Test main with --check flag when changes needed."""

@@ -95,7 +95,7 @@ jobs:
           echo "Detected Node.js project"
           cat > Dockerfile << 'EOF'
         # Node.js Application Dockerfile
-        FROM node:18-alpine AS builder
+        FROM node:22-alpine AS builder
 
         WORKDIR /app
 
@@ -105,7 +105,7 @@ jobs:
         COPY . .
         RUN if grep -q '"build"' package.json; then npm run build; fi
 
-        FROM node:18-alpine
+        FROM node:22-alpine
 
         WORKDIR /app
 
@@ -121,7 +121,7 @@ jobs:
           echo "Detected Python project"
           cat > Dockerfile << 'EOF'
         # Python Application Dockerfile
-        FROM python:3.11-slim
+        FROM python:3.12-slim
 
         WORKDIR /app
 
@@ -142,7 +142,7 @@ jobs:
           echo "Detected Go project"
           cat > Dockerfile << 'EOF'
         # Go Application Dockerfile
-        FROM golang:1.21-alpine AS builder
+        FROM golang:1.23-alpine AS builder
 
         WORKDIR /app
 
@@ -167,7 +167,7 @@ jobs:
           echo "Detected Rust project"
           cat > Dockerfile << 'EOF'
         # Rust Application Dockerfile
-        FROM rust:1.75-alpine AS builder
+        FROM rust:1.85-alpine AS builder
 
         WORKDIR /app
 
@@ -347,6 +347,8 @@ jobs:
 
     - name: Create deployment summary
       if: github.event_name != 'pull_request'
+      env:
+        PLATFORMS: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
       run: |
         cat >> $GITHUB_STEP_SUMMARY << EOF
         ## 🐳 Docker Build Summary
@@ -356,7 +358,7 @@ jobs:
         **Tags:**
         $(echo "${{ steps.meta.outputs.tags }}" | sed 's/^/- `/' | sed 's/$/`/')
 
-        **Platforms:** ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
+        **Platforms:** $PLATFORMS
         **Build Time:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
         **Commit:** \`${{ github.sha }}\`
 

@@ -53,11 +53,15 @@ jobs:
 
     - name: Get PR number
       id: pr-number
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
       run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "number=${{ github.event.inputs.pr_number }}" >> $GITHUB_OUTPUT
-        elif [ -n "${{ github.event.pull_request.number }}" ]; then
-          echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+        if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+          echo "number=$INPUT_PR_NUMBER" >> $GITHUB_OUTPUT
+        elif [ -n "$PR_NUMBER" ]; then
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
         else
           echo "No PR number found"
           exit 0

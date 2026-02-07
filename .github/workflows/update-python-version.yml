@@ -57,9 +57,11 @@ jobs:
 
     - name: Detect latest stable Python version
       id: latest
+      env:
+        TARGET_VERSION: ${{ inputs.target_version }}
       run: |
-        if [ -n "${{ inputs.target_version }}" ]; then
-          LATEST="${{ inputs.target_version }}"
+        if [ -n "$TARGET_VERSION" ]; then
+          LATEST="$TARGET_VERSION"
           echo "Using manually specified version: $LATEST"
         else
           # Query the actions/python-versions repository for available versions
@@ -232,6 +234,8 @@ jobs:
 
     steps:
     - name: Generate summary
+      env:
+        DRY_RUN: ${{ inputs.dry_run }}
       run: |
         echo "## Python Version Update Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
@@ -241,7 +245,7 @@ jobs:
         echo "| Latest Available | ${{ needs.check-version.outputs.latest_version }} |" >> $GITHUB_STEP_SUMMARY
         echo "| Update Available | ${{ needs.check-version.outputs.should_update }} |" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ inputs.dry_run }}" = "true" ]; then
+        if [ "$DRY_RUN" = "true" ]; then
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> **Note:** This was a dry run. No changes were made." >> $GITHUB_STEP_SUMMARY
         fi

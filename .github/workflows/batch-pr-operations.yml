@@ -51,14 +51,19 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Validate Inputs
+      env:
+        OPERATION: ${{ github.event.inputs.operation }}
+        FILTER_LABEL: ${{ github.event.inputs.filter_label }}
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
+        MAX_PRS: ${{ github.event.inputs.max_prs }}
       run: |
         echo "🔍 Validating inputs..."
-        echo "Operation: ${{ github.event.inputs.operation }}"
-        echo "Filter Label: ${{ github.event.inputs.filter_label || 'none' }}"
-        echo "Dry Run: ${{ github.event.inputs.dry_run }}"
-        echo "Max PRs: ${{ github.event.inputs.max_prs }}"
+        echo "Operation: $OPERATION"
+        echo "Filter Label: ${FILTER_LABEL:-none}"
+        echo "Dry Run: $DRY_RUN"
+        echo "Max PRs: $MAX_PRS"
 
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+        if [ "$DRY_RUN" = "true" ]; then
           echo "⚠️  DRY RUN MODE - No actual changes will be made"
         else
           echo "⚠️  LIVE MODE - Changes will be applied!"
@@ -443,15 +448,19 @@ jobs:
 
     - name: Summary
       if: always()
+      env:
+        OPERATION: ${{ github.event.inputs.operation }}
+        FILTER_LABEL: ${{ github.event.inputs.filter_label }}
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       run: |
         echo "### 🚀 Bulk PR Operation Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Operation:** ${{ github.event.inputs.operation }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Filter:** ${{ github.event.inputs.filter_label || 'none' }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Dry Run:** ${{ github.event.inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Operation:** $OPERATION" >> $GITHUB_STEP_SUMMARY
+        echo "**Filter:** ${FILTER_LABEL:-none}" >> $GITHUB_STEP_SUMMARY
+        echo "**Dry Run:** $DRY_RUN" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+        if [ "$DRY_RUN" = "true" ]; then
           echo "⚠️ **DRY RUN MODE** - No actual changes were made" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "To apply changes, run again with dry_run=false" >> $GITHUB_STEP_SUMMARY

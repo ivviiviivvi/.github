@@ -32,15 +32,19 @@ runs:
   - name: Determine notification settings
     shell: bash
     id: settings
+    env:
+      WEBHOOK_URL: ${{ inputs.webhook-url }}
+      PRIORITY: ${{ inputs.priority }}
+      STATUS: ${{ inputs.status }}
     run: |
-      if [[ ! "${{ inputs.webhook-url }}" =~ ^https://hooks\.slack\.com/services/ ]]; then
+      if [[ ! "$WEBHOOK_URL" =~ ^https://hooks\.slack\.com/services/ ]]; then
         echo "send=false" >> $GITHUB_OUTPUT
         echo "invalid_webhook=true" >> $GITHUB_OUTPUT
         echo "reason=Invalid Slack webhook URL format" >> $GITHUB_OUTPUT
         exit 0
       fi
 
-      case "${{ inputs.priority }}" in
+      case "$PRIORITY" in
         P0)
           echo "mention=<!channel>" >> $GITHUB_OUTPUT
           echo "color=#FF0000" >> $GITHUB_OUTPUT
@@ -62,7 +66,7 @@ runs:
           ;;
       esac
 
-      case "${{ inputs.status }}" in
+      case "$STATUS" in
         success)
           echo "icon=:white_check_mark:" >> $GITHUB_OUTPUT
           ;;
@@ -77,11 +81,19 @@ runs:
   - name: Send Slack notification
     if: steps.settings.outputs.send == 'true'
     shell: bash
+    env:
+      DETAILS_URL: ${{ inputs.details-url }}
+      WEBHOOK_URL: ${{ inputs.webhook-url }}
+      TITLE: ${{ inputs.title }}
+      WORKFLOW_NAME: ${{ inputs.workflow }}
+      PRIORITY: ${{ inputs.priority }}
+      STATUS: ${{ inputs.status }}
+      MESSAGE: ${{ inputs.message }}
     run: |
       set -euo pipefail
       DETAILS_SECTION=""
-      if [ -n "${{ inputs.details-url }}" ]; then
-        DETAILS_SECTION=",{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"text\":\"View Details\"},\"url\":\"${{ inputs.details-url }}\"}]}"
+      if [ -n "$DETAILS_URL" ]; then
+        DETAILS_SECTION=",{\"type\":\"actions\",\"elements\":[{\"type\":\"button\",\"text\":{\"type\":\"plain_text\",\"text\":\"View Details\"},\"url\":\"$DETAILS_URL\"}]}"
       fi
 
       MENTION_SECTION=""
@@ -89,7 +101,7 @@ runs:
         MENTION_SECTION=",{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"${{ steps.settings.outputs.mention }}\"}]}"
       fi
 
-      curl --fail --silent --show-error -X POST "${{ inputs.webhook-url }}" \
+      curl --fail --silent --show-error -X POST "$WEBHOOK_URL" \
         -H 'Content-Type: application/json' \
         -d "{
           \"blocks\": [
@@ -97,7 +109,7 @@ runs:
               \"type\": \"header\",
               \"text\": {
                 \"type\": \"plain_text\",
-                \"text\": \"${{ steps.settings.outputs.icon }} ${{ inputs.title }}\",
+                \"text\": \"${{ steps.settings.outputs.icon }} $TITLE\",
                 \"emoji\": true
               }
             },
@@ -106,15 +118,15 @@ runs:
               \"fields\": [
                 {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*Workflow:*\n${{ inputs.workflow }}\"
+                  \"text\": \"*Workflow:*\n$WORKFLOW_NAME\"
                 },
                 {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*Priority:*\n${{ inputs.priority }}\"
+                  \"text\": \"*Priority:*\n$PRIORITY\"
                 },
                 {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"*Status:*\n${{ inputs.status }}\"
+                  \"text\": \"*Status:*\n$STATUS\"
                 },
                 {
                   \"type\": \"mrkdwn\",
@@ -126,7 +138,7 @@ runs:
               \"type\": \"section\",
               \"text\": {
                 \"type\": \"mrkdwn\",
-                \"text\": \"${{ inputs.message }}\"
+                \"text\": \"$MESSAGE\"
               }
             }${DETAILS_SECTION}${MENTION_SECTION}
           ]

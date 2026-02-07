@@ -75,31 +75,34 @@ jobs:
 
     - name: Detect incident trigger
       id: detect
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        LABEL_NAME: ${{ github.event.label.name }}
       run: |
         IS_INCIDENT="false"
 
         # Check if triggered by workflow failure
-        if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
-          if [[ "${{ github.event.workflow_run.conclusion }}" == "failure" ]]; then
+        if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+          if [[ "$WORKFLOW_RUN_CONCLUSION" == "failure" ]]; then
             # Check if it's a critical workflow
-            WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
             CRITICAL_WORKFLOWS="CI|deploy|release|security"
-            if echo "$WORKFLOW_NAME" | grep -qiE "$CRITICAL_WORKFLOWS"; then
+            if echo "$WORKFLOW_RUN_NAME" | grep -qiE "$CRITICAL_WORKFLOWS"; then
               IS_INCIDENT="true"
             fi
           fi
         fi
 
         # Check if triggered by incident label
-        if [[ "${{ github.event_name }}" == "issues" ]]; then
-          LABEL="${{ github.event.label.name }}"
-          if echo "${{ env.INCIDENT_LABELS }}" | grep -qi "$LABEL"; then
+        if [[ "$EVENT_NAME" == "issues" ]]; then
+          if echo "${{ env.INCIDENT_LABELS }}" | grep -qi "$LABEL_NAME"; then
             IS_INCIDENT="true"
           fi
         fi
 
         # Manual trigger is always an incident
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
           IS_INCIDENT="true"
         fi
 
@@ -108,29 +111,34 @@ jobs:
     - name: Assess incident severity
       id: assess
       if: steps.detect.outputs.is_incident == 'true'
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_SEVERITY: ${{ inputs.severity }}
+        INPUT_INCIDENT_TYPE: ${{ inputs.incident_type }}
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        LABEL_NAME: ${{ github.event.label.name }}
+        RUN_NUMBER: ${{ github.run_number }}
       run: |
         SEVERITY="p2"  # Default severity
         INCIDENT_TYPE="unknown"
-        INCIDENT_ID="INC-$(date +%Y%m%d)-${{ github.run_number }}"
+        INCIDENT_ID="INC-$(date +%Y%m%d)-$RUN_NUMBER"
 
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          SEVERITY="${{ inputs.severity }}"
-          INCIDENT_TYPE="${{ inputs.incident_type }}"
-        elif [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          SEVERITY="$INPUT_SEVERITY"
+          INCIDENT_TYPE="$INPUT_INCIDENT_TYPE"
+        elif [[ "$EVENT_NAME" == "workflow_run" ]]; then
           INCIDENT_TYPE="workflow_failure"
           # Assess severity based on workflow
-          WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
-          if echo "$WORKFLOW_NAME" | grep -qiE "deploy|release"; then
+          if echo "$WORKFLOW_RUN_NAME" | grep -qiE "deploy|release"; then
             SEVERITY="p1"
-          elif echo "$WORKFLOW_NAME" | grep -qiE "security"; then
+          elif echo "$WORKFLOW_RUN_NAME" | grep -qiE "security"; then
             SEVERITY="p0"
           fi
-        elif [[ "${{ github.event_name }}" == "issues" ]]; then
-          LABEL="${{ github.event.label.name }}"
+        elif [[ "$EVENT_NAME" == "issues" ]]; then
           INCIDENT_TYPE="issue_reported"
-          if [[ "$LABEL" == "p0" ]] || [[ "$LABEL" == "security-incident" ]]; then
+          if [[ "$LABEL_NAME" == "p0" ]] || [[ "$LABEL_NAME" == "security-incident" ]]; then
             SEVERITY="p0"
-          elif [[ "$LABEL" == "p1" ]] || [[ "$LABEL" == "outage" ]]; then
+          elif [[ "$LABEL_NAME" == "p1" ]] || [[ "$LABEL_NAME" == "outage" ]]; then
             SEVERITY="p1"
           fi
         fi

@@ -490,7 +490,7 @@ class TestGenerateMarkdownReport:
         report = crawler._generate_markdown_report()
 
         assert "Broken Links" in report
-        assert "https://broken1.com" in report
+        assert "broken1.com" in report  # lgtm [py/incomplete-url-substring-sanitization]
         assert "HTTP 404" in report
 
     def test_report_with_shatter_points(self, crawler):

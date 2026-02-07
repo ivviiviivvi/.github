@@ -36,11 +36,15 @@ jobs:
 
     - name: Get PR Number
       id: pr
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+        EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
       run: |
-        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          echo "number=${{ github.event.inputs.pr_number }}" >> $GITHUB_OUTPUT
+        if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+          echo "number=$INPUT_PR_NUMBER" >> $GITHUB_OUTPUT
         else
-          echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          echo "number=$EVENT_PR_NUMBER" >> $GITHUB_OUTPUT
         fi
 
     - name: Get PR Details and Extract Tasks

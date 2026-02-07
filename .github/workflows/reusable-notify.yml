@@ -49,9 +49,15 @@ jobs:
     steps:
     - name: Determine notification details
       id: details
+      env:
+        INPUT_STATUS: ${{ inputs.status }}
+        SERVER_URL: ${{ github.server_url }}
+        REPOSITORY: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
+        COMMIT_SHA: ${{ github.sha }}
       run: |
         # Determine emoji and color based on status
-        case "${{ inputs.status }}" in
+        case "$INPUT_STATUS" in
           success)
             emoji="✅"
             color="good"
@@ -79,27 +85,31 @@ jobs:
         echo "title=$title" >> $GITHUB_OUTPUT
 
         # Build run URL
-        run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run_url="${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID}"
         echo "run_url=$run_url" >> $GITHUB_OUTPUT
 
         # Build commit URL
-        commit_url="${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+        commit_url="${SERVER_URL}/${REPOSITORY}/commit/${COMMIT_SHA}"
         echo "commit_url=$commit_url" >> $GITHUB_OUTPUT
 
     - name: Create GitHub summary
       if: inputs.notification_type == 'github' || inputs.notification_type == 'all'
+      env:
+        WORKFLOW_NAME: ${{ inputs.workflow_name }}
+        INPUT_STATUS: ${{ inputs.status }}
+        INPUT_MESSAGE: ${{ inputs.message }}
       run: |
         echo "## ${{ steps.details.outputs.emoji }} ${{ steps.details.outputs.title }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Workflow**: ${{ inputs.workflow_name }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Status**: ${{ inputs.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow**: $WORKFLOW_NAME" >> $GITHUB_STEP_SUMMARY
+        echo "**Status**: $INPUT_STATUS" >> $GITHUB_STEP_SUMMARY
         echo "**Triggered by**: @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
         echo "**Branch**: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
         echo "**Commit**: [${{ github.sha }}](${{ steps.details.outputs.commit_url }})" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ -n "${{ inputs.message }}" ]; then
-          echo "**Message**: ${{ inputs.message }}" >> $GITHUB_STEP_SUMMARY
+        if [ -n "$INPUT_MESSAGE" ]; then
+          echo "**Message**: $INPUT_MESSAGE" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         fi
 

@@ -82,10 +82,11 @@ jobs:
     - name: List PRs
       if: inputs.operation == 'list'
       id: list
+      env:
+        PR_FILTERS: ${{ inputs.pr-filters }}
       run: |
-        if [ -n "${{ inputs.pr-filters }}" ]; then
-          FILTERS="${{ inputs.pr-filters }}"
-          prs=$(gh pr list --json number,title,author,labels --search "$FILTERS")
+        if [ -n "$PR_FILTERS" ]; then
+          prs=$(gh pr list --json number,title,author,labels --search "$PR_FILTERS")
         else
           prs=$(gh pr list --json number,title,author,labels)
         fi
@@ -95,69 +96,85 @@ jobs:
     - name: Merge PR
       if: inputs.operation == 'merge'
       id: merge
+      env:
+        AUTO_MERGE: ${{ inputs.auto-merge }}
+        MERGE_METHOD: ${{ inputs.merge-method }}
       run: |
         if [ -z "$PR_NUMBER" ]; then
           echo "Error: PR number is required for merge operation"
           exit 1
         fi
 
-        if [ "${{ inputs.auto-merge }}" = "true" ]; then
-          gh pr merge "$PR_NUMBER" --auto --${{ inputs.merge-method }}
+        if [ "$AUTO_MERGE" = "true" ]; then
+          gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD"
           echo "result=auto-merge-enabled" >> $GITHUB_OUTPUT
         else
-          gh pr merge "$PR_NUMBER" --${{ inputs.merge-method }}
+          gh pr merge "$PR_NUMBER" --"$MERGE_METHOD"
           echo "result=merged" >> $GITHUB_OUTPUT
         fi
 
     - name: Add Review
       if: inputs.operation == 'review'
       id: review
+      env:
+        REVIEW_BODY: ${{ inputs.review-body }}
+        REVIEW_EVENT: ${{ inputs.review-event }}
       run: |
         if [ -z "$PR_NUMBER" ]; then
           echo "Error: PR number is required for review operation"
           exit 1
         fi
 
-        if [ -n "${{ inputs.review-body }}" ]; then
-          gh pr review "$PR_NUMBER" --${{ inputs.review-event }} --body "${{ inputs.review-body }}"
+        if [ -n "$REVIEW_BODY" ]; then
+          gh pr review "$PR_NUMBER" --"$REVIEW_EVENT" --body "$REVIEW_BODY"
         else
-          gh pr review "$PR_NUMBER" --${{ inputs.review-event }}
+          gh pr review "$PR_NUMBER" --"$REVIEW_EVENT"
         fi
         echo "result=review-added" >> $GITHUB_OUTPUT
 
     - name: Add Comment
       if: inputs.operation == 'comment'
       id: comment
+      env:
+        COMMENT_BODY: ${{ inputs.comment-body }}
       run: |
         if [ -z "$PR_NUMBER" ]; then
           echo "Error: PR number is required for comment operation"
           exit 1
         fi
 
-        if [ -z "${{ inputs.comment-body }}" ]; then
+        if [ -z "$COMMENT_BODY" ]; then
           echo "Error: comment-body is required for comment operation"
           exit 1
         fi
 
-        gh pr comment "$PR_NUMBER" --body "${{ inputs.comment-body }}"
+        gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
         echo "result=comment-added" >> $GITHUB_OUTPUT
 
     - name: Enable Auto-merge
       if: inputs.operation == 'auto-merge'
       id: auto-merge
+      env:
+        MERGE_METHOD: ${{ inputs.merge-method }}
       run: |
         if [ -z "$PR_NUMBER" ]; then
           echo "Error: PR number is required for auto-merge operation"
           exit 1
         fi
 
-        gh pr merge "$PR_NUMBER" --auto --${{ inputs.merge-method }}
+        gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD"
         echo "result=auto-merge-enabled" >> $GITHUB_OUTPUT
 
     - name: Set operation result
       id: operation
+      env:
+        LIST_RESULT: ${{ steps.list.outputs.result }}
+        MERGE_RESULT: ${{ steps.merge.outputs.result }}
+        REVIEW_RESULT: ${{ steps.review.outputs.result }}
+        COMMENT_RESULT: ${{ steps.comment.outputs.result }}
+        AUTO_MERGE_RESULT: ${{ steps.auto-merge.outputs.result }}
       run: |
-        result="${{ steps.list.outputs.result || steps.merge.outputs.result || steps.review.outputs.result || steps.comment.outputs.result || steps.auto-merge.outputs.result }}"
+        result="${LIST_RESULT:-${MERGE_RESULT:-${REVIEW_RESULT:-${COMMENT_RESULT:-$AUTO_MERGE_RESULT}}}}"
         if [ -z "$result" ]; then
           result="operation-completed"
         fi

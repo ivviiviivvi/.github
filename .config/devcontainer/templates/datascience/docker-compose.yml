@@ -20,6 +20,9 @@ services:
     command: start.sh jupyter lab --LabApp.token='' --LabApp.password=''
     networks:
     - workspace-network
+    security_opt:
+    - no-new-privileges:true
+    # nosemgrep: yaml.docker-compose.security.writable-filesystem-service
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,6 +43,12 @@ services:
     - workspace-network
     volumes:
     - postgres-data:/var/lib/postgresql/data
+    security_opt:
+    - no-new-privileges:true
+    read_only: true
+    tmpfs:
+    - /tmp
+    - /run
     environment:
       POSTGRES_USER: devuser
       POSTGRES_PASSWORD: devpass
@@ -60,6 +69,11 @@ services:
     volumes:
     - redis-data:/data
     command: redis-server --appendonly yes
+    security_opt:
+    - no-new-privileges:true
+    read_only: true
+    tmpfs:
+    - /tmp
     healthcheck:
       test: [CMD, redis-cli, ping]
       interval: 10s
@@ -75,6 +89,11 @@ services:
     - workspace-network
     volumes:
     - mlflow-data:/mlflow
+    security_opt:
+    - no-new-privileges:true
+    read_only: true
+    tmpfs:
+    - /tmp
     environment:
     - BACKEND_STORE_URI=postgresql://devuser:devpass@postgres:5432/devdb
     - ARTIFACT_ROOT=/mlflow/artifacts
@@ -95,6 +114,11 @@ services:
     restart: unless-stopped
     networks:
     - workspace-network
+    security_opt:
+    - no-new-privileges:true
+    read_only: true
+    tmpfs:
+    - /tmp
     ports:
     - 8081:8080
     environment:

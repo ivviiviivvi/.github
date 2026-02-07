@@ -48,26 +48,33 @@ jobs:
 
     - name: Resolve source run and repository
       id: resolve-run
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+        INPUT_RUN_ID: ${{ inputs.run_id }}
+        EVENT_INPUT_RUN_ID: ${{ github.event.inputs.run_id }}
+        INPUT_REPOSITORY: ${{ inputs.repository }}
+        REPO: ${{ github.repository }}
       run: |
         # Determine the run_id
-        if [ "${{ github.event_name }}" = "workflow_run" ]; then
-          echo "run_id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
-          echo "repository=${{ github.repository }}" >> $GITHUB_OUTPUT
-        elif [ "${{ github.event_name }}" = "workflow_call" ]; then
-          if [ -n "${{ inputs.run_id }}" ]; then
-            echo "run_id=${{ inputs.run_id }}" >> $GITHUB_OUTPUT
+        if [ "$EVENT_NAME" = "workflow_run" ]; then
+          echo "run_id=$WORKFLOW_RUN_ID" >> $GITHUB_OUTPUT
+          echo "repository=$REPO" >> $GITHUB_OUTPUT
+        elif [ "$EVENT_NAME" = "workflow_call" ]; then
+          if [ -n "$INPUT_RUN_ID" ]; then
+            echo "run_id=$INPUT_RUN_ID" >> $GITHUB_OUTPUT
           else
             echo "::error::No run_id provided for workflow_call"
             exit 1
           fi
-          if [ -n "${{ inputs.repository }}" ]; then
-            echo "repository=${{ inputs.repository }}" >> $GITHUB_OUTPUT
+          if [ -n "$INPUT_REPOSITORY" ]; then
+            echo "repository=$INPUT_REPOSITORY" >> $GITHUB_OUTPUT
           else
-            echo "repository=${{ github.repository }}" >> $GITHUB_OUTPUT
+            echo "repository=$REPO" >> $GITHUB_OUTPUT
           fi
-        elif [ -n "${{ github.event.inputs.run_id }}" ]; then
-          echo "run_id=${{ github.event.inputs.run_id }}" >> $GITHUB_OUTPUT
-          echo "repository=${{ github.repository }}" >> $GITHUB_OUTPUT
+        elif [ -n "$EVENT_INPUT_RUN_ID" ]; then
+          echo "run_id=$EVENT_INPUT_RUN_ID" >> $GITHUB_OUTPUT
+          echo "repository=$REPO" >> $GITHUB_OUTPUT
         else
           echo "::warning::No run_id provided — skipping metadata collection"
           echo "skip=true" >> $GITHUB_OUTPUT

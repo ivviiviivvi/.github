@@ -51,9 +51,11 @@ jobs:
     - name: Find Ready PRs
       id: find-prs
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
         script: |
-          const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+          const dryRun = process.env.DRY_RUN === 'true';
 
           console.log('🔍 Finding PRs ready for auto-merge...');
 
@@ -148,9 +150,11 @@ jobs:
     - name: Merge Ready PRs
       if: steps.find-prs.outputs.count > 0
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
         script: |
-          const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+          const dryRun = process.env.DRY_RUN === 'true';
           const prs = JSON.parse('${{ steps.find-prs.outputs.prs }}');
 
           let merged = 0;
@@ -210,9 +214,11 @@ jobs:
     steps:
     - name: Find and Convert Draft PRs
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
         script: |
-          const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+          const dryRun = process.env.DRY_RUN === 'true';
 
           console.log('🔍 Finding draft PRs to convert...');
 
@@ -320,9 +326,11 @@ jobs:
 
     - name: Delete Merged Branches
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
         script: |
-          const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+          const dryRun = process.env.DRY_RUN === 'true';
 
           console.log('🧹 Cleaning up merged branches...');
 
@@ -429,9 +437,11 @@ jobs:
     steps:
     - name: Find and Close Stale PRs
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
         script: |
-          const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+          const dryRun = process.env.DRY_RUN === 'true';
 
           console.log('🔍 Finding stale PRs...');
 
@@ -515,13 +525,15 @@ jobs:
 
     steps:
     - name: Generate Summary
+      env:
+        DRY_RUN: ${{ github.event.inputs.dry_run }}
       run: |
         echo "### 🌙 Nightly Cleanup Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Date:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+        if [ "$DRY_RUN" = "true" ]; then
           echo "⚠️ **DRY RUN MODE** - No actual changes were made" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
         fi

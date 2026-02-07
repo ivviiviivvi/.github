@@ -97,9 +97,13 @@ jobs:
     - name: Run Trivy vulnerability scanner
       if: inputs.scan-type == 'trivy' || inputs.scan-type == 'all'
       id: trivy
+      env:
+        TRIVY_EXIT_CODE: ${{ inputs.fail-on-severity == 'CRITICAL' && '1' || '0' }}
+        TRIVY_SCAN_TYPE: ${{ inputs.trivy-scan-type }}
+        SEVERITY_THRESHOLD: ${{ inputs.severity-threshold }}
+        WORKING_DIRECTORY: ${{ inputs.working-directory }}
       run: |
-        EXIT_CODE=${{ inputs.fail-on-severity == 'CRITICAL' && '1' || '0' }}
-        trivy ${{ inputs.trivy-scan-type }} --format sarif --output trivy-results.sarif --severity ${{ inputs.severity-threshold }} --exit-code $EXIT_CODE ${{ inputs.working-directory }}
+        trivy "$TRIVY_SCAN_TYPE" --format sarif --output trivy-results.sarif --severity "$SEVERITY_THRESHOLD" --exit-code "$TRIVY_EXIT_CODE" "$WORKING_DIRECTORY"
 
     - name: Upload Trivy results to GitHub Security
       if: inputs.scan-type == 'trivy' || inputs.scan-type == 'all'

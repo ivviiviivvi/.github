@@ -62,6 +62,7 @@ jobs:
         TARGET_REPOS: ${{ github.event.inputs.target_repos || 'active' }}
         CUSTOM_REPOS: ${{ github.event.inputs.custom_repo_list || '' }}
         FORCE_REGENERATE: ${{ github.event.inputs.force_regenerate || 'false' }}
+        REPO_OWNER: ${{ github.repository_owner }}
       run: |
         # Load configuration
         if [ -f ".github/scheduled-walkthrough-config.yml" ]; then
@@ -95,7 +96,7 @@ jobs:
               }
             }
           }
-        ' -f org="${{ github.repository_owner }}")
+        ' -f org="$REPO_OWNER")
 
         # Filter repos based on criteria
         FILTERED_REPOS="[]"
@@ -113,7 +114,7 @@ jobs:
 
           for repo_name in $(echo "$REPOS" | jq -r '.data.organization.repositories.nodes[] | select(.isArchived == false) | .name'); do
             # Check for recent releases
-            LATEST_RELEASE=$(gh api "repos/${{ github.repository_owner }}/$repo_name/releases" --jq '.[0].published_at // ""' 2>/dev/null || echo "")
+            LATEST_RELEASE=$(gh api "repos/$REPO_OWNER/$repo_name/releases" --jq '.[0].published_at // ""' 2>/dev/null || echo "")
 
             if [ -n "$LATEST_RELEASE" ]; then
               # Compare release date with cutoff
@@ -139,12 +140,12 @@ jobs:
 
           for repo_name in $(echo "$FILTERED_REPOS" | jq -r '.[].name'); do
             # Look for walkthrough tags to determine last generation
-            LAST_WALKTHROUGH=$(gh api "repos/${{ github.repository_owner }}/$repo_name/tags" \
+            LAST_WALKTHROUGH=$(gh api "repos/$REPO_OWNER/$repo_name/tags" \
               --jq '[.[] | select(.name | startswith("walkthrough-"))] | .[0].name // "none"' 2>/dev/null || echo "none")
 
             if [ "$LAST_WALKTHROUGH" != "none" ]; then
               # Check commits since last walkthrough tag
-              COMMITS_SINCE=$(gh api "repos/${{ github.repository_owner }}/$repo_name/compare/$LAST_WALKTHROUGH...HEAD" \
+              COMMITS_SINCE=$(gh api "repos/$REPO_OWNER/$repo_name/compare/$LAST_WALKTHROUGH...HEAD" \
                 --jq '.ahead_by // 0' 2>/dev/null || echo "0")
 
               if [ "$COMMITS_SINCE" -gt 0 ]; then
@@ -175,16 +176,21 @@ jobs:
         echo "$FILTERED_REPOS" | jq '.'
 
     - name: Create summary
+      env:
+        TARGET_REPOS_INPUT: ${{ github.event.inputs.target_repos || 'active' }}
+        REPO_COUNT: ${{ steps.discover.outputs.count }}
+        FORCE_REGENERATE: ${{ github.event.inputs.force_regenerate || 'false' }}
+        DISCOVERED_REPOS: ${{ steps.discover.outputs.repos }}
       run: |
         echo "## Repository Discovery Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "- **Target criteria**: ${{ github.event.inputs.target_repos || 'active' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Repositories found**: ${{ steps.discover.outputs.count }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Force regenerate**: ${{ github.event.inputs.force_regenerate || 'false' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Target criteria**: $TARGET_REPOS_INPUT" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repositories found**: $REPO_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "- **Force regenerate**: $FORCE_REGENERATE" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Repositories to Process" >> $GITHUB_STEP_SUMMARY
         echo '```json' >> $GITHUB_STEP_SUMMARY
-        echo '${{ steps.discover.outputs.repos }}' | jq '.' >> $GITHUB_STEP_SUMMARY
+        echo "$DISCOVERED_REPOS" | jq '.' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
 
   # Job 2: Generate Gource visualizations for discovered repositories
@@ -251,6 +257,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         REPO_MATRIX: ${{ needs.discover-repos.outputs.repo-matrix }}
+        SERVER_URL: ${{ github.server_url }}
+        REPOSITORY: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
+        TOTAL_REPOS: ${{ needs.discover-repos.outputs.repo-count }}
+        WALKTHROUGHS_RESULT: ${{ needs.generate-walkthroughs.result }}
       run: |
         echo "Compiling results from all Gource visualizations..."
 
@@ -268,7 +279,7 @@ jobs:
               # Check if video exists
               if find "$artifact_dir" -name '*.mp4' -type f | head -1 | grep -q .; then
                 SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
-                ARTIFACT_LIST="$ARTIFACT_LIST\n| $REPO_NAME | Success | [Download](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+                ARTIFACT_LIST="$ARTIFACT_LIST\n| $REPO_NAME | Success | [Download](${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID}) |"
               else
                 FAILED_COUNT=$((FAILED_COUNT + 1))
                 ARTIFACT_LIST="$ARTIFACT_LIST\n| $REPO_NAME | No video | - |"
@@ -276,9 +287,6 @@ jobs:
             fi
           done
         fi
-
-        # Get total from matrix
-        TOTAL_REPOS="${{ needs.discover-repos.outputs.repo-count }}"
 
         # Calculate repos without artifacts (may have failed silently)
         PROCESSED=$((SUCCESS_COUNT + FAILED_COUNT))
@@ -295,13 +303,13 @@ jobs:
         echo "## Scheduled Gource Visualization Report" > report.md
         echo "" >> report.md
         echo "**Date**: $(date +%Y-%m-%d %H:%M:%S UTC)" >> report.md
-        echo "**Workflow Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> report.md
+        echo "**Workflow Run**: ${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID}" >> report.md
         echo "" >> report.md
         echo "### Summary" >> report.md
         echo "- **Repositories discovered**: $TOTAL_REPOS" >> report.md
         echo "- **Successful visualizations**: $SUCCESS_COUNT" >> report.md
         echo "- **Failed/incomplete**: $FAILED_COUNT" >> report.md
-        echo "- **Overall status**: ${{ needs.generate-walkthroughs.result }}" >> report.md
+        echo "- **Overall status**: $WALKTHROUGHS_RESULT" >> report.md
         echo "" >> report.md
 
         echo "### Results by Repository" >> report.md
@@ -330,6 +338,10 @@ jobs:
       if: failure()
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SERVER_URL: ${{ github.server_url }}
+        REPOSITORY: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
+        REPO_OWNER: ${{ github.repository_owner }}
       run: |
         # Send notification on failure
         echo "Scheduled Gource visualization generation failed"
@@ -339,11 +351,11 @@ jobs:
           --title "Scheduled Gource Visualization Failed - $(date +%Y-%m-%d)" \
           --body "The scheduled Gource visualization workflow failed.
 
-        Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        Workflow Run: ${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID}
         Time: $(date +%Y-%m-%d %H:%M:%S UTC)
 
         Please review the workflow logs for details.
 
-        @${{ github.repository_owner }}" \
+        @${REPO_OWNER}" \
           --label "bug,automated,walkthrough" \
-          --assignee "${{ github.repository_owner }}"
+          --assignee "$REPO_OWNER"

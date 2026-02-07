@@ -55,7 +55,7 @@ class OrganizationCrawler:
         # Default is 10, which bottlenecks if max_workers > 10
         adapter = HTTPAdapter(pool_connections=max_workers, pool_maxsize=max_workers)
         self.session.mount("https://", adapter)
-        self.session.mount("http://", adapter)
+        self.session.mount("http://", adapter)  # nosemgrep: python.lang.security.audit.network.http-not-https-connection.http-not-https-connection  # needed for redirect handling
 
         # Create a single SSL context for reuse
         # This avoids reloading the system trust store for every request

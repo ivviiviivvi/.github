@@ -125,7 +125,7 @@ def validate_token(token_name: str, config: dict[str, Any], verbose: bool = Fals
                 print(
                     f"  → Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )
-                print(f"  → Token scopes: {', '.join(result['scopes'])}")
+                print(f"  → Token scopes: {len(result['scopes'])} scope(s) granted")
 
             # Verify scopes match expected (only for active tokens)
             expected = set(config.get("scopes", []))
@@ -178,9 +178,13 @@ def print_summary(results: list[dict[str, Any]], verbose: bool = False) -> bool:
             status_icon = "✓" if result["valid"] else "✗" if result["status"] != "planned" else "⏳"
             status_color = GREEN if result["valid"] else RED if result["status"] != "planned" else YELLOW
 
-            print(f"{status_color}{status_icon}{NC} {result['token']}")
+            # Mask token name to avoid leaking sensitive identifiers in logs
+            token_display = result['token']
+            if len(token_display) > 8:
+                token_display = f"{token_display[:4]}...{token_display[-4:]}"
+            print(f"{status_color}{status_icon}{NC} {token_display}")
             if result["valid"]:
-                print(f"    Token scopes: {', '.join(result['scopes'])}")
+                print(f"    Scopes: {len(result['scopes'])} scope(s) granted")
                 print(
                     f"    Rate limit: {result['rate_limit']['remaining']}/{result['rate_limit']['limit']}"  # noqa: E501
                 )
