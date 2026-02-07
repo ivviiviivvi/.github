@@ -256,8 +256,10 @@ class OrganizationCrawler:
                 server_hostname=hostname,
             )
         else:
-            return urllib3.HTTPConnectionPool(  # nosemgrep
-                host=safe_ip, port=port, maxsize=self.max_workers
+            return urllib3.HTTPConnectionPool(  # nosemgrep: http-not-https-connection
+                host=safe_ip,
+                port=port,
+                maxsize=self.max_workers,
             )  # needed for redirect handling
 
     def _check_link(self, url: str, timeout: int = 10) -> int:
