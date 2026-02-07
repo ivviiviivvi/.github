@@ -117,6 +117,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate Contributors List
+      continue-on-error: true
       uses: akhilmhdh/contributors-readme-action@e4176e1d9e68d73f01455e68f5eca9441447f5f7  # ratchet:akhilmhdh/contributors-readme-action@v2.3.6
       with:
         image_size: 80

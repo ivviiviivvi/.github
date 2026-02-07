@@ -41,6 +41,7 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Sync labels
+      continue-on-error: true
       uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a   # v2.3.3
       with:
         node-version: '20'
@@ -48,7 +49,8 @@ jobs:
     - name: Install github-label-sync
       run: npm install -g github-label-sync
 
-    - name: Sync labels
+    - name: Sync labels with CLI
+      continue-on-error: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}

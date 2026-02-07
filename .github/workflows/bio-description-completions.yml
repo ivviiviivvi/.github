@@ -101,6 +101,7 @@ jobs:
         echo "  Create Issues: $CREATE_ISSUES"
 
     - name: Check organization profile
+      continue-on-error: true
       if: inputs.scope == 'all' || inputs.scope == 'organization'
       id: check-org
       env:
@@ -251,6 +252,7 @@ jobs:
         fi
 
     - name: Audit all organization repositories
+      continue-on-error: true
       if: inputs.scope == 'all' || inputs.scope == 'repositories'
       id: check-all-repos
       env:

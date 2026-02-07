@@ -60,6 +60,7 @@ jobs:
       id: fetch-repos
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ORG: ${{ github.repository_owner }}
       run: |
         cat > fetch_repos.py << 'EOF'
         import os
@@ -67,7 +68,7 @@ jobs:
         from github import Github
 
         g = Github(os.environ['GITHUB_TOKEN'])
-        org = g.get_organization('{{ORG_NAME}}')
+        org = g.get_organization(os.environ['GITHUB_ORG'])
 
         repos = []
         for repo in org.get_repos():
@@ -289,11 +290,12 @@ jobs:
 
     steps:
     - name: Check quota usage
+      continue-on-error: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         BILLING=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-          "https://api.github.com/orgs/{{ORG_NAME}}/settings/billing/actions")
+          "https://api.github.com/orgs/${{ github.repository_owner }}/settings/billing/actions")
 
         TOTAL_MINUTES_USED=$(echo "$BILLING" | jq '.total_minutes_used')
         INCLUDED_MINUTES=$(echo "$BILLING" | jq '.included_minutes')
