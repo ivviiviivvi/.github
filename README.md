@@ -63,7 +63,7 @@ All actions are
 with ratchet comments.
 
 Key workflows: `ci.yml` · `codeql-analysis.yml` · `auto-merge.yml` ·
-`health-check.yml` · `batch-onboarding.yml`
+`health-check.yml` · `batch-onboarding.yml` · `demo-deployment.yml`
 
 See the [Workflow Registry](docs/registry/) for the full catalog.
 

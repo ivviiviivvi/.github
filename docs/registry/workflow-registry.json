@@ -1,39 +1,276 @@
 {
   "$schema": "https://example.com/schemas/workflow-registry.schema.json",
-  "generated": "2026-01-24T17:47:32.164729+00:00",
+  "generated": "2026-02-07T20:14:53.691969+00:00",
   "generator": "workflow-registry-builder.py",
-  "root": "/Users/4jp/Workspace/{{ORG_NAME}}/.github/.github/workflows",
+  "root": "/Users/4jp/Workspace/ivviiviivvi/.github/.github/workflows",
   "statistics": {
-    "total_workflows": 134,
-    "with_metadata": 5,
-    "orphans": 129,
+    "total_workflows": 145,
+    "with_metadata": 143,
+    "orphans": 2,
     "by_layer": {
-      "interface": 1,
-      "core": 2,
-      "logic": 1,
-      "application": 1
+      "logic": 73,
+      "interface": 14,
+      "core": 34,
+      "application": 22
     }
   },
   "resources": [
     {
-      "name": "Auto Assign",
-      "path": "auto-assign.yml",
-      "meta": "auto-assign.yml.meta.json",
-      "hash": "d740cf8992f15b5d2d9c8e9a484b9e3c75a5d286f0f4580268d792e8790b3717",
+      "name": "Accessibility Testing",
+      "path": "accessibility-testing.yml",
+      "meta": "accessibility-testing.yml.meta.json",
+      "hash": "3b04e56539c132cf49b1b663b34bc6bc6d3c975ca00350b1c5fd853dc4cbfca6",
       "functioncalled": {
-        "canonical": "interface.assign.contributor.yml",
-        "layer": "interface",
-        "role": "assign",
-        "domain": "contributor"
+        "canonical": "logic.testing.accessibility.yml",
+        "layer": "logic",
+        "role": "testing",
+        "domain": "accessibility"
       },
       "version": "1.0.0",
       "profile": "full"
     },
     {
-      "name": "CI Pipeline",
-      "path": "ci.yml",
-      "meta": "ci.yml.meta.json",
-      "hash": "1bc368d138f99b6e7471a8b59852ad37ad61cafdb9501b361ade67a3d1e6239d",
+      "name": "Admin Approval Dashboard",
+      "path": "admin-approval-dashboard.yml",
+      "meta": "admin-approval-dashboard.yml.meta.json",
+      "hash": "0217420fe778b0d46fbc115294b6b4c0f4f57d1d380c623ab09d38bd36db5ebd",
+      "functioncalled": {
+        "canonical": "interface.general.admin.yml",
+        "layer": "interface",
+        "role": "general",
+        "domain": "admin"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Alert on Workflow Failure",
+      "path": "alert-on-workflow-failure.yml",
+      "meta": "alert-on-workflow-failure.yml.meta.json",
+      "hash": "ae8122bdbb8c02b0768a4d37b7cd3df8d0b5bffb57f79d86001c50f059e847d4",
+      "functioncalled": {
+        "canonical": "logic.general.alert.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "alert"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto-Assign Reviewers",
+      "path": "auto-assign-reviewers.yml",
+      "meta": "auto-assign-reviewers.yml.meta.json",
+      "hash": "f7c7c6aa70f6f99532ce5aa6290418e0b76168fe20ad5700e5ede2613993ed9e",
+      "functioncalled": {
+        "canonical": "interface.automation.auto.yml",
+        "layer": "interface",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto Assign",
+      "path": "auto-assign.yml",
+      "meta": "auto-assign.yml.meta.json",
+      "hash": "540ce6c82771dee74857192ab8901e5d7d468103852240f1c4721d97bbc7d13f",
+      "functioncalled": {
+        "canonical": "interface.automation.auto.yml",
+        "layer": "interface",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto-Batch Automated PRs",
+      "path": "auto-batch-prs.yml",
+      "meta": "auto-batch-prs.yml.meta.json",
+      "hash": "d6689322133d7bf20cb1477f70188c17b428783ed21de886094b72dff7d7e3d1",
+      "functioncalled": {
+        "canonical": "logic.automation.auto.yml",
+        "layer": "logic",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto-Enable Merge",
+      "path": "auto-enable-merge.yml",
+      "meta": "auto-enable-merge.yml.meta.json",
+      "hash": "7ca809d18ed47980a7b5dc27783100e67b99b0ca91028c2b8e91fb2fcb5ca893",
+      "functioncalled": {
+        "canonical": "logic.automation.auto.yml",
+        "layer": "logic",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto Labeler",
+      "path": "auto-labeler.yml",
+      "meta": "auto-labeler.yml.meta.json",
+      "hash": "41c1e139945c65f4ea53eee794f3812680ab5ab7bfb1bc22f14f166be0228690",
+      "functioncalled": {
+        "canonical": "interface.automation.auto.yml",
+        "layer": "interface",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto Merge Pull Request",
+      "path": "auto-merge.yml",
+      "meta": "auto-merge.yml.meta.json",
+      "hash": "3b2f015217755d43c53445cad3961a78735ec5204bf83ed68b6ec2bd7c7c8ec6",
+      "functioncalled": {
+        "canonical": "logic.automation.auto.yml",
+        "layer": "logic",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Auto Create Pull Request",
+      "path": "auto-pr-create.yml",
+      "meta": "auto-pr-create.yml.meta.json",
+      "hash": "24564beb7ecc2c9f9f4e25c0e7664513bcb39727e6fd0e910e769460fa00746b",
+      "functioncalled": {
+        "canonical": "logic.automation.auto.yml",
+        "layer": "logic",
+        "role": "automation",
+        "domain": "auto"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Badge Management",
+      "path": "badge-management.yml",
+      "meta": "badge-management.yml.meta.json",
+      "functioncalled": {
+        "canonical": "interface.general.badge.yml",
+        "layer": "interface",
+        "role": "general",
+        "domain": "badge"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Batch Repository Onboarding",
+      "path": "batch-onboarding.yml",
+      "meta": "batch-onboarding.yml.meta.json",
+      "hash": "7e123d6c4c9df132f09e6231b2e3c70305e5db5544ec493043b6f8cb41b8e3c3",
+      "functioncalled": {
+        "canonical": "logic.general.batch.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "batch"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Batch PR Lifecycle Management",
+      "path": "batch-pr-lifecycle.yml",
+      "meta": "batch-pr-lifecycle.yml.meta.json",
+      "hash": "06038beabf22cefb40fb48ec05ab147468a7c8b720b3d5a8e949cb9cd55a4822",
+      "functioncalled": {
+        "canonical": "logic.pr-management.batch.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "batch"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Bulk PR Operations",
+      "path": "batch-pr-operations.yml",
+      "meta": "batch-pr-operations.yml.meta.json",
+      "hash": "228f7a7cf5756f43112b6c5210dc6307ebc2a574d9e95fe7f0d60ddda68d9d48",
+      "functioncalled": {
+        "canonical": "logic.pr-management.bulk.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "bulk"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Bio and Description Completions",
+      "path": "bio-description-completions.yml",
+      "meta": "bio-description-completions.yml.meta.json",
+      "hash": "a1b67406164f67ef8bf6fdd68f760bb0fa7e8beb49f6aeb3caed0df2dbafccd3",
+      "functioncalled": {
+        "canonical": "logic.general.bio.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "bio"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Branch Cleanup Notification",
+      "path": "branch-cleanup-notify.yml",
+      "meta": "branch-cleanup-notify.yml.meta.json",
+      "hash": "5759c77b43471a6e88f0fde50cfeca64b8db824ff7cb424e75c0e64177904f0c",
+      "functioncalled": {
+        "canonical": "logic.maintenance.branch.yml",
+        "layer": "logic",
+        "role": "maintenance",
+        "domain": "branch"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Branch Lifecycle Management",
+      "path": "branch-lifecycle-management.yml",
+      "meta": "branch-lifecycle-management.yml.meta.json",
+      "hash": "050435eddc39a947364e586b7477c2dfc3710da3558aa2f2e049efa66ffa105b",
+      "functioncalled": {
+        "canonical": "logic.general.branch.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "branch"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Branch Lifecycle (Core)",
+      "path": "branch-lifecycle.yml",
+      "meta": "branch-lifecycle.yml.meta.json",
+      "hash": "5347a3ecf91144a000e9e6b0a1850ea8a57b87cdd79ea4ab270e561b36be4c61",
+      "functioncalled": {
+        "canonical": "logic.general.branch.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "branch"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Build and Deploy GitHub Pages Site",
+      "path": "build-pages-site.yml",
+      "meta": "build-pages-site.yml.meta.json",
+      "hash": "c623f93887af52fdd0512afd0dd831c60b6da99f2daa98f1d98d49f55e96e595",
       "functioncalled": {
         "canonical": "core.ci.build.yml",
         "layer": "core",
@@ -44,29 +281,1173 @@
       "profile": "full"
     },
     {
-      "name": "PR Title Lint",
-      "path": "pr-title-lint.yml",
-      "meta": "pr-title-lint.yml.meta.json",
-      "hash": "0b53a61a2b4fe7890434c1732455cfe1a5a38ea463b29ae664dc0edccffa850d",
+      "name": "Chatmode Frontmatter",
+      "path": "chatmode-frontmatter.yml",
+      "meta": "chatmode-frontmatter.yml.meta.json",
+      "hash": "ec19f691daadd246d9d7b781875060163b5c28b245c9d0a93185373c468ac591",
       "functioncalled": {
-        "canonical": "logic.validate.title.yml",
+        "canonical": "logic.general.chatmode.yml",
         "layer": "logic",
-        "role": "validate",
-        "domain": "title"
+        "role": "general",
+        "domain": "chatmode"
       },
       "version": "1.0.0",
       "profile": "full"
     },
     {
-      "name": "Release",
+      "name": "Advanced CI Pipeline",
+      "path": "ci-advanced.yml",
+      "meta": "ci-advanced.yml.meta.json",
+      "hash": "00b6764a40e37540fb2be4a193439d20e2ae7f96b8688f547bfc89ec9d493ace",
+      "functioncalled": {
+        "canonical": "logic.general.ci.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "ci"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "CI",
+      "path": "ci.yml",
+      "meta": "ci.yml.meta.json",
+      "hash": "3572857e5d1c819c6617cc2f85dbb44372c6f44fc40e808f4c956882a0a0d52e",
+      "functioncalled": {
+        "canonical": "core.ci.ci.yml",
+        "layer": "core",
+        "role": "ci",
+        "domain": "ci"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Claude Code Review",
+      "path": "claude-code-review.yml",
+      "meta": "claude-code-review.yml.meta.json",
+      "hash": "24e9243924fca79d448cc6489e393619200218b66b9538415e35207cecde7af8",
+      "functioncalled": {
+        "canonical": "logic.ai.claude.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "claude"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Claude Code",
+      "path": "claude.yml",
+      "meta": "claude.yml.meta.json",
+      "hash": "468b2ba6b509ea8e948e8e3f0646b357e136372a402a82daecbb0032a5faafae",
+      "functioncalled": {
+        "canonical": "logic.ai.claude.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "claude"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Code Coverage",
+      "path": "code-coverage.yml",
+      "meta": "code-coverage.yml.meta.json",
+      "hash": "7975b498b7b0f7e83033c488b6a42e4b1a3c0c5bab7602e8e866e989a6e2d834",
+      "functioncalled": {
+        "canonical": "core.testing.code.yml",
+        "layer": "core",
+        "role": "testing",
+        "domain": "code"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "CodeQL",
+      "path": "codeql-analysis.yml",
+      "meta": "codeql-analysis.yml.meta.json",
+      "hash": "63d0533dc1d30b3057a585a0909619fdf48e498f10e8265ba192fb8a6e680056",
+      "functioncalled": {
+        "canonical": "core.security.codeql.yml",
+        "layer": "core",
+        "role": "security",
+        "domain": "codeql"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Collect Deployment Metadata",
+      "path": "collect-deployment-metadata.yml",
+      "meta": "collect-deployment-metadata.yml.meta.json",
+      "hash": "4bc34b459f9f88e538ca226dd55a07c2e198ed4f948f510c0a3dab0ef8dc7f0d",
+      "functioncalled": {
+        "canonical": "application.deployment.collect.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "collect"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Combine PRs",
+      "path": "combine-prs.yml",
+      "meta": "combine-prs.yml.meta.json",
+      "hash": "2d6e9d7ae84e611b9159de7b38e89609c954876c74d33abe127598afaaadb750",
+      "functioncalled": {
+        "canonical": "logic.general.combine.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "combine"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Commit Tracking",
+      "path": "commit-tracking.yml",
+      "meta": "commit-tracking.yml.meta.json",
+      "hash": "deef5a65f0367cf978445388857d3142353d246f18e159806fd2878899c1440a",
+      "functioncalled": {
+        "canonical": "logic.general.commit.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "commit"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Commitizen Bump",
+      "path": "commitizen-bump.yml",
+      "meta": "commitizen-bump.yml.meta.json",
+      "hash": "ad35cfae8d7f5ff7b3e0589c4923e91ec6f54e4f4ba7f4f05da8624494de7ef3",
+      "functioncalled": {
+        "canonical": "logic.general.commitizen.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "commitizen"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Community Health",
+      "path": "community-health.yml",
+      "meta": "community-health.yml.meta.json",
+      "hash": "df137657ccc65f79fb2e35a7974f46a8f30ab3d53a259e52d8462c7d320b9cba",
+      "functioncalled": {
+        "canonical": "logic.metrics.community.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "community"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Create Organizational Content",
+      "path": "create-organizational-content.yml",
+      "meta": "create-organizational-content.yml.meta.json",
+      "hash": "92ea5a2d058d80186362a116d648d5d5345958ce8290280a8daa9d8557868343",
+      "functioncalled": {
+        "canonical": "logic.general.create.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "create"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Daily Master Orchestrator",
+      "path": "daily-orchestrator.yml",
+      "meta": "daily-orchestrator.yml.meta.json",
+      "functioncalled": {
+        "canonical": "application.automation.daily.yml",
+        "layer": "application",
+        "role": "automation",
+        "domain": "daily"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Demo Sandbox Deployment",
+      "path": "demo-deployment.yml",
+      "meta": "demo-deployment.yml.meta.json",
+      "hash": "d30fcff91b8c70d6244c1b3a86e7dd2ca25c2cb5be084a8db51dc10137f7cf17",
+      "functioncalled": {
+        "canonical": "application.deployment.demo-sandbox.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "demo-sandbox"
+      },
+      "version": "2.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Dependency Review",
+      "path": "dependency-review.yml",
+      "meta": "dependency-review.yml.meta.json",
+      "hash": "f204ddb32a9792368c1069ce6034308cb986d1bad2e2b1957ee28c55198b759c",
+      "functioncalled": {
+        "canonical": "logic.pr-management.dependency.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "dependency"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Deploy Live App to GitHub Pages",
+      "path": "deploy-to-pages-live.yml",
+      "meta": "deploy-to-pages-live.yml.meta.json",
+      "hash": "0fc60e2283c201447dac40a6c370f4dcabde7f8a5ee8d9fa3361995fd132ec31",
+      "functioncalled": {
+        "canonical": "application.deployment.deploy.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "deploy"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Deploy to Production",
+      "path": "deployment.yml",
+      "meta": "deployment.yml.meta.json",
+      "hash": "7e06115b2fcb545b6791c4162f8c9e59619cc2b40f0934e282831fb933b2fa96",
+      "functioncalled": {
+        "canonical": "application.deployment.deployment.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "deployment"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Docker Build and Push",
+      "path": "docker-build-push.yml",
+      "meta": "docker-build-push.yml.meta.json",
+      "hash": "5e982964d2d6e2deab5fc1d1a38cae8bc9dbf027a635b0c3a2914cb3aabd90cc",
+      "functioncalled": {
+        "canonical": "application.ci.docker.yml",
+        "layer": "application",
+        "role": "ci",
+        "domain": "docker"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Draft to Ready PR Automation",
+      "path": "draft-to-ready-automation.yml",
+      "meta": "draft-to-ready-automation.yml.meta.json",
+      "hash": "41552eacb3f6b6a223293278080e0e6d2bf3d356d818eb8bd1bf5d7c343883d5",
+      "functioncalled": {
+        "canonical": "logic.general.draft.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "draft"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Email Digest",
+      "path": "email-digest.yml",
+      "meta": "email-digest.yml.meta.json",
+      "hash": "2fc2c1388e27af36c12b58cf44f692b166eb2b77c49e4c64511fa9386d1e67b2",
+      "functioncalled": {
+        "canonical": "interface.general.email.yml",
+        "layer": "interface",
+        "role": "general",
+        "domain": "email"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "\ud83d\udd00 Gemini Dispatch",
+      "path": "gemini-dispatch.yml",
+      "meta": "gemini-dispatch.yml.meta.json",
+      "hash": "05a67ee2be90f05063ea156d94e7714d415e82342114dcc29bb86823983632e0",
+      "functioncalled": {
+        "canonical": "logic.ai.gemini.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "gemini"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "\u25b6\ufe0f Gemini Invoke",
+      "path": "gemini-invoke.yml",
+      "meta": "gemini-invoke.yml.meta.json",
+      "hash": "ab295e86d3d8688e8149cd81850e4f15da381a7968d0835fd9ff94b1355b2574",
+      "functioncalled": {
+        "canonical": "logic.ai.gemini.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "gemini"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "\ud83d\udd0e Gemini Review",
+      "path": "gemini-review.yml",
+      "meta": "gemini-review.yml.meta.json",
+      "hash": "c8516fc53b3cfc10910125ca0b44b264924159cdc3ecac0e5dd9c41ec5fa9281",
+      "functioncalled": {
+        "canonical": "logic.ai.gemini.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "gemini"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "\ud83d\udccb Gemini Scheduled Issue Triage",
+      "path": "gemini-scheduled-triage.yml",
+      "meta": "gemini-scheduled-triage.yml.meta.json",
+      "hash": "61df50d1c19155c9e97361001f34f599dbd24dd7ecf3f325b084e9ee6688ba7a",
+      "functioncalled": {
+        "canonical": "interface.automation.gemini.yml",
+        "layer": "interface",
+        "role": "automation",
+        "domain": "gemini"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "\ud83d\udd00 Gemini Triage",
+      "path": "gemini-triage.yml",
+      "meta": "gemini-triage.yml.meta.json",
+      "hash": "bfbcd73120d44b181af61508b99f6571319b5a6bbe65ffc998f83049a377befd",
+      "functioncalled": {
+        "canonical": "interface.ai.gemini.yml",
+        "layer": "interface",
+        "role": "ai",
+        "domain": "gemini"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Generate Pages Index",
+      "path": "generate-pages-index.yml",
+      "meta": "generate-pages-index.yml.meta.json",
+      "functioncalled": {
+        "canonical": "application.documentation.generate.yml",
+        "layer": "application",
+        "role": "documentation",
+        "domain": "generate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Generate Video Walkthrough",
+      "path": "generate-walkthrough.yml",
+      "meta": "generate-walkthrough.yml.meta.json",
+      "hash": "6fa8d4ab992b6033a613c404114f27689b80a5c17545b6db724aedf4b697dcca",
+      "functioncalled": {
+        "canonical": "application.documentation.generate.yml",
+        "layer": "application",
+        "role": "documentation",
+        "domain": "generate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Grok Workflow",
+      "path": "grok-workflow.yml",
+      "meta": "grok-workflow.yml.meta.json",
+      "hash": "7d8cc3353f2c393eda121bb1089a81be667512b64f9e3b5d3e59ba6fcd62cea8",
+      "functioncalled": {
+        "canonical": "logic.ai.grok.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "grok"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Health Check - Live Apps Monitoring",
+      "path": "health-check-live-apps.yml",
+      "meta": "health-check-live-apps.yml.meta.json",
+      "hash": "0f1af7aa7e6def82979a37fc5dbb6ad516c9f72395067882539ad0a3a4b0a3d0",
+      "functioncalled": {
+        "canonical": "core.quality.health.yml",
+        "layer": "core",
+        "role": "quality",
+        "domain": "health"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Workflow Health Check",
+      "path": "health-check.yml",
+      "meta": "health-check.yml.meta.json",
+      "hash": "53b5470d36be27a4e3f9cacc9aafd60672215563cef95317b4cfccb4226b9058",
+      "functioncalled": {
+        "canonical": "core.quality.health.yml",
+        "layer": "core",
+        "role": "quality",
+        "domain": "health"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Incident Response",
+      "path": "incident-response.yml",
+      "meta": "incident-response.yml.meta.json",
+      "hash": "4e2b6d8c215c9bc9b7b6e02c956f936e6fcdecd0c8a0aa93b8bc85f7e3423fe1",
+      "functioncalled": {
+        "canonical": "logic.general.incident.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "incident"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Issue Triage Automation",
+      "path": "issue-triage.yml",
+      "meta": "issue-triage.yml.meta.json",
+      "hash": "2eb9f9926049e28e172b10dc75281f7d6877aa23fa3238d2320e95e2631d0dfd",
+      "functioncalled": {
+        "canonical": "interface.issue-management.issue.yml",
+        "layer": "interface",
+        "role": "issue-management",
+        "domain": "issue"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Jules Agent",
+      "path": "jules.yml",
+      "meta": "jules.yml.meta.json",
+      "hash": "4817ec93724972481f9b51a2334ee9ca96e8c41156959f08a28d58d03d01d8a9",
+      "functioncalled": {
+        "canonical": "logic.ai.jules.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "jules"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Label Sync",
+      "path": "label-sync.yml",
+      "meta": "label-sync.yml.meta.json",
+      "hash": "c205bbe82f3d0962d6d3e1fa2ab56788aaa813f7535f45a18635709f96728cf5",
+      "functioncalled": {
+        "canonical": "logic.general.label.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "label"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Link Checker",
+      "path": "link-checker.yml",
+      "meta": "link-checker.yml.meta.json",
+      "hash": "190ebf318297bbc7d5632978409db80a7d84b323496d915f005549d9703b97c1",
+      "functioncalled": {
+        "canonical": "logic.quality.link.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "link"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Manual Reset",
+      "path": "manual-reset.yml",
+      "meta": "manual-reset.yml.meta.json",
+      "hash": "59ac04db9e033cd8343df879b2d3fe0136520eba17de09e0ebc4e1642dc7334e",
+      "functioncalled": {
+        "canonical": "logic.maintenance.manual.yml",
+        "layer": "logic",
+        "role": "maintenance",
+        "domain": "manual"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Workflow Metrics Collection",
+      "path": "metrics-collection.yml",
+      "meta": "metrics-collection.yml.meta.json",
+      "functioncalled": {
+        "canonical": "logic.metrics.metrics.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "metrics"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Metrics Dashboard",
+      "path": "metrics-dashboard.yml",
+      "meta": "metrics-dashboard.yml.meta.json",
+      "hash": "0d76007c8466499d9a95a638574d447e14cdeb3990a520c0482f0be2e99f1961",
+      "functioncalled": {
+        "canonical": "interface.metrics.metrics.yml",
+        "layer": "interface",
+        "role": "metrics",
+        "domain": "metrics"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Mutation Testing",
+      "path": "mutation-testing.yml",
+      "meta": "mutation-testing.yml.meta.json",
+      "hash": "0604ff005d9d2e4079abb314ba63bbbcfcead05a1e0fc67b5f17c3b3828e0b3d",
+      "functioncalled": {
+        "canonical": "logic.testing.mutation.yml",
+        "layer": "logic",
+        "role": "testing",
+        "domain": "mutation"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Nightly Cleanup and Automation",
+      "path": "nightly-cleanup.yml",
+      "meta": "nightly-cleanup.yml.meta.json",
+      "hash": "7cb221cf1cc5da421a93595d946ed197f5d1f650b7c2c8a67ce59cb082ca0106",
+      "functioncalled": {
+        "canonical": "logic.maintenance.nightly.yml",
+        "layer": "logic",
+        "role": "maintenance",
+        "domain": "nightly"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "OpenAI Workflow",
+      "path": "openai-workflow.yml",
+      "meta": "openai-workflow.yml.meta.json",
+      "hash": "09f003ac36b167fd62d5ea784b4af2eaa02a3197b3974077382d4baa9d53ac0a",
+      "functioncalled": {
+        "canonical": "logic.ai.openai.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "openai"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "AI Task Orchestrator",
+      "path": "orchestrator.yml",
+      "meta": "orchestrator.yml.meta.json",
+      "hash": "5c0d68977cbd925cc37ede5ff39986c9563164d181c8632b85d91e6a6f44e111",
+      "functioncalled": {
+        "canonical": "application.automation.orchestrator.yml",
+        "layer": "application",
+        "role": "automation",
+        "domain": "orchestrator"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Organization Health Crawler",
+      "path": "org-health-crawler.yml",
+      "meta": "org-health-crawler.yml.meta.json",
+      "hash": "a9fa396dda8c9c629efca4b053c3a38e0f28d453cd39aee994967ebacad5088b",
+      "functioncalled": {
+        "canonical": "logic.metrics.org.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "org"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Organization Walkthrough Generator (Reusable)",
+      "path": "org-walkthrough-generator.yml",
+      "meta": "org-walkthrough-generator.yml.meta.json",
+      "hash": "c1212875759d14ca8a5fe7777a824b9ff7a017cbd2ce9e0b6915bf3b9abc58e4",
+      "functioncalled": {
+        "canonical": "core.documentation.org.yml",
+        "layer": "core",
+        "role": "documentation",
+        "domain": "org"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Organization-Wide Workflow Dispatch",
+      "path": "org-wide-workflow-dispatch.yml",
+      "meta": "org-wide-workflow-dispatch.yml.meta.json",
+      "hash": "53502a4de15ae65ffdd69442a2264683cc299dfd57ca7e8fde87f7b9f4e9e1eb",
+      "functioncalled": {
+        "canonical": "logic.general.org.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "org"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Deploy Jekyll site to Pages",
+      "path": "pages.yml",
+      "meta": "pages.yml.meta.json",
+      "hash": "7283c0d4421df97a34d041f121f87bfc5669a6874718f0ebe2fd9fb655396884",
+      "functioncalled": {
+        "canonical": "application.deployment.pages.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "pages"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Performance Benchmark",
+      "path": "performance-benchmark.yml",
+      "meta": "performance-benchmark.yml.meta.json",
+      "hash": "2114dc1389bd82a72f399009803463cbdfd167e73a79e74a23c00423a483d4a9",
+      "functioncalled": {
+        "canonical": "logic.general.performance.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "performance"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Perplexity Workflow",
+      "path": "perplexity-workflow.yml",
+      "meta": "perplexity-workflow.yml.meta.json",
+      "hash": "7d334c11ac8460c4f180b51884623bbc69f14afe74895af1a1671d984fca85a7",
+      "functioncalled": {
+        "canonical": "logic.ai.perplexity.yml",
+        "layer": "logic",
+        "role": "ai",
+        "domain": "perplexity"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Batch Merge Related PRs",
+      "path": "pr-batch-merge.yml",
+      "meta": "pr-batch-merge.yml.meta.json",
+      "hash": "da7129efeee7e2a321c4e0aa15b662142398be29f4c5b4dcd62676552ec29b3c",
+      "functioncalled": {
+        "canonical": "logic.pr-management.pr.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Quality Checks",
+      "path": "pr-quality-checks.yml",
+      "meta": "pr-quality-checks.yml.meta.json",
+      "hash": "3db8c3385cb4e4b9a47fedf9c862f7cf419acf4b5d5e98df7dc69a8158889e0f",
+      "functioncalled": {
+        "canonical": "logic.quality.pr.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Suggestion Implementation",
+      "path": "pr-suggestion-implementation.yml",
+      "meta": "pr-suggestion-implementation.yml.meta.json",
+      "hash": "8081d4067c517dd0ef6353d9a8b2c88f0aa68e573e56e20e7efd63606430ce2e",
+      "functioncalled": {
+        "canonical": "logic.pr-management.pr.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Task Catcher",
+      "path": "pr-task-catcher.yml",
+      "meta": "pr-task-catcher.yml.meta.json",
+      "hash": "18e044b3e37359f2b28173d1e933afe9d452ecf4b1c4263636f8da7ac5b0063e",
+      "functioncalled": {
+        "canonical": "logic.pr-management.pr.yml",
+        "layer": "logic",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Title Lint",
+      "path": "pr-title-lint.yml",
+      "meta": "pr-title-lint.yml.meta.json",
+      "hash": "355efea7cd2f749ad7f6a65e22143a0e040a5abe0af376022e1d5e2a64fd679e",
+      "functioncalled": {
+        "canonical": "core.quality.pr.yml",
+        "layer": "core",
+        "role": "quality",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Proactive Maintenance",
+      "path": "proactive-maintenance.yml",
+      "meta": "proactive-maintenance.yml.meta.json",
+      "hash": "bd70e751dba90ce1cfc04da8277bfb4eaa979938d6b2d5013e16224a19b3b0b4",
+      "functioncalled": {
+        "canonical": "logic.maintenance.proactive.yml",
+        "layer": "logic",
+        "role": "maintenance",
+        "domain": "proactive"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Process Task Queue",
+      "path": "process-queue.yml",
+      "meta": "process-queue.yml.meta.json",
+      "hash": "aed5982163753ed0e99113cde79f2ed3845f66268e0b7ed97178ade54859975e",
+      "functioncalled": {
+        "canonical": "logic.issue-management.process.yml",
+        "layer": "logic",
+        "role": "issue-management",
+        "domain": "process"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Project Automation",
+      "path": "project-automation.yml",
+      "meta": "project-automation.yml.meta.json",
+      "hash": "5da71bf956678bbbeaae6f9a728fd75eadca30bc9103b3215f78af9254f92610",
+      "functioncalled": {
+        "canonical": "logic.general.project.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "project"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Metadata Reconciliation - Deployments",
+      "path": "reconcile-deployments.yml",
+      "meta": "reconcile-deployments.yml.meta.json",
+      "hash": "875f7140221a90d5dc73313d4ddb1aa63ddfaff03d60be87f5522ced84c08eae",
+      "functioncalled": {
+        "canonical": "application.deployment.reconcile.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "reconcile"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Release Management",
       "path": "release.yml",
       "meta": "release.yml.meta.json",
-      "hash": "7e1fc49a018d1a696519883c2a392799d46b3d74af50f97e43f680ea576501f1",
+      "hash": "c8784a4140e782b8e753df6752cb39c51247dd7b7925eaf7662e2aec532c4a96",
       "functioncalled": {
-        "canonical": "application.deploy.release.yml",
+        "canonical": "application.deployment.release.yml",
         "layer": "application",
-        "role": "deploy",
+        "role": "deployment",
         "domain": "release"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Repository Metrics",
+      "path": "repo-metrics.yml",
+      "meta": "repo-metrics.yml.meta.json",
+      "hash": "143525ea67b0df2c62c0cec0c02bad26679dbbb3f267b2ce0c200e86f02b8be7",
+      "functioncalled": {
+        "canonical": "logic.metrics.repo.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "repo"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Repository Bootstrap",
+      "path": "repository-bootstrap.yml",
+      "meta": "repository-bootstrap.yml.meta.json",
+      "hash": "7d4f7c2fcd245f5a4a9550c3f434e47d798cca864022daf2173aa6f397abb2ae",
+      "functioncalled": {
+        "canonical": "logic.general.repository.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "repository"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Repository Structure Validation",
+      "path": "repository-structure-validation.yml",
+      "meta": "repository-structure-validation.yml.meta.json",
+      "hash": "f84c68d526e05b24dd85acbb2067860601b693a5ac0cbb1389ce220eb26c558b",
+      "functioncalled": {
+        "canonical": "logic.general.repository.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "repository"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reset Quotas",
+      "path": "reset-quotas.yml",
+      "meta": "reset-quotas.yml.meta.json",
+      "functioncalled": {
+        "canonical": "logic.maintenance.reset.yml",
+        "layer": "logic",
+        "role": "maintenance",
+        "domain": "reset"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Artifact Management (Reusable)",
+      "path": "reusable/artifact-management.yml",
+      "meta": "reusable/artifact-management.yml.meta.json",
+      "hash": "903178734202f945f1832039f16531612b9a0b33985dd90ed6d889ddcf9cb22c",
+      "functioncalled": {
+        "canonical": "core.general.artifact.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "artifact"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "CI Pipeline (Reusable)",
+      "path": "reusable/ci-pipeline.yml",
+      "meta": "reusable/ci-pipeline.yml.meta.json",
+      "hash": "7f10cdeba0222a761bb80ce24a82c0ad5369f93a08ca24722c18d3fca883c353",
+      "functioncalled": {
+        "canonical": "core.ci.ci.yml",
+        "layer": "core",
+        "role": "ci",
+        "domain": "ci"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Demo Sandbox (Reusable)",
+      "path": "reusable/demo-sandbox.yml",
+      "meta": "reusable/demo-sandbox.yml.meta.json",
+      "hash": "24b09d689d45d23b34fd144449cd4774acdc0538bd67be376c32c4a92e567d63",
+      "functioncalled": {
+        "canonical": "core.deployment.demo-sandbox.yml",
+        "layer": "core",
+        "role": "deployment",
+        "domain": "demo"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Docker Build & Push (Reusable)",
+      "path": "reusable/docker-build-push.yml",
+      "meta": "reusable/docker-build-push.yml.meta.json",
+      "hash": "cdf79d238b4b819d247a6fe147ad3f6c802df63d469fa470bcb1b7c7cd3c9b98",
+      "functioncalled": {
+        "canonical": "core.ci.docker.yml",
+        "layer": "core",
+        "role": "ci",
+        "domain": "docker"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "GitHub CLI PR Operations (Reusable)",
+      "path": "reusable/github-cli-pr-ops.yml",
+      "meta": "reusable/github-cli-pr-ops.yml.meta.json",
+      "hash": "63204dd0e76f5004cc921a9b7d0df4062e7c3e7eaeb3cab075dd053ea0176a72",
+      "functioncalled": {
+        "canonical": "core.pr-management.github.yml",
+        "layer": "core",
+        "role": "pr-management",
+        "domain": "github"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Node.js Setup & Build (Reusable)",
+      "path": "reusable/nodejs-setup-build.yml",
+      "meta": "reusable/nodejs-setup-build.yml.meta.json",
+      "hash": "e516f0d608811b22f1865585341103b6b012831c5e6339cfd063d7c727772187",
+      "functioncalled": {
+        "canonical": "core.ci.nodejs.yml",
+        "layer": "core",
+        "role": "ci",
+        "domain": "nodejs"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Automation (Reusable)",
+      "path": "reusable/pr-automation.yml",
+      "meta": "reusable/pr-automation.yml.meta.json",
+      "hash": "a919971e09c3d21c241d33a677183914a57954fe0eed721e299e6d3876ef2016",
+      "functioncalled": {
+        "canonical": "core.pr-management.pr.yml",
+        "layer": "core",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Batching (Reusable)",
+      "path": "reusable/pr-batching.yml",
+      "meta": "reusable/pr-batching.yml.meta.json",
+      "hash": "4869527d040c9da4402c16c0ef68e5fb9d66774026f83b17937c0276bb76b80f",
+      "functioncalled": {
+        "canonical": "core.pr-management.pr.yml",
+        "layer": "core",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Review (Reusable)",
+      "path": "reusable/pr-review.yml",
+      "meta": "reusable/pr-review.yml.meta.json",
+      "hash": "b89aebb3b176b8ed01b5fe339b71046c1c92f6c5a935be667b2560a5424f0228",
+      "functioncalled": {
+        "canonical": "core.pr-management.pr.yml",
+        "layer": "core",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "PR Validation (Reusable)",
+      "path": "reusable/pr-validation.yml",
+      "meta": "reusable/pr-validation.yml.meta.json",
+      "hash": "9e18a8e0b156e362a5d980c3cc211c9cd4f6a9e4e760e903b03a496185112a2d",
+      "functioncalled": {
+        "canonical": "core.pr-management.pr.yml",
+        "layer": "core",
+        "role": "pr-management",
+        "domain": "pr"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Python Setup & Test (Reusable)",
+      "path": "reusable/python-setup-test.yml",
+      "meta": "reusable/python-setup-test.yml.meta.json",
+      "hash": "dd21a2b53ed2621680a3aa03d26bbde581db0833c5becbe91070416fe3d6a54b",
+      "functioncalled": {
+        "canonical": "core.testing.python.yml",
+        "layer": "core",
+        "role": "testing",
+        "domain": "python"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Security Scanning (Reusable)",
+      "path": "reusable/security-scanning.yml",
+      "meta": "reusable/security-scanning.yml.meta.json",
+      "hash": "81776f88385df4c0e4b714e5fe20d784206270acab48be99b4d4529b7d08e727",
+      "functioncalled": {
+        "canonical": "core.security.security.yml",
+        "layer": "core",
+        "role": "security",
+        "domain": "security"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Specialized Testing (Reusable)",
+      "path": "reusable/specialized-testing.yml",
+      "meta": "reusable/specialized-testing.yml.meta.json",
+      "hash": "954bd7c7c5eed8096e9b1f6e147e3526632d8e056831115544a71e49c2e868e6",
+      "functioncalled": {
+        "canonical": "core.testing.specialized.yml",
+        "layer": "core",
+        "role": "testing",
+        "domain": "specialized"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable API Call with Retry",
+      "path": "reusable-api-retry.yml",
+      "meta": "reusable-api-retry.yml.meta.json",
+      "hash": "8e69e1ea6f4622804ca0b7b89ef763489bcc710027d567ae76ff26ec2136c205",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable App Detection",
+      "path": "reusable-app-detect.yml",
+      "meta": "reusable-app-detect.yml.meta.json",
+      "hash": "df2a05891e21c4212a5ceeaf663f8bd0401e055f769145f9082f4171a2d0faee",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable: Commitizen Bump",
+      "path": "reusable-commitizen-bump.yml",
+      "meta": "reusable-commitizen-bump.yml.meta.json",
+      "hash": "39d4e3cdb4120c1b1d912176fa8759fb360d84dccdb6976fda39a006765ce09e",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable: Pull Request Labeler",
+      "path": "reusable-labeler.yml",
+      "meta": "reusable-labeler.yml.meta.json",
+      "hash": "13fe63299467d4842eb740f76df72eb6f3f608f715446ca85413316b34183704",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable: Major Version Updater",
+      "path": "reusable-major-version-updater.yml",
+      "meta": "reusable-major-version-updater.yml.meta.json",
+      "hash": "f2c5b52f688341d4c47f80030582f8c0692e9a02897d2c3fc9da776a6f922e7d",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable Notification",
+      "path": "reusable-notify.yml",
+      "meta": "reusable-notify.yml.meta.json",
+      "hash": "8bd418ad90f668856239fc677e27c71d41dafbc4ffde07cd4cba938e70d9d0bf",
+      "functioncalled": {
+        "canonical": "core.general.reusable.yml",
+        "layer": "core",
+        "role": "general",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable: PR Title Lint",
+      "path": "reusable-pr-title.yml",
+      "meta": "reusable-pr-title.yml.meta.json",
+      "hash": "c86b6c4f46f078ba6658f61de5263a747d997d7c97cd27ccf4e57c91b8461800",
+      "functioncalled": {
+        "canonical": "core.quality.reusable.yml",
+        "layer": "core",
+        "role": "quality",
+        "domain": "reusable"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Reusable: Release",
+      "path": "reusable-release.yml",
+      "meta": "reusable-release.yml.meta.json",
+      "hash": "47fb23f68822fb4a4813de1ef32b8aa0bf4a15d22d756cdc889096350ad80cce",
+      "functioncalled": {
+        "canonical": "core.deployment.reusable.yml",
+        "layer": "core",
+        "role": "deployment",
+        "domain": "reusable"
       },
       "version": "1.0.0",
       "profile": "full"
@@ -75,918 +1456,575 @@
       "name": "Reusable Security Scan",
       "path": "reusable-security-scan.yml",
       "meta": "reusable-security-scan.yml.meta.json",
-      "hash": "0778188932d9c791b92391a2db7140301c597f21aab2742e6e4bd9c404d40e62",
+      "hash": "9732edf863def5619b97b475e4266bff7d4525f4f63edfc74b2fd655d736f57a",
       "functioncalled": {
-        "canonical": "core.security.scanning.yml",
+        "canonical": "core.security.reusable.yml",
         "layer": "core",
         "role": "security",
-        "domain": "scanning"
+        "domain": "reusable"
       },
       "version": "1.0.0",
       "profile": "full"
     },
     {
-      "name": "accessibility-testing.yml",
-      "path": "accessibility-testing.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f7d378bfd627b244a431f693cdee012f89fc61507ee4bac86e3a7aed591ae119"
-    },
-    {
-      "name": "admin-approval-dashboard.yml",
-      "path": "admin-approval-dashboard.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b560dbdd2cf5f6833634231093d37bc524089f695665a2da96ce9b3248f907d2"
-    },
-    {
-      "name": "agentsphere-deployment.yml",
-      "path": "agentsphere-deployment.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "2c524a768d5cd0fef91f6e799df69cfe9cebdac87bcd47719e8bcb0b1b777c0a"
-    },
-    {
-      "name": "alert-on-workflow-failure.yml",
-      "path": "alert-on-workflow-failure.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "6c2fa0e69bcbea1aa7599e362501ccc0653bacf369111d6050bb9dc869e12b91"
-    },
-    {
-      "name": "auto-assign-reviewers.yml",
-      "path": "auto-assign-reviewers.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "617377186812d3a9171696c87d674862bc3b5d2c00f620d2cf901bcaf5ce48a2"
-    },
-    {
-      "name": "auto-batch-prs.yml",
-      "path": "auto-batch-prs.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "67af5de38e23e07f7346c00aaaa69e4ac8ed00db5f5175def512711004a80c95"
-    },
-    {
-      "name": "auto-enable-merge.yml",
-      "path": "auto-enable-merge.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b0eb15af6ff4d26884bf9d63c12960ee9be2ec05be8a4ba5e1cf3a3098c43d36"
-    },
-    {
-      "name": "auto-labeler.yml",
-      "path": "auto-labeler.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "24994ed6e599105eb3102f03912f609d29aff08c196a440e767266c80132d6b1"
-    },
-    {
-      "name": "auto-merge.yml",
-      "path": "auto-merge.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d17cb0ef39371bf83d56174a4a31b81b28087f89522fbf76b4af843c2d7bc01f"
-    },
-    {
-      "name": "auto-pr-create.yml",
-      "path": "auto-pr-create.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "07a1f2129500171e1775ac4e38248701c823a7116e5fdf1ad6e3e07737671216"
-    },
-    {
-      "name": "badge-management.yml",
-      "path": "badge-management.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "55d6d138ce197c2d1b1c412cfeac4969cd7c37a3483f1df4c028b83a77e56612"
-    },
-    {
-      "name": "batch-onboarding.yml",
-      "path": "batch-onboarding.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b33cb180354d0f1812d720ed22bf31dbd06f5c1654bc5f5f8ecd5293759cb2ff"
-    },
-    {
-      "name": "batch-pr-lifecycle.yml",
-      "path": "batch-pr-lifecycle.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "acaa529ea5a658269d62996a31c0da2106e717088966d8cb55b22141ab8ff7de"
-    },
-    {
-      "name": "bio-description-completions.yml",
-      "path": "bio-description-completions.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "810df8cccde63aa1e790d29e13a1f20232a3ca566df5c6cb09d2f53d8c4d4fab"
-    },
-    {
-      "name": "branch-cleanup-notify.yml",
-      "path": "branch-cleanup-notify.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "767ea609dc05328f4fb0d6726957d3eb717954f977a687b05871abb72c213904"
-    },
-    {
-      "name": "branch-lifecycle-management.yml",
-      "path": "branch-lifecycle-management.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "aa985ffb4999256314535c368b8999180c2ba8c218964667d6ab6fa50db76335"
-    },
-    {
-      "name": "branch-lifecycle.yml",
-      "path": "branch-lifecycle.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b70119ad61b967a7e6fd04d012cc8517664a9c8bfbc014a05bbc048837000c10"
-    },
-    {
-      "name": "build-pages-site.yml",
-      "path": "build-pages-site.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "3a26d73145b1184f64b8e0a44ddaa8a82564e6fbb1ad0a9c5c5a2261b191f4e8"
-    },
-    {
-      "name": "batch-pr-operations.yml",
-      "path": "batch-pr-operations.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "00bbd289b0d7f23242444260a43a8216ae69a3527789ff194d2e8a0a143cb80b"
-    },
-    {
-      "name": "chatmode-frontmatter.yml",
-      "path": "chatmode-frontmatter.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "54f7ad73e6c6112fb52c5d67124ba10d3dae693d637da83e1b7c9eadca6821f8"
-    },
-    {
-      "name": "ci-advanced.yml",
-      "path": "ci-advanced.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "19ad7793ccd3599f0dbd11e416fa20b231f7bf3e74c8e168c44769ab512a3480"
-    },
-    {
-      "name": "claude-code-review.yml",
-      "path": "claude-code-review.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "eb165e19e6e6a76ffea7085b62dd94c01af4b4fdd1d7bfaf82df9de1a82a6f1d"
-    },
-    {
-      "name": "claude.yml",
-      "path": "claude.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "6cf30e6cac7f9e7b804f39a3d49e79cfae21e3c80cbb312987d20196eba7cdd1"
-    },
-    {
-      "name": "code-coverage.yml",
-      "path": "code-coverage.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "cf2355be0d589e31280c4158ffd2bcb695364908431ff1d77422c0424224eac5"
-    },
-    {
-      "name": "codeql-analysis.yml",
-      "path": "codeql-analysis.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "ee27f2d4d9eea5b15de33dbd2cf3eb851e49834b2f5d918b5972b1c68eff841a"
-    },
-    {
-      "name": "collect-deployment-metadata.yml",
-      "path": "collect-deployment-metadata.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "5dc14315496ab5dfe3b428fd668c548276cc34906c287de17439df7a737019a1"
-    },
-    {
-      "name": "combine-prs.yml",
-      "path": "combine-prs.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "1f3c16dc6e640bceb785b042a744e9e4b31ae011a515afc8a57a7a3e092f0d0e"
-    },
-    {
-      "name": "commit-tracking.yml",
-      "path": "commit-tracking.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "9e1b09d04abd0c51de68722e3294914731223ff469df0d4580a84b7939f611b3"
-    },
-    {
-      "name": "commitizen-bump.yml",
-      "path": "commitizen-bump.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d84745f2857b289decbf9f38dd61f1f87827669ee30b517aac3c09afeb5ad31e"
-    },
-    {
-      "name": "community-health.yml",
-      "path": "community-health.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "9892f896906975e026a95bd25fa853c90064762b31ee3ff078e559d990c0df8c"
-    },
-    {
-      "name": "create-organizational-content.yml",
-      "path": "create-organizational-content.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "5a58e739df082344d3924c4d5d3d15a7fa3542bea5f69cacdb444159618e945a"
-    },
-    {
-      "name": "daily-orchestrator.yml",
-      "path": "daily-orchestrator.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "752f4ebb5c676ec17bbdedf3532ab140a62de7b42fdbef93484aa570b7317520"
-    },
-    {
-      "name": "dependency-review.yml",
-      "path": "dependency-review.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "370c3ca161c01dd3d0464c4b29ce069c43646e0e102e927f6c0686e30de83b07"
-    },
-    {
-      "name": "deploy-to-pages-live.yml",
-      "path": "deploy-to-pages-live.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "4ed7759a5c39ecae4b56c22bb407fd6525e13445d6db25d2d10fb129812688ec"
-    },
-    {
-      "name": "deployment.yml",
-      "path": "deployment.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b9c959acc68ab3aa8e7562546cfb277458898fd2d0a006ed96b7da495afc1565"
-    },
-    {
-      "name": "docker-build-push.yml",
-      "path": "docker-build-push.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "6dbd0fd4307d400c30de0dcedd1de5a81bc0103f1e44ace76ff63b6b72b952ec"
-    },
-    {
-      "name": "draft-to-ready-automation.yml",
-      "path": "draft-to-ready-automation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f964924c81d5de392b7076a51e4c00d3641575387f25cbe73ec06d73851bad63"
-    },
-    {
-      "name": "email-digest.yml",
-      "path": "email-digest.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "481650a985fe476672ff8c016401d8dbc3bd27d648f61e56a6abd746cd3fbb6e"
-    },
-    {
-      "name": "gemini-dispatch.yml",
-      "path": "gemini-dispatch.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "3045d283475892e60ffbef6a0b0b7ddcc820f1566bb0812f381b7e75c2c6bffc"
-    },
-    {
-      "name": "gemini-invoke.yml",
-      "path": "gemini-invoke.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "6bbeeeeae2b2f8f0cc0cb5cba096d1be1977d09ba7fc8e221a53c2f04fbcb082"
-    },
-    {
-      "name": "gemini-review.yml",
-      "path": "gemini-review.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "a4241a9cb05cd6a0a1fabf25cadb878d038ab5702a1d6677c5e3c1dd9ef635db"
-    },
-    {
-      "name": "gemini-scheduled-triage.yml",
-      "path": "gemini-scheduled-triage.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b3a122e7874e37edb2f2fef1045bc7cee94351894e24d379beef038bea26a97e"
-    },
-    {
-      "name": "gemini-triage.yml",
-      "path": "gemini-triage.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f376d96732ec38021157bc45b9892a0237e81039333222ea9d0ffbd0a4104123"
-    },
-    {
-      "name": "generate-pages-index.yml",
-      "path": "generate-pages-index.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d39316561757901aa6b912d3b4311b2dfd0ed08e47e29a951f4ba9b84971603c"
-    },
-    {
-      "name": "generate-walkthrough.yml",
-      "path": "generate-walkthrough.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "5ec399cf987193bdd38fec3321d6c583b4f8262dad2ca0b7e814b8f99a5f21c5"
-    },
-    {
-      "name": "grok-workflow.yml",
-      "path": "grok-workflow.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "8c929ceed29f0172445ae6097dbc04c861ea041c72b525ffa3b98dae9b84c7a0"
-    },
-    {
-      "name": "health-check-live-apps.yml",
-      "path": "health-check-live-apps.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d76244a318719cc791fcc53d3791c91ca8e4e3ca1d9553d0249d21d1fb177bfe"
-    },
-    {
-      "name": "health-check.yml",
-      "path": "health-check.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "8ad7053ba0c39fe62aa416741a34965e660cec0996053489ed7b055b485501ce"
-    },
-    {
-      "name": "incident-response.yml",
-      "path": "incident-response.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "2e866604c68d7cad8e0fe84aa8261fbe687ce9d3a6e440b3669b5475a596a0cb"
-    },
-    {
-      "name": "issue-triage.yml",
-      "path": "issue-triage.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "c1d5d1fa84ba91af00c469a2dc0cdb8dec3d0f008ec3d0f5fb35d7e9627a127d"
-    },
-    {
-      "name": "jules.yml",
-      "path": "jules.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "c1b9142ab05ec65a47a6d92f16a5d621780bf6e6013e431d3542564b60c97b72"
-    },
-    {
-      "name": "label-sync.yml",
-      "path": "label-sync.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "e4e618f3595608535ca804fdab588a8473f958c0a522a9b81683ae9b09f2d9b1"
-    },
-    {
-      "name": "link-checker.yml",
-      "path": "link-checker.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "64cfdac44814aefc25fb4f9d1cc65a4315dd1734c04ff65e9641bc7a5c63778e"
-    },
-    {
-      "name": "manual-reset.yml",
-      "path": "manual-reset.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "524ec8a85c503924519aa8d10d13610d8b54207ec95c09e323c729b85db299a4"
-    },
-    {
-      "name": "metrics-collection.yml",
-      "path": "metrics-collection.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "9cb99c7a8b71ebb2d27cea6c8e99b7d405b40808a88fac29c01802992eb56ef7"
-    },
-    {
-      "name": "metrics-dashboard.yml",
-      "path": "metrics-dashboard.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d964fd5bc366b44c8714097b7a2d1a47d7896d071cfae297e608960a4df415c1"
-    },
-    {
-      "name": "mutation-testing.yml",
-      "path": "mutation-testing.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "289ae0d271e5bcda7b069eb26d34be14654708175d19902c876ccd2a746d31c4"
-    },
-    {
-      "name": "nightly-cleanup.yml",
-      "path": "nightly-cleanup.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f2516c7ff82856a29e319867b75a986f3d11d689a8ab4e1d5d6e3e50363fbc48"
-    },
-    {
-      "name": "openai-workflow.yml",
-      "path": "openai-workflow.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b54dc7f69a807f8802beaa72efc26d4f49419e405b482fe844b215f7368f44e2"
-    },
-    {
-      "name": "orchestrator.yml",
-      "path": "orchestrator.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "1869980d93c280a04e3557addd6a027c01a60c4c764c035a75f904d348579102"
-    },
-    {
-      "name": "org-health-crawler.yml",
-      "path": "org-health-crawler.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "777c17447c5da11ef06537bacec0e027a13144ca4aa116ec7e2c967736ee8da2"
-    },
-    {
-      "name": "org-walkthrough-generator.yml",
-      "path": "org-walkthrough-generator.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "24db58111fd91efcaebfcdf503c578b46098765ce82e05e98bd8661d5e6d00d4"
-    },
-    {
-      "name": "org-wide-workflow-dispatch.yml",
-      "path": "org-wide-workflow-dispatch.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "e2951b70e483cef09e0077150ffc41618ed098626798de993baccf711222566d"
-    },
-    {
-      "name": "pages.yml",
-      "path": "pages.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "0edc694b3d9071b1ccdb8d619d9ecb4970fa5a2345ab860ee49ccd966024bd09"
-    },
-    {
-      "name": "performance-benchmark.yml",
-      "path": "performance-benchmark.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "81103c65f8df498dd296acd980ea4b176a0653d45043c4a7b9e1d01fc688c95d"
-    },
-    {
-      "name": "perplexity-workflow.yml",
-      "path": "perplexity-workflow.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "74600976be59c63d8cac4d89ed01180a9bf94c4977e799e2a9a43398429e65af"
-    },
-    {
-      "name": "pr-batch-merge.yml",
-      "path": "pr-batch-merge.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "8e8d36b2732bc2c2fe71b451ff3a631d28e4c747a3e5eaa584c5d9b6516e00c0"
-    },
-    {
-      "name": "pr-quality-checks.yml",
-      "path": "pr-quality-checks.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "63abe79fd7fc27558b87f507c1f500f764878c5f99965ed23d14ea2c4808533e"
-    },
-    {
-      "name": "pr-suggestion-implementation.yml",
-      "path": "pr-suggestion-implementation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "3f6195f70f8c75bc89437950da090731557b19462d0b5daf0c47372978d5f5a0"
-    },
-    {
-      "name": "pr-task-catcher.yml",
-      "path": "pr-task-catcher.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "071c9e0969f91aff7d3745ad7e891ae2567eb7b134a51e23bb924ee6a4f9104e"
-    },
-    {
-      "name": "proactive-maintenance.yml",
-      "path": "proactive-maintenance.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "aa0bc69064df0b0496b8ae1e3ab1353b5c1198b8709aa5a6757a1af7691f3a68"
-    },
-    {
-      "name": "process-queue.yml",
-      "path": "process-queue.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "cba1158f803fdd568f8ca37546db26a9eed7f9a4c196adc47c2026b46f195365"
-    },
-    {
-      "name": "project-automation.yml",
-      "path": "project-automation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "8ff5ae676e43544b682c65b50806cf232045223a1ee68b70d6bc40d4ff09b481"
-    },
-    {
-      "name": "reconcile-deployments.yml",
-      "path": "reconcile-deployments.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "e99764b9d73396fde25e915be0ac805ea3492868c360e4c59c0472b3e89aa5f2"
-    },
-    {
-      "name": "repo-metrics.yml",
-      "path": "repo-metrics.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "079b61d018ba11d469a2332dc927b95a569f01c9013bb48351c81d0a0937dc82"
-    },
-    {
-      "name": "repository-bootstrap.yml",
-      "path": "repository-bootstrap.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "cf52433176df55b9a13f6420ff3aa253f1fedd6392b8f4760a8d73662460283e"
-    },
-    {
-      "name": "repository-structure-validation.yml",
-      "path": "repository-structure-validation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "0bd9e4b4a03d463afafca34d5756454c73e3f771f4077848e91baa4b0ab494de"
-    },
-    {
-      "name": "reset-quotas.yml",
-      "path": "reset-quotas.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "976bcfde109ab9985ba19e21318971be761b45ca86a5c6db23a14d5ee6b6075d"
-    },
-    {
-      "name": "artifact-management.yml",
-      "path": "reusable/artifact-management.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "8d000bea27ca868735f0db28fd67bc8920c8d65531a3d8bf8d5ec8aee7060ca7"
-    },
-    {
-      "name": "docker-build-push.yml",
-      "path": "reusable/docker-build-push.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "ba274938a7d251c082d30270ac51f5ebb022df77c925bd417cd35aab3bfd576c"
-    },
-    {
-      "name": "github-cli-pr-ops.yml",
-      "path": "reusable/github-cli-pr-ops.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "505d37381b0116e414630a7f9214e6c8ef47d4074a6a5cc7f3bdf79c7fe4c6e1"
-    },
-    {
-      "name": "nodejs-setup-build.yml",
-      "path": "reusable/nodejs-setup-build.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f721878cb5bf505b61a3aa66a755aed9059c869f4f009e67883e92a08fa66250"
-    },
-    {
-      "name": "python-setup-test.yml",
-      "path": "reusable/python-setup-test.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "69f3ff186bc722716de61716993e996775f5649a75bd27f57fab29165d5fcbab"
-    },
-    {
-      "name": "security-scanning.yml",
-      "path": "reusable/security-scanning.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "45f3939f31c8e642b678688eb1d12285b0acf8c9e665c5227cb40f022bebcb62"
-    },
-    {
-      "name": "reusable-api-retry.yml",
-      "path": "reusable-api-retry.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f474cf2e10214984234d08182feb0331626242acd5bb0f4fb6d4415c179ced74"
-    },
-    {
-      "name": "reusable-app-detect.yml",
-      "path": "reusable-app-detect.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "227c1a5e3ca6138db2bcd05c26b9506dc179467acbdfd5cf3f30ef6f514e6087"
-    },
-    {
-      "name": "reusable-commitizen-bump.yml",
-      "path": "reusable-commitizen-bump.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "3398df08694a55748b807469e6017544ffef28c10521cdb7e1f886eb000bf183"
-    },
-    {
-      "name": "reusable-labeler.yml",
-      "path": "reusable-labeler.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "db4a11a0111bfe873c56b2e715808b9777244785ff8e19d781713a3ecb7432d3"
-    },
-    {
-      "name": "reusable-major-version-updater.yml",
-      "path": "reusable-major-version-updater.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d458bc06d25df7aa80b6984d8934bb795785d9acec1c87c2118312801111e1c3"
-    },
-    {
-      "name": "reusable-notify.yml",
-      "path": "reusable-notify.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "634cc04c75cfdb03b3c3515b6c37dbccc2c8ff76c64bcd54b6e126fc1cd18579"
-    },
-    {
-      "name": "reusable-pr-title.yml",
-      "path": "reusable-pr-title.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "43ac09e575e430f4f5d4b8286c3da8d2b81cde782f99cde1ff22547ad10f26bd"
-    },
-    {
-      "name": "reusable-release.yml",
-      "path": "reusable-release.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "e1be42b87a98bcd4246f1f95a5a7f96e0aa0c32c05d3605bdf9ba72e52b45b5e"
-    },
-    {
-      "name": "run-integration-tests.yml",
+      "name": "Integration Tests",
       "path": "run-integration-tests.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "c137d412f90d0c096f8c6f3fbff61ddb31c6b6b3cfa3dddbd51a28aa7b06e820"
+      "meta": "run-integration-tests.yml.meta.json",
+      "hash": "bcf1433b4beeeaed00849b8d34877c64ad5d175b7e2b264ff6c16b69e229e92a",
+      "functioncalled": {
+        "canonical": "logic.testing.run.yml",
+        "layer": "logic",
+        "role": "testing",
+        "domain": "run"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "safeguard-5-secret-scanning.yml",
+      "name": "Safeguard 5: Secret Scanning for Walkthroughs",
       "path": "safeguard-5-secret-scanning.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "5f8aee2d9bb3cb671dc47f77f87cfaf55842ea84a8cca0d99bec7cf49c10c87c"
+      "meta": "safeguard-5-secret-scanning.yml.meta.json",
+      "hash": "afdb2b6985a2771d537c732c47ff85c65917234ffbada8c028743ac102a0d47e",
+      "functioncalled": {
+        "canonical": "logic.security.safeguard.yml",
+        "layer": "logic",
+        "role": "security",
+        "domain": "safeguard"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "safeguard-6-admin-approval.yml",
+      "name": "Safeguard 6: Admin Approval Dashboard",
       "path": "safeguard-6-admin-approval.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "01122cdb0f37f369020b60ed2085393a334d14b5d3788d3e22f0e9f3274efad9"
+      "meta": "safeguard-6-admin-approval.yml.meta.json",
+      "hash": "0df089e2f0668029064d6eb011cc3462a6536351e854099cccbb1d97223742c1",
+      "functioncalled": {
+        "canonical": "interface.general.safeguard.yml",
+        "layer": "interface",
+        "role": "general",
+        "domain": "safeguard"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "safeguard-7-staggered-scheduling.yml",
+      "name": "Safeguard 7: Staggered Scheduling",
       "path": "safeguard-7-staggered-scheduling.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "078bd0aab7dc66c845335432fa0a684d6e2943f1d8b61c311a1a380a158f2ed8"
+      "meta": "safeguard-7-staggered-scheduling.yml.meta.json",
+      "hash": "25650c8993a655d70eb4be2a55128d211151593fc17febab77a93f87614ea0d9",
+      "functioncalled": {
+        "canonical": "logic.general.safeguard.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "safeguard"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "safeguard-8-usage-monitoring.yml",
+      "name": "Safeguard 8: Usage Monitoring & Reporting",
       "path": "safeguard-8-usage-monitoring.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "381c6816fc64657db4d75eaf2da078692602cab661dc3c10b01bf8185d7e84b4"
+      "meta": "safeguard-8-usage-monitoring.yml.meta.json",
+      "hash": "6253c5a4b23678ddbe0e6671912b01b7f83601f74cdcdeca3769744db702a2da",
+      "functioncalled": {
+        "canonical": "logic.metrics.safeguard.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "safeguard"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "sbom-generation.yml",
+      "name": "SBOM Generation",
       "path": "sbom-generation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "220d8c991cf82125793af19529a7bbeeac382aa547f2b82f2300ce38bb272826"
+      "meta": "sbom-generation.yml.meta.json",
+      "hash": "aa861b8d4e54c53df411f26a803d284017f0bbd7ce167738ac36aeefe5156859",
+      "functioncalled": {
+        "canonical": "application.general.sbom.yml",
+        "layer": "application",
+        "role": "general",
+        "domain": "sbom"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "scan-for-secrets.yml",
+      "name": "Scan for Secrets in Videos and Code",
       "path": "scan-for-secrets.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "ec162a0417b969b2c3ee1b5e9bd082ef9c5d05409bf4165fae88a47a0f959c38"
+      "meta": "scan-for-secrets.yml.meta.json",
+      "hash": "08d2a8808eb97313d8ec7e987b86621d81dabb529d1281628872392c14e34e3f",
+      "functioncalled": {
+        "canonical": "logic.security.scan.yml",
+        "layer": "logic",
+        "role": "security",
+        "domain": "scan"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "scheduled-walkthrough-generator.yml",
+      "name": "Scheduled Walkthrough Generator",
       "path": "scheduled-walkthrough-generator.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "0b4b98570a6fa59e48a54d0a05c052690563afc7f916c0affd163727665d6b82"
+      "meta": "scheduled-walkthrough-generator.yml.meta.json",
+      "hash": "9b7462bbb102a26aaaf6f1ff895ac74d90fbf426ceadb56804db6146172d9972",
+      "functioncalled": {
+        "canonical": "application.automation.scheduled.yml",
+        "layer": "application",
+        "role": "automation",
+        "domain": "scheduled"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "schema-org-validation.yml",
+      "name": "Schema.org Validation",
       "path": "schema-org-validation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "92c5dc4cb61a1b47ffcb5c1660383e85ebe4b765c5cccc2a88a5ecbe98041169"
+      "meta": "schema-org-validation.yml.meta.json",
+      "hash": "c39d09e47f07f4f74afd4c0e8f99e09d05dfdd175e18c944add60e54f94beb5d",
+      "functioncalled": {
+        "canonical": "logic.general.schema.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "schema"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "security-scan.yml",
+      "name": "Security Scan",
       "path": "security-scan.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "7b27ccde2bb644a649875a9f45e62dac0cfa62fae0857cd6859147112bd925c2"
+      "meta": "security-scan.yml.meta.json",
+      "hash": "888820bbc2114eb7e808162ed2e82eb0f61992dbffcdf92e08d11f7ce10e21b8",
+      "functioncalled": {
+        "canonical": "core.security.security.yml",
+        "layer": "core",
+        "role": "security",
+        "domain": "security"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "self-healing.yml",
+      "name": "Self-Healing Workflows",
       "path": "self-healing.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "829d52ca6df6319d0060145bfac33edd14c68c014f68bf986f3f22fd0d342963"
+      "meta": "self-healing.yml.meta.json",
+      "hash": "05d3660345e85fb625a552add74e5a82c04094673dd5c7b7ff4a882fb50a6be8",
+      "functioncalled": {
+        "canonical": "logic.general.self.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "self"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "semantic-release.yml",
+      "name": "Semantic Release",
       "path": "semantic-release.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d5f8b1b0b0bd04ad256a0acf9a777bd79e98dc4ae7ea7b42a9c067b101587a9e"
+      "meta": "semantic-release.yml.meta.json",
+      "hash": "f9ab6737012d194918bd26912d2d8701f7623cbb4cf7a06943ae0894aacf7bbc",
+      "functioncalled": {
+        "canonical": "application.deployment.semantic.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "semantic"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "semgrep.yml",
+      "name": "Semgrep Security Analysis",
       "path": "semgrep.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d2b28ef5492953cadf005030f2eeb736c310320d1f5c98a3d052cb6c813a372d"
+      "meta": "semgrep.yml.meta.json",
+      "hash": "947011b19ea72f9b6385030ec31e08d205453221e853a088b665349add9a5bd3",
+      "functioncalled": {
+        "canonical": "core.security.semgrep.yml",
+        "layer": "core",
+        "role": "security",
+        "domain": "semgrep"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "sla-monitoring.yml",
+      "name": "Sentry Release",
+      "path": "sentry-release.yml",
+      "meta": "sentry-release.yml.meta.json",
+      "hash": "5d17d91c196def5624b83b9bc549b866f1193ed88e28277faf970c239f4a1757",
+      "functioncalled": {
+        "canonical": "application.deployment.sentry.yml",
+        "layer": "application",
+        "role": "deployment",
+        "domain": "sentry"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "SLA Monitoring",
       "path": "sla-monitoring.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "bb57a856504e58c902d00aa4e7e7bb57108692a7c9eaa13a22c3f762cbce36d4"
+      "meta": "sla-monitoring.yml.meta.json",
+      "hash": "783489a9ba8e8f99f5aed9e73e77aacc38277f6323afe010d9d4edc5d551f97e",
+      "functioncalled": {
+        "canonical": "logic.metrics.sla.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "sla"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "slack-daily-summary.yml",
-      "path": "slack-daily-summary.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "31b0b3905eb6aa99dc6a1ed32e9717a73103e876001e822561e5dc9ef0e5fc2c"
-    },
-    {
-      "name": "staggered-scheduling.yml",
+      "name": "Staggered Scheduling for Batch Operations",
       "path": "staggered-scheduling.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "07adfbe60a6c37aa0a16650c0edf49c81a8b2a46246565977d5e5b88b0ffd9ff"
+      "meta": "staggered-scheduling.yml.meta.json",
+      "hash": "dfc489e790d265bf74013bbb498c8d6df98c76cf2ec2793c41d4268fbb9d56b1",
+      "functioncalled": {
+        "canonical": "logic.general.staggered.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "staggered"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "stale-management.yml",
+      "name": "Stale Item Management (A/B Test)",
+      "path": "stale-management-ab.yml",
+      "meta": "stale-management-ab.yml.meta.json",
+      "hash": "5485b9b40db404ff0fb35de0dc294926ba7638214a9f5c8edae4511a8efd8b1a",
+      "functioncalled": {
+        "canonical": "logic.testing.stale.yml",
+        "layer": "logic",
+        "role": "testing",
+        "domain": "stale"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Stale Item Management",
       "path": "stale-management.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "20c980311b0bc59ca3afbedfc39dac278bf759925dca9bfd04f104510df82746"
+      "meta": "stale-management.yml.meta.json",
+      "hash": "b49df3db41f151a938da8d7886250d40e41ef656e92b4c69b49673e66081d4ee",
+      "functioncalled": {
+        "canonical": "logic.general.stale.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "stale"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "status-sync.yml",
+      "name": "Status Synchronization",
       "path": "status-sync.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "f97315c2b42ce32312c1c1e983aeff8bdd8fbd9b0dbaccfc8d1ac796d15e1cf7"
+      "meta": "status-sync.yml.meta.json",
+      "hash": "a68bc57d96e51eb40178a3a1598a64825464aec7b7d0cdf436353096b8cd6d87",
+      "functioncalled": {
+        "canonical": "logic.general.status.yml",
+        "layer": "logic",
+        "role": "general",
+        "domain": "status"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "task-extraction.yml",
+      "name": "Task Extraction from Closed PRs",
       "path": "task-extraction.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "e3b2cac6f026fc012b2206301a5497331ee6bc3a8d33bc7d47b1426c296f066d"
+      "meta": "task-extraction.yml.meta.json",
+      "hash": "78f890bbea23cd3934fa3b0f27c48b47ec1a62d806ea1593a7e2908e7980b2bb",
+      "functioncalled": {
+        "canonical": "logic.issue-management.task.yml",
+        "layer": "logic",
+        "role": "issue-management",
+        "domain": "task"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "test-batch-onboarding-validation.yml",
+      "name": "Test Workflow - Batch Onboarding Validation",
       "path": "test-batch-onboarding-validation.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "6e058fa50beeed54b156cad31f254ef823c6a8fa25abe4c8de3a50c4d5d0f650"
+      "meta": "test-batch-onboarding-validation.yml.meta.json",
+      "hash": "d64ea5687092299489cf9763189743cf44ccd4bd5924004349eabf230b870080",
+      "functioncalled": {
+        "canonical": "logic.testing.test.yml",
+        "layer": "logic",
+        "role": "testing",
+        "domain": "test"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "test-coverage.yml",
+      "name": "Test Coverage",
       "path": "test-coverage.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "7c2f9ea5243c6a8ca4a2be06966022143152c2d43f8f03cd84d01f96ce496912"
+      "meta": "test-coverage.yml.meta.json",
+      "hash": "bb3296251bbef9708752e2ee453dd630cefa58925c38f0611e3c48fccaa0dc23",
+      "functioncalled": {
+        "canonical": "core.testing.test.yml",
+        "layer": "core",
+        "role": "testing",
+        "domain": "test"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "test-slack-notifications.yml",
+      "name": "Test Slack Notifications",
       "path": "test-slack-notifications.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "2026e8162f7b0f32bbbc8d9f503a25f4252c1d7be2174a99cc079dfce280389b"
+      "meta": "test-slack-notifications.yml.meta.json",
+      "hash": "804c56917b304dafd2eec5e2ad51d8785fd06135d6215fb4a62bc23faaf2fcbd",
+      "functioncalled": {
+        "canonical": "interface.testing.test.yml",
+        "layer": "interface",
+        "role": "testing",
+        "domain": "test"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "token-health-check.yml",
+      "name": "Token Health Check",
       "path": "token-health-check.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "5e8c4f916a18d16ff9211dd1322a709b1804cbf6b6d8e36e3446491d1e0beaf6"
+      "meta": "token-health-check.yml.meta.json",
+      "hash": "b2f09633faa5fd04b4c1d1311b81d543fe5fe595c51c8526ef7496fa5b83a8ad",
+      "functioncalled": {
+        "canonical": "core.quality.token.yml",
+        "layer": "core",
+        "role": "quality",
+        "domain": "token"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "update-action-pins-scheduled.yml",
+      "name": "Update Action Pins (Scheduled)",
       "path": "update-action-pins-scheduled.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b73ab815f4429414dd784443798bf8d4f9bebc83b30a82d534a4453e4480438d"
+      "meta": "update-action-pins-scheduled.yml.meta.json",
+      "hash": "a893d1fc7706c550b744f3b281a594d18408506cc63b50a430b57e12ca1e082f",
+      "functioncalled": {
+        "canonical": "logic.automation.update.yml",
+        "layer": "logic",
+        "role": "automation",
+        "domain": "update"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "update-nodejs-version.yml",
+      "name": "Update Demo Registry",
+      "path": "update-demo-registry.yml",
+      "meta": "update-demo-registry.yml.meta.json",
+      "hash": "a2192b4ec435f534d26d1e51fc872b865787925dce2b2a7182b82a36f9d99fa1",
+      "functioncalled": {
+        "canonical": "application.registry.update-demo-registry.yml",
+        "layer": "application",
+        "role": "registry",
+        "domain": "demo"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "Update Node.js Version",
       "path": "update-nodejs-version.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "490499eaebb13492d8c1a21200aff869dfba04eeda4f46156b7cb4c831f4f5fa"
+      "meta": "update-nodejs-version.yml.meta.json",
+      "hash": "00a987c38139c648949bc2b67723dc0eef1529fa19cd8abd3edf62621379f291",
+      "functioncalled": {
+        "canonical": "application.general.update.yml",
+        "layer": "application",
+        "role": "general",
+        "domain": "update"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "update-python-version.yml",
+      "name": "Update Python Version",
       "path": "update-python-version.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "d40edcdc92d367e0fc3629d60c25729388f3339dde3258f83e6a1e8b7bc45572"
+      "meta": "update-python-version.yml.meta.json",
+      "hash": "5ea2cb2d147fe193bedb8e8c5a1c626695afe361f7d272052250a35181845f6f",
+      "functioncalled": {
+        "canonical": "application.general.update.yml",
+        "layer": "application",
+        "role": "general",
+        "domain": "update"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "usage-monitoring.yml",
+      "name": "Usage Monitoring and Budget Tracking",
       "path": "usage-monitoring.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "b246cff8b973bcee51e1c080c312c6e3bf64d71ba831bc45b84be83e4c6b8589"
+      "meta": "usage-monitoring.yml.meta.json",
+      "hash": "efff56562ef2225d421f184902d149e3bd7d9e26728fea92abefbfa22ce5f33f",
+      "functioncalled": {
+        "canonical": "logic.metrics.usage.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "usage"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "validate-action-pins.yml",
+      "name": "Validate Action Pins",
       "path": "validate-action-pins.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "3fe05b5c21120cc07e836de5ae0136b88b46519a12f93ffe806dc75b1bf1242a"
+      "meta": "validate-action-pins.yml.meta.json",
+      "hash": "ea7bff5330e6781188ca6a36658f32838eb43b0cabc1be9299a8e6297e4ea999",
+      "functioncalled": {
+        "canonical": "logic.quality.validate.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "validate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "validate-functioncalled.yml",
+      "name": "Validate FUNCTIONcalled Metadata",
       "path": "validate-functioncalled.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "820a4775929a13d590d7534b312b0bdadb62558ac6b3002fec11bf749b7f4a7f"
+      "meta": "validate-functioncalled.yml.meta.json",
+      "hash": "8b98457fbc8d2a7b7507a9a3d12124c950bc44baa6856b2b59e20c693f1e7cc8",
+      "functioncalled": {
+        "canonical": "logic.quality.validate.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "validate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "validate-quality.yml",
+      "name": "Video Quality Validation",
       "path": "validate-quality.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "0163cc757f3a504ce3781710a075644e1fb6f9657ef6267a38f56e5c3e90bf20"
+      "meta": "validate-quality.yml.meta.json",
+      "hash": "460c28adeac680539466a74fe8b80556e32682140b3dbc12b7389d9d7c42ff13",
+      "functioncalled": {
+        "canonical": "logic.quality.validate.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "validate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "validate-workspace-config.yml",
+      "name": "Validate Workspace Configurations",
       "path": "validate-workspace-config.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "deef438d8da9008e900e586564f31d03885ed444c0a74ac18ba3cad801baac40"
+      "meta": "validate-workspace-config.yml.meta.json",
+      "hash": "e4762ad4b163e5f0dd81f5411bc9071ad06a0082ccbeb44e6f7ddcfae8a4a1ff",
+      "functioncalled": {
+        "canonical": "logic.quality.validate.yml",
+        "layer": "logic",
+        "role": "quality",
+        "domain": "validate"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "version-bump.yml",
+      "name": "Version Bump",
       "path": "version-bump.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "cc6db45fe66e4fb8880ecf6c395d2f08c8199718fc6caf736a23221958ff3ff1"
+      "meta": "version-bump.yml.meta.json",
+      "hash": "2d09a8efc4b998046fbebe2100874a324c83527e84afb5a00282b7b1603a1e4e",
+      "functioncalled": {
+        "canonical": "application.general.version.yml",
+        "layer": "application",
+        "role": "general",
+        "domain": "version"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "version-control-standards.yml",
+      "name": "Version Control Standards Validation",
       "path": "version-control-standards.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "df97954eb67701124fee256b56ddfdf7d0d967914f1c268fb48da7e76097a8fc"
+      "meta": "version-control-standards.yml.meta.json",
+      "hash": "798fa240b8195deb08abe1df80409ea92d1ef2a738d74ee88fbc842e8e07f35c",
+      "functioncalled": {
+        "canonical": "application.general.version.yml",
+        "layer": "application",
+        "role": "general",
+        "domain": "version"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "version-update-orchestrator.yml",
+      "name": "Version Update Orchestrator",
       "path": "version-update-orchestrator.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "1125f1ec72f0753f146e1556bfa195f06584d3715b01fadb50b9eb113551dde3"
+      "meta": "version-update-orchestrator.yml.meta.json",
+      "hash": "0677ac1d62f5af544d62f019609abf54e6c734e42e120dd7d913382736a0f417",
+      "functioncalled": {
+        "canonical": "application.automation.version.yml",
+        "layer": "application",
+        "role": "automation",
+        "domain": "version"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "weekly-commit-report.yml",
+      "name": "Weekly Commit Report",
       "path": "weekly-commit-report.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "88ef1ecc86f2a55a727a8af4261b25eb436e4e97aa251b0122e8c741a5e8060d"
+      "meta": "weekly-commit-report.yml.meta.json",
+      "hash": "91e2e144ad62425f1a1837e531d89157a020ba0afec72f53da2aa40d64b8e432",
+      "functioncalled": {
+        "canonical": "logic.metrics.weekly.yml",
+        "layer": "logic",
+        "role": "metrics",
+        "domain": "weekly"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "welcome.yml",
+      "name": "Welcome",
       "path": "welcome.yml",
-      "meta": null,
-      "orphan": true,
-      "hash": "71208f51ca4ef7d8b42c8d6a80db32ea6b02d932490a3f27b16c4bf237805d95"
+      "meta": "welcome.yml.meta.json",
+      "hash": "6fb1ca5ea37dc11944ef55b10332edaf24acbb1c8bfaa296122ea966fdefe0cc",
+      "functioncalled": {
+        "canonical": "interface.general.welcome.yml",
+        "layer": "interface",
+        "role": "general",
+        "domain": "welcome"
+      },
+      "version": "1.0.0",
+      "profile": "full"
     },
     {
-      "name": "workflow-metrics.yml",
+      "name": "Workflow Metrics Dashboard",
       "path": "workflow-metrics.yml",
+      "meta": "workflow-metrics.yml.meta.json",
+      "hash": "0253826ab45f1aaa97911f007a6dd083b1bee5e536e659c8783806277b9b22b7",
+      "functioncalled": {
+        "canonical": "interface.metrics.workflow.yml",
+        "layer": "interface",
+        "role": "metrics",
+        "domain": "workflow"
+      },
+      "version": "1.0.0",
+      "profile": "full"
+    },
+    {
+      "name": "collect-metrics.yml",
+      "path": "collect-metrics.yml",
       "meta": null,
       "orphan": true,
-      "hash": "a3e7d1d5086fa038e450884807978c38ddf5f3530ee8cc0a1a03e36446e92efd"
+      "hash": "10f3b7cf7850d3323a62ad647cc0cefa9d900c887afb6917afe1d23e7297f535"
+    },
+    {
+      "name": "google-chat-daily-summary.yml",
+      "path": "google-chat-daily-summary.yml",
+      "meta": null,
+      "orphan": true,
+      "hash": "9c614fa84ca9d7542938b5c4d27309b62b2732025df200744726cf28e8a7d777"
     }
   ]
 }

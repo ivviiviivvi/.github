@@ -2,7 +2,7 @@ name: Alert on Workflow Failure
 
 on:
   workflow_run:
-    workflows: [generate-walkthrough, agentsphere-deployment, build-pages-site, generate-pages-index, deploy-to-pages-live, docker-build-push, collect-deployment-metadata]
+    workflows: [generate-walkthrough, agentsphere-deployment, build-pages-site, generate-pages-index, deploy-to-pages-live, docker-build-push, collect-deployment-metadata, Demo Sandbox Deployment, Update Demo Registry]
     types: [completed]
   workflow_dispatch:
 

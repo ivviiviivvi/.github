@@ -57,6 +57,13 @@ ______________________________________________________________________
 │  └──────────────────────────────────────────────────────────┘  │
 │                           ↓                                       │
 │  ┌──────────────────────────────────────────────────────────┐  │
+│  │ PHASE 4: Demo Sandbox Deployment                         │  │
+│  │ • demo-deployment.yml (wrapper)                           │  │
+│  │ • reusable/demo-sandbox.yml (detect → deploy → badge)     │  │
+│  │ • update-demo-registry.yml (registry_dispatch listener)   │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                           ↓                                       │
+│  ┌──────────────────────────────────────────────────────────┐  │
 │  │ SAFEGUARDS: Enterprise Protection (8 workflows)          │  │
 │  │ • alert-on-workflow-failure.yml                           │  │
 │  │ • health-check-live-apps.yml                              │  │
@@ -196,7 +203,7 @@ generation\
 Example badge:
 
 ```markdown
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-success?style=for-the-badge)](https://agentsphere.example.com/demo/your-repo)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20Now-success?style=for-the-badge)](https://{{ORG_NAME}}.github.io/.github/demo/your-repo)
 ```
 
 #### `build-pages-site.yml`
@@ -278,6 +285,66 @@ deployment:
 
 ______________________________________________________________________
 
+### Phase 4: Demo Sandbox Deployment
+
+#### `demo-deployment.yml`
+
+**Purpose**: Wrapper workflow that triggers the reusable demo sandbox pipeline\
+**Triggers**:
+
+- Push to main/master (when `src/`, `public/`, `package*.json`,
+  `requirements*.txt`, `Dockerfile`, or `docker-compose.yml` change)
+- Manual via workflow\_dispatch (with optional overrides for app-type,
+  hosting-provider, and badge injection)
+
+**Inputs** (all optional):
+
+- `app-type`: frontend, backend, fullstack, static, cli-library (auto-detected
+  if empty)
+- `hosting-provider`: vercel, cloudflare-pages, render, codespaces
+  (auto-selected if empty)
+- `inject-badge`: whether to create a PR adding a "Try Demo" badge to README
+  (default: true)
+
+#### `reusable/demo-sandbox.yml`
+
+**Purpose**: Reusable workflow implementing the full sandbox pipeline\
+**Jobs** (4 stages):
+
+1. **detect** — Auto-detects app type, framework, and optimal hosting provider
+1. **deploy** — Deploys the sandbox to the selected provider
+1. **badge** — Creates a PR to inject a "Try Demo" badge into the repository's
+   README
+1. **registry** — Dispatches a `demo-registry-update` event to the `.github`
+   repo
+
+**Provider Selection**:
+
+| Provider | Best For |
+| --- | --- |
+| Vercel | Frontend / static / Next.js apps |
+| Cloudflare Pages | Static sites, JAMstack |
+| Render | Backend / fullstack / Docker apps |
+| Codespaces | Complex environments, monorepos |
+
+**DEMO\_MODE Convention**: The sandbox sets `DEMO_MODE=true` as an environment
+variable. Apps should check this to load seed data, disable destructive
+operations, and show demo banners. See `docs/conventions/DEMO_MODE.md` for the
+full specification.
+
+#### `update-demo-registry.yml`
+
+**Purpose**: Listens for `demo-registry-update` repository\_dispatch events and
+updates the central registry\
+**Triggers**: `repository_dispatch` (type: `demo-registry-update`)\
+**Actions**:
+
+- Updates `docs/_data/live_demos.yml` with the new sandbox entry
+- Updates `docs/_data/app-deployments.yml` with deployment metadata
+- Commits and pushes changes automatically
+
+______________________________________________________________________
+
 ### Safeguards: Enterprise Protection
 
 #### `alert-on-workflow-failure.yml`
@@ -297,6 +364,8 @@ ______________________________________________________________________
 - generate-pages-index
 - deploy-to-pages-live
 - docker-build-push
+- demo-deployment
+- update-demo-registry
 
 #### `health-check-live-apps.yml`
 
