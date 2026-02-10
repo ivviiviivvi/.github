@@ -1,35 +1,39 @@
 <div align="center">
 
-# {{ORG_NAME}}
+# ORGAN I: Theoria
 
-**AI-Driven Development Infrastructure for the Modern Organization**
+> *θεωρία — contemplation, theory*
 
-[Configuration Hub](https://github.com/%7B%7BORG_NAME%7D%7D/.github) |
-[Documentation](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/docs/INDEX.md)
-| [Discussions](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions)
+**Epistemological frameworks and recursive systems**
 
 </div>
 
-______________________________________________________________________
+---
 
-We build open-source tooling that scales AI-assisted development across teams
-and repositories.
+Epistemological frameworks, recursive engines, ontological systems, conceptual research
 
-|                                  |                                                    |
-| :------------------------------: | :------------------------------------------------: |
-| **{{WORKFLOW_COUNT}}** Workflows |           **{{AGENT_COUNT}}** AI Agents            |
-| **{{CHATMODE_COUNT}}** Chatmodes | **{{REUSABLE_TEMPLATE_COUNT}}** Reusable Templates |
+## Repositories
 
-### What We Ship
+<!-- This section will be populated after repos are deployed to this org. -->
+<!-- Use: gh repo list organvm-i-theoria --json name,description --template '...' -->
 
-- **Organization Automation** — Centralized CI/CD, security scanning, and
-  governance workflows
-- **AI Development Agents** — Production-ready agents for code review,
-  documentation, and infrastructure tasks
-- **GitHub Copilot Customizations** — Chatmodes, prompts, and coding
-  instructions tailored to org standards
+*Repositories are being prepared for launch. Check back soon.*
 
-______________________________________________________________________
+## Part of the organvm System
 
-[![CI](https://img.shields.io/github/actions/workflow/status/%7B%7BORG_NAME%7D%7D/.github/ci.yml?style=flat-square&label=CI)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/%7B%7BORG_NAME%7D%7D/.github?style=flat-square)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/blob/main/LICENSE)
+This organization is one of 8 in the [organvm system](https://github.com/meta-organvm):
+
+| Organ | Domain | Organization |
+|-------|--------|-------------|
+| I | Theory | [organvm-i-theoria](https://github.com/organvm-i-theoria) |
+| II | Art | [organvm-ii-poiesis](https://github.com/organvm-ii-poiesis) |
+| III | Commerce | [organvm-iii-ergon](https://github.com/organvm-iii-ergon) |
+| IV | Orchestration | [organvm-iv-taxis](https://github.com/organvm-iv-taxis) |
+| V | Public Process | [organvm-v-logos](https://github.com/organvm-v-logos) |
+| VI | Community | [organvm-vi-koinonia](https://github.com/organvm-vi-koinonia) |
+| VII | Marketing | [organvm-vii-kerygma](https://github.com/organvm-vii-kerygma) |
+| VIII | Meta | [meta-organvm](https://github.com/meta-organvm) |
+
+---
+
+<sub>ORGAN I: Theoria &mdash; part of the eight-organ creative-institutional system</sub>
