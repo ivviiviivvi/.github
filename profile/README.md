@@ -9,7 +9,8 @@
 > The ancient Greek word for the act of beholding truth: not passive observation,
 > but the disciplined practice of looking until structure reveals itself.
 
-**17 repositories · ~56,000 words of documentation**
+**18 repositories · ~56,000 words of documentation**
+**9 PRODUCTION · 4 PROTOTYPE · 3 SKELETON · 2 DESIGN_ONLY**
 
 </div>
 
@@ -56,7 +57,7 @@ The repositories here treat ideas as engineered artifacts: versioned, documented
 
 ## The Eight-Organ System
 
-ORGAN-I is one of eight organizations in the **organvm** creative-institutional system. Each organ governs a distinct domain; together they form a coordinated whole:
+ORGAN-I is one of eight organizations in the **organvm** creative-institutional system — 81 repositories across 8 orgs, ~320K words of documentation, 16 published essays. Each organ governs a distinct domain; together they form a coordinated whole:
 
 | Organ | Domain | Organization |
 |:------|:-------|:-------------|
@@ -69,6 +70,8 @@ ORGAN-I is one of eight organizations in the **organvm** creative-institutional 
 | VII | Marketing | [organvm-vii-kerygma](https://github.com/organvm-vii-kerygma) |
 | VIII | Meta | [meta-organvm](https://github.com/meta-organvm) |
 
+> **Read the public process:** [organvm-v-logos.github.io/public-process](https://organvm-v-logos.github.io/public-process/)
+
 ---
 
-<sub>ORGAN-I: Theoria · 17 repositories · [@4444j99](https://github.com/4444j99) · part of the [eight-organ system](https://github.com/meta-organvm)</sub>
+<sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99) · part of the [eight-organ system](https://github.com/meta-organvm) · CONSOLIDATION-II Sprint 2026-02-12</sub>
