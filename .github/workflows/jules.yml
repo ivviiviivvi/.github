@@ -95,7 +95,7 @@ jobs:
     - name: Run Claude Code
       id: claude
       if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota && steps.quota.outputs.should_process == 'true' }}
-      uses: anthropics/claude-code-action@6867bb3ab0b2c0a10629b6823e457347e74ad6d2  # ratchet:anthropics/claude-code-action@v1
+      uses: anthropics/claude-code-action@68cfeead1890300cc87935dbe2c023825be87b8a  # ratchet:anthropics/claude-code-action@v1
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         additional_permissions: |
