@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Scheduled Walkthrough Generator",
+  "identifier": "urn:uuid:c2270c3e-2e23-5634-935f-3f45cb4f3b2e",
+  "version": "1.0.0",
+  "description": "Discovers org repos and generates Gource git history visualizations on a weekly schedule. Triggered by schedule, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "application.automation.scheduled.yml",
+    "layer": "application",
+    "role": "automation",
+    "domain": "scheduled"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-02-06T00:00:00Z",
+  "dc:subject": ["application", "automation", "manual", "scheduled"]
+}

@@ -1,0 +1,145 @@
+{
+  "$schema": "./manifest.schema.json",
+  "generated": "2026-02-06T17:06:16.335313+00:00",
+  "generator": "generate_manifest.py",
+  "version": "1.0.0",
+  "organization": "{{ORG_NAME}}",
+  "statistics": {
+    "workflows": {
+      "total": 134,
+      "with_metadata": 5,
+      "by_layer": {
+        "interface": 1,
+        "core": 2,
+        "logic": 1,
+        "application": 1
+      }
+    },
+    "agents": {
+      "total": 26
+    },
+    "chatmodes": {
+      "total": 85
+    },
+    "prompts": {
+      "total": 6
+    },
+    "collections": {
+      "total": 27
+    }
+  },
+  "registries": {
+    "workflows": "workflow-registry.json"
+  },
+  "health": {
+    "orphaned_metadata": [],
+    "missing_metadata_count": 2
+  },
+  "components": {
+    "agents": [
+      {
+        "file": "adr-generator.agent.md",
+        "name": "ADR Generator",
+        "description": "Expert agent for creating comprehensive Architectural Decision Records (ADRs) with structured formatting optimized for AI consumption and human readability."
+      },
+      {
+        "file": "amplitude-experiment-implementation.agent.md",
+        "name": "Amplitude Experiment Implementation",
+        "description": "This custom agent uses Amplitude's MCP tools to deploy new experiments inside of Amplitude, enabling seamless variant testing capabilities and rollout of product features."
+      },
+      {
+        "file": "arm-migration.agent.md",
+        "name": "arm-migration-agent",
+        "description": "Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base image and dependency incompatibilities, and recommends Arm-optimized changes."
+      },
+      {
+        "file": "completionism-specialist.agent.md",
+        "name": "Completionism Specialist",
+        "description": "Completionism Specialist Agent - Ensures every field, form, textbox, and documentation section is thoroughly completed with no blank spaces or missing information"
+      },
+      {
+        "file": "csharp-expert.agent.md",
+        "name": "C# Expert",
+        "description": "An agent designed to assist with software development tasks for .NET projects."
+      },
+      {
+        "file": "data-decommissioning.agent.md",
+        "name": "data-decommissioning",
+        "description": "Data Decommissioning Agent - Securely removes data and systems following compliance requirements, ensuring complete and verifiable data destruction"
+      },
+      {
+        "file": "data-forensics.agent.md",
+        "name": "Data Forensics",
+        "description": "Data Forensics Agent - Investigates data issues, security breaches, audit trails, and compliance violations with advanced analytical capabilities"
+      },
+      {
+        "file": "data-reclamation.agent.md",
+        "name": "Data Reclamation",
+        "description": "Data Reclamation Agent - Recovers and restores lost, corrupted, or accidentally deleted data from various sources with comprehensive recovery strategies"
+      },
+      {
+        "file": "data-sanitization.agent.md",
+        "name": "Data Sanitization",
+        "description": "Data Sanitization Agent - Cleans and sanitizes data, removes PII, ensures compliance, and prepares data for safe sharing or disposal"
+      },
+      {
+        "file": "dynatrace-expert.agent.md",
+        "name": "Dynatrace Expert",
+        "description": "The Dynatrace Expert Agent integrates observability and security capabilities directly into GitHub workflows, enabling development teams to investigate incidents, validate deployments, triage errors, detect performance regressions, validate releases, and manage security vulnerabilities by autonomously analysing traces, logs, and Dynatrace findings."
+      },
+      {
+        "file": "exhaustive-repo-scanner.agent.md",
+        "name": "exhaustive-repo-scanner",
+        "description": "Exhaustive Repo Scanner Agent - Comprehensive data excavation and analysis specialist that exhaustively scans repositories, generates actionable tasks, creates persistent memories, and produces comprehensive reports while ensuring no data is overlooked"
+      },
+      {
+        "file": "github-org-manager.agent.md",
+        "name": "github-org-manager",
+        "description": "AI GitHub Organization Manager - Assists with implementing the 8-module AI GitHub Management Protocol for organization governance and automation"
+      },
+      {
+        "file": "jfrog-sec.agent.md",
+        "name": "jfrog-sec",
+        "description": "The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelligence."
+      },
+      {
+        "file": "launchdarkly-flag-cleanup.agent.md",
+        "name": "launchdarkly-flag-cleanup",
+        "description": "A specialized GitHub Copilot agent that uses the LaunchDarkly MCP server for feature flag lifecycle management"
+      },
+      {
+        "file": "neon-migration-specialist.agent.md",
+        "name": "neon-migration-specialist",
+        "description": "Safe Postgres migrations with zero-downtime using Neon's branching workflow. Test schema changes in isolated database branches, validate thoroughly, then apply to production."
+      },
+      {
+        "file": "neon-optimization-analyzer.agent.md",
+        "name": "Neon Performance Analyzer",
+        "description": "Identify and fix slow Postgres queries automatically using Neon's branching workflow. Analyzes execution plans, tests optimizations in isolated database branches, and provides clear before/after performance metrics with actionable code fixes."
+      },
+      {
+        "file": "octopus-deploy-release-notes-mcp.agent.md",
+        "name": "octopus-release-notes-with-mcp",
+        "description": "Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs."
+      },
+      {
+        "file": "pagerduty-incident-responder.agent.md",
+        "name": "PagerDuty Incident Responder",
+        "description": "Responds to PagerDuty incidents by analyzing incident context, identifying recent code changes, and suggesting fixes via GitHub PRs."
+      },
+      {
+        "file": "pr-branch-cleanup.agent.md",
+        "name": "PR Branch Cleanup",
+        "description": "Deep analysis and cleanup of pull requests, branches, and related artifacts to maintain optimal repository health and hygiene."
+      },
+      {
+        "file": "repository-setup.agent.md",
+        "name": "repository-setup",
+        "description": "Repository Setup Agent - Automates the creation and configuration of new repositories following organization standards and best practices"
+      }
+    ],
+    "chatmodes_count": 85,
+    "prompts_count": 6,
+    "collections_count": 27
+  }
+}

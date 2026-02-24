@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "GitHub CLI PR Operations (Reusable)",
+  "identifier": "urn:uuid:09b4b09d-222e-5d08-aa78-ae2d85ae115b",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.pr-management.github.yml",
+    "layer": "core",
+    "role": "pr-management",
+    "domain": "github"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "pr management", "pull-request"]
+}

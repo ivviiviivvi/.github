@@ -1,0 +1,543 @@
+name: PR Task Catcher
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to scan
+        required: true
+        type: number
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  scan-pr-comments:
+    name: Scan PR Comments for Tasks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request && github.event.pull_request.state == 'open') ||
+      (github.event.issue.pull_request)
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Get PR Number
+      id: pr
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+          echo "number=$INPUT_PR_NUMBER" >> $GITHUB_OUTPUT
+        elif [ "$EVENT_NAME" == "issue_comment" ]; then
+          echo "number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+        else
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Fetch All PR Data
+      id: fetch
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+      run: |
+        echo "📡 Fetching PR data for #$PR_NUM..."
+
+        # Get PR details
+        gh pr view "$PR_NUM" --json title,body,author,reviews,comments > pr_data.json
+
+        TITLE=$(jq -r '.title' pr_data.json)
+        BODY=$(jq -r '.body // ""' pr_data.json)
+        AUTHOR=$(jq -r '.author.login' pr_data.json)
+
+        echo "title=$TITLE" >> $GITHUB_OUTPUT
+        echo "author=$AUTHOR" >> $GITHUB_OUTPUT
+
+        # Save body to file for processing
+        echo "$BODY" > pr_body.txt
+
+    - name: Extract Tasks from PR Body
+      id: body_tasks
+      run: |
+        echo "🔍 Scanning PR body for tasks..."
+
+        # Extract unchecked tasks
+        UNCHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[ \]' pr_body.txt || true)
+        if [ -n "$UNCHECKED_TASKS" ]; then
+          UNCHECKED_COUNT=$(echo "$UNCHECKED_TASKS" | wc -l | tr -d ' ')
+        else
+          UNCHECKED_COUNT=0
+        fi
+
+        # Extract checked tasks (for comparison)
+        CHECKED_TASKS=$(grep -E '^\s*[-*]\s*\[x\]' pr_body.txt || true)
+        if [ -n "$CHECKED_TASKS" ]; then
+          CHECKED_COUNT=$(echo "$CHECKED_TASKS" | wc -l | tr -d ' ')
+        else
+          CHECKED_COUNT=0
+        fi
+
+        echo "Found $UNCHECKED_COUNT unchecked tasks, $CHECKED_COUNT checked tasks in PR body"
+
+        echo "unchecked_count=$UNCHECKED_COUNT" >> $GITHUB_OUTPUT
+        echo "checked_count=$CHECKED_COUNT" >> $GITHUB_OUTPUT
+
+        # Save unchecked tasks (use delimiter that won't conflict with content)
+        if [ -n "$UNCHECKED_TASKS" ]; then
+          {
+            echo "unchecked_tasks<<TASK_LIST_EOF"
+            printf '%s\n' "$UNCHECKED_TASKS"
+            echo "TASK_LIST_EOF"
+          } >> $GITHUB_OUTPUT
+        else
+          echo "unchecked_tasks=" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Extract Tasks from Comments
+      id: comment_tasks
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        REPOSITORY: ${{ github.repository }}
+      run: |
+        echo "💬 Scanning all comments for tasks and suggestions..."
+
+        # Get all comments (issue comments + review comments)
+        gh api "repos/$REPOSITORY/issues/$PR_NUM/comments" --paginate > issue_comments.json
+        gh api "repos/$REPOSITORY/pulls/$PR_NUM/comments" --paginate > review_comments.json
+
+        # Keywords that indicate actionable items
+        BLOCKER_KEYWORDS="blocker|must fix|required|critical|blocking|action item|FIXME|TODO"
+        SUGGESTION_KEYWORDS="suggest|should|could|consider|recommend|might want to"
+        QUESTION_KEYWORDS="\?"
+
+        # Process issue comments
+        echo "## Issue Comments" > comment_tasks.md
+        jq -r '.[] | "\(.user.login)|\(.created_at)|\(.body)"' issue_comments.json | while IFS='|' read -r user created body; do
+          # Check for unchecked tasks
+          TASKS=$(echo "$body" | grep -E '^\s*[-*]\s*\[ \]' || echo "")
+          if [ -n "$TASKS" ]; then
+            echo "### @$user ($(date -d "$created" +'%Y-%m-%d %H:%M' 2>/dev/null || echo "$created"))" >> comment_tasks.md
+            echo "$TASKS" >> comment_tasks.md
+            echo "" >> comment_tasks.md
+          fi
+
+          # Check for blocker keywords
+          BLOCKERS=$(echo "$body" | grep -iE "$BLOCKER_KEYWORDS" || echo "")
+          if [ -n "$BLOCKERS" ]; then
+            echo "### 🚨 @$user - BLOCKER" >> comment_tasks.md
+            echo "$BLOCKERS" | head -3 >> comment_tasks.md
+            echo "" >> comment_tasks.md
+          fi
+
+          # Check for suggestions
+          SUGGESTIONS=$(echo "$body" | grep -iE "$SUGGESTION_KEYWORDS" || echo "")
+          if [ -n "$SUGGESTIONS" ]; then
+            echo "### 💡 @$user - Suggestion" >> comment_tasks.md
+            echo "$SUGGESTIONS" | head -2 >> comment_tasks.md
+            echo "" >> comment_tasks.md
+          fi
+        done
+
+        # Process review comments
+        echo "## Review Comments" >> comment_tasks.md
+        jq -r '.[] | "\(.user.login)|\(.created_at)|\(.body)|\(.path):\(.line)"' review_comments.json | while IFS='|' read -r user created body location; do
+          # Check for unchecked tasks
+          TASKS=$(echo "$body" | grep -E '^\s*[-*]\s*\[ \]' || echo "")
+          if [ -n "$TASKS" ]; then
+            echo "### @$user at $location" >> comment_tasks.md
+            echo "$TASKS" >> comment_tasks.md
+            echo "" >> comment_tasks.md
+          fi
+
+          # Check for blocker keywords
+          BLOCKERS=$(echo "$body" | grep -iE "$BLOCKER_KEYWORDS" || echo "")
+          if [ -n "$BLOCKERS" ]; then
+            echo "### 🚨 @$user - BLOCKER at $location" >> comment_tasks.md
+            echo "$BLOCKERS" | head -3 >> comment_tasks.md
+            echo "" >> comment_tasks.md
+          fi
+        done
+
+        # Count findings (use grep -c with proper handling to avoid newline issues)
+        TASK_COUNT=$(grep -c '^\s*[-*]\s*\[ \]' comment_tasks.md 2>/dev/null || true)
+        TASK_COUNT=${TASK_COUNT:-0}
+        BLOCKER_COUNT=$(grep -c '🚨' comment_tasks.md 2>/dev/null || true)
+        BLOCKER_COUNT=${BLOCKER_COUNT:-0}
+        SUGGESTION_COUNT=$(grep -c '💡' comment_tasks.md 2>/dev/null || true)
+        SUGGESTION_COUNT=${SUGGESTION_COUNT:-0}
+
+        echo "Found: $TASK_COUNT tasks, $BLOCKER_COUNT blockers, $SUGGESTION_COUNT suggestions"
+
+        echo "task_count=$TASK_COUNT" >> $GITHUB_OUTPUT
+        echo "blocker_count=$BLOCKER_COUNT" >> $GITHUB_OUTPUT
+        echo "suggestion_count=$SUGGESTION_COUNT" >> $GITHUB_OUTPUT
+
+        # Save to output (use unique delimiter)
+        {
+          echo "tasks_summary<<TASK_SUMMARY_EOF"
+          cat comment_tasks.md
+          echo "TASK_SUMMARY_EOF"
+        } >> $GITHUB_OUTPUT
+
+    - name: Check for Unresolved Review Threads
+      id: review_threads
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        REPO_OWNER: ${{ github.repository_owner }}
+        REPO_NAME_FULL: ${{ github.repository }}
+      run: |
+        echo "🧵 Checking for unresolved review threads..."
+
+        REPO_NAME="${REPO_NAME_FULL#*/}"
+
+        # Get review threads via GraphQL (more reliable for thread status)
+        UNRESOLVED_COUNT=$(gh api graphql -f query='
+          query($owner: String!, $repo: String!, $pr: Int!) {
+            repository(owner: $owner, name: $repo) {
+              pullRequest(number: $pr) {
+                reviewThreads(first: 100) {
+                  nodes {
+                    isResolved
+                    comments(first: 1) {
+                      nodes {
+                        body
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ' -F "owner=$REPO_OWNER" \
+          -F "repo=$REPO_NAME" \
+          -F "pr=$PR_NUM" \
+          --jq '.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved == false)) | length')
+
+        echo "Found $UNRESOLVED_COUNT unresolved review threads"
+        echo "unresolved_count=$UNRESOLVED_COUNT" >> $GITHUB_OUTPUT
+
+    - name: Create Task Summary Comment
+      id: summary
+      env:
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        UNCHECKED_BODY: ${{ steps.body_tasks.outputs.unchecked_count }}
+        CHECKED_BODY: ${{ steps.body_tasks.outputs.checked_count }}
+        COMMENT_TASKS: ${{ steps.comment_tasks.outputs.task_count }}
+        BLOCKERS: ${{ steps.comment_tasks.outputs.blocker_count }}
+        SUGGESTIONS: ${{ steps.comment_tasks.outputs.suggestion_count }}
+        UNRESOLVED_THREADS: ${{ steps.review_threads.outputs.unresolved_count }}
+        UNCHECKED_TASKS_BODY: ${{ steps.body_tasks.outputs.unchecked_tasks }}
+        TASKS_SUMMARY: ${{ steps.comment_tasks.outputs.tasks_summary }}
+        EVENT_NAME: ${{ github.event_name }}
+      run: |
+        TOTAL_TASKS=$((UNCHECKED_BODY + COMMENT_TASKS))
+
+        echo "📊 Generating task summary..."
+
+        # Determine status
+        if [ "$BLOCKERS" -gt 0 ]; then
+          STATUS="🚨 **BLOCKERS FOUND** - Address before merging"
+          STATUS_EMOJI="🚨"
+        elif [ "$TOTAL_TASKS" -gt 0 ]; then
+          STATUS="⚠️ **Tasks pending** - Review before merging"
+          STATUS_EMOJI="⚠️"
+        elif [ "$UNRESOLVED_THREADS" -gt 0 ]; then
+          STATUS="💬 **Unresolved discussions** - Resolve review threads"
+          STATUS_EMOJI="💬"
+        else
+          STATUS="✅ **All clear** - No pending tasks"
+          STATUS_EMOJI="✅"
+        fi
+
+        # Build summary comment
+        {
+          echo "<!-- task-catcher-summary -->"
+          echo "# $STATUS_EMOJI Task Catcher Summary"
+          echo ""
+          echo "$STATUS"
+          echo ""
+          echo "## 📋 Task Overview"
+          echo ""
+          echo "| Category | Count |"
+          echo "|----------|-------|"
+          echo "| PR Body Unchecked Tasks | $UNCHECKED_BODY |"
+          echo "| PR Body Checked Tasks | $CHECKED_BODY ✅ |"
+          echo "| Comment Tasks | $COMMENT_TASKS |"
+          echo "| Blocker Items | $BLOCKERS 🚨 |"
+          echo "| Suggestions | $SUGGESTIONS 💡 |"
+          echo "| Unresolved Review Threads | $UNRESOLVED_THREADS |"
+          echo ""
+          echo "---"
+        } > /tmp/task_summary.md
+
+        # Add PR body tasks if any
+        if [ "$UNCHECKED_BODY" -gt 0 ]; then
+          {
+            echo ""
+            echo "## ✅ PR Body Tasks ($UNCHECKED_BODY unchecked)"
+            echo ""
+            echo "$UNCHECKED_TASKS_BODY"
+            echo ""
+            echo "---"
+          } >> /tmp/task_summary.md
+        fi
+
+        # Add comment tasks if any
+        if [ "$COMMENT_TASKS" -gt 0 ] || [ "$BLOCKERS" -gt 0 ]; then
+          {
+            echo ""
+            echo "## 💬 Comment Tasks & Blockers"
+            echo ""
+            echo "$TASKS_SUMMARY"
+            echo ""
+            echo "---"
+          } >> /tmp/task_summary.md
+        fi
+
+        # Add guidance
+        {
+          echo ""
+          echo "## 🎯 Next Steps"
+          echo ""
+        } >> /tmp/task_summary.md
+
+        if [ "$BLOCKERS" -gt 0 ]; then
+          echo "- 🚨 **Address all blocker items** before merging" >> /tmp/task_summary.md
+        fi
+
+        if [ "$UNCHECKED_BODY" -gt 0 ]; then
+          echo "- ✅ Check off completed tasks in PR description" >> /tmp/task_summary.md
+        fi
+
+        if [ "$UNRESOLVED_THREADS" -gt 0 ]; then
+          echo "- 💬 Resolve review discussion threads" >> /tmp/task_summary.md
+        fi
+
+        if [ "$COMMENT_TASKS" -gt 0 ]; then
+          echo "- 📝 Complete or assign out tasks from comments" >> /tmp/task_summary.md
+        fi
+
+        if [ "$TOTAL_TASKS" -eq 0 ] && [ "$BLOCKERS" -eq 0 ] && [ "$UNRESOLVED_THREADS" -eq 0 ]; then
+          echo "- 🚀 All tasks complete! Ready to merge when CI passes." >> /tmp/task_summary.md
+        fi
+
+        {
+          echo ""
+          echo "---"
+          echo ""
+          echo "**Options:**"
+          echo "- ✅ Check off tasks as you complete them"
+          echo "- 📋 Create issues for tasks to handle later: Add \`create-issues-for-tasks\` label"
+          echo "- 🚫 Ignore tasks for merge: Add \`ignore-task-checks\` label"
+          echo ""
+          echo "*Last scanned: $(date -u +'%Y-%m-%d %H:%M UTC')*"
+          echo "*Triggered by: $EVENT_NAME*"
+        } >> /tmp/task_summary.md
+
+        # Read the complete summary
+        SUMMARY=$(cat /tmp/task_summary.md)
+
+        # Save summary to file
+        echo "$SUMMARY" > task_summary.md
+
+        echo "has_blockers=$( [ "$BLOCKERS" -gt 0 ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+        echo "has_tasks=$( [ "$TOTAL_TASKS" -gt 0 ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+        echo "total_tasks=$TOTAL_TASKS" >> $GITHUB_OUTPUT
+
+    - name: Post or Update Task Summary
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        REPOSITORY: ${{ github.repository }}
+      run: |
+        echo "💬 Posting task summary to PR..."
+
+        # Check if task-catcher summary comment already exists
+        EXISTING_COMMENT=$(gh api "repos/$REPOSITORY/issues/$PR_NUM/comments" \
+          --jq '.[] | select(.body | contains("<!-- task-catcher-summary -->")) | .id' | head -1)
+
+        SUMMARY=$(cat task_summary.md)
+
+        if [ -n "$EXISTING_COMMENT" ]; then
+          echo "Updating existing comment #$EXISTING_COMMENT"
+          gh api "repos/$REPOSITORY/issues/comments/$EXISTING_COMMENT" \
+            -X PATCH \
+            -f body="$SUMMARY"
+        else
+          echo "Creating new task summary comment"
+          gh pr comment "$PR_NUM" --body "$SUMMARY"
+        fi
+
+    - name: Add Labels Based on Findings
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        HAS_BLOCKERS: ${{ steps.summary.outputs.has_blockers }}
+        HAS_TASKS: ${{ steps.summary.outputs.has_tasks }}
+      run: |
+        echo "🏷️ Updating PR labels..."
+
+        # Get current labels
+        CURRENT_LABELS=$(gh pr view "$PR_NUM" --json labels --jq '.labels | map(.name) | join(",")')
+
+        if [ "$HAS_BLOCKERS" == "true" ]; then
+          if [[ ! "$CURRENT_LABELS" =~ "has-blockers" ]]; then
+            gh pr edit "$PR_NUM" --add-label "has-blockers"
+            echo "Added 'has-blockers' label"
+          fi
+        else
+          if [[ "$CURRENT_LABELS" =~ "has-blockers" ]]; then
+            gh pr edit "$PR_NUM" --remove-label "has-blockers"
+            echo "Removed 'has-blockers' label"
+          fi
+        fi
+
+        if [ "$HAS_TASKS" == "true" ]; then
+          if [[ ! "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
+            gh pr edit "$PR_NUM" --add-label "has-pending-tasks"
+            echo "Added 'has-pending-tasks' label"
+          fi
+        else
+          if [[ "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
+            gh pr edit "$PR_NUM" --remove-label "has-pending-tasks"
+            echo "Removed 'has-pending-tasks' label"
+          fi
+        fi
+
+    - name: Check Merge Blocking
+      id: block_check
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUM: ${{ steps.pr.outputs.number }}
+        HAS_BLOCKERS: ${{ steps.summary.outputs.has_blockers }}
+      run: |
+        # Get labels
+        LABELS=$(gh pr view "$PR_NUM" --json labels --jq '.labels | map(.name) | join(",")')
+
+        # Check if PR has ignore label
+        if [[ "$LABELS" =~ "ignore-task-checks" ]]; then
+          echo "⏭️ Ignoring task checks (ignore-task-checks label present)"
+          echo "should_block=false" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        # Block merge if blockers exist
+        if [ "$HAS_BLOCKERS" == "true" ]; then
+          echo "🚨 Blocking merge due to unresolved blockers"
+          echo "should_block=true" >> $GITHUB_OUTPUT
+
+          {
+            echo "🚫 **Merge Blocked**"
+            echo ""
+            echo "This PR has unresolved blocker items that must be addressed before merging."
+            echo ""
+            echo "Review the task summary above and:"
+            echo "1. Address all items marked with 🚨 BLOCKER"
+            echo "2. Check off completed tasks"
+            echo "3. Or add \`ignore-task-checks\` label to bypass (not recommended)"
+            echo ""
+            echo "The \`has-blockers\` label will be automatically removed when blockers are resolved."
+          } > /tmp/blocker_message.md
+          gh pr comment "$PR_NUM" --body-file /tmp/blocker_message.md
+        else
+          echo "✅ No blockers found, merge allowed"
+          echo "should_block=false" >> $GITHUB_OUTPUT
+        fi
+
+  create-issues-from-tasks:
+    name: Create Issues from PR Tasks
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'create-issues-for-tasks')
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Extract and Create Issues
+      env:
+        EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+        EVENT_PR_TITLE: ${{ github.event.pull_request.title }}
+        EVENT_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        PR_NUM=$EVENT_PR_NUMBER
+        PR_TITLE="$EVENT_PR_TITLE"
+        AUTHOR="$EVENT_PR_AUTHOR"
+
+        echo "📋 Extracting incomplete tasks from merged PR #$PR_NUM..."
+
+        # Get PR body
+        BODY=$(gh pr view $PR_NUM --json body --jq '.body // ""')
+
+        # Extract unchecked tasks
+        TASKS=$(echo "$BODY" | grep -E '^\s*[-*]\s*\[ \]' || echo "")
+
+        if [ -z "$TASKS" ]; then
+          echo "No unchecked tasks found"
+          exit 0
+        fi
+
+        TASK_COUNT=$(echo "$TASKS" | grep -c '^\s*[-*]\s*\[ \]')
+        echo "Found $TASK_COUNT unchecked tasks"
+
+        # Create issues for each task
+        echo "$TASKS" | while read -r task; do
+          # Clean up task text
+          TASK_TEXT=$(echo "$task" | sed 's/^\s*[-*]\s*\[ \]\s*//')
+
+          if [ -n "$TASK_TEXT" ]; then
+            echo "Creating issue for: $TASK_TEXT"
+
+            {
+              echo "# Task from PR #$PR_NUM"
+              echo ""
+              echo "**Original PR:** #$PR_NUM - $PR_TITLE"
+              echo "**Author:** @$AUTHOR"
+              echo ""
+              echo "## Task"
+              echo ""
+              echo "$TASK_TEXT"
+              echo ""
+              echo "## Context"
+              echo ""
+              echo "This task was left incomplete in PR #$PR_NUM. See the original PR for full context."
+              echo ""
+              echo "---"
+              echo "_Auto-created by [pr-task-catcher.yml](../.github/workflows/pr-task-catcher.yml)_"
+            } > /tmp/task_issue.md
+
+            gh issue create \
+              --title "Task from PR #$PR_NUM: $TASK_TEXT" \
+              --body-file /tmp/task_issue.md \
+              --label "task-from-pr,needs-triage" \
+              --assignee "$AUTHOR"
+          fi
+        done
+
+        echo "✅ Created $TASK_COUNT issues from PR tasks"

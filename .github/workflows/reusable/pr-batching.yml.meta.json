@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "PR Batching (Reusable)",
+  "identifier": "urn:uuid:838d17fb-ffc0-50a6-924e-56c0686aa131",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.pr-management.pr.yml",
+    "layer": "core",
+    "role": "pr-management",
+    "domain": "pr"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "pr management", "pull-request"]
+}

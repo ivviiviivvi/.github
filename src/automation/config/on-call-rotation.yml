@@ -1,0 +1,83 @@
+# On-Call Rotation Configuration
+# Used by automation/scripts/incident_response.py
+
+rotation:
+  # Schedule configuration
+  schedule: weekly
+  timezone: UTC
+  handoff_day: Monday
+  handoff_time: 09:00
+
+  # Rotation type: round_robin, weighted, or custom
+  type: round_robin
+
+  # Current rotation members (to be populated)
+  members: []
+
+  # Backup rotation (when primary is unavailable)
+  backup_rotation:
+    enabled: true
+    escalation_delay_minutes: 15
+
+# Escalation policy
+escalation:
+  levels:
+  - name: primary
+    delay_minutes: 0
+    notify: [on-call-primary]
+  - name: secondary
+    delay_minutes: 15
+    notify: [on-call-secondary]
+  - name: manager
+    delay_minutes: 30
+    notify: [team-manager]
+  - name: leadership
+    delay_minutes: 60
+    notify: [engineering-lead]
+
+# Notification preferences
+notifications:
+  channels:
+    slack:
+      enabled: true
+      channel: '#on-call-alerts'
+    pagerduty:
+      enabled: true
+      service_id: ${PAGERDUTY_SERVICE_ID}
+    email:
+      enabled: false
+
+  # Override preferences per severity
+  severity_overrides:
+    p0:
+      use_all_channels: true
+      notify_backup: true
+    p1:
+      use_all_channels: true
+      notify_backup: false
+    p2:
+      channels: [slack]
+      notify_backup: false
+
+# Handoff procedure
+handoff:
+  # Automated handoff summary
+  generate_summary: true
+  include_open_incidents: true
+  include_recent_alerts: true
+  summary_lookback_hours: 168 # 7 days
+
+  # Handoff checklist
+  checklist:
+  - Review open incidents
+  - Check pending alerts
+  - Verify monitoring status
+  - Confirm contact information
+
+# Override schedules (holidays, planned absences)
+overrides: []
+  # Example:
+  # - start: "2024-12-25T00:00:00Z"
+  #   end: "2024-12-26T00:00:00Z"
+  #   replacement: user-backup
+  #   reason: "Holiday coverage"

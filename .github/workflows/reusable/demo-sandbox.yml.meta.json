@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Demo Sandbox (Reusable)",
+  "identifier": "urn:uuid:e3a7c1f0-8b2d-4f6e-a9d1-5c3b8e7f2a4d",
+  "version": "1.0.0",
+  "description": "Reusable sandbox deployment workflow for demo environments. Auto-detects app type, selects hosting provider, deploys, and optionally injects a README badge. Triggered by workflow_call, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "core.deployment.demo-sandbox.yml",
+    "layer": "core",
+    "role": "deployment",
+    "domain": "demo"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2026-02-07T00:00:00Z",
+  "dateModified": "2026-02-07T00:00:00Z",
+  "dc:subject": ["core", "deployment", "demo", "sandbox", "reusable"]
+}

@@ -1,0 +1,180 @@
+name: Google Chat Daily Summary
+
+on:
+  schedule:
+    # Run at 9:00 AM UTC daily
+  - cron: 0 9 * * *
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  daily-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Get yesterday's metrics
+      id: metrics
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const startDate = yesterday.toISOString().split('T')[0];
+
+          // Get workflow runs from yesterday
+          const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            created: `>=${startDate}`,
+            per_page: 100
+          });
+
+          const relevantWorkflows = [
+            'issue-triage.yml',
+            'auto-assign-reviewers.yml',
+            'status-sync.yml',
+            'stale-management.yml'
+          ];
+
+          const workflowRuns = runs.workflow_runs.filter(run =>
+            relevantWorkflows.includes(run.path.split('/').pop())
+          );
+
+          const total = workflowRuns.length;
+          const successful = workflowRuns.filter(r => r.conclusion === 'success').length;
+          const failed = workflowRuns.filter(r => r.conclusion === 'failure').length;
+          const successRate = total > 0 ? ((successful / total) * 100).toFixed(1) : 0;
+
+          // Count by workflow
+          const byWorkflow = {};
+          relevantWorkflows.forEach(wf => {
+            const wfRuns = workflowRuns.filter(r => r.path.endsWith(wf));
+            byWorkflow[wf.replace('.yml', '')] = {
+              total: wfRuns.length,
+              successful: wfRuns.filter(r => r.conclusion === 'success').length,
+              failed: wfRuns.filter(r => r.conclusion === 'failure').length
+            };
+          });
+
+          core.setOutput('total', total);
+          core.setOutput('successful', successful);
+          core.setOutput('failed', failed);
+          core.setOutput('success-rate', successRate);
+          core.setOutput('by-workflow', JSON.stringify(byWorkflow));
+          core.setOutput('date', startDate);
+
+    - name: Send daily summary to Google Chat
+      env:
+        GOOGLE_CHAT_WEBHOOK: ${{ secrets.GOOGLE_CHAT_WEBHOOK_METRICS }}
+      shell: bash
+      run: |
+        if [ -z "$GOOGLE_CHAT_WEBHOOK" ]; then
+          echo "::warning::GOOGLE_CHAT_WEBHOOK_METRICS secret not configured, skipping notification"
+          exit 0
+        fi
+
+        WORKFLOW_DATA='${{ steps.metrics.outputs.by-workflow }}'
+
+        # Determine status emoji and color
+        SUCCESS_RATE=${{ steps.metrics.outputs.success-rate }}
+        if (( $(echo "$SUCCESS_RATE >= 98" | bc -l) )); then
+          STATUS_ICON="✅"
+          HEADER_COLOR="#36A64F"
+        elif (( $(echo "$SUCCESS_RATE >= 95" | bc -l) )); then
+          STATUS_ICON="🔶"
+          HEADER_COLOR="#FFA500"
+        else
+          STATUS_ICON="⚠️"
+          HEADER_COLOR="#FF0000"
+        fi
+
+        # Build workflow breakdown text
+        WORKFLOW_BREAKDOWN=$(echo "$WORKFLOW_DATA" | jq -r 'to_entries | map("<b>" + .key + ":</b> " + (.value.successful|tostring) + "/" + (.value.total|tostring) + " (" + (if .value.total > 0 then ((.value.successful / .value.total * 100)|tostring|split(".")[0]) else "0" end) + "%)") | join("<br>")')
+
+        # Send to Google Chat using Card v2 format
+        if ! curl -sf -X POST "$GOOGLE_CHAT_WEBHOOK" \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"cardsV2\": [
+              {
+                \"cardId\": \"daily-summary-${{ steps.metrics.outputs.date }}\",
+                \"card\": {
+                  \"header\": {
+                    \"title\": \"${STATUS_ICON} Daily Workflow Summary\",
+                    \"subtitle\": \"${{ steps.metrics.outputs.date }}\"
+                  },
+                  \"sections\": [
+                    {
+                      \"header\": \"Overview\",
+                      \"widgets\": [
+                        {
+                          \"decoratedText\": {
+                            \"topLabel\": \"Total Runs\",
+                            \"text\": \"${{ steps.metrics.outputs.total }}\"
+                          }
+                        },
+                        {
+                          \"decoratedText\": {
+                            \"topLabel\": \"Success Rate\",
+                            \"text\": \"${{ steps.metrics.outputs.success-rate }}%\"
+                          }
+                        },
+                        {
+                          \"decoratedText\": {
+                            \"topLabel\": \"Successful\",
+                            \"text\": \"${{ steps.metrics.outputs.successful }}\"
+                          }
+                        },
+                        {
+                          \"decoratedText\": {
+                            \"topLabel\": \"Failed\",
+                            \"text\": \"${{ steps.metrics.outputs.failed }}\"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      \"header\": \"Workflow Breakdown\",
+                      \"widgets\": [
+                        {
+                          \"textParagraph\": {
+                            \"text\": \"${WORKFLOW_BREAKDOWN}\"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      \"widgets\": [
+                        {
+                          \"buttonList\": {
+                            \"buttons\": [
+                              {
+                                \"text\": \"View Dashboard\",
+                                \"onClick\": {
+                                  \"openLink\": {
+                                    \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions\"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }"; then
+          echo "::warning::Google Chat notification failed - check GOOGLE_CHAT_WEBHOOK_METRICS secret"
+        fi

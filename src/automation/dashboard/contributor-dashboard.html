@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributor Dashboard - Month 3 Analytics</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-card h3 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .metric-change.positive {
+            color: var(--success-color);
+        }
+
+        .metric-change.negative {
+            color: var(--danger-color);
+        }
+
+        /* Contribution Count Section */
+        .contribution-count-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .contribution-count-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Response Time Section */
+        .response-time-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .response-time-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Success Rate Section */
+        .success-rate-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-rate-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Expertise Area Section */
+        .expertise-area-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .expertise-area-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contributors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .contributors-table th,
+        .contributors-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .contributors-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .contributors-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-primary {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Contributor Dashboard</h1>
+            <p class="subtitle">Month 3 Analytics - Real-time contributor metrics and performance tracking</p>
+        </header>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Contributors</h3>
+                <div class="metric-value" id="total-contributors">24</div>
+                <div class="metric-change positive">+3 this month</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Active This Week</h3>
+                <div class="metric-value" id="active-contributors">18</div>
+                <div class="metric-change positive">75% activity rate</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Average Response Time</h3>
+                <div class="metric-value" id="avg-response-time">2.4h</div>
+                <div class="metric-change positive">-0.5h from last week</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Overall Success Rate</h3>
+                <div class="metric-value" id="success-rate">94.2%</div>
+                <div class="metric-change positive">+1.2% this month</div>
+            </div>
+        </div>
+
+        <!-- Contribution Count Section -->
+        <div class="contribution-count-section">
+            <h2 class="contribution-count-title">Contribution Count by Contributor</h2>
+            <p>Track individual contribution counts including commits, PRs, and reviews.</p>
+            <table class="contributors-table">
+                <thead>
+                    <tr>
+                        <th>Contributor</th>
+                        <th>Commits</th>
+                        <th>PRs Merged</th>
+                        <th>Reviews</th>
+                        <th>Total Score</th>
+                    </tr>
+                </thead>
+                <tbody id="contribution-count-table">
+                    <tr>
+                        <td><img src="https://github.com/identicons/contributor1.png" alt="" class="avatar">contributor-1</td>
+                        <td>145</td>
+                        <td>32</td>
+                        <td>89</td>
+                        <td><span class="badge badge-success">266</span></td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://github.com/identicons/contributor2.png" alt="" class="avatar">contributor-2</td>
+                        <td>98</td>
+                        <td>24</td>
+                        <td>67</td>
+                        <td><span class="badge badge-success">189</span></td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://github.com/identicons/contributor3.png" alt="" class="avatar">contributor-3</td>
+                        <td>76</td>
+                        <td>18</td>
+                        <td>45</td>
+                        <td><span class="badge badge-primary">139</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Response Time Section -->
+        <div class="response-time-section">
+            <h2 class="response-time-title">Response Time Analytics</h2>
+            <p>Average response time for PR reviews and issue responses.</p>
+            <table class="contributors-table">
+                <thead>
+                    <tr>
+                        <th>Contributor</th>
+                        <th>Avg Review Time</th>
+                        <th>Avg Issue Response</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody id="response-time-table">
+                    <tr>
+                        <td>contributor-1</td>
+                        <td>1.2h</td>
+                        <td>0.8h</td>
+                        <td><span class="badge badge-success">Improving</span></td>
+                    </tr>
+                    <tr>
+                        <td>contributor-2</td>
+                        <td>2.5h</td>
+                        <td>1.5h</td>
+                        <td><span class="badge badge-warning">Stable</span></td>
+                    </tr>
+                    <tr>
+                        <td>contributor-3</td>
+                        <td>3.1h</td>
+                        <td>2.0h</td>
+                        <td><span class="badge badge-primary">Stable</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Success Rate Section -->
+        <div class="success-rate-section">
+            <h2 class="success-rate-title">Success Rate Metrics</h2>
+            <p>PR merge success rate and CI pass rate by contributor.</p>
+            <table class="contributors-table">
+                <thead>
+                    <tr>
+                        <th>Contributor</th>
+                        <th>PR Success Rate</th>
+                        <th>CI Pass Rate</th>
+                        <th>Overall</th>
+                    </tr>
+                </thead>
+                <tbody id="success-rate-table">
+                    <tr>
+                        <td>contributor-1</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 96%"></div>
+                            </div>
+                            96%
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 98%"></div>
+                            </div>
+                            98%
+                        </td>
+                        <td><span class="badge badge-success">97%</span></td>
+                    </tr>
+                    <tr>
+                        <td>contributor-2</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 92%"></div>
+                            </div>
+                            92%
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 95%"></div>
+                            </div>
+                            95%
+                        </td>
+                        <td><span class="badge badge-success">93.5%</span></td>
+                    </tr>
+                    <tr>
+                        <td>contributor-3</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 88%"></div>
+                            </div>
+                            88%
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 91%"></div>
+                            </div>
+                            91%
+                        </td>
+                        <td><span class="badge badge-primary">89.5%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Expertise Area Section -->
+        <div class="expertise-area-section">
+            <h2 class="expertise-area-title">Expertise Area Distribution</h2>
+            <p>Contributor expertise areas based on historical contributions.</p>
+            <table class="contributors-table">
+                <thead>
+                    <tr>
+                        <th>Contributor</th>
+                        <th>Primary Expertise Area</th>
+                        <th>Secondary Areas</th>
+                        <th>Expertise Score</th>
+                    </tr>
+                </thead>
+                <tbody id="expertise-area-table">
+                    <tr>
+                        <td>contributor-1</td>
+                        <td><span class="badge badge-primary">Backend</span></td>
+                        <td>API, Database, Security</td>
+                        <td>0.92</td>
+                    </tr>
+                    <tr>
+                        <td>contributor-2</td>
+                        <td><span class="badge badge-primary">Frontend</span></td>
+                        <td>UI/UX, Testing, Documentation</td>
+                        <td>0.87</td>
+                    </tr>
+                    <tr>
+                        <td>contributor-3</td>
+                        <td><span class="badge badge-primary">DevOps</span></td>
+                        <td>CI/CD, Infrastructure, Monitoring</td>
+                        <td>0.85</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>Contributor Dashboard - Part of Month 3 Enhanced Analytics</p>
+            <p>Data updated every 15 minutes | Last update: <span id="last-update">2024-01-15 10:30 UTC</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Update timestamp
+        document.getElementById('last-update').textContent = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+
+        // Placeholder for real-time data updates
+        // In production, this would fetch data from the analytics API
+        async function updateDashboard() {
+            try {
+                // const response = await fetch('/api/contributor-metrics');
+                // const data = await response.json();
+                // updateMetrics(data);
+                console.log('Dashboard ready for real-time updates');
+            } catch (error) {
+                console.error('Failed to update dashboard:', error);
+            }
+        }
+
+        // Initialize dashboard
+        updateDashboard();
+    </script>
+</body>
+</html>

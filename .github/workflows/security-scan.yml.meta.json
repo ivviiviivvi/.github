@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Security Scan",
+  "identifier": "urn:uuid:5218d8d0-8093-53c4-ba27-459db5a5f94a",
+  "version": "1.0.0",
+  "description": "Security scanning and vulnerability detection. Triggered by push, pull_request, schedule, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "core.security.security.yml",
+    "layer": "core",
+    "role": "security",
+    "domain": "security"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled",
+    "security"
+  ]
+}

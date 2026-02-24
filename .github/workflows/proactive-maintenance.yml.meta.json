@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Proactive Maintenance",
+  "identifier": "urn:uuid:563d4a44-f7d8-5c02-af1d-8922106c0159",
+  "version": "1.0.0",
+  "description": "Repository maintenance and cleanup. Triggered by schedule, workflow_dispatch, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.maintenance.proactive.yml",
+    "layer": "logic",
+    "role": "maintenance",
+    "domain": "proactive"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["logic", "maintenance", "manual", "pull-request", "scheduled"]
+}

@@ -1,0 +1,102 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^https://localhost"
+    },
+    {
+      "pattern": "^http://127.0.0.1"
+    },
+    {
+      "pattern": "^https://aka.ms/awesome-copilot/"
+    },
+    {
+      "pattern": "^https://img.shields.io/badge/"
+    },
+    {
+      "pattern": "^https://ffmpeg.org/"
+    },
+    {
+      "pattern": "^https://learn.microsoft.com/"
+    },
+    {
+      "pattern": "^https://keepachangelog.com/"
+    },
+    {
+      "pattern": "^https://semver.org/"
+    },
+    {
+      "pattern": "^https?://[^/]*example\\.com"
+    },
+    {
+      "pattern": "^https?://agentsphere\\.example\\.com"
+    },
+    {
+      "pattern": "^https?://demo-.*\\.agentsphere\\.dev"
+    },
+    {
+      "pattern": "^https?://github\\.com/organization/repository"
+    },
+    {
+      "pattern": "^https?://github\\.com/username/repo"
+    },
+    {
+      "pattern": "^https?://github\\.com/OWNER/REPO"
+    },
+    {
+      "pattern": "^https?://github\\.com/4444JPP"
+    },
+    {
+      "pattern": "^https?://\\{[^}]+\\}"
+    },
+    {
+      "pattern": "^https?://<"
+    },
+    {
+      "pattern": "^https?://\\$"
+    },
+    {
+      "pattern": "^https?://code-server"
+    },
+    {
+      "pattern": "^https?://\\.\\.\\."
+    },
+    {
+      "pattern": "^https?://[^\\s]*\\[NUMBER"
+    },
+    {
+      "pattern": "^https?://\\[[^\\]]+\\]"
+    },
+    {
+      "pattern": "^https?://api\\.dynatrace\\.com/mcp"
+    },
+    {
+      "pattern": "^https?://your-server\\.example\\.com"
+    },
+    {
+      "pattern": "^https?://blog\\.example\\.com"
+    },
+    {
+      "pattern": "^https?://forum\\.example\\.com"
+    },
+    {
+      "pattern": "^https?://docs\\.example\\.com"
+    }
+  ],
+  "replacementPatterns": [],
+  "httpHeaders": [
+    {
+      "urls": ["https://github.com"],
+      "headers": {
+        "Accept": "application/vnd.github+json"
+      }
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 301, 302, 307, 308, 406]
+}

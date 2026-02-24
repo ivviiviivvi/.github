@@ -1,0 +1,244 @@
+name: Stale Item Management (A/B Test)
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC (offset from main stale workflow)
+  - cron: 0 2 * * *
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run (only log, dont take action)
+        required: false
+        default: 'false'
+      force_group:
+        description: Force assignment to group (control/experiment)
+        required: false
+        default: ''
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  determine-group:
+    name: Determine A/B Test Group
+    runs-on: ubuntu-latest
+    outputs:
+      group: ${{ steps.assign.outputs.group }}
+      grace_period: ${{ steps.assign.outputs.grace_period }}
+      close_after: ${{ steps.assign.outputs.close_after }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065    # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: pip
+
+    - name: Install dependencies
+      run: pip install PyYAML
+
+    - name: Assign to A/B test group using ab_test_assignment
+      id: assign
+      env:
+        FORCE_GROUP: ${{ inputs.force_group }}
+      run: |
+        # Use ab_test_assignment.py for consistent group assignment
+        REPO_NAME="${{ github.repository }}"
+        CONFIG_PATH="src/automation/config/ab-test-config.yml"
+
+        # Run assignment script
+        if [ -n "$FORCE_GROUP" ]; then
+          echo "Forcing assignment to group: $FORCE_GROUP"
+          GROUP="$FORCE_GROUP"
+        else
+          GROUP=$(python3 src/automation/scripts/ab_test_assignment.py --repo "$REPO_NAME" --config "$CONFIG_PATH" 2>/dev/null || echo "control")
+        fi
+
+        # Read grace period and close_after from config based on group
+        if [ "$GROUP" = "experiment" ]; then
+          GRACE_PERIOD=$(python3 -c "import yaml; c=yaml.safe_load(open('$CONFIG_PATH')); print(c['groups']['experiment']['gracePeriod'])")
+          CLOSE_AFTER=$(python3 -c "import yaml; c=yaml.safe_load(open('$CONFIG_PATH')); print(c['groups']['experiment']['closeAfter'])")
+        else
+          GROUP="control"
+          GRACE_PERIOD=$(python3 -c "import yaml; c=yaml.safe_load(open('$CONFIG_PATH')); print(c['groups']['control']['gracePeriod'])")
+          CLOSE_AFTER=$(python3 -c "import yaml; c=yaml.safe_load(open('$CONFIG_PATH')); print(c['groups']['control']['closeAfter'])")
+        fi
+
+        echo "group=$GROUP" >> $GITHUB_OUTPUT
+        echo "grace_period=$GRACE_PERIOD" >> $GITHUB_OUTPUT
+        echo "close_after=$CLOSE_AFTER" >> $GITHUB_OUTPUT
+
+        echo "Repository: $REPO_NAME"
+        echo "Assigned to: $GROUP group"
+        echo "Grace period: $GRACE_PERIOD days"
+        echo "Close after: $CLOSE_AFTER days"
+
+  stale-issues-ab:
+    name: Manage Stale Issues (A/B)
+    runs-on: ubuntu-latest
+    needs: determine-group
+    timeout-minutes: 30
+    steps:
+    - name: Log A/B test assignment
+      run: |
+        echo "A/B Test Group: ${{ needs.determine-group.outputs.group }}"
+        echo "Grace Period: ${{ needs.determine-group.outputs.grace_period }} days"
+        echo "Close After: ${{ needs.determine-group.outputs.close_after }} days"
+
+    - name: Mark and close stale issues
+      if: inputs.dry_run != 'true'
+      uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639  # ratchet:actions/stale@v9
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issue Configuration with A/B test parameters
+        stale-issue-message: |
+          This issue has been automatically marked as stale due to inactivity.
+
+          **Why?** Issues with no activity for 90 days are assumed to be no longer relevant.
+
+          **What happens next?**
+          - This issue will be closed in ${{ needs.determine-group.outputs.close_after }} days if no further activity occurs
+          - You can remove the stale label to keep it open
+          - Commenting will automatically remove the stale label
+
+          **Still relevant?**
+          - Add a comment explaining why this should remain open
+          - Provide any updates or additional context
+          - Indicate if you're still working on it
+
+          ---
+          *Automated stale issue management (A/B Test: ${{ needs.determine-group.outputs.group }})*
+
+        close-issue-message: |
+          This issue has been automatically closed due to inactivity.
+
+          **Closed because:** Extended inactivity period
+
+          **Need to reopen?**
+          - Comment with updated information
+          - Reference this issue in a new issue or PR
+          - Contact a maintainer if this was closed in error
+
+          ---
+          *Automated stale issue closure (A/B Test: ${{ needs.determine-group.outputs.group }})*
+
+        days-before-stale: 90
+        days-before-close: ${{ needs.determine-group.outputs.close_after }}
+        stale-issue-label: stale
+        exempt-issue-labels: 'pinned,security,priority: critical,priority: high,status: in-progress,status: in-review'
+        exempt-all-milestones: true
+        operations-per-run: 100
+
+          # PR Configuration with A/B test parameters
+        stale-pr-message: |
+          This pull request has been automatically marked as stale due to inactivity.
+
+          **Why?** PRs with no activity for 30 days are assumed to be abandoned or no longer needed.
+
+          **What happens next?**
+          - This PR will be closed in ${{ needs.determine-group.outputs.close_after }} days if no further activity occurs
+          - You can remove the stale label to keep it open
+          - Pushing new commits will automatically remove the stale label
+
+          **Still working on this?**
+          - Push new commits to show continued work
+          - Comment with a status update
+          - Request review if ready
+
+          ---
+          *Automated stale PR management (A/B Test: ${{ needs.determine-group.outputs.group }})*
+
+        close-pr-message: |
+          This pull request has been automatically closed due to inactivity.
+
+          **Closed because:** Extended inactivity period
+
+          **Want to revive this?**
+          - Reopen the PR and push new commits
+          - Comment explaining the status
+          - Create a new PR with fresh changes
+
+          ---
+          *Automated stale PR closure (A/B Test: ${{ needs.determine-group.outputs.group }})*
+
+        days-before-pr-stale: 30
+        days-before-pr-close: ${{ needs.determine-group.outputs.close_after }}
+        stale-pr-label: stale
+        exempt-pr-labels: 'pinned,priority: critical,priority: high,work-in-progress,awaiting-review'
+        exempt-draft-pr: true
+
+          # General Configuration
+        ascending: true
+        remove-stale-when-updated: true
+        enable-statistics: true
+
+  record-metrics:
+    name: Record A/B Test Metrics
+    runs-on: ubuntu-latest
+    needs: [determine-group, stale-issues-ab]
+    if: always()
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Record experiment metrics
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          const metrics = {
+            timestamp: new Date().toISOString(),
+            repository: `${context.repo.owner}/${context.repo.repo}`,
+            group: '${{ needs.determine-group.outputs.group }}',
+            gracePeriod: parseInt('${{ needs.determine-group.outputs.grace_period }}'),
+            closeAfter: parseInt('${{ needs.determine-group.outputs.close_after }}'),
+            workflowRunId: context.runId,
+            dryRun: '${{ inputs.dry_run }}' === 'true'
+          };
+
+          // Get stale statistics
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: 'stale',
+            per_page: 100
+          });
+
+          metrics.staleIssueCount = issues.data.filter(i => !i.pull_request).length;
+          metrics.stalePRCount = issues.data.filter(i => i.pull_request).length;
+
+          // Log metrics
+          console.log('A/B Test Metrics:');
+          console.log(JSON.stringify(metrics, null, 2));
+
+          // Append to metrics file if it exists
+          const metricsPath = 'src/automation/metrics/ab-test-stale.json';
+          try {
+            let existingMetrics = [];
+            if (fs.existsSync(metricsPath)) {
+              existingMetrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
+            }
+            existingMetrics.push(metrics);
+
+            // Keep only last 90 days of metrics
+            const ninetyDaysAgo = new Date();
+            ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+            existingMetrics = existingMetrics.filter(m =>
+              new Date(m.timestamp) > ninetyDaysAgo
+            );
+
+            fs.writeFileSync(metricsPath, JSON.stringify(existingMetrics, null, 2));
+          } catch (e) {
+            console.log('Could not persist metrics:', e.message);
+          }

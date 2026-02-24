@@ -1,0 +1,116 @@
+<!-- Walkthrough Gallery Component -->
+<!-- This reusable include generates a responsive gallery of walkthrough videos -->
+
+{% assign walkthroughs = site.data.walkthroughs | default: empty_array %}
+
+{% if walkthroughs.size > 0 %}
+<div class="gallery-grid">
+  {% for walkthrough in walkthroughs %}
+  <div class="video-card" data-repository="{{ walkthrough.repository }}" data-date="{{ walkthrough.updated_at }}">
+    <!-- Video Thumbnail -->
+    <div class="video-thumbnail">
+      {% if walkthrough.video_url %}
+        {% assign file_ext = walkthrough.video_url | split: '.' | last | downcase %}
+        {% if file_ext == 'webm' %}
+          {% assign video_type = 'video/webm' %}
+        {% elsif file_ext == 'mov' %}
+          {% assign video_type = 'video/quicktime' %}
+        {% else %}
+          {% assign video_type = 'video/mp4' %}
+        {% endif %}
+        <video
+          data-src="{{ walkthrough.video_url }}"
+          poster="{{ walkthrough.thumbnail_url | default: '/assets/images/video-placeholder.png' }}"
+          controls
+          preload="metadata"
+          aria-label="Walkthrough video for {{ walkthrough.title }}"
+        >
+          <source data-src="{{ walkthrough.video_url }}" type="{{ video_type }}">
+          Your browser does not support the video tag.
+        </video>
+      {% elsif walkthrough.thumbnail_url %}
+        <img
+          src="{{ walkthrough.thumbnail_url }}"
+          alt="Thumbnail for {{ walkthrough.title }}"
+          loading="lazy"
+        >
+      {% else %}
+        <img
+          src="/assets/images/video-placeholder.png"
+          alt="Placeholder thumbnail"
+          loading="lazy"
+        >
+      {% endif %}
+    </div>
+
+    <!-- Video Information -->
+    <div class="video-info">
+      <h3 class="video-title">{{ walkthrough.title | default: 'Untitled Walkthrough' }}</h3>
+
+      <p class="video-repository">
+        📦 {{ walkthrough.repository | default: 'Unknown Repository' }}
+      </p>
+
+      <p class="video-description">
+        {{ walkthrough.description | default: 'No description available.' | truncate: 150 }}
+      </p>
+
+      <!-- Metadata -->
+      <div class="video-meta">
+        <span class="video-date">
+          📅 {{ walkthrough.updated_at | date: "%b %d, %Y" }}
+        </span>
+
+        {% if walkthrough.live_demo_url %}
+        <a href="{{ walkthrough.live_demo_url }}" class="badge" target="_blank" rel="noopener noreferrer">
+          Live Demo
+        </a>
+        {% endif %}
+      </div>
+
+      <!-- Additional tags -->
+      {% if walkthrough.tags and walkthrough.tags.size > 0 %}
+      <div class="video-tags" style="margin-top: 0.75rem;">
+        {% for tag in walkthrough.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  .video-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+</style>
+
+{% else %}
+<!-- Empty State -->
+<div class="empty-state">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+  </svg>
+  <h3>No walkthroughs available yet</h3>
+  <p>Walkthroughs will appear here once they are generated from your repositories.</p>
+  <p style="margin-top: 1rem; font-size: 0.9rem;">
+    <a href="https://github.com/{{ORG_NAME}}/.github/blob/main/.github/docs/GITHUB_PAGES_SETUP.md" style="color: var(--primary-color);">
+      Learn how to generate walkthroughs →
+    </a>
+  </p>
+</div>
+{% endif %}

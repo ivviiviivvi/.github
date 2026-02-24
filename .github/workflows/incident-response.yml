@@ -1,0 +1,378 @@
+name: Incident Response
+
+on:
+  workflow_run:
+    types: [completed]
+    workflows:
+    - CI
+    - Deploy to Production
+    - Live Demo Deployment
+    - Release Management
+    - Semantic Release
+    - CodeQL
+    - Security Scan
+    - Test Coverage
+    # Trigger on critical workflow failures only
+    # Note: Additional filtering by conclusion is done in job conditions
+
+  issues:
+    types: [labeled]
+    # Trigger when issue is labeled with incident-related labels
+
+  workflow_dispatch:
+    inputs:
+      incident_type:
+        description: Type of incident
+        required: true
+        type: choice
+        options:
+        - workflow_failure
+        - security
+        - performance
+        - availability
+      severity:
+        description: Incident severity
+        required: true
+        type: choice
+        options:
+        - p0
+        - p1
+        - p2
+        - p3
+      description:
+        description: Incident description
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+env:
+  INCIDENT_LABELS: incident,outage,security-incident,p0,p1
+
+jobs:
+  detect-and-assess:
+    name: Detect and Assess Incident
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Only process workflow failures to avoid alert fatigue
+    if: github.event.workflow_run.conclusion == 'failure' || github.event_name != 'workflow_run'
+    outputs:
+      is_incident: ${{ steps.detect.outputs.is_incident }}
+      severity: ${{ steps.assess.outputs.severity }}
+      incident_type: ${{ steps.assess.outputs.incident_type }}
+      incident_id: ${{ steps.assess.outputs.incident_id }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Detect incident trigger
+      id: detect
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        LABEL_NAME: ${{ github.event.label.name }}
+      run: |
+        IS_INCIDENT="false"
+
+        # Check if triggered by workflow failure
+        if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+          if [[ "$WORKFLOW_RUN_CONCLUSION" == "failure" ]]; then
+            # Check if it's a critical workflow
+            CRITICAL_WORKFLOWS="CI|deploy|release|security"
+            if echo "$WORKFLOW_RUN_NAME" | grep -qiE "$CRITICAL_WORKFLOWS"; then
+              IS_INCIDENT="true"
+            fi
+          fi
+        fi
+
+        # Check if triggered by incident label
+        if [[ "$EVENT_NAME" == "issues" ]]; then
+          if echo "${{ env.INCIDENT_LABELS }}" | grep -qi "$LABEL_NAME"; then
+            IS_INCIDENT="true"
+          fi
+        fi
+
+        # Manual trigger is always an incident
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          IS_INCIDENT="true"
+        fi
+
+        echo "is_incident=$IS_INCIDENT" >> $GITHUB_OUTPUT
+
+    - name: Assess incident severity
+      id: assess
+      if: steps.detect.outputs.is_incident == 'true'
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_SEVERITY: ${{ inputs.severity }}
+        INPUT_INCIDENT_TYPE: ${{ inputs.incident_type }}
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        LABEL_NAME: ${{ github.event.label.name }}
+        RUN_NUMBER: ${{ github.run_number }}
+      run: |
+        SEVERITY="p2"  # Default severity
+        INCIDENT_TYPE="unknown"
+        INCIDENT_ID="INC-$(date +%Y%m%d)-$RUN_NUMBER"
+
+        if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+          SEVERITY="$INPUT_SEVERITY"
+          INCIDENT_TYPE="$INPUT_INCIDENT_TYPE"
+        elif [[ "$EVENT_NAME" == "workflow_run" ]]; then
+          INCIDENT_TYPE="workflow_failure"
+          # Assess severity based on workflow
+          if echo "$WORKFLOW_RUN_NAME" | grep -qiE "deploy|release"; then
+            SEVERITY="p1"
+          elif echo "$WORKFLOW_RUN_NAME" | grep -qiE "security"; then
+            SEVERITY="p0"
+          fi
+        elif [[ "$EVENT_NAME" == "issues" ]]; then
+          INCIDENT_TYPE="issue_reported"
+          if [[ "$LABEL_NAME" == "p0" ]] || [[ "$LABEL_NAME" == "security-incident" ]]; then
+            SEVERITY="p0"
+          elif [[ "$LABEL_NAME" == "p1" ]] || [[ "$LABEL_NAME" == "outage" ]]; then
+            SEVERITY="p1"
+          fi
+        fi
+
+        echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+        echo "incident_type=$INCIDENT_TYPE" >> $GITHUB_OUTPUT
+        echo "incident_id=$INCIDENT_ID" >> $GITHUB_OUTPUT
+
+        echo "::notice title=Incident Detected::ID: $INCIDENT_ID, Type: $INCIDENT_TYPE, Severity: $SEVERITY"
+
+  mitigate:
+    name: Mitigate Incident
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: detect-and-assess
+    if: needs.detect-and-assess.outputs.is_incident == 'true'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Execute runbook
+      id: runbook
+      run: |
+        INCIDENT_TYPE="${{ needs.detect-and-assess.outputs.incident_type }}"
+        SEVERITY="${{ needs.detect-and-assess.outputs.severity }}"
+
+        echo "Executing runbook for $INCIDENT_TYPE (severity: $SEVERITY)"
+
+        # Check for runbook
+        RUNBOOK_PATH="docs/runbooks/${INCIDENT_TYPE}.md"
+        if [[ -f "$RUNBOOK_PATH" ]]; then
+          echo "Found runbook at $RUNBOOK_PATH"
+          cat "$RUNBOOK_PATH"
+        else
+          echo "No specific runbook found, using generic incident response"
+        fi
+
+        # Automated mitigation steps based on incident type
+        case "$INCIDENT_TYPE" in
+          "workflow_failure")
+            echo "Checking for quick remediation..."
+            # Could trigger self-healing workflow here
+            ;;
+          "security")
+            echo "Initiating security response..."
+            # Could disable affected components
+            ;;
+          "performance")
+            echo "Checking performance metrics..."
+            ;;
+          "availability")
+            echo "Checking service health..."
+            ;;
+        esac
+
+        echo "mitigation_status=in_progress" >> $GITHUB_OUTPUT
+
+    - name: Track mitigation
+      run: |
+        echo "::notice title=Incident Mitigation::Mitigation steps initiated for ${{ needs.detect-and-assess.outputs.incident_id }}"
+
+  notify-stakeholders:
+    name: Notify Stakeholders
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [detect-and-assess, mitigate]
+    if: needs.detect-and-assess.outputs.is_incident == 'true'
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      PAGERDUTY_INTEGRATION_KEY: ${{ secrets.PAGERDUTY_INTEGRATION_KEY }}
+
+    steps:
+    - name: Create incident tracking issue
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        INCIDENT_ID="${{ needs.detect-and-assess.outputs.incident_id }}"
+        SEVERITY="${{ needs.detect-and-assess.outputs.severity }}"
+        INCIDENT_TYPE="${{ needs.detect-and-assess.outputs.incident_type }}"
+
+        SEVERITY_EMOJI="⚠️"
+        case "$SEVERITY" in
+          "p0") SEVERITY_EMOJI="🚨" ;;
+          "p1") SEVERITY_EMOJI="🔴" ;;
+          "p2") SEVERITY_EMOJI="🟡" ;;
+          "p3") SEVERITY_EMOJI="🟢" ;;
+        esac
+
+        gh issue create \
+          --title "$SEVERITY_EMOJI [$INCIDENT_ID] Incident: $INCIDENT_TYPE" \
+          --body "## Incident Report
+
+        **Incident ID:** $INCIDENT_ID
+        **Severity:** $SEVERITY
+        **Type:** $INCIDENT_TYPE
+        **Detected At:** $(date -u +\"%Y-%m-%d %H:%M:%S UTC\")
+        **Status:** Investigating
+
+        ### Timeline
+        - $(date -u +\"%H:%M UTC\"): Incident detected
+        - $(date -u +\"%H:%M UTC\"): Automated response initiated
+
+        ### Impact
+        _To be updated_
+
+        ### Root Cause
+        _Under investigation_
+
+        ### Action Items
+        - [ ] Assess impact scope
+        - [ ] Implement mitigation
+        - [ ] Communicate to stakeholders
+        - [ ] Document root cause
+        - [ ] Create post-mortem
+
+        ---
+        *This incident was automatically created by the Incident Response workflow.*" \
+          --label "incident,$SEVERITY,automation" || true
+
+    - name: Validate notification secrets
+      id: validate-notify
+      shell: bash
+      run: |
+        slack_valid=false
+        pagerduty_valid=false
+
+        if [[ -n "${SLACK_WEBHOOK_URL}" && "${SLACK_WEBHOOK_URL}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+
+        if [[ -n "${PAGERDUTY_INTEGRATION_KEY}" && "${PAGERDUTY_INTEGRATION_KEY}" =~ ^[A-Za-z0-9]{32}$ ]]; then
+          pagerduty_valid=true
+        fi
+
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+        echo "pagerduty_valid=$pagerduty_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Send Slack notification
+      if: steps.validate-notify.outputs.slack_valid == 'true'
+      run: |
+        SEVERITY="${{ needs.detect-and-assess.outputs.severity }}"
+        INCIDENT_ID="${{ needs.detect-and-assess.outputs.incident_id }}"
+        INCIDENT_TYPE="${{ needs.detect-and-assess.outputs.incident_type }}"
+
+        COLOR="warning"
+        if [[ "$SEVERITY" == "p0" ]] || [[ "$SEVERITY" == "p1" ]]; then
+          COLOR="danger"
+        fi
+
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"🚨 Incident Alert: $INCIDENT_ID\",
+            \"attachments\": [
+              {
+                \"color\": \"$COLOR\",
+                \"blocks\": [
+                  {
+                    \"type\": \"section\",
+                    \"text\": {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*Incident Response Triggered*\n\n*ID:* $INCIDENT_ID\n*Severity:* $SEVERITY\n*Type:* $INCIDENT_TYPE\n*Repository:* ${{ github.repository }}\"
+                    }
+                  }
+                ]
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::Incident alert notification failed"
+        fi
+
+    - name: Notify via PagerDuty (P0/P1)
+      if: |
+        (needs.detect-and-assess.outputs.severity == 'p0' ||
+         needs.detect-and-assess.outputs.severity == 'p1') &&
+        steps.validate-notify.outputs.pagerduty_valid == 'true'
+      run: |
+        SEVERITY="${{ needs.detect-and-assess.outputs.severity }}"
+        PD_SEVERITY="critical"
+        if [[ "$SEVERITY" == "p1" ]]; then
+          PD_SEVERITY="error"
+        fi
+
+        if ! curl --fail --silent --show-error -X POST https://events.pagerduty.com/v2/enqueue \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"routing_key\": \"$PAGERDUTY_INTEGRATION_KEY\",
+            \"event_action\": \"trigger\",
+            \"dedup_key\": \"${{ needs.detect-and-assess.outputs.incident_id }}\",
+            \"payload\": {
+              \"summary\": \"[$SEVERITY] ${{ needs.detect-and-assess.outputs.incident_type }} incident in ${{ github.repository }}\",
+              \"severity\": \"$PD_SEVERITY\",
+              \"source\": \"${{ github.repository }}\",
+              \"custom_details\": {
+                \"incident_id\": \"${{ needs.detect-and-assess.outputs.incident_id }}\",
+                \"incident_type\": \"${{ needs.detect-and-assess.outputs.incident_type }}\",
+                \"repository\": \"${{ github.repository }}\",
+                \"workflow_url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }
+            }
+          }"; then
+          echo "::warning title=PagerDuty notification failed::Incident PagerDuty trigger failed"
+        fi
+
+  post-incident:
+    name: Post-Incident Actions
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [detect-and-assess, mitigate, notify-stakeholders]
+    if: always() && needs.detect-and-assess.outputs.is_incident == 'true'
+
+    steps:
+    - name: Generate incident summary
+      run: |
+        cat << EOF
+        ## Incident Response Summary
+
+        **Incident ID:** ${{ needs.detect-and-assess.outputs.incident_id }}
+        **Severity:** ${{ needs.detect-and-assess.outputs.severity }}
+        **Type:** ${{ needs.detect-and-assess.outputs.incident_type }}
+
+        ### Response Timeline
+        - Detection: ✅ Complete
+        - Assessment: ✅ Complete
+        - Mitigation: ${{ needs.mitigate.result }}
+        - Notification: ${{ needs.notify-stakeholders.result }}
+
+        ### Next Steps
+        1. Monitor for incident resolution
+        2. Update stakeholders on progress
+        3. Schedule post-mortem if needed
+        EOF
+
+    - name: Track incident metric
+      run: |
+        echo "::notice title=Incident Response Complete::${{ needs.detect-and-assess.outputs.incident_id }} response workflow finished"

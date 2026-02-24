@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Daily Master Orchestrator",
+  "identifier": "urn:uuid:a9b7328a-8297-54a9-94b9-a253b421e759",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by schedule, workflow_dispatch, executes 6 job(s).",
+  "functioncalled": {
+    "canonical": "application.automation.daily.yml",
+    "layer": "application",
+    "role": "automation",
+    "domain": "daily"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["application", "automation", "manual", "scheduled"]
+}

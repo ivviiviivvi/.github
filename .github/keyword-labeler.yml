@@ -1,0 +1,8 @@
+# Keyword Labeler Configuration
+# Labels issues based on keywords in title or body
+
+keywords:
+  bug: [bug, error, fail, crash]
+  enhancement: [feature, request, add, improve]
+  documentation: [docs, readme, guide]
+  security: [security, vulnerability, cve, leak]

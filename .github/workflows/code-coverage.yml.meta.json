@@ -1,0 +1,29 @@
+{
+  "profile": "full",
+  "name": "Code Coverage",
+  "identifier": "urn:uuid:f6bb9dbc-1b1e-5411-bf1a-07adc2b6e484",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by push, pull_request, schedule, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "core.testing.code.yml",
+    "layer": "core",
+    "role": "testing",
+    "domain": "code"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "coverage",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled",
+    "testing"
+  ]
+}

@@ -1,0 +1,92 @@
+# SLA Thresholds Configuration
+# Used by automation/scripts/sla_monitor.py
+
+sla:
+  # Response time thresholds (in hours)
+  response_time:
+    p0: 1 # Critical - 1 hour
+    p1: 4 # High - 4 hours
+    p2: 24 # Medium - 24 hours (1 day)
+    p3: 72 # Low - 72 hours (3 days)
+
+  # Resolution time thresholds (in hours)
+  resolution_time:
+    p0: 4 # Critical - 4 hours
+    p1: 24 # High - 24 hours (1 day)
+    p2: 72 # Medium - 72 hours (3 days)
+    p3: 168 # Low - 168 hours (7 days)
+
+  # Success rate thresholds (percentage)
+  success_rate:
+    target: 95 # Target success rate
+    warning: 90 # Warning threshold
+    critical: 80 # Critical threshold
+
+  # Availability targets
+  availability:
+    target: 99.5 # Target availability percentage
+    warning: 99.0 # Warning threshold
+    critical: 95.0 # Critical threshold
+
+# Monitoring configuration
+monitoring:
+  check_interval: 30 # Minutes between SLA checks
+  lookback_window: 24 # Hours to analyze for metrics
+
+  # Metrics to track
+  metrics:
+  - response_time
+  - resolution_time
+  - success_rate
+  - availability
+  - throughput
+
+# Alerting configuration
+alerting:
+  enabled: true
+  channels:
+  - slack
+  - pagerduty
+
+  # Escalation rules
+  escalation:
+    warning:
+      delay_minutes: 15
+      channels: [slack]
+    critical:
+      delay_minutes: 0
+      channels: [slack, pagerduty]
+
+  # Breach notifications
+  breach_notification:
+    include_metrics: true
+    include_trend: true
+    include_recommendations: true
+
+# Reporting
+reporting:
+  daily_summary: true
+  weekly_report: true
+  monthly_review: true
+
+  # Report recipients
+  recipients:
+    daily: [team-channel]
+    weekly: [management-channel]
+    monthly: [leadership-channel]
+
+# Exception handling
+exceptions:
+  # Issues/PRs exempt from SLA tracking
+  exempt_labels:
+  - external
+  - on-hold
+  - blocked
+  - wontfix
+
+  # Maintenance windows (SLA paused)
+  maintenance_windows:
+  - day: sunday
+    start: 02:00
+    end: 06:00
+    timezone: UTC

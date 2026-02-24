@@ -1,0 +1,36 @@
+{
+  "tasks": [
+    {
+      "id": "daily-market-summary",
+      "description": "Generate a daily summary of the stock market.",
+      "schedule": "0 8 * * 1-5",
+      "subscription": "Perplexity_Pro_API",
+      "prompt": "Provide a concise summary of the previous day's stock market performance, highlighting key indices and major news.",
+      "enabled": true
+    },
+    {
+      "id": "weekly-tech-news",
+      "description": "Generate a weekly roundup of technology news.",
+      "schedule": "0 9 * * 1",
+      "subscription": "Grok_API",
+      "prompt": "Summarize the most significant technology news from the past week, covering AI, hardware, and major software releases.",
+      "enabled": true
+    },
+    {
+      "id": "daily-code-review-summary",
+      "description": "Summarize open pull requests for high-level review.",
+      "schedule": "30 9 * * 1-5",
+      "subscription": "Gemini_API_Tier1",
+      "prompt": "Review all open pull requests in the organization and provide a one-sentence summary for each, noting any with significant changes or discussions.",
+      "enabled": false
+    },
+    {
+      "id": "weekly-security-brief",
+      "description": "Generate a weekly security brief for the organization.",
+      "schedule": "0 10 * * 2",
+      "subscription": "OpenAI_API",
+      "prompt": "Analyze recent cybersecurity news and provide a brief for the engineering team, highlighting any new vulnerabilities or threats relevant to our tech stack.",
+      "enabled": true
+    }
+  ]
+}

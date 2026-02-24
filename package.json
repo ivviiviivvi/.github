@@ -1,0 +1,39 @@
+{
+  "name": "@{{NPM_SCOPE}}/github-org-policies",
+  "version": "1.0.0",
+  "description": "Community health files and organization-wide policies for the {{ORG_NAME}} GitHub organization",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/{{ORG_NAME}}/.github.git"
+  },
+  "keywords": [
+    "github",
+    "organization",
+    "policies",
+    "workflows",
+    "automation",
+    "ai-framework",
+    "governance"
+  ],
+  "author": "{{ORG_NAME}}",
+  "license": "MIT",
+  "homepage": "https://github.com/{{ORG_NAME}}/.github#readme",
+  "bugs": {
+    "url": "https://github.com/{{ORG_NAME}}/.github/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"No JavaScript tests configured\"",
+    "build": "echo \"No build step configured\"",
+    "version:bump:major": "npm version major --no-git-tag-version",
+    "version:bump:minor": "npm version minor --no-git-tag-version",
+    "version:bump:patch": "npm version patch --no-git-tag-version",
+    "version:sync": "node src/automation/scripts/utils/sync-version.js",
+    "postversion": "npm run version:sync"
+  },
+  "devDependencies": {
+    "prettier": "3.8.1"
+  }
+}

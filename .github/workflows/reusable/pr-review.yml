@@ -1,0 +1,554 @@
+name: PR Review (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      validate-codeowners:
+        description: Validate that CODEOWNERS file exists and covers changed files
+        required: false
+        type: boolean
+        default: true
+      require-codeowner-review:
+        description: Require review from at least one CODEOWNER
+        required: false
+        type: boolean
+        default: false
+      review-assignment-strategy:
+        description: Strategy for assigning reviewers (round-robin, load-balanced, random)
+        required: false
+        type: string
+        default: round-robin
+      team-reviewers:
+        description: Comma-separated list of team slugs to request reviews from
+        required: false
+        type: string
+        default: ''
+      min-approvals:
+        description: Minimum number of approvals required
+        required: false
+        type: number
+        default: 1
+      dismiss-stale-reviews:
+        description: Flag stale reviews when new commits are pushed
+        required: false
+        type: boolean
+        default: true
+      auto-approve-dependabot:
+        description: Automatically approve Dependabot PRs for minor/patch updates
+        required: false
+        type: boolean
+        default: false
+      auto-approve-patterns:
+        description: Comma-separated list of author patterns to auto-approve (e.g., dependabot[bot],renovate[bot])
+        required: false
+        type: string
+        default: ''
+      implement-suggestions:
+        description: Enable automatic implementation of review suggestions
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      github-token:
+        description: GitHub token with PR and review permissions
+        required: false
+    outputs:
+      review-status:
+        description: Current review status (pending, approved, changes_requested)
+        value: ${{ jobs.pr-review.outputs.status }}
+      approval-count:
+        description: Number of approvals
+        value: ${{ jobs.pr-review.outputs.approvals }}
+      codeowners-valid:
+        description: Whether CODEOWNERS validation passed
+        value: ${{ jobs.pr-review.outputs.codeowners-valid }}
+      pending-reviewers:
+        description: List of pending reviewers
+        value: ${{ jobs.pr-review.outputs.pending-reviewers }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-review:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.review-status.outputs.status }}
+      approvals: ${{ steps.review-status.outputs.approvals }}
+      codeowners-valid: ${{ steps.codeowners-check.outputs.valid }}
+      pending-reviewers: ${{ steps.review-status.outputs.pending }}
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    env:
+      GH_TOKEN: ${{ secrets.github-token || secrets.GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get PR details
+      id: pr-details
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          if (!pr) {
+            core.setFailed('This workflow must be triggered by a pull_request event');
+            return;
+          }
+
+          core.setOutput('number', pr.number);
+          core.setOutput('author', pr.user.login);
+          core.setOutput('head-sha', pr.head.sha);
+          core.setOutput('base-branch', pr.base.ref);
+
+          return pr;
+
+    - name: Get changed files
+      id: changed-files
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber,
+            per_page: 100
+          });
+
+          const filenames = files.map(f => f.filename);
+          core.setOutput('files', JSON.stringify(filenames));
+
+          return filenames;
+
+    - name: Validate CODEOWNERS
+      id: codeowners-check
+      if: inputs.validate-codeowners
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          // Possible CODEOWNERS locations
+          const codeownersPaths = [
+            'CODEOWNERS',
+            '.github/CODEOWNERS',
+            'docs/CODEOWNERS'
+          ];
+
+          let codeownersContent = null;
+          let codeownersPath = null;
+
+          for (const p of codeownersPaths) {
+            try {
+              codeownersContent = fs.readFileSync(p, 'utf8');
+              codeownersPath = p;
+              break;
+            } catch (e) {
+              // File not found, try next
+            }
+          }
+
+          if (!codeownersContent) {
+            console.log('No CODEOWNERS file found');
+            core.setOutput('valid', 'true');
+            core.setOutput('exists', 'false');
+            core.setOutput('owners', '{}');
+            return;
+          }
+
+          console.log(`Found CODEOWNERS at: ${codeownersPath}`);
+          core.setOutput('exists', 'true');
+          core.setOutput('path', codeownersPath);
+
+          // Parse CODEOWNERS file
+          const rules = [];
+          const lines = codeownersContent.split('\n');
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) continue;
+
+            const parts = trimmed.split(/\s+/);
+            if (parts.length >= 2) {
+              const pattern = parts[0];
+              const owners = parts.slice(1);
+              rules.push({ pattern, owners });
+            }
+          }
+
+          // Check which changed files have owners
+          const changedFiles = ${{ steps.changed-files.outputs.files }};
+          const fileOwners = {};
+          const uncoveredFiles = [];
+
+          for (const file of changedFiles) {
+            let matched = false;
+
+            for (let i = rules.length - 1; i >= 0; i--) {
+              const rule = rules[i];
+              const pattern = rule.pattern
+                .replace(/\*\*/g, '.*')
+                .replace(/\*/g, '[^/]*')
+                .replace(/\?/g, '.');
+
+              const regex = new RegExp(`^${pattern}$`);
+
+              if (regex.test(file) || file.startsWith(rule.pattern.replace('*', ''))) {
+                fileOwners[file] = rule.owners;
+                matched = true;
+                break;
+              }
+            }
+
+            if (!matched) {
+              uncoveredFiles.push(file);
+            }
+          }
+
+          const allCovered = uncoveredFiles.length === 0;
+
+          if (!allCovered) {
+            console.log(`Files without CODEOWNERS coverage: ${uncoveredFiles.join(', ')}`);
+          }
+
+          core.setOutput('valid', allCovered.toString());
+          core.setOutput('owners', JSON.stringify(fileOwners));
+          core.setOutput('uncovered', JSON.stringify(uncoveredFiles));
+
+    - name: Get current review status
+      id: review-status
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const minApprovals = ${{ inputs.min-approvals }};
+
+          // Get all reviews
+          const { data: reviews } = await github.rest.pulls.listReviews({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Get latest review from each user
+          const latestReviews = {};
+          for (const review of reviews) {
+            const user = review.user.login;
+            if (!latestReviews[user] ||
+                new Date(review.submitted_at) > new Date(latestReviews[user].submitted_at)) {
+              latestReviews[user] = review;
+            }
+          }
+
+          // Count review states
+          const approvals = Object.values(latestReviews).filter(r => r.state === 'APPROVED');
+          const changesRequested = Object.values(latestReviews).filter(r => r.state === 'CHANGES_REQUESTED');
+          const pending = Object.values(latestReviews).filter(r => r.state === 'PENDING' || r.state === 'COMMENTED');
+
+          // Get requested reviewers
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const requestedReviewers = pr.requested_reviewers.map(r => r.login);
+          const requestedTeams = pr.requested_teams.map(t => t.slug);
+
+          // Determine overall status
+          let status = 'pending';
+          if (changesRequested.length > 0) {
+            status = 'changes_requested';
+          } else if (approvals.length >= minApprovals) {
+            status = 'approved';
+          }
+
+          core.setOutput('status', status);
+          core.setOutput('approvals', approvals.length.toString());
+          core.setOutput('changes-requested', changesRequested.length.toString());
+          core.setOutput('pending', JSON.stringify(requestedReviewers));
+          core.setOutput('pending-teams', JSON.stringify(requestedTeams));
+
+          console.log(`Review status: ${status}, Approvals: ${approvals.length}/${minApprovals}`);
+
+    - name: Request team reviews
+      id: request-team-reviews
+      if: inputs.team-reviewers != ''
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const teamReviewers = '${{ inputs.team-reviewers }}'.split(',').map(t => t.trim()).filter(t => t);
+
+          if (teamReviewers.length === 0) {
+            console.log('No team reviewers specified');
+            return;
+          }
+
+          try {
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              team_reviewers: teamReviewers
+            });
+
+            console.log(`Requested reviews from teams: ${teamReviewers.join(', ')}`);
+          } catch (error) {
+            console.log(`Could not request team reviews: ${error.message}`);
+          }
+
+    - name: Check for CODEOWNER review
+      id: codeowner-review
+      if: inputs.require-codeowner-review && steps.codeowners-check.outputs.exists == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const fileOwners = JSON.parse('${{ steps.codeowners-check.outputs.owners }}');
+
+          // Get all unique owners
+          const allOwners = new Set();
+          for (const owners of Object.values(fileOwners)) {
+            owners.forEach(o => {
+              // Remove @ prefix if present
+              const owner = o.startsWith('@') ? o.substring(1) : o;
+              allOwners.add(owner);
+            });
+          }
+
+          // Get reviews
+          const { data: reviews } = await github.rest.pulls.listReviews({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Check if any CODEOWNER has approved
+          const approvedBy = reviews
+            .filter(r => r.state === 'APPROVED')
+            .map(r => r.user.login);
+
+          const codeownerApproved = approvedBy.some(user => allOwners.has(user));
+
+          core.setOutput('approved', codeownerApproved.toString());
+          core.setOutput('codeowners', JSON.stringify(Array.from(allOwners)));
+
+          if (!codeownerApproved) {
+            console.log(`No CODEOWNER has approved. Required: ${Array.from(allOwners).join(', ')}`);
+          }
+
+    - name: Auto-approve eligible PRs
+      id: auto-approve
+      if: inputs.auto-approve-dependabot || inputs.auto-approve-patterns != ''
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prAuthor = '${{ steps.pr-details.outputs.author }}';
+
+          // Check if auto-approve is enabled for this author
+          let shouldApprove = false;
+          let reason = '';
+
+          // Check Dependabot
+          if (${{ inputs.auto-approve-dependabot }} && prAuthor === 'dependabot[bot]') {
+            // Get PR title to check if it's a minor/patch update
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Dependabot titles usually contain version info
+            const title = pr.title.toLowerCase();
+            const isMajor = /major|breaking/.test(title) || /from \d+\.\d+\.\d+ to (\d+)\.\d+\.\d+/.test(title);
+
+            if (!isMajor) {
+              shouldApprove = true;
+              reason = 'Dependabot minor/patch update';
+            }
+          }
+
+          // Check custom patterns
+          const patterns = '${{ inputs.auto-approve-patterns }}'.split(',').map(p => p.trim()).filter(p => p);
+          for (const pattern of patterns) {
+            if (prAuthor === pattern || prAuthor.includes(pattern)) {
+              shouldApprove = true;
+              reason = `Matches auto-approve pattern: ${pattern}`;
+              break;
+            }
+          }
+
+          if (shouldApprove) {
+            try {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                event: 'APPROVE',
+                body: `Auto-approved: ${reason}`
+              });
+
+              console.log(`Auto-approved PR: ${reason}`);
+              core.setOutput('approved', 'true');
+              core.setOutput('reason', reason);
+            } catch (error) {
+              console.log(`Could not auto-approve: ${error.message}`);
+              core.setOutput('approved', 'false');
+            }
+          } else {
+            core.setOutput('approved', 'false');
+          }
+
+    - name: Flag stale reviews
+      id: stale-reviews
+      if: inputs.dismiss-stale-reviews && github.event.action == 'synchronize'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+
+          // Get all reviews
+          const { data: reviews } = await github.rest.pulls.listReviews({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Get the timestamp of the latest commit
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const { data: commits } = await github.rest.pulls.listCommits({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber,
+            per_page: 1
+          });
+
+          if (commits.length === 0) return;
+
+          const latestCommitTime = new Date(commits[0].commit.committer.date);
+
+          // Find stale reviews (approved before latest commit)
+          const staleReviews = reviews.filter(r => {
+            return r.state === 'APPROVED' &&
+                   new Date(r.submitted_at) < latestCommitTime;
+          });
+
+          if (staleReviews.length > 0) {
+            console.log(`Found ${staleReviews.length} stale approvals`);
+
+            // Add a comment about stale reviews
+            const staleReviewers = staleReviews.map(r => `@${r.user.login}`).join(', ');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `**Note:** New commits have been pushed since the last approval.\n\n` +
+                    `The following approvals may need to be refreshed: ${staleReviewers}\n\n` +
+                    `Please re-review the latest changes.`
+            });
+
+            core.setOutput('stale-count', staleReviews.length.toString());
+          } else {
+            core.setOutput('stale-count', '0');
+          }
+
+    - name: Process review suggestions
+      id: suggestions
+      if: inputs.implement-suggestions && github.event.action == 'submitted'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+
+          // Get review comments
+          const { data: comments } = await github.rest.pulls.listReviewComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Find comments with suggestions (GitHub's suggestion blocks)
+          const suggestions = comments.filter(c => {
+            return c.body.includes('```suggestion') && !c.body.includes('[implemented]');
+          });
+
+          if (suggestions.length === 0) {
+            console.log('No pending suggestions found');
+            core.setOutput('count', '0');
+            return;
+          }
+
+          console.log(`Found ${suggestions.length} pending suggestions`);
+
+          // Log suggestions for manual implementation
+          // (Automatic implementation would require committing changes)
+          for (const suggestion of suggestions) {
+            console.log(`Suggestion in ${suggestion.path}:${suggestion.line} by @${suggestion.user.login}`);
+          }
+
+          core.setOutput('count', suggestions.length.toString());
+          core.setOutput('suggestions', JSON.stringify(suggestions.map(s => ({
+            path: s.path,
+            line: s.line,
+            author: s.user.login,
+            id: s.id
+          }))));
+
+    - name: Post review summary
+      if: always()
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const status = '${{ steps.review-status.outputs.status }}';
+          const approvals = '${{ steps.review-status.outputs.approvals }}';
+          const minApprovals = ${{ inputs.min-approvals }};
+          const codeownersValid = '${{ steps.codeowners-check.outputs.valid }}';
+          const codeownerApproved = '${{ steps.codeowner-review.outputs.approved }}';
+
+          let summary = '## PR Review Summary\n\n';
+
+          // Status badge
+          const statusEmoji = {
+            'approved': '✅',
+            'changes_requested': '❌',
+            'pending': '⏳'
+          };
+
+          summary += `**Status:** ${statusEmoji[status] || '⏳'} ${status}\n\n`;
+          summary += `**Approvals:** ${approvals}/${minApprovals}\n\n`;
+
+          if (${{ inputs.validate-codeowners }}) {
+            summary += `**CODEOWNERS Coverage:** ${codeownersValid === 'true' ? '✅' : '⚠️'}\n\n`;
+          }
+
+          if (${{ inputs.require-codeowner-review }}) {
+            summary += `**CODEOWNER Approval:** ${codeownerApproved === 'true' ? '✅' : '⏳'}\n\n`;
+          }
+
+          console.log(summary);
+
+          // Write to job summary
+          const fs = require('fs');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);

@@ -1,0 +1,507 @@
+name: PR Validation (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      enforce-conventional-commits:
+        description: Enforce conventional commit format in PR title
+        required: false
+        type: boolean
+        default: true
+      allowed-commit-types:
+        description: Comma-separated list of allowed commit types (e.g., feat,fix,docs)
+        required: false
+        type: string
+        default: feat,fix,docs,style,refactor,perf,test,build,ci,chore,revert
+      min-description-length:
+        description: Minimum required length for PR description (0 to disable)
+        required: false
+        type: number
+        default: 50
+      require-issue-link:
+        description: Require an issue link in PR description or title
+        required: false
+        type: boolean
+        default: false
+      require-checklist-completion:
+        description: Require all checklist items to be checked
+        required: false
+        type: boolean
+        default: false
+      max-files-changed:
+        description: Maximum files changed before warning (0 to disable)
+        required: false
+        type: number
+        default: 50
+      max-lines-changed:
+        description: Maximum lines changed before warning (0 to disable)
+        required: false
+        type: number
+        default: 500
+      check-merge-conflicts:
+        description: Check for merge conflicts
+        required: false
+        type: boolean
+        default: true
+      fail-on-warnings:
+        description: Treat warnings as failures
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      validation-passed:
+        description: Whether all validations passed
+        value: ${{ jobs.validate-pr.outputs.passed }}
+      validation-summary:
+        description: Summary of validation results
+        value: ${{ jobs.validate-pr.outputs.summary }}
+      has-warnings:
+        description: Whether any warnings were generated
+        value: ${{ jobs.validate-pr.outputs.has-warnings }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    outputs:
+      passed: ${{ steps.final-result.outputs.passed }}
+      summary: ${{ steps.final-result.outputs.summary }}
+      has-warnings: ${{ steps.final-result.outputs.has-warnings }}
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get PR details
+      id: pr-details
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          if (!pr) {
+            core.setFailed('This workflow must be triggered by a pull_request event');
+            return;
+          }
+
+          core.setOutput('title', pr.title);
+          core.setOutput('body', pr.body || '');
+          core.setOutput('number', pr.number);
+          core.setOutput('head-sha', pr.head.sha);
+          core.setOutput('base-branch', pr.base.ref);
+          core.setOutput('head-branch', pr.head.ref);
+          core.setOutput('mergeable', pr.mergeable);
+          core.setOutput('mergeable-state', pr.mergeable_state);
+
+          return pr;
+
+    - name: Validate PR title (Conventional Commits)
+      id: title-check
+      if: inputs.enforce-conventional-commits
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const title = '${{ steps.pr-details.outputs.title }}';
+          const allowedTypes = '${{ inputs.allowed-commit-types }}'.split(',').map(t => t.trim());
+
+          // Conventional commit regex: type(optional-scope): description
+          const conventionalRegex = /^([\w-]+)(\(.+\))?!?:\s+.+$/;
+          const match = title.match(conventionalRegex);
+
+          let valid = false;
+          let message = '';
+
+          if (!match) {
+            message = `Title does not follow conventional commit format.\nExpected: \`type(scope): description\` or \`type: description\`\nAllowed types: ${allowedTypes.join(', ')}`;
+          } else {
+            const type = match[1];
+            if (!allowedTypes.includes(type)) {
+              message = `Invalid commit type: \`${type}\`\nAllowed types: ${allowedTypes.join(', ')}`;
+            } else {
+              valid = true;
+              message = `Title follows conventional commit format (type: ${type})`;
+            }
+          }
+
+          core.setOutput('valid', valid.toString());
+          core.setOutput('message', message);
+          console.log(message);
+
+    - name: Validate PR description length
+      id: description-check
+      if: inputs.min-description-length > 0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const body = `${{ steps.pr-details.outputs.body }}`;
+          const minLength = ${{ inputs.min-description-length }};
+
+          // Remove markdown formatting for length check
+          const cleanBody = body
+            .replace(/<!--[\s\S]*?-->/g, '')  // Remove comments
+            .replace(/\s+/g, ' ')              // Normalize whitespace
+            .trim();
+
+          const length = cleanBody.length;
+          const valid = length >= minLength;
+
+          let message = '';
+          if (valid) {
+            message = `Description length (${length} chars) meets minimum requirement (${minLength})`;
+          } else {
+            message = `Description too short: ${length} chars (minimum: ${minLength})`;
+          }
+
+          core.setOutput('valid', valid.toString());
+          core.setOutput('message', message);
+          core.setOutput('length', length.toString());
+          console.log(message);
+
+    - name: Check for issue link
+      id: issue-check
+      if: inputs.require-issue-link
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const title = '${{ steps.pr-details.outputs.title }}';
+          const body = `${{ steps.pr-details.outputs.body }}`;
+          const combined = `${title}\n${body}`;
+
+          // Patterns for issue references
+          const patterns = [
+            /#\d+/,                                    // #123
+            /https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/\d+/,  // Full GitHub URL
+            /(?:closes?|fixes?|resolves?)\s+#\d+/i,   // Closes #123
+            /(?:closes?|fixes?|resolves?)\s+https:\/\/github\.com/i,
+            /JIRA-\d+/i,                              // JIRA tickets
+            /[A-Z]+-\d+/                              // Generic ticket format
+          ];
+
+          const hasIssueLink = patterns.some(pattern => pattern.test(combined));
+
+          let message = '';
+          if (hasIssueLink) {
+            message = 'Issue link found in PR';
+          } else {
+            message = 'No issue link found. Please link to a related issue using #issue-number or keywords like "Closes #123"';
+          }
+
+          core.setOutput('valid', hasIssueLink.toString());
+          core.setOutput('message', message);
+          console.log(message);
+
+    - name: Check checklist completion
+      id: checklist-check
+      if: inputs.require-checklist-completion
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const body = `${{ steps.pr-details.outputs.body }}`;
+
+          // Match checkbox patterns
+          const uncheckedPattern = /^\s*[-*]\s*\[ \]/gm;
+          const checkedPattern = /^\s*[-*]\s*\[x\]/gim;
+
+          const uncheckedMatches = body.match(uncheckedPattern) || [];
+          const checkedMatches = body.match(checkedPattern) || [];
+
+          const uncheckedCount = uncheckedMatches.length;
+          const checkedCount = checkedMatches.length;
+          const totalCount = uncheckedCount + checkedCount;
+
+          let valid = true;
+          let message = '';
+
+          if (totalCount === 0) {
+            message = 'No checklist items found in PR description';
+          } else if (uncheckedCount > 0) {
+            valid = false;
+            message = `${uncheckedCount} of ${totalCount} checklist items are incomplete`;
+          } else {
+            message = `All ${totalCount} checklist items are complete`;
+          }
+
+          core.setOutput('valid', valid.toString());
+          core.setOutput('message', message);
+          core.setOutput('unchecked-count', uncheckedCount.toString());
+          core.setOutput('checked-count', checkedCount.toString());
+          console.log(message);
+
+    - name: Check PR size
+      id: size-check
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const maxFiles = ${{ inputs.max-files-changed }};
+          const maxLines = ${{ inputs.max-lines-changed }};
+
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const filesChanged = pr.changed_files;
+          const linesChanged = pr.additions + pr.deletions;
+
+          let warnings = [];
+          let sizeLabel = 'small';
+
+          if (maxFiles > 0 && filesChanged > maxFiles) {
+            warnings.push(`Files changed (${filesChanged}) exceeds recommended limit (${maxFiles})`);
+          }
+
+          if (maxLines > 0 && linesChanged > maxLines) {
+            warnings.push(`Lines changed (${linesChanged}) exceeds recommended limit (${maxLines})`);
+          }
+
+          // Determine size label
+          if (linesChanged > 1000 || filesChanged > 100) {
+            sizeLabel = 'xlarge';
+          } else if (linesChanged > 500 || filesChanged > 50) {
+            sizeLabel = 'large';
+          } else if (linesChanged > 100 || filesChanged > 10) {
+            sizeLabel = 'medium';
+          }
+
+          const hasWarning = warnings.length > 0;
+          const message = hasWarning
+            ? warnings.join('. ') + '. Consider breaking into smaller PRs.'
+            : `PR size is acceptable: ${filesChanged} files, ${linesChanged} lines changed`;
+
+          core.setOutput('warning', hasWarning.toString());
+          core.setOutput('message', message);
+          core.setOutput('files-changed', filesChanged.toString());
+          core.setOutput('lines-changed', linesChanged.toString());
+          core.setOutput('size-label', sizeLabel);
+          console.log(message);
+
+    - name: Check merge conflicts
+      id: conflict-check
+      if: inputs.check-merge-conflicts
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+
+          // Get fresh PR data for mergeable status
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const mergeable = pr.mergeable;
+          const mergeableState = pr.mergeable_state;
+
+          let hasConflicts = false;
+          let message = '';
+
+          if (mergeable === null) {
+            message = 'Merge status is being calculated. Please wait and re-run if needed.';
+          } else if (mergeable === false || mergeableState === 'dirty') {
+            hasConflicts = true;
+            message = 'This PR has merge conflicts that must be resolved';
+          } else if (mergeableState === 'blocked') {
+            message = 'PR is blocked by branch protection rules';
+          } else if (mergeableState === 'behind') {
+            message = 'PR branch is behind the base branch. Consider updating.';
+          } else {
+            message = 'No merge conflicts detected';
+          }
+
+          core.setOutput('has-conflicts', hasConflicts.toString());
+          core.setOutput('message', message);
+          core.setOutput('mergeable-state', mergeableState);
+          console.log(message);
+
+    - name: Compile validation results
+      id: final-result
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const failOnWarnings = ${{ inputs.fail-on-warnings }};
+
+          const checks = {
+            title: {
+              enabled: "${{ inputs.enforce-conventional-commits }},"
+              valid: '${{ steps.title-check.outputs.valid }}' === 'true',
+              message: '${{ steps.title-check.outputs.message }}'
+            },
+            description: {
+              enabled: ${{ inputs.min-description-length }} > 0,
+              valid: '${{ steps.description-check.outputs.valid }}' === 'true',
+              message: '${{ steps.description-check.outputs.message }}'
+            },
+            issueLink: {
+              enabled: "${{ inputs.require-issue-link }},"
+              valid: '${{ steps.issue-check.outputs.valid }}' === 'true',
+              message: '${{ steps.issue-check.outputs.message }}'
+            },
+            checklist: {
+              enabled: "${{ inputs.require-checklist-completion }},"
+              valid: '${{ steps.checklist-check.outputs.valid }}' === 'true',
+              message: '${{ steps.checklist-check.outputs.message }}'
+            },
+            conflicts: {
+              enabled: "${{ inputs.check-merge-conflicts }},"
+              valid: '${{ steps.conflict-check.outputs.has-conflicts }}' !== 'true',
+              message: '${{ steps.conflict-check.outputs.message }}'
+            }
+          };
+
+          const sizeWarning = '${{ steps.size-check.outputs.warning }}' === 'true';
+          const sizeMessage = '${{ steps.size-check.outputs.message }}';
+
+          let failures = [];
+          let warnings = [];
+          let passes = [];
+
+          for (const [name, check] of Object.entries(checks)) {
+            if (check.enabled) {
+              if (check.valid) {
+                passes.push(`✅ ${name}: ${check.message}`);
+              } else {
+                failures.push(`❌ ${name}: ${check.message}`);
+              }
+            }
+          }
+
+          if (sizeWarning) {
+            warnings.push(`⚠️ size: ${sizeMessage}`);
+          } else {
+            passes.push(`✅ size: ${sizeMessage}`);
+          }
+
+          const hasWarnings = warnings.length > 0;
+          const hasFailures = failures.length > 0;
+          const passed = !hasFailures && (!failOnWarnings || !hasWarnings);
+
+          // Build summary
+          let summary = '## PR Validation Results\n\n';
+
+          if (passed && !hasWarnings) {
+            summary += '✅ **All validations passed!**\n\n';
+          } else if (passed && hasWarnings) {
+            summary += '⚠️ **Validations passed with warnings**\n\n';
+          } else {
+            summary += '❌ **Validation failed**\n\n';
+          }
+
+          if (failures.length > 0) {
+            summary += '### Failures\n' + failures.join('\n') + '\n\n';
+          }
+
+          if (warnings.length > 0) {
+            summary += '### Warnings\n' + warnings.join('\n') + '\n\n';
+          }
+
+          if (passes.length > 0) {
+            summary += '### Passed\n' + passes.join('\n') + '\n';
+          }
+
+          core.setOutput('passed', passed.toString());
+          core.setOutput('summary', summary);
+          core.setOutput('has-warnings', hasWarnings.toString());
+
+          console.log(summary);
+
+          if (!passed) {
+            core.setFailed('PR validation failed. See summary for details.');
+          }
+
+    - name: Add size label to PR
+      if: always()
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const sizeLabel = 'size/${{ steps.size-check.outputs.size-label }}';
+          const sizeLabelPrefix = 'size/';
+
+          try {
+            // Get current labels
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            // Remove existing size labels
+            const existingSizeLabels = currentLabels.filter(l => l.name.startsWith(sizeLabelPrefix));
+            for (const label of existingSizeLabels) {
+              if (label.name !== sizeLabel) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: label.name
+                });
+              }
+            }
+
+            // Add new size label
+            const hasLabel = currentLabels.some(l => l.name === sizeLabel);
+            if (!hasLabel) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: [sizeLabel]
+              });
+            }
+          } catch (error) {
+            console.log(`Could not update size label: ${error.message}`);
+          }
+
+    - name: Post validation summary as comment
+      if: always() && (steps.final-result.outputs.passed == 'false' || steps.final-result.outputs.has-warnings == 'true')
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const summary = `${{ steps.final-result.outputs.summary }}`;
+          const commentMarker = '<!-- pr-validation-summary -->';
+          const body = `${commentMarker}\n${summary}\n\n*Last checked: ${new Date().toISOString()}*`;
+
+          try {
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            const existingComment = comments.find(c => c.body.includes(commentMarker));
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: body
+              });
+            }
+          } catch (error) {
+            console.log(`Could not post comment: ${error.message}`);
+          }

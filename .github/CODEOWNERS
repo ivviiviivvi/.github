@@ -1,0 +1,75 @@
+# CODEOWNERS - Defines individuals or teams responsible for code in this repository
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# These owners will be automatically requested for review when someone opens a pull request
+# that modifies code that they own. Order is important; the last matching pattern takes precedence.
+
+##############################
+# Default Owners
+##############################
+
+# Default owners for everything in the repo
+* @{{ORG_NAME}}/leadership
+
+##############################
+# Engineering
+##############################
+
+# Engineering owns code
+/src/ @{{ORG_NAME}}/engineering
+*.py @{{ORG_NAME}}/engineering
+*.js @{{ORG_NAME}}/engineering
+*.ts @{{ORG_NAME}}/engineering
+*.tsx @{{ORG_NAME}}/engineering
+*.jsx @{{ORG_NAME}}/engineering
+*.java @{{ORG_NAME}}/engineering
+*.go @{{ORG_NAME}}/engineering
+*.rs @{{ORG_NAME}}/engineering
+
+##############################
+# DevOps and Infrastructure
+##############################
+
+# DevOps owns infrastructure
+/.github/workflows/ @{{ORG_NAME}}/devops
+/infrastructure/ @{{ORG_NAME}}/devops
+*.yml @{{ORG_NAME}}/devops
+*.yaml @{{ORG_NAME}}/devops
+Dockerfile @{{ORG_NAME}}/devops
+docker-compose.yml @{{ORG_NAME}}/devops
+.dockerignore @{{ORG_NAME}}/devops
+
+##############################
+# Security
+##############################
+
+# Security team for security files
+/SECURITY.md @{{ORG_NAME}}/security
+/.github/SECURITY.md @{{ORG_NAME}}/security
+/.github/CLAUDE_SECURITY.md @{{ORG_NAME}}/security
+/.github/workflows/codeql*.yml @{{ORG_NAME}}/security
+/.github/workflows/security-*.yml @{{ORG_NAME}}/security
+/.github/workflows/scan-*.yml @{{ORG_NAME}}/security
+
+##############################
+# Organization Profile
+##############################
+
+# Organization profile README
+/profile/ @{{ORG_NAME}}/leadership
+
+##############################
+# Workflow Templates
+##############################
+
+# Starter workflow templates for org repos
+/.github/workflow-templates/ @{{ORG_NAME}}/devops
+
+##############################
+# Organization Documentation
+##############################
+
+# Documentation
+*.md @{{ORG_NAME}}/leadership @{{ORG_NAME}}/engineering
+/docs/ @{{ORG_NAME}}/engineering
+/README.md @{{ORG_NAME}}/leadership

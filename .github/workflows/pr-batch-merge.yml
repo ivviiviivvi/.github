@@ -1,0 +1,459 @@
+name: Batch Merge Related PRs
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      batch_label:
+        description: Batch label to merge (e.g., batch:api-update)
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.batch_label || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  batch-merge:
+    name: Batch Merge PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request &&
+       contains(github.event.comment.body, '/merge-batch'))
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Extract Batch Label
+      id: batch_label
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_BATCH_LABEL: ${{ github.event.inputs.batch_label }}
+        COMMENT_BODY: ${{ github.event.comment.body }}
+      run: |
+        if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+          BATCH_LABEL="$INPUT_BATCH_LABEL"
+        else
+          # Extract from comment: /merge-batch api-update
+          BATCH_NAME=$(echo "$COMMENT_BODY" | grep -oP '/merge-batch\s+\K\S+')
+          BATCH_LABEL="batch:$BATCH_NAME"
+        fi
+
+        echo "label=$BATCH_LABEL" >> $GITHUB_OUTPUT
+        echo "Batch label: $BATCH_LABEL"
+
+    - name: Get PRs in Batch
+      id: batch_prs
+      run: |
+        BATCH_LABEL="${{ steps.batch_label.outputs.label }}"
+
+        echo "🔍 Finding PRs with label: $BATCH_LABEL"
+
+        # Get all open PRs with the batch label
+        gh pr list --label "$BATCH_LABEL" --json number,title,headRefName,baseRefName,mergeable,statusCheckRollup \
+          --limit 100 > batch_prs.json
+
+        PR_COUNT=$(jq length batch_prs.json)
+
+        echo "Found $PR_COUNT PRs in batch"
+        cat batch_prs.json | jq -r '.[] | "- PR #\(.number): \(.title)"'
+
+        if [ "$PR_COUNT" -eq 0 ]; then
+          echo "❌ No PRs found with label: $BATCH_LABEL"
+          exit 1
+        fi
+
+        echo "count=$PR_COUNT" >> $GITHUB_OUTPUT
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Validate All PRs Ready
+      id: validate
+      run: |
+        ALL_READY="true"
+        BLOCKING_ISSUES=""
+
+        jq -c '.[]' batch_prs.json | while read -r pr; do
+          PR_NUMBER=$(echo "$pr" | jq -r '.number')
+          TITLE=$(echo "$pr" | jq -r '.title')
+          MERGEABLE=$(echo "$pr" | jq -r '.mergeable')
+
+          # Check if all status checks passed
+          ALL_CHECKS_PASSED=$(echo "$pr" | jq -r '
+            .statusCheckRollup // [] |
+            map(select(.conclusion != null)) |
+            all(.conclusion == "SUCCESS" or .conclusion == "SKIPPED" or .conclusion == "NEUTRAL")
+          ')
+
+          echo "Validating PR #$PR_NUMBER: $TITLE"
+          echo "  Mergeable: $MERGEABLE"
+          echo "  All checks passed: $ALL_CHECKS_PASSED"
+
+          if [ "$MERGEABLE" != "MERGEABLE" ]; then
+            ALL_READY="false"
+            BLOCKING_ISSUES="${BLOCKING_ISSUES}\n- PR #$PR_NUMBER: Not mergeable (conflicts or checks pending)"
+          fi
+
+          if [ "$ALL_CHECKS_PASSED" != "true" ]; then
+            ALL_READY="false"
+            BLOCKING_ISSUES="${BLOCKING_ISSUES}\n- PR #$PR_NUMBER: CI checks not passing"
+          fi
+        done
+
+        echo "all_ready=$ALL_READY" >> $GITHUB_OUTPUT
+        echo "blocking_issues<<EOF" >> $GITHUB_OUTPUT
+        echo -e "$BLOCKING_ISSUES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Comment on Blocking Issues
+      if: steps.validate.outputs.all_ready == 'false'
+      run: |
+        BATCH_LABEL="${{ steps.batch_label.outputs.label }}"
+        BLOCKING="${{ steps.validate.outputs.blocking_issues }}"
+
+        # Comment on all PRs in batch
+        jq -r '.[].number' batch_prs.json | while read -r pr_num; do
+          cat > /tmp/pr_comment.md <<- 'EOF_BATCH'
+          ⏸️ **Batch Merge Paused**
+
+          Batch label: `$BATCH_LABEL`
+
+          Not all PRs in this batch are ready to merge:
+
+          $BLOCKING
+
+          **To proceed:**
+          - Fix blocking issues in each PR
+          - Ensure all CI checks pass
+          - Resolve any merge conflicts
+          - Re-trigger batch merge with: `/merge-batch $(echo $BATCH_LABEL | sed 's/batch://')`
+
+          See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details.
+          EOF_BATCH
+          gh pr comment $pr_num --body-file /tmp/pr_comment.md
+        done
+
+        exit 1
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Determine Merge Order
+      id: merge_order
+      if: steps.validate.outputs.all_ready == 'true'
+      run: |
+        echo "🔀 Determining optimal merge order based on file dependencies..."
+
+        # Build dependency graph based on file changes overlap
+        # PRs that modify the same files should be merged in creation order to avoid conflicts
+
+        # Collect file changes for each PR
+        declare -A FILE_CHANGES
+        declare -A PR_DATES
+
+        for PR_NUM in $(jq -r '.[].number' batch_prs.json); do
+          # Get files changed by this PR
+          FILES=$(gh pr view "$PR_NUM" --json files -q '.files[].path' 2>/dev/null | sort | tr '\n' '|')
+          FILE_CHANGES[$PR_NUM]="$FILES"
+
+          # Get creation date for ordering
+          CREATED=$(jq -r --arg n "$PR_NUM" '.[] | select(.number == ($n|tonumber)) | .createdAt' batch_prs.json)
+          PR_DATES[$PR_NUM]="$CREATED"
+        done
+
+        # Build dependency list: if PR B modifies files that PR A also modifies,
+        # and A was created before B, then B depends on A (A should merge first)
+        declare -A DEPENDENCIES
+
+        for PR_A in $(jq -r '.[].number' batch_prs.json); do
+          for PR_B in $(jq -r '.[].number' batch_prs.json); do
+            if [ "$PR_A" != "$PR_B" ]; then
+              # Check for file overlap
+              FILES_A="${FILE_CHANGES[$PR_A]}"
+              FILES_B="${FILE_CHANGES[$PR_B]}"
+
+              # Find common files
+              OVERLAP=""
+              IFS='|' read -ra A_ARRAY <<< "$FILES_A"
+              for file in "${A_ARRAY[@]}"; do
+                if [ -n "$file" ] && echo "$FILES_B" | grep -q "$file"; then
+                  OVERLAP="yes"
+                  break
+                fi
+              done
+
+              if [ -n "$OVERLAP" ]; then
+                # PRs have overlapping files - older PR should merge first
+                DATE_A="${PR_DATES[$PR_A]}"
+                DATE_B="${PR_DATES[$PR_B]}"
+
+                if [[ "$DATE_A" < "$DATE_B" ]]; then
+                  # A is older, B depends on A
+                  DEPENDENCIES[$PR_B]+=" $PR_A"
+                  echo "  PR #$PR_B depends on PR #$PR_A (overlapping files)"
+                fi
+              fi
+            fi
+          done
+        done
+
+        # Topological sort for merge order (dependencies first)
+        # Build input for tsort: "dependency dependent" pairs
+        TSORT_INPUT=""
+        for pr in "${!DEPENDENCIES[@]}"; do
+          for dep in ${DEPENDENCIES[$pr]}; do
+            TSORT_INPUT+="$dep $pr"$'\n'
+          done
+        done
+
+        # Add all PRs that have no dependencies (may not appear in tsort input)
+        ALL_PRS=$(jq -r '.[].number' batch_prs.json | tr '\n' ' ')
+
+        if [ -n "$TSORT_INPUT" ]; then
+          # Use tsort to determine order, fallback to creation order on cycle
+          SORTED_ORDER=$(echo "$TSORT_INPUT" | tsort 2>/dev/null || jq -r 'sort_by(.createdAt) | .[].number' batch_prs.json)
+
+          # tsort only outputs PRs that appear in dependencies, add remaining in creation order
+          MERGE_ORDER=""
+          for pr in $SORTED_ORDER; do
+            MERGE_ORDER+="$pr "
+          done
+
+          # Add any PRs not in sorted output
+          for pr in $ALL_PRS; do
+            if ! echo "$MERGE_ORDER" | grep -qw "$pr"; then
+              MERGE_ORDER+="$pr "
+            fi
+          done
+        else
+          # No dependencies found, use creation order
+          echo "  No file overlaps detected, using creation order"
+          MERGE_ORDER=$(jq -r 'sort_by(.createdAt) | .[].number' batch_prs.json | tr '\n' ' ')
+        fi
+
+        echo "Merge order: $MERGE_ORDER"
+        echo "order=$MERGE_ORDER" >> $GITHUB_OUTPUT
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Execute Batch Merge
+      if: steps.validate.outputs.all_ready == 'true'
+      run: |
+        BATCH_LABEL="${{ steps.batch_label.outputs.label }}"
+        MERGE_ORDER="${{ steps.merge_order.outputs.order }}"
+        BASE_BRANCH=$(jq -r '.[0].baseRefName' batch_prs.json)
+
+        echo "🚀 Starting batch merge of ${{ steps.batch_prs.outputs.count }} PRs"
+        echo "Base branch: $BASE_BRANCH"
+
+        # Ensure we're up to date with base branch
+        git fetch origin $BASE_BRANCH
+        git checkout $BASE_BRANCH
+        git pull origin $BASE_BRANCH
+
+        MERGED_COUNT=0
+        FAILED_PRS=""
+
+        for PR_NUM in $MERGE_ORDER; do
+          echo "---"
+          echo "Merging PR #$PR_NUM..."
+
+          # Get PR details
+          PR_DATA=$(gh pr view $PR_NUM --json title,headRefName)
+          PR_TITLE=$(echo "$PR_DATA" | jq -r '.title')
+          PR_BRANCH=$(echo "$PR_DATA" | jq -r '.headRefName')
+
+          # Fetch the PR branch
+          git fetch origin $PR_BRANCH
+
+          # Try to merge
+          if gh pr merge $PR_NUM --squash --delete-branch --auto; then
+            echo "✅ Successfully merged PR #$PR_NUM"
+            MERGED_COUNT=$((MERGED_COUNT + 1))
+
+            # Comment on successful merge
+            cat > /tmp/merge_success.md <<- 'EOF_SUCCESS'
+            ✅ **Batch Merged**
+
+            This PR was successfully merged as part of batch: `$BATCH_LABEL`
+
+            Merge order: $MERGE_ORDER
+            PRs merged in this batch: ${{ steps.batch_prs.outputs.count }}
+
+            _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+            EOF_SUCCESS
+            gh pr comment $PR_NUM --body-file /tmp/merge_success.md
+
+          else
+            echo "❌ Failed to merge PR #$PR_NUM"
+            FAILED_PRS="${FAILED_PRS}\n- PR #$PR_NUM: $PR_TITLE"
+
+            # Comment on failure
+            cat > /tmp/merge_failure.md <<- 'EOF_FAILURE'
+            ❌ **Batch Merge Failed**
+
+            This PR could not be merged as part of batch: `$BATCH_LABEL`
+
+            **Possible reasons:**
+            - Merge conflict after earlier PRs in batch were merged
+            - CI checks failed after rebase
+            - Branch protection rules
+
+            **Next steps:**
+            - Rebase on `$BASE_BRANCH`
+            - Resolve conflicts
+            - Ensure CI passes
+            - Try merging individually or as part of new batch
+
+            _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+            EOF_FAILURE
+            gh pr comment $PR_NUM --body-file /tmp/merge_failure.md
+          fi
+        done
+
+        echo "📊 Batch Merge Summary"
+        echo "====================="
+        echo "Total PRs: ${{ steps.batch_prs.outputs.count }}"
+        echo "Successfully merged: $MERGED_COUNT"
+        echo "Failed: $((${{ steps.batch_prs.outputs.count }} - $MERGED_COUNT))"
+
+        if [ -n "$FAILED_PRS" ]; then
+          echo ""
+          echo "Failed PRs:"
+          echo -e "$FAILED_PRS"
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Batch Summary Issue
+      if: steps.validate.outputs.all_ready == 'true'
+      run: |
+        BATCH_LABEL="${{ steps.batch_label.outputs.label }}"
+        BATCH_NAME=$(echo "$BATCH_LABEL" | sed 's/batch://')
+
+        # Get details of all PRs in batch
+        PR_LIST=$(jq -r '.[] | "- #\(.number): \(.title)"' batch_prs.json)
+
+        cat > /tmp/batch_summary.md <<- 'EOF_SUMMARY'
+        # Batch Merge Summary: $BATCH_NAME
+
+        **Batch Label:** `$BATCH_LABEL`
+        **Date:** $(date +'%Y-%m-%d %H:%M UTC')
+        **Total PRs:** ${{ steps.batch_prs.outputs.count }}
+
+        ## PRs in Batch
+
+        $PR_LIST
+
+        ## Outcome
+
+        All PRs in this batch have been processed. Check individual PRs for merge status.
+
+        ## Details
+
+        - Merge order: ${{ steps.merge_order.outputs.order }}
+        - Base branch: $(jq -r '.[0].baseRefName' batch_prs.json)
+        - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+        ---
+        _Automated by [pr-batch-merge.yml](../.github/workflows/pr-batch-merge.yml)_
+        EOF_SUMMARY
+
+        gh issue create \
+          --title "Batch Merge Summary: $BATCH_NAME ($(date +'%Y-%m-%d'))" \
+          --body-file /tmp/batch_summary.md \
+          --label "batch-merge,automation"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job to monitor batch readiness (runs on schedule)
+  check-batch-readiness:
+    name: Check Batch Readiness
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+
+    steps:
+    - name: Find Batch Labels
+      run: |
+        echo "🔍 Scanning for batch labels..."
+
+        # Get all unique batch:* labels from open PRs
+        BATCH_LABELS=$(gh pr list --json labels --limit 100 | \
+          jq -r '.[].labels[].name | select(startswith("batch:"))' | \
+          sort -u)
+
+        if [ -z "$BATCH_LABELS" ]; then
+          echo "No batch labels found"
+          exit 0
+        fi
+
+        echo "Found batch labels:"
+        echo "$BATCH_LABELS"
+
+        # Check each batch
+        echo "$BATCH_LABELS" | while read -r batch_label; do
+          echo "---"
+          echo "Checking batch: $batch_label"
+
+          # Get PRs in this batch
+          PR_DATA=$(gh pr list --label "$batch_label" --json number,statusCheckRollup,mergeable)
+          PR_COUNT=$(echo "$PR_DATA" | jq length)
+
+          if [ "$PR_COUNT" -eq 0 ]; then
+            continue
+          fi
+
+          # Check if all are ready
+          ALL_READY=$(echo "$PR_DATA" | jq '
+            all(
+              .mergeable == "MERGEABLE" and
+              (.statusCheckRollup // [] |
+               map(select(.conclusion != null)) |
+               all(.conclusion == "SUCCESS" or .conclusion == "SKIPPED" or .conclusion == "NEUTRAL"))
+            )
+          ')
+
+          echo "PRs in batch: $PR_COUNT"
+          echo "All ready: $ALL_READY"
+
+          if [ "$ALL_READY" == "true" ]; then
+            echo "✅ Batch $batch_label is ready for merge!"
+
+            # Comment on all PRs in batch
+            echo "$PR_DATA" | jq -r '.[].number' | while read -r pr_num; do
+              cat > /tmp/batch_ready.md <<- 'EOF_READY'
+              ✅ **Batch Ready for Merge**
+
+              All PRs in batch `$batch_label` are ready to merge!
+
+              **To merge this batch:**
+              ```
+              /merge-batch $(echo $batch_label | sed 's/batch://')
+              ```
+
+              Or manually trigger the workflow:
+              Actions → Batch Merge Related PRs → Run workflow → Enter: `$batch_label`
+
+              See [AI_RAPID_WORKFLOW.md](../blob/main/AI_RAPID_WORKFLOW.md#batch-merge-workflow) for details.
+              EOF_READY
+              gh pr comment $pr_num --body-file /tmp/batch_ready.md
+            done
+          else
+            echo "⏳ Batch not yet ready"
+          fi
+        done
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

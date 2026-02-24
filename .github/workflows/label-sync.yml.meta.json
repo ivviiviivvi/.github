@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Label Sync",
+  "identifier": "urn:uuid:f0bfce93-8b61-5506-9c62-5904cfe647d2",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by push, workflow_call, workflow_dispatch, schedule, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.label.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "label"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "workflow_call", "workflow_dispatch", "schedule"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "push-triggered", "scheduled"]
+}

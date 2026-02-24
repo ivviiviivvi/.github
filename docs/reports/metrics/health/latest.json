@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-01-30T17:40:46.793761",
+  "overall_health": "good",
+  "total_workflows": 130,
+  "healthy_workflows": 113,
+  "warnings": [
+    "claude-code-review.yml: Missing explicit permissions",
+    "claude.yml: Missing explicit permissions",
+    "codeql-analysis.yml: Missing explicit permissions",
+    "commit-tracking.yml: Missing explicit permissions",
+    "gemini-dispatch.yml: Missing explicit permissions",
+    "gemini-invoke.yml: Missing explicit permissions",
+    "gemini-review.yml: Missing explicit permissions",
+    "gemini-scheduled-triage.yml: Missing explicit permissions",
+    "gemini-triage.yml: Missing explicit permissions",
+    "generate-walkthrough.yml: Missing explicit permissions",
+    "jules.yml: Missing explicit permissions",
+    "org-walkthrough-generator.yml: Missing explicit permissions",
+    "reconcile-deployments.yml: Missing explicit permissions",
+    "sentry-release.yml: Missing timeout configuration",
+    "token-health-check.yml: Missing explicit permissions",
+    "validate-quality.yml: Missing explicit permissions",
+    "weekly-commit-report.yml: Missing explicit permissions"
+  ],
+  "errors": [],
+  "recommendations": [
+    "health-check.yml: Could benefit from pip caching",
+    "link-checker.yml: Could benefit from pip caching"
+  ],
+  "metrics": {
+    "security": {
+      "score": 8.400000000000006,
+      "issues": []
+    },
+    "performance": {
+      "score": 9,
+      "issues": []
+    },
+    "reliability": {
+      "score": 9,
+      "issues": []
+    },
+    "maintainability": {
+      "score": 9,
+      "issues": []
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "\ud83d\udd00 Gemini Triage",
+  "identifier": "urn:uuid:40a1ee67-a9e6-59c0-a4cf-fb3407f07c62",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by workflow_call, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "interface.ai.gemini.yml",
+    "layer": "interface",
+    "role": "ai",
+    "domain": "gemini"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["ai", "interface"]
+}

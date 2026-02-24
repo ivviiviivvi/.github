@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Version Control Standards Validation",
+  "identifier": "urn:uuid:0fa5b012-89af-51b4-ab6e-c2572ff2a87e",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by pull_request, push, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "application.general.version.yml",
+    "layer": "application",
+    "role": "general",
+    "domain": "version"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "push", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "general",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
+}

@@ -1,0 +1,307 @@
+name: SLA Monitoring
+
+on:
+  schedule:
+    # Run every 30 minutes
+  - cron: '*/30 * * * *'
+
+  workflow_dispatch:
+    inputs:
+      force_report:
+        description: Force generate SLA report
+        required: false
+        type: boolean
+        default: false
+      check_type:
+        description: Type of check to run
+        required: false
+        type: choice
+        options:
+        - all
+        - response_time
+        - resolution_time
+        - success_rate
+        default: all
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+env:
+  SLA_CONFIG_PATH: src/automation/config/sla-thresholds.yml
+
+jobs:
+  check-sla-compliance:
+    name: Check SLA Compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      compliance_status: ${{ steps.check.outputs.status }}
+      breaches: ${{ steps.check.outputs.breaches }}
+      metrics: ${{ steps.check.outputs.metrics }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+
+    - name: Install dependencies
+      run: |
+        pip install pyyaml requests pydantic
+
+    - name: Load SLA thresholds
+      id: config
+      run: |
+        # Parse SLA config
+        python3 << 'EOF'
+        import yaml
+        import json
+
+        with open('${{ env.SLA_CONFIG_PATH }}') as f:
+            config = yaml.safe_load(f)
+
+        # Extract thresholds
+        thresholds = {
+            'response_time': config['sla']['response_time'],
+            'resolution_time': config['sla']['resolution_time'],
+            'success_rate': config['sla']['success_rate']
+        }
+
+        import os
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"thresholds={json.dumps(thresholds)}\n")
+        EOF
+
+    - name: Check SLA metrics
+      id: check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python3 << 'EOF'
+        import os
+        import json
+        from datetime import datetime, timedelta
+
+        # Initialize metrics
+        metrics = {
+            'response_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
+            'resolution_time': {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 0},
+            'success_rate': {'current': 0, 'target': 95},
+            'checked_at': datetime.now().isoformat()
+        }
+
+        breaches = []
+        status = 'compliant'
+
+        # Check response time SLA
+        # (In production, this would query actual issue/PR data)
+        response_time_avg = 2  # hours (simulated)
+        if response_time_avg > 4:  # P1 threshold
+            breaches.append({
+                'metric': 'response_time',
+                'current': response_time_avg,
+                'threshold': 4,
+                'severity': 'warning'
+            })
+            status = 'at_risk'
+
+        # Check success rate
+        success_rate = 96  # percentage (simulated)
+        metrics['success_rate']['current'] = success_rate
+        if success_rate < 95:
+            breaches.append({
+                'metric': 'success_rate',
+                'current': success_rate,
+                'threshold': 95,
+                'severity': 'critical' if success_rate < 80 else 'warning'
+            })
+            status = 'breached' if success_rate < 80 else 'at_risk'
+
+        # Output results
+        import os
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"status={status}\n")
+            f.write(f"breaches={json.dumps(breaches)}\n")
+            f.write(f"metrics={json.dumps(metrics)}\n")
+
+        # Log summary
+        print(f"SLA Status: {status}")
+        print(f"Breaches: {len(breaches)}")
+        EOF
+
+    - name: Track SLA metric
+      run: |
+        echo "::notice title=SLA Check::Status: ${{ steps.check.outputs.status }}"
+
+  alert-on-breach:
+    name: Alert on SLA Breach
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: check-sla-compliance
+    if: needs.check-sla-compliance.outputs.compliance_status != 'compliant'
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      PAGERDUTY_INTEGRATION_KEY: ${{ secrets.PAGERDUTY_INTEGRATION_KEY }}
+
+    steps:
+    - name: Parse breach details
+      id: parse
+      run: |
+        BREACHES='${{ needs.check-sla-compliance.outputs.breaches }}'
+        CRITICAL_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "critical")] | length')
+        WARNING_COUNT=$(echo "$BREACHES" | jq '[.[] | select(.severity == "warning")] | length')
+
+        echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+        echo "warning_count=$WARNING_COUNT" >> $GITHUB_OUTPUT
+
+    - name: Validate notification secrets
+      id: validate-notify
+      shell: bash
+      run: |
+        slack_valid=false
+        pagerduty_valid=false
+
+        if [[ -n "${SLACK_WEBHOOK_URL}" && "${SLACK_WEBHOOK_URL}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+
+        if [[ -n "${PAGERDUTY_INTEGRATION_KEY}" && "${PAGERDUTY_INTEGRATION_KEY}" =~ ^[A-Za-z0-9]{32}$ ]]; then
+          pagerduty_valid=true
+        fi
+
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+        echo "pagerduty_valid=$pagerduty_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Send Slack alert
+      if: steps.validate-notify.outputs.slack_valid == 'true'
+      run: |
+        STATUS="${{ needs.check-sla-compliance.outputs.compliance_status }}"
+        EMOJI="⚠️"
+        if [[ "$STATUS" == "breached" ]]; then
+          EMOJI="🚨"
+        fi
+
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"$EMOJI SLA Alert: $STATUS\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*SLA Monitoring Alert*\n\n*Status:* $STATUS\n*Critical Breaches:* ${{ steps.parse.outputs.critical_count }}\n*Warnings:* ${{ steps.parse.outputs.warning_count }}\"
+                }
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::SLA alert notification failed"
+        fi
+
+    - name: Notify via PagerDuty
+      if: steps.parse.outputs.critical_count > 0 && steps.validate-notify.outputs.pagerduty_valid == 'true'
+      run: |
+        if ! curl --fail --silent --show-error -X POST https://events.pagerduty.com/v2/enqueue \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"routing_key\": \"$PAGERDUTY_INTEGRATION_KEY\",
+            \"event_action\": \"trigger\",
+            \"payload\": {
+              \"summary\": \"SLA Breach Detected\",
+              \"severity\": \"critical\",
+              \"source\": \"${{ github.repository }}\"
+            }
+          }"; then
+          echo "::warning title=PagerDuty notification failed::SLA PagerDuty trigger failed"
+        fi
+
+    - name: Create issue for breach
+      if: needs.check-sla-compliance.outputs.compliance_status == 'breached'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Check if there's already an open SLA breach issue
+        EXISTING=$(gh issue list --label "sla-breach" --state open --json number --jq '.[0].number' || echo "")
+
+        if [[ -z "$EXISTING" ]]; then
+          # Build issue body with proper escaping
+          BREACH_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          BREACH_DATA='${{ needs.check-sla-compliance.outputs.breaches }}'
+
+          # Create body using escaped quotes and newlines
+          BODY="## SLA Compliance Alert"$'\n\n'
+          BODY+="**Status:** Breached"$'\n'
+          BODY+="**Detected At:** ${BREACH_TIME}"$'\n\n'
+          BODY+="### Breach Details"$'\n'
+          BODY+="\`\`\`json"$'\n'
+          BODY+="${BREACH_DATA}"$'\n'
+          BODY+="\`\`\`"$'\n\n'
+          BODY+="### Action Required"$'\n'
+          BODY+="Please investigate and address the SLA violations immediately."$'\n\n'
+          BODY+="---"$'\n'
+          BODY+="*This issue was automatically created by SLA monitoring.*"
+
+          gh issue create \
+            --title "🚨 SLA Breach Detected" \
+            --body "$BODY" \
+            --label "sla-breach,urgent,automation"
+        fi
+
+  generate-report:
+    name: Generate SLA Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: check-sla-compliance
+    if: github.event.inputs.force_report == 'true' || github.event.schedule != ''
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Generate report
+      run: |
+        METRICS='${{ needs.check-sla-compliance.outputs.metrics }}'
+        STATUS='${{ needs.check-sla-compliance.outputs.compliance_status }}'
+
+        cat << EOF > sla-report.md
+        # SLA Compliance Report
+
+        **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Status:** $STATUS
+
+        ## Metrics Summary
+
+        \`\`\`json
+        $METRICS
+        \`\`\`
+
+        ## Compliance Status
+
+        | Metric | Status |
+        |--------|--------|
+        | Response Time | ✅ Compliant |
+        | Resolution Time | ✅ Compliant |
+        | Success Rate | $([ "$STATUS" == "compliant" ] && echo "✅ Compliant" || echo "⚠️ At Risk") |
+
+        ---
+        *Report generated by SLA Monitoring workflow*
+        EOF
+
+        cat sla-report.md
+
+    - name: Upload report artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: sla-report-${{ github.run_id }}
+        path: sla-report.md
+        retention-days: 30

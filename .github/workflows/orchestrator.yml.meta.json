@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "AI Task Orchestrator",
+  "identifier": "urn:uuid:ba5a7128-ee04-50a3-aecd-e8886138cb20",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.automation.orchestrator.yml",
+    "layer": "application",
+    "role": "automation",
+    "domain": "orchestrator"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["application", "automation", "manual", "scheduled"]
+}

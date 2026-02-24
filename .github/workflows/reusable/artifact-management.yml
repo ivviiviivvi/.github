@@ -1,0 +1,106 @@
+name: Artifact Management (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      operation:
+        description: Operation to perform (upload, download)
+        required: true
+        type: string
+      artifact-name:
+        description: Name of the artifact
+        required: true
+        type: string
+      artifact-path:
+        description: Path to upload or download location
+        required: true
+        type: string
+      retention-days:
+        description: Days to retain artifact
+        required: false
+        type: number
+        default: 30
+      if-no-files-found:
+        description: What to do if no files found (error, warn, ignore)
+        required: false
+        type: string
+        default: warn
+      compression-level:
+        description: Compression level (0-9, where 0 is no compression)
+        required: false
+        type: number
+        default: 6
+    outputs:
+      artifact-id:
+        description: ID of the artifact
+        value: ${{ jobs.artifact-ops.outputs.artifact-id }}
+      download-path:
+        description: Path where artifact was downloaded
+        value: ${{ jobs.artifact-ops.outputs.download-path }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  artifact-ops:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      download-path: ${{ steps.download.outputs.download-path }}
+
+    steps:
+    - name: Checkout code (for upload operations)
+      if: inputs.operation == 'upload'
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Upload artifact
+      if: inputs.operation == 'upload'
+      id: upload
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-path }}
+        retention-days: ${{ inputs.retention-days }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        compression-level: ${{ inputs.compression-level }}
+
+    - name: Download artifact
+      if: inputs.operation == 'download'
+      id: download
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # ratchet:actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-path }}
+
+    - name: List downloaded files
+      if: inputs.operation == 'download'
+      shell: bash
+      env:
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+      run: |
+        echo "Downloaded artifact to: $ARTIFACT_PATH"
+        ls -lah "$ARTIFACT_PATH" || echo "No files found"
+        echo "download-path=$ARTIFACT_PATH" >> $GITHUB_OUTPUT
+
+    - name: Verify uploaded files
+      if: inputs.operation == 'upload'
+      shell: bash
+      env:
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+        IF_NO_FILES_FOUND: ${{ inputs.if-no-files-found }}
+      run: |
+        echo "Uploaded files from: $ARTIFACT_PATH"
+        if [ -f "$ARTIFACT_PATH" ]; then
+          ls -lh "$ARTIFACT_PATH"
+        elif [ -d "$ARTIFACT_PATH" ]; then
+          ls -lah "$ARTIFACT_PATH"
+        else
+          echo "Path not found: $ARTIFACT_PATH"
+          if [ "$IF_NO_FILES_FOUND" = "error" ]; then
+            exit 1
+          fi
+        fi

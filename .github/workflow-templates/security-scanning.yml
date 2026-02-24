@@ -1,0 +1,26 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+  schedule:
+  - cron: 0 6 * * 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security:
+    name: Security Scan
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/security-scanning.yml@main'
+    with:
+      scan-type: all
+      severity-threshold: MEDIUM
+      fail-on-severity: HIGH

@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Auto Merge Pull Request",
+  "identifier": "urn:uuid:9e49f211-44e6-53ec-b521-eb9cae0bcbfe",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by pull_request, pull_request_review, check_suite, status, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.automation.auto.yml",
+    "layer": "logic",
+    "role": "automation",
+    "domain": "auto"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request",
+    "pull_request_review",
+    "check_suite",
+    "status",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["automation", "logic", "manual", "pr-triggered"]
+}

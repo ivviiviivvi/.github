@@ -1,0 +1,158 @@
+# A/B Test Configuration for Stale Grace Period Optimization
+# Week 7 Enhancement - Testing 7-day vs 10-day grace periods
+
+test:
+  name: Stale Grace Period Optimization
+  hypothesis: 10-day grace period reduces false positives without increasing stale accumulation
+  startDate: '2026-03-01'
+  minimumDuration: 7 # days
+  owner: '@workflow-team'
+
+# Experiment groups
+groups:
+  control:
+    name: 7-Day Grace Period
+    description: Current implementation - mark stale after 7 days
+    gracePeriod: 7
+    closeAfter: 7
+    percentage: 50
+
+  experiment:
+    name: 10-Day Grace Period
+    description: Proposed change - mark stale after 10 days
+    gracePeriod: 10
+    closeAfter: 7
+    percentage: 50
+
+# Split strategy
+split:
+  method: hash   # Hash repository name for consistent assignment
+  seed: 42
+
+# Repositories to include in test
+repositories:
+  include:
+  - all     # Include all active repositories
+  exclude:
+  - .github     # Exclude organizational repos
+  - security/*     # Exclude security-critical repos
+  minimumActivity:
+    issues: 5 # At least 5 issues in last 30 days
+    pullRequests: 2 # At least 2 PRs in last 30 days
+
+# Metrics to track
+metrics:
+  primary:
+  - name: false_positive_rate
+    description: Percentage of stale items reopened within 7 days
+    target: <5%
+    criticalThreshold: 20%
+
+  secondary:
+  - name: stale_items_closed
+    description: Number of items closed by stale workflow
+    target: '>= control baseline'
+
+  - name: contributor_satisfaction
+    description: Survey rating from contributors
+    target: '>= 7.5/10'
+
+  - name: reopen_rate
+    description: Percentage of closed stale items reopened
+    target: <10%
+
+  - name: stale_accumulation
+    description: Number of items marked stale but not closed
+    target: <= control + 20%
+
+# Success criteria
+successCriteria:
+- metric: false_positive_rate
+  improvement: '>= 20%'   # At least 20% reduction
+
+- metric: stale_accumulation
+  constraint: <= control + 10%     # No more than 10% increase
+
+- metric: contributor_satisfaction
+  threshold: '>= 8.0/10'
+
+# Statistical significance
+statistics:
+  confidenceLevel: 0.95 # 95% confidence
+  minimumSampleSize: 100 # At least 100 stale events per group
+
+# Rollback triggers
+rollback:
+  automatic:
+  - condition: false_positive_rate > 20%
+    action: Stop test and revert to control
+
+  - condition: stale_accumulation > control + 50%
+    action: Stop test and investigate
+
+  - condition: critical_issue_stale
+    action: Immediate rollback
+
+  manual:
+  - trigger: Team consensus
+  - trigger: Stakeholder request
+
+# Monitoring
+monitoring:
+  frequency: daily
+  dashboard: https://github.com/{{ORG_NAME}}/.github/actions
+  alerts:
+  - channel: '#workflow-alerts'
+    priority: P1
+    conditions:
+    - false_positive_rate > 15%
+    - stale_accumulation > control + 30%
+
+# Reporting
+reporting:
+  daily:
+    enabled: true
+    time: 09:00 UTC
+    channel: '#workflow-metrics'
+
+  weekly:
+    enabled: true
+    day: Friday
+    time: 16:00 UTC
+    channel: '#workflow-team'
+    includeStatistics: true
+
+  final:
+    generateReport: true
+    includeRecommendation: true
+    presentTo:
+    - '@engineering-manager'
+    - '@workflow-team'
+
+# Post-test actions
+postTest:
+  winner:
+    control:
+      action: Keep current 7-day grace period
+      communication: Announce findings, no changes needed
+
+    experiment:
+      action: Deploy 10-day grace period to all repositories
+      rolloutStrategy: gradual   # 25% -> 50% -> 100% over 3 days
+
+    inconclusive:
+      action: Extend test duration by 7 days
+      reevaluate: true
+
+# Documentation
+documentation:
+  testPlan: docs/WEEK7_AB_TEST_PLAN.md
+  results: reports/ab-test-stale-grace-period.md
+
+# Metadata
+metadata:
+  version: '1.0'
+  createdBy: Workflow Team
+  createdDate: '2026-01-16'
+  approvedBy: '@engineering-manager'
+  approvalDate: TBD

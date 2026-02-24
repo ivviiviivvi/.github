@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Branch Cleanup Notification",
+  "identifier": "urn:uuid:7a93ac3a-2925-513e-8125-2f97420b781f",
+  "version": "1.0.0",
+  "description": "Repository maintenance and cleanup. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.maintenance.branch.yml",
+    "layer": "logic",
+    "role": "maintenance",
+    "domain": "branch"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["logic", "maintenance", "manual", "scheduled"]
+}

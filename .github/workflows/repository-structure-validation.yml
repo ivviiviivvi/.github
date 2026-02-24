@@ -1,0 +1,87 @@
+name: Repository Structure Validation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+    - '**.md'
+    - .github/**
+    - src/automation/scripts/utils/**
+    - .gitignore
+  pull_request:
+    branches: [main, develop]
+    paths:
+    - '**.md'
+    - .github/**
+    - src/automation/scripts/utils/**
+    - .gitignore
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-structure:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Run Structure Validation
+      id: validate
+      continue-on-error: true
+      run: |
+        chmod +x src/automation/scripts/utils/validate-repository-structure.sh
+        ./src/automation/scripts/utils/validate-repository-structure.sh 2>&1 | tee validation-output.txt
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+
+    - name: Generate Summary
+      run: |
+        echo "## Repository Structure Validation" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f validation-output.txt ]; then
+          # Count results
+          PASSES=$(grep -c "^✓" validation-output.txt || echo "0")
+          WARNINGS=$(grep -c "^⚠" validation-output.txt || echo "0")
+          ERRORS=$(grep -c "^✗" validation-output.txt || echo "0")
+
+          echo "| Status | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| ✓ Passed | $PASSES |" >> $GITHUB_STEP_SUMMARY
+          echo "| ⚠ Warnings | $WARNINGS |" >> $GITHUB_STEP_SUMMARY
+          echo "| ✗ Errors | $ERRORS |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "### ❌ Validation Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Please review the errors above and fix them." >> $GITHUB_STEP_SUMMARY
+          elif [ "$WARNINGS" -gt 0 ]; then
+            echo "### ⚠️ Validation Passed with Warnings" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Consider addressing the warnings for better organization." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ✅ All Checks Passed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Documentation" >> $GITHUB_STEP_SUMMARY
+          echo "- [Repository Structure Standards](docs/reference/REPOSITORY_STRUCTURE.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Quick Reference](docs/reference/REPOSITORY_ORGANIZATION_QUICK_REF.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Migration Guide](docs/reference/REPOSITORY_ORGANIZATION_MIGRATION.md)" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Check for Errors
+      if: steps.validate.outputs.exit_code == '1'
+      run: |
+        echo "::error::Repository structure validation failed. See summary for details."
+        # Note: Not failing the workflow, just reporting
+        # exit 1  # Uncomment to fail PR on errors

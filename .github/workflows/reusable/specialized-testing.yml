@@ -1,0 +1,762 @@
+name: Specialized Testing (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      # Test Types to Enable
+      enable-accessibility:
+        description: Enable accessibility testing with axe-core
+        required: false
+        type: boolean
+        default: true
+      enable-mutation:
+        description: Enable mutation testing
+        required: false
+        type: boolean
+        default: false
+      enable-integration:
+        description: Enable integration tests
+        required: false
+        type: boolean
+        default: true
+      enable-e2e:
+        description: Enable end-to-end tests
+        required: false
+        type: boolean
+        default: false
+
+      # Language Configuration
+      language:
+        description: Primary language (python, node)
+        required: false
+        type: string
+        default: node
+      python-version:
+        description: Python version to use (falls back to vars.PYTHON_VERSION_DEFAULT, then 3.12)
+        required: false
+        type: string
+        default: ''
+      node-version:
+        description: Node.js version to use (falls back to vars.NODE_VERSION_DEFAULT, then 20)
+        required: false
+        type: string
+        default: ''
+      package-manager:
+        description: Node.js package manager (npm, yarn, pnpm)
+        required: false
+        type: string
+        default: npm
+
+      # Accessibility Testing Configuration
+      accessibility-urls:
+        description: URLs to test for accessibility (JSON array, e.g., ["http://localhost:3000"])
+        required: false
+        type: string
+        default: '["http://localhost:3000"]'
+      accessibility-standard:
+        description: Accessibility standard (wcag2a, wcag2aa, wcag21aa, best-practice)
+        required: false
+        type: string
+        default: wcag2aa
+      accessibility-start-command:
+        description: Command to start the application for accessibility testing
+        required: false
+        type: string
+        default: npm start
+      accessibility-wait-on:
+        description: URL to wait for before running accessibility tests
+        required: false
+        type: string
+        default: http://localhost:3000
+
+      # Mutation Testing Configuration
+      mutation-target:
+        description: Target directory or files for mutation testing
+        required: false
+        type: string
+        default: src/
+      mutation-timeout:
+        description: Timeout for mutation tests in minutes
+        required: false
+        type: number
+        default: 30
+      mutation-threshold:
+        description: Minimum mutation score percentage required
+        required: false
+        type: number
+        default: 0
+
+      # Integration Testing Configuration
+      integration-test-command:
+        description: Command to run integration tests
+        required: false
+        type: string
+        default: ''
+      integration-setup-command:
+        description: Command to set up integration test environment
+        required: false
+        type: string
+        default: ''
+      integration-services:
+        description: Services required for integration tests (JSON array, e.g., ["postgres", "redis"])
+        required: false
+        type: string
+        default: '[]'
+
+      # E2E Testing Configuration
+      e2e-framework:
+        description: E2E testing framework (playwright, cypress, puppeteer)
+        required: false
+        type: string
+        default: playwright
+      e2e-test-command:
+        description: Command to run E2E tests
+        required: false
+        type: string
+        default: ''
+      e2e-start-command:
+        description: Command to start the application for E2E testing
+        required: false
+        type: string
+        default: npm start
+      e2e-browsers:
+        description: Browsers to test (JSON array, e.g., ["chromium", "firefox", "webkit"])
+        required: false
+        type: string
+        default: '["chromium"]'
+
+      # General Configuration
+      working-directory:
+        description: Working directory for commands
+        required: false
+        type: string
+        default: .
+      artifact-retention-days:
+        description: Days to retain test artifacts
+        required: false
+        type: number
+        default: 7
+      fail-fast:
+        description: Fail fast on first error
+        required: false
+        type: boolean
+        default: false
+
+    outputs:
+      accessibility-report:
+        description: Path to accessibility test report
+        value: ${{ jobs.accessibility-tests.outputs.report-path }}
+      mutation-score:
+        description: Mutation testing score
+        value: ${{ jobs.mutation-tests.outputs.mutation-score }}
+      integration-results:
+        description: Path to integration test results
+        value: ${{ jobs.integration-tests.outputs.results-path }}
+      e2e-results:
+        description: Path to E2E test results
+        value: ${{ jobs.e2e-tests.outputs.results-path }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: specialized-testing-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Accessibility Testing with axe-core
+  accessibility-tests:
+    if: inputs.enable-accessibility
+    runs-on: ubuntu-latest
+    outputs:
+      report-path: ${{ steps.a11y-test.outputs.report-path }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Determine Node.js version
+      id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_NODE_VERSION"
+        DEFAULT_VERSION="20"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Node.js ${{ steps.node-version.outputs.version }}
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: ${{ inputs.package-manager }}
+
+    - name: Install dependencies
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
+      run: |
+        case "$PACKAGE_MANAGER" in
+          npm)
+            npm ci
+            ;;
+          yarn)
+            yarn install --frozen-lockfile
+            ;;
+          pnpm)
+            corepack enable
+            pnpm install --frozen-lockfile
+            ;;
+        esac
+
+    - name: Install axe-core and testing tools
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        npm install -g @axe-core/cli wait-on
+        npm install --save-dev @axe-core/playwright @axe-core/react axe-html-reporter 2>/dev/null || true
+
+    - name: Start application
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        ACCESSIBILITY_START_COMMAND: ${{ inputs.accessibility-start-command }}
+        ACCESSIBILITY_WAIT_ON: ${{ inputs.accessibility-wait-on }}
+      run: |
+        $ACCESSIBILITY_START_COMMAND &
+        echo "Waiting for application to be ready..."
+        npx wait-on "$ACCESSIBILITY_WAIT_ON" --timeout 120000
+
+    - name: Run accessibility tests
+      id: a11y-test
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        ACCESSIBILITY_URLS: ${{ inputs.accessibility-urls }}
+        ACCESSIBILITY_STANDARD: ${{ inputs.accessibility-standard }}
+      run: |
+        mkdir -p accessibility-reports
+        URLS="$ACCESSIBILITY_URLS"
+        STANDARD="$ACCESSIBILITY_STANDARD"
+
+        echo "Testing accessibility for URLs: $URLS"
+        echo "Using standard: $STANDARD"
+
+        # Parse JSON array and test each URL
+        echo "$URLS" | jq -r '.[]' | while read -r url; do
+          echo "Testing: $url"
+          FILENAME=$(echo "$url" | sed 's|[^a-zA-Z0-9]|_|g')
+          axe "$url" --tags "$STANDARD" --save "accessibility-reports/${FILENAME}.json" || true
+        done
+
+        echo "report-path=accessibility-reports/" >> $GITHUB_OUTPUT
+
+    - name: Generate accessibility report summary
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        echo "## Accessibility Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        for report in accessibility-reports/*.json; do
+          if [ -f "$report" ]; then
+            URL=$(basename "$report" .json | sed 's|_|/|g')
+            VIOLATIONS=$(jq '.violations | length' "$report" 2>/dev/null || echo "0")
+            PASSES=$(jq '.passes | length' "$report" 2>/dev/null || echo "0")
+
+            echo "### $URL" >> $GITHUB_STEP_SUMMARY
+            echo "- Violations: $VIOLATIONS" >> $GITHUB_STEP_SUMMARY
+            echo "- Passes: $PASSES" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+
+    - name: Upload accessibility reports
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: accessibility-reports
+        path: ${{ inputs.working-directory }}/accessibility-reports/
+        retention-days: ${{ inputs.artifact-retention-days }}
+        if-no-files-found: ignore
+
+  # Mutation Testing
+  mutation-tests:
+    if: inputs.enable-mutation
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.mutation-timeout }}
+    outputs:
+      mutation-score: ${{ steps.mutation.outputs.score }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Python Mutation Testing
+    - name: Determine Python version
+      if: inputs.language == 'python'
+      id: python-version
+      env:
+        INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+        REPO_VAR_VERSION: ${{ vars.PYTHON_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_PYTHON_VERSION"
+        DEFAULT_VERSION="3.12"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Set up Python ${{ steps.python-version.outputs.version }}
+      if: inputs.language == 'python'
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: ${{ steps.python-version.outputs.version }}
+        cache: pip
+
+    - name: Install Python dependencies and mutmut
+      if: inputs.language == 'python'
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        python -m pip install --upgrade pip
+        pip install mutmut pytest pytest-cov
+        if [ -f "requirements.txt" ]; then
+          pip install -r requirements.txt
+        fi
+        if [ -f "requirements-dev.txt" ]; then
+          pip install -r requirements-dev.txt
+        fi
+
+    - name: Run Python mutation testing
+      if: inputs.language == 'python'
+      id: mutation-python
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        MUTATION_TARGET: ${{ inputs.mutation-target }}
+      run: |
+        mutmut run --paths-to-mutate="$MUTATION_TARGET" --no-progress || true
+        mutmut results > mutation-report.txt
+        mutmut html
+
+        # Extract mutation score
+        SCORE=$(mutmut results 2>/dev/null | grep -oP 'Mutation score: \K[\d.]+' || echo "0")
+        echo "score=$SCORE" >> $GITHUB_OUTPUT
+        echo "Mutation score: $SCORE%"
+
+    # Node.js Mutation Testing
+    - name: Determine Node.js version
+      if: inputs.language == 'node'
+      id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_NODE_VERSION"
+        DEFAULT_VERSION="20"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Node.js ${{ steps.node-version.outputs.version }}
+      if: inputs.language == 'node'
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: ${{ inputs.package-manager }}
+
+    - name: Install Node.js dependencies and Stryker
+      if: inputs.language == 'node'
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        npm ci
+        npm install --save-dev @stryker-mutator/core @stryker-mutator/jest-runner @stryker-mutator/typescript-checker 2>/dev/null || true
+
+    - name: Run Node.js mutation testing
+      if: inputs.language == 'node'
+      id: mutation-node
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        MUTATION_TARGET: ${{ inputs.mutation-target }}
+        MUTATION_THRESHOLD: ${{ inputs.mutation-threshold }}
+      run: |
+        # Create Stryker config if not exists
+        if [ ! -f "stryker.conf.json" ] && [ ! -f "stryker.conf.js" ]; then
+          jq -n \
+            --arg target "${MUTATION_TARGET}**/*.{ts,js}" \
+            --argjson threshold "$MUTATION_THRESHOLD" \
+            '{
+              "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+              "mutate": [$target],
+              "testRunner": "jest",
+              "reporters": ["html", "clear-text", "progress", "json"],
+              "coverageAnalysis": "perTest",
+              "thresholds": { "high": 80, "low": 60, "break": $threshold }
+            }' > stryker.conf.json
+        fi
+
+        npx stryker run || true
+
+        # Extract mutation score
+        if [ -f "reports/mutation/mutation.json" ]; then
+          SCORE=$(jq '.files | to_entries | map(.value.mutants | map(select(.status == "Killed")) | length) | add // 0' reports/mutation/mutation.json)
+          TOTAL=$(jq '.files | to_entries | map(.value.mutants | length) | add // 1' reports/mutation/mutation.json)
+          PERCENT=$((SCORE * 100 / TOTAL))
+          echo "score=$PERCENT" >> $GITHUB_OUTPUT
+          echo "Mutation score: $PERCENT%"
+        else
+          echo "score=0" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Set combined mutation output
+      id: mutation
+      env:
+        PYTHON_SCORE: ${{ steps.mutation-python.outputs.score }}
+        NODE_SCORE: ${{ steps.mutation-node.outputs.score }}
+      run: |
+        if [ -n "$PYTHON_SCORE" ]; then
+          echo "score=$PYTHON_SCORE" >> $GITHUB_OUTPUT
+        elif [ -n "$NODE_SCORE" ]; then
+          echo "score=$NODE_SCORE" >> $GITHUB_OUTPUT
+        else
+          echo "score=0" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Check mutation threshold
+      if: inputs.mutation-threshold > 0
+      env:
+        SCORE: ${{ steps.mutation.outputs.score }}
+        THRESHOLD: ${{ inputs.mutation-threshold }}
+      run: |
+        if [ "$SCORE" -lt "$THRESHOLD" ]; then
+          echo "::error::Mutation score $SCORE% is below threshold $THRESHOLD%"
+          exit 1
+        fi
+
+    - name: Upload mutation reports
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: mutation-reports
+        path: |
+          ${{ inputs.working-directory }}/html/
+          ${{ inputs.working-directory }}/reports/mutation/
+          ${{ inputs.working-directory }}/mutation-report.txt
+        retention-days: ${{ inputs.artifact-retention-days }}
+        if-no-files-found: ignore
+
+  # Integration Testing
+  integration-tests:
+    if: inputs.enable-integration
+    runs-on: ubuntu-latest
+    outputs:
+      results-path: ${{ steps.integration.outputs.results-path }}
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+        - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports:
+        - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Python Integration Tests
+    - name: Determine Python version
+      if: inputs.language == 'python'
+      id: python-version
+      env:
+        INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+        REPO_VAR_VERSION: ${{ vars.PYTHON_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_PYTHON_VERSION"
+        DEFAULT_VERSION="3.12"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Set up Python ${{ steps.python-version.outputs.version }}
+      if: inputs.language == 'python'
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: ${{ steps.python-version.outputs.version }}
+        cache: pip
+
+    - name: Install Python dependencies
+      if: inputs.language == 'python'
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f "requirements.txt" ]; then
+          pip install -r requirements.txt
+        fi
+        if [ -f "requirements-dev.txt" ]; then
+          pip install -r requirements-dev.txt
+        fi
+        pip install pytest pytest-cov pytest-asyncio
+
+    # Node.js Integration Tests
+    - name: Determine Node.js version
+      if: inputs.language == 'node'
+      id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_NODE_VERSION"
+        DEFAULT_VERSION="20"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Node.js ${{ steps.node-version.outputs.version }}
+      if: inputs.language == 'node'
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: ${{ inputs.package-manager }}
+
+    - name: Install Node.js dependencies
+      if: inputs.language == 'node'
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
+      run: |
+        case "$PACKAGE_MANAGER" in
+          npm)
+            npm ci
+            ;;
+          yarn)
+            yarn install --frozen-lockfile
+            ;;
+          pnpm)
+            corepack enable
+            pnpm install --frozen-lockfile
+            ;;
+        esac
+
+    - name: Run integration setup
+      if: inputs.integration-setup-command != ''
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        DATABASE_URL: postgresql://test:test@localhost:5432/test
+        REDIS_URL: redis://localhost:6379
+        INTEGRATION_SETUP_COMMAND: ${{ inputs.integration-setup-command }}
+      run: $INTEGRATION_SETUP_COMMAND
+
+    - name: Run integration tests
+      id: integration
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        DATABASE_URL: postgresql://test:test@localhost:5432/test
+        REDIS_URL: redis://localhost:6379
+        CI: true
+        INTEGRATION_TEST_COMMAND: ${{ inputs.integration-test-command }}
+        LANGUAGE: ${{ inputs.language }}
+      run: |
+        mkdir -p integration-results
+
+        if [ -n "$INTEGRATION_TEST_COMMAND" ]; then
+          $INTEGRATION_TEST_COMMAND
+        elif [ "$LANGUAGE" = "python" ]; then
+          pytest tests/integration/ -v --junitxml=integration-results/junit.xml || pytest -m integration -v --junitxml=integration-results/junit.xml || true
+        else
+          npm run test:integration 2>/dev/null || npm test -- --testPathPattern=integration 2>/dev/null || true
+        fi
+
+        echo "results-path=integration-results/" >> $GITHUB_OUTPUT
+
+    - name: Upload integration test results
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: ${{ inputs.working-directory }}/integration-results/
+        retention-days: ${{ inputs.artifact-retention-days }}
+        if-no-files-found: ignore
+
+  # End-to-End Testing
+  e2e-tests:
+    if: inputs.enable-e2e
+    runs-on: ubuntu-latest
+    outputs:
+      results-path: ${{ steps.e2e.outputs.results-path }}
+
+    strategy:
+      fail-fast: ${{ inputs.fail-fast }}
+      matrix:
+        browser: ${{ fromJson(inputs.e2e-browsers) }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Determine Node.js version
+      id: node-version
+      env:
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        REPO_VAR_VERSION: ${{ vars.NODE_VERSION_DEFAULT }}
+      run: |
+        INPUT_VERSION="$INPUT_NODE_VERSION"
+        DEFAULT_VERSION="20"
+
+        if [ -n "$INPUT_VERSION" ]; then
+          VERSION="$INPUT_VERSION"
+        elif [ -n "$REPO_VAR_VERSION" ]; then
+          VERSION="$REPO_VAR_VERSION"
+        else
+          VERSION="$DEFAULT_VERSION"
+        fi
+
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Node.js ${{ steps.node-version.outputs.version }}
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: ${{ inputs.package-manager }}
+
+    - name: Install dependencies
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
+      run: |
+        case "$PACKAGE_MANAGER" in
+          npm)
+            npm ci
+            ;;
+          yarn)
+            yarn install --frozen-lockfile
+            ;;
+          pnpm)
+            corepack enable
+            pnpm install --frozen-lockfile
+            ;;
+        esac
+
+    # Playwright Setup
+    - name: Install Playwright browsers
+      if: inputs.e2e-framework == 'playwright'
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        BROWSER: ${{ matrix.browser }}
+      run: |
+        npx playwright install --with-deps "$BROWSER"
+
+    # Cypress Setup
+    - name: Install Cypress dependencies
+      if: inputs.e2e-framework == 'cypress'
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
+    - name: Start application
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        E2E_START_COMMAND: ${{ inputs.e2e-start-command }}
+      run: |
+        $E2E_START_COMMAND &
+        sleep 10  # Wait for application to start
+
+    - name: Run E2E tests
+      id: e2e
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        CI: true
+        E2E_TEST_COMMAND: ${{ inputs.e2e-test-command }}
+        E2E_FRAMEWORK: ${{ inputs.e2e-framework }}
+        BROWSER: ${{ matrix.browser }}
+      run: |
+        mkdir -p e2e-results
+
+        if [ -n "$E2E_TEST_COMMAND" ]; then
+          $E2E_TEST_COMMAND
+        elif [ "$E2E_FRAMEWORK" = "playwright" ]; then
+          npx playwright test --project="$BROWSER" --reporter=html,json
+        elif [ "$E2E_FRAMEWORK" = "cypress" ]; then
+          npx cypress run --browser "$BROWSER" --reporter json --reporter-options "output=e2e-results/results.json"
+        elif [ "$E2E_FRAMEWORK" = "puppeteer" ]; then
+          npm run test:e2e 2>/dev/null || true
+        fi
+
+        echo "results-path=e2e-results/" >> $GITHUB_OUTPUT
+
+    - name: Upload E2E test results
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: e2e-results-${{ matrix.browser }}
+        path: |
+          ${{ inputs.working-directory }}/e2e-results/
+          ${{ inputs.working-directory }}/playwright-report/
+          ${{ inputs.working-directory }}/cypress/screenshots/
+          ${{ inputs.working-directory }}/cypress/videos/
+        retention-days: ${{ inputs.artifact-retention-days }}
+        if-no-files-found: ignore
+
+    - name: Upload test screenshots on failure
+      if: failure()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: e2e-failure-screenshots-${{ matrix.browser }}
+        path: |
+          ${{ inputs.working-directory }}/test-results/
+          ${{ inputs.working-directory }}/cypress/screenshots/
+        retention-days: ${{ inputs.artifact-retention-days }}
+        if-no-files-found: ignore

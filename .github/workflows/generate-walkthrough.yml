@@ -1,0 +1,79 @@
+name: Generate Video Walkthrough
+
+on:
+  workflow_dispatch:
+    inputs:
+      seconds_per_day:
+        description: Gource seconds per day of history
+        required: false
+        default: '0.5'
+        type: string
+      resolution:
+        description: Video resolution
+        required: false
+        default: 1080p
+        type: choice
+        options:
+        - 720p
+        - 1080p
+        - 1440p
+        - 2160p
+      title:
+        description: Custom title for the visualization
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate-walkthrough:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate Gource visualization
+      uses: NBprojekt/gource-action@57256d303c5a9a5e72ed92ba13e3e83c5ec8b257  # ratchet:NBprojekt/gource-action@v1.3.0
+      with:
+        gource_title: ${{ inputs.title || github.event.repository.name }}
+        gource_resolution: ${{ inputs.resolution || '1080p' }}
+        gource_fps: '60'
+        gource_seconds_per_day: ${{ inputs.seconds_per_day || '0.5' }}
+        gource_auto_skip_seconds: '1'
+        gource_background_color: '000000'
+        avatars_auto_fetch: 'true'
+
+    - name: Upload video artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: walkthrough-${{ github.event.repository.name }}-${{ github.run_number }}
+        path: ./gource/gource.mp4
+        retention-days: 90
+
+    - name: Generate step summary
+      env:
+        REPO_NAME: ${{ github.event.repository.name }}
+        CUSTOM_TITLE: ${{ inputs.title || github.event.repository.name }}
+        RESOLUTION: ${{ inputs.resolution || '1080p' }}
+        SECONDS_PER_DAY: ${{ inputs.seconds_per_day || '0.5' }}
+        RUN_NUMBER: ${{ github.run_number }}
+      run: |
+        echo "## Gource Visualization Generated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repository**: $REPO_NAME" >> $GITHUB_STEP_SUMMARY
+        echo "- **Title**: $CUSTOM_TITLE" >> $GITHUB_STEP_SUMMARY
+        echo "- **Resolution**: $RESOLUTION" >> $GITHUB_STEP_SUMMARY
+        echo "- **Seconds per day**: $SECONDS_PER_DAY" >> $GITHUB_STEP_SUMMARY
+        echo "- **Artifact**: walkthrough-${REPO_NAME}-${RUN_NUMBER}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Download the MP4 artifact from the workflow run artifacts." >> $GITHUB_STEP_SUMMARY

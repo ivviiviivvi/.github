@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Validate Action Pins",
+  "identifier": "urn:uuid:91376c16-21ec-5f77-9e5c-d02d3577f888",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by pull_request, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.quality.validate.yml",
+    "layer": "logic",
+    "role": "quality",
+    "domain": "validate"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["logic", "pr-triggered", "quality"]
+}

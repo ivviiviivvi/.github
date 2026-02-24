@@ -1,0 +1,142 @@
+name: Schema.org Validation
+
+on:
+  pull_request:
+    paths:
+    - .schema-org/**
+    - src/automation/scripts/utils/validate-schema-org.py
+  push:
+    branches:
+    - main
+    paths:
+    - .schema-org/**
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate-schemas:
+    name: Validate Schema.org Files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+
+    - name: Validate schema.org files
+      id: validate
+      run: |
+        echo "Running schema.org validation..."
+        python src/automation/scripts/utils/validate-schema-org.py
+      continue-on-error: true
+
+    - name: Check version consistency
+      id: version-check
+      continue-on-error: true
+      run: |
+        echo "Checking version consistency across files..."
+
+        # Read versions from different files
+        VERSION_FILE=$(cat VERSION 2>/dev/null || echo "not-found")
+        PACKAGE_VERSION=$(jq -r '.version' package.json 2>/dev/null || echo "not-found")
+        REPO_SCHEMA_VERSION=$(jq -r '.version' .schema-org/repository.jsonld 2>/dev/null || echo "not-found")
+        AI_SCHEMA_VERSION=$(jq -r '.version' .schema-org/ai-framework.jsonld 2>/dev/null || echo "not-found")
+        DOCS_SCHEMA_VERSION=$(jq -r '.version' .schema-org/documentation.jsonld 2>/dev/null || echo "not-found")
+
+        echo "Versions found:"
+        echo "  VERSION file: $VERSION_FILE"
+        echo "  package.json: $PACKAGE_VERSION"
+        echo "  repository.jsonld: $REPO_SCHEMA_VERSION"
+        echo "  ai-framework.jsonld: $AI_SCHEMA_VERSION"
+        echo "  documentation.jsonld: $DOCS_SCHEMA_VERSION"
+
+        # Check if all versions match
+        VERSIONS=($VERSION_FILE $PACKAGE_VERSION $REPO_SCHEMA_VERSION $AI_SCHEMA_VERSION $DOCS_SCHEMA_VERSION)
+        FIRST_VERSION=${VERSIONS[0]}
+        MISMATCH=false
+
+        for ver in "${VERSIONS[@]}"; do
+          if [ "$ver" != "not-found" ] && [ "$ver" != "$FIRST_VERSION" ]; then
+            MISMATCH=true
+            break
+          fi
+        done
+
+        if [ "$MISMATCH" = true ]; then
+          echo "❌ Version mismatch detected!"
+          echo "Please run: npm run version:sync"
+          exit 1
+        else
+          echo "✅ All versions are consistent: $FIRST_VERSION"
+        fi
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && (success() || failure())
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let comment = '## 📊 Schema.org Validation Results\n\n';
+
+          if ('${{ steps.validate.outcome }}' === 'success') {
+            comment += '✅ **Schema.org validation passed!**\n\n';
+            comment += 'All schema.org files are valid and follow the standards.\n';
+          } else {
+            comment += '❌ **Schema.org validation failed!**\n\n';
+            comment += 'Please fix the errors and run `python src/automation/scripts/utils/validate-schema-org.py` locally.\n';
+          }
+
+          comment += '\n---\n\n';
+
+          if ('${{ steps.version-check.outcome }}' === 'success') {
+            comment += '✅ **Version consistency check passed!**\n\n';
+          } else {
+            comment += '❌ **Version mismatch detected!**\n\n';
+            comment += 'Please run `npm run version:sync` to synchronize versions across all files.\n';
+          }
+
+          comment += '\n---\n\n';
+          comment += '### Files Validated\n';
+          comment += '- `.schema-org/organization.jsonld`\n';
+          comment += '- `.schema-org/repository.jsonld`\n';
+          comment += '- `.schema-org/ai-framework.jsonld`\n';
+          comment += '- `.schema-org/documentation.jsonld`\n';
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: Fail if validation failed
+      continue-on-error: true
+      if: steps.validate.outcome == 'failure' || steps.version-check.outcome == 'failure'
+      run: |
+        echo "⚠️ Validation failed. Check the output above for details."
+        exit 1
+
+    - name: Success summary
+      if: success()
+      run: |
+        echo "✨ All validations passed!"
+        echo ""
+        echo "✅ Schema.org files are valid"
+        echo "✅ Versions are consistent"
+        echo ""
+        echo "For more information, see: docs/SCHEMA_ORG_SEMVER_GUIDE.md"

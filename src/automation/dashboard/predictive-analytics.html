@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha384-e6nUZLBkQ86NJ6TVVKAeSaK8jWa3NhkYWZFomE39AvDbQWeie9PlQqM3pmYW5d1g" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #f0f6fc;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            font-size: 16px;
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .prediction-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+        }
+
+        .prediction-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 16px;
+        }
+
+        .prediction-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .prediction-value.high {
+            color: #f85149;
+        }
+
+        .prediction-value.medium {
+            color: #d29922;
+        }
+
+        .prediction-value.low {
+            color: #3fb950;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .confidence-high {
+            background: rgba(63, 185, 80, 0.2);
+            color: #3fb950;
+        }
+
+        .confidence-medium {
+            background: rgba(210, 153, 34, 0.2);
+            color: #d29922;
+        }
+
+        .confidence-low {
+            background: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+        }
+
+        .prediction-details {
+            font-size: 14px;
+            color: #8b949e;
+            line-height: 1.6;
+        }
+
+        .chart-container {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .insights-list li:last-child {
+            border-bottom: none;
+        }
+
+        .insight-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .insight-icon.warning {
+            background: rgba(210, 153, 34, 0.2);
+        }
+
+        .insight-icon.success {
+            background: rgba(63, 185, 80, 0.2);
+        }
+
+        .insight-icon.info {
+            background: rgba(88, 166, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Predictive Analytics Dashboard</h1>
+            <p class="subtitle">ML-powered workflow failure prediction and insights</p>
+        </header>
+
+        <!-- Predictions Grid -->
+        <div class="predictions-grid">
+            <div class="prediction-card">
+                <h3>Next 24h Failure Probability</h3>
+                <div class="prediction-value low">12%</div>
+                <span class="confidence-badge confidence-high">92% confidence</span>
+                <p class="prediction-details">
+                    Based on historical patterns, current system load, and recent deployment activity.
+                    The prediction model indicates low risk for the next 24 hours.
+                </p>
+            </div>
+
+            <div class="prediction-card">
+                <h3>High-Risk Workflows</h3>
+                <div class="prediction-value medium">3</div>
+                <span class="confidence-badge confidence-medium">78% confidence</span>
+                <p class="prediction-details">
+                    Three workflows have elevated failure risk: dependency-update, security-scan,
+                    and integration-tests. Consider pre-emptive review.
+                </p>
+            </div>
+
+            <div class="prediction-card">
+                <h3>Predicted Recovery Time</h3>
+                <div class="prediction-value low">4.2min</div>
+                <span class="confidence-badge confidence-high">85% confidence</span>
+                <p class="prediction-details">
+                    Average predicted recovery time for failures based on historical auto-healing
+                    performance and current system state.
+                </p>
+            </div>
+
+            <div class="prediction-card">
+                <h3>Resource Utilization Forecast</h3>
+                <div class="prediction-value medium">67%</div>
+                <span class="confidence-badge confidence-medium">81% confidence</span>
+                <p class="prediction-details">
+                    Predicted peak resource utilization for today. Consider scheduling
+                    resource-intensive workflows during off-peak hours.
+                </p>
+            </div>
+        </div>
+
+        <!-- Trend Chart -->
+        <div class="chart-container">
+            <h2>Failure Probability Trend (7 Days)</h2>
+            <div class="chart-wrapper">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="chart-container">
+            <h2>Predictive Insights</h2>
+            <ul class="insights-list">
+                <li>
+                    <div class="insight-icon warning"></div>
+                    <div>
+                        <strong>Dependency Update Due</strong>
+                        <p class="prediction-details">3 critical dependencies will be outdated within 7 days. Schedule updates to maintain security.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="insight-icon success"></div>
+                    <div>
+                        <strong>Performance Improvement Detected</strong>
+                        <p class="prediction-details">Workflow execution times have improved 15% this week compared to last week.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="insight-icon info"></div>
+                    <div>
+                        <strong>Pattern Detected</strong>
+                        <p class="prediction-details">Higher failure rates detected on Mondays between 9-11 AM UTC. Consider adjusting deployment schedules.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js global configuration
+        Chart.defaults.color = '#8b949e';
+        Chart.defaults.borderColor = '#30363d';
+
+        // Trend Chart
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Actual Failures',
+                        data: [15, 12, 18, 8, 10, 5, 12],
+                        borderColor: '#f85149',
+                        backgroundColor: 'rgba(248, 81, 73, 0.1)',
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Predicted (confidence interval)',
+                        data: [14, 13, 16, 10, 11, 6, 11],
+                        borderColor: '#58a6ff',
+                        backgroundColor: 'rgba(88, 166, 255, 0.1)',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        backgroundColor: '#161b22',
+                        borderColor: '#30363d',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Failure Count'
+                        },
+                        grid: { color: '#30363d' }
+                    },
+                    x: {
+                        grid: { color: '#30363d' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

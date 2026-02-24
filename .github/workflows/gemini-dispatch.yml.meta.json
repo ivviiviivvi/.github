@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "\ud83d\udd00 Gemini Dispatch",
+  "identifier": "urn:uuid:dcda1ea4-c8ea-50d3-81d1-ff606e749866",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by pull_request_review_comment, pull_request_review, pull_request, issues, issue_comment, workflow_dispatch, executes 6 job(s).",
+  "functioncalled": {
+    "canonical": "logic.ai.gemini.yml",
+    "layer": "logic",
+    "role": "ai",
+    "domain": "gemini"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": [
+    "pull_request_review_comment",
+    "pull_request_review",
+    "pull_request",
+    "issues",
+    "issue_comment",
+    "workflow_dispatch"
+  ],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["ai", "logic", "manual", "pr-triggered"]
+}

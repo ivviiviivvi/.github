@@ -1,0 +1,292 @@
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+    - src/**
+    - tests/**
+    - benchmarks/**
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - package*.json
+    - requirements*.txt
+  pull_request:
+    branches: [main, master]
+    paths:
+    - src/**
+    - tests/**
+    - benchmarks/**
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - package*.json
+    - requirements*.txt
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  deployments: write
+
+jobs:
+  benchmark:
+    name: Run Performance Benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4.2.2
+
+    - name: Set up Node.js
+      if: hashFiles('package.json') != ''
+      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4.1.0
+      with:
+        node-version: '20'
+        cache: npm
+
+    - name: Set up Python
+      if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5.3.0
+      with:
+        python-version: '3.11'
+        cache: pip
+
+    - name: Install Node dependencies
+      if: hashFiles('package.json') != ''
+      run: npm ci
+
+    - name: Install Python dependencies
+      if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+        pip install pytest-benchmark
+
+        # JavaScript/TypeScript Benchmarks
+    - name: Run JavaScript Benchmarks
+      if: hashFiles('package.json') != ''
+      run: |
+        npm run benchmark || echo "No benchmark script found"
+        # Alternative: npx vitest bench || npx jest --testMatch="**/*.bench.js"
+
+        # Python Benchmarks
+    - name: Run Python Benchmarks
+      if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+      run: |
+        pytest benchmarks/ --benchmark-only --benchmark-json=benchmark-results.json || true
+
+        # Store benchmark results
+    - name: Store benchmark result
+      continue-on-error: true
+      uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b  # ratchet:benchmark-action/github-action-benchmark@v1
+      with:
+        tool: benchmarkjs
+        output-file-path: benchmark-results.json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        auto-push: true
+        alert-threshold: 150%
+        comment-on-alert: true
+        fail-on-alert: false
+        alert-comment-cc-users: '@ivi374forivi'
+
+        # Lighthouse Performance (for web apps)
+    - name: Run Lighthouse CI
+      if: hashFiles('package.json') != ''
+      run: |
+        npm install -g @lhci/cli
+        lhci autorun || echo "Lighthouse CI not configured"
+
+        # Load Testing with k6 (only if load test file exists)
+    - name: Check for load test file
+      id: check-load-test
+      run: |
+        if [ -f "tests/load-test.js" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ No load test file found at tests/load-test.js"
+        fi
+
+    - name: Load Testing
+      if: steps.check-load-test.outputs.exists == 'true'
+      uses: grafana/k6-action@e4714b734f2b0afaabeb7b4a69142745548ab9ec  # ratchet:grafana/k6-action@v0.3.1
+      with:
+        filename: tests/load-test.js
+      continue-on-error: true
+
+        # Generate Performance Report
+    - name: Generate Performance Report
+      continue-on-error: true
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let report = '## 📊 Performance Benchmark Results\n\n';
+
+          if (fs.existsSync('benchmark-results.json')) {
+            const results = JSON.parse(fs.readFileSync('benchmark-results.json', 'utf8'));
+            report += '### Benchmark Metrics\n\n';
+            report += '| Test | Operations/sec | Relative Margin of Error |\n';
+            report += '|------|----------------|-------------------------|\n';
+            // Add benchmark results here
+          }
+
+          if (context.eventName === 'pull_request') {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: report
+            });
+          }
+
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+    - name: Check for package.json
+      id: check-pkg
+      run: |
+        if [ -f "package.json" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Setup Node.js
+      if: steps.check-pkg.outputs.exists == 'true'
+      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      if: steps.check-pkg.outputs.exists == 'true'
+      run: npm ci
+
+    - name: Build
+      if: steps.check-pkg.outputs.exists == 'true'
+      run: npm run build || true
+
+    - name: Run Lighthouse
+      if: steps.check-pkg.outputs.exists == 'true'
+      continue-on-error: true
+      uses: treosh/lighthouse-ci-action@72f881228236981b625ed765b928efb1786a1f55  # ratchet:treosh/lighthouse-ci-action@v11
+      with:
+        urls: |
+          http://localhost:3000
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+  bundle-size:
+    name: Check Bundle Size
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+
+    - name: Check for package.json
+      id: check-pkg
+      run: |
+        if [ -f "package.json" ]; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Setup Node.js
+      if: steps.check-pkg.outputs.exists == 'true'
+      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      if: steps.check-pkg.outputs.exists == 'true'
+      run: npm ci
+
+    - name: Build
+      if: steps.check-pkg.outputs.exists == 'true'
+      run: npm run build
+
+    - name: Analyze bundle size
+      if: steps.check-pkg.outputs.exists == 'true'
+      continue-on-error: true
+      uses: andresz1/size-limit-action@e7493a72a44b113341c0cf6186ab49c17c4b65c1  # ratchet:andresz1/size-limit-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        skip_step: install
+        build_script: build
+
+  memory-profiling:
+    name: Memory Profiling
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+    - name: Set up Python
+      if: hashFiles('requirements.txt') != ''
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install memory profiler
+      if: hashFiles('requirements.txt', 'setup.py', 'pyproject.toml') != ''
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+        pip install memory_profiler
+
+    - name: Run memory profiling
+      if: hashFiles('requirements.txt') != ''
+      run: |
+        python -m memory_profiler tests/profile_memory.py || echo "No memory profiling script"
+
+    - name: Upload profiling results
+      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      with:
+        name: memory-profile
+        path: '*.prof'
+        retention-days: 30
+
+  performance-report:
+    name: Performance Summary
+    needs: [benchmark, lighthouse, bundle-size, memory-profiling]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create Performance Summary
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const summary = `
+          ## 🎯 Performance Test Summary
+
+          | Job | Status |
+          |-----|--------|
+          | Benchmarks | ${{ needs.benchmark.result }} |
+          | Lighthouse | ${{ needs.lighthouse.result }} |
+          | Bundle Size | ${{ needs.bundle-size.result }} |
+          | Memory Profiling | ${{ needs.memory-profiling.result }} |
+
+          ### Recommendations
+
+          - Monitor performance metrics regularly
+          - Set performance budgets
+          - Optimize critical rendering path
+          - Minimize bundle size
+          - Use lazy loading where applicable
+          - Implement caching strategies
+
+          See individual job outputs for detailed metrics.
+          `;
+
+          console.log(summary);

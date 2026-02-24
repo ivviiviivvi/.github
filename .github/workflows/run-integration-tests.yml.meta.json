@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Integration Tests",
+  "identifier": "urn:uuid:dd96f4f1-51d5-5a1a-a481-40718fe22f91",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by pull_request, push, workflow_dispatch, schedule, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.testing.run.yml",
+    "layer": "logic",
+    "role": "testing",
+    "domain": "run"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "push", "workflow_dispatch", "schedule"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "logic",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled",
+    "testing"
+  ]
+}

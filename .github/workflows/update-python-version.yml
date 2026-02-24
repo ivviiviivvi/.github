@@ -1,0 +1,251 @@
+name: Update Python Version
+
+on:
+  schedule:
+    # Run monthly on the 15th at 5 AM UTC
+  - cron: 0 5 15 * *
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run (show available updates without making changes)
+        required: false
+        type: boolean
+        default: false
+      target_version:
+        description: Target Python version (leave empty for auto-detect latest stable)
+        required: false
+        type: string
+        default: ''
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  # Current minimum Python version from pyproject.toml
+  MIN_PYTHON_VERSION: '3.9'
+  # Maximum Python version to consider (adjust when new stable releases come out)
+  MAX_PYTHON_VERSION: '3.13'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      current_version: ${{ steps.current.outputs.version }}
+      latest_version: ${{ steps.latest.outputs.version }}
+      should_update: ${{ steps.compare.outputs.should_update }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Get current default version
+      id: current
+      run: |
+        # Check repository variable first, then fallback to hardcoded default
+        CURRENT="${{ vars.PYTHON_VERSION_DEFAULT }}"
+        if [ -z "$CURRENT" ]; then
+          CURRENT="3.12"
+        fi
+        echo "version=$CURRENT" >> $GITHUB_OUTPUT
+        echo "Current default Python version: $CURRENT"
+
+    - name: Detect latest stable Python version
+      id: latest
+      env:
+        TARGET_VERSION: ${{ inputs.target_version }}
+      run: |
+        if [ -n "$TARGET_VERSION" ]; then
+          LATEST="$TARGET_VERSION"
+          echo "Using manually specified version: $LATEST"
+        else
+          # Query the actions/python-versions repository for available versions
+          # This is the source of truth for setup-python action
+          VERSIONS=$(curl -s "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json" | \
+            jq -r '.[].version' | \
+            grep -E '^3\.(9|1[0-3])\.[0-9]+$' | \
+            sort -V | \
+            tail -1)
+
+          # Extract major.minor from full version
+          LATEST=$(echo "$VERSIONS" | grep -oE '^3\.[0-9]+')
+
+          # Cap at MAX_PYTHON_VERSION
+          if [ "$(printf '%s\n' "$LATEST" "${{ env.MAX_PYTHON_VERSION }}" | sort -V | tail -1)" = "${{ env.MAX_PYTHON_VERSION }}" ]; then
+            # LATEST is <= MAX, use it
+            :
+          else
+            LATEST="${{ env.MAX_PYTHON_VERSION }}"
+          fi
+
+          echo "Detected latest stable version: $LATEST"
+        fi
+
+        echo "version=$LATEST" >> $GITHUB_OUTPUT
+
+    - name: Compare versions
+      id: compare
+      run: |
+        CURRENT="${{ steps.current.outputs.version }}"
+        LATEST="${{ steps.latest.outputs.version }}"
+
+        echo "Comparing: current=$CURRENT vs latest=$LATEST"
+
+        if [ "$CURRENT" = "$LATEST" ]; then
+          echo "Already on latest version"
+          echo "should_update=false" >> $GITHUB_OUTPUT
+        else
+          # Check if latest is newer using version comparison
+          HIGHER=$(printf '%s\n' "$CURRENT" "$LATEST" | sort -V | tail -1)
+          if [ "$HIGHER" = "$LATEST" ]; then
+            echo "Update available: $CURRENT -> $LATEST"
+            echo "should_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "Current version is newer than detected latest (unusual)"
+            echo "should_update=false" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+  validate-version:
+    needs: check-version
+    if: needs.check-version.outputs.should_update == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Test new Python version
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: ${{ needs.check-version.outputs.latest_version }}
+        cache: pip
+
+    - name: Validate dependencies install
+      run: |
+        python --version
+        python -m pip install --upgrade pip
+
+        # Test installing project dependencies
+        if [ -f ".github/requirements.txt" ]; then
+          pip install -r .github/requirements.txt
+          echo "Requirements installed successfully"
+        fi
+
+        # Test pyproject.toml if present
+        if [ -f "pyproject.toml" ]; then
+          pip install build
+          echo "Build tools installed successfully"
+        fi
+
+    - name: Run basic tests
+      run: |
+        # Ensure Python works correctly
+        python -c "import sys; print(f'Python {sys.version}')"
+        python -c "import json, pathlib, hashlib; print('Core modules OK')"
+
+  update-workflows:
+    needs: [check-version, validate-version]
+    if: needs.check-version.outputs.should_update == 'true' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update workflow files
+      id: update
+      env:
+        NEW_VERSION: ${{ needs.check-version.outputs.latest_version }}
+        OLD_VERSION: ${{ needs.check-version.outputs.current_version }}
+      run: |
+        cd .github
+
+        # Count files to update
+        COUNT=0
+
+        # Update workflow files that have hardcoded Python versions
+        for file in workflows/*.yml workflows/**/*.yml; do
+          if [ -f "$file" ]; then
+            # Update python-version inputs with the old default
+            if grep -q "python-version.*$OLD_VERSION" "$file" 2>/dev/null; then
+              sed -i "s/python-version: '$OLD_VERSION'/python-version: '$NEW_VERSION'/g" "$file"
+              sed -i "s/python-version: \"$OLD_VERSION\"/python-version: \"$NEW_VERSION\"/g" "$file"
+              COUNT=$((COUNT + 1))
+              echo "Updated: $file"
+            fi
+          fi
+        done
+
+        echo "updated_count=$COUNT" >> $GITHUB_OUTPUT
+        echo "Updated $COUNT workflow files"
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c  # ratchet:peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: |
+          chore(deps): update default Python version to ${{ needs.check-version.outputs.latest_version }}
+
+          Update from ${{ needs.check-version.outputs.current_version }} to ${{ needs.check-version.outputs.latest_version }}.
+
+          Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        branch: auto/update-python-version
+        delete-branch: true
+        title: 'chore(deps): update default Python version to ${{ needs.check-version.outputs.latest_version }}'
+        body: |
+          ## Summary
+          Update default Python version from **${{ needs.check-version.outputs.current_version }}** to **${{ needs.check-version.outputs.latest_version }}**.
+
+          ## Changes
+          - Updated ${{ steps.update.outputs.updated_count }} workflow files
+          - Consider updating `vars.PYTHON_VERSION_DEFAULT` repository variable
+
+          ## Validation
+          - [x] New Python version is available in GitHub Actions
+          - [x] Dependencies install successfully
+          - [ ] CI passes with new version
+
+          ## Manual Steps Required
+          After merging, update the repository variable:
+          1. Go to Settings > Secrets and variables > Actions > Variables
+          2. Update `PYTHON_VERSION_DEFAULT` to `${{ needs.check-version.outputs.latest_version }}`
+
+          ---
+          Generated by [Update Python Version workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        labels: |
+          dependencies
+          automated
+          python
+
+  summary:
+    needs: [check-version, validate-version]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Generate summary
+      env:
+        DRY_RUN: ${{ inputs.dry_run }}
+      run: |
+        echo "## Python Version Update Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Current Version | ${{ needs.check-version.outputs.current_version }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Latest Available | ${{ needs.check-version.outputs.latest_version }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Update Available | ${{ needs.check-version.outputs.should_update }} |" >> $GITHUB_STEP_SUMMARY
+
+        if [ "$DRY_RUN" = "true" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **Note:** This was a dry run. No changes were made." >> $GITHUB_STEP_SUMMARY
+        fi

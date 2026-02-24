@@ -1,0 +1,105 @@
+name: Update Demo Registry
+
+on:
+  repository_dispatch:
+    types: [demo-registry-update]
+
+permissions:
+  contents: write
+
+jobs:
+  update-registry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Checkout .github repo
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        ref: main
+
+    - name: Install yq (pinned v4.44.6 + checksum)
+      env:
+        YQ_VERSION: v4.44.6
+        YQ_SHA256: 0c2b24e645b57d8e7c0566d18643a6d4f5580feeea3878127354a46f2a1e4598
+      run: |
+        sudo wget -qO /usr/local/bin/yq \
+          "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+        echo "$YQ_SHA256  /usr/local/bin/yq" | sha256sum --check --strict
+        sudo chmod +x /usr/local/bin/yq
+        yq --version
+
+    - name: Update live_demos.yml
+      env:
+        REPO: ${{ github.event.client_payload.repository }}
+        SANDBOX_URL: ${{ github.event.client_payload.sandbox_url }}
+        APP_TYPE: ${{ github.event.client_payload.app_type }}
+        FRAMEWORK: ${{ github.event.client_payload.framework }}
+        PROVIDER: ${{ github.event.client_payload.provider }}
+        TIMESTAMP: ${{ github.event.client_payload.timestamp }}
+      run: |
+        FILE="docs/_data/live_demos.yml"
+
+        # Ensure file exists and has array root
+        if [ ! -f "$FILE" ] || [ "$(yq eval 'length' "$FILE")" = "0" ]; then
+          echo "[]" > "$FILE"
+        fi
+
+        # Remove existing entry for this repo (if any) then append
+        yq eval -i "del(.[] | select(.repository == \"$REPO\"))" "$FILE"
+
+        yq eval -i \
+          ". += [{
+            \"repository\": \"$REPO\",
+            \"sandbox_url\": \"$SANDBOX_URL\",
+            \"app_type\": \"$APP_TYPE\",
+            \"framework\": \"$FRAMEWORK\",
+            \"provider\": \"$PROVIDER\",
+            \"status\": \"active\",
+            \"last_updated\": \"$TIMESTAMP\"
+          }]" "$FILE"
+
+        echo "Updated $FILE with $REPO"
+
+    - name: Update app-deployments.yml
+      env:
+        REPO: ${{ github.event.client_payload.repository }}
+        SANDBOX_URL: ${{ github.event.client_payload.sandbox_url }}
+        APP_TYPE: ${{ github.event.client_payload.app_type }}
+        FRAMEWORK: ${{ github.event.client_payload.framework }}
+        PROVIDER: ${{ github.event.client_payload.provider }}
+        TIMESTAMP: ${{ github.event.client_payload.timestamp }}
+      run: |
+        FILE="docs/_data/app-deployments.yml"
+
+        if [ ! -f "$FILE" ] || [ "$(yq eval 'length' "$FILE")" = "0" ]; then
+          echo "[]" > "$FILE"
+        fi
+
+        yq eval -i "del(.[] | select(.repository == \"$REPO\"))" "$FILE"
+
+        yq eval -i \
+          ". += [{
+            \"repository\": \"$REPO\",
+            \"app_type\": \"$APP_TYPE\",
+            \"deployment_strategy\": \"sandbox\",
+            \"deployment_url\": \"$SANDBOX_URL\",
+            \"deployed_at\": \"$TIMESTAMP\",
+            \"status\": \"active\",
+            \"language\": \"$FRAMEWORK\",
+            \"framework\": \"$FRAMEWORK\",
+            \"provider\": \"$PROVIDER\"
+          }]" "$FILE"
+
+        echo "Updated $FILE with $REPO"
+
+    - name: Commit and push
+      env:
+        REPO: ${{ github.event.client_payload.repository }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add docs/_data/live_demos.yml docs/_data/app-deployments.yml
+        git diff --cached --quiet && echo "No changes to commit" && exit 0
+        git commit -m "chore(registry): update demo sandbox for ${REPO} [skip ci]"
+        git push

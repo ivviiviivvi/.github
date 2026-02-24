@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Python Setup & Test (Reusable)",
+  "identifier": "urn:uuid:a9d8bae9-cb2a-5acc-a741-2fd3cd2a50e6",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.testing.python.yml",
+    "layer": "core",
+    "role": "testing",
+    "domain": "python"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "testing"]
+}

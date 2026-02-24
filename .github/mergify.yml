@@ -1,0 +1,51 @@
+pull_request_rules:
+- name: Automatic merge for Renovate pull requests
+  conditions:
+  - author=renovate[bot]
+  - check-success=CI
+  - check-success=Lint Code
+  - check-success=Security Scan
+  - '#approved-reviews-by>=1'
+  actions:
+    merge:
+      method: squash
+
+- name: Automatic merge for Dependabot pull requests
+  conditions:
+  - author=dependabot[bot]
+  - check-success=CI
+  - check-success=Lint Code
+  - check-success=Security Scan
+  - '#approved-reviews-by>=1'
+  actions:
+    merge:
+      method: squash
+
+- name: Delete head branch after merge
+  conditions:
+  - merged
+  actions:
+    delete_head_branch: {}
+
+- name: Label size - small
+  conditions:
+  - additions<20
+  - deletions<20
+  actions:
+    label:
+      add: [size/small]
+
+- name: Label size - medium
+  conditions:
+  - additions>=20
+  - additions<100
+  actions:
+    label:
+      add: [size/medium]
+
+- name: Label size - large
+  conditions:
+  - additions>=100
+  actions:
+    label:
+      add: [size/large]

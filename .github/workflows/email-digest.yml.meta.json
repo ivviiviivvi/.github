@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Email Digest",
+  "identifier": "urn:uuid:6fd5d784-3cdf-5cf2-bd7c-809974509502",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "interface.general.email.yml",
+    "layer": "interface",
+    "role": "general",
+    "domain": "email"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "interface", "manual", "scheduled"]
+}

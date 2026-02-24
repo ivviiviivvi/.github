@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Bio and Description Completions",
+  "identifier": "urn:uuid:c3804b5b-4ac3-5d4c-b549-92d6d9c7c1ee",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.bio.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "bio"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch", "workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "scheduled"]
+}

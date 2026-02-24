@@ -1,0 +1,7 @@
+{
+  "name": "Bio and Description Completions Workflow",
+  "description": "Audit and ensure complete repository and organization descriptions and metadata",
+  "iconName": "checklist",
+  "categories": ["Automation", "Documentation", "Quality"],
+  "filePatterns": ["README.md$"]
+}

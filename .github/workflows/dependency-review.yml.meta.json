@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Dependency Review",
+  "identifier": "urn:uuid:db8e052a-02ec-568c-b0d9-84fcf015d880",
+  "version": "1.0.0",
+  "description": "Pull request automation and management. Triggered by pull_request, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.pr-management.dependency.yml",
+    "layer": "logic",
+    "role": "pr-management",
+    "domain": "dependency"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["logic", "manual", "pr management", "pr-triggered", "review"]
+}

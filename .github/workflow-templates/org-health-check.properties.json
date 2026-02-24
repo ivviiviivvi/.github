@@ -1,0 +1,6 @@
+{
+  "name": "Organization Health Check",
+  "description": "Automated repository health monitoring and standards compliance reporting",
+  "iconName": "shield-check",
+  "categories": ["Automation", "Monitoring"]
+}

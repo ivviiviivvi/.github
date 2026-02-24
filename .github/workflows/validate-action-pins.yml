@@ -1,0 +1,74 @@
+name: Validate Action Pins
+
+on:
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+    - .github/workflows/**/*.yml
+    - .github/.github/workflows/**/*.yml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-pins:
+    name: Check SHA Pinning
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Check for unpinned actions
+      id: check
+      run: |
+        # Find uses: lines with @v* but no ratchet comment
+        # This detects actions pinned to version tags instead of SHA commits
+        # Exclude this file itself from the check to avoid false positives in the example code
+        unpinned=$(grep -rn 'uses:.*@v[0-9]' .github/workflows/ .github/.github/workflows/ 2>/dev/null | grep -v '# ratchet:' | grep -v 'validate-action-pins.yml' || true)
+
+        if [ -n "$unpinned" ]; then
+          echo "::error::Found unpinned actions"
+          echo "$unpinned"
+          echo "unpinned=true" >> $GITHUB_OUTPUT
+          exit 1
+        else
+          echo "All actions are properly pinned"
+          echo "unpinned=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Comment on PR (if unpinned)
+      if: failure()
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: `## Action Pinning Required
+
+          This PR contains GitHub Actions that are not pinned to SHA commits.
+
+          **Why this matters:**
+          SHA pinning prevents supply chain attacks where a malicious actor could hijack a version tag.
+
+          **How to fix:**
+          1. Run \`python src/automation/scripts/utils/update-action-pins.py\`
+          2. Or manually pin actions using format: \`action@SHA  # ratchet:action@version\`
+
+          **Example:**
+          \`\`\`yaml
+          # Before (vulnerable)
+          uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+          # After (secure)
+          uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+          \`\`\`
+          `
+          })

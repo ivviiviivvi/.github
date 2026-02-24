@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Token Health Check",
+  "identifier": "urn:uuid:3886f70b-aae1-56d9-9c1d-40fda406f1d3",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by schedule, workflow_dispatch, push, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.quality.token.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "token"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch", "push"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "manual", "push-triggered", "quality", "scheduled"]
+}

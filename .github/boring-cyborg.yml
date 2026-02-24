@@ -1,0 +1,36 @@
+# Boring Cyborg Configuration
+# Automates labeling and greetings
+
+# Automatically label Pull Requests based on changed files
+labelPRBasedOnFilePath:
+  area/automation:
+  - src/automation/**/*
+  - scripts/**/*
+  area/workflows:
+  - .github/workflows/**/*
+  area/docs:
+  - docs/**/*
+  - '**/*.md'
+  lang/python:
+  - '**/*.py'
+  lang/javascript:
+  - '**/*.js'
+  - '**/*.ts'
+  config:
+  - .github/*.yml
+  - .config/**/*
+
+# Greet first-time contributors
+firstPR: |
+  🎉 **Welcome to the project!**
+
+  Thanks for opening your first pull request. A maintainer will review your changes shortly.
+  Please make sure you've followed our [Contributing Guidelines](../CONTRIBUTING.md).
+
+firstIssue: |
+  👋 **Thanks for opening your first issue!**
+
+  We appreciate your feedback. Please make sure you've provided all necessary details so we can help you faster.
+
+# Cleanup
+deleteBranchAfterMerge: true

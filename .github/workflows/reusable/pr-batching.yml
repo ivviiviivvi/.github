@@ -1,0 +1,631 @@
+name: PR Batching (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      operation:
+        description: Operation to perform (create-batch, merge-batch, list-queue, add-to-queue, remove-from-queue)
+        required: true
+        type: string
+      batch-label:
+        description: Label to identify PRs for batching
+        required: false
+        type: string
+        default: batch-merge
+      batch-branch-prefix:
+        description: Prefix for batch merge branches
+        required: false
+        type: string
+        default: batch/
+      base-branch:
+        description: Base branch for batch operations
+        required: false
+        type: string
+        default: main
+      pr-numbers:
+        description: Comma-separated PR numbers to include in batch (for create-batch operation)
+        required: false
+        type: string
+        default: ''
+      merge-method:
+        description: Merge method (merge, squash, rebase)
+        required: false
+        type: string
+        default: squash
+      require-all-checks:
+        description: Require all checks to pass before batching
+        required: false
+        type: boolean
+        default: true
+      require-approval:
+        description: Require at least one approval before batching
+        required: false
+        type: boolean
+        default: true
+      auto-delete-branches:
+        description: Delete source branches after successful batch merge
+        required: false
+        type: boolean
+        default: true
+      max-batch-size:
+        description: Maximum number of PRs in a batch
+        required: false
+        type: number
+        default: 10
+      conflict-resolution:
+        description: How to handle conflicts (skip, abort, manual)
+        required: false
+        type: string
+        default: skip
+    secrets:
+      github-token:
+        description: GitHub token with PR and contents permissions
+        required: false
+    outputs:
+      batch-branch:
+        description: Name of the created batch branch
+        value: ${{ jobs.pr-batching.outputs.batch-branch }}
+      batch-pr-number:
+        description: PR number for the batch merge
+        value: ${{ jobs.pr-batching.outputs.batch-pr }}
+      included-prs:
+        description: List of PRs included in the batch
+        value: ${{ jobs.pr-batching.outputs.included }}
+      excluded-prs:
+        description: List of PRs excluded from the batch (conflicts, checks failed)
+        value: ${{ jobs.pr-batching.outputs.excluded }}
+      queue-status:
+        description: Current queue status
+        value: ${{ jobs.pr-batching.outputs.queue }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-batching:
+    runs-on: ubuntu-latest
+    outputs:
+      batch-branch: ${{ steps.create-batch.outputs.branch }}
+      batch-pr: ${{ steps.create-batch-pr.outputs.number }}
+      included: ${{ steps.create-batch.outputs.included }}
+      excluded: ${{ steps.create-batch.outputs.excluded }}
+      queue: ${{ steps.list-queue.outputs.queue }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      GH_TOKEN: ${{ secrets.github-token || secrets.GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.github-token || secrets.GITHUB_TOKEN }}
+
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: List PR queue
+      id: list-queue
+      if: inputs.operation == 'list-queue' || inputs.operation == 'create-batch'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const batchLabel = '${{ inputs.batch-label }}';
+          const baseBranch = '${{ inputs.base-branch }}';
+          const requireChecks = ${{ inputs.require-all-checks }};
+          const requireApproval = ${{ inputs.require-approval }};
+          const maxBatchSize = ${{ inputs.max-batch-size }};
+
+          // Find all PRs with batch label
+          const { data: prs } = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            base: baseBranch,
+            per_page: 100
+          });
+
+          const batchablePRs = prs.filter(pr =>
+            pr.labels.some(l => l.name === batchLabel)
+          );
+
+          console.log(`Found ${batchablePRs.length} PRs with batch label`);
+
+          // Check eligibility for each PR
+          const eligible = [];
+          const ineligible = [];
+
+          for (const pr of batchablePRs.slice(0, maxBatchSize)) {
+            const status = {
+              number: pr.number,
+              title: pr.title,
+              author: pr.user.login,
+              mergeable: pr.mergeable,
+              eligible: true,
+              reasons: []
+            };
+
+            // Check mergeable status
+            if (pr.mergeable === false) {
+              status.eligible = false;
+              status.reasons.push('Has merge conflicts');
+            }
+
+            // Check if draft
+            if (pr.draft) {
+              status.eligible = false;
+              status.reasons.push('Is a draft PR');
+            }
+
+            // Check CI status
+            if (requireChecks) {
+              const { data: checks } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha
+              });
+
+              const failedChecks = checks.check_runs.filter(c =>
+                c.conclusion === 'failure' || c.conclusion === 'cancelled'
+              );
+
+              if (failedChecks.length > 0) {
+                status.eligible = false;
+                status.reasons.push(`${failedChecks.length} checks failed`);
+              }
+
+              const pendingChecks = checks.check_runs.filter(c =>
+                c.status === 'in_progress' || c.status === 'queued'
+              );
+
+              if (pendingChecks.length > 0) {
+                status.eligible = false;
+                status.reasons.push(`${pendingChecks.length} checks pending`);
+              }
+            }
+
+            // Check approvals
+            if (requireApproval) {
+              const { data: reviews } = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number
+              });
+
+              const approvals = reviews.filter(r => r.state === 'APPROVED');
+              const changesRequested = reviews.filter(r => r.state === 'CHANGES_REQUESTED');
+
+              if (approvals.length === 0) {
+                status.eligible = false;
+                status.reasons.push('No approvals');
+              }
+
+              if (changesRequested.length > 0) {
+                status.eligible = false;
+                status.reasons.push('Changes requested');
+              }
+            }
+
+            if (status.eligible) {
+              eligible.push(status);
+            } else {
+              ineligible.push(status);
+            }
+          }
+
+          const queue = {
+            total: batchablePRs.length,
+            eligible: eligible.length,
+            ineligible: ineligible.length,
+            prs: { eligible, ineligible }
+          };
+
+          core.setOutput('queue', JSON.stringify(queue));
+          core.setOutput('eligible-prs', JSON.stringify(eligible.map(p => p.number)));
+
+          console.log(`Queue: ${eligible.length} eligible, ${ineligible.length} ineligible`);
+
+    - name: Create batch branch
+      id: create-batch
+      if: inputs.operation == 'create-batch'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const baseBranch = '${{ inputs.base-branch }}';
+          const branchPrefix = '${{ inputs.batch-branch-prefix }}';
+          const conflictResolution = '${{ inputs.conflict-resolution }}';
+
+          // Get eligible PRs from queue or input
+          let prNumbers = [];
+          const inputPRs = '${{ inputs.pr-numbers }}';
+
+          if (inputPRs) {
+            prNumbers = inputPRs.split(',').map(n => parseInt(n.trim()));
+          } else {
+            const queueData = JSON.parse('${{ steps.list-queue.outputs.eligible-prs }}' || '[]');
+            prNumbers = queueData;
+          }
+
+          if (prNumbers.length === 0) {
+            console.log('No PRs to batch');
+            core.setOutput('branch', '');
+            core.setOutput('included', '[]');
+            core.setOutput('excluded', '[]');
+            return;
+          }
+
+          // Create batch branch name
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+          const batchBranch = `${branchPrefix}batch-${timestamp}`;
+
+          console.log(`Creating batch branch: ${batchBranch}`);
+
+          // Get base branch SHA
+          const { data: baseBranchData } = await github.rest.git.getRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `heads/${baseBranch}`
+          });
+
+          // Create batch branch
+          await github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `refs/heads/${batchBranch}`,
+            sha: baseBranchData.object.sha
+          });
+
+          const included = [];
+          const excluded = [];
+
+          // Merge each PR into batch branch
+          for (const prNumber of prNumbers) {
+            console.log(`Processing PR #${prNumber}...`);
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            try {
+              // Try to merge the PR branch into batch branch
+              await github.rest.repos.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                base: batchBranch,
+                head: pr.head.sha,
+                commit_message: `Batch merge PR #${prNumber}: ${pr.title}`
+              });
+
+              included.push({
+                number: prNumber,
+                title: pr.title,
+                author: pr.user.login
+              });
+
+              console.log(`Successfully merged PR #${prNumber}`);
+            } catch (error) {
+              console.log(`Failed to merge PR #${prNumber}: ${error.message}`);
+
+              if (conflictResolution === 'abort') {
+                // Delete batch branch and fail
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `heads/${batchBranch}`
+                });
+
+                core.setFailed(`Conflict detected in PR #${prNumber}. Batch aborted.`);
+                return;
+              }
+
+              excluded.push({
+                number: prNumber,
+                title: pr.title,
+                author: pr.user.login,
+                reason: 'Merge conflict'
+              });
+            }
+          }
+
+          if (included.length === 0) {
+            console.log('No PRs could be merged into batch');
+
+            // Delete empty batch branch
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${batchBranch}`
+            });
+
+            core.setOutput('branch', '');
+          } else {
+            core.setOutput('branch', batchBranch);
+          }
+
+          core.setOutput('included', JSON.stringify(included));
+          core.setOutput('excluded', JSON.stringify(excluded));
+
+    - name: Create batch PR
+      id: create-batch-pr
+      if: inputs.operation == 'create-batch' && steps.create-batch.outputs.branch != ''
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const batchBranch = '${{ steps.create-batch.outputs.branch }}';
+          const baseBranch = '${{ inputs.base-branch }}';
+          const included = JSON.parse('${{ steps.create-batch.outputs.included }}');
+          const excluded = JSON.parse('${{ steps.create-batch.outputs.excluded }}');
+
+          // Build PR body
+          let body = '## Batch Merge PR\n\n';
+          body += 'This PR combines multiple approved PRs for batch merging.\n\n';
+
+          body += '### Included PRs\n\n';
+          for (const pr of included) {
+            body += `- #${pr.number} - ${pr.title} (@${pr.author})\n`;
+          }
+
+          if (excluded.length > 0) {
+            body += '\n### Excluded PRs (conflicts or issues)\n\n';
+            for (const pr of excluded) {
+              body += `- #${pr.number} - ${pr.title} (@${pr.author}) - ${pr.reason}\n`;
+            }
+          }
+
+          body += '\n---\n\n';
+          body += '**Merge Method:** ${{ inputs.merge-method }}\n';
+          body += `**Auto-delete branches:** ${{ inputs.auto-delete-branches }}\n`;
+
+          // Create the batch PR
+          const { data: batchPR } = await github.rest.pulls.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `[Batch Merge] ${included.length} PRs`,
+            head: batchBranch,
+            base: baseBranch,
+            body: body
+          });
+
+          console.log(`Created batch PR #${batchPR.number}`);
+
+          // Add batch label
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: batchPR.number,
+            labels: ['batch-pr']
+          });
+
+          core.setOutput('number', batchPR.number.toString());
+          core.setOutput('url', batchPR.html_url);
+
+    - name: Merge batch
+      id: merge-batch
+      if: inputs.operation == 'merge-batch'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const mergeMethod = '${{ inputs.merge-method }}';
+          const autoDeleteBranches = ${{ inputs.auto-delete-branches }};
+
+          // Find the batch PR
+          const { data: prs } = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            per_page: 100
+          });
+
+          const batchPR = prs.find(pr =>
+            pr.labels.some(l => l.name === 'batch-pr')
+          );
+
+          if (!batchPR) {
+            console.log('No batch PR found');
+            core.setOutput('merged', 'false');
+            return;
+          }
+
+          console.log(`Found batch PR #${batchPR.number}`);
+
+          // Check if PR is mergeable
+          const { data: prDetails } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: batchPR.number
+          });
+
+          if (!prDetails.mergeable) {
+            core.setFailed('Batch PR is not mergeable');
+            return;
+          }
+
+          // Merge the batch PR
+          try {
+            await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: batchPR.number,
+              merge_method: mergeMethod,
+              commit_title: `Batch merge: ${batchPR.title}`,
+              commit_message: batchPR.body
+            });
+
+            console.log('Batch PR merged successfully');
+            core.setOutput('merged', 'true');
+
+            // Extract included PR numbers from body
+            const prNumberMatches = batchPR.body.match(/#(\d+)/g) || [];
+            const includedPRNumbers = prNumberMatches.map(m => parseInt(m.slice(1)));
+
+            // Close included PRs with comment
+            for (const prNumber of includedPRNumbers) {
+              try {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  body: `This PR was included in batch merge #${batchPR.number}.`
+                });
+
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  state: 'closed'
+                });
+
+                console.log(`Closed PR #${prNumber}`);
+
+                // Delete branch if enabled
+                if (autoDeleteBranches) {
+                  const { data: pr } = await github.rest.pulls.get({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: prNumber
+                  });
+
+                  // Only delete if it's in the same repo
+                  if (pr.head.repo.full_name === pr.base.repo.full_name) {
+                    try {
+                      await github.rest.git.deleteRef({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        ref: `heads/${pr.head.ref}`
+                      });
+                      console.log(`Deleted branch: ${pr.head.ref}`);
+                    } catch (e) {
+                      console.log(`Could not delete branch ${pr.head.ref}: ${e.message}`);
+                    }
+                  }
+                }
+              } catch (error) {
+                console.log(`Could not close PR #${prNumber}: ${error.message}`);
+              }
+            }
+          } catch (error) {
+            core.setFailed(`Failed to merge batch PR: ${error.message}`);
+          }
+
+    - name: Add PR to queue
+      id: add-to-queue
+      if: inputs.operation == 'add-to-queue'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const batchLabel = '${{ inputs.batch-label }}';
+          const prNumbers = '${{ inputs.pr-numbers }}'.split(',').map(n => parseInt(n.trim()));
+
+          for (const prNumber of prNumbers) {
+            if (isNaN(prNumber)) continue;
+
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: [batchLabel]
+              });
+
+              console.log(`Added PR #${prNumber} to batch queue`);
+            } catch (error) {
+              console.log(`Could not add PR #${prNumber} to queue: ${error.message}`);
+            }
+          }
+
+          core.setOutput('added', JSON.stringify(prNumbers.filter(n => !isNaN(n))));
+
+    - name: Remove PR from queue
+      id: remove-from-queue
+      if: inputs.operation == 'remove-from-queue'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const batchLabel = '${{ inputs.batch-label }}';
+          const prNumbers = '${{ inputs.pr-numbers }}'.split(',').map(n => parseInt(n.trim()));
+
+          for (const prNumber of prNumbers) {
+            if (isNaN(prNumber)) continue;
+
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                name: batchLabel
+              });
+
+              console.log(`Removed PR #${prNumber} from batch queue`);
+            } catch (error) {
+              console.log(`Could not remove PR #${prNumber} from queue: ${error.message}`);
+            }
+          }
+
+          core.setOutput('removed', JSON.stringify(prNumbers.filter(n => !isNaN(n))));
+
+    - name: Post operation summary
+      if: always()
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const operation = '${{ inputs.operation }}';
+          let summary = `## PR Batching - ${operation}\n\n`;
+
+          switch (operation) {
+            case 'list-queue':
+              const queue = JSON.parse('${{ steps.list-queue.outputs.queue }}' || '{}');
+              summary += `**Total in queue:** ${queue.total || 0}\n`;
+              summary += `**Eligible for batch:** ${queue.eligible || 0}\n`;
+              summary += `**Ineligible:** ${queue.ineligible || 0}\n`;
+              break;
+
+            case 'create-batch':
+              const branch = '${{ steps.create-batch.outputs.branch }}';
+              const prNumber = '${{ steps.create-batch-pr.outputs.number }}';
+              const included = JSON.parse('${{ steps.create-batch.outputs.included }}' || '[]');
+              const excluded = JSON.parse('${{ steps.create-batch.outputs.excluded }}' || '[]');
+
+              if (branch) {
+                summary += `**Batch branch:** \`${branch}\`\n`;
+                summary += `**Batch PR:** #${prNumber}\n`;
+                summary += `**Included PRs:** ${included.length}\n`;
+                summary += `**Excluded PRs:** ${excluded.length}\n`;
+              } else {
+                summary += 'No batch created (no eligible PRs).\n';
+              }
+              break;
+
+            case 'merge-batch':
+              const merged = '${{ steps.merge-batch.outputs.merged }}' === 'true';
+              summary += merged ? 'Batch merged successfully.\n' : 'Batch merge failed.\n';
+              break;
+
+            case 'add-to-queue':
+              const added = JSON.parse('${{ steps.add-to-queue.outputs.added }}' || '[]');
+              summary += `Added ${added.length} PRs to queue.\n`;
+              break;
+
+            case 'remove-from-queue':
+              const removed = JSON.parse('${{ steps.remove-from-queue.outputs.removed }}' || '[]');
+              summary += `Removed ${removed.length} PRs from queue.\n`;
+              break;
+          }
+
+          console.log(summary);
+
+          // Write to job summary
+          const fs = require('fs');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);

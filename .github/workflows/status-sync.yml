@@ -1,0 +1,293 @@
+name: Status Synchronization
+
+on:
+  pull_request:
+    types: [opened, closed, reopened, converted_to_draft, ready_for_review]
+  issues:
+    types: [opened, closed, reopened, assigned, unassigned]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  sync-pr-to-issue:
+    name: Sync PR Status to Linked Issues
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'pull_request'
+    steps:
+    - name: Find and update linked issues
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          const prBody = pr.body || '';
+
+          // Extract issue references (Closes #123, Fixes #456, Resolves #789, etc.)
+          const issueRegex = /(close[sd]?|fix(e[sd])?|resolve[sd]?)\s+#(\d+)/gi;
+          const matches = [...prBody.matchAll(issueRegex)];
+          const issueNumbers = matches.map(m => parseInt(m[3]));
+
+          // Also check PR title
+          const titleMatches = [...pr.title.matchAll(issueRegex)];
+          titleMatches.forEach(m => issueNumbers.push(parseInt(m[3])));
+
+          // Remove duplicates
+          const uniqueIssues = [...new Set(issueNumbers)];
+
+          for (const issueNumber of uniqueIssues) {
+            try {
+              // Get current issue
+              const issue = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              const currentLabels = issue.data.labels.map(l => l.name);
+              let labelsToAdd = [];
+              let labelsToRemove = [];
+
+              // Determine status based on PR state
+              if (pr.draft) {
+                // PR is draft
+                labelsToAdd.push('status: in-progress');
+                labelsToRemove = currentLabels.filter(l =>
+                  l === 'status: in-review' || l === 'status: backlog'
+                );
+              } else if (pr.state === 'open') {
+                // PR is ready for review
+                labelsToAdd.push('status: in-review');
+                labelsToRemove = currentLabels.filter(l =>
+                  l === 'status: in-progress' || l === 'status: backlog'
+                );
+              } else if (pr.merged) {
+                // PR is merged
+                labelsToAdd.push('status: done');
+                labelsToRemove = currentLabels.filter(l =>
+                  l === 'status: in-review' || l === 'status: in-progress'
+                );
+              } else if (pr.state === 'closed' && !pr.merged) {
+                // PR closed without merging - return to backlog
+                labelsToAdd.push('status: backlog');
+                labelsToRemove = currentLabels.filter(l =>
+                  l === 'status: in-review' || l === 'status: in-progress'
+                );
+              }
+
+              // Remove old status labels
+              for (const label of labelsToRemove) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    name: label
+                  });
+                } catch (error) {
+                  // Label might not exist
+                }
+              }
+
+              // Add new status label
+              if (labelsToAdd.length > 0) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  labels: labelsToAdd
+                });
+              }
+
+              // Add comment linking PR and issue
+              if (pr.action === 'opened') {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: `🔗 **Linked Pull Request**
+
+                  PR #${pr.number} has been opened to address this issue.
+
+                  **PR**: ${pr.title}
+                  **Status**: ${pr.draft ? 'Draft' : 'Ready for Review'}
+
+                  [View Pull Request →](${pr.html_url})
+
+                  ---
+                  *Automated status sync - Issue #${issueNumber}*`
+                });
+              }
+
+              // Comment when PR is merged
+              if (pr.action === 'closed' && pr.merged) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: `✅ **Completed**
+
+                  PR #${pr.number} has been merged!
+
+                  This issue will be automatically closed.
+
+                  **Merged by**: @${pr.merged_by.login}
+                  **Merge commit**: ${pr.merge_commit_sha.substring(0, 7)}
+
+                  ---
+                  *Automated status sync - Issue #${issueNumber}*`
+                });
+              }
+
+            } catch (error) {
+              console.log(`Error updating issue #${issueNumber}:`, error.message);
+            }
+          }
+
+  sync-issue-assignment:
+    name: Sync Issue Status on Assignment
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'issues' && (github.event.action == 'assigned' || github.event.action == 'unassigned')
+    steps:
+    - name: Update status on assignment
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const issue = context.payload.issue;
+          const currentLabels = issue.labels.map(l => l.name);
+
+          if (context.payload.action === 'assigned') {
+            // Issue was assigned - move to in-progress if not already
+            const hasInProgress = currentLabels.includes('status: in-progress');
+            const hasInReview = currentLabels.includes('status: in-review');
+
+            if (!hasInProgress && !hasInReview) {
+              // Remove backlog status
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  name: 'status: backlog'
+                });
+              } catch (error) {
+                // Label might not exist
+              }
+
+              // Add in-progress status
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['status: in-progress']
+              });
+
+              // Add welcome comment for first-time assignee
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `🚀 **Work Started**
+
+                @${context.payload.assignee.login} has been assigned to this issue.
+
+                **Next Steps:**
+                1. Review the issue requirements
+                2. Create a feature branch
+                3. Open a draft PR when ready
+                4. Link the PR to this issue
+
+                **Need Help?**
+                - [Development Guide](../docs/DEVELOPMENT_ENVIRONMENT_SETUP.md)
+                - [Workflow Guide](../docs/WORKFLOW_GUIDE.md)
+                - Ask questions in [Discussions](../../discussions)
+
+                ---
+                *Automated status sync - Issue #${issue.number}*`
+              });
+            }
+          } else if (context.payload.action === 'unassigned') {
+            // Issue was unassigned - check if should return to backlog
+            const hasOtherAssignees = issue.assignees.length > 0;
+
+            if (!hasOtherAssignees) {
+              // No more assignees - return to backlog
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  name: 'status: in-progress'
+                });
+              } catch (error) {
+                // Label might not exist
+              }
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['status: backlog']
+              });
+            }
+          }
+
+  update-pr-labels:
+    name: Update PR Labels Based on State
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'pull_request'
+    steps:
+    - name: Sync PR labels
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          const currentLabels = pr.labels.map(l => l.name);
+          let labelsToAdd = [];
+          let labelsToRemove = [];
+
+          // Manage draft status
+          if (pr.draft) {
+            labelsToAdd.push('status: draft');
+            labelsToRemove.push('awaiting-review', 'status: in-review');
+          } else {
+            labelsToRemove.push('status: draft');
+            if (pr.state === 'open') {
+              labelsToAdd.push('awaiting-review');
+            }
+          }
+
+          // Remove labels
+          for (const label of labelsToRemove) {
+            if (currentLabels.includes(label)) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: label
+                });
+              } catch (error) {
+                // Label might not exist
+              }
+            }
+          }
+
+          // Add labels
+          if (labelsToAdd.length > 0) {
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: labelsToAdd
+            });
+          }

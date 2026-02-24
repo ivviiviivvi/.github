@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "CI",
+  "identifier": "urn:uuid:1fd6743d-22e0-5261-a8bd-743ff69e9016",
+  "version": "1.0.0",
+  "description": "Continuous integration workflow for building and testing. Triggered by push, pull_request, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "core.ci.ci.yml",
+    "layer": "core",
+    "role": "ci",
+    "domain": "ci"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "ci",
+    "continuous-integration",
+    "core",
+    "manual",
+    "pr-triggered",
+    "push-triggered"
+  ]
+}

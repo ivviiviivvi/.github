@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "OpenAI Workflow",
+  "identifier": "urn:uuid:929835cf-8971-5c60-bec6-996826509504",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.ai.openai.yml",
+    "layer": "logic",
+    "role": "ai",
+    "domain": "openai"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["ai", "logic", "manual"]
+}

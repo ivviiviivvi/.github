@@ -1,0 +1,6 @@
+{
+  "name": "Security Scanning",
+  "description": "CodeQL, Trivy, Semgrep, and secret detection using org-standard reusable workflow",
+  "iconName": "shield-lock",
+  "categories": ["Security"]
+}

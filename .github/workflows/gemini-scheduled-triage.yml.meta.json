@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "\ud83d\udccb Gemini Scheduled Issue Triage",
+  "identifier": "urn:uuid:d5a669ed-3dfc-54f2-94db-a7cac90d6e84",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by schedule, pull_request, push, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "interface.automation.gemini.yml",
+    "layer": "interface",
+    "role": "automation",
+    "domain": "gemini"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "pull_request", "push", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "automation",
+    "interface",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled"
+  ]
+}

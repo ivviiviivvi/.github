@@ -1,0 +1,3 @@
+# Disable Jekyll processing for GitHub Pages
+
+# This file tells GitHub to skip Jekyll and use our custom build process

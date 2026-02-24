@@ -1,0 +1,6 @@
+{
+  "name": "PR Automation",
+  "description": "Automatic PR labeling and reviewer assignment using org-standard reusable workflow",
+  "iconName": "git-pull-request",
+  "categories": ["Automation"]
+}

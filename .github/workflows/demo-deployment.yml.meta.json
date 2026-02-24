@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Demo Sandbox Deployment",
+  "identifier": "urn:uuid:49a0531e-569f-5ffd-8daf-b9db5193766b",
+  "version": "2.0.0",
+  "description": "Deploys org repo apps to sandbox environments (Vercel, Cloudflare Pages, Render, Codespaces). Triggered by push to main or workflow_dispatch, calls reusable/demo-sandbox.yml.",
+  "functioncalled": {
+    "canonical": "application.deployment.demo-sandbox.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "demo-sandbox"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-02-07T00:00:00Z",
+  "dc:subject": ["application", "deployment", "sandbox", "demo", "push-triggered"]
+}

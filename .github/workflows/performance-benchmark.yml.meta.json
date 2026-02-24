@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Performance Benchmark",
+  "identifier": "urn:uuid:22f96620-dcff-5fa4-8a50-270ed0e338e6",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by push, pull_request, workflow_dispatch, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.performance.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "performance"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "pr-triggered", "push-triggered"]
+}

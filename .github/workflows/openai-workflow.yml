@@ -1,0 +1,65 @@
+name: OpenAI Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: The prompt for the OpenAI task
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  openai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5.3.0
+      with:
+        python-version: '3.12'
+        cache: pip
+
+    - name: Check quota
+      id: quota
+      run: |
+        usage=$(python src/automation/scripts/quota_manager.py get_usage "OpenAI_API")
+        quota=$(jq -r '.subscriptions[] | select(.name=="OpenAI_API") | .quota' .github/subscriptions.json)
+        echo "usage=$usage" >> $GITHUB_OUTPUT
+        echo "quota=$quota" >> $GITHUB_OUTPUT
+
+    - name: Run OpenAI Task
+      if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota }}
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+      run: |
+        echo "Running OpenAI task with prompt: $INPUT_PROMPT"
+        # Simulate a variable cost based on prompt length
+        prompt_length=${#INPUT_PROMPT}
+        cost=$(echo "scale=4; $prompt_length * 0.00012" | bc)
+        echo "Simulated cost: $cost"
+        python src/automation/scripts/quota_manager.py increment_usage "OpenAI_API" $cost
+
+        # Simulate output
+        echo "This is a simulated output from OpenAI for the prompt: $INPUT_PROMPT" > openai_output_${{ github.run_id }}.txt
+
+    - name: Queue Task
+      if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
+      run: |
+        task='{ "subscription": "OpenAI_API", "details": "..." }'
+        python src/automation/scripts/quota_manager.py add_task "$task"
+        echo "OpenAI API quota reached. Task queued."
+
+    - name: Commit state changes
+      if: always()
+      run: |
+        ./src/automation/scripts/commit_changes.sh "chore: update state for OpenAI task"

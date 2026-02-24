@@ -1,0 +1,50 @@
+# Dependabot configuration for automated dependency updates
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+#
+# NOTE: Dependabot handles GitHub Actions and Docker only.
+# npm, pip, Go, and Composer are managed by Renovate (see .config/renovate.json)
+# for better PR grouping and dashboard features.
+
+version: 2
+updates:
+  # Enable version updates for GitHub Actions
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: weekly
+    day: monday
+    time: 03:00
+  open-pull-requests-limit: 5
+  labels:
+  - dependencies
+  - automated
+  - github-actions
+  commit-message:
+    prefix: chore(deps)
+    include: scope
+  groups:
+    github-actions:
+      patterns:
+      - '*'
+      update-types:
+      - minor
+      - patch
+
+  # Enable version updates for Docker
+- package-ecosystem: docker
+  directory: /
+  schedule:
+    interval: weekly
+    day: monday
+    time: 03:00
+  open-pull-requests-limit: 2
+  labels:
+  - dependencies
+  - automated
+  - docker
+  commit-message:
+    prefix: build(deps)
+  groups:
+    docker-images:
+      patterns:
+      - '*'

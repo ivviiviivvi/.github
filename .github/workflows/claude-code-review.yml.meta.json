@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Claude Code Review",
+  "identifier": "urn:uuid:cec03340-3116-55a3-910d-89a05a762f1e",
+  "version": "1.0.0",
+  "description": "AI-assisted code review and analysis. Triggered by pull_request, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.ai.claude.yml",
+    "layer": "logic",
+    "role": "ai",
+    "domain": "claude"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["ai", "logic", "manual", "pr-triggered", "review"]
+}

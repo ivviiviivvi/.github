@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Artifact Management (Reusable)",
+  "identifier": "urn:uuid:e88e28cb-9e10-5cc9-9c18-75f7aad7fc80",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.artifact.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "artifact"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "general"]
+}

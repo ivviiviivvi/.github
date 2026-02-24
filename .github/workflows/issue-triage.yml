@@ -1,0 +1,249 @@
+name: Issue Triage Automation
+
+on:
+  issues:
+    types: [opened, reopened, labeled, unlabeled]
+  schedule:
+    # Run daily at 9 AM UTC to check for SLA violations
+  - cron: 0 9 * * *
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  initial-triage:
+    name: Initial Triage
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
+    steps:
+    - name: Add needs-triage label
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['needs-triage', 'status: new']
+          });
+
+    - name: Add comment with triage info
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: `👋 Thank you for opening this issue!
+
+          **Next Steps:**
+          - A maintainer will triage this issue within 48 hours
+          - You'll receive an update once it's been reviewed
+          - Please provide any additional context if needed
+
+          **While You Wait:**
+          - Review our [Contributing Guide](../CONTRIBUTING.md)
+          - Check if similar issues exist
+          - Join the [Discussions](../../discussions) for questions
+
+          ---
+          *This is an automated message. Issue #${context.issue.number}*`
+          });
+
+  auto-label:
+    name: Auto-label Based on Content
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+    - name: Analyze and label
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const issue = context.payload.issue;
+          const title = issue.title.toLowerCase();
+          const body = (issue.body || '').toLowerCase();
+          const labels = [];
+
+          // Type detection
+          if (title.includes('bug') || body.includes('bug') || body.includes('error')) {
+            labels.push('type: bug');
+          }
+          if (title.includes('feature') || title.includes('enhancement')) {
+            labels.push('type: feature');
+          }
+          if (title.includes('security') || body.includes('security') || body.includes('vulnerability')) {
+            labels.push('type: security', 'priority: high');
+          }
+          if (title.includes('documentation') || title.includes('docs')) {
+            labels.push('type: documentation');
+          }
+          if (title.includes('question') || title.includes('how to')) {
+            labels.push('type: question');
+          }
+          if (title.includes('performance') || body.includes('slow') || body.includes('performance')) {
+            labels.push('type: performance');
+          }
+
+          // Priority detection
+          if (title.includes('critical') || title.includes('urgent') || body.includes('production down')) {
+            labels.push('priority: critical');
+          }
+          if (title.includes('important') || body.includes('blocking')) {
+            labels.push('priority: high');
+          }
+
+          // Area detection
+          if (body.includes('frontend') || body.includes('ui') || body.includes('ux')) {
+            labels.push('area: frontend');
+          }
+          if (body.includes('backend') || body.includes('api') || body.includes('server')) {
+            labels.push('area: backend');
+          }
+          if (body.includes('infrastructure') || body.includes('devops') || body.includes('ci/cd')) {
+            labels.push('area: infrastructure');
+          }
+          if (body.includes('test') || body.includes('testing')) {
+            labels.push('area: testing');
+          }
+
+          // Apply labels if any were detected
+          if (labels.length > 0) {
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              labels: labels
+            });
+          }
+
+  check-triage-sla:
+    name: Check Triage SLA
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+    - name: Find untriaged issues
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const TWO_DAYS_MS = 48 * 60 * 60 * 1000;
+          const now = new Date();
+
+          // Get all issues with needs-triage label
+          const issues = await github.paginate(github.rest.issues.listForRepo, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: 'needs-triage',
+            state: 'open'
+          });
+
+          for (const issue of issues) {
+            const createdAt = new Date(issue.created_at);
+            const ageMs = now - createdAt;
+
+            if (ageMs > TWO_DAYS_MS) {
+              // Add warning comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `⚠️ **Triage SLA Exceeded**
+
+                This issue has been waiting for triage for more than 48 hours.
+
+                @${context.repo.owner}/maintainers - Please review and triage this issue.
+
+                ---
+                *Automated SLA check - Issue #${issue.number}*`
+              });
+
+              // Add high priority label
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['priority: high']
+              });
+            }
+          }
+
+  remove-triage-label:
+    name: Remove Triage Label When Complete
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event_name == 'issues' && github.event.action == 'labeled'
+    steps:
+    - name: Check if triage is complete
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const issue = context.payload.issue;
+          const labels = issue.labels.map(l => l.name);
+
+          // Check if issue has both needs-triage and other status labels
+          const hasNeedsTriage = labels.includes('needs-triage');
+          const hasOtherStatus = labels.some(l =>
+            l.startsWith('status:') && l !== 'status: new' && l !== 'needs-triage'
+          );
+          const hasPriority = labels.some(l => l.startsWith('priority:'));
+          const hasType = labels.some(l => l.startsWith('type:'));
+
+          // If triaged (has priority and type), remove needs-triage
+          if (hasNeedsTriage && (hasPriority || hasType || hasOtherStatus)) {
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              name: 'needs-triage'
+            });
+
+            // Also remove status: new if present
+            if (labels.includes('status: new')) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  name: 'status: new'
+                });
+              } catch (error) {
+                // Label might not exist, ignore
+              }
+            }
+
+            // Add backlog label if no other status
+            if (!hasOtherStatus) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['status: backlog']
+              });
+            }
+
+            // Comment to confirm triage
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: `✅ **Triage Complete**
+
+              This issue has been triaged and is ready for work.
+
+              **Status**: ${hasOtherStatus ? labels.find(l => l.startsWith('status:')) : 'Backlog'}
+              **Priority**: ${labels.find(l => l.startsWith('priority:')) || 'Not set'}
+              **Type**: ${labels.find(l => l.startsWith('type:')) || 'Not set'}
+
+              ---
+              *Automated triage completion - Issue #${issue.number}*`
+            });
+          }

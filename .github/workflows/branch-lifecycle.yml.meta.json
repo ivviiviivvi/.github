@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Branch Lifecycle (Core)",
+  "identifier": "urn:uuid:db5cff41-b73a-5d07-89a8-587e24be84a5",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.branch.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "branch"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "scheduled"]
+}

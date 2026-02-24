@@ -1,0 +1,318 @@
+name: Reusable Notification
+
+on:
+  workflow_call:
+    inputs:
+      status:
+        description: Workflow status (success, failure, cancelled)
+        required: true
+        type: string
+      workflow_name:
+        description: Name of the workflow
+        required: true
+        type: string
+      notification_type:
+        description: Type of notification (slack, email, github, all)
+        required: false
+        type: string
+        default: github
+      message:
+        description: Custom message to include
+        required: false
+        type: string
+        default: ''
+      mention_on_failure:
+        description: Mention team on failure
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      SLACK_WEBHOOK:
+        description: Slack webhook URL (required for Slack notifications)
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  notify:
+    name: Send Notifications
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Determine notification details
+      id: details
+      env:
+        INPUT_STATUS: ${{ inputs.status }}
+        SERVER_URL: ${{ github.server_url }}
+        REPOSITORY: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
+        COMMIT_SHA: ${{ github.sha }}
+      run: |
+        # Determine emoji and color based on status
+        case "$INPUT_STATUS" in
+          success)
+            emoji="✅"
+            color="good"
+            title="Workflow Succeeded"
+            ;;
+          failure)
+            emoji="❌"
+            color="danger"
+            title="Workflow Failed"
+            ;;
+          cancelled)
+            emoji="⏸️"
+            color="warning"
+            title="Workflow Cancelled"
+            ;;
+          *)
+            emoji="ℹ️"
+            color="#808080"
+            title="Workflow Status Update"
+            ;;
+        esac
+
+        echo "emoji=$emoji" >> $GITHUB_OUTPUT
+        echo "color=$color" >> $GITHUB_OUTPUT
+        echo "title=$title" >> $GITHUB_OUTPUT
+
+        # Build run URL
+        run_url="${SERVER_URL}/${REPOSITORY}/actions/runs/${RUN_ID}"
+        echo "run_url=$run_url" >> $GITHUB_OUTPUT
+
+        # Build commit URL
+        commit_url="${SERVER_URL}/${REPOSITORY}/commit/${COMMIT_SHA}"
+        echo "commit_url=$commit_url" >> $GITHUB_OUTPUT
+
+    - name: Create GitHub summary
+      if: inputs.notification_type == 'github' || inputs.notification_type == 'all'
+      env:
+        WORKFLOW_NAME: ${{ inputs.workflow_name }}
+        INPUT_STATUS: ${{ inputs.status }}
+        INPUT_MESSAGE: ${{ inputs.message }}
+        EMOJI: ${{ steps.details.outputs.emoji }}
+        TITLE: ${{ steps.details.outputs.title }}
+        ACTOR: ${{ github.actor }}
+        REF_NAME: ${{ github.ref_name }}
+        COMMIT_SHA: ${{ github.sha }}
+        COMMIT_URL: ${{ steps.details.outputs.commit_url }}
+        RUN_URL: ${{ steps.details.outputs.run_url }}
+      run: |
+        echo "## $EMOJI $TITLE" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow**: $WORKFLOW_NAME" >> $GITHUB_STEP_SUMMARY
+        echo "**Status**: $INPUT_STATUS" >> $GITHUB_STEP_SUMMARY
+        echo "**Triggered by**: @$ACTOR" >> $GITHUB_STEP_SUMMARY
+        echo "**Branch**: \`$REF_NAME\`" >> $GITHUB_STEP_SUMMARY
+        echo "**Commit**: [$COMMIT_SHA]($COMMIT_URL)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -n "$INPUT_MESSAGE" ]; then
+          echo "**Message**: $INPUT_MESSAGE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "🔗 [View workflow run]($RUN_URL)" >> $GITHUB_STEP_SUMMARY
+
+    - name: Comment on PR
+      if: |
+        (inputs.notification_type == 'github' || inputs.notification_type == 'all') &&
+        github.event_name == 'pull_request' &&
+        inputs.status != 'success'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        INPUT_STATUS: ${{ inputs.status }}
+        EMOJI: ${{ steps.details.outputs.emoji }}
+        WORKFLOW_NAME: ${{ inputs.workflow_name }}
+        INPUT_MESSAGE: ${{ inputs.message }}
+        MENTION_ON_FAILURE: ${{ inputs.mention_on_failure }}
+        RUN_URL: ${{ steps.details.outputs.run_url }}
+        COMMIT_SHA: ${{ github.sha }}
+        ACTOR: ${{ github.actor }}
+      with:
+        script: |
+          const status = process.env.INPUT_STATUS;
+          const emoji = process.env.EMOJI;
+          const workflowName = process.env.WORKFLOW_NAME;
+          const message = process.env.INPUT_MESSAGE;
+          const mention = process.env.MENTION_ON_FAILURE === 'true' && status === 'failure';
+
+          let body = `${emoji} **${workflowName}** ${status}\n\n`;
+
+          if (message) {
+            body += `${message}\n\n`;
+          }
+
+          body += `🔗 [View workflow run](${process.env.RUN_URL})\n`;
+          body += `📝 Commit: ${process.env.COMMIT_SHA}\n`;
+
+          if (mention && status === 'failure') {
+            body += `\n⚠️ @${process.env.ACTOR} This workflow needs attention.\n`;
+          }
+
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
+
+    - name: Validate Slack webhook
+      id: validate-slack
+      if: inputs.notification_type == 'slack' || inputs.notification_type == 'all'
+      shell: bash
+      env:
+        WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      run: |
+        slack_valid=false
+        if [[ -n "$WEBHOOK" && "$WEBHOOK" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Send Slack notification
+      if: |
+        (inputs.notification_type == 'slack' || inputs.notification_type == 'all') &&
+        steps.validate-slack.outputs.slack_valid == 'true'
+      uses: slackapi/slack-github-action@fcfb566f8b0aab22203f066d80ca1d7e4b5d05b3  # ratchet:slackapi/slack-github-action@v1
+      with:
+        payload: |
+          {
+            "text": "${{ steps.details.outputs.emoji }} ${{ inputs.workflow_name }} ${{ inputs.status }}",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "${{ steps.details.outputs.emoji }} ${{ steps.details.outputs.title }}"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Workflow:*\n${{ inputs.workflow_name }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:*\n${{ inputs.status }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Repository:*\n${{ github.repository }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Branch:*\n${{ github.ref_name }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Triggered by:*\n${{ github.actor }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Commit:*\n<${{ steps.details.outputs.commit_url }}|${{ github.sha }}>"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${{ inputs.message }}"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Workflow Run"
+                    },
+                    "url": "${{ steps.details.outputs.run_url }}"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      continue-on-error: true
+
+    - name: Create issue on repeated failures
+      if: |
+        inputs.status == 'failure' &&
+        (inputs.notification_type == 'github' || inputs.notification_type == 'all')
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        WORKFLOW_NAME: ${{ inputs.workflow_name }}
+        RUN_URL: ${{ steps.details.outputs.run_url }}
+        COMMIT_SHA: ${{ github.sha }}
+        REF_NAME: ${{ github.ref_name }}
+        ACTOR: ${{ github.actor }}
+        INPUT_MESSAGE: ${{ inputs.message }}
+      with:
+        script: |
+          // Check if there's already an open issue for this workflow
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: ['workflow-failure', 'automated'],
+            per_page: 100
+          });
+
+          const workflowName = process.env.WORKFLOW_NAME;
+          const existingIssue = issues.data.find(issue =>
+            issue.title.includes(workflowName)
+          );
+
+          if (!existingIssue) {
+            // Create new issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Workflow Failure: ${workflowName}`,
+              body: `## Workflow Failure Alert
+
+              The workflow **${workflowName}** has failed.
+
+              **Run**: ${process.env.RUN_URL}
+              **Commit**: ${process.env.COMMIT_SHA}
+              **Branch**: ${process.env.REF_NAME}
+              **Triggered by**: @${process.env.ACTOR}
+
+              ${process.env.INPUT_MESSAGE}
+
+              ---
+
+              This issue was created automatically. It will be closed when the workflow succeeds.
+              `,
+              labels: ['workflow-failure', 'automated', 'needs-triage']
+            });
+          } else {
+            // Comment on existing issue
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existingIssue.number,
+              body: `Another failure occurred:
+
+              **Run**: ${process.env.RUN_URL}
+              **Commit**: ${process.env.COMMIT_SHA}
+              **Time**: ${new Date().toISOString()}
+              `
+            });
+          }
+      continue-on-error: true

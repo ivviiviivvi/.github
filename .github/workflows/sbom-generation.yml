@@ -1,0 +1,60 @@
+name: SBOM Generation
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+    - requirements*.txt
+    - package*.json
+    - go.mod
+    - Cargo.toml
+    - pom.xml
+    - build.gradle
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  generate-sbom:
+    name: Generate Software Bill of Materials
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # ratchet:anchore/sbom-action@v0
+      with:
+        format: spdx-json
+        output-file: sbom.spdx.json
+        upload-artifact: true
+        upload-release-assets: true
+
+    - name: Generate SBOM (CycloneDX format)
+      uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # ratchet:anchore/sbom-action@v0
+      with:
+        format: cyclonedx-json
+        output-file: sbom.cyclonedx.json
+        upload-artifact: true
+
+    - name: Upload SBOM to dependency graph
+      uses: advanced-security/spdx-dependency-submission-action@f957edbb35161c1f9e33f61026fc86a671c58cae  # ratchet:advanced-security/spdx-dependency-submission-action@v0.1.2
+      with:
+        filePath: sbom.spdx.json
+
+    - name: Archive SBOM artifacts
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: sbom-reports
+        path: |
+          sbom.*.json
+        retention-days: 90

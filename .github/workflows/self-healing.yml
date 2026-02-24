@@ -1,0 +1,277 @@
+name: Self-Healing Workflows
+
+on:
+  workflow_run:
+    workflows: [CI, Advanced CI Pipeline]
+    types: [completed]
+
+  workflow_dispatch:
+    inputs:
+      workflow_run_id:
+        description: Workflow run ID to heal
+        required: false
+        type: string
+      force_retry:
+        description: Force retry even if not auto-retriable
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
+  issues: write
+
+env:
+  MAX_RETRY_ATTEMPTS: 3
+  INITIAL_BACKOFF_SECONDS: 60
+  BACKOFF_MULTIPLIER: 2
+
+jobs:
+  classify-failure:
+    name: Classify Failure
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch'
+    outputs:
+      failure_type: ${{ steps.classify.outputs.failure_type }}
+      should_retry: ${{ steps.classify.outputs.should_retry }}
+      attempt_number: ${{ steps.classify.outputs.attempt_number }}
+      backoff_seconds: ${{ steps.classify.outputs.backoff_seconds }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+
+    - name: Install dependencies
+      run: |
+        pip install pyyaml requests
+
+    - name: Classify failure type
+      continue-on-error: true
+      id: classify
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || inputs.workflow_run_id }}
+        REPOSITORY: ${{ github.repository }}
+        FORCE_RETRY: ${{ inputs.force_retry }}
+      run: |
+        # Determine failure classification
+        FAILURE_TYPE="unknown"
+        SHOULD_RETRY="false"
+        ATTEMPT_NUMBER=1
+        BACKOFF_SECONDS=${{ env.INITIAL_BACKOFF_SECONDS }}
+
+        # Check workflow logs for transient failures
+        # Note: GitHub logs API returns a zip file, so we download and extract it
+        if [[ -n "$WORKFLOW_RUN_ID" ]]; then
+          LOGS_DIR=$(mktemp -d)
+          (cd "$LOGS_DIR" && gh run download "$WORKFLOW_RUN_ID" --log >/dev/null 2>&1)
+          # Concatenate all log files into a single variable
+          LOGS=$(find "$LOGS_DIR" -type f -name "*.txt" -print0 2>/dev/null | xargs -0 cat 2>/dev/null || echo "")
+          rm -rf "$LOGS_DIR"
+
+          # Classify based on error patterns (check permanent failures first)
+          if echo "$LOGS" | grep -qi "syntax error\|type error\|assertion"; then
+            FAILURE_TYPE="permanent"
+            SHOULD_RETRY="false"
+          elif echo "$LOGS" | grep -qi "rate limit\|429\|too many requests"; then
+            FAILURE_TYPE="transient"
+            SHOULD_RETRY="true"
+          elif echo "$LOGS" | grep -qi "timeout\|timed out\|ETIMEDOUT"; then
+            FAILURE_TYPE="transient"
+            SHOULD_RETRY="true"
+          elif echo "$LOGS" | grep -qi "network\|connection refused\|ECONNREFUSED"; then
+            FAILURE_TYPE="transient"
+            SHOULD_RETRY="true"
+          elif echo "$LOGS" | grep -qi "dependency\|module not found\|package"; then
+            FAILURE_TYPE="dependency"
+            SHOULD_RETRY="true"
+          fi
+
+          # Get previous attempt count from annotations
+          CHECK_RUN_IDS=$(gh api "repos/$REPOSITORY/actions/runs/$WORKFLOW_RUN_ID/jobs" -q '.jobs[].check_run_url // empty' 2>/dev/null | sed 's/.*\/check-runs\///' || echo "")
+          PREVIOUS_ATTEMPTS=0
+          if [[ -n "$CHECK_RUN_IDS" ]]; then
+            for CHECK_RUN_ID in $CHECK_RUN_IDS; do
+              if [[ -n "$CHECK_RUN_ID" && "$CHECK_RUN_ID" =~ ^[0-9]+$ ]]; then
+                ATTEMPTS_ON_JOB=$(gh api "repos/$REPOSITORY/check-runs/$CHECK_RUN_ID/annotations" --jq '[.[] | select(.title == "self-healing-attempt")] | length' 2>/dev/null || echo "0")
+                # Ensure ATTEMPTS_ON_JOB is a valid number
+                if [[ "$ATTEMPTS_ON_JOB" =~ ^[0-9]+$ ]]; then
+                  PREVIOUS_ATTEMPTS=$((PREVIOUS_ATTEMPTS + ATTEMPTS_ON_JOB))
+                fi
+              fi
+            done
+          fi
+          ATTEMPT_NUMBER=$((PREVIOUS_ATTEMPTS + 1))
+
+          # Calculate exponential backoff (use bc for exponentiation, with fallback)
+          BACKOFF_SECONDS=$(echo "$INITIAL_BACKOFF_SECONDS * ($BACKOFF_MULTIPLIER ^ ($ATTEMPT_NUMBER - 1))" | bc 2>/dev/null || echo "$INITIAL_BACKOFF_SECONDS")
+        fi
+
+        # Don't retry if max attempts exceeded
+        if [[ $ATTEMPT_NUMBER -gt ${{ env.MAX_RETRY_ATTEMPTS }} ]]; then
+          SHOULD_RETRY="false"
+        fi
+
+        # Force retry if requested
+        if [[ "$FORCE_RETRY" == "true" ]]; then
+          SHOULD_RETRY="true"
+        fi
+
+        echo "failure_type=$FAILURE_TYPE" >> $GITHUB_OUTPUT
+        echo "should_retry=$SHOULD_RETRY" >> $GITHUB_OUTPUT
+        echo "attempt_number=$ATTEMPT_NUMBER" >> $GITHUB_OUTPUT
+        echo "backoff_seconds=$BACKOFF_SECONDS" >> $GITHUB_OUTPUT
+
+    - name: Track metric
+      run: |
+        echo "::notice title=Self-Healing Classification::Failure Type: ${{ steps.classify.outputs.failure_type }}, Should Retry: ${{ steps.classify.outputs.should_retry }}, Attempt: ${{ steps.classify.outputs.attempt_number }}"
+
+  retry-workflow:
+    name: Retry Workflow (Attempt ${{ needs.classify-failure.outputs.attempt_number }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: classify-failure
+    if: needs.classify-failure.outputs.should_retry == 'true'
+
+    steps:
+    - name: Wait for backoff period
+      run: |
+        BACKOFF=${{ needs.classify-failure.outputs.backoff_seconds }}
+        echo "Waiting ${BACKOFF} seconds before retry (exponential backoff)..."
+        sleep $BACKOFF
+
+    - name: Retry failed workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id || inputs.workflow_run_id }}
+        REPOSITORY: ${{ github.repository }}
+      run: |
+        if [[ -n "$WORKFLOW_RUN_ID" ]]; then
+          echo "Retrying workflow run $WORKFLOW_RUN_ID (attempt ${{ needs.classify-failure.outputs.attempt_number }})"
+          gh api -X POST "repos/$REPOSITORY/actions/runs/$WORKFLOW_RUN_ID/rerun-failed-jobs"
+
+          # Create annotation to track attempt
+          echo "::notice title=self-healing-attempt::Retry attempt ${{ needs.classify-failure.outputs.attempt_number }} initiated"
+        fi
+
+    - name: Track retry metric
+      run: |
+        echo "::notice title=Self-Healing Retry::Initiated retry attempt ${{ needs.classify-failure.outputs.attempt_number }} for failure type: ${{ needs.classify-failure.outputs.failure_type }}"
+
+  notify-permanent-failure:
+    name: Notify Permanent Failure
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: classify-failure
+    if: |
+      needs.classify-failure.outputs.failure_type == 'permanent' ||
+      (needs.classify-failure.outputs.should_retry == 'false' && needs.classify-failure.outputs.attempt_number > 1)
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+    - name: Create issue for permanent failure
+      if: needs.classify-failure.outputs.failure_type == 'permanent'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WORKFLOW_NAME: ${{ github.event.workflow_run.name || 'Unknown' }}
+        WORKFLOW_URL: ${{ github.event.workflow_run.html_url || 'N/A' }}
+        FAILURE_TYPE: ${{ needs.classify-failure.outputs.failure_type }}
+      run: |
+        gh issue create \
+          --title "🔴 Permanent workflow failure: $WORKFLOW_NAME" \
+          --body "## Workflow Failure Requires Manual Intervention
+
+        **Workflow:** $WORKFLOW_NAME
+        **Run URL:** $WORKFLOW_URL
+        **Failure Type:** $FAILURE_TYPE
+        **Classification:** Permanent (not auto-retriable)
+
+        ### Action Required
+        Please investigate and fix the root cause of this failure.
+
+        ---
+        *This issue was automatically created by the self-healing system.*" \
+          --label "bug,automation,needs-triage"
+
+    - name: Validate notification secrets
+      id: validate-notify
+      shell: bash
+      run: |
+        slack_valid=false
+        if [[ -n "${SLACK_WEBHOOK_URL}" && "${SLACK_WEBHOOK_URL}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Notify via Slack
+      if: steps.validate-notify.outputs.slack_valid == 'true'
+      env:
+        WORKFLOW_RUN_NAME: ${{ github.event.workflow_run.name }}
+        FAILURE_TYPE: ${{ needs.classify-failure.outputs.failure_type }}
+        ATTEMPT_NUMBER: ${{ needs.classify-failure.outputs.attempt_number }}
+      run: |
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"⚠️ Self-Healing Alert\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*Self-Healing Alert*\nWorkflow: ${WORKFLOW_RUN_NAME}\nFailure Type: ${FAILURE_TYPE}\nAttempts: ${ATTEMPT_NUMBER}\"
+                }
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::Self-healing notification failed"
+        fi
+
+    - name: Track notification metric
+      run: |
+        echo "::notice title=Self-Healing Notification::Sent notification for permanent failure"
+
+  resolve-dependencies:
+    name: Resolve Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: classify-failure
+    if: needs.classify-failure.outputs.failure_type == 'dependency'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Attempt dependency resolution
+      run: |
+        echo "Attempting to resolve dependency issues..."
+
+        # Check for common dependency issues
+        if [[ -f "package.json" ]]; then
+          npm ci || npm install
+        fi
+
+        if [[ -f "requirements.txt" ]]; then
+          pip install -r requirements.txt
+        fi
+
+        if [[ -f "Gemfile" ]]; then
+          bundle install
+        fi
+
+    - name: Track resolution attempt
+      run: |
+        echo "::notice title=Self-Healing Dependency::Attempted dependency resolution"

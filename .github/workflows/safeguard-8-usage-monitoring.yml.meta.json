@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Safeguard 8: Usage Monitoring & Reporting",
+  "identifier": "urn:uuid:8b998640-acf1-5da6-b42c-00dde5723ee7",
+  "version": "1.0.0",
+  "description": "Metrics collection and health monitoring. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.metrics.safeguard.yml",
+    "layer": "logic",
+    "role": "metrics",
+    "domain": "safeguard"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["logic", "manual", "metrics", "scheduled"]
+}

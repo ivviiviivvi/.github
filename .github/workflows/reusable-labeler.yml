@@ -1,0 +1,46 @@
+# Reusable workflow for pull request labeling
+# Can be called from other repositories using workflow_call
+name: 'Reusable: Pull Request Labeler'
+
+on:
+  workflow_call:
+    inputs:
+      config-path:
+        required: false
+        type: string
+        default: .github/labeler.yml
+        description: Path to the labeler configuration file
+      sync-labels:
+        required: false
+        type: boolean
+        default: true
+        description: Whether to sync labels (remove labels that no longer match)
+    secrets:
+      github-token:
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  labeler:
+    name: Label Pull Request
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Run Labeler
+      uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b   # v6.0.1
+      with:
+        repo-token: ${{ secrets.github-token }}
+        configuration-path: ${{ inputs.config-path }}
+        sync-labels: ${{ inputs.sync-labels }}

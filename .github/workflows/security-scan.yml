@@ -1,0 +1,100 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - '**.go'
+    - '**.rs'
+    - requirements*.txt
+    - package*.json
+  pull_request:
+    branches: [main, master, develop]
+  schedule:
+  - cron: 0 0 * * 0  # Run weekly security scans
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/analyze@v3
+      with:
+        category: /language:${{matrix.language}}
+
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Install Trivy
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.58.1
+
+    - name: Run Trivy vulnerability scanner
+      run: |
+        trivy fs --format sarif --output trivy-results.sarif --skip-dirs usr,var,opt .
+
+    - name: Upload Trivy results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: trivy-results.sarif
+
+  secret-detection:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Run Gitleaks secret scan
+      run: |
+        # Install gitleaks (pinned version for reproducibility)
+        curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.1/gitleaks_8.18.1_linux_x64.tar.gz | tar -xz
+        sudo mv gitleaks /usr/local/bin/
+
+        # Scan current filesystem only (--no-git), not full git history
+        # History scanning finds thousands of false positives from old commits
+        if [ -f ".config/.gitleaks.toml" ]; then
+          gitleaks detect --source . --no-git --config .config/.gitleaks.toml --verbose
+        else
+          gitleaks detect --source . --no-git --verbose
+        fi

@@ -1,0 +1,82 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# Ignore automatically generated direnv output
+.direnv
+
+# gemini-cli settings
+.gemini/
+
+# GitHub App credentials
+gha-creds-*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+Gemfile.lock
+
+# Jekyll build artifacts
+docs/.jekyll-cache/
+docs/_site/
+
+# Backup files
+*.backup
+*.bak
+
+# Editor artifacts
+*~
+*.swp
+*.swo
+.vscode/.ropeproject
+.idea/
+
+# OS artifacts
+Thumbs.db
+Desktop.ini
+
+# Generated state files
+.github/task_state.json
+
+# SpecStory conversation history (contains sensitive data)
+.specstory/
+
+# Case sensitivity: prevent uppercase Jules directory
+.Jules/
+node_modules/
+
+# Temporary status and test files
+test-results-*.json
+test-results/
+coverage.xml
+*_STATUS_*.md
+*_COMPLETE_*.md
+
+# Runtime-generated files
+.github/incidents/
+.github/notifications/
+generated_workflows/
+
+# Local tool configuration
+.serena/

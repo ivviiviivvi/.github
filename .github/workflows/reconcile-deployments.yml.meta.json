@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Metadata Reconciliation - Deployments",
+  "identifier": "urn:uuid:7813f8e0-b064-5d5c-a616-da42aa8a7a95",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.reconcile.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "reconcile"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "continuous-integration",
+    "deployment",
+    "manual",
+    "scheduled"
+  ]
+}

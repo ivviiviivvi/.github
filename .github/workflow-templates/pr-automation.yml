@@ -1,0 +1,22 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pr-automation:
+    name: PR Automation
+    uses: '{{ORG_NAME}}/.github/.github/workflows/reusable/pr-automation.yml@main'
+    with:
+      auto-assign-reviewers: true
+      auto-label: true
+      max-reviewers: 2

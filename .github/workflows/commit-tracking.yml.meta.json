@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Commit Tracking",
+  "identifier": "urn:uuid:7b75a2f8-8277-5744-96bb-4977c89a0f65",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by push, pull_request, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.commit.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "commit"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "pr-triggered", "push-triggered"]
+}

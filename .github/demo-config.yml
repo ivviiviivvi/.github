@@ -1,0 +1,314 @@
+# Demo Deployment Configuration
+# This file controls how applications are automatically deployed for live demos
+
+# Enable or disable automatic deployment
+enabled: true
+
+# Global settings
+global:
+  # API endpoint — unused by sandbox system; set if using a custom deploy API
+  api_endpoint: ''
+
+  # Timeout for application startup (seconds)
+  startup_timeout: 60
+
+  # Health check interval (seconds)
+  health_check_interval: 30
+
+  # Maximum retries for failed deployments
+  max_retries: 3
+
+  # Badge configuration
+  badge:
+    # Style: flat, flat-square, for-the-badge, plastic, social
+    style: for-the-badge
+    # Color: success, blue, green, brightgreen, etc.
+    color: brightgreen
+    # Label text
+    label: Live Demo
+    # Position in README (options: top, after-title, before-installation)
+    position: after-title
+
+  # Access control
+  access:
+    # Visibility: public, private, organization
+    visibility: public
+    # Require authentication
+    require_auth: false
+    # Rate limiting (requests per minute)
+    rate_limit: 100
+
+  # Auto-restart policy
+  auto_restart:
+    enabled: true
+    # Restart on crash
+    on_crash: true
+    # Maximum restart attempts
+    max_attempts: 5
+    # Backoff delay (seconds)
+    backoff_delay: 10
+
+# Tech stack specific configurations
+tech_stacks:
+  # Node.js applications
+  nodejs:
+    enabled: true
+    # Detection patterns (file existence)
+    detection:
+    - package.json
+    # Startup commands (tried in order)
+    startup_commands:
+    - npm start
+    - npm run dev
+    - npm run serve
+    - node index.js
+    - node app.js
+    - node server.js
+    # Environment variables
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      DEMO_MODE: 'true'
+    # Port to expose
+    port: 3000
+    # Build command (if needed)
+    build_command: npm install
+    # Health check path
+    health_check_path: /
+
+  # Python applications
+  python:
+    enabled: true
+    detection:
+    - requirements.txt
+    - Pipfile
+    - pyproject.toml
+    - setup.py
+    startup_commands:
+    - python app.py
+    - python main.py
+    - python -m flask run
+    - uvicorn app:app --host 0.0.0.0 --port 8000
+    - gunicorn app:app --bind 0.0.0.0:8000
+    - python manage.py runserver 0.0.0.0:8000
+    environment:
+      PYTHONUNBUFFERED: '1'
+      FLASK_ENV: production
+      PORT: '8000'
+      DEMO_MODE: 'true'
+    port: 8000
+    build_command: pip install -r requirements.txt
+    health_check_path: /
+
+  # Vue.js applications
+  vue:
+    enabled: true
+    detection:
+    - vue.config.js
+    - vite.config.js
+    startup_commands:
+    - npm run serve
+    - npm run dev
+    - npm start
+    environment:
+      NODE_ENV: production
+      PORT: '8080'
+      DEMO_MODE: 'true'
+    port: 8080
+    build_command: npm install
+    health_check_path: /
+
+  # React applications
+  react:
+    enabled: true
+    detection:
+    - src/App.jsx
+    - src/App.tsx
+    - src/App.js
+    startup_commands:
+    - npm start
+    - npm run dev
+    - npm run serve
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      DEMO_MODE: 'true'
+    port: 3000
+    build_command: npm install
+    health_check_path: /
+
+  # Java applications
+  java:
+    enabled: true
+    detection:
+    - pom.xml
+    - build.gradle
+    - build.gradle.kts
+    startup_commands:
+    - java -jar target/*.jar
+    - gradle bootRun
+    - mvn spring-boot:run
+    - ./gradlew bootRun
+    environment:
+      JAVA_OPTS: -Xmx512m
+      PORT: '8080'
+      DEMO_MODE: 'true'
+    port: 8080
+    build_command: mvn clean install -DskipTests
+    health_check_path: /actuator/health
+
+  # Go applications
+  go:
+    enabled: true
+    detection:
+    - go.mod
+    - main.go
+    startup_commands:
+    - ./main
+    - go run main.go
+    - go run .
+    environment:
+      PORT: '8080'
+      DEMO_MODE: 'true'
+    port: 8080
+    build_command: go build -o main .
+    health_check_path: /
+
+  # Ruby applications
+  ruby:
+    enabled: true
+    detection:
+    - Gemfile
+    - config.ru
+    startup_commands:
+    - bundle exec rails server -b 0.0.0.0 -p 3000
+    - bundle exec puma -p 3000
+    - ruby app.rb
+    environment:
+      RAILS_ENV: production
+      PORT: '3000'
+      DEMO_MODE: 'true'
+    port: 3000
+    build_command: bundle install
+    health_check_path: /
+
+  # .NET applications
+  dotnet:
+    enabled: true
+    detection:
+    - '*.csproj'
+    - '*.sln'
+    startup_commands:
+    - dotnet run
+    - dotnet run --project src/*.csproj
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      PORT: '5000'
+      DEMO_MODE: 'true'
+    port: 5000
+    build_command: dotnet restore && dotnet build
+    health_check_path: /health
+
+# Sandbox deployment settings
+sandbox:
+  # DEMO_MODE contract — these env vars are injected into every sandbox
+  demo_mode:
+    env_vars:
+      DEMO_MODE: 'true'
+      DEMO_BANNER: 'true'
+      DEMO_AUTH_BYPASS: 'true'
+
+  # Provider priority per app type (first available wins)
+  hosting_priority:
+    frontend:
+    - cloudflare-pages
+    - vercel
+    backend:
+    - render
+    fullstack:
+    - render
+    static:
+    - cloudflare-pages
+    - vercel
+    default:
+    - codespaces
+
+  # Provider-specific settings
+  providers:
+    vercel:
+      project_prefix: demo-
+      region: iad1
+    cloudflare_pages:
+      project_prefix: demo-
+    render:
+      plan: free
+      region: oregon
+      health_check_path: /
+      health_check_timeout: 300
+    codespaces:
+      devcontainer_path: .devcontainer/demo/devcontainer.json
+
+  # Lifecycle settings
+  lifecycle:
+    always_on: false
+    # Cron expression to keep Render free tier warm (every 14 min)
+    keep_warm_cron: '*/14 * * * *'
+    data_reset_on_cold_start: true
+
+# Custom overrides (repository-specific)
+# Can be overridden by creating .demo-config.yml in the repository root
+custom_overrides:
+  # Allow custom startup commands
+  allow_custom_commands: true
+  # Allow custom environment variables
+  allow_custom_env: true
+  # Allow custom ports
+  allow_custom_ports: true
+
+# Notifications
+notifications:
+  # Notify on deployment success
+  on_success: true
+  # Notify on deployment failure
+  on_failure: true
+  # Notification methods: pr_comment, issue_comment, slack
+  methods:
+  - pr_comment
+
+# Security settings
+security:
+  # Scan for secrets before deployment
+  scan_secrets: true
+  # Validate startup commands
+  validate_commands: true
+  # Sandbox isolation level: basic, standard, enhanced
+  isolation_level: standard
+  # Network restrictions
+  network_restrictions:
+    # Allow outbound connections
+    allow_outbound: true
+    # Allow inbound connections (from internet)
+    allow_inbound: true
+    # Whitelist domains (empty = allow all)
+    whitelist_domains: []
+
+# Logging and monitoring
+logging:
+  # Log level: debug, info, warning, error
+  level: info
+  # Retain logs for (days)
+  retention_days: 30
+  # Export logs to
+  export_to: []
+
+# Cleanup policy
+cleanup:
+  # Auto-cleanup after inactivity (hours)
+  inactive_after: 24
+  # Keep live demo active for (days)
+  max_lifetime: 7
+  # Cleanup on PR close
+  on_pr_close: true
+  # Cleanup on branch delete
+  on_branch_delete: true

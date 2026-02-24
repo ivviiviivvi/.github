@@ -1,0 +1,13 @@
+# Auto Add Label Configuration
+# Automates labeling based on PR content or author
+
+# Add labels to every new PR
+addLabels:
+- needs-review
+
+# Add labels based on author
+authorLabels:
+  dependabot[bot]:
+  - dependencies
+  renovate[bot]:
+  - dependencies

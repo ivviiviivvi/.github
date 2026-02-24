@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Branch Lifecycle Management",
+  "identifier": "urn:uuid:5316b6d9-ed14-5997-9ed8-5c0828fd56e1",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by create, pull_request, schedule, workflow_dispatch, executes 5 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.branch.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "branch"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["create", "pull_request", "schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "pr-triggered", "scheduled"]
+}

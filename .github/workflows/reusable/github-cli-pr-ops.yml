@@ -1,0 +1,181 @@
+name: GitHub CLI PR Operations (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      operation:
+        description: Operation to perform (list, merge, review, comment, auto-merge)
+        required: true
+        type: string
+      pr-number:
+        description: PR number (optional, auto-detected from context if not provided)
+        required: false
+        type: string
+        default: ''
+      pr-filters:
+        description: Filters for listing PRs (e.g., label:bug, author:username, draft:false)
+        required: false
+        type: string
+        default: ''
+      merge-method:
+        description: Merge method (squash, merge, rebase)
+        required: false
+        type: string
+        default: squash
+      auto-merge:
+        description: Enable auto-merge
+        required: false
+        type: boolean
+        default: false
+      comment-body:
+        description: Comment text (for comment operation)
+        required: false
+        type: string
+        default: ''
+      review-event:
+        description: Review event type (APPROVE, REQUEST_CHANGES, COMMENT)
+        required: false
+        type: string
+        default: COMMENT
+      review-body:
+        description: Review comment text
+        required: false
+        type: string
+        default: ''
+    secrets:
+      github-token:
+        description: GitHub token with PR permissions
+        required: false
+    outputs:
+      pr-list:
+        description: List of PRs (for list operation)
+        value: ${{ jobs.pr-operations.outputs.pr-list }}
+      result:
+        description: Operation result
+        value: ${{ jobs.pr-operations.outputs.result }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-operations:
+    runs-on: ubuntu-latest
+    outputs:
+      pr-list: ${{ steps.list.outputs.prs }}
+      result: ${{ steps.operation.outputs.result }}
+
+    env:
+      GH_TOKEN: ${{ secrets.github-token || secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ inputs.pr-number || github.event.pull_request.number }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: List PRs
+      if: inputs.operation == 'list'
+      id: list
+      env:
+        PR_FILTERS: ${{ inputs.pr-filters }}
+      run: |
+        if [ -n "$PR_FILTERS" ]; then
+          prs=$(gh pr list --json number,title,author,labels --search "$PR_FILTERS")
+        else
+          prs=$(gh pr list --json number,title,author,labels)
+        fi
+        echo "prs=$prs" >> $GITHUB_OUTPUT
+        echo "$prs"
+
+    - name: Merge PR
+      if: inputs.operation == 'merge'
+      id: merge
+      env:
+        AUTO_MERGE: ${{ inputs.auto-merge }}
+        MERGE_METHOD: ${{ inputs.merge-method }}
+      run: |
+        if [ -z "$PR_NUMBER" ]; then
+          echo "Error: PR number is required for merge operation"
+          exit 1
+        fi
+
+        if [ "$AUTO_MERGE" = "true" ]; then
+          gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD"
+          echo "result=auto-merge-enabled" >> $GITHUB_OUTPUT
+        else
+          gh pr merge "$PR_NUMBER" --"$MERGE_METHOD"
+          echo "result=merged" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Add Review
+      if: inputs.operation == 'review'
+      id: review
+      env:
+        REVIEW_BODY: ${{ inputs.review-body }}
+        REVIEW_EVENT: ${{ inputs.review-event }}
+      run: |
+        if [ -z "$PR_NUMBER" ]; then
+          echo "Error: PR number is required for review operation"
+          exit 1
+        fi
+
+        if [ -n "$REVIEW_BODY" ]; then
+          gh pr review "$PR_NUMBER" --"$REVIEW_EVENT" --body "$REVIEW_BODY"
+        else
+          gh pr review "$PR_NUMBER" --"$REVIEW_EVENT"
+        fi
+        echo "result=review-added" >> $GITHUB_OUTPUT
+
+    - name: Add Comment
+      if: inputs.operation == 'comment'
+      id: comment
+      env:
+        COMMENT_BODY: ${{ inputs.comment-body }}
+      run: |
+        if [ -z "$PR_NUMBER" ]; then
+          echo "Error: PR number is required for comment operation"
+          exit 1
+        fi
+
+        if [ -z "$COMMENT_BODY" ]; then
+          echo "Error: comment-body is required for comment operation"
+          exit 1
+        fi
+
+        gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
+        echo "result=comment-added" >> $GITHUB_OUTPUT
+
+    - name: Enable Auto-merge
+      if: inputs.operation == 'auto-merge'
+      id: auto-merge
+      env:
+        MERGE_METHOD: ${{ inputs.merge-method }}
+      run: |
+        if [ -z "$PR_NUMBER" ]; then
+          echo "Error: PR number is required for auto-merge operation"
+          exit 1
+        fi
+
+        gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD"
+        echo "result=auto-merge-enabled" >> $GITHUB_OUTPUT
+
+    - name: Set operation result
+      id: operation
+      env:
+        LIST_RESULT: ${{ steps.list.outputs.result }}
+        MERGE_RESULT: ${{ steps.merge.outputs.result }}
+        REVIEW_RESULT: ${{ steps.review.outputs.result }}
+        COMMENT_RESULT: ${{ steps.comment.outputs.result }}
+        AUTO_MERGE_RESULT: ${{ steps.auto-merge.outputs.result }}
+      run: |
+        result="${LIST_RESULT:-${MERGE_RESULT:-${REVIEW_RESULT:-${COMMENT_RESULT:-$AUTO_MERGE_RESULT}}}}"
+        if [ -z "$result" ]; then
+          result="operation-completed"
+        fi
+        echo "result=$result" >> $GITHUB_OUTPUT

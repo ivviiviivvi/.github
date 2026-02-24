@@ -1,0 +1,193 @@
+name: Auto-Assign Reviewers
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to assign reviewers
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  assign-reviewers:
+    name: Assign Reviewers from CODEOWNERS
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.pull_request.draft == false
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Parse CODEOWNERS and assign reviewers
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          // Get PR details
+          const pr = context.payload.pull_request || await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          }).then(res => res.data);
+
+          // Get list of changed files
+          const files = await github.paginate(github.rest.pulls.listFiles, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: pr.number
+          });
+
+          const changedFiles = files.map(f => f.filename);
+
+          // Read CODEOWNERS file
+          let codeowners = '';
+          const possiblePaths = [
+            '.github/CODEOWNERS',
+            'CODEOWNERS',
+            'docs/CODEOWNERS'
+          ];
+
+          for (const codeoPath of possiblePaths) {
+            try {
+              codeowners = fs.readFileSync(codeoPath, 'utf8');
+              break;
+            } catch (error) {
+              // Try next path
+            }
+          }
+
+          if (!codeowners) {
+            console.log('No CODEOWNERS file found');
+            return;
+          }
+
+          // Parse CODEOWNERS
+          const lines = codeowners.split('\n');
+          const rules = [];
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) continue;
+
+            const parts = trimmed.split(/\s+/);
+            if (parts.length < 2) continue;
+
+            const pattern = parts[0];
+            const owners = parts.slice(1);
+
+            rules.push({ pattern, owners });
+          }
+
+          // Match files to owners
+          const allOwners = new Set();
+
+          for (const file of changedFiles) {
+            // Match from most specific to least specific
+            for (let i = rules.length - 1; i >= 0; i--) {
+              const rule = rules[i];
+
+              // Simple glob matching
+              const regex = new RegExp(
+                '^' +
+                rule.pattern
+                  .replace(/\./g, '\\.')
+                  .replace(/\*/g, '.*')
+                  .replace(/\?/g, '.')
+                + '$'
+              );
+
+              if (regex.test(file)) {
+                rule.owners.forEach(owner => allOwners.add(owner));
+                break; // Use first matching rule
+              }
+            }
+          }
+
+          // Convert to array and filter
+          const reviewers = Array.from(allOwners)
+            .filter(owner => !owner.startsWith('@' + context.repo.owner + '/')) // Filter out teams for individual assignment
+            .map(owner => owner.replace('@', ''))
+            .filter(owner => owner !== pr.user.login); // Don't assign PR author
+
+          const teams = Array.from(allOwners)
+            .filter(owner => owner.startsWith('@' + context.repo.owner + '/'))
+            .map(owner => owner.replace('@' + context.repo.owner + '/', ''));
+
+          // Assign reviewers
+          if (reviewers.length > 0 || teams.length > 0) {
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                reviewers: reviewers.slice(0, 5), // Max 5 individual reviewers
+                team_reviewers: teams.slice(0, 3) // Max 3 teams
+              });
+
+              console.log(`Assigned reviewers: ${reviewers.join(', ')}`);
+              console.log(`Assigned teams: ${teams.join(', ')}`);
+            } catch (error) {
+              console.log('Error assigning reviewers:', error.message);
+            }
+          }
+
+    - name: Add comment with reviewer info
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.number,
+            body: `🔍 **Reviewers Assigned**
+
+            Reviewers have been automatically assigned based on the CODEOWNERS file.
+
+            **What's Next:**
+            - Reviewers will be notified
+            - Please respond to any feedback
+            - Ensure all CI checks pass
+            - Reviews typically completed within 48 hours
+
+            **Need Help?**
+            - [Review Process Guide](../docs/WORKFLOW_GUIDE.md)
+            - [Contributing Guidelines](../CONTRIBUTING.md)
+
+            ---
+            *Automated reviewer assignment - PR #${pr.number}*`
+          });
+
+  set-review-reminders:
+    name: Set Review Reminder
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.pull_request.draft == false
+    steps:
+    - name: Schedule review reminder
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          // This would typically integrate with a separate scheduled workflow
+          // For now, we'll just add a label to track review timing
+
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['awaiting-review']
+          });
+
+          console.log('Review tracking label added');

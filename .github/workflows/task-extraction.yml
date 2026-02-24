@@ -1,0 +1,261 @@
+name: Task Extraction from Closed PRs
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to extract tasks from
+        required: true
+        type: number
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+
+jobs:
+  extract-tasks:
+    name: Extract Tasks from Closed PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only run if PR was closed without merging (abandoned work)
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == false &&
+       github.event.pull_request.state == 'closed')
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Get PR Number
+      id: pr
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+        EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        if [ "$EVENT_NAME" == "workflow_dispatch" ]; then
+          echo "number=$INPUT_PR_NUMBER" >> $GITHUB_OUTPUT
+        else
+          echo "number=$EVENT_PR_NUMBER" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Get PR Details and Extract Tasks
+      id: extract
+      run: |
+        PR_NUM=${{ steps.pr.outputs.number }}
+
+        echo "🔍 Extracting tasks from PR #$PR_NUM..."
+
+        # Get PR details
+        PR_DATA=$(gh pr view $PR_NUM --json title,body,author,url,createdAt,closedAt,labels,comments)
+
+        TITLE=$(echo "$PR_DATA" | jq -r '.title')
+        BODY=$(echo "$PR_DATA" | jq -r '.body // ""')
+        AUTHOR=$(echo "$PR_DATA" | jq -r '.author.login')
+        URL=$(echo "$PR_DATA" | jq -r '.url')
+        CREATED=$(echo "$PR_DATA" | jq -r '.createdAt')
+        CLOSED=$(echo "$PR_DATA" | jq -r '.closedAt')
+
+        echo "PR: $TITLE"
+        echo "Author: $AUTHOR"
+
+        # Extract unchecked task items from body and comments
+        # Pattern: - [ ] task or * [ ] task
+        TASKS=$(echo "$PR_DATA" | jq -r '
+          ([.body] + [.comments[].body]) |
+          map(
+            split("\n") |
+            map(
+              select(test("^\\s*[-*]\\s*\\[[ ]\\]")) |
+              # Remove leading whitespace and checkbox
+              sub("^\\s*[-*]\\s*\\[[ ]\\]\\s*"; "- [ ] ")
+            ) |
+            .[]
+          ) |
+          unique |
+          join("\n")
+        ')
+
+        # Count tasks
+        if [ -n "$TASKS" ]; then
+          TASK_COUNT=$(echo "$TASKS" | grep -c "- \[ \]" || echo "0")
+        else
+          TASK_COUNT=0
+        fi
+
+        echo "Found $TASK_COUNT incomplete tasks"
+
+        # Save for next step
+        echo "title=$TITLE" >> $GITHUB_OUTPUT
+        echo "author=$AUTHOR" >> $GITHUB_OUTPUT
+        echo "url=$URL" >> $GITHUB_OUTPUT
+        echo "created=$CREATED" >> $GITHUB_OUTPUT
+        echo "closed=$CLOSED" >> $GITHUB_OUTPUT
+        echo "task_count=$TASK_COUNT" >> $GITHUB_OUTPUT
+
+        # Save tasks to file (multiline)
+        echo "tasks<<EOF" >> $GITHUB_OUTPUT
+        echo "$TASKS" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+        # Extract labels for context
+        LABELS=$(echo "$PR_DATA" | jq -r '.labels | map(.name) | join(", ")')
+        echo "labels=$LABELS" >> $GITHUB_OUTPUT
+
+        # Check if PR was marked as "do-not-extract-tasks"
+        SKIP_EXTRACTION=$(echo "$PR_DATA" | jq -r '.labels | map(.name) | any(. == "do-not-extract-tasks")')
+        echo "skip=$SKIP_EXTRACTION" >> $GITHUB_OUTPUT
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Issue with Extracted Tasks
+      if: steps.extract.outputs.task_count > 0 && steps.extract.outputs.skip != 'true'
+      run: |
+        PR_NUM=${{ steps.pr.outputs.number }}
+        TITLE="${{ steps.extract.outputs.title }}"
+        AUTHOR="${{ steps.extract.outputs.author }}"
+        URL="${{ steps.extract.outputs.url }}"
+        CREATED="${{ steps.extract.outputs.created }}"
+        CLOSED="${{ steps.extract.outputs.closed }}"
+        TASKS="${{ steps.extract.outputs.tasks }}"
+        LABELS="${{ steps.extract.outputs.labels }}"
+        TASK_COUNT="${{ steps.extract.outputs.task_count }}"
+
+        # Create issue body
+        cat > /tmp/issue_body.md <<-'EOF'
+        # Extracted Tasks from Closed PR
+
+        **Original PR:** #$PR_NUM - $TITLE
+        **Author:** @$AUTHOR
+        **PR URL:** $URL
+
+        ## Status
+
+        - Created: $(date -d "$CREATED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CREATED")
+        - Closed: $(date -d "$CLOSED" +'%Y-%m-%d %H:%M UTC' 2>/dev/null || echo "$CLOSED")
+        - Status: Closed without merging
+        - Original labels: $LABELS
+
+        ## Incomplete Tasks ($TASK_COUNT found)
+
+        $TASKS
+
+        ## Context
+
+        The original PR was closed without merging. Review the PR for full context:
+        👉 #$PR_NUM
+
+        ## Next Steps
+
+        - [ ] Triage these tasks
+        - [ ] Determine if work should continue
+        - [ ] Create new PR if needed, or close as obsolete
+        - [ ] Assign to appropriate milestone/sprint
+
+        ## Related Work
+
+        If you create a new PR for this work, reference it here:
+        - New PR: (link here)
+
+        ---
+        _Auto-extracted by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+        _To prevent task extraction, add \`do-not-extract-tasks\` label to PR before closing_
+        EOF
+        ISSUE_BODY=$(cat /tmp/issue_body.md)
+
+        # Create the issue
+        ISSUE_NUM=$(gh issue create \
+          --title "📋 Tasks from closed PR #$PR_NUM: $TITLE" \
+          --body "$ISSUE_BODY" \
+          --label "extracted-tasks,needs-triage" \
+          --assignee "$AUTHOR" | grep -oP '\d+$')
+
+        echo "✅ Created issue #$ISSUE_NUM with $TASK_COUNT extracted tasks"
+
+        # Comment on the closed PR
+        cat > /tmp/pr_comment.md <<-'EOF'
+        📋 **Tasks Extracted**
+
+        This PR was closed with $TASK_COUNT incomplete tasks.
+
+        **Tasks have been extracted to:** #$ISSUE_NUM
+
+        Review and triage the extracted tasks. If this work should continue, create a new PR and reference the issue.
+
+        _Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+        EOF
+        gh pr comment $PR_NUM --body-file /tmp/pr_comment.md
+
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Comment if No Tasks Found
+      if: steps.extract.outputs.task_count == 0 && steps.extract.outputs.skip != 'true'
+      run: |
+        PR_NUM=${{ steps.pr.outputs.number }}
+
+        cat > /tmp/pr_comment.md <<-'EOF'
+        ℹ️ **No Tasks to Extract**
+
+        This PR was closed, but no incomplete task items were found.
+
+        If there's work that should be tracked, create an issue manually.
+
+        _Automated by [task-extraction.yml](../.github/workflows/task-extraction.yml)_
+        EOF
+        gh pr comment $PR_NUM --body-file /tmp/pr_comment.md
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Skip Notification
+      if: steps.extract.outputs.skip == 'true'
+      run: |
+        echo "⏭️ Skipping task extraction (do-not-extract-tasks label present)"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job to manually extract tasks from multiple PRs
+  bulk-extract:
+    name: Bulk Task Extraction
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.pr_number == ''
+
+    steps:
+    - name: Find Recently Closed PRs
+      run: |
+        echo "🔍 Finding recently closed PRs without merges..."
+
+        # Get PRs closed in last 7 days that weren't merged
+        CLOSED_PRS=$(gh pr list \
+          --state closed \
+          --search "is:pr is:closed is:unmerged closed:>=$(date -d '7 days ago' +%Y-%m-%d)" \
+          --json number,title,closedAt \
+          --limit 50)
+
+        PR_COUNT=$(echo "$CLOSED_PRS" | jq length)
+
+        echo "Found $PR_COUNT closed unmerged PRs in last 7 days"
+
+        if [ "$PR_COUNT" -eq 0 ]; then
+          echo "No PRs to process"
+          exit 0
+        fi
+
+        # Trigger task extraction for each
+        echo "$CLOSED_PRS" | jq -r '.[].number' | while read -r pr_num; do
+          echo "Processing PR #$pr_num..."
+          gh workflow run task-extraction.yml -f pr_number=$pr_num
+          sleep 2  # Rate limit
+        done
+
+        echo "✅ Triggered task extraction for $PR_COUNT PRs"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

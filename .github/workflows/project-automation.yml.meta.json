@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Project Automation",
+  "identifier": "urn:uuid:b9deb4d5-5064-5638-80ae-d28844ee1a90",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by issues, pull_request, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.project.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "project"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["issues", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "automation",
+    "general",
+    "logic",
+    "manual",
+    "pr-triggered",
+    "pull-request"
+  ]
+}

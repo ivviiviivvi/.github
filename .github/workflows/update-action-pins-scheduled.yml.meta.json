@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Update Action Pins (Scheduled)",
+  "identifier": "urn:uuid:145e3bb2-2d54-5629-bcf3-8bce2edca4fe",
+  "version": "1.0.0",
+  "description": "Automated workflow for operational tasks. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.automation.update.yml",
+    "layer": "logic",
+    "role": "automation",
+    "domain": "update"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["automation", "logic", "manual", "scheduled"]
+}

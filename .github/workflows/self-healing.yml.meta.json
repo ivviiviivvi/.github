@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Self-Healing Workflows",
+  "identifier": "urn:uuid:829eb1d3-83a8-524d-9760-fa55df90b08e",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_run, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.self.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "self"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_run", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual"]
+}

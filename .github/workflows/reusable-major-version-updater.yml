@@ -1,0 +1,61 @@
+# Reusable workflow for updating major version tags
+# Useful for GitHub Actions that need v1, v2, etc. tags pointing to latest minor/patch
+# Example: When releasing v1.2.3, this updates v1 tag to point to v1.2.3
+name: 'Reusable: Major Version Updater'
+
+on:
+  workflow_call:
+    inputs:
+      tag-name:
+        required: true
+        type: string
+        description: The full tag name (e.g., v1.2.3 or refs/tags/v1.2.3)
+    secrets:
+      github-token:
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  major-version-updater:
+    name: Update Major Version Tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-tags: true
+        ref: ${{ inputs.tag-name }}
+
+    - name: Parse Version
+      id: version
+      env:
+        TAG_NAME: ${{ inputs.tag-name }}
+      run: |
+        # Remove refs/tags/ prefix if present
+        tag=${TAG_NAME/refs\/tags\//}
+        # Remove 'v' prefix if present for version parsing
+        version=${tag#v}
+        # Extract major version number
+        major=${version%%.*}
+        {
+          echo "tag=${tag}"
+          echo "version=${version}"
+          echo "major=${major}"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Force Update Major Tag
+      env:
+        GITHUB_TOKEN: ${{ secrets.github-token }}
+      run: |
+        echo "Updating v${{ steps.version.outputs.major }} to point to ${{ steps.version.outputs.tag }}"
+        git tag -f v${{ steps.version.outputs.major }} ${{ steps.version.outputs.tag }}
+        git push -f origin v${{ steps.version.outputs.major }}

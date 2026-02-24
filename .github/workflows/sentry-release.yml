@@ -1,0 +1,34 @@
+name: Sentry Release
+
+on:
+  push:
+    tags:
+    - v*
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    name: Create Sentry Release
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5    # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Create Sentry Release
+      uses: getsentry/action-release@a2c79a744222df24ad4296767c9c766297374a2e    # ratchet:getsentry/action-release@v1
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      with:
+        environment: production
+        version: ${{ github.ref_name }}

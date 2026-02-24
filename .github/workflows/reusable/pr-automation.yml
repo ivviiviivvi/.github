@@ -1,0 +1,450 @@
+name: PR Automation (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      auto-assign-reviewers:
+        description: Enable automatic reviewer assignment based on file changes
+        required: false
+        type: boolean
+        default: true
+      reviewer-mapping:
+        description: 'JSON mapping of file patterns to reviewers (e.g., {"src/**": ["user1"], "docs/**": ["user2"]})'
+        required: false
+        type: string
+        default: '{}'
+      fallback-reviewers:
+        description: Comma-separated list of fallback reviewers when no pattern matches
+        required: false
+        type: string
+        default: ''
+      max-reviewers:
+        description: Maximum number of reviewers to assign
+        required: false
+        type: number
+        default: 2
+      auto-label:
+        description: Enable automatic labeling based on file paths
+        required: false
+        type: boolean
+        default: true
+      label-mapping:
+        description: 'JSON mapping of file patterns to labels (e.g., {"src/**": ["code"], "docs/**": ["documentation"]})'
+        required: false
+        type: string
+        default: '{}'
+      enable-auto-merge:
+        description: Enable auto-merge when conditions are met
+        required: false
+        type: boolean
+        default: false
+      auto-merge-method:
+        description: Merge method for auto-merge (merge, squash, rebase)
+        required: false
+        type: string
+        default: squash
+      auto-merge-labels:
+        description: Comma-separated labels that trigger auto-merge
+        required: false
+        type: string
+        default: auto-merge,automerge
+      delete-branch-on-merge:
+        description: Delete head branch after merge
+        required: false
+        type: boolean
+        default: true
+      skip-ci-label:
+        description: Label that skips automation
+        required: false
+        type: string
+        default: skip-automation
+    secrets:
+      github-token:
+        description: GitHub token with PR permissions (defaults to GITHUB_TOKEN)
+        required: false
+    outputs:
+      reviewers-assigned:
+        description: List of reviewers assigned
+        value: ${{ jobs.pr-automation.outputs.reviewers }}
+      labels-applied:
+        description: List of labels applied
+        value: ${{ jobs.pr-automation.outputs.labels }}
+      auto-merge-enabled:
+        description: Whether auto-merge was enabled
+        value: ${{ jobs.pr-automation.outputs.auto-merge }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-automation:
+    runs-on: ubuntu-latest
+    outputs:
+      reviewers: ${{ steps.assign-reviewers.outputs.assigned }}
+      labels: ${{ steps.apply-labels.outputs.applied }}
+      auto-merge: ${{ steps.auto-merge.outputs.enabled }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      GH_TOKEN: ${{ secrets.github-token || secrets.GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get PR details
+      id: pr-details
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          if (!pr) {
+            core.setFailed('This workflow must be triggered by a pull_request event');
+            return;
+          }
+
+          core.setOutput('number', pr.number);
+          core.setOutput('author', pr.user.login);
+          core.setOutput('head-branch', pr.head.ref);
+          core.setOutput('base-branch', pr.base.ref);
+          core.setOutput('draft', pr.draft);
+
+          // Check for skip label
+          const skipLabel = '${{ inputs.skip-ci-label }}';
+          const hasSkipLabel = pr.labels.some(l => l.name === skipLabel);
+          core.setOutput('skip-automation', hasSkipLabel.toString());
+
+          // Get current labels
+          const currentLabels = pr.labels.map(l => l.name);
+          core.setOutput('current-labels', JSON.stringify(currentLabels));
+
+          return pr;
+
+    - name: Get changed files
+      id: changed-files
+      if: steps.pr-details.outputs.skip-automation != 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber,
+            per_page: 100
+          });
+
+          const filenames = files.map(f => f.filename);
+          core.setOutput('files', JSON.stringify(filenames));
+          core.setOutput('count', filenames.length);
+
+          // Categorize files by extension
+          const extensions = {};
+          filenames.forEach(f => {
+            const ext = f.split('.').pop() || 'no-extension';
+            extensions[ext] = (extensions[ext] || 0) + 1;
+          });
+          core.setOutput('extensions', JSON.stringify(extensions));
+
+          console.log(`Found ${filenames.length} changed files`);
+          return filenames;
+
+    - name: Assign reviewers based on file changes
+      id: assign-reviewers
+      if: inputs.auto-assign-reviewers && steps.pr-details.outputs.skip-automation != 'true' && steps.pr-details.outputs.draft != 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const prAuthor = '${{ steps.pr-details.outputs.author }}';
+          const maxReviewers = ${{ inputs.max-reviewers }};
+          const files = ${{ steps.changed-files.outputs.files }};
+
+          // Parse reviewer mapping
+          let reviewerMapping = {};
+          try {
+            reviewerMapping = JSON.parse('${{ inputs.reviewer-mapping }}');
+          } catch (e) {
+            console.log('No valid reviewer mapping provided');
+          }
+
+          // Parse fallback reviewers
+          const fallbackReviewers = '${{ inputs.fallback-reviewers }}'
+            .split(',')
+            .map(r => r.trim())
+            .filter(r => r && r !== prAuthor);
+
+          // Match files to reviewers using glob-like patterns
+          const matchedReviewers = new Set();
+
+          for (const file of files) {
+            for (const [pattern, reviewers] of Object.entries(reviewerMapping)) {
+              // Convert glob pattern to regex
+              const regexPattern = pattern
+                .replace(/\*\*/g, '.*')
+                .replace(/\*/g, '[^/]*')
+                .replace(/\?/g, '.');
+
+              const regex = new RegExp(`^${regexPattern}$`);
+
+              if (regex.test(file)) {
+                reviewers.forEach(r => {
+                  if (r !== prAuthor) {
+                    matchedReviewers.add(r);
+                  }
+                });
+              }
+            }
+          }
+
+          // Add fallback reviewers if no matches
+          if (matchedReviewers.size === 0) {
+            fallbackReviewers.forEach(r => matchedReviewers.add(r));
+          }
+
+          // Limit to max reviewers
+          const selectedReviewers = Array.from(matchedReviewers).slice(0, maxReviewers);
+
+          if (selectedReviewers.length > 0) {
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                reviewers: selectedReviewers
+              });
+
+              console.log(`Assigned reviewers: ${selectedReviewers.join(', ')}`);
+              core.setOutput('assigned', JSON.stringify(selectedReviewers));
+            } catch (error) {
+              console.log(`Could not assign reviewers: ${error.message}`);
+              core.setOutput('assigned', '[]');
+            }
+          } else {
+            console.log('No reviewers to assign');
+            core.setOutput('assigned', '[]');
+          }
+
+    - name: Apply labels based on file paths
+      id: apply-labels
+      if: inputs.auto-label && steps.pr-details.outputs.skip-automation != 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const files = ${{ steps.changed-files.outputs.files }};
+          const extensions = ${{ steps.changed-files.outputs.extensions }};
+          const currentLabels = ${{ steps.pr-details.outputs.current-labels }};
+
+          // Parse label mapping
+          let labelMapping = {};
+          try {
+            labelMapping = JSON.parse('${{ inputs.label-mapping }}');
+          } catch (e) {
+            console.log('No valid label mapping provided');
+          }
+
+          const labelsToAdd = new Set();
+
+          // Match files to labels using patterns
+          for (const file of files) {
+            for (const [pattern, labels] of Object.entries(labelMapping)) {
+              const regexPattern = pattern
+                .replace(/\*\*/g, '.*')
+                .replace(/\*/g, '[^/]*')
+                .replace(/\?/g, '.');
+
+              const regex = new RegExp(`^${regexPattern}$`);
+
+              if (regex.test(file)) {
+                labels.forEach(l => labelsToAdd.add(l));
+              }
+            }
+          }
+
+          // Add extension-based labels
+          const extensionLabels = {
+            'py': 'python',
+            'js': 'javascript',
+            'ts': 'typescript',
+            'tsx': 'typescript',
+            'jsx': 'javascript',
+            'go': 'go',
+            'rs': 'rust',
+            'rb': 'ruby',
+            'java': 'java',
+            'yml': 'configuration',
+            'yaml': 'configuration',
+            'json': 'configuration',
+            'md': 'documentation',
+            'mdx': 'documentation',
+            'css': 'styles',
+            'scss': 'styles',
+            'sql': 'database',
+            'dockerfile': 'docker',
+            'tf': 'terraform'
+          };
+
+          for (const [ext, count] of Object.entries(extensions)) {
+            const extLower = ext.toLowerCase();
+            if (extensionLabels[extLower]) {
+              labelsToAdd.add(extensionLabels[extLower]);
+            }
+          }
+
+          // Filter out labels that already exist
+          const newLabels = Array.from(labelsToAdd).filter(l => !currentLabels.includes(l));
+
+          if (newLabels.length > 0) {
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: newLabels
+              });
+
+              console.log(`Applied labels: ${newLabels.join(', ')}`);
+              core.setOutput('applied', JSON.stringify(newLabels));
+            } catch (error) {
+              console.log(`Could not apply labels: ${error.message}`);
+              core.setOutput('applied', '[]');
+            }
+          } else {
+            console.log('No new labels to apply');
+            core.setOutput('applied', '[]');
+          }
+
+    - name: Enable auto-merge
+      id: auto-merge
+      if: inputs.enable-auto-merge && steps.pr-details.outputs.skip-automation != 'true' && steps.pr-details.outputs.draft != 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const prNumber = ${{ steps.pr-details.outputs.number }};
+          const currentLabels = ${{ steps.pr-details.outputs.current-labels }};
+          const autoMergeLabels = '${{ inputs.auto-merge-labels }}'.split(',').map(l => l.trim());
+          const mergeMethod = '${{ inputs.auto-merge-method }}'.toUpperCase();
+
+          // Check if PR has auto-merge label
+          const hasAutoMergeLabel = currentLabels.some(l => autoMergeLabels.includes(l));
+
+          if (!hasAutoMergeLabel) {
+            console.log('PR does not have auto-merge label');
+            core.setOutput('enabled', 'false');
+            return;
+          }
+
+          // Get PR node ID for GraphQL
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          try {
+            // Enable auto-merge via GraphQL
+            const mutation = `
+              mutation($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
+                enablePullRequestAutoMerge(input: {
+                  pullRequestId: $pullRequestId,
+                  mergeMethod: $mergeMethod
+                }) {
+                  pullRequest {
+                    autoMergeRequest {
+                      enabledAt
+                    }
+                  }
+                }
+              }
+            `;
+
+            await github.graphql(mutation, {
+              pullRequestId: pr.node_id,
+              mergeMethod: mergeMethod
+            });
+
+            console.log(`Auto-merge enabled with method: ${mergeMethod}`);
+            core.setOutput('enabled', 'true');
+          } catch (error) {
+            console.log(`Could not enable auto-merge: ${error.message}`);
+            core.setOutput('enabled', 'false');
+          }
+
+    - name: Handle branch cleanup after merge
+      id: branch-cleanup
+      if: inputs.delete-branch-on-merge && github.event.pull_request.merged == true
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const headBranch = '${{ steps.pr-details.outputs.head-branch }}';
+
+          // Protected branches that should never be deleted
+          const protectedBranches = ['main', 'master', 'develop', 'staging', 'production'];
+
+          if (protectedBranches.includes(headBranch)) {
+            console.log(`Skipping deletion of protected branch: ${headBranch}`);
+            core.setOutput('deleted', 'false');
+            return;
+          }
+
+          try {
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${headBranch}`
+            });
+
+            console.log(`Deleted branch: ${headBranch}`);
+            core.setOutput('deleted', 'true');
+          } catch (error) {
+            console.log(`Could not delete branch: ${error.message}`);
+            core.setOutput('deleted', 'false');
+          }
+
+    - name: Post automation summary
+      if: always() && steps.pr-details.outputs.skip-automation != 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const reviewers = '${{ steps.assign-reviewers.outputs.assigned }}' || '[]';
+          const labels = '${{ steps.apply-labels.outputs.applied }}' || '[]';
+          const autoMerge = '${{ steps.auto-merge.outputs.enabled }}' === 'true';
+
+          const parsedReviewers = JSON.parse(reviewers);
+          const parsedLabels = JSON.parse(labels);
+
+          let summary = '## PR Automation Summary\n\n';
+
+          if (parsedReviewers.length > 0) {
+            summary += `**Reviewers assigned:** ${parsedReviewers.map(r => `@${r}`).join(', ')}\n\n`;
+          }
+
+          if (parsedLabels.length > 0) {
+            summary += `**Labels applied:** ${parsedLabels.map(l => `\`${l}\``).join(', ')}\n\n`;
+          }
+
+          if (autoMerge) {
+            summary += '**Auto-merge:** Enabled\n\n';
+          }
+
+          if (parsedReviewers.length === 0 && parsedLabels.length === 0 && !autoMerge) {
+            summary += 'No automation actions were taken.\n';
+          }
+
+          console.log(summary);
+
+          // Write to job summary
+          const fs = require('fs');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);

@@ -1,0 +1,30 @@
+name: Project Automation
+
+on:
+  issues:
+    types: [opened, reopened, labeled]
+  pull_request:
+    types: [opened, reopened, labeled]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  project-management:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Add to Project
+      continue-on-error: true
+      uses: actions/add-to-project@1b844f0c5ac6446a402e0cb3693f9be5eca188c5 # v0.6.1
+      with:
+          # Requires a PAT or App token with project write permissions
+        project-url: https://github.com/orgs/${{ github.repository_owner }}/projects/1
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}

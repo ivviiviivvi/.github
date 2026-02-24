@@ -1,0 +1,7 @@
+{
+  "name": "CI Pipeline",
+  "description": "Continuous integration with linting, testing, and build verification using org-standard reusable workflow",
+  "iconName": "rocket",
+  "categories": ["Continuous integration"],
+  "filePatterns": ["package.json", "pyproject.toml"]
+}

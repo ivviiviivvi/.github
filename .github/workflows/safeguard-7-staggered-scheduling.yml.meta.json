@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Safeguard 7: Staggered Scheduling",
+  "identifier": "urn:uuid:5159f5f5-de29-5443-9e47-762f50697dca",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.safeguard.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "safeguard"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual", "scheduled"]
+}

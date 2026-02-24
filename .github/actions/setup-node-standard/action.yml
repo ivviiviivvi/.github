@@ -1,0 +1,64 @@
+name: Standard Node.js Setup
+description: Standardized Node.js setup with repository variable support and sensible defaults
+
+inputs:
+  node-version:
+    description: Node.js version to use. Falls back to vars.NODE_VERSION_DEFAULT, then '20'
+    required: false
+    default: ''
+  cache:
+    description: Package manager to cache (npm, yarn, pnpm, or empty for no cache)
+    required: false
+    default: npm
+  cache-dependency-path:
+    description: Path to lockfile for cache key
+    required: false
+    default: ''
+  registry-url:
+    description: Optional registry URL for publishing
+    required: false
+    default: ''
+
+outputs:
+  node-version:
+    description: The Node.js version that was set up
+    value: ${{ steps.setup.outputs.node-version }}
+  cache-hit:
+    description: Whether the cache was hit
+    value: ${{ steps.setup.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+  - name: Determine Node.js version
+    id: version
+    shell: bash
+    env:
+      NODE_VERSION: ${{ inputs.node-version }}
+    run: |
+      # Priority: input > repository variable > default
+      INPUT_VERSION="$NODE_VERSION"
+      REPO_VAR_VERSION="${{ vars.NODE_VERSION_DEFAULT }}"
+      DEFAULT_VERSION="20"
+
+      if [ -n "$INPUT_VERSION" ]; then
+        VERSION="$INPUT_VERSION"
+        echo "Using input version: $VERSION"
+      elif [ -n "$REPO_VAR_VERSION" ]; then
+        VERSION="$REPO_VAR_VERSION"
+        echo "Using repository variable NODE_VERSION_DEFAULT: $VERSION"
+      else
+        VERSION="$DEFAULT_VERSION"
+        echo "Using default version: $VERSION"
+      fi
+
+      echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  - name: Set up Node.js ${{ steps.version.outputs.version }}
+    id: setup
+    uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af    # ratchet:actions/setup-node@v4
+    with:
+      node-version: ${{ steps.version.outputs.version }}
+      cache: ${{ inputs.cache }}
+      cache-dependency-path: ${{ inputs.cache-dependency-path }}
+      registry-url: ${{ inputs.registry-url }}

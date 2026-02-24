@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Reusable: Commitizen Bump",
+  "identifier": "urn:uuid:95a0a3ad-3de1-500d-b204-1123de0e6f22",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.reusable.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "general"]
+}

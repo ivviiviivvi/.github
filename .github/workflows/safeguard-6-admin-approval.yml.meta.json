@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Safeguard 6: Admin Approval Dashboard",
+  "identifier": "urn:uuid:427d7dd3-5769-50e2-a16a-fb203080b267",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, workflow_run, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "interface.general.safeguard.yml",
+    "layer": "interface",
+    "role": "general",
+    "domain": "safeguard"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_dispatch", "workflow_run"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "interface", "manual", "pull-request"]
+}

@@ -1,0 +1,263 @@
+name: Version Control Standards Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches-ignore:
+    - main
+    - master
+    - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate-standards:
+    name: Validate Version Control Standards
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate branch name
+      id: validate-branch
+      run: |
+        BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+        echo "Branch name: $BRANCH_NAME"
+
+        # Skip validation for protected branches and push events to main
+        if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]] || [[ "$BRANCH_NAME" == "develop" ]]; then
+          echo "Skipping validation for protected branch: $BRANCH_NAME"
+          exit 0
+        fi
+
+        # Skip validation for Dependabot branches (automated dependency updates)
+        if [[ "$BRANCH_NAME" =~ ^dependabot/ ]]; then
+          echo "Skipping validation for Dependabot branch: $BRANCH_NAME"
+          exit 0
+        fi
+
+        # Skip validation on push events (only validate PRs)
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          echo "Skipping validation for push event to $BRANCH_NAME"
+          exit 0
+        fi
+
+        # Valid patterns according to VERSION_CONTROL_STANDARDS.md
+        VALID_PATTERNS=(
+          "^(develop|experimental|production|maintenance|deprecated|archive)/(feature|bugfix|hotfix|enhancement|refactor|docs|test|chore)/[a-z0-9-]+(/[a-z0-9-]+)?(/[a-z0-9-]+)?$"
+          "^fix/[a-z0-9-]+(/[a-z0-9-]+)?$"
+          "^release/v[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.-]+)?$"
+          "^maintenance/v[0-9]+-maintenance$"
+          "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"
+          "^archive/[a-z0-9-]+/[a-z0-9-]+$"
+          # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
+          "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
+        )
+
+        VALID=false
+        for pattern in "${VALID_PATTERNS[@]}"; do
+          if [[ "$BRANCH_NAME" =~ $pattern ]]; then
+            VALID=true
+            echo "Branch name matches pattern: $pattern"
+            break
+          fi
+        done
+
+        if [ "$VALID" = false ]; then
+          echo "::error::Branch name '$BRANCH_NAME' does not follow naming conventions"
+          echo "::error::Expected format: <lifecycle>/<type>/<component>[/<subcomponent>]"
+          echo "::error::Examples:"
+          echo "::error::  - develop/feature/user-authentication"
+          echo "::error::  - production/hotfix/critical-security-fix"
+          echo "::error::  - release/v1.2.0"
+          echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
+          exit 1
+        fi
+
+        echo "Branch name is valid"
+
+    - name: Validate commit messages
+      id: validate-commits
+      if: github.event_name == 'pull_request'
+      env:
+        BASE_REF: ${{ github.base_ref }}
+      run: |
+        # Get commits in the PR
+        git fetch origin "$BASE_REF"
+        COMMITS=$(git log origin/"$BASE_REF"..HEAD --pretty=format:"%H|%s")
+
+        echo "Validating commit messages..."
+
+        INVALID_COMMITS=()
+        while IFS= read -r line; do
+          if [ -z "$line" ]; then
+            continue
+          fi
+
+          HASH=$(echo "$line" | cut -d'|' -f1)
+          MESSAGE=$(echo "$line" | cut -d'|' -f2-)
+
+          # Skip merge commits
+          if [[ "$MESSAGE" =~ ^Merge ]]; then
+            continue
+          fi
+
+          # Conventional Commits pattern
+          # Format: type(scope): subject or type: subject
+          if [[ ! "$MESSAGE" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?:\ .+ ]]; then
+            INVALID_COMMITS+=("$HASH: $MESSAGE")
+          fi
+        done <<< "$COMMITS"
+
+        if [ ${#INVALID_COMMITS[@]} -gt 0 ]; then
+          echo "::error::Found commits not following Conventional Commits format:"
+          for commit in "${INVALID_COMMITS[@]}"; do
+            echo "::error::  - $commit"
+          done
+          echo "::error::Expected format: <type>(<scope>): <subject>"
+          echo "::error::Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+          echo "::error::Examples:"
+          echo "::error::  - feat(auth): add OAuth2 authentication"
+          echo "::error::  - fix: resolve memory leak"
+          echo "::error::  - docs: update installation guide"
+          echo "::error::See VERSION_CONTROL_STANDARDS.md for details"
+          exit 1
+        fi
+
+        echo "All commit messages are valid"
+
+    - name: Comment on PR with validation results
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const body = `## Version Control Standards Validation Failed
+
+          This pull request does not meet our version control standards.
+
+          **Common Issues:**
+
+          1. **Branch Name**: Must follow format \`<lifecycle>/<type>/<component>[/<subcomponent>]\`
+             - Examples:
+               - \`develop/feature/user-authentication\`
+               - \`production/hotfix/critical-security-fix\`
+               - \`maintenance/v1.x/security-patches\`
+
+          2. **Commit Messages**: Must follow Conventional Commits format
+             - Format: \`<type>(<scope>): <subject>\`
+             - Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+             - Examples:
+               - \`feat(auth): add OAuth2 authentication\`
+               - \`fix: resolve memory leak\`
+               - \`docs: update installation guide\`
+
+          **Documentation:**
+          - [VERSION_CONTROL_STANDARDS.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/VERSION_CONTROL_STANDARDS.md)
+          - [GIT_WORKFLOW.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/GIT_WORKFLOW.md)
+          - [BRANCH_STRATEGY.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/BRANCH_STRATEGY.md)
+
+          Please update your branch name and/or commit messages to follow the standards.`;
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: body
+          });
+
+  validate-markdown:
+    name: Validate Markdown Style
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Get changed markdown files
+      id: changed-files
+      uses: tj-actions/changed-files@716b1e13042866565e00e85fd4ec490e186c4a2f  # ratchet:tj-actions/changed-files@v41
+      with:
+        files: |
+          **/*.md
+
+    - name: Check for emoji in markdown
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        echo "Checking markdown files for emoji..."
+
+        EMOJI_FOUND=false
+
+        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          # Check for emoji characters (actual emoji, not box-drawing/geometric)
+          # Focus on emoji faces, symbols, and objects ranges
+          if [ ! -f "$file" ] || [ ! -r "$file" ]; then
+            echo "::warning file=$file::Cannot read file for emoji validation"
+            continue
+          fi
+
+          if python3 -c "
+          import re, sys
+          try:
+              with open('$file', 'r', encoding='utf-8', errors='ignore') as f:
+                  content = f.read()
+                  sys.exit(0 if re.search(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF]', content) else 1)
+          except Exception as e:
+              print(f'Error: {e}', file=sys.stderr)
+              sys.exit(1)
+          " 2>/dev/null; then
+            echo "::error file=$file::Emoji found in $file (violates MARKDOWN_STYLE_GUIDE.md)"
+            EMOJI_FOUND=true
+          fi
+        done
+
+        if [ "$EMOJI_FOUND" = true ]; then
+          echo "::error::Emoji found in markdown files"
+          echo "::error::Our style guide prohibits emoji in documentation"
+          echo "::error::See MARKDOWN_STYLE_GUIDE.md section 'No Visual Embellishments'"
+          exit 1
+        fi
+
+        echo "No emoji found in markdown files"
+
+    - name: Comment on PR if emoji found
+      if: failure()
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      with:
+        script: |
+          const body = `## Markdown Style Violation: Emoji Detected
+
+          This pull request contains emoji in markdown files, which violates our [Markdown Style Guide](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/MARKDOWN_STYLE_GUIDE.md).
+
+          **Our Standard:**
+          > DO NOT use emoji or decorative Unicode characters in documentation.
+
+          **Why?**
+          - Ensures professionalism
+          - Improves accessibility
+          - Maintains consistency across all documentation
+          - Better readability in all contexts
+
+          Please remove all emoji from markdown files before merging.
+
+          **Reference:** [MARKDOWN_STYLE_GUIDE.md - No Visual Embellishments](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/MARKDOWN_STYLE_GUIDE.md#5-no-visual-embellishments)`;
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: body
+          });

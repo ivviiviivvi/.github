@@ -1,0 +1,200 @@
+name: Email Digest
+
+on:
+  schedule:
+    # Weekly on Monday at 9:00 AM UTC
+  - cron: 0 9 * * 1
+  workflow_dispatch:
+    inputs:
+      recipients:
+        description: Additional recipients (comma-separated emails)
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  generate-digest:
+    name: Generate Weekly Digest
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+
+    - name: Install dependencies
+      run: |
+        pip install jinja2 requests python-dateutil
+
+    - name: Collect workflow metrics
+      id: metrics
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Get last week's date range
+        END_DATE=$(date -u +%Y-%m-%d)
+        START_DATE=$(date -u -d '7 days ago' +%Y-%m-%d)
+
+        echo "Date range: $START_DATE to $END_DATE"
+
+        # Get workflow runs from last week
+        gh api \
+          -H "Accept: application/vnd.github+json" \
+          "/repos/${{ github.repository }}/actions/runs?created=>=${START_DATE}&per_page=100" \
+          > workflow_runs.json
+
+        # Calculate metrics
+        TOTAL_RUNS=$(jq '.workflow_runs | length' workflow_runs.json)
+        SUCCESSFUL=$(jq '[.workflow_runs[] | select(.conclusion == "success")] | length' workflow_runs.json)
+        FAILED=$(jq '[.workflow_runs[] | select(.conclusion == "failure")] | length' workflow_runs.json)
+
+        if [ "$TOTAL_RUNS" -gt 0 ]; then
+          SUCCESS_RATE=$(echo "scale=1; $SUCCESSFUL * 100 / $TOTAL_RUNS" | bc)
+        else
+          SUCCESS_RATE="0.0"
+        fi
+
+        # Get issue and PR counts
+        ISSUES_OPENED=$(gh issue list --repo "${{ github.repository }}" \
+          --state all --search "created:>=$START_DATE" --json number --jq '. | length')
+        ISSUES_CLOSED=$(gh issue list --repo "${{ github.repository }}" \
+          --state closed --search "closed:>=$START_DATE" --json number --jq '. | length')
+
+        PRS_OPENED=$(gh pr list --repo "${{ github.repository }}" \
+          --state all --search "created:>=$START_DATE" --json number --jq '. | length')
+        PRS_MERGED=$(gh pr list --repo "${{ github.repository }}" \
+          --state merged --search "merged:>=$START_DATE" --json number --jq '. | length')
+
+        # Get stale items
+        STALE_MARKED=$(gh issue list --repo "${{ github.repository }}" \
+          --label "stale" --json number --jq '. | length')
+
+        # Save metrics to file
+        cat > metrics.json <<EOF
+        {
+          "period": {
+            "start": "$START_DATE",
+            "end": "$END_DATE"
+          },
+          "workflows": {
+            "totalRuns": $TOTAL_RUNS,
+            "successful": $SUCCESSFUL,
+            "failed": $FAILED,
+            "successRate": $SUCCESS_RATE
+          },
+          "issues": {
+            "opened": $ISSUES_OPENED,
+            "closed": $ISSUES_CLOSED
+          },
+          "pullRequests": {
+            "opened": $PRS_OPENED,
+            "merged": $PRS_MERGED
+          },
+          "stale": {
+            "marked": $STALE_MARKED
+          }
+        }
+        EOF
+
+        echo "Metrics collected:"
+        cat metrics.json
+
+    - name: Get notable events
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Get failed workflow runs
+        gh api \
+          -H "Accept: application/vnd.github+json" \
+          "/repos/${{ github.repository }}/actions/runs?status=failure&per_page=5" \
+          | jq '.workflow_runs[] | {name: .name, conclusion: .conclusion, html_url: .html_url, created_at: .created_at}' \
+          | jq -s '.' > notable_events.json
+
+        echo "Notable events:"
+        cat notable_events.json
+
+    - name: Generate HTML email
+      run: |
+        python3 src/automation/scripts/generate_email_digest.py \
+          --metrics metrics.json \
+          --events notable_events.json \
+          --output email_digest.html
+
+    - name: Validate email secrets
+      id: validate-email
+      shell: bash
+      run: |
+        email_valid=false
+        if [[ -n "${{ secrets.SMTP_SERVER }}" && -n "${{ secrets.SMTP_USERNAME }}" && -n "${{ secrets.SMTP_PASSWORD }}" && -n "${{ secrets.DIGEST_RECIPIENTS }}" ]]; then
+          email_valid=true
+        fi
+        echo "email_valid=$email_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Send email
+      if: steps.validate-email.outputs.email_valid == 'true'
+      uses: dawidd6/action-send-mail@2cea9617b09d79a095af21254fbcb7ae95903dde  # ratchet:dawidd6/action-send-mail@v3.12.0
+      with:
+        server_address: ${{ secrets.SMTP_SERVER }}
+        server_port: ${{ secrets.SMTP_PORT }}
+        username: ${{ secrets.SMTP_USERNAME }}
+        password: ${{ secrets.SMTP_PASSWORD }}
+        subject: 📊 Weekly Workflow Digest - ${{ github.repository }}
+        to: ${{ secrets.DIGEST_RECIPIENTS }},${{ github.event.inputs.recipients }}
+        from: GitHub Workflows <noreply@github.com>
+        html_body: file://email_digest.html
+        content_type: text/html
+
+    - name: Skip email (missing secrets)
+      if: steps.validate-email.outputs.email_valid != 'true'
+      run: |
+        echo "::warning::Email secrets not configured. Skipping email digest send."
+
+    - name: Upload digest
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: email-digest-${{ github.run_id }}
+        path: |
+          email_digest.html
+          metrics.json
+          notable_events.json
+        retention-days: 90
+
+    - name: Validate Slack secrets
+      id: validate-slack
+      shell: bash
+      run: |
+        slack_valid=false
+        if [[ -n "${{ secrets.SLACK_WEBHOOK_URL }}" && "${{ secrets.SLACK_WEBHOOK_URL }}" == https://hooks.slack.com/services/* ]]; then
+          slack_valid=true
+        fi
+        echo "slack_valid=$slack_valid" >> "$GITHUB_OUTPUT"
+
+    - name: Post summary to Slack
+      if: always() && steps.validate-slack.outputs.slack_valid == 'true'
+      uses: ./.github/actions/slack-notify
+      with:
+        webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        priority: P3
+        title: Weekly Email Digest Sent
+        message: |
+          Weekly workflow digest has been sent to stakeholders.
+
+          Success Rate: ${{ steps.metrics.outputs.success-rate }}%
+          Total Runs: ${{ steps.metrics.outputs.total-runs }}
+        workflow-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        repository: ${{ github.repository }}

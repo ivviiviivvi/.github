@@ -1,0 +1,121 @@
+name: Jules Agent
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: The issue number to process
+        required: false
+      pr_number:
+        description: The PR number to process
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  jules:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@jules')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@jules')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@jules')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@jules') || contains(github.event.issue.title, '@jules'))) ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+
+
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Set up Python
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065    # ratchet:actions/setup-python@v5.3.0
+      with:
+        python-version: '3.12'
+        cache: pip
+
+    - name: Check quota and deduplication
+      id: quota
+      run: |
+        usage=$(python src/automation/scripts/quota_manager.py get_usage "Jules_Agent")
+        quota=$(jq -r '.subscriptions[] | select(.name=="Jules_Agent") | .quota' .github/subscriptions.json)
+        echo "usage=$usage" >> $GITHUB_OUTPUT
+        echo "quota=$quota" >> $GITHUB_OUTPUT
+
+        # Check for task deduplication
+        ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
+        TASK_TYPE="jules_request"
+        TASK_DATA="{\"issue\":\"$ISSUE_NUM\",\"event\":\"${{ github.event_name }}\",\"repo\":\"${{ github.repository }}\"}"
+
+        DEDUPE_RESULT=$(python3 .github/scripts/task_deduplicator.py check "$TASK_TYPE" "$TASK_DATA" || echo '{"should_process":false,"reason":"deduplication check failed"}')
+        SHOULD_PROCESS=$(echo "$DEDUPE_RESULT" | jq -r '.should_process')
+        REASON=$(echo "$DEDUPE_RESULT" | jq -r '.reason')
+
+        echo "should_process=$SHOULD_PROCESS" >> $GITHUB_OUTPUT
+        echo "dedupe_reason=$REASON" >> $GITHUB_OUTPUT
+
+        if [ "$SHOULD_PROCESS" = "false" ]; then
+          echo "⏭️  Skipping duplicate task: $REASON"
+        fi
+
+    - name: Skip Duplicate Notice
+      if: steps.quota.outputs.should_process == 'false'
+      run: |
+        ISSUE_NUM="${{ github.event.issue.number || github.event.pull_request.number }}"
+        if [ -n "$ISSUE_NUM" ]; then
+          gh issue comment $ISSUE_NUM --body "⏭️  **Duplicate Request Detected**
+
+          This Jules request was already processed recently: ${{ steps.quota.outputs.dedupe_reason }}
+
+          To prevent redundant work and PR sprawl, duplicate requests are automatically skipped. If you need to re-run this task, please wait 24 hours or contact a maintainer.
+
+          _Automated by [jules.yml](../.github/workflows/jules.yml) with task deduplication_" || echo "Could not post comment"
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run Claude Code
+      id: claude
+      if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota && steps.quota.outputs.should_process == 'true' }}
+      uses: anthropics/claude-code-action@6867bb3ab0b2c0a10629b6823e457347e74ad6d2  # ratchet:anthropics/claude-code-action@v1
+      with:
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        additional_permissions: |
+          actions: read
+        claude_args: --allowed-tools "Bash(gh issue view:*),Bash(gh pr view:*),Bash(gh pr comment:*)"
+
+    - name: Increment usage
+      if: steps.claude.conclusion == 'success'
+      run: python src/automation/scripts/quota_manager.py increment_usage "Jules_Agent"
+
+    - name: Queue Task
+      if: ${{ steps.quota.outputs.usage >= steps.quota.outputs.quota }}
+      run: |
+        task='{ "subscription": "Jules_Agent", "issue_number": ${{ github.event.issue.number }}, "pr_url": ${{ github.event.pull_request.html_url }} }'
+        python src/automation/scripts/quota_manager.py add_task "$task"
+        gh issue comment ${{ github.event.issue.number }} --body "The daily task limit for Jules has been reached. Your request has been added to the queue and will be processed as soon as possible."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit state changes
+      if: always()
+      run: |
+        ./src/automation/scripts/commit_changes.sh "chore: update state for Jules task"

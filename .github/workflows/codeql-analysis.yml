@@ -1,0 +1,61 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+    paths:
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - .github/workflows/codeql-analysis.yml
+  pull_request:
+    branches: [main]
+    paths:
+    - '**.py'
+    - '**.js'
+    - '**.ts'
+    - .github/workflows/codeql-analysis.yml
+  schedule:
+  - cron: 0 6 * * 1   # Weekly on Mondays
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/analyze@v3
+      with:
+        category: /language:${{matrix.language}}

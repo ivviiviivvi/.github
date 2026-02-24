@@ -1,0 +1,207 @@
+name: Reusable Security Scan
+
+on:
+  workflow_call:
+    inputs:
+      scan_type:
+        description: Type of security scan (trivy, codeql, semgrep, all)
+        required: false
+        type: string
+        default: all
+      severity:
+        description: Minimum severity level (UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL)
+        required: false
+        type: string
+        default: MEDIUM
+      fail_on_severity:
+        description: Fail workflow on this severity and above
+        required: false
+        type: string
+        default: HIGH
+      scan_path:
+        description: 'Path to scan (default: .)'
+        required: false
+        type: string
+        default: .
+      upload_sarif:
+        description: Upload results to GitHub Security tab
+        required: false
+        type: boolean
+        default: true
+    outputs:
+      vulnerabilities_found:
+        description: Whether vulnerabilities were found
+        value: ${{ jobs.security-scan.outputs.vulnerabilities_found }}
+      scan_status:
+        description: Overall scan status (pass, warn, fail)
+        value: ${{ jobs.security-scan.outputs.scan_status }}
+      critical_count:
+        description: Number of critical vulnerabilities
+        value: ${{ jobs.security-scan.outputs.critical_count }}
+      high_count:
+        description: Number of high vulnerabilities
+        value: ${{ jobs.security-scan.outputs.high_count }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      vulnerabilities_found: ${{ steps.analyze.outputs.vulnerabilities_found }}
+      scan_status: ${{ steps.analyze.outputs.scan_status }}
+      critical_count: ${{ steps.analyze.outputs.critical_count }}
+      high_count: ${{ steps.analyze.outputs.high_count }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Install Trivy
+      if: inputs.scan_type == 'trivy' || inputs.scan_type == 'all'
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.58.1
+
+    - name: Run Trivy vulnerability scanner
+      if: inputs.scan_type == 'trivy' || inputs.scan_type == 'all'
+      env:
+        SEVERITY: ${{ inputs.severity }}
+        SCAN_PATH: ${{ inputs.scan_path }}
+      run: |
+        trivy fs --format sarif --output trivy-results.sarif --severity "$SEVERITY" --exit-code 0 --skip-dirs usr,var,opt "$SCAN_PATH"
+
+    - name: Run Semgrep scanner
+      if: inputs.scan_type == 'semgrep' || inputs.scan_type == 'all'
+      uses: returntocorp/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d  # ratchet:returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          p/security-audit
+          p/secrets
+          p/owasp-top-ten
+        generateSarif: true
+      continue-on-error: true
+
+    - name: Analyze scan results
+      id: analyze
+      run: |
+        # Initialize counters
+        critical=0
+        high=0
+        medium=0
+        low=0
+        vulnerabilities_found=false
+        scan_status="pass"
+
+        # Parse Trivy SARIF if exists
+        if [ -f "trivy-results.sarif" ]; then
+          echo "📊 Analyzing Trivy results..."
+
+          # Count vulnerabilities by severity
+          critical=$(jq '[.runs[].results[] | select(.level == "error")] | length' trivy-results.sarif 2>/dev/null || echo 0)
+          high=$(jq '[.runs[].results[] | select(.level == "warning")] | length' trivy-results.sarif 2>/dev/null || echo 0)
+          medium=$(jq '[.runs[].results[] | select(.level == "note")] | length' trivy-results.sarif 2>/dev/null || echo 0)
+
+          echo "Critical: $critical"
+          echo "High: $high"
+          echo "Medium: $medium"
+        fi
+
+        # Parse Semgrep SARIF if exists
+        if [ -f "semgrep.sarif" ]; then
+          echo "📊 Analyzing Semgrep results..."
+
+          # Count vulnerabilities by severity
+          s_high=$(jq '[.runs[].results[] | select(.level == "error")] | length' semgrep.sarif 2>/dev/null || echo 0)
+          s_medium=$(jq '[.runs[].results[] | select(.level == "warning")] | length' semgrep.sarif 2>/dev/null || echo 0)
+          s_low=$(jq '[.runs[].results[] | select(.level == "note")] | length' semgrep.sarif 2>/dev/null || echo 0)
+
+          echo "Semgrep High: $s_high"
+          echo "Semgrep Medium: $s_medium"
+          echo "Semgrep Low: $s_low"
+
+          # Add to totals
+          high=$((high + s_high))
+          medium=$((medium + s_medium))
+          low=$((low + s_low))
+
+          # Rename for artifact upload
+          mv semgrep.sarif semgrep-results.sarif
+        fi
+
+        # Determine status
+        if [ "$critical" -gt 0 ] || [ "$high" -gt 0 ]; then
+          vulnerabilities_found=true
+        fi
+
+        if [ "$critical" -gt 0 ]; then
+          scan_status="fail"
+        elif [ "$high" -gt 0 ]; then
+          scan_status="warn"
+        fi
+
+        # Set outputs
+        echo "vulnerabilities_found=$vulnerabilities_found" >> $GITHUB_OUTPUT
+        echo "scan_status=$scan_status" >> $GITHUB_OUTPUT
+        echo "critical_count=$critical" >> $GITHUB_OUTPUT
+        echo "high_count=$high" >> $GITHUB_OUTPUT
+
+        # Print summary
+        echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Severity | Count |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔴 Critical | $critical |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🟠 High | $high |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🟡 Medium | $medium |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🟢 Low | $low |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Status**: $scan_status" >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload Trivy SARIF to GitHub Security
+      if: inputs.upload_sarif && always()
+      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: trivy-results.sarif
+        category: trivy
+      continue-on-error: true
+
+    - name: Check fail threshold
+      if: always()
+      env:
+        SCAN_STATUS: ${{ steps.analyze.outputs.scan_status }}
+        FAIL_ON_SEVERITY: ${{ inputs.fail_on_severity }}
+      run: |
+        echo "Scan status: $SCAN_STATUS"
+        echo "Fail threshold: $FAIL_ON_SEVERITY"
+
+        # Fail if threshold exceeded
+        if [ "$FAIL_ON_SEVERITY" == "CRITICAL" ] && [ "$SCAN_STATUS" == "fail" ]; then
+          echo "❌ Critical vulnerabilities found. Failing workflow."
+          exit 1
+        elif [ "$FAIL_ON_SEVERITY" == "HIGH" ] && ([ "$SCAN_STATUS" == "fail" ] || [ "$SCAN_STATUS" == "warn" ]); then
+          echo "❌ High or critical vulnerabilities found. Failing workflow."
+          exit 1
+        elif [ "$FAIL_ON_SEVERITY" == "MEDIUM" ] && [ "$SCAN_STATUS" != "pass" ]; then
+          echo "❌ Medium or higher vulnerabilities found. Failing workflow."
+          exit 1
+        else
+          echo "✅ Scan passed. No vulnerabilities above threshold."
+        fi
+
+    - name: Upload scan artifacts
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: security-scan-results
+        path: |
+          trivy-results.sarif
+          semgrep-results.sarif
+        retention-days: 30

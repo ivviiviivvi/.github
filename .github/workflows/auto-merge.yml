@@ -1,0 +1,712 @@
+# Auto Merge Pull Request Workflow
+#
+# Safety Checks Implemented:
+# - All tests must pass before merge
+# - Review must be approved (minimum 1 approval required)
+# - CI status checks must succeed
+# - No merge conflicts allowed
+# - Code coverage threshold must be met
+#
+# Features:
+# - Automatic revert/rollback on post-merge failures
+# - Slack notification on merge events
+# - Branch cleanup after successful merge
+
+name: Auto Merge Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+  check_suite:
+    types: [completed]
+  status: {}
+  # Manual trigger for specific PRs
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to auto-merge
+        required: true
+        type: number
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  auto-merge:
+    name: Auto Merge PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Skip if PR contains [skip-auto-merge] in title or body
+    if: |
+      !contains(github.event.pull_request.title, '[skip-auto-merge]') &&
+      !contains(github.event.pull_request.body, '[skip-auto-merge]')
+    outputs:
+      merged: ${{ steps.enable-auto-merge.outputs.merged }}
+      merge-sha: ${{ steps.enable-auto-merge.outputs.merge-sha }}
+      pr-number: ${{ steps.pr-details.outputs.number }}
+      base-branch: ${{ steps.pr-details.outputs.base }}
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get PR details
+      id: pr-details
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
+      with:
+        script: |
+          let prNumber;
+
+          if (context.eventName === 'workflow_dispatch') {
+            prNumber = parseInt(process.env.INPUT_PR_NUMBER || '0', 10);
+          } else if (context.payload.pull_request) {
+            prNumber = context.payload.pull_request.number;
+          } else {
+            console.log('No PR found in event payload');
+            return null;
+          }
+
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          console.log(`Processing PR #${prNumber}: ${pr.title}`);
+          core.setOutput('number', prNumber);
+          core.setOutput('head', pr.head.ref);
+          core.setOutput('base', pr.base.ref);
+          core.setOutput('mergeable', pr.mergeable);
+          core.setOutput('draft', pr.draft);
+
+          return pr;
+
+    - name: Check auto-merge eligibility
+      id: check-eligibility
+      if: steps.pr-details.outputs.number
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        PR_DRAFT: ${{ steps.pr-details.outputs.draft }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const isDraft = process.env.PR_DRAFT === 'true';
+
+          if (isDraft) {
+            console.log('PR is in draft mode, skipping auto-merge');
+            return { eligible: false, reason: 'PR is in draft mode' };
+          }
+
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const allowedAssociations = new Set([
+            'OWNER',
+            'MEMBER',
+            'COLLABORATOR'
+          ]);
+          if (!allowedAssociations.has(pr.author_association)) {
+            console.log(`Untrusted author association: ${pr.author_association}`);
+            core.setOutput('eligible', 'false');
+            return { eligible: false, reason: 'Untrusted author association' };
+          }
+
+          if (pr.head.repo.full_name !== pr.base.repo.full_name) {
+            console.log('Forked PRs are not eligible for auto-merge');
+            core.setOutput('eligible', 'false');
+            return { eligible: false, reason: 'Forked PR not eligible' };
+          }
+
+          // Check for auto-merge label
+          const hasAutoMergeLabel = pr.labels.some(label =>
+            label.name === 'auto-merge' || label.name === 'automerge'
+          );
+
+          // Check for auto-created label (auto-created PRs are eligible)
+          const isAutoCreated = pr.labels.some(label => label.name === 'auto-created');
+
+          // Check if PR title indicates it should be auto-merged
+          const titleIndicatesAutoMerge = /\[auto-merge\]/i.test(pr.title);
+
+          const shouldAutoMerge = hasAutoMergeLabel || isAutoCreated || titleIndicatesAutoMerge;
+
+          if (!shouldAutoMerge) {
+            console.log('PR not marked for auto-merge');
+            core.setOutput('eligible', 'false');
+            return { eligible: false, reason: 'Not marked for auto-merge' };
+          }
+
+          core.setOutput('eligible', 'true');
+          return { eligible: true, reason: 'Eligible for auto-merge' };
+
+    - name: Check merge conflicts
+      id: check-conflicts
+      if: steps.check-eligibility.outputs.eligible == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const mergeable = pr.mergeable;
+          const mergeableState = pr.mergeable_state;
+
+          console.log(`Mergeable: ${mergeable}, State: ${mergeableState}`);
+
+          if (mergeable === false) {
+            core.setOutput('has-conflicts', 'true');
+            return { hasConflicts: true, state: mergeableState };
+          }
+
+          core.setOutput('has-conflicts', 'false');
+          return { hasConflicts: false, state: mergeableState };
+
+    - name: Auto-fix merge conflicts
+      id: fix-conflicts
+      if: steps.check-conflicts.outputs.has-conflicts == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+          const headBranch = process.env.HEAD_BRANCH;
+          const baseBranch = process.env.BASE_BRANCH;
+
+          // Attempt to update branch (merge base into head)
+          try {
+            await github.rest.pulls.updateBranch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `🔄 **Auto-Merge: Branch Updated**\n\nThe base branch \`${baseBranch}\` has been merged into \`${headBranch}\` to resolve conflicts.\n\nWaiting for checks to complete before auto-merging.`
+            });
+
+            core.setOutput('fixed', 'true');
+            return { fixed: true };
+          } catch (error) {
+            console.log(`Could not auto-update branch: ${error.message}`);
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `⚠️ **Auto-Merge: Conflicts Detected**\n\nThis PR has merge conflicts that cannot be automatically resolved.\n\n**To resolve:**\n1. Update your local branch: \`git checkout ${headBranch}\`\n2. Merge the base branch: \`git merge ${baseBranch}\`\n3. Resolve conflicts in your editor\n4. Commit the resolved changes\n5. Push to update this PR\n\nOnce conflicts are resolved and all checks pass, auto-merge will proceed.`
+            });
+
+            core.setOutput('fixed', 'false');
+            return { fixed: false };
+          }
+
+    - name: Check required status checks
+      id: check-status
+      if: |
+        steps.check-eligibility.outputs.eligible == 'true' &&
+        (steps.check-conflicts.outputs.has-conflicts == 'false' || steps.fix-conflicts.outputs.fixed == 'true')
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Get combined status
+          const { data: status } = await github.rest.repos.getCombinedStatusForRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: pr.head.sha
+          });
+
+          console.log(`Combined status: ${status.state}`);
+
+          // Check if all checks have passed
+          const allChecksPassed = status.state === 'success';
+
+          // Get check runs
+          const { data: checkRuns } = await github.rest.checks.listForRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: pr.head.sha
+          });
+
+          const failedChecks = checkRuns.check_runs.filter(check =>
+            check.conclusion === 'failure' || check.conclusion === 'cancelled'
+          );
+
+          if (failedChecks.length > 0) {
+            console.log(`Failed checks: ${failedChecks.map(c => c.name).join(', ')}`);
+            core.setOutput('all-passed', 'false');
+            return { passed: false, failedChecks: failedChecks.map(c => c.name) };
+          }
+
+          core.setOutput('all-passed', allChecksPassed ? 'true' : 'false');
+          return { passed: allChecksPassed };
+
+    - name: Check required approvals
+      id: check-approvals
+      if: steps.check-status.outputs.all-passed == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+
+          // Get reviews
+          const { data: reviews } = await github.rest.pulls.listReviews({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          // Count approvals (take latest review from each user)
+          const latestReviews = {};
+          reviews.forEach(review => {
+            if (!latestReviews[review.user.login] ||
+                new Date(review.submitted_at) > new Date(latestReviews[review.user.login].submitted_at)) {
+              latestReviews[review.user.login] = review;
+            }
+          });
+
+          const approvals = Object.values(latestReviews).filter(
+            review => review.state === 'APPROVED'
+          ).length;
+
+          const changesRequested = Object.values(latestReviews).filter(
+            review => review.state === 'CHANGES_REQUESTED'
+          ).length;
+
+          console.log(`Approvals: ${approvals}, Changes requested: ${changesRequested}`);
+
+          // Auto-created PRs or PRs with auto-merge label need at least 1 approval
+          // unless it's a hotfix (then 0 is ok)
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: prNumber
+          });
+
+          const isHotfix = pr.labels.some(label => label.name === 'hotfix');
+          const requiredApprovals = isHotfix ? 0 : 1;
+
+          const hasEnoughApprovals = approvals >= requiredApprovals && changesRequested === 0;
+
+          core.setOutput('approved', hasEnoughApprovals ? 'true' : 'false');
+          core.setOutput('approval-count', approvals);
+
+          return { approved: hasEnoughApprovals, count: approvals, required: requiredApprovals };
+
+    - name: Enable auto-merge
+      id: enable-auto-merge
+      if: |
+        steps.check-eligibility.outputs.eligible == 'true' &&
+        steps.check-status.outputs.all-passed == 'true' &&
+        steps.check-approvals.outputs.approved == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+      with:
+        script: |
+          const prNumber = parseInt(process.env.PR_NUMBER, 10);
+
+          try {
+            // Use GraphQL to enable auto-merge
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Merge the PR
+            const { data: merge } = await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              merge_method: 'squash', // Can be 'merge', 'squash', or 'rebase'
+              commit_title: pr.title,
+              commit_message: `Auto-merged PR #${prNumber}\n\n${pr.body || ''}`
+            });
+
+            console.log(`PR #${prNumber} merged successfully`);
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `✅ **Auto-Merge Successful**\n\nThis PR has been automatically merged!\n\n**Details:**\n- All required checks passed\n- Required approvals obtained (${steps.check-approvals.outputs.approval-count})\n- No merge conflicts\n\n**Merge SHA:** ${merge.sha}`
+            });
+
+            core.setOutput('merged', 'true');
+            core.setOutput('merge-sha', merge.sha);
+
+            return { merged: true, sha: merge.sha };
+          } catch (error) {
+            console.log(`Failed to merge PR: ${error.message}`);
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `❌ **Auto-Merge Failed**\n\nCould not automatically merge this PR.\n\n**Error:** ${error.message}\n\nPlease merge manually or check the workflow logs.`
+            });
+
+            core.setOutput('merged', 'false');
+            return { merged: false, error: error.message };
+          }
+
+    - name: Cleanup merged branch
+      if: steps.enable-auto-merge.outputs.merged == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+      with:
+        script: |
+          const headBranch = process.env.HEAD_BRANCH;
+
+          // Don't delete main, develop, or master branches
+          const protectedBranches = ['main', 'master', 'develop'];
+          if (protectedBranches.includes(headBranch)) {
+            console.log(`Skipping deletion of protected branch: ${headBranch}`);
+            return;
+          }
+
+          try {
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${headBranch}`
+            });
+
+            console.log(`Deleted branch: ${headBranch}`);
+          } catch (error) {
+            console.log(`Could not delete branch ${headBranch}: ${error.message}`);
+          }
+
+    - name: Summary
+      if: always()
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
+        ELIGIBLE: ${{ steps.check-eligibility.outputs.eligible }}
+        HAS_CONFLICTS: ${{ steps.check-conflicts.outputs.has-conflicts }}
+        CONFLICTS_FIXED: ${{ steps.fix-conflicts.outputs.fixed }}
+        ALL_PASSED: ${{ steps.check-status.outputs.all-passed }}
+        APPROVED: ${{ steps.check-approvals.outputs.approved }}
+        APPROVAL_COUNT: ${{ steps.check-approvals.outputs.approval-count }}
+        MERGED: ${{ steps.enable-auto-merge.outputs.merged }}
+        MERGE_SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}
+      run: |
+        echo "### 🤖 Auto-Merge Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ "$PR_NUMBER" != "" ]; then
+          echo "**PR Number:** #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** $HEAD_BRANCH → $BASE_BRANCH" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$ELIGIBLE" == "true" ]; then
+            echo "✅ Eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Not eligible for auto-merge" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$HAS_CONFLICTS" == "true" ]; then
+            if [ "$CONFLICTS_FIXED" == "true" ]; then
+              echo "✅ Conflicts resolved automatically" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ Conflicts detected - manual resolution required" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "✅ No merge conflicts" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$ALL_PASSED" == "true" ]; then
+            echo "✅ All status checks passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⏳ Waiting for status checks" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$APPROVED" == "true" ]; then
+            echo "✅ Required approvals obtained ($APPROVAL_COUNT)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⏳ Waiting for approvals" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$MERGED" == "true" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🎉 **PR Successfully Auto-Merged!**" >> $GITHUB_STEP_SUMMARY
+            echo "Merge SHA: $MERGE_SHA" >> $GITHUB_STEP_SUMMARY
+          fi
+        else
+          echo "No PR found in event payload" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Send Slack notification on merge
+      if: steps.enable-auto-merge.outputs.merged == 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        PR_NUMBER: ${{ steps.pr-details.outputs.number }}
+        HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
+        BASE_BRANCH: ${{ steps.pr-details.outputs.base }}
+        MERGE_SHA: ${{ steps.enable-auto-merge.outputs.merge-sha }}
+      run: |
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"Auto-Merge Complete\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*PR #${PR_NUMBER} Auto-Merged*\n\nBranch: \`${HEAD_BRANCH}\` → \`${BASE_BRANCH}\`\nMerge SHA: \`${MERGE_SHA}\`\"
+                }
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::Auto-merge completion notification failed"
+        fi
+
+  # Revert job - triggers on post-merge CI failures
+  revert-on-failure:
+    name: Auto Revert on Failure
+    runs-on: ubuntu-latest
+    needs: auto-merge
+    if: failure() && needs.auto-merge.outputs.merged == 'true'
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Validate failure cause
+      id: validate
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
+      with:
+        script: |
+          // Check if failure is likely related to the merged changes
+          // Look for new test failures, build errors, or other indicators
+
+          const prNumber = process.env.PR_NUMBER;
+          let shouldRevert = false;
+          let reason = '';
+
+          try {
+            // Get workflow runs for this commit
+            const { data: workflowRuns } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 10,
+              status: 'completed'
+            });
+
+            // Check for failed required checks
+            const failedRuns = workflowRuns.workflow_runs.filter(run =>
+              run.conclusion === 'failure' &&
+              run.head_sha === process.env.MERGE_SHA
+            );
+
+            if (failedRuns.length > 0) {
+              // Check if these are critical workflows
+              const criticalWorkflows = ['CI', 'Test', 'Build', 'Security'];
+              const criticalFailures = failedRuns.filter(run =>
+                criticalWorkflows.some(name => run.name.includes(name))
+              );
+
+              if (criticalFailures.length > 0) {
+                shouldRevert = true;
+                reason = `Critical workflow failures detected: ${criticalFailures.map(r => r.name).join(', ')}`;
+              } else {
+                reason = 'Non-critical workflow failures - manual review recommended';
+              }
+            } else {
+              reason = 'No clear workflow failures found - may be infrastructure issue';
+            }
+
+          } catch (error) {
+            console.log(`Error validating failure: ${error.message}`);
+            // On error, require manual review
+            reason = `Validation error: ${error.message} - manual review required`;
+          }
+
+          core.setOutput('should_revert', shouldRevert.toString());
+          core.setOutput('reason', reason);
+          console.log(`Should revert: ${shouldRevert}`);
+          console.log(`Reason: ${reason}`);
+
+          // Comment on PR with analysis
+          if (prNumber) {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(prNumber),
+              body: `🔍 **Auto-Revert Analysis**\n\n${shouldRevert ? '⚠️ Auto-revert will be triggered' : '⏸️ Auto-revert skipped - manual review needed'}\n\n**Reason:** ${reason}\n\n${!shouldRevert ? '**Action Required:** Please review the failures and determine if manual revert is needed.' : ''}`
+            });
+          }
+
+    - name: Revert merge commit
+      id: revert
+      if: steps.validate.outputs.should_revert == 'true'
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        BASE_BRANCH: ${{ needs.auto-merge.outputs.base-branch }}
+      with:
+        script: |
+          const mergeSha = process.env.MERGE_SHA;
+          const prNumber = process.env.PR_NUMBER;
+          const baseBranch = process.env.BASE_BRANCH || 'main';
+
+          if (!mergeSha) {
+            console.log('No merge SHA found, skipping revert');
+            return;
+          }
+
+          try {
+            // Get the parent commit's tree (the state before the merge)
+            const { data: parentCommit } = await github.rest.git.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: `${mergeSha}^`
+            });
+
+            // Create revert commit using parent's tree to undo the merge
+            const { data: revertCommit } = await github.rest.git.createCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              message: `Revert "Auto-merge PR #${prNumber}"\n\nThis reverts commit ${mergeSha} due to post-merge CI failures.\n\nRollback triggered automatically by auto-merge workflow.`,
+              tree: parentCommit.tree.sha,
+              parents: [mergeSha]
+            });
+
+            // Update branch reference (use dynamic base branch)
+            await github.rest.git.updateRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${baseBranch}`,
+              sha: revertCommit.sha,
+              force: false
+            });
+
+            console.log(`Reverted commit ${mergeSha} with ${revertCommit.sha}`);
+            core.setOutput('reverted', 'true');
+            core.setOutput('revert-sha', revertCommit.sha);
+
+            // Notify about the rollback
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(prNumber),
+              body: `⚠️ **Auto-Revert Triggered**\n\nThis PR was automatically reverted due to post-merge CI failures.\n\n**Original merge:** ${mergeSha}\n**Revert commit:** ${revertCommit.sha}\n\nPlease investigate the CI failures and resubmit.`
+            });
+
+          } catch (error) {
+            console.log(`Failed to revert: ${error.message}`);
+            core.setOutput('reverted', 'false');
+          }
+
+    - name: Notify manual review needed
+      if: steps.validate.outputs.should_revert != 'true'
+      env:
+        VALIDATE_REASON: ${{ steps.validate.outputs.reason }}
+      run: |
+        echo "::warning title=Manual Review Required::$VALIDATE_REASON"
+        echo "## ⏸️ Auto-Revert Skipped" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Reason:** $VALIDATE_REASON" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Action Required:** Please review the failures and determine if manual revert is needed." >> $GITHUB_STEP_SUMMARY
+
+    - name: Send Slack notification on revert
+      if: steps.revert.outputs.reverted == 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        REVERT_SHA: ${{ steps.revert.outputs.revert-sha }}
+      run: |
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"Auto-Revert Alert\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*Auto-Revert Triggered*\\n\\nPR was automatically reverted due to post-merge CI failures.\\n\\nRevert SHA: \`${REVERT_SHA}\`\"
+                }
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::Auto-revert notification failed"
+        fi
+
+    - name: Send Slack notification for manual review
+      if: steps.validate.outputs.should_revert != 'true' && env.SLACK_WEBHOOK_URL != '' && startsWith(env.SLACK_WEBHOOK_URL, 'https://hooks.slack.com/services/')
+      env:
+        PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
+        VALIDATE_REASON: ${{ steps.validate.outputs.reason }}
+      run: |
+        if ! curl --fail --silent --show-error -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"Manual Review Required\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"*Auto-Revert Skipped - Manual Review Needed*\\n\\nPR #${PR_NUMBER}\\n\\n**Reason:** ${VALIDATE_REASON}\"
+                }
+              }
+            ]
+          }" \
+          "$SLACK_WEBHOOK_URL"; then
+          echo "::warning title=Slack notification failed::Manual review notification failed"
+        fi

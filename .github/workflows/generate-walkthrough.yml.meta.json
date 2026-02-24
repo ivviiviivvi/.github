@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Generate Video Walkthrough",
+  "identifier": "urn:uuid:294f79c5-22af-5742-a672-997d52d44876",
+  "version": "1.0.0",
+  "description": "Generates Gource git history visualization as MP4 video. Triggered by workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.documentation.generate.yml",
+    "layer": "application",
+    "role": "documentation",
+    "domain": "generate"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-02-06T00:00:00Z",
+  "dc:subject": ["application", "documentation", "manual"]
+}

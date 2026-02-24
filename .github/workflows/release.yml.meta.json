@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Release Management",
+  "identifier": "urn:uuid:cbdd8522-f0dc-5861-9a86-702e26fe8fc0",
+  "version": "1.0.0",
+  "description": "Deployment and release management. Triggered by push, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "application.deployment.release.yml",
+    "layer": "application",
+    "role": "deployment",
+    "domain": "release"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "application",
+    "deployment",
+    "manual",
+    "push-triggered",
+    "release"
+  ]
+}

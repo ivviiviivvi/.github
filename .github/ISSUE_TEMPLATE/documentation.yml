@@ -1,0 +1,163 @@
+name: Documentation
+description: Request documentation improvements or additions
+title: '[Docs]: '
+labels: [documentation, triage]
+body:
+- type: markdown
+  attributes:
+    value: |
+      ## Documentation Request
+
+      Thank you for helping improve our documentation! Please provide details about the documentation you'd like to see added or improved.
+
+- type: textarea
+  id: documentation-need
+  attributes:
+    label: What documentation is missing or needs improvement?
+    description: Describe what documentation you need or what existing documentation should be improved.
+    placeholder: |
+      Example: "The API reference for the authentication module is missing examples of how to use OAuth2 tokens."
+  validations:
+    required: true
+
+- type: dropdown
+  id: documentation-type
+  attributes:
+    label: Documentation Type
+    description: What type of documentation is this related to?
+    options:
+    - API Reference
+    - Getting Started Guide
+    - Tutorial/How-To
+    - Architecture Documentation
+    - Configuration Guide
+    - Troubleshooting
+    - Code Comments
+    - README
+    - Contributing Guidelines
+    - Other
+  validations:
+    required: true
+
+- type: dropdown
+  id: documentation-section
+  attributes:
+    label: Documentation Section
+    description: Which section of the documentation does this relate to?
+    options:
+    - Installation/Setup
+    - Configuration
+    - Usage/Examples
+    - API Reference
+    - Architecture
+    - Contributing
+    - Security
+    - Deployment
+    - Testing
+    - Other
+  validations:
+    required: true
+
+- type: textarea
+  id: current-documentation
+  attributes:
+    label: Current Documentation (if applicable)
+    description: Link to or quote the current documentation that needs improvement.
+    placeholder: |
+      Link: https://docs.example.com/authentication  # allow-secret
+
+      Or quote the current text that needs improvement.
+
+- type: textarea
+  id: proposed-content
+  attributes:
+    label: Proposed Documentation Content
+    description: If you have ideas for how the documentation should read, please provide them here.
+    placeholder: |
+      Example:
+
+      ## Authentication with OAuth2
+
+      To authenticate using OAuth2, first obtain an access token...
+
+      ```python
+      import auth
+      token = auth.get_oauth2_token(...)  # allow-secret
+      ```
+
+- type: textarea
+  id: examples-needed
+  attributes:
+    label: Examples Needed
+    description: What specific examples or use cases should be included?
+    placeholder: |
+      - Basic authentication example
+      - OAuth2 with refresh tokens
+      - Error handling
+      - Production configuration
+
+- type: dropdown
+  id: audience
+  attributes:
+    label: Target Audience
+    description: Who is the primary audience for this documentation?
+    options:
+    - Beginners/New Users
+    - Intermediate Users
+    - Advanced Users
+    - Contributors/Developers
+    - System Administrators
+    - All Users
+  validations:
+    required: true
+
+- type: textarea
+  id: additional-context
+  attributes:
+    label: Additional Context
+    description: |
+      Add any other context, screenshots, or examples that would help improve the documentation.
+    placeholder: |
+      - Screenshots of confusing UI elements
+      - Links to helpful external resources
+      - Common questions from users
+      - Related issues or discussions
+
+- type: checkboxes
+  id: contribution
+  attributes:
+    label: Contribution
+    description: Would you like to contribute this documentation yourself?
+    options:
+    - label: I would like to write this documentation myself
+      required: false
+    - label: I need help from the maintainers to write this documentation
+      required: false
+    - label: I can review documentation written by others
+      required: false
+
+- type: checkboxes
+  id: checklist
+  attributes:
+    label: Pre-submission Checklist
+    description: Please verify the following before submitting
+    options:
+    - label: I have searched existing issues to ensure this isn't a duplicate
+      required: true
+    - label: I have checked the existing documentation to see if this already exists
+      required: true
+    - label: I have provided specific details about what documentation is needed
+      required: true
+
+- type: markdown
+  attributes:
+    value: |
+      ---
+
+      ### After Submission
+
+      - A maintainer will review your request and add appropriate labels
+      - If approved, the issue will be assigned or opened for community contribution
+      - Documentation PRs should reference this issue number
+
+      Thank you for helping improve our documentation! 📚

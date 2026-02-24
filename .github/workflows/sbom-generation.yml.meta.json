@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "SBOM Generation",
+  "identifier": "urn:uuid:645e7184-f888-549d-b66a-68a110040362",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by push, release, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "application.general.sbom.yml",
+    "layer": "application",
+    "role": "general",
+    "domain": "sbom"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "release", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["application", "general", "manual", "push-triggered"]
+}

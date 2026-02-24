@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Metrics Dashboard",
+  "identifier": "urn:uuid:a160ff93-3fcf-58ad-b3fd-abc9bfdd4d0a",
+  "version": "1.0.0",
+  "description": "Metrics collection and health monitoring. Triggered by schedule, workflow_dispatch, push, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "interface.metrics.metrics.yml",
+    "layer": "interface",
+    "role": "metrics",
+    "domain": "metrics"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch", "push"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "interface",
+    "manual",
+    "metrics",
+    "push-triggered",
+    "scheduled"
+  ]
+}

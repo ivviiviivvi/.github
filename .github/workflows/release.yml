@@ -1,0 +1,111 @@
+name: Release Management
+
+on:
+  push:
+    tags:
+    - v*.*.*
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (e.g., v1.0.0)
+        required: true
+        type: string
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: release
+    # Only create releases on tags or workflow_dispatch
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.ref, 'refs/tags/v')
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate changelog
+      id: changelog
+      uses: metcalfc/changelog-generator@3f82cef08fe5dcf57c591fe165e70e1d5032e15a  # ratchet:metcalfc/changelog-generator@v4
+      with:
+        myToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844  # ratchet:softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.version || github.ref_name }}
+        name: Release ${{ github.event.inputs.version || github.ref_name }}
+        body: |
+          ## What's Changed
+          ${{ steps.changelog.outputs.changelog }}
+
+          ## Installation
+
+          ### npm
+          ```bash
+          npm install package@${{ github.event.inputs.version || github.ref_name }}
+          ```
+
+          ### pip
+          ```bash
+          pip install package==${{ github.event.inputs.version || github.ref_name }}
+          ```
+
+          ### Docker
+          ```bash
+          docker pull ghcr.io/${{ github.repository }}:${{ github.event.inputs.version || github.ref_name }}
+          ```
+
+          ## Full Changelog
+          See [CHANGELOG.md](CHANGELOG.md) for complete details.
+
+          **Full Diff**: https://github.com/${{ github.repository }}/compare/${{ steps.changelog.outputs.from_tag }}...${{ github.event.inputs.version || github.ref_name }}
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+
+  update-changelog:
+    name: Update Changelog
+    runs-on: ubuntu-latest
+    needs: create-release
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update Changelog
+      uses: rhysd/changelog-from-release@78b335bb7d059f35ad04c5428d50711726feee50  # ratchet:rhysd/changelog-from-release@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        file: CHANGELOG.md
+        header: |
+          # Changelog
+
+          All notable changes to this project will be documented in this file.
+
+          The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+          and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+    - name: Commit updated CHANGELOG
+      uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403  # ratchet:stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: 'docs: update CHANGELOG for ${{ github.event.inputs.version || github.ref_name }}'
+        file_pattern: CHANGELOG.md
+        commit_user_name: github-actions[bot]
+        commit_user_email: github-actions[bot]@users.noreply.github.com

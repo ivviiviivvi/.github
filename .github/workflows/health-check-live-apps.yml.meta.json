@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Health Check - Live Apps Monitoring",
+  "identifier": "urn:uuid:b2432b53-9b6f-5aa9-9e84-9b73f5327f82",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by schedule, workflow_dispatch, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.quality.health.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "health"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "manual", "quality", "scheduled"]
+}

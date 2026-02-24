@@ -1,0 +1,47 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+    - '**/package*.json'
+    - '**/yarn.lock'
+    - '**/pnpm-lock.yaml'
+    - '**/requirements*.txt'
+    - '**/Pipfile*'
+    - '**/go.mod'
+    - '**/go.sum'
+    - '**/Gemfile*'
+    - '**/composer.json'
+    - '**/composer.lock'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+
+    - name: Dependency Review
+      uses: actions/dependency-review-action@3c4e3dcb1aa7874d2c16be7d79418e9b7efd6261  # ratchet:actions/dependency-review-action@v4
+      with:
+          # Fail the action if vulnerabilities are found
+        fail-on-severity: moderate
+          # Allow licenses (customize as needed)
+        allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD
+          # Deny licenses (customize as needed)
+        deny-licenses: GPL-3.0, AGPL-3.0
+          # Comment on PR with results
+        comment-summary-in-pr: always
+          # Warn about deprecated packages
+        warn-on-deprecated: true

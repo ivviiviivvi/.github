@@ -1,0 +1,9 @@
+# Issue-Label Bot Configuration
+# https://github.com/machine-learning-apps/issue-label-bot
+
+# Minimum probability for a label to be applied
+threshold: 0.7
+
+# Labels to exclude
+# exclude:
+#   - "wontfix"

@@ -1,0 +1,27 @@
+{
+  "profile": "full",
+  "name": "Task Extraction from Closed PRs",
+  "identifier": "urn:uuid:da574a55-9ed5-5961-8ac9-915aeb49fec4",
+  "version": "1.0.0",
+  "description": "Issue triage and task management. Triggered by pull_request, workflow_dispatch, executes 2 job(s).",
+  "functioncalled": {
+    "canonical": "logic.issue-management.task.yml",
+    "layer": "logic",
+    "role": "issue-management",
+    "domain": "task"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "issue management",
+    "logic",
+    "manual",
+    "pr-triggered",
+    "pull-request"
+  ]
+}

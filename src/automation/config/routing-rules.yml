@@ -1,0 +1,96 @@
+# Intelligent Routing Configuration
+# Used by automation/scripts/issue_assignment_router.py
+#
+# Scaling: Supports 15+ repositories with multi-repo configuration
+# Each repository can have custom routing rules or use global defaults
+
+# Repository-specific configuration
+repositories:
+  default:
+    use_global_rules: true
+  # Example per-repo overrides:
+  # my-org/critical-repo:
+  #   priority_routing:
+  #     p0:
+  #       min_expertise_score: 0.9
+  #   exempt_labels:
+  #     - ceo-review-required
+
+routing:
+  # Expertise weights for routing decisions
+  expertise_weights:
+    commits: 0.35
+    issues_handled: 0.25
+    labels_expertise: 0.20
+    pr_reviews: 0.15
+    documentation: 0.05
+
+  # Workload management
+  workload_threshold: 10 # Maximum active assignments per user
+  workload_weights:
+    open_issues: 1.0
+    open_prs: 1.5
+    review_requests: 1.2
+
+  # Availability check configuration
+  availability_check:
+    method: recent_activity
+    window_hours: 168 # 7 days
+    min_activity_count: 3
+    check_calendar: false # Future: integrate with calendar APIs
+
+  # Fallback strategies when no ideal match found
+  fallback_strategy:
+  - round_robin   # Try round-robin among available team members
+  - least_workload   # Assign to person with least workload
+  - random   # Random assignment as last resort
+
+  # Load balancing configuration
+  load_balancing:
+    enabled: true
+    rebalance_threshold: 1.5 # Trigger rebalance if ratio exceeds this
+    max_variance: 3 # Maximum assignment variance between team members
+
+  # Labels that bypass intelligent routing
+  exempt_labels:
+  - manual-assignment
+  - team-lead-only
+  - external-contributor
+  - security
+
+  # Priority-based routing
+  priority_routing:
+    p0: # Critical - route to senior/experienced
+      min_expertise_score: 0.8
+      prefer_availability: false
+    p1: # High
+      min_expertise_score: 0.6
+      prefer_availability: true
+    p2: # Medium
+      min_expertise_score: 0.4
+      prefer_availability: true
+    p3: # Low
+      min_expertise_score: 0.0
+      prefer_availability: true
+
+  # Performance tracking
+  performance:
+    track_response_time: true
+    track_resolution_time: true
+    track_quality_score: true
+    feedback_weight: 0.1 # Weight of historical performance in routing
+
+# Team-specific overrides
+teams:
+  security:
+    expertise_weights:
+      issues_handled: 0.50
+      commits: 0.30
+      pr_reviews: 0.20
+    exempt_from_load_balance: true
+
+  docs:
+    expertise_weights:
+      documentation: 0.60
+      commits: 0.25
+      pr_reviews: 0.15

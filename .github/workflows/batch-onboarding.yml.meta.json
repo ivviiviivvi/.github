@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Batch Repository Onboarding",
+  "identifier": "urn:uuid:669c9e24-d58f-5ec0-bb4f-b5c1e79d72e4",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "logic.general.batch.yml",
+    "layer": "logic",
+    "role": "general",
+    "domain": "batch"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["general", "logic", "manual"]
+}

@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Update Python Version",
+  "identifier": "urn:uuid:3d9a4250-b262-53a6-a7c1-13f6aff26773",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "application.general.update.yml",
+    "layer": "application",
+    "role": "general",
+    "domain": "update"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["application", "general", "manual", "scheduled"]
+}

@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Test Coverage",
+  "identifier": "urn:uuid:eb645e57-c8a9-5e70-8e6e-62c01e1dc367",
+  "version": "1.0.0",
+  "description": "Test execution and coverage analysis. Triggered by push, pull_request, workflow_dispatch, executes 3 job(s).",
+  "functioncalled": {
+    "canonical": "core.testing.test.yml",
+    "layer": "core",
+    "role": "testing",
+    "domain": "test"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "coverage",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "testing"
+  ]
+}

@@ -1,0 +1,153 @@
+name: Security Scanning (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      scan-type:
+        description: Type of scan (codeql, trivy, semgrep, secrets, all)
+        required: false
+        type: string
+        default: all
+      languages:
+        description: 'Languages for CodeQL (comma-separated: python,javascript,etc)'
+        required: false
+        type: string
+        default: python,javascript,typescript
+      severity-threshold:
+        description: Minimum severity to report (CRITICAL, HIGH, MEDIUM, LOW)
+        required: false
+        type: string
+        default: MEDIUM
+      fail-on-severity:
+        description: Fail build on this severity or higher
+        required: false
+        type: string
+        default: HIGH
+      trivy-scan-type:
+        description: Trivy scan type (fs, image, config, repo)
+        required: false
+        type: string
+        default: fs
+      working-directory:
+        description: Working directory for scans
+        required: false
+        type: string
+        default: .
+    outputs:
+      codeql-sarif:
+        description: Path to CodeQL SARIF results
+        value: ${{ jobs.security-scan.outputs.codeql-sarif }}
+      trivy-report:
+        description: Path to Trivy report
+        value: ${{ jobs.security-scan.outputs.trivy-report }}
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    outputs:
+      codeql-sarif: ${{ steps.codeql.outputs.sarif-path }}
+      trivy-report: ${{ steps.trivy.outputs.report-path }}
+
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+        # CodeQL Analysis
+    - name: Initialize CodeQL
+      if: inputs.scan-type == 'codeql' || inputs.scan-type == 'all'
+      uses: github/codeql-action/init@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/init@v3
+      with:
+        languages: ${{ inputs.languages }}
+        queries: security-extended,security-and-quality
+
+    - name: Autobuild
+      if: inputs.scan-type == 'codeql' || inputs.scan-type == 'all'
+      uses: github/codeql-action/autobuild@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      if: inputs.scan-type == 'codeql' || inputs.scan-type == 'all'
+      id: codeql
+      uses: github/codeql-action/analyze@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/analyze@v3
+      with:
+        category: /language:${{ inputs.languages }}
+        output: codeql-results
+
+        # Trivy Security Scan
+    - name: Install Trivy
+      if: inputs.scan-type == 'trivy' || inputs.scan-type == 'all'
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.58.1
+
+    - name: Run Trivy vulnerability scanner
+      if: inputs.scan-type == 'trivy' || inputs.scan-type == 'all'
+      id: trivy
+      env:
+        TRIVY_EXIT_CODE: ${{ inputs.fail-on-severity == 'CRITICAL' && '1' || '0' }}
+        TRIVY_SCAN_TYPE: ${{ inputs.trivy-scan-type }}
+        SEVERITY_THRESHOLD: ${{ inputs.severity-threshold }}
+        WORKING_DIRECTORY: ${{ inputs.working-directory }}
+      run: |
+        trivy "$TRIVY_SCAN_TYPE" --format sarif --output trivy-results.sarif --severity "$SEVERITY_THRESHOLD" --exit-code "$TRIVY_EXIT_CODE" "$WORKING_DIRECTORY"
+
+    - name: Upload Trivy results to GitHub Security
+      if: inputs.scan-type == 'trivy' || inputs.scan-type == 'all'
+      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: trivy-results.sarif
+        category: trivy
+
+        # Semgrep SAST Scan
+    - name: Run Semgrep
+      if: inputs.scan-type == 'semgrep' || inputs.scan-type == 'all'
+      uses: returntocorp/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d  # ratchet:returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          p/security-audit
+          p/secrets
+          p/owasp-top-ten
+        generateSarif: true
+
+    - name: Upload Semgrep results
+      if: inputs.scan-type == 'semgrep' || inputs.scan-type == 'all'
+      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: semgrep.sarif
+        category: semgrep
+
+        # Secret Scanning
+    - name: Run secret scan with detect-secrets
+      if: inputs.scan-type == 'secrets' || inputs.scan-type == 'all'
+      run: |
+        pip install detect-secrets==1.5.0
+        detect-secrets scan --all-files --baseline .secrets.baseline || true
+        if [ -f .secrets.baseline ]; then
+          echo "Secret scan complete. Review .secrets.baseline for any findings."
+        fi
+
+    - name: Upload security scan artifacts
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      with:
+        name: security-scan-results
+        path: |
+          codeql-results/
+          trivy-results.sarif
+          semgrep.sarif
+          .secrets.baseline
+        retention-days: 30

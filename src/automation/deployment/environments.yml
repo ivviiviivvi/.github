@@ -1,0 +1,111 @@
+# Deployment Environment Configuration
+#
+# Defines configuration for staging and production environments
+
+staging:
+  # Target repositories for staging
+  repositories:
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/test-repo-1'
+  - '{{ORG_NAME}}/test-repo-2'
+
+  # Phased rollout configuration
+  canary_percentage: 33 # 1 of 3 repos
+  progressive_percentage: 67 # 2 of 3 repos
+
+  # Health check configuration
+  health_check_interval: 30 # Check every 30 seconds
+  health_check_duration: 180 # Monitor for 3 minutes
+  rollback_threshold: 0.80 # 80% success rate minimum for staging
+
+  # Required secrets
+  required_secrets:
+  - GITHUB_TOKEN
+  - SLACK_WEBHOOK_URL
+
+  # Slack notifications
+  slack_webhook: ${SLACK_WEBHOOK_URL}
+  slack_channel: '#deployment-staging'
+
+  # Feature flags
+  features:
+    auto_merge: true
+    issue_assignment_router: true
+    self_healing: true
+    proactive_maintenance: true
+    ml_predictions: true
+
+production:
+  # Target repositories for production
+  repositories:
+  - '{{ORG_NAME}}/.github'
+  - '{{ORG_NAME}}/production-repo-1'
+  - '{{ORG_NAME}}/production-repo-2'
+  - '{{ORG_NAME}}/production-repo-3'
+  - '{{ORG_NAME}}/production-repo-4'
+  - '{{ORG_NAME}}/production-repo-5'
+    # Add more repositories as needed
+
+  # Phased rollout configuration (more conservative)
+  canary_percentage: 10 # 10% for canary
+  progressive_percentage: 40 # 40% for progressive
+
+  # Health check configuration (stricter)
+  health_check_interval: 60 # Check every 60 seconds
+  health_check_duration: 600 # Monitor for 10 minutes
+  rollback_threshold: 0.90 # 90% success rate minimum for production
+
+  # Required secrets
+  required_secrets:
+  - GITHUB_TOKEN
+  - SLACK_WEBHOOK_URL
+  - PAGERDUTY_TOKEN
+
+  # Slack notifications
+  slack_webhook: ${SLACK_WEBHOOK_URL}
+  slack_channel: '#deployment-production'
+
+  # PagerDuty integration
+  pagerduty_service_key: ${PAGERDUTY_TOKEN}
+
+  # Feature flags (more conservative rollout)
+  features:
+    auto_merge: false # Disabled initially
+    issue_assignment_router: true
+    self_healing: true
+    proactive_maintenance: false # Disabled initially
+    ml_predictions: true
+
+  # SLA requirements
+  sla:
+    max_response_time: 300 # 5 minutes
+    min_success_rate: 0.95 # 95%
+    max_error_rate: 0.05 # 5%
+
+  # Rollback automation
+  auto_rollback:
+    enabled: true
+    threshold: 0.85 # Auto-rollback below 85% success
+    window: 300 # Check within 5 minutes
+
+# Development environment (for local testing)
+development:
+  repositories:
+  - '{{ORG_NAME}}/.github'
+
+  canary_percentage: 100
+  progressive_percentage: 100
+
+  health_check_interval: 10
+  health_check_duration: 60
+  rollback_threshold: 0.50
+
+  required_secrets:
+  - GITHUB_TOKEN
+
+  features:
+    auto_merge: true
+    issue_assignment_router: true
+    self_healing: true
+    proactive_maintenance: true
+    ml_predictions: true

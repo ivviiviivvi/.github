@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "Reusable API Call with Retry",
+  "identifier": "urn:uuid:99d9469c-a283-5586-9bed-142a9ec96906",
+  "version": "1.0.0",
+  "description": "General-purpose workflow. Triggered by workflow_call, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.general.reusable.yml",
+    "layer": "core",
+    "role": "general",
+    "domain": "reusable"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["workflow_call"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "general"]
+}

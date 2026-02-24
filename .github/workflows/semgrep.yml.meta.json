@@ -1,0 +1,28 @@
+{
+  "profile": "full",
+  "name": "Semgrep Security Analysis",
+  "identifier": "urn:uuid:300e997c-5486-5063-972a-e0bc6ccba1ae",
+  "version": "1.0.0",
+  "description": "Security scanning and vulnerability detection. Triggered by push, pull_request, schedule, workflow_dispatch, executes 4 job(s).",
+  "functioncalled": {
+    "canonical": "core.security.semgrep.yml",
+    "layer": "core",
+    "role": "security",
+    "domain": "semgrep"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["push", "pull_request", "schedule", "workflow_dispatch"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": [
+    "core",
+    "manual",
+    "pr-triggered",
+    "push-triggered",
+    "scheduled",
+    "security"
+  ]
+}

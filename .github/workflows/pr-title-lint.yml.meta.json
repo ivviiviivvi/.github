@@ -1,0 +1,21 @@
+{
+  "profile": "full",
+  "name": "PR Title Lint",
+  "identifier": "urn:uuid:7c26504b-52f2-565c-b00c-3e5e178742c8",
+  "version": "1.0.0",
+  "description": "Code quality validation and linting. Triggered by pull_request, executes 1 job(s).",
+  "functioncalled": {
+    "canonical": "core.quality.pr.yml",
+    "layer": "core",
+    "role": "quality",
+    "domain": "pr"
+  },
+  "schema:type": "SoftwareSourceCode",
+  "encodingFormat": "application/x-yaml",
+  "programmingLanguage": "YAML",
+  "runtimePlatform": "GitHub Actions",
+  "triggers": ["pull_request"],
+  "dateCreated": "2024-01-01T00:00:00Z",
+  "dateModified": "2026-01-31T00:00:00Z",
+  "dc:subject": ["core", "linting", "pr-triggered", "pull-request", "quality"]
+}
