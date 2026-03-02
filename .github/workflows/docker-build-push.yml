@@ -274,7 +274,7 @@ jobs:
         echo "primary=ghcr.io/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # ratchet:docker/build-push-action@v6
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8  # ratchet:docker/build-push-action@v6
       with:
         context: .
         platforms: ${{ steps.deployment-inputs.outputs.platforms }}
@@ -331,7 +331,7 @@ jobs:
 
     - name: Generate SBOM
       if: github.event_name != 'pull_request'
-      uses: anchore/sbom-action@28d71544de8eaf1b958d335707167c5f783590ad  # ratchet:anchore/sbom-action@v0
+      uses: anchore/sbom-action@17ae1740179002c89186b61233e0f892c3118b11  # ratchet:anchore/sbom-action@v0
       with:
         image: ${{ steps.image-ref.outputs.primary }}
         format: spdx-json
