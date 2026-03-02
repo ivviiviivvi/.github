@@ -96,7 +96,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 1 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 1 Test Results
@@ -158,7 +158,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 2 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 2 Test Results
@@ -220,7 +220,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 3 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 3 Test Results
