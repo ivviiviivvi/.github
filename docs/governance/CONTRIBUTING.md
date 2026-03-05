@@ -332,3 +332,7 @@ Contributors will be:
 - Acknowledged in commit messages
 
 Thank you for contributing! 🎉
+
+## Documentation Standards
+
+- README structure and depth should follow [README standards](README_STANDARDS.md)
