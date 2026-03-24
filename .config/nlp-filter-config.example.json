@@ -1,0 +1,8 @@
+{
+  "preserve_poetry": true,
+  "extract_metaphors": true,
+  "maintain_voice": true,
+  "output_format": "structured",
+  "include_analysis": true,
+  "style": "conversational"
+}
