@@ -40,7 +40,7 @@ jobs:
       has_site: ${{ steps.check.outputs.has_site }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 1
 
@@ -63,18 +63,18 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Setup Ruby
-      uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd  # ratchet:ruby/setup-ruby@v1.288.0
+      uses: ruby/setup-ruby@319994f95fa847cf3fb3cd3dbe89f6dcde9f178f  # ratchet:ruby/setup-ruby@v1.295.0
       with:
         ruby-version: '3.2'
         bundler-cache: true
 
     - name: Setup Node.js
-      uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # ratchet:actions/setup-node@v4
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f  # ratchet:actions/setup-node@v4
       with:
         node-version: '18'
         cache: npm
@@ -195,7 +195,7 @@ jobs:
 
     - name: Setup GitHub Pages
       id: pages
-      uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7d  # ratchet:actions/configure-pages@v4
+      uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b  # ratchet:actions/configure-pages@v5.0.0
     - name: Build Jekyll site
       working-directory: site
       env:
@@ -230,7 +230,7 @@ jobs:
         echo "✅ Assets optimized"
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa  # ratchet:actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b  # ratchet:actions/upload-pages-artifact@v4.0.0
       with:
         path: site/_site
 
@@ -290,7 +290,7 @@ jobs:
 
     - name: Checkout repository
       if: steps.check_branch.outputs.exists == 'true'
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
 
