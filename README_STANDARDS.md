@@ -21,8 +21,8 @@ Every active repository should have:
 
 ## Enforcement
 
-Run this org's local standards audit script from the superproject root:
-
-`./tools/audit_platform_standards.sh`
+> **TODO**: A local standards audit script (`./tools/audit_platform_standards.sh`)
+> is planned but not yet implemented. Until then, review README quality manually
+> against the criteria above.
 
 Any exception should be tracked with owner and due date.
