@@ -335,4 +335,4 @@ Thank you for contributing! 🎉
 
 ## Documentation Standards
 
-- README structure and depth should follow [README standards](README_STANDARDS.md)
+- README structure and depth should follow [README standards](../../README_STANDARDS.md)
