@@ -23,7 +23,7 @@ jobs:
     steps:
     - name: Add to Project
       continue-on-error: true
-      uses: actions/add-to-project@1b844f0c5ac6446a402e0cb3693f9be5eca188c5 # v0.6.1
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
           # Requires a PAT or App token with project write permissions
         project-url: https://github.com/orgs/${{ github.repository_owner }}/projects/1
