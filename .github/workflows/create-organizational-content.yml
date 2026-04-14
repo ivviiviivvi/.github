@@ -39,7 +39,7 @@ jobs:
     name: Create Comprehensive Issues
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create tracking issues
       env:
@@ -158,7 +158,7 @@ jobs:
     name: Create Discussion Documentation
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create discussion starter files
       run: |
@@ -245,7 +245,7 @@ jobs:
     name: Create Project Templates
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create project configuration files
       run: |
@@ -425,7 +425,7 @@ jobs:
     name: Create Wiki Structure Documentation
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create wiki page templates
       run: |
@@ -595,7 +595,7 @@ jobs:
     name: Generate Summary
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create comprehensive summary
       run: |
@@ -827,7 +827,7 @@ jobs:
         cat ORGANIZATIONAL_CONTENT_SUMMARY.md
 
     - name: Commit summary
-      uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403  # ratchet:stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9  # ratchet:stefanzweifel/git-auto-commit-action@v7.1.0
       with:
         commit_message: 'docs: add organizational content creation summary'
         file_pattern: ORGANIZATIONAL_CONTENT_SUMMARY.md .github/discussion-starters/* .github/project-templates/* .github/wiki-templates/*

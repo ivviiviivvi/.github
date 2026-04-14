@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Close Stale Issues and PRs
-      uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639  # ratchet:actions/stale@v9
+      uses: actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f  # ratchet:actions/stale@v10.2.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
           # Issues
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Lock Inactive Closed Issues
-      uses: dessant/lock-threads@1bf7ec25051fe7c00bdd17e6a7cf3d7bfb7dc771  # ratchet:dessant/lock-threads@v5
+      uses: dessant/lock-threads@7266a7ce5c1df01b1c6db85bf8cd86c737dadbe7  # ratchet:dessant/lock-threads@v6.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         issue-inactive-days: 90
@@ -111,14 +111,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate Contributors List
       continue-on-error: true
-      uses: akhilmhdh/contributors-readme-action@e4176e1d9e68d73f01455e68f5eca9441447f5f7  # ratchet:akhilmhdh/contributors-readme-action@v2.3.6
+      uses: akhilmhdh/contributors-readme-action@098389139f2fabed92e52606268941dbff381edb  # ratchet:akhilmhdh/contributors-readme-action@v2.3.6
       with:
         image_size: 80
         columns_per_row: 7
@@ -132,13 +132,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@67526e7bd8100b870f10b1c120780a8375777b43  # ratchet:github/issue-metrics@v3.25.5
+      uses: github/issue-metrics@7bee6e691468e996f6701b0638a5238b1490014e  # ratchet:github/issue-metrics@v4.2.1
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
 
     - name: Upload Metrics
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: issue-metrics
         path: issue_metrics.md
