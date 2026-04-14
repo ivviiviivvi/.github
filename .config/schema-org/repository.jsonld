@@ -1,0 +1,112 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "@id": "https://github.com/{{ORG_NAME}}/.github",
+  "name": "Organization Governance Repository",
+  "alternateName": "{{ORG_NAME}}/.github",
+  "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "ontological-title",
+    "value": "Organization Governance Repository"
+  },
+  "description": "Community health files and organization-wide policies for the {{ORG_DISPLAY_NAME}} GitHub organization. Includes comprehensive documentation, AI framework, workflow automation, and governance policies.",
+  "version": "1.0.0",
+  "dateCreated": "2024",
+  "dateModified": "2026-01-21",
+  "url": "https://github.com/{{ORG_NAME}}/.github",
+  "codeRepository": "https://github.com/{{ORG_NAME}}/.github.git",
+  "license": "https://opensource.org/licenses/MIT",
+  "programmingLanguage": [
+    {
+      "@type": "ComputerLanguage",
+      "name": "Python",
+      "url": "https://www.python.org/"
+    },
+    {
+      "@type": "ComputerLanguage",
+      "name": "TypeScript",
+      "url": "https://www.typescriptlang.org/"
+    },
+    {
+      "@type": "ComputerLanguage",
+      "name": "Shell",
+      "url": "https://www.gnu.org/software/bash/"
+    },
+    {
+      "@type": "ComputerLanguage",
+      "name": "YAML",
+      "url": "https://yaml.org/"
+    }
+  ],
+  "runtimePlatform": [
+    "GitHub Actions",
+    "Docker",
+    "Node.js",
+    "Python 3.11+"
+  ],
+  "targetProduct": {
+    "@type": "SoftwareApplication",
+    "name": "GitHub Organization Management",
+    "applicationCategory": "DeveloperApplication"
+  },
+  "featureList": [
+    "Automated workflow system",
+    "AI framework with specialized agents",
+    "GitHub Actions workflows",
+    "Comprehensive documentation system",
+    "Security scanning and compliance",
+    "Pre-commit quality gates",
+    "GitHub Projects integration",
+    "MCP servers for multiple programming languages"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "contributor": [
+    {
+      "@type": "Organization",
+      "name": "{{ORG_DISPLAY_NAME}}",
+      "url": "https://github.com/{{ORG_NAME}}"
+    }
+  ],
+  "maintainer": {
+    "@type": "Organization",
+    "name": "{{ORG_DISPLAY_NAME}}",
+    "url": "https://github.com/{{ORG_NAME}}"
+  },
+  "keywords": [
+    "github",
+    "organization-policies",
+    "workflows",
+    "automation",
+    "ai-framework",
+    "governance",
+    "documentation",
+    "devops",
+    "ci-cd",
+    "quality-gates",
+    "security-scanning",
+    "pre-commit-hooks"
+  ],
+  "softwareRequirements": [
+    "Git 2.40+",
+    "Node.js 20+",
+    "Python 3.11+",
+    "Docker"
+  ],
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": [
+    "Linux",
+    "macOS",
+    "Windows"
+  ],
+  "isAccessibleForFree": true,
+  "citation": {
+    "@type": "CreativeWork",
+    "name": "GitHub Community Health Files",
+    "url": "https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions"
+  }
+}

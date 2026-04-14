@@ -1,0 +1,9 @@
+# Sample Git configuration for this repository.
+# Customize values before using globally.
+
+[user]
+    name = Your Name
+    email = you@example.com
+
+[core]
+    autocrlf = input

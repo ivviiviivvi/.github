@@ -77,3 +77,15 @@ ORGAN-I is one of eight organizations in the **organvm** creative-institutional 
 ---
 
 <sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99) · part of the [eight-organ system](https://github.com/meta-organvm) · CONSOLIDATION-II Sprint 2026-02-12</sub>
+
+<!-- PORTFOLIO-HUB-START -->
+---
+
+<div align="center">
+
+**Explore the System**
+
+[Portfolio](https://4444j99.github.io/portfolio/) · [System Directory](https://4444j99.github.io/portfolio/directory/) · [49 Essays](https://organvm-v-logos.github.io/public-process/) · [Knowledge Base](https://organvm-i-theoria.github.io/my-knowledge-base/) · [Consult](https://4444j99.github.io/portfolio/consult/)
+
+</div>
+<!-- PORTFOLIO-HUB-END -->

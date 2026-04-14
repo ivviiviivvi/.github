@@ -1,0 +1,12 @@
+{
+    "schedule": "weekly",
+    "ignoredFiles": [
+        "dist/**",
+        "build/**",
+        "node_modules/**",
+        "test-results/**",
+        "htmlcov/**",
+        "coverage/**"
+    ],
+    "aggressiveCompression": "true"
+}

@@ -1,0 +1,89 @@
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "@id": "https://github.com/{{ORG_NAME}}/.github/tree/main/docs",
+  "name": "Organization Documentation",
+  "headline": "Comprehensive Documentation Ecosystem",
+  "description": "Documentation ecosystem covering setup guides, architecture documentation, API references, tutorials, and policy documents",
+  "dateCreated": "2024",
+  "dateModified": "2026-01-30",
+  "version": "1.0.0",
+  "url": "https://github.com/{{ORG_NAME}}/.github/tree/main/docs",
+  "isPartOf": {
+    "@type": "SoftwareSourceCode",
+    "@id": "https://github.com/{{ORG_NAME}}/.github",
+    "name": ".github Repository"
+  },
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "Organizational Policies",
+      "description": "Core organizational policies and governance"
+    },
+    {
+      "@type": "Thing",
+      "name": "Workflow System",
+      "description": "Complete discussion/issue/PR workflow documentation"
+    },
+    {
+      "@type": "Thing",
+      "name": "AI Framework",
+      "description": "Guides for the AI framework and agents"
+    },
+    {
+      "@type": "Thing",
+      "name": "Development Environment",
+      "description": "Setup guides and configuration"
+    },
+    {
+      "@type": "Thing",
+      "name": "Security & Compliance",
+      "description": "Security policies and compliance documentation"
+    }
+  ],
+  "hasPart": [
+    {
+      "@type": "TechArticle",
+      "name": "Setup Guides",
+      "description": "Quick start guides and environment setup documentation"
+    },
+    {
+      "@type": "TechArticle",
+      "name": "Architecture Documentation",
+      "description": "System architecture and design documents"
+    },
+    {
+      "@type": "TechArticle",
+      "name": "API References",
+      "description": "Technical API references and guides"
+    },
+    {
+      "@type": "TechArticle",
+      "name": "Tutorials",
+      "description": "Step-by-step learning resources"
+    },
+    {
+      "@type": "TechArticle",
+      "name": "Policy Documents",
+      "description": "Organizational policies and standards"
+    }
+  ],
+  "keywords": [
+    "documentation",
+    "guides",
+    "tutorials",
+    "architecture",
+    "api-reference",
+    "policies",
+    "governance",
+    "workflow-system"
+  ],
+  "inLanguage": "en-US",
+  "license": "https://opensource.org/licenses/MIT",
+  "educationalUse": [
+    "Learning",
+    "Reference",
+    "Training"
+  ],
+  "proficiencyLevel": "Beginner to Advanced"
+}
