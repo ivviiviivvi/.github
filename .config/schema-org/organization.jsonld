@@ -1,0 +1,44 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://github.com/{{ORG_NAME}}",
+  "name": "{{ORG_DISPLAY_NAME}}",
+  "url": "https://github.com/{{ORG_NAME}}",
+  "logo": "https://github.com/{{ORG_NAME}}.png",
+  "description": "Organization focused on AI-powered development workflows, automation, and comprehensive governance frameworks",
+  "foundingDate": "2024",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Technical Support",
+    "url": "https://github.com/orgs/{{ORG_NAME}}/discussions"
+  },
+  "sameAs": [
+    "https://github.com/{{ORG_NAME}}"
+  ],
+  "knowsAbout": [
+    "Software Development",
+    "Artificial Intelligence",
+    "Workflow Automation",
+    "GitHub Actions",
+    "DevOps",
+    "Documentation",
+    "Governance Frameworks"
+  ],
+  "owns": [
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://github.com/{{ORG_NAME}}/.github",
+      "name": ".github",
+      "description": "Community health files and organization-wide policies",
+      "version": "1.0.0",
+      "codeRepository": "https://github.com/{{ORG_NAME}}/.github",
+      "programmingLanguage": [
+        "Python",
+        "TypeScript",
+        "Shell",
+        "YAML"
+      ],
+      "license": "https://opensource.org/licenses/MIT"
+    }
+  ]
+}

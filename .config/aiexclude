@@ -1,0 +1,9 @@
+# This file is used to exclude files and directories from Gemini Code Assist.
+# It has the same syntax as .gitignore.
+
+node_modules/
+.venv/
+.venv-1/
+archive/
+reports/
+test-results-*.json

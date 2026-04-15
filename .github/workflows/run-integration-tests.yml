@@ -53,10 +53,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
       with:
         python-version: '3.11'
         cache: pip
@@ -85,7 +85,7 @@ jobs:
           --cov-fail-under=0  # Disable coverage threshold for integration tests
 
     - name: Upload Month 1 test results
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v4
       if: always()
       with:
         name: month1-test-results
@@ -96,7 +96,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 1 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 1 Test Results
@@ -114,10 +114,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
       with:
         python-version: '3.11'
         cache: pip
@@ -147,7 +147,7 @@ jobs:
           --cov-fail-under=0  # Disable coverage threshold for integration tests
 
     - name: Upload Month 2 test results
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v4
       if: always()
       with:
         name: month2-test-results
@@ -158,7 +158,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 2 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 2 Test Results
@@ -176,10 +176,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
       with:
         python-version: '3.11'
         cache: pip
@@ -209,7 +209,7 @@ jobs:
           --cov-fail-under=0  # Disable coverage threshold for integration tests
 
     - name: Upload Month 3 test results
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v4
       if: always()
       with:
         name: month3-test-results
@@ -220,7 +220,7 @@ jobs:
         retention-days: 14
 
     - name: Publish Month 3 test report
-      uses: dorny/test-reporter@6c357194179c694acfcad2100dbf27c5b9b0d5e0  # ratchet:dorny/test-reporter@v1
+      uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5  # ratchet:dorny/test-reporter@v1
       if: always()
       with:
         name: Month 3 Test Results
@@ -238,10 +238,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # ratchet:actions/setup-python@v5
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
       with:
         python-version: '3.11'
         cache: pip
@@ -265,7 +265,7 @@ jobs:
           --junitxml=test-results/critical-results.xml
 
     - name: Upload critical test results
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v4
       if: always()
       with:
         name: critical-test-results
@@ -287,7 +287,7 @@ jobs:
 
     steps:
     - name: Download all test results
-      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16  # ratchet:actions/download-artifact@v4
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # ratchet:actions/download-artifact@v4
       with:
         path: test-results
 
@@ -299,7 +299,7 @@ jobs:
         coverage html -d htmlcov-combined || true
 
     - name: Upload combined coverage
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v4
       if: always()
       with:
         name: combined-coverage
@@ -308,7 +308,7 @@ jobs:
 
     - name: Comment test summary on PR
       if: github.event_name == 'pull_request'
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea  # ratchet:actions/github-script@v7
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v7
       with:
         script: |
           const fs = require('fs');

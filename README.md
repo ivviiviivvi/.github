@@ -113,6 +113,7 @@ Default community health files inherited by all org repos:
 | [CONTRIBUTING.md](CONTRIBUTING.md)       | Contribution guidelines |
 | [SECURITY.md](SECURITY.md)               | Vulnerability reporting |
 | [SUPPORT.md](SUPPORT.md)                 | Getting help            |
+| [README_STANDARDS.md](README_STANDARDS.md) | README structure and depth standards |
 
 Issue templates, PR templates, and workflow templates are also provided for
 bootstrapping new repositories.

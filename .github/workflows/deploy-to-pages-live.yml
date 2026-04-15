@@ -66,7 +66,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
       with:
         fetch-depth: 1
 
@@ -189,10 +189,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Setup Node.js
-      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f  # ratchet:actions/setup-node@v6.3.0
       with:
         node-version: '18'
         cache: npm
@@ -209,16 +209,16 @@ jobs:
         fi
 
     - name: Setup Pages
-      uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b  # ratchet:actions/configure-pages@v5.0.0
+      uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # ratchet:actions/configure-pages@v6.0.0
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa  # ratchet:actions/upload-pages-artifact@v3.0.1
+      uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b  # ratchet:actions/upload-pages-artifact@v4.0.0
       with:
         path: ./dist
 
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e  # ratchet:actions/deploy-pages@v4.0.5
+      uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # ratchet:actions/deploy-pages@v5.0.0
 
     - name: Generate deployment metadata
       run: |
@@ -237,7 +237,7 @@ jobs:
         EOF
 
     - name: Upload deployment metadata
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: app-deployment
         path: deployment-metadata.json
@@ -251,26 +251,26 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # ratchet:docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd  # ratchet:docker/setup-buildx-action@v4.0.0
 
     - name: Log in to Docker Hub
       if: github.event_name != 'pull_request'
-      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # ratchet:docker/login-action@v3
+      uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2  # ratchet:docker/login-action@v4.0.0
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Extract metadata
       id: meta
-      uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # ratchet:docker/metadata-action@v5
+      uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf  # ratchet:docker/metadata-action@v6.0.0
       with:
         images: ${{ github.repository }}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # ratchet:docker/build-push-action@v6
+      uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294  # ratchet:docker/build-push-action@v6
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
@@ -289,7 +289,7 @@ jobs:
         trivy image --format sarif --output trivy-results.sarif --severity CRITICAL,HIGH "$IMAGE_TAG" || true
 
     - name: Upload Trivy scan results
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: trivy-container-scan
         path: trivy-results.sarif
@@ -335,7 +335,7 @@ jobs:
         EOF
 
     - name: Upload deployment metadata
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: app-deployment
         path: deployment-metadata.json
@@ -349,7 +349,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Create Codespaces configuration
       run: |
@@ -393,7 +393,7 @@ jobs:
         EOF
 
     - name: Upload deployment metadata
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: app-deployment
         path: deployment-metadata.json
@@ -407,7 +407,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Generate deployment metadata
       run: |
@@ -425,7 +425,7 @@ jobs:
         EOF
 
     - name: Upload deployment metadata
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: app-deployment
         path: deployment-metadata.json

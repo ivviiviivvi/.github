@@ -1,0 +1,5 @@
+# GitBook Configuration
+# https://docs.gitbook.com/integrations/gitbook-sync
+
+# Map directory to GitBook
+# root: /docs

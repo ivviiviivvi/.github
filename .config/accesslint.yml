@@ -1,0 +1,17 @@
+# AccessLint Configuration
+# https://github.com/accesslint/accesslint
+
+# Paths to ignore
+ignore:
+- node_modules/**/*
+- dist/**/*
+- build/**/*
+- test/**/*
+- tests/**/*
+
+# Rule overrides (examples)
+# rules:
+#   label:
+#     enabled: true
+#   alt-text:
+#     enabled: true
