@@ -147,7 +147,7 @@ jobs:
 
     - name: Send email
       if: steps.validate-email.outputs.email_valid == 'true'
-      uses: dawidd6/action-send-mail@d38f3f7cd391cdebfe0d38efc3998b935e951c4f  # ratchet:dawidd6/action-send-mail@v16
+      uses: dawidd6/action-send-mail@42942bc2f8fba4e611b459a018967a6a7c78c68c  # ratchet:dawidd6/action-send-mail@v17
       with:
         server_address: ${{ secrets.SMTP_SERVER }}
         server_port: ${{ secrets.SMTP_PORT }}
@@ -165,7 +165,7 @@ jobs:
         echo "::warning::Email secrets not configured. Skipping email digest send."
 
     - name: Upload digest
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
       with:
         name: email-digest-${{ github.run_id }}
         path: |

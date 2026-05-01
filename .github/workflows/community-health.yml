@@ -118,7 +118,7 @@ jobs:
 
     - name: Generate Contributors List
       continue-on-error: true
-      uses: akhilmhdh/contributors-readme-action@098389139f2fabed92e52606268941dbff381edb  # ratchet:akhilmhdh/contributors-readme-action@v2.3.6
+      uses: akhilmhdh/contributors-readme-action@83ea0b4f1ac928fbfe88b9e8460a932a528eb79f  # ratchet:akhilmhdh/contributors-readme-action@v2.3.11
       with:
         image_size: 80
         columns_per_row: 7
@@ -132,13 +132,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@7bee6e691468e996f6701b0638a5238b1490014e  # ratchet:github/issue-metrics@v4.2.1
+      uses: github/issue-metrics@c9e9838147fd355dace335ba787f01b6641a400a  # ratchet:github/issue-metrics@v4.2.2
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
 
     - name: Upload Metrics
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
       with:
         name: issue-metrics
         path: issue_metrics.md

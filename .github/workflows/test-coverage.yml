@@ -74,7 +74,7 @@ jobs:
 
     - name: Archive coverage results
       if: matrix.python-version == '3.11'
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
       with:
         name: coverage-report
         path: htmlcov/
@@ -82,7 +82,7 @@ jobs:
 
     - name: Comment coverage on PR
       if: github.event_name == 'pull_request' && matrix.python-version == '3.11'
-      uses: py-cov-action/python-coverage-comment-action@7188638f871f721a365d644f505d1ff3df20d683  # ratchet:py-cov-action/python-coverage-comment-action@v3
+      uses: py-cov-action/python-coverage-comment-action@63f52f4fbbffada6e8dee8ec432de7e01df9ba79  # ratchet:py-cov-action/python-coverage-comment-action@v3
       with:
         GITHUB_TOKEN: ${{ github.token }}
         MINIMUM_GREEN: 80
