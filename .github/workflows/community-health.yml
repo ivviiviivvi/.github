@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Close Stale Issues and PRs
-      uses: actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f  # ratchet:actions/stale@v10.2.0
+      uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899  # ratchet:actions/stale@v10.3.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
           # Issues
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Lock Inactive Closed Issues
-      uses: dessant/lock-threads@7266a7ce5c1df01b1c6db85bf8cd86c737dadbe7  # ratchet:dessant/lock-threads@v6.0.0
+      uses: dessant/lock-threads@89ae32b08ed1a541efecbab17912962a5e38981c  # ratchet:dessant/lock-threads@v6.0.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         issue-inactive-days: 90
@@ -118,7 +118,7 @@ jobs:
 
     - name: Generate Contributors List
       continue-on-error: true
-      uses: akhilmhdh/contributors-readme-action@098389139f2fabed92e52606268941dbff381edb  # ratchet:akhilmhdh/contributors-readme-action@v2.3.6
+      uses: akhilmhdh/contributors-readme-action@83ea0b4f1ac928fbfe88b9e8460a932a528eb79f  # ratchet:akhilmhdh/contributors-readme-action@v2.3.11
       with:
         image_size: 80
         columns_per_row: 7
@@ -132,13 +132,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@7bee6e691468e996f6701b0638a5238b1490014e  # ratchet:github/issue-metrics@v4.2.1
+      uses: github/issue-metrics@1e38d5e62363e14db8019ed7d106b9855bdba6cc  # ratchet:github/issue-metrics@v4.2.7
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
 
     - name: Upload Metrics
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
       with:
         name: issue-metrics
         path: issue_metrics.md

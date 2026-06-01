@@ -32,7 +32,7 @@ jobs:
 
     - name: Setup Ruby
       if: steps.check.outputs.exists == 'true'
-      uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64  # ratchet:ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f  # ratchet:ruby/setup-ruby@v1
       with:
         ruby-version: '3.1'
         bundler-cache: true
@@ -52,7 +52,7 @@ jobs:
 
     - name: Upload artifact
       if: steps.check.outputs.exists == 'true'
-      uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b  # ratchet:actions/upload-pages-artifact@v4.0.0
+      uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # ratchet:actions/upload-pages-artifact@v5.0.0
       with:
         path: site/_site
 
