@@ -6,16 +6,16 @@
 
 <!-- BADGES:START -->
 
-[![CI](https://img.shields.io/github/actions/workflow/status/%7B%7BORG_NAME%7D%7D/.github/ci.yml?style=flat-square&label=CI)](https://github.com/%7B%7BORG_NAME%7D%7D/.github/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/organvm-i-theoria/.github/ci.yml?style=flat-square&label=CI)](https://github.com/organvm-i-theoria/.github/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-58%25-yellow?style=flat-square)](pyproject.toml)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)](pyproject.toml)
-[![License](https://img.shields.io/github/license/%7B%7BORG_NAME%7D%7D/.github?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/github/license/organvm-i-theoria/.github?style=flat-square)](LICENSE)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?style=flat-square&logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
 <!-- BADGES:END -->
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/%7B%7BORG_NAME%7D%7D/.github?devcontainer_path=.devcontainer/devcontainer.json)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/organvm-i-theoria/.github?devcontainer_path=.devcontainer/devcontainer.json)
 
 [Documentation](docs/INDEX.md) | [Contributing](CONTRIBUTING.md) |
 [Security](SECURITY.md)
@@ -35,7 +35,7 @@
 - [Acknowledgments](#acknowledgments)
 - [License](#license)
 
-This is the **organization-level `.github` repository** for {{ORG_NAME}}. Files
+This is the **organization-level `.github` repository** for organvm-i-theoria. Files
 here — workflows, templates, governance docs — are automatically inherited by
 every repository in the organization that doesn't define its own.
 
@@ -57,8 +57,8 @@ graph TB
     subgraph dotgithub[".github Repository"]
         direction TB
         governance["Community Health<br/>Code of Conduct · Contributing · Security · Support"]
-        workflows["{{WORKFLOW_COUNT}} Workflows<br/>CI/CD · Security · Automation · {{REUSABLE_TEMPLATE_COUNT}} Reusable Templates"]
-        ai["AI Framework<br/>{{AGENT_COUNT}} Agents · {{CHATMODE_COUNT}} Chatmodes · Prompts · Collections"]
+        workflows["129 Workflows<br/>CI/CD · Security · Automation · 13 Reusable Templates"]
+        ai["AI Framework<br/>26 Agents · 88 Chatmodes · Prompts · Collections"]
     end
     subgraph org["Organization Repos"]
         R1[Repo A]
@@ -71,18 +71,18 @@ graph TB
 ## Quick Start
 
 ```bash
-git clone https://github.com/{{ORG_NAME}}/.github.git
+git clone https://github.com/organvm-i-theoria/.github.git
 cd .github
 pip install -e ".[dev]"
 pre-commit install
 ```
 
 Need help? Check [SUPPORT.md](SUPPORT.md) or
-[start a discussion](https://github.com/orgs/%7B%7BORG_NAME%7D%7D/discussions).
+[start a discussion](https://github.com/orgs/organvm-i-theoria/discussions).
 
 ## Workflows
 
-**{{WORKFLOW_COUNT}} workflows** covering CI/CD pipelines, security scanning
+**129 workflows** covering CI/CD pipelines, security scanning
 (CodeQL, Gitleaks, TruffleHog), PR automation, health monitoring, and metrics.
 All actions are
 [SHA-pinned](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions#using-third-party-actions)
@@ -95,8 +95,8 @@ See the [Workflow Registry](docs/registry/) for the full catalog.
 
 ## AI Framework
 
-**{{AGENT_COUNT}} production agents** across security, infrastructure,
-development, languages, and documentation. **{{CHATMODE_COUNT}} chatmodes** for
+**26 production agents** across security, infrastructure,
+development, languages, and documentation. **88 chatmodes** for
 specialized AI personas. Plus coding instructions, task prompts, and curated
 collections — all compatible with GitHub Copilot.
 
@@ -138,7 +138,7 @@ guidelines, including our
 
 Found a vulnerability? **Do not open a public issue.** Follow our
 [Security Policy](SECURITY.md) or use
-[GitHub Security Advisories](https://github.com/%7B%7BORG_NAME%7D%7D/.github/security/advisories/new).
+[GitHub Security Advisories](https://github.com/organvm-i-theoria/.github/security/advisories/new).
 
 ## Acknowledgments
 
