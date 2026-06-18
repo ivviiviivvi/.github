@@ -135,9 +135,13 @@ jobs:
       if: inputs.scan-type == 'secrets' || inputs.scan-type == 'all'
       run: |
         pip install detect-secrets==1.5.0
-        detect-secrets scan --all-files --baseline .secrets.baseline || true
-        if [ -f .secrets.baseline ]; then
-          echo "Secret scan complete. Review .secrets.baseline for any findings."
+        SECRET_BASELINE=".config/.secrets.baseline"
+        if [ -f "$SECRET_BASELINE" ]; then
+          detect-secrets scan --all-files --baseline "$SECRET_BASELINE" --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
+          echo "Secret scan complete using $SECRET_BASELINE."
+        else
+          detect-secrets scan --all-files --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
+          echo "Secret scan complete without a baseline."
         fi
 
     - name: Upload security scan artifacts
@@ -149,5 +153,7 @@ jobs:
           codeql-results/
           trivy-results.sarif
           semgrep.sarif
-          .secrets.baseline
+          detect-secrets-results.json
+          .config/.secrets.baseline
         retention-days: 30
+        include-hidden-files: true
