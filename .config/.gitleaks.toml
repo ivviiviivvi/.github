@@ -3,6 +3,9 @@
 
 title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
 
+[extend]
+  useDefault = true
+
 # Global allowlist for false positives
 [allowlist]
   description = "Global allowlist for false positives"
@@ -11,8 +14,10 @@ title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
   paths = [
     '''\.github/workflows/scan-for-secrets\.yml''',
     '''\.github/workflows/safeguard-5-secret-scanning\.yml''',
-    '''docs/SECRETS_SETUP\.md''',
+    '''docs/guides/SECRETS_SETUP\.md''',
+    '''docs/guides/security-best-practices\.md''',
     '''docs/reference/SECURITY_ADVANCED\.md''',
+    '''docs/governance/BRANCH_PROTECTION\.md''',
     '''SECURITY_ADVANCED\.md''',
     '''\.github/WORKFLOW_GUIDE\.md''',
     '''WORKFLOW_GUIDE\.md''',
