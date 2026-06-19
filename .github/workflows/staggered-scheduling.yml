@@ -38,6 +38,8 @@ jobs:
     outputs:
       has_schedule: ${{ steps.generate.outputs.has_schedule }}
       repos_today: ${{ steps.check-today.outputs.repos_today }}
+      schedule_date: ${{ steps.check-today.outputs.schedule_date }}
+      stagger_minutes: ${{ steps.check-today.outputs.stagger_minutes }}
 
     steps:
     - name: Checkout repository
@@ -94,96 +96,57 @@ jobs:
         REPO_COUNT=$(jq 'length' repositories.json)
         echo "repo_count=$REPO_COUNT" >> $GITHUB_OUTPUT
 
-    - name: Generate staggered schedule
+    - name: Plan staggered schedule
       id: generate
       env:
-        REPOSITORIES_PER_DAY: ${{ github.event.inputs.repositories_per_day || '10' }}
+        REPOSITORIES_PER_DAY: ${{ github.event.inputs.repositories_per_day || env.REPOS_PER_DAY }}
+        FORCE_RESCHEDULE: ${{ github.event.inputs.force_reschedule || 'false' }}
       run: |
-        cat > generate_schedule.py << 'EOF'
-        import json
-        import math
-        import os
-        from datetime import datetime, timedelta
+        TODAY=$(date -u +%Y-%m-%d)
 
-        # Load repositories
-        with open('repositories.json', 'r') as f:
-            repos = json.load(f)
-
-        repos_per_day = int(os.environ.get('REPOSITORIES_PER_DAY', '10'))
-        total_repos = len(repos)
-        days_needed = math.ceil(total_repos / repos_per_day)
-
-        print(f"Total repositories: {total_repos}")
-        print(f"Repositories per day: {repos_per_day}")
-        print(f"Days needed: {days_needed}")
-
-        # Sort repos by size (smaller repos first for faster initial runs)
-        repos.sort(key=lambda x: x['size'])
-
-        # Generate schedule
-        schedule = {
-            'version': '1.0',
-            'generated_at': datetime.utcnow().isoformat() + 'Z',
-            'repos_per_day': repos_per_day,
-            'total_repositories': total_repos,
-            'schedule_days': days_needed,
-            'schedule': {}
-        }
-
-        start_date = datetime.utcnow().date()
-
-        for day_offset in range(days_needed):
-            date = (start_date + timedelta(days=day_offset)).isoformat()
-            start_idx = day_offset * repos_per_day
-            end_idx = min(start_idx + repos_per_day, total_repos)
-
-            day_repos = repos[start_idx:end_idx]
-
-            schedule['schedule'][date] = {
-                'date': date,
-                'repositories': [r['full_name'] for r in day_repos],
-                'count': len(day_repos),
-                'status': 'pending',
-                'stagger_minutes': 5  # 5 minutes between each repo
-            }
-
-        with open('schedule.json', 'w') as f:
-            json.dump(schedule, f, indent=2)
-
-        print(f"Generated schedule for {days_needed} days")
-        EOF
-
-        python generate_schedule.py
-
-        echo "has_schedule=true" >> $GITHUB_OUTPUT
+        python src/automation/scripts/staggered_walkthrough_schedule.py plan \
+          --repositories repositories.json \
+          --schedule-file "${{ env.SCHEDULE_FILE }}" \
+          --output schedule.json \
+          --repos-per-day "$REPOSITORIES_PER_DAY" \
+          --force "$FORCE_RESCHEDULE" \
+          --today "$TODAY"
 
     - name: Save schedule
       run: |
-        mkdir -p .github/scheduling
-        mv schedule.json ${{ env.SCHEDULE_FILE }}
+        mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
+        mv schedule.json "${{ env.SCHEDULE_FILE }}"
 
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add .github/scheduling/
-        git commit -m "chore: update staggered schedule [skip ci]" || echo "No changes to commit"
-        git push || echo "No changes to push"
+        git add "${{ env.SCHEDULE_FILE }}"
+
+        if git diff --staged --quiet; then
+          echo "No schedule changes to commit"
+        else
+          git commit -m "chore: update staggered schedule [skip ci]"
+          git push
+        fi
 
     - name: Check today's schedule
       id: check-today
       run: |
         if [ ! -f "${{ env.SCHEDULE_FILE }}" ]; then
           echo "repos_today=0" >> $GITHUB_OUTPUT
+          echo "schedule_date=" >> $GITHUB_OUTPUT
+          echo "stagger_minutes=5" >> $GITHUB_OUTPUT
           exit 0
         fi
 
-        TODAY=$(date -u +%Y-%m-%d)
+        python src/automation/scripts/staggered_walkthrough_schedule.py due \
+          --schedule-file "${{ env.SCHEDULE_FILE }}" \
+          --repos-output repos_today.txt \
+          --today "$(date -u +%Y-%m-%d)"
 
-        REPOS_TODAY=$(jq -r ".schedule[\"$TODAY\"].repositories // [] | length" ${{ env.SCHEDULE_FILE }})
-        echo "repos_today=$REPOS_TODAY" >> $GITHUB_OUTPUT
-
+        REPOS_TODAY=$(wc -l < repos_today.txt | tr -d ' ')
         if [ "$REPOS_TODAY" -gt 0 ]; then
           echo "📋 Today's schedule: $REPOS_TODAY repositories"
-          jq -r ".schedule[\"$TODAY\"].repositories[]" ${{ env.SCHEDULE_FILE }} > repos_today.txt
+          cat repos_today.txt
         else
           echo "✅ No repositories scheduled for today"
         fi
@@ -205,6 +168,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      with:
+        fetch-depth: 1
+        ref: ${{ github.ref_name }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Download today's schedule
       uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # ratchet:actions/download-artifact@v8.0.1
       with:
@@ -213,12 +181,12 @@ jobs:
     - name: Execute staggered workflows
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        STAGGER_MINUTES: ${{ needs.calculate-schedule.outputs.stagger_minutes || '5' }}
+        MAX_CONCURRENT: ${{ env.MAX_CONCURRENT_WORKFLOWS }}
       run: |
         cat > execute_schedule.sh << 'EOF'
         #!/bin/bash
 
-        STAGGER_MINUTES=5
-        MAX_CONCURRENT=3
         CURRENT_RUNNING=0
 
         echo "🚀 Starting staggered workflow execution..."
@@ -243,20 +211,23 @@ jobs:
 
           echo "📋 Triggering workflow for: $repo"
 
-          # Trigger walkthrough generation workflow
-          curl -X POST \
+          REPO_JSON=$(curl -fsS \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$repo/actions/workflows/generate-walkthrough.yml/dispatches" \
-            -d '{"ref":"main"}' || \
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$repo/actions/workflows/generate-walkthrough.yml/dispatches" \
-            -d '{"ref":"master"}' || \
-            echo "⚠️ Failed to trigger workflow for $repo"
+            "https://api.github.com/repos/$repo" || echo '{}')
+          DEFAULT_BRANCH=$(echo "$REPO_JSON" | jq -r '.default_branch // "main"')
+          PAYLOAD=$(jq -n --arg ref "$DEFAULT_BRANCH" '{ref: $ref}')
 
-          echo "✅ Triggered: $repo"
+          if curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$repo/actions/workflows/generate-walkthrough.yml/dispatches" \
+            -d "$PAYLOAD"; then
+            echo "✅ Triggered: $repo ($DEFAULT_BRANCH)"
+          else
+            echo "⚠️ Failed to trigger workflow for $repo"
+          fi
+
           echo "⏰ Waiting $STAGGER_MINUTES minutes before next..."
           sleep $((STAGGER_MINUTES * 60))
 
@@ -270,18 +241,24 @@ jobs:
 
     - name: Update schedule status
       if: always()
+      env:
+        SCHEDULE_DATE: ${{ needs.calculate-schedule.outputs.schedule_date }}
       run: |
-        TODAY=$(date -u +%Y-%m-%d)
+        if [ -z "$SCHEDULE_DATE" ]; then
+          echo "No schedule date was executed; skipping status update"
+          exit 0
+        fi
 
         if [ -f "${{ env.SCHEDULE_FILE }}" ]; then
-          # Update today's status to completed
-          cat ${{ env.SCHEDULE_FILE }} | jq ".schedule[\"$TODAY\"].status = \"completed\" | .schedule[\"$TODAY\"].completed_at = \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"" > temp.json
-          mv temp.json ${{ env.SCHEDULE_FILE }}
+          python src/automation/scripts/staggered_walkthrough_schedule.py complete \
+            --schedule-file "${{ env.SCHEDULE_FILE }}" \
+            --date "$SCHEDULE_DATE" \
+            --completed-at "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ${{ env.SCHEDULE_FILE }}
-          git commit -m "chore: mark $TODAY schedule as completed [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: mark $SCHEDULE_DATE schedule as completed [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"
         fi
 
