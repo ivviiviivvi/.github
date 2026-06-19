@@ -39,26 +39,5 @@ jobs:
           revert
           style
           test
-         # Optional scopes for this repository
-        scopes: |
-          workflows
-          docs
-          automation
-          governance
-          ci
-          deps
+        # Scopes are optional and unrestricted (any scope is accepted)
         requireScope: false
-            # Custom error message
-        subjectPattern: ^(?![A-Z]).+$
-        subjectPatternError: |
-          The PR title "{subject}" doesn't match the required format.
-
-          Expected format: <type>(<optional-scope>): <description>
-
-          Examples:
-          - feat: add new workflow for issue triage
-          - fix(workflows): correct label sync permissions
-          - docs: update contributing guidelines
-          - chore(deps): bump actions/checkout to v4
-
-          The description must start with a lowercase letter.

@@ -81,13 +81,9 @@ repos:
 
           # Python hooks
   # Note: black removed - using ruff-format instead (faster, compatible)
-
-- repo: https://github.com/pycqa/isort
-  rev: 7.0.0
-  hooks:
-  - id: isort
-    args: [--profile=black]
-
+  # Note: isort removed - using ruff's import sorting (I rules) instead.
+  #       Running both isort and ruff caused non-convergent reformatting
+  #       (each reordered imports differently), failing pre-commit.
   # Note: flake8 removed - using ruff from pyproject.toml instead (faster, more comprehensive)
 
 - repo: https://github.com/astral-sh/ruff-pre-commit

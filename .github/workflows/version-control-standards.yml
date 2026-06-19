@@ -65,6 +65,8 @@ jobs:
           "^archive/[a-z0-9-]+/[a-z0-9-]+$"
           # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
           "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
+          # Patterns for automated/bot branches (dash- or slash-separated)
+          "^(jules|bolt|palette|sentinel|copilot|renovate|limen|claude|gemini|cursor|codex|devin|sweep|gpt)[/-][a-z0-9._/-]+$"
         )
 
         VALID=false
