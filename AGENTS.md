@@ -6,21 +6,28 @@ This repo participates in the **ORGAN-I (Theory)** swarm.
 
 ### Active Subscriptions
 
-- Event: `research-published` → Action: Render and distribute research announcement
+- Event: `research-published` → Action: Render and distribute research
+  announcement
 - Event: `framework-updated` → Action: Render and distribute framework update
 - Event: `artwork-released` → Action: Render and distribute artwork announcement
-- Event: `performance-scheduled` → Action: Render and distribute performance invitation
+- Event: `performance-scheduled` → Action: Render and distribute performance
+  invitation
 - Event: `feature-released` → Action: Render and distribute feature release
 - Event: `bugfix-released` → Action: Render and distribute bugfix notice
 - Event: `repo-launched` → Action: Render and distribute repo launch
-- Event: `milestone-reached` → Action: Render and distribute milestone announcement
+- Event: `milestone-reached` → Action: Render and distribute milestone
+  announcement
 - Event: `audit-completed` → Action: Render and distribute audit completion
 - Event: `essay-published` → Action: Render and distribute essay announcement
 - Event: `salon-scheduled` → Action: Render and distribute salon invitation
-- Event: `workshop-scheduled` → Action: Render and distribute workshop announcement
-- Event: `partnership-announced` → Action: Render and distribute partnership announcement
-- Event: `reading-group-scheduled` → Action: Render and distribute reading group invitation
-- Event: `community-milestone` → Action: Render and distribute community milestone
+- Event: `workshop-scheduled` → Action: Render and distribute workshop
+  announcement
+- Event: `partnership-announced` → Action: Render and distribute partnership
+  announcement
+- Event: `reading-group-scheduled` → Action: Render and distribute reading group
+  invitation
+- Event: `community-milestone` → Action: Render and distribute community
+  milestone
 
 ### Production Responsibilities
 

@@ -8,11 +8,12 @@ _Epistemological frameworks and symbolic computing in Python_
 
 > *θεωρία (theoria) — contemplation, seeing*
 >
-> The ancient Greek word for the act of beholding truth: not passive observation,
-> but the disciplined practice of looking until structure reveals itself.
+> The ancient Greek word for the act of beholding truth: not passive
+> observation, but the disciplined practice of looking until structure reveals
+> itself.
 
-**18 repositories · ~56,000 words of documentation**
-**9 PRODUCTION · 4 PROTOTYPE · 3 SKELETON · 2 DESIGN_ONLY**
+**18 repositories · ~56,000 words of documentation** **9 PRODUCTION · 4
+PROTOTYPE · 3 SKELETON · 2 DESIGN_ONLY**
 
 </div>
 
@@ -20,20 +21,34 @@ ______________________________________________________________________
 
 ## What This Organ Does
 
-ORGAN-I is the **epistemological foundation** of the eight-organ system. It houses frameworks for recursive reasoning, ontological architecture, knowledge representation, and conceptual research. Every system needs a theory of itself before it can create (ORGAN-II) or transact (ORGAN-III) — Theoria provides that self-knowledge.
+ORGAN-I is the **epistemological foundation** of the eight-organ system. It
+houses frameworks for recursive reasoning, ontological architecture, knowledge
+representation, and conceptual research. Every system needs a theory of itself
+before it can create (ORGAN-II) or transact (ORGAN-III) — Theoria provides that
+self-knowledge.
 
 The work here spans:
 
-- **Recursive engines** — symbolic operating systems that model identity, myth, and ritual as computable processes
-- **Ontological frameworks** — naming conventions, metadata systems, and governance architectures for autonomous systems
-- **Epistemological tools** — knowledge extraction pipelines, cognitive archaeology, and multi-agent deliberation systems
-- **Linguistic analysis** — computational rhetoric, narratological algorithms, and rhetorical operating system design
+- **Recursive engines** — symbolic operating systems that model identity, myth,
+  and ritual as computable processes
+- **Ontological frameworks** — naming conventions, metadata systems, and
+  governance architectures for autonomous systems
+- **Epistemological tools** — knowledge extraction pipelines, cognitive
+  archaeology, and multi-agent deliberation systems
+- **Linguistic analysis** — computational rhetoric, narratological algorithms,
+  and rhetorical operating system design
 
 ## Philosophy
 
-Theory is not abstraction for its own sake. In the organ system, **theory precedes art, and art precedes commerce** — the I → II → III dependency flow. ORGAN-I produces the conceptual scaffolding that ORGAN-II transforms into creative artifacts and ORGAN-III operationalizes into products. No back-edges: commerce never dictates theory. This is a design constraint, not an accident.
+Theory is not abstraction for its own sake. In the organ system, **theory
+precedes art, and art precedes commerce** — the I → II → III dependency flow.
+ORGAN-I produces the conceptual scaffolding that ORGAN-II transforms into
+creative artifacts and ORGAN-III operationalizes into products. No back-edges:
+commerce never dictates theory. This is a design constraint, not an accident.
 
-The repositories here treat ideas as engineered artifacts: versioned, documented, and structured for reuse. A naming convention is infrastructure. A governance framework is a machine. A recursive engine is a living system.
+The repositories here treat ideas as engineered artifacts: versioned,
+documented, and structured for reuse. A naming convention is infrastructure. A
+governance framework is a machine. A recursive engine is a living system.
 
 ## Key Repositories
 
@@ -59,7 +74,10 @@ The repositories here treat ideas as engineered artifacts: versioned, documented
 
 ## The Eight-Organ System
 
-ORGAN-I is one of eight organizations in the **organvm** creative-institutional system — 81 repositories across 8 orgs, ~320K words of documentation, 16 published essays. Each organ governs a distinct domain; together they form a coordinated whole:
+ORGAN-I is one of eight organizations in the **organvm** creative-institutional
+system — 81 repositories across 8 orgs, ~320K words of documentation, 16
+published essays. Each organ governs a distinct domain; together they form a
+coordinated whole:
 
 | Organ | Domain         | Organization                                                  |
 | :---- | :------------- | :------------------------------------------------------------ |
@@ -72,11 +90,14 @@ ORGAN-I is one of eight organizations in the **organvm** creative-institutional 
 | VII   | Marketing      | [organvm-vii-kerygma](https://github.com/organvm-vii-kerygma) |
 | VIII  | Meta           | [meta-organvm](https://github.com/meta-organvm)               |
 
-> **Read the public process:** [organvm-v-logos.github.io/public-process](https://organvm-v-logos.github.io/public-process/)
+> **Read the public process:**
+> [organvm-v-logos.github.io/public-process](https://organvm-v-logos.github.io/public-process/)
 
 ______________________________________________________________________
 
-<sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99) · part of the [eight-organ system](https://github.com/meta-organvm) · CONSOLIDATION-II Sprint 2026-02-12</sub>
+<sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99)
+· part of the [eight-organ system](https://github.com/meta-organvm) ·
+CONSOLIDATION-II Sprint 2026-02-12</sub>
 
 <!-- PORTFOLIO-HUB-START -->
 
@@ -86,7 +107,11 @@ ______________________________________________________________________
 
 **Explore the System**
 
-[Portfolio](https://4444j99.github.io/portfolio/) · [System Directory](https://4444j99.github.io/portfolio/directory/) · [49 Essays](https://organvm-v-logos.github.io/public-process/) · [Knowledge Base](https://organvm-i-theoria.github.io/my-knowledge-base/) · [Consult](https://4444j99.github.io/portfolio/consult/)
+[Portfolio](https://4444j99.github.io/portfolio/) ·
+[System Directory](https://4444j99.github.io/portfolio/directory/) ·
+[49 Essays](https://organvm-v-logos.github.io/public-process/) ·
+[Knowledge Base](https://organvm-i-theoria.github.io/my-knowledge-base/) ·
+[Consult](https://4444j99.github.io/portfolio/consult/)
 
 </div>
 <!-- PORTFOLIO-HUB-END -->

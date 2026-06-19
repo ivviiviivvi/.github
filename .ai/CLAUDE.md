@@ -205,14 +205,21 @@ pytest -m security      # Security-focused tests
 
 ### Edges
 
-- **Produces** → `ORGAN-IV, ORGAN-V`: unspecified (event: `distribution-completed`)
+- **Produces** → `ORGAN-IV, ORGAN-V`: unspecified (event:
+  `distribution-completed`)
 - **Produces** → `unspecified`: unspecified (event: `press-release`)
 - **Produces** → `unspecified`: unspecified (event: `grant-update`)
 - **Produces** → `ORGAN-V`: unspecified (event: `newsletter-published`)
 
 ### Siblings in Theory
 
-`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`, `auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`, `call-function--ontological`, `sema-metra--alchemica-mundi`, `cognitive-archaelogy-tribunal`, `a-recursive-root`, `radix-recursiva-solve-coagula-redi`, `nexus--babel-alexandria`, `4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`, `my-knowledge-base`, `scalable-lore-expert` ... and 5 more
+`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`,
+`auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`,
+`call-function--ontological`, `sema-metra--alchemica-mundi`,
+`cognitive-archaelogy-tribunal`, `a-recursive-root`,
+`radix-recursiva-solve-coagula-redi`, `nexus--babel-alexandria`,
+`4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`,
+`my-knowledge-base`, `scalable-lore-expert` ... and 5 more
 
 ### Governance
 
@@ -227,7 +234,8 @@ At the end of each session that produces or modifies files:
 1. Run `organvm session review --latest` to get a session summary
 1. Check for unimplemented plans: `organvm session plans --project .`
 1. Export significant sessions: `organvm session export <id> --slug <slug>`
-1. Run `organvm prompts distill --dry-run` to detect uncovered operational patterns
+1. Run `organvm prompts distill --dry-run` to detect uncovered operational
+   patterns
 
 Transcripts are on-demand (never committed):
 
@@ -290,15 +298,20 @@ Transcripts are on-demand (never committed):
 | unknown | any   | index                                | SOP_INDEX.md                                                                 |
 | unknown | any   | obsidian-sync                        | SOP_OBSIDIAN_SYNC.md                                                         |
 
-Linked skills: cicd-resilience-and-recovery, continuous-learning-agent, evaluation-to-growth, genesis-dna, multi-agent-workforce-planner, promotion-and-state-transitions, quality-gate-baseline-calibration, repo-onboarding-and-habitat-creation, structural-integrity-audit
+Linked skills: cicd-resilience-and-recovery, continuous-learning-agent,
+evaluation-to-growth, genesis-dna, multi-agent-workforce-planner,
+promotion-and-state-transitions, quality-gate-baseline-calibration,
+repo-onboarding-and-habitat-creation, structural-integrity-audit
 
-**Prompting (Anthropic)**: context 200K tokens, format: XML tags, thinking: extended thinking (budget_tokens)
+**Prompting (Anthropic)**: context 200K tokens, format: XML tags, thinking:
+extended thinking (budget_tokens)
 
 ## Entity Identity (Ontologia)
 
 **UID:** `ent_repo_01KKKX3RVH13015KN8GT0VY8VE` | **Matched by:** primary_name
 
-Resolve: `organvm ontologia resolve .github` | History: `organvm ontologia history ent_repo_01KKKX3RVH13015KN8GT0VY8VE`
+Resolve: `organvm ontologia resolve .github` | History:
+`organvm ontologia history ent_repo_01KKKX3RVH13015KN8GT0VY8VE`
 
 ## Live System Variables (Ontologia)
 
@@ -320,22 +333,25 @@ Resolve: `organvm ontologia resolve .github` | History: `organvm ontologia histo
 | `total_words_numeric`   | 740907  | global | 2026-03-21 |
 | `total_words_short`     | 741K+   | global | 2026-03-21 |
 
-Metrics: 9 registered | Observations: 8632 recorded
-Resolve: `organvm ontologia status` | Refresh: `organvm refresh`
+Metrics: 9 registered | Observations: 8632 recorded Resolve:
+`organvm ontologia status` | Refresh: `organvm refresh`
 
 ## System Density (auto-generated)
 
-AMMOI: 54% | Edges: 28 | Tensions: 33 | Clusters: 5 | Adv: 3 | Events(24h): 14977
-Structure: 8 organs / 117 repos / 1654 components (depth 17) | Inference: 98% | Organs: META-ORGANVM:66%, ORGAN-I:55%, ORGAN-II:47%, ORGAN-III:56% +4 more
+AMMOI: 54% | Edges: 28 | Tensions: 33 | Clusters: 5 | Adv: 3 | Events(24h):
+14977 Structure: 8 organs / 117 repos / 1654 components (depth 17) | Inference:
+98% | Organs: META-ORGANVM:66%, ORGAN-I:55%, ORGAN-II:47%, ORGAN-III:56% +4 more
 Last pulse: 2026-03-21T13:20:54 | Δ24h: n/a | Δ7d: n/a
 
 ## Dialect Identity (Trivium)
 
-**Dialect:** FORMAL_LOGIC | **Classical Parallel:** Logic | **Translation Role:** The Grammar — defines well-formedness in any dialect
+**Dialect:** FORMAL_LOGIC | **Classical Parallel:** Logic | **Translation
+Role:** The Grammar — defines well-formedness in any dialect
 
 Strongest translations: III (formal), IV (formal), META (formal)
 
-Scan: `organvm trivium scan I <OTHER>` | Matrix: `organvm trivium matrix` | Synthesize: `organvm trivium synthesize`
+Scan: `organvm trivium scan I <OTHER>` | Matrix: `organvm trivium matrix` |
+Synthesize: `organvm trivium synthesize`
 
 <!-- ORGANVM:AUTO:END -->
 
@@ -346,4 +362,5 @@ This repository is a managed component of the ORGANVM meta-workspace.
 - **Orchestration:** Use `conductor patch` for system status and work queue.
 - **Lifecycle:** Follow the `FRAME -> SHAPE -> BUILD -> PROVE` workflow.
 - **Governance:** Promotions are managed via `conductor wip promote`.
-- **Intelligence:** Conductor MCP tools are available for routing and mission synthesis.
+- **Intelligence:** Conductor MCP tools are available for routing and mission
+  synthesis.

@@ -289,7 +289,8 @@ ______________________________________________________________________
 
 #### `demo-deployment.yml`
 
-**Purpose**: Wrapper workflow that triggers the reusable demo sandbox pipeline\
+**Purpose**: Wrapper workflow that triggers the reusable demo sandbox
+pipeline\
 **Triggers**:
 
 - Push to main/master (when `src/`, `public/`, `package*.json`,
@@ -309,7 +310,8 @@ ______________________________________________________________________
 #### `reusable/demo-sandbox.yml`
 
 **Purpose**: Reusable workflow implementing the full sandbox pipeline\
-**Jobs** (4 stages):
+**Jobs**
+(4 stages):
 
 1. **detect** — Auto-detects app type, framework, and optimal hosting provider
 1. **deploy** — Deploys the sandbox to the selected provider
@@ -336,7 +338,8 @@ full specification.
 
 **Purpose**: Listens for `demo-registry-update` repository_dispatch events and
 updates the central registry\
-**Triggers**: `repository_dispatch` (type: `demo-registry-update`)\
+**Triggers**: `repository_dispatch` (type:
+`demo-registry-update`)\
 **Actions**:
 
 - Updates `docs/_data/live_demos.yml` with the new sandbox entry

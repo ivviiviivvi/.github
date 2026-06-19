@@ -23,8 +23,8 @@ Every active repository should have:
 
 ## Enforcement
 
-> **TODO**: A local standards audit script (`./tools/audit_platform_standards.sh`)
-> is planned but not yet implemented. Until then, review README quality manually
-> against the criteria above.
+> **TODO**: A local standards audit script
+> (`./tools/audit_platform_standards.sh`) is planned but not yet implemented.
+> Until then, review README quality manually against the criteria above.
 
 Any exception should be tracked with owner and due date.

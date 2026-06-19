@@ -25,8 +25,8 @@ All three are injected automatically by the
    (`demo@example.com` / `demo1234`) — never connect to production identity
    providers.
 1. **Database seeds on startup.** The app runs its seeder automatically (or via
-   the `demo-data-seed-command` workflow input) the first time it starts in
-   demo mode.
+   the `demo-data-seed-command` workflow input) the first time it starts in demo
+   mode.
 1. **Banner is visible.** A non-dismissable banner warns users that data resets
    periodically.
 
@@ -142,8 +142,7 @@ For a repo maintainer adding demo sandbox support:
 - [ ] Stub all external API calls when `DEMO_MODE` is true
 - [ ] Add demo auth bypass when `DEMO_AUTH_BYPASS` is true
 - [ ] Add demo banner component when `DEMO_BANNER` is true
-- [ ] Copy
-  [demo-deployment.yml](../../.github/workflows/demo-deployment.yml) to
+- [ ] Copy [demo-deployment.yml](../../.github/workflows/demo-deployment.yml) to
   your repo's `.github/workflows/`
 - [ ] Push to `main` — the workflow auto-detects, deploys, and opens a badge PR
 - [ ] Merge the badge PR to show "Try Demo" in your README
