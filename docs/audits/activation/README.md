@@ -9,11 +9,11 @@ these audits answer a single question:
 
 ## Verdicts
 
-| Verdict      | Meaning                                                              |
-| ------------ | ------------------------------------------------------------------- |
-| `activate`   | Shipping evidence exists; promote / surface the repository.         |
-| `park`       | No shipping surface, but the repo is functioning as intended.       |
-| `retire`     | No shipping surface and no remaining role; decommission.            |
+| Verdict    | Meaning                                                       |
+| ---------- | ------------------------------------------------------------- |
+| `activate` | Shipping evidence exists; promote / surface the repository.   |
+| `park`     | No shipping surface, but the repo is functioning as intended. |
+| `retire`   | No shipping surface and no remaining role; decommission.      |
 
 ## Naming Convention
 
@@ -22,6 +22,6 @@ audit event date and `<issue>` is the tracking issue number.
 
 ## Records
 
-| Date       | Repository                  | Verdict | Issue                                            |
-| ---------- | --------------------------- | ------- | ------------------------------------------------ |
+| Date       | Repository                  | Verdict | Issue                                                           |
+| ---------- | --------------------------- | ------- | --------------------------------------------------------------- |
 | 2026-06-11 | `organvm-i-theoria/.github` | `park`  | [#447](https://github.com/organvm-i-theoria/.github/issues/447) |
