@@ -105,10 +105,10 @@ We use multiple tools to prevent secrets from being committed:
 detect-secrets scan --all-files
 
 # Update baseline after reviewing findings
-detect-secrets scan --update .secrets.baseline
+detect-secrets scan --update .config/.secrets.baseline
 
 # Audit findings
-detect-secrets audit .secrets.baseline
+detect-secrets audit .config/.secrets.baseline
 ```
 
 **Pre-commit Hook:**
@@ -121,7 +121,7 @@ The `detect-secrets` pre-commit hook automatically scans staged files:
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ["--baseline", ".secrets.baseline"]
+      args: ["--baseline", ".config/.secrets.baseline"]
 ```
 
 #### GitHub Secret Scanning
@@ -134,25 +134,25 @@ Enabled for all repositories:
 
 ### Managing Secrets Baseline
 
-The `.secrets.baseline` file contains known false positives:
+The `.config/.secrets.baseline` file contains known false positives:
 
 **Updating Baseline:**
 
 ```bash
 # After resolving findings, update baseline
-detect-secrets scan --update .secrets.baseline
+detect-secrets scan --update .config/.secrets.baseline
 
 # Review changes
-git diff .secrets.baseline
+git diff .config/.secrets.baseline
 
 # Commit if changes are valid
-git add .secrets.baseline
+git add .config/.secrets.baseline
 git commit -m "chore: update secrets baseline"
 ```
 
 **Auditing Process:**
 
-1. Run: `detect-secrets audit .secrets.baseline`
+1. Run: `detect-secrets audit .config/.secrets.baseline`
 1. For each finding:
    - Press `y` if it's a real secret (remove it!)
    - Press `n` if it's a false positive (keep in baseline)
@@ -183,7 +183,7 @@ If a secret is committed:
 1. **Remove from History**: Use `git filter-repo` or BFG Repo-Cleaner
 1. **Force Push**: Update remote repository
 1. **Notify Team**: Inform all contributors of the breach
-1. **Update Baseline**: Remove from `.secrets.baseline` if present
+1. **Update Baseline**: Remove from `.config/.secrets.baseline` if present
 1. **Audit Access**: Check for unauthorized access using the secret
 
 ______________________________________________________________________
@@ -442,7 +442,7 @@ Security-focused hooks in `.pre-commit-config.yaml`:
   rev: v1.4.0
   hooks:
     - id: detect-secrets
-      args: ["--baseline", ".secrets.baseline"]
+      args: ["--baseline", ".config/.secrets.baseline"]
 
 # Python security
 - repo: https://github.com/PyCQA/bandit

@@ -30,12 +30,12 @@ CHANGES MADE
 ================================================================================
 
 NEW CONFIGURATION FILES:
-  📄 .gitleaks.toml (2.5KB)
+  📄 .config/.gitleaks.toml (2.5KB)
      - Configures Gitleaks scanner
      - Allowlists documentation, examples, workflows
      - Defines patterns for placeholders
 
-  📄 .secrets.baseline (9.5KB)
+  📄 .config/.secrets.baseline (9.5KB)
      - Baseline for detect-secrets
      - 26 verified false positives across 20 files
      - All findings are in documentation/examples
@@ -43,8 +43,8 @@ NEW CONFIGURATION FILES:
 WORKFLOW FIXES:
   📄 .github/workflows/scan-for-secrets.yml
      - Removed "cache: 'pip'" causing failures
-     - Added .gitleaks.toml usage
-     - Added .secrets.baseline usage
+     - Added .config/.gitleaks.toml usage
+     - Added .config/.secrets.baseline usage
 
   �� .github/workflows/safeguard-5-secret-scanning.yml
      - Fixed Python setup (2 occurrences)
@@ -130,8 +130,8 @@ After Merging This PR:
   5. 📋 Close original security alert issue
 
 Managing Future False Positives:
-  1. Update .gitleaks.toml to add new allowlists
-  2. Regenerate .secrets.baseline when needed
+  1. Update .config/.gitleaks.toml to add new allowlists
+  2. Regenerate .config/.secrets.baseline when needed
   3. See docs/SECRET_SCANNING_GUIDE.md for details
 
 ================================================================================
@@ -139,8 +139,8 @@ FILES CHANGED IN THIS PR
 ================================================================================
 
 New Files:
-  .gitleaks.toml
-  .secrets.baseline
+  .config/.gitleaks.toml
+  .config/.secrets.baseline
   docs/SECRET_SCANNING_GUIDE.md
   docs/SECRET_SCANNING_RESOLUTION.md
 
