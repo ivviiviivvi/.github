@@ -46,10 +46,11 @@ We use three complementary tools to scan for secrets:
 
 ## Configuration Files
 
-### .gitleaks.toml
+### .config/.gitleaks.toml
 
 Configuration for Gitleaks scanner that defines:
 
+- **Default rules**: Built-in Gitleaks rules remain enabled
 - **Allowlist paths**: Files that are known to contain example patterns
 - **Allowlist regexes**: Patterns that are placeholders or examples
 - **Stop words**: Common words that indicate examples
@@ -62,7 +63,7 @@ Configuration for Gitleaks scanner that defines:
 - Agent files describing patterns
 - Test configurations
 
-### .secrets.baseline
+### .config/.secrets.baseline
 
 Baseline file for detect-secrets containing:
 
@@ -73,8 +74,13 @@ Baseline file for detect-secrets containing:
 Generated with:
 
 ```bash
-detect-secrets scan --all-files --force-use-all-plugins > .secrets.baseline
+detect-secrets scan --all-files --force-use-all-plugins \
+  --exclude-files '(^|/)(\.git|\.mypy_cache|\.pytest_cache|__pycache__|node_modules|\.venv|venv)/' \
+  > .config/.secrets.baseline
 ```
+
+The workflows compare new scan output against this baseline and alert only on
+findings that are not already recorded.
 
 ## Managing False Positives
 
@@ -86,7 +92,7 @@ detect-secrets scan --all-files --force-use-all-plugins > .secrets.baseline
    - Is it a pattern definition in the scanner itself?
    - Is it a placeholder like `xxx`, `example`, `your-token-here`?
 
-1. **Update .gitleaks.toml** to allowlist:
+1. **Update .config/.gitleaks.toml** to allowlist:
 
 ```toml
 # Add to allowlist.paths
@@ -100,14 +106,16 @@ regexes = [
 ]
 ```
 
-3. **Update .secrets.baseline** for detect-secrets:
+3. **Update .config/.secrets.baseline** for detect-secrets:
 
 ```bash
 # Regenerate baseline to include new false positives
-detect-secrets scan --all-files --force-use-all-plugins > .secrets.baseline
+detect-secrets scan --all-files --force-use-all-plugins \
+  --exclude-files '(^|/)(\.git|\.mypy_cache|\.pytest_cache|__pycache__|node_modules|\.venv|venv)/' \
+  > .config/.secrets.baseline
 
 # Or audit and update existing findings
-detect-secrets audit .secrets.baseline
+detect-secrets audit .config/.secrets.baseline
 ```
 
 4. **Commit both files** to the repository
@@ -218,7 +226,7 @@ If detect-secrets baseline regeneration fails:
 1. Ensure detect-secrets is installed: `pip install detect-secrets`
 1. Check file permissions
 1. Try clearing and regenerating:
-   `rm .secrets.baseline && detect-secrets scan ...`
+   `rm .config/.secrets.baseline && detect-secrets scan ...`
 1. Update detect-secrets: `pip install --upgrade detect-secrets`
 
 ## Workflow Architecture
@@ -268,18 +276,18 @@ For questions or issues with secret scanning:
 
 1. Check this guide first
 1. Review workflow logs in GitHub Actions
-1. Check `.gitleaks.toml` and `.secrets.baseline` configuration
+1. Check `.config/.gitleaks.toml` and `.config/.secrets.baseline` configuration
 1. Open an issue with the `security` label
 1. Contact the security team: @security-team
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-12-25\
+**Last Updated**: 2026-06-18\
 **Maintained By**: Security Team\
 **Related
 Files**:
 
-- `.gitleaks.toml`
-- `.secrets.baseline`
+- `.config/.gitleaks.toml`
+- `.config/.secrets.baseline`
 - `.github/workflows/scan-for-secrets.yml`
 - `.github/workflows/safeguard-5-secret-scanning.yml`
