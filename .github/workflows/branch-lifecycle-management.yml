@@ -33,6 +33,7 @@ jobs:
         VALID_PATTERNS=(
           "^(exploration|development|testing|staging|production|maintenance|archive)/.*"
           "^(feature|fix|hotfix|release|refactor|docs|test|chore)/.*"
+          "^(jules|bolt|palette|sentinel|copilot|renovate|limen|claude|gemini|cursor|codex|devin|sweep|gpt)[/-][a-z0-9._/-]+$"
           "^main$"
           "^master$"
           "^develop$"

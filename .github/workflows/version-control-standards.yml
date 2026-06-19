@@ -37,6 +37,13 @@ jobs:
         BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
         echo "Branch name: $BRANCH_NAME"
 
+        AUTOMATION_BRANCH_PATTERN='^(dependabot/|(jules|bolt|palette|sentinel|copilot|renovate|limen|claude|gemini|cursor|codex|devin|sweep|gpt)[/-][a-z0-9._/-]+$)'
+        IS_AUTOMATED_BRANCH=false
+        if [[ "$BRANCH_NAME" =~ $AUTOMATION_BRANCH_PATTERN ]]; then
+          IS_AUTOMATED_BRANCH=true
+        fi
+        echo "is_automated_branch=$IS_AUTOMATED_BRANCH" >> "$GITHUB_OUTPUT"
+
         # Skip validation for protected branches and push events to main
         if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]] || [[ "$BRANCH_NAME" == "develop" ]]; then
           echo "Skipping validation for protected branch: $BRANCH_NAME"
@@ -65,6 +72,8 @@ jobs:
           "^archive/[a-z0-9-]+/[a-z0-9-]+$"
           # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
           "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
+          # Patterns for automated/bot branches (dash- or slash-separated)
+          "^(jules|bolt|palette|sentinel|copilot|renovate|limen|claude|gemini|cursor|codex|devin|sweep|gpt)[/-][a-z0-9._/-]+$"
         )
 
         VALID=false
@@ -91,7 +100,7 @@ jobs:
 
     - name: Validate commit messages
       id: validate-commits
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && steps.validate-branch.outputs.is_automated_branch != 'true'
       env:
         BASE_REF: ${{ github.base_ref }}
       run: |
