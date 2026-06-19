@@ -57,7 +57,8 @@ baseline contains tracked repository false positives only; local `.git/` and
 
 ### Changes Made
 
-1. **Created `.config/.gitleaks.toml`** - Configuration file for Gitleaks scanner
+1. **Created `.config/.gitleaks.toml`** - Configuration file for Gitleaks
+   scanner
 
    - Extends the built-in Gitleaks rules
    - Allowlists documentation files with example patterns
@@ -108,7 +109,8 @@ docs/SECRET_SCANNING_GUIDE.md                     [NEW]
 ✅ All workflow YAML files are syntactically valid\
 ✅ `.config/.gitleaks.toml`
 configuration is valid TOML\
-✅ `.config/.secrets.baseline` contains verified false positives\
+✅ `.config/.secrets.baseline` contains verified
+false positives\
 ✅ No actual secrets detected in repository
 
 ### Next Steps

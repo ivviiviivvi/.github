@@ -276,8 +276,7 @@ For questions or issues with secret scanning:
 
 1. Check this guide first
 1. Review workflow logs in GitHub Actions
-1. Check `.config/.gitleaks.toml` and `.config/.secrets.baseline`
-   configuration
+1. Check `.config/.gitleaks.toml` and `.config/.secrets.baseline` configuration
 1. Open an issue with the `security` label
 1. Contact the security team: @security-team
 
