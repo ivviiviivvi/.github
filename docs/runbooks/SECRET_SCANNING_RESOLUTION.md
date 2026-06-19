@@ -19,6 +19,34 @@ scanning tools reported clean results**:
 - ✅ **Gitleaks**: Clean (no secrets found)
 - ✅ **detect-secrets**: Clean (no secrets found)
 
+## 2026-06 Follow-up Triage (LIMEN-086)
+
+Issue [#441](https://github.com/organvm-i-theoria/.github/issues/441) reported a
+repeatable daily alert from 2026-06-02 through 2026-06-07:
+
+- ✅ **TruffleHog**: Clean
+- ⚠️ **Gitleaks**: 6862 potential leaks
+- ⚠️ **detect-secrets**: 43 files with secrets
+
+This was a scanner configuration mismatch, not evidence of active leaked
+credentials. The repository stores scanner state under `.config/`, but the
+scheduled workflow only looked for root-level `.gitleaks.toml` and
+`.secrets.baseline`. As a result, Gitleaks ran with its default rules, scanned
+`.config/.secrets.baseline` as ordinary source, and reported thousands of hashed
+baseline entries plus documentation/test placeholders. Local verification with
+`.config/.gitleaks.toml` produced zero Gitleaks findings.
+
+### Follow-up Fix
+
+1. Updated the secret-scanning workflows to use:
+   - `.config/.gitleaks.toml`
+   - `.config/.secrets.baseline`
+1. Excluded `.config/.secrets.baseline` from fresh detect-secrets scans.
+1. Removed verbose scanner output that printed candidate values into workflow
+   logs.
+1. Fixed the Safeguard 5 Gitleaks step so an empty JSON report (`[]`) is counted
+   as clean instead of as a finding.
+
 ### Root Cause
 
 The workflow failed due to a **Python setup error**, not because secrets were
@@ -45,14 +73,15 @@ A manual scan of the repository confirmed:
 
 ### Changes Made
 
-1. **Created `.gitleaks.toml`** - Configuration file for Gitleaks scanner
+1. **Created `.config/.gitleaks.toml`** - Configuration file for Gitleaks
+   scanner
 
    - Allowlists documentation files with example patterns
    - Allowlists workflow files that define patterns
    - Defines stop words for placeholders (example, xxx, etc.)
    - Custom rules for API keys, tokens, and private keys
 
-1. **Created `.secrets.baseline`** - Baseline file for detect-secrets
+1. **Created `.config/.secrets.baseline`** - Baseline file for detect-secrets
 
    - Generated with all plugins enabled
    - Contains 26 verified false positives across 20 files
@@ -66,8 +95,8 @@ A manual scan of the repository confirmed:
 
 1. **Updated Workflows**
 
-   - Both workflows now use `.gitleaks.toml` configuration
-   - Both workflows now use `.secrets.baseline` for comparison
+   - Both workflows now use `.config/.gitleaks.toml` configuration
+   - Both workflows now use `.config/.secrets.baseline` for comparison
    - Better error handling and clearer output messages
 
 1. **Created Documentation**
@@ -81,8 +110,8 @@ A manual scan of the repository confirmed:
 ### Files Changed
 
 ```
-.gitleaks.toml                                    [NEW]
-.secrets.baseline                                 [NEW]
+.config/.gitleaks.toml                            [NEW]
+.config/.secrets.baseline                         [NEW]
 docs/SECRET_SCANNING_GUIDE.md                     [NEW]
 .github/workflows/scan-for-secrets.yml            [MODIFIED]
 .github/workflows/safeguard-5-secret-scanning.yml [MODIFIED]
@@ -93,10 +122,10 @@ docs/SECRET_SCANNING_GUIDE.md                     [NEW]
 ### Configuration Validation
 
 ✅ All workflow YAML files are syntactically valid\
-✅ `.gitleaks.toml`
+✅ `.config/.gitleaks.toml`
 configuration is valid TOML\
-✅ `.secrets.baseline` contains 26 verified false
-positives\
+✅ `.config/.secrets.baseline` contains verified
+false positives\
 ✅ No actual secrets detected in repository
 
 ### Next Steps
@@ -186,7 +215,7 @@ fixed\
 
    - Review scan results weekly
    - Update baseline when adding new examples
-   - Keep `.gitleaks.toml` rules current
+   - Keep `.config/.gitleaks.toml` rules current
    - Monitor workflow success rate
 
 ## References
