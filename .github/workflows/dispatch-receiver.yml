@@ -4,29 +4,29 @@ name: Dispatch Receiver
 on:
   repository_dispatch:
     types:
-    - organ-health-audit
-    - promotion-recommended
-    - essay-published
-    - distribution-requested
-    - governance-updated
-    - system-graph-updated
+      - organ-health-audit
+      - promotion-recommended
+      - essay-published
+      - distribution-requested
+      - governance-updated
+      - system-graph-updated
 
 jobs:
   handle:
     runs-on: ubuntu-latest
     steps:
-    - name: Log received event
-      run: |
-        echo "Received event: ${{ github.event.action }}"
-        echo "Payload: ${{ toJSON(github.event.client_payload) }}"
+      - name: Log received event
+        run: |
+          echo "Received event: ${{ github.event.action }}"
+          echo "Payload: ${{ toJSON(github.event.client_payload) }}"
 
-    - name: Handle promotion recommendation
-      if: github.event.action == 'promotion-recommended'
-      run: |
-        echo "Promotion recommended for this org"
-        echo "Details: ${{ github.event.client_payload.details }}"
+      - name: Handle promotion recommendation
+        if: github.event.action == 'promotion-recommended'
+        run: |
+          echo "Promotion recommended for this org"
+          echo "Details: ${{ github.event.client_payload.details }}"
 
-    - name: Handle governance update
-      if: github.event.action == 'governance-updated'
-      run: |
-        echo "Governance rules updated — compliance check needed"
+      - name: Handle governance update
+        if: github.event.action == 'governance-updated'
+        run: |
+          echo "Governance rules updated — compliance check needed"

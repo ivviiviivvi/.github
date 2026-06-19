@@ -24,7 +24,7 @@ jobs:
     if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
     steps:
     - name: Add needs-triage label
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           await github.rest.issues.addLabels({
@@ -35,7 +35,7 @@ jobs:
           });
 
     - name: Add comment with triage info
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           await github.rest.issues.createComment({
@@ -65,7 +65,7 @@ jobs:
     if: github.event_name == 'issues' && github.event.action == 'opened'
     steps:
     - name: Analyze and label
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           const issue = context.payload.issue;
@@ -132,7 +132,7 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
     - name: Find untriaged issues
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           const TWO_DAYS_MS = 48 * 60 * 60 * 1000;
@@ -183,7 +183,7 @@ jobs:
     if: github.event_name == 'issues' && github.event.action == 'labeled'
     steps:
     - name: Check if triage is complete
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           const issue = context.payload.issue;

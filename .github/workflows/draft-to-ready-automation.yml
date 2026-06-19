@@ -40,7 +40,7 @@ jobs:
 
     - name: Get PR Details
       id: pr-details
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
       with:
@@ -96,7 +96,7 @@ jobs:
     - name: Check if PR should be converted
       id: should-convert
       if: steps.pr-details.outputs.number && steps.pr-details.outputs.draft == 'true'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         INPUT_FORCE: ${{ github.event.inputs.force }}
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
@@ -150,7 +150,7 @@ jobs:
     - name: Check Status Checks
       id: check-status
       if: steps.should-convert.outputs.should-convert == 'true'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         INPUT_FORCE: ${{ github.event.inputs.force }}
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
@@ -219,7 +219,7 @@ jobs:
       if: |
         steps.should-convert.outputs.should-convert == 'true' &&
         steps.check-status.outputs.should-proceed == 'true'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -253,7 +253,7 @@ jobs:
       if: |
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
         IS_TRUSTED_AGENT: ${{ steps.should-convert.outputs.is-trusted-agent }}
@@ -295,7 +295,7 @@ jobs:
       if: |
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -316,7 +316,7 @@ jobs:
       if: |
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -383,7 +383,7 @@ jobs:
       if: |
         steps.convert.outputs.converted == 'true' ||
         (steps.pr-details.outputs.is_ready_for_review_event == 'true' && steps.pr-details.outputs.draft == 'false')
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -487,7 +487,7 @@ jobs:
 
     steps:
     - name: Find and Process Draft PRs
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           console.log('🔍 Scanning for draft PRs that should be converted...');

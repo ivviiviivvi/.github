@@ -153,7 +153,7 @@ jobs:
 
     - name: Upload today's schedule
       if: steps.check-today.outputs.repos_today != '0'
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # ratchet:actions/upload-artifact@v7.0.0
       with:
         name: todays-schedule
         path: repos_today.txt
@@ -300,7 +300,7 @@ jobs:
 
     - name: Create alert if quota high
       if: env.quota_warning == 'true'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
       with:
         script: |
           await github.rest.issues.create({

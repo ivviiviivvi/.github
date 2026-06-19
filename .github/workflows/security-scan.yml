@@ -94,7 +94,7 @@ jobs:
         # Scan current filesystem only (--no-git), not full git history
         # History scanning finds thousands of false positives from old commits
         if [ -f ".config/.gitleaks.toml" ]; then
-          gitleaks detect --source . --no-git --config .config/.gitleaks.toml --redact=100 --no-banner --no-color
+          gitleaks detect --source . --no-git --config .config/.gitleaks.toml --verbose
         else
-          gitleaks detect --source . --no-git --redact=100 --no-banner --no-color
+          gitleaks detect --source . --no-git --verbose
         fi
