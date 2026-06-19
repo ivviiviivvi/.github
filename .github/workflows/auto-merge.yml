@@ -66,7 +66,7 @@ jobs:
 
     - name: Get PR details
       id: pr-details
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         INPUT_PR_NUMBER: ${{ github.event.inputs.pr_number }}
       with:
@@ -100,7 +100,7 @@ jobs:
     - name: Check auto-merge eligibility
       id: check-eligibility
       if: steps.pr-details.outputs.number
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
         PR_DRAFT: ${{ steps.pr-details.outputs.draft }}
@@ -162,7 +162,7 @@ jobs:
     - name: Check merge conflicts
       id: check-conflicts
       if: steps.check-eligibility.outputs.eligible == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -191,7 +191,7 @@ jobs:
     - name: Auto-fix merge conflicts
       id: fix-conflicts
       if: steps.check-conflicts.outputs.has-conflicts == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
         HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
@@ -238,7 +238,7 @@ jobs:
       if: |
         steps.check-eligibility.outputs.eligible == 'true' &&
         (steps.check-conflicts.outputs.has-conflicts == 'false' || steps.fix-conflicts.outputs.fixed == 'true')
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -286,7 +286,7 @@ jobs:
     - name: Check required approvals
       id: check-approvals
       if: steps.check-status.outputs.all-passed == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -343,7 +343,7 @@ jobs:
         steps.check-eligibility.outputs.eligible == 'true' &&
         steps.check-status.outputs.all-passed == 'true' &&
         steps.check-approvals.outputs.approved == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ steps.pr-details.outputs.number }}
       with:
@@ -397,7 +397,7 @@ jobs:
 
     - name: Cleanup merged branch
       if: steps.enable-auto-merge.outputs.merged == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         HEAD_BRANCH: ${{ steps.pr-details.outputs.head }}
       with:
@@ -526,7 +526,7 @@ jobs:
 
     - name: Validate failure cause
       id: validate
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}
         MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
@@ -595,7 +595,7 @@ jobs:
     - name: Revert merge commit
       id: revert
       if: steps.validate.outputs.should_revert == 'true'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         MERGE_SHA: ${{ needs.auto-merge.outputs.merge-sha }}
         PR_NUMBER: ${{ needs.auto-merge.outputs.pr-number }}

@@ -50,7 +50,7 @@ jobs:
 
     - name: Find Ready PRs
       id: find-prs
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
@@ -149,7 +149,7 @@ jobs:
 
     - name: Merge Ready PRs
       if: steps.find-prs.outputs.count > 0
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         DRY_RUN: ${{ github.event.inputs.dry_run }}
         READY_PRS: ${{ steps.find-prs.outputs.prs }}
@@ -214,7 +214,7 @@ jobs:
 
     steps:
     - name: Find and Convert Draft PRs
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
@@ -326,7 +326,7 @@ jobs:
         fetch-depth: 0
 
     - name: Delete Merged Branches
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:
@@ -437,7 +437,7 @@ jobs:
 
     steps:
     - name: Find and Close Stale PRs
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd  # ratchet:actions/github-script@v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
       env:
         DRY_RUN: ${{ github.event.inputs.dry_run }}
       with:

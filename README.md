@@ -107,12 +107,12 @@ collections — all compatible with GitHub Copilot.
 
 Default community health files inherited by all org repos:
 
-| File                                     | Purpose                 |
-| ---------------------------------------- | ----------------------- |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards     |
-| [CONTRIBUTING.md](CONTRIBUTING.md)       | Contribution guidelines |
-| [SECURITY.md](SECURITY.md)               | Vulnerability reporting |
-| [SUPPORT.md](SUPPORT.md)                 | Getting help            |
+| File                                       | Purpose                              |
+| ------------------------------------------ | ------------------------------------ |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)   | Community standards                  |
+| [CONTRIBUTING.md](CONTRIBUTING.md)         | Contribution guidelines              |
+| [SECURITY.md](SECURITY.md)                 | Vulnerability reporting              |
+| [SUPPORT.md](SUPPORT.md)                   | Getting help                         |
 | [README_STANDARDS.md](README_STANDARDS.md) | README structure and depth standards |
 
 Issue templates, PR templates, and workflow templates are also provided for

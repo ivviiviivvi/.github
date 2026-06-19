@@ -289,12 +289,13 @@ ______________________________________________________________________
 
 #### `demo-deployment.yml`
 
-**Purpose**: Wrapper workflow that triggers the reusable demo sandbox pipeline\
+**Purpose**: Wrapper workflow that triggers the reusable demo sandbox
+pipeline\
 **Triggers**:
 
 - Push to main/master (when `src/`, `public/`, `package*.json`,
   `requirements*.txt`, `Dockerfile`, or `docker-compose.yml` change)
-- Manual via workflow\_dispatch (with optional overrides for app-type,
+- Manual via workflow_dispatch (with optional overrides for app-type,
   hosting-provider, and badge injection)
 
 **Inputs** (all optional):
@@ -309,7 +310,8 @@ ______________________________________________________________________
 #### `reusable/demo-sandbox.yml`
 
 **Purpose**: Reusable workflow implementing the full sandbox pipeline\
-**Jobs** (4 stages):
+**Jobs**
+(4 stages):
 
 1. **detect** — Auto-detects app type, framework, and optimal hosting provider
 1. **deploy** — Deploys the sandbox to the selected provider
@@ -320,23 +322,24 @@ ______________________________________________________________________
 
 **Provider Selection**:
 
-| Provider | Best For |
-| --- | --- |
-| Vercel | Frontend / static / Next.js apps |
-| Cloudflare Pages | Static sites, JAMstack |
-| Render | Backend / fullstack / Docker apps |
-| Codespaces | Complex environments, monorepos |
+| Provider         | Best For                          |
+| ---------------- | --------------------------------- |
+| Vercel           | Frontend / static / Next.js apps  |
+| Cloudflare Pages | Static sites, JAMstack            |
+| Render           | Backend / fullstack / Docker apps |
+| Codespaces       | Complex environments, monorepos   |
 
-**DEMO\_MODE Convention**: The sandbox sets `DEMO_MODE=true` as an environment
+**DEMO_MODE Convention**: The sandbox sets `DEMO_MODE=true` as an environment
 variable. Apps should check this to load seed data, disable destructive
 operations, and show demo banners. See `docs/conventions/DEMO_MODE.md` for the
 full specification.
 
 #### `update-demo-registry.yml`
 
-**Purpose**: Listens for `demo-registry-update` repository\_dispatch events and
+**Purpose**: Listens for `demo-registry-update` repository_dispatch events and
 updates the central registry\
-**Triggers**: `repository_dispatch` (type: `demo-registry-update`)\
+**Triggers**: `repository_dispatch` (type:
+`demo-registry-update`)\
 **Actions**:
 
 - Updates `docs/_data/live_demos.yml` with the new sandbox entry

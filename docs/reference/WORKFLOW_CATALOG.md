@@ -671,8 +671,8 @@ ______________________________________________________________________
 ### demo-deployment.yml
 
 **Purpose**: Wrapper workflow that deploys org repo apps to sandbox
-environments. Calls `reusable/demo-sandbox.yml` to auto-detect app type,
-select a hosting provider, deploy, and inject a README badge.
+environments. Calls `reusable/demo-sandbox.yml` to auto-detect app type, select
+a hosting provider, deploy, and inject a README badge.
 
 | Property     | Value                           |
 | ------------ | ------------------------------- |
@@ -930,18 +930,18 @@ selects a hosting provider (Vercel, Cloudflare Pages, Render, or Codespaces),
 deploys with `DEMO_MODE=true`, optionally injects a README badge, and dispatches
 a registry update to the `.github` repo.
 
-| Input                    | Type    | Default        | Description                           |
-| ------------------------ | ------- | -------------- | ------------------------------------- |
-| `app-type`               | string  | '' (auto)      | Application type override             |
-| `hosting-provider`       | string  | '' (auto)      | Hosting provider override             |
-| `build-command`          | string  | '' (auto)      | Custom build command                  |
-| `start-command`          | string  | '' (auto)      | Custom start command                  |
-| `node-version`           | string  | '20'           | Node.js version for frontend builds   |
-| `python-version`         | string  | '3.12'         | Python version for backend builds     |
-| `demo-data-seed-command` | string  | ''             | Command to seed demo data at runtime  |
-| `inject-badge`           | boolean | true           | Create PR to add demo badge to README |
-| `update-registry`        | boolean | true           | Dispatch registry update event        |
-| `badge-style`            | string  | 'for-the-badge'| Shield.io badge style                 |
+| Input                    | Type    | Default         | Description                           |
+| ------------------------ | ------- | --------------- | ------------------------------------- |
+| `app-type`               | string  | '' (auto)       | Application type override             |
+| `hosting-provider`       | string  | '' (auto)       | Hosting provider override             |
+| `build-command`          | string  | '' (auto)       | Custom build command                  |
+| `start-command`          | string  | '' (auto)       | Custom start command                  |
+| `node-version`           | string  | '20'            | Node.js version for frontend builds   |
+| `python-version`         | string  | '3.12'          | Python version for backend builds     |
+| `demo-data-seed-command` | string  | ''              | Command to seed demo data at runtime  |
+| `inject-badge`           | boolean | true            | Create PR to add demo badge to README |
+| `update-registry`        | boolean | true            | Dispatch registry update event        |
+| `badge-style`            | string  | 'for-the-badge' | Shield.io badge style                 |
 
 **Outputs**: `sandbox_url`, `deployment_id`
 
