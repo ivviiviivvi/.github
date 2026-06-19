@@ -3,7 +3,7 @@
   "name": "Staggered Scheduling for Batch Operations",
   "identifier": "urn:uuid:0a4d9035-c1c8-588d-9b5e-a75be5d99ab5",
   "version": "1.0.0",
-  "description": "General-purpose workflow. Triggered by schedule, workflow_dispatch, executes 4 job(s).",
+  "description": "Quota-aware staggered walkthrough scheduler that reuses active schedules, catches up overdue batches, and dispatches repository workflows with limited concurrency. Triggered by schedule, workflow_dispatch, executes 4 job(s).",
   "functioncalled": {
     "canonical": "logic.general.staggered.yml",
     "layer": "logic",
@@ -16,6 +16,6 @@
   "runtimePlatform": "GitHub Actions",
   "triggers": ["schedule", "workflow_dispatch"],
   "dateCreated": "2024-01-01T00:00:00Z",
-  "dateModified": "2026-01-31T00:00:00Z",
+  "dateModified": "2026-06-18T00:00:00Z",
   "dc:subject": ["general", "logic", "manual", "scheduled"]
 }
