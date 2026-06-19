@@ -21,8 +21,7 @@ scanning tools reported clean results**:
 
 ## 2026-06 Follow-up Triage (LIMEN-086)
 
-Issue
-[#441](https://github.com/organvm-i-theoria/.github/issues/441) reported a
+Issue [#441](https://github.com/organvm-i-theoria/.github/issues/441) reported a
 repeatable daily alert from 2026-06-02 through 2026-06-07:
 
 - ✅ **TruffleHog**: Clean
@@ -33,9 +32,9 @@ This was a scanner configuration mismatch, not evidence of active leaked
 credentials. The repository stores scanner state under `.config/`, but the
 scheduled workflow only looked for root-level `.gitleaks.toml` and
 `.secrets.baseline`. As a result, Gitleaks ran with its default rules, scanned
-`.config/.secrets.baseline` as ordinary source, and reported thousands of
-hashed baseline entries plus documentation/test placeholders. Local
-verification with `.config/.gitleaks.toml` produced zero Gitleaks findings.
+`.config/.secrets.baseline` as ordinary source, and reported thousands of hashed
+baseline entries plus documentation/test placeholders. Local verification with
+`.config/.gitleaks.toml` produced zero Gitleaks findings.
 
 ### Follow-up Fix
 
@@ -45,8 +44,8 @@ verification with `.config/.gitleaks.toml` produced zero Gitleaks findings.
 1. Excluded `.config/.secrets.baseline` from fresh detect-secrets scans.
 1. Removed verbose scanner output that printed candidate values into workflow
    logs.
-1. Fixed the Safeguard 5 Gitleaks step so an empty JSON report (`[]`) is
-   counted as clean instead of as a finding.
+1. Fixed the Safeguard 5 Gitleaks step so an empty JSON report (`[]`) is counted
+   as clean instead of as a finding.
 
 ### Root Cause
 
@@ -74,7 +73,8 @@ A manual scan of the repository confirmed:
 
 ### Changes Made
 
-1. **Created `.config/.gitleaks.toml`** - Configuration file for Gitleaks scanner
+1. **Created `.config/.gitleaks.toml`** - Configuration file for Gitleaks
+   scanner
 
    - Allowlists documentation files with example patterns
    - Allowlists workflow files that define patterns
@@ -124,8 +124,8 @@ docs/SECRET_SCANNING_GUIDE.md                     [NEW]
 ✅ All workflow YAML files are syntactically valid\
 ✅ `.config/.gitleaks.toml`
 configuration is valid TOML\
-✅ `.config/.secrets.baseline` contains verified false
-positives\
+✅ `.config/.secrets.baseline` contains verified
+false positives\
 ✅ No actual secrets detected in repository
 
 ### Next Steps
