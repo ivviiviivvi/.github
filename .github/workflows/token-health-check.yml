@@ -27,7 +27,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # ratchet:actions/checkout@v7.0.0
 
     - name: Set up Python
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
@@ -46,7 +46,7 @@ jobs:
       run: echo "has_token=$HAS_TOKEN" >> $GITHUB_OUTPUT
 
     - name: Set up 1Password CLI
-      uses: 1password/install-cli-action@8d006a0d0a4fd505af7f7ce589e7f768385ff5e4  # ratchet:3.0.0password/install-cli-action@v3.0.0
+      uses: 1password/install-cli-action@a5215d3a7f75c1629216c465ea9ab3ab399c4b71  # ratchet:4.0.0password/install-cli-action@v4.0.0
       if: steps.check-op.outputs.has_token == 'true'
 
     - name: Validate tokens
