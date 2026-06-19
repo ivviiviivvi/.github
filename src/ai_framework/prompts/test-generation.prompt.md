@@ -1,23 +1,26 @@
----
+______________________________________________________________________
+
 name: Test Generation
 description: Generate comprehensive test suites including unit, integration, and edge case tests.
 category: testing
 author: ai-framework
 version: 1.0.0
 tags:
-  - testing
-  - unit-tests
-  - integration-tests
-  - edge-cases
-  - tdd
-  - coverage
-variables:
-  - code_to_test
-  - language
-  - test_framework
-  - coverage_requirements
-updated: 2026-01-30
----
+
+- testing
+- unit-tests
+- integration-tests
+- edge-cases
+- tdd
+- coverage
+  variables:
+- code_to_test
+- language
+- test_framework
+- coverage_requirements
+  updated: 2026-01-30
+
+______________________________________________________________________
 
 # Test Generation Prompt
 

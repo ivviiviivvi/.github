@@ -1,7 +1,6 @@
----
-name: PR Branch Cleanup
-description: Deep analysis and cleanup of pull requests, branches, and related artifacts to maintain optimal repository health and hygiene.
----
+______________________________________________________________________
+
+## name: PR Branch Cleanup description: Deep analysis and cleanup of pull requests, branches, and related artifacts to maintain optimal repository health and hygiene.
 
 # PR Branch Cleanup Agent
 

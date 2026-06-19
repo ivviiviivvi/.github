@@ -1,7 +1,6 @@
----
-name: Data Forensics
-description: Data Forensics Agent - Investigates data issues, security breaches, audit trails, and compliance violations with advanced analytical capabilities
----
+______________________________________________________________________
+
+## name: Data Forensics description: Data Forensics Agent - Investigates data issues, security breaches, audit trails, and compliance violations with advanced analytical capabilities
 
 # Data Forensics Agent
 

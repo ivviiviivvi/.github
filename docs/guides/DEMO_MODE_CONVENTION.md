@@ -6,11 +6,11 @@ synthetic data, stubbed external services, and simplified auth.
 
 ## Environment Variables
 
-| Variable | Purpose |
-|---|---|
-| `DEMO_MODE=true` | Master flag — activates all sandbox behaviors |
-| `DEMO_BANNER=true` | Show a persistent "Demo Environment" banner in the UI |
-| `DEMO_AUTH_BYPASS=true` | Use pre-seeded demo credentials instead of real auth |
+| Variable                | Purpose                                               |
+| ----------------------- | ----------------------------------------------------- |
+| `DEMO_MODE=true`        | Master flag — activates all sandbox behaviors         |
+| `DEMO_BANNER=true`      | Show a persistent "Demo Environment" banner in the UI |
+| `DEMO_AUTH_BYPASS=true` | Use pre-seeded demo credentials instead of real auth  |
 
 All three are injected automatically by the
 [demo-sandbox reusable workflow](../../.github/workflows/reusable/demo-sandbox.yml).
@@ -19,15 +19,15 @@ All three are injected automatically by the
 
 1. **No mock data files in the repo.** Demo data is generated at runtime using
    factories / faker / seed scripts gated behind `DEMO_MODE`.
-2. **External APIs stub locally.** HTTP calls to third-party services return
+1. **External APIs stub locally.** HTTP calls to third-party services return
    canned responses when `DEMO_MODE` is set.
-3. **Auth is simplified.** A hardcoded demo user is available
+1. **Auth is simplified.** A hardcoded demo user is available
    (`demo@example.com` / `demo1234`) — never connect to production identity
    providers.
-4. **Database seeds on startup.** The app runs its seeder automatically (or via
+1. **Database seeds on startup.** The app runs its seeder automatically (or via
    the `demo-data-seed-command` workflow input) the first time it starts in
    demo mode.
-5. **Banner is visible.** A non-dismissable banner warns users that data resets
+1. **Banner is visible.** A non-dismissable banner warns users that data resets
    periodically.
 
 ## Implementation Examples
@@ -143,8 +143,8 @@ For a repo maintainer adding demo sandbox support:
 - [ ] Add demo auth bypass when `DEMO_AUTH_BYPASS` is true
 - [ ] Add demo banner component when `DEMO_BANNER` is true
 - [ ] Copy
-      [demo-deployment.yml](../../.github/workflows/demo-deployment.yml) to
-      your repo's `.github/workflows/`
+  [demo-deployment.yml](../../.github/workflows/demo-deployment.yml) to
+  your repo's `.github/workflows/`
 - [ ] Push to `main` — the workflow auto-detects, deploys, and opens a badge PR
 - [ ] Merge the badge PR to show "Try Demo" in your README
 
@@ -152,25 +152,25 @@ For a repo maintainer adding demo sandbox support:
 
 The reusable workflow auto-selects a provider based on app type:
 
-| App Type | Default Provider | Alternatives |
-|---|---|---|
-| `frontend` / `static` | Cloudflare Pages | Vercel |
-| `backend` | Render | — |
-| `fullstack` | Render | — |
-| `cli-library` / unknown | Codespaces deep link | — |
+| App Type                | Default Provider     | Alternatives |
+| ----------------------- | -------------------- | ------------ |
+| `frontend` / `static`   | Cloudflare Pages     | Vercel       |
+| `backend`               | Render               | —            |
+| `fullstack`             | Render               | —            |
+| `cli-library` / unknown | Codespaces deep link | —            |
 
 Override via the `hosting-provider` input in the wrapper workflow.
 
 ## Required Org Secrets
 
-| Secret | Provider | Purpose |
-|---|---|---|
-| `VERCEL_TOKEN` | Vercel | Deploy frontend apps |
-| `VERCEL_ORG_ID` | Vercel | Team/org scope |
-| `RENDER_API_KEY` | Render | Deploy backend/fullstack apps |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare | Deploy static sites |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare | Account scope |
-| `REGISTRY_PAT` | GitHub | Write to `.github` repo registry |
+| Secret                  | Provider   | Purpose                          |
+| ----------------------- | ---------- | -------------------------------- |
+| `VERCEL_TOKEN`          | Vercel     | Deploy frontend apps             |
+| `VERCEL_ORG_ID`         | Vercel     | Team/org scope                   |
+| `RENDER_API_KEY`        | Render     | Deploy backend/fullstack apps    |
+| `CLOUDFLARE_API_TOKEN`  | Cloudflare | Deploy static sites              |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare | Account scope                    |
+| `REGISTRY_PAT`          | GitHub     | Write to `.github` repo registry |
 
 ## Data Lifecycle
 

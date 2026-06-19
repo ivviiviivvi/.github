@@ -1,22 +1,25 @@
----
+______________________________________________________________________
+
 name: Code Review
 description: Comprehensive code review focusing on security, performance, and maintainability.
 category: review
 author: ai-framework
 version: 1.0.0
 tags:
-  - code-review
-  - security
-  - performance
-  - maintainability
-  - best-practices
-variables:
-  - code_diff
-  - file_path
-  - language
-  - context
-updated: 2026-01-30
----
+
+- code-review
+- security
+- performance
+- maintainability
+- best-practices
+  variables:
+- code_diff
+- file_path
+- language
+- context
+  updated: 2026-01-30
+
+______________________________________________________________________
 
 # Code Review Prompt
 

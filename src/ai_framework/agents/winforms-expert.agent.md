@@ -1,7 +1,6 @@
----
-name: WinForms Expert
-description: Support development of .NET (OOP) WinForms Designer compatible Apps.
----
+______________________________________________________________________
+
+## name: WinForms Expert description: Support development of .NET (OOP) WinForms Designer compatible Apps.
 
 ## Critical Generic WinForms Issue: Dealing with Two Code Contexts
 

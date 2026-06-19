@@ -1,7 +1,6 @@
----
-name: neon-migration-specialist
-description: Safe Postgres migrations with zero-downtime using Neon's branching workflow. Test schema changes in isolated database branches, validate thoroughly, then apply to production.
----
+______________________________________________________________________
+
+## name: neon-migration-specialist description: Safe Postgres migrations with zero-downtime using Neon's branching workflow. Test schema changes in isolated database branches, validate thoroughly, then apply to production.
 
 # Neon Database Migration Specialist
 

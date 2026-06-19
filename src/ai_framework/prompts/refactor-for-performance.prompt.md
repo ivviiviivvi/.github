@@ -1,22 +1,25 @@
----
+______________________________________________________________________
+
 name: Refactor for Performance
 description: Analyze code for performance bottlenecks and suggest optimizations.
 category: optimization
 author: ai-framework
 version: 1.0.0
 tags:
-  - performance
-  - optimization
-  - refactoring
-  - complexity
-  - bottleneck
-variables:
-  - code_snippet
-  - language
-  - runtime_context
-  - performance_requirements
-updated: 2026-01-30
----
+
+- performance
+- optimization
+- refactoring
+- complexity
+- bottleneck
+  variables:
+- code_snippet
+- language
+- runtime_context
+- performance_requirements
+  updated: 2026-01-30
+
+______________________________________________________________________
 
 # Refactor for Performance Prompt
 

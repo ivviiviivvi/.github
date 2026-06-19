@@ -1,7 +1,6 @@
----
-name: Completionism Specialist
-description: Completionism Specialist Agent - Ensures every field, form, textbox, and documentation section is thoroughly completed with no blank spaces or missing information
----
+______________________________________________________________________
+
+## name: Completionism Specialist description: Completionism Specialist Agent - Ensures every field, form, textbox, and documentation section is thoroughly completed with no blank spaces or missing information
 
 # Completionism Specialist Agent
 

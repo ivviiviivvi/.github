@@ -1,9 +1,11 @@
 <!-- ORGANVM:AUTO:START -->
+
 ## Agent Context (auto-generated — do not edit)
 
 This repo participates in the **ORGAN-I (Theory)** swarm.
 
 ### Active Subscriptions
+
 - Event: `research-published` → Action: Render and distribute research announcement
 - Event: `framework-updated` → Action: Render and distribute framework update
 - Event: `artwork-released` → Action: Render and distribute artwork announcement
@@ -21,17 +23,21 @@ This repo participates in the **ORGAN-I (Theory)** swarm.
 - Event: `community-milestone` → Action: Render and distribute community milestone
 
 ### Production Responsibilities
+
 - **Produce** `unknown` for ORGAN-IV, ORGAN-V
 - **Produce** `unknown` for unspecified
 - **Produce** `unknown` for unspecified
 - **Produce** `unknown` for ORGAN-V
 
 ### External Dependencies
+
 - *No external dependencies*
 
 ### Governance Constraints
+
 - Adhere to unidirectional flow: I→II→III
 - Never commit secrets or credentials
 
 *Last synced: 2026-03-21T13:20:55Z*
+
 <!-- ORGANVM:AUTO:END -->

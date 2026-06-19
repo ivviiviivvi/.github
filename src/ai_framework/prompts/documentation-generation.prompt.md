@@ -1,22 +1,25 @@
----
+______________________________________________________________________
+
 name: Documentation Generation
 description: Generate comprehensive documentation including API docs, user guides, and READMEs.
 category: documentation
 author: ai-framework
 version: 1.0.0
 tags:
-  - documentation
-  - api-docs
-  - readme
-  - user-guide
-  - technical-writing
-variables:
-  - code_or_project
-  - doc_type
-  - audience
-  - existing_docs
-updated: 2026-01-30
----
+
+- documentation
+- api-docs
+- readme
+- user-guide
+- technical-writing
+  variables:
+- code_or_project
+- doc_type
+- audience
+- existing_docs
+  updated: 2026-01-30
+
+______________________________________________________________________
 
 # Documentation Generation Prompt
 
