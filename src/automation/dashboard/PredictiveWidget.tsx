@@ -1,7 +1,7 @@
 // Dashboard Widget for Predictive Analytics
 // Displays real-time failure risk predictions
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./PredictiveWidget.css";
 
 interface Prediction {
@@ -24,7 +24,7 @@ interface ModelMetrics {
   test_samples: number;
 }
 
-const PredictiveWidget: React.FC = () => {
+const PredictiveWidget = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [metrics, setMetrics] = useState<ModelMetrics | null>(null);
   const [loading, setLoading] = useState(true);
