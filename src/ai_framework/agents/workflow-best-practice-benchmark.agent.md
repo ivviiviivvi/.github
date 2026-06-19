@@ -1,6 +1,7 @@
-______________________________________________________________________
-
-## name: workflow-best-practice-benchmark description: Workflow Best Practice Benchmark Agent - Compares your GitHub Actions workflows against industry best practices and successful patterns to identify improvement opportunities
+---
+name: workflow-best-practice-benchmark
+description: Workflow Best Practice Benchmark Agent - Compares your GitHub Actions workflows against industry best practices and successful patterns to identify improvement opportunities
+---
 
 # Workflow Best Practice Benchmark Agent
 

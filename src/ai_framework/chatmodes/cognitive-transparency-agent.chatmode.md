@@ -1,16 +1,13 @@
-______________________________________________________________________
-
+---
 name: Cognitive Transparency Agent
 description: Ultimate Transparent Thinking Beast Mode with maximum creativity and cognitive overclocking.
 tools:
-
-- '\*'
-  tags:
-- beast
-- agent
-  updated: 2026-01-13
-
-______________________________________________________________________
+  - '*'
+tags:
+  - beast
+  - agent
+updated: 2026-01-13
+---
 
 # Ultimate Transparent Thinking Mode
 

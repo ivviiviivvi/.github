@@ -1,6 +1,7 @@
-______________________________________________________________________
-
-## name: exhaustive-repo-scanner description: Exhaustive Repo Scanner Agent - Comprehensive data excavation and analysis specialist that exhaustively scans repositories, generates actionable tasks, creates persistent memories, and produces comprehensive reports while ensuring no data is overlooked
+---
+name: exhaustive-repo-scanner
+description: Exhaustive Repo Scanner Agent - Comprehensive data excavation and analysis specialist that exhaustively scans repositories, generates actionable tasks, creates persistent memories, and produces comprehensive reports while ensuring no data is overlooked
+---
 
 # Exhaustive Repo Scanner Agent
 

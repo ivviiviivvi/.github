@@ -1,26 +1,23 @@
-______________________________________________________________________
-
+---
 name: Security Audit
 description: Comprehensive security review covering OWASP Top 10, dependencies, and secrets.
 category: security
 author: ai-framework
 version: 1.0.0
 tags:
-
-- security
-- audit
-- owasp
-- vulnerability
-- secrets
-- dependencies
-  variables:
-- code_or_repo
-- language
-- framework
-- deployment_context
-  updated: 2026-01-30
-
-______________________________________________________________________
+  - security
+  - audit
+  - owasp
+  - vulnerability
+  - secrets
+  - dependencies
+variables:
+  - code_or_repo
+  - language
+  - framework
+  - deployment_context
+updated: 2026-01-30
+---
 
 # Security Audit Prompt
 

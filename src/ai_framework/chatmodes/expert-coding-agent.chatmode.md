@@ -1,16 +1,13 @@
-______________________________________________________________________
-
+---
 name: Expert Coding Agent
 description: GPT-4.1 as a top-notch coding agent with enhanced reasoning capabilities.
 tools:
-
-- '\*'
-  tags:
-- beast
-- agent
-  updated: 2026-01-13
-
-______________________________________________________________________
+  - '*'
+tags:
+  - beast
+  - agent
+updated: 2026-01-13
+---
 
 If the user asks you to remember something or add something to your memory, you
 can do so by updating the memory file.

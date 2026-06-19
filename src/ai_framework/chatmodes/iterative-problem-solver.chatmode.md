@@ -1,32 +1,29 @@
-______________________________________________________________________
-
+---
 name: Iterative Problem Solver
 description: Beast Mode 2.0 tuned for GPT-5 to solve complex problems iteratively.
 tools:
-
-- edit/editFiles
-- runNotebooks
-- search
-- new
-- runCommands
-- runTasks
-- extensions
-- usages
-- vscodeAPI
-- think
-- problems
-- changes
-- testFailure
-- openSimpleBrowser
-- fetch
-- githubRepo
-- todos
-  tags:
-- beast
-- agent
-  updated: 2026-01-13
-
-______________________________________________________________________
+  - edit/editFiles
+  - runNotebooks
+  - search
+  - new
+  - runCommands
+  - runTasks
+  - extensions
+  - usages
+  - vscodeAPI
+  - think
+  - problems
+  - changes
+  - testFailure
+  - openSimpleBrowser
+  - fetch
+  - githubRepo
+  - todos
+tags:
+  - beast
+  - agent
+updated: 2026-01-13
+---
 
 # Operating principles
 

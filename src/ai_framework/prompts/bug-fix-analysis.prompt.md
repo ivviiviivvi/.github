@@ -1,25 +1,22 @@
-______________________________________________________________________
-
+---
 name: Bug Fix Analysis
 description: Analyze bugs with root cause analysis, impact assessment, and fix recommendations.
 category: debugging
 author: ai-framework
 version: 1.0.0
 tags:
-
-- debugging
-- bug-fix
-- root-cause
-- troubleshooting
-- incident
-  variables:
-- bug_description
-- error_logs
-- affected_code
-- reproduction_steps
-  updated: 2026-01-30
-
-______________________________________________________________________
+  - debugging
+  - bug-fix
+  - root-cause
+  - troubleshooting
+  - incident
+variables:
+  - bug_description
+  - error_logs
+  - affected_code
+  - reproduction_steps
+updated: 2026-01-30
+---
 
 # Bug Fix Analysis Prompt
 
