@@ -1,0 +1,42 @@
+[
+  {
+    "repo": "organvm-i-theoria/studium-generale",
+    "name": "studium-generale",
+    "priority_tier": 2,
+    "scheduled_date": "2026-06-15",
+    "day_offset": 0,
+    "batch": 1
+  },
+  {
+    "repo": "organvm-i-theoria/atomic-substrata",
+    "name": "atomic-substrata",
+    "priority_tier": 2,
+    "scheduled_date": "2026-06-15",
+    "day_offset": 0,
+    "batch": 1
+  },
+  {
+    "repo": "organvm-i-theoria/scale-threshold-emergence",
+    "name": "scale-threshold-emergence",
+    "priority_tier": 2,
+    "scheduled_date": "2026-06-15",
+    "day_offset": 0,
+    "batch": 1
+  },
+  {
+    "repo": "organvm-i-theoria/styx-behavioral-economics-theory",
+    "name": "styx-behavioral-economics-theory",
+    "priority_tier": 2,
+    "scheduled_date": "2026-06-15",
+    "day_offset": 0,
+    "batch": 1
+  },
+  {
+    "repo": "organvm-i-theoria/hierarchia-mundi",
+    "name": "hierarchia-mundi",
+    "priority_tier": 2,
+    "scheduled_date": "2026-06-15",
+    "day_offset": 0,
+    "batch": 1
+  }
+]
