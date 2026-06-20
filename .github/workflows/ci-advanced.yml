@@ -51,9 +51,11 @@ jobs:
     - name: Detect Languages
       id: detect
       run: |
-        echo "has-python=$(test -f requirements.txt -o -f setup.py -o -f pyproject.toml && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
-        echo "has-node=$(test -f package.json && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
-        echo "has-docker=$(test -f Dockerfile && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+        {
+          echo "has-python=$(test -f requirements.txt -o -f setup.py -o -f pyproject.toml && echo 'true' || echo 'false')"
+          echo "has-node=$(test -f package.json && echo 'true' || echo 'false')"
+          echo "has-docker=$(test -f Dockerfile && echo 'true' || echo 'false')"
+        } >> "$GITHUB_OUTPUT"
 
   # Python CI
   python-ci:

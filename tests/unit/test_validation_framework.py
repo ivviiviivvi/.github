@@ -34,9 +34,11 @@ class TestValidationFramework:
         with patch.object(
             ValidationFramework,
             "__init__",
-            lambda self, client: setattr(self, "github", client)
-            or setattr(self, "results", [])
-            or setattr(self, "validation_dir", tmp_path / ".github" / "validation"),
+            lambda self, client: (
+                setattr(self, "github", client)
+                or setattr(self, "results", [])
+                or setattr(self, "validation_dir", tmp_path / ".github" / "validation")
+            ),
         ):
             fw = ValidationFramework.__new__(ValidationFramework)
             fw.github = mock_github_client
