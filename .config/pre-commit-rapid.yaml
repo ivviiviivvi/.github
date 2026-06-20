@@ -151,9 +151,7 @@ repos:
     - --baseline
     - .config/.secrets.baseline
     - --exclude-files
-    - .*\.lock$
-    - --exclude-files
-    - package-lock\.json
+    - '(^|/)(\.git|\.hg|\.svn|\.config/\.secrets\.baseline|\.secrets\.baseline|\.mypy_cache|\.pytest_cache|\.ruff_cache|\.venv|venv|node_modules|coverage|dist|build|__pycache__)(/|$)|(^|/)(package-lock\.json|uv\.lock)$'
     stages: [commit]
 
   # ============================================================================

@@ -50,10 +50,14 @@ We use three complementary tools to scan for secrets:
 
 Configuration for Gitleaks scanner that defines:
 
+- **Default rule extension**: Built-in Gitleaks rules remain enabled
 - **Allowlist paths**: Files that are known to contain example patterns
 - **Allowlist regexes**: Patterns that are placeholders or examples
 - **Stop words**: Common words that indicate examples
 - **Custom rules**: Extended detection rules with allowlists
+
+The root `.gitleaks.toml` file is a symlink to this file so ad hoc `gitleaks`
+commands and GitHub Actions use the same configuration.
 
 **Example allowlisted paths:**
 
@@ -69,12 +73,23 @@ Baseline file for detect-secrets containing:
 - Known false positives from documentation
 - Plugin configuration
 - File-specific findings that are verified safe
+- Only tracked repository files; generated caches, virtual environments,
+  package directories, lock files, and `.git` internals must stay out of the
+  baseline
+
+The root `.secrets.baseline` file is a symlink to this file for compatibility
+with tools that expect the default filename.
 
 Generated with:
 
 ```bash
-detect-secrets scan --all-files --force-use-all-plugins > .config/.secrets.baseline
+DETECT_SECRETS_EXCLUDE='(^|/)(\.git|\.hg|\.svn|\.config/\.secrets\.baseline|\.secrets\.baseline|\.mypy_cache|\.pytest_cache|\.ruff_cache|\.venv|venv|node_modules|coverage|dist|build|__pycache__)(/|$)|(^|/)(package-lock\.json|uv\.lock)$'
+detect-secrets scan --force-use-all-plugins --exclude-files "$DETECT_SECRETS_EXCLUDE" $(git ls-files) > .config/.secrets.baseline
 ```
+
+Run the command from a clean checkout. Do not regenerate the baseline from a
+workspace that contains local caches, virtual environments, vendored
+dependencies, or scanner output artifacts.
 
 ## Managing False Positives
 
@@ -210,6 +225,18 @@ If scanning is slow:
 1. Limit paths scanned in workflow configuration
 1. Use cached tool installations
 1. Consider scanning only changed files in PRs
+
+### Gitleaks Reports Thousands of Findings
+
+If Gitleaks reports thousands of findings while TruffleHog is clean, first
+verify that the workflow is using `.config/.gitleaks.toml` or the root
+`.gitleaks.toml` symlink. The alert workflows intentionally use
+`gitleaks detect --no-git` for current-tree checks; full history audits should
+be run separately when investigating a confirmed leak.
+
+Also confirm that `.config/.secrets.baseline` is not being scanned as source and
+that generated folders such as `.mypy_cache`, `.pytest_cache`, `.ruff_cache`,
+`.venv`, `node_modules`, `dist`, `build`, and `coverage` are excluded.
 
 ### Can't Regenerate Baseline
 

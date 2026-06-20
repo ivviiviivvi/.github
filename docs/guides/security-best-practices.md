@@ -233,7 +233,7 @@ Personal Identifiable Information (PII) includes:
 ```log
 # ❌ WRONG - Contains PII and secrets
 2024-01-14 10:30:45 [ERROR] Login failed for user john.doe@example.com
-2024-01-14 10:30:45 [DEBUG] API Key: sk_live_51abc123xyz789
+2024-01-14 10:30:45 [DEBUG] API Key: sk_live_xxx
 2024-01-14 10:30:45 [INFO] Connecting to database at 192.168.1.100:5432
 
 # ✅ CORRECT - Sanitized

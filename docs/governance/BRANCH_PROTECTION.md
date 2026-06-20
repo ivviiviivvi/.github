@@ -84,7 +84,7 @@ To automate branch protection rules across repositories, use the GitHub API:
 # Example: Set branch protection for 'main' branch
 curl -X PUT \
   -H "Accept: application/vnd.github.v3+json" \
-  -H "Authorization: token YOUR_TOKEN" \
+  -H "Authorization: Bearer <github-token>" \
   https://api.github.com/repos/OWNER/REPO/branches/main/protection \
   -d '{
     "required_status_checks": {

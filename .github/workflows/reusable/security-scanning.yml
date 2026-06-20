@@ -46,6 +46,9 @@ permissions:
   security-events: write
   actions: read
 
+env:
+  DETECT_SECRETS_EXCLUDE: '(^|/)(\.git|\.hg|\.svn|\.config/\.secrets\.baseline|\.secrets\.baseline|\.mypy_cache|\.pytest_cache|\.ruff_cache|\.venv|venv|node_modules|coverage|dist|build|__pycache__)(/|$)|(^|/)(package-lock\.json|uv\.lock)$'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -137,10 +140,10 @@ jobs:
         pip install detect-secrets==1.5.0
         SECRET_BASELINE=".config/.secrets.baseline"
         if [ -f "$SECRET_BASELINE" ]; then
-          detect-secrets scan --all-files --baseline "$SECRET_BASELINE" --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
+          detect-secrets scan --all-files --baseline "$SECRET_BASELINE" --exclude-files "$DETECT_SECRETS_EXCLUDE" > detect-secrets-results.json || true
           echo "Secret scan complete using $SECRET_BASELINE."
         else
-          detect-secrets scan --all-files --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
+          detect-secrets scan --all-files --exclude-files "$DETECT_SECRETS_EXCLUDE" > detect-secrets-results.json || true
           echo "Secret scan complete without a baseline."
         fi
 
