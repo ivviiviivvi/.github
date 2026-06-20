@@ -5,6 +5,7 @@ via pytest_configure which runs before any test modules are imported.
 """
 
 import sys
+import types
 from unittest.mock import MagicMock
 
 
@@ -25,6 +26,50 @@ def pytest_configure(config):
 
     # Install the mock in sys.modules BEFORE any imports happen
     sys.modules["secret_manager"] = mock_secret_manager
+
+    try:
+        __import__("github")
+    except ImportError:
+        mock_github_module = types.ModuleType("github")
+
+        class MockGithubException(Exception):
+            """Small PyGithub exception stand-in for import-time tests."""
+
+            def __init__(self, status=None, data=None, headers=None):
+                self.status = status
+                self.data = data
+                self.headers = headers
+                message = data.get("message") if isinstance(data, dict) else data
+                super().__init__(message or status)
+
+        class MockAuth:
+            """Small PyGithub Auth stand-in."""
+
+            @staticmethod
+            def Token(token):
+                return token
+
+        class MockGithub:
+            """Small PyGithub client stand-in."""
+
+            def __init__(self, *args, **kwargs):
+                self.args = args
+                self.kwargs = kwargs
+
+        mock_github_module.Auth = MockAuth
+        mock_github_module.Github = MockGithub
+        mock_github_module.GithubException = MockGithubException
+        mock_github_module.Label = MagicMock()
+        mock_github_module.Repository = MagicMock()
+
+        label_module = types.ModuleType("github.Label")
+        label_module.Label = MagicMock()
+        repository_module = types.ModuleType("github.Repository")
+        repository_module.Repository = MagicMock()
+
+        sys.modules["github"] = mock_github_module
+        sys.modules["github.Label"] = label_module
+        sys.modules["github.Repository"] = repository_module
 
 
 def pytest_unconfigure(config):

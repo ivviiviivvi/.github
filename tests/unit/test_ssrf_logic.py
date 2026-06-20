@@ -1,3 +1,4 @@
+import socket
 import sys
 import unittest
 from pathlib import Path
@@ -17,22 +18,27 @@ class TestSSRFLogic(unittest.TestCase):
         # issues
         self.crawler = web_crawler.OrganizationCrawler(github_token="dummy", org_name="dummy")
 
-    @patch("socket.gethostbyname")
-    def test_is_safe_url(self, mock_gethostbyname):
+    @patch("socket.getaddrinfo")
+    def test_is_safe_url(self, mock_getaddrinfo):
+        def resolve_to(ip_address):
+            mock_getaddrinfo.return_value = [
+                (socket.AF_INET, socket.SOCK_STREAM, 6, "", (ip_address, 80)),
+            ]
+
         # Case 1: Safe Public IP
-        mock_gethostbyname.return_value = "8.8.8.8"
+        resolve_to("8.8.8.8")
         self.assertTrue(self.crawler._is_safe_url("http://google.com"))
 
         # Case 2: Private IP (10.x)
-        mock_gethostbyname.return_value = "10.0.0.1"
+        resolve_to("10.0.0.1")
         self.assertFalse(self.crawler._is_safe_url("http://internal.corp"))
 
         # Case 3: Loopback
-        mock_gethostbyname.return_value = "127.0.0.1"
+        resolve_to("127.0.0.1")
         self.assertFalse(self.crawler._is_safe_url("http://localhost"))
 
         # Case 4: Cloud Metadata (169.254)
-        mock_gethostbyname.return_value = "169.254.169.254"
+        resolve_to("169.254.169.254")
         self.assertFalse(self.crawler._is_safe_url("http://169.254.169.254"))
 
 
