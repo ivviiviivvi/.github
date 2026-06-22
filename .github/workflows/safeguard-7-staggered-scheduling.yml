@@ -225,6 +225,9 @@ jobs:
         else:
             repos = all_repos
 
+        # Sort by priority tier so critical repos are scheduled first
+        repos.sort(key=lambda r: r.get('priority_tier', 3))
+
         # Generate schedule
         schedule = []
         start_date = datetime.now()
