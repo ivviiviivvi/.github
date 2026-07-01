@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # ratchet:actions/checkout@v7.0.0
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -132,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@1e38d5e62363e14db8019ed7d106b9855bdba6cc  # ratchet:github/issue-metrics@v4.2.7
+      uses: github/issue-metrics@44173f9e0a3b2144a777a10a340e4c09a25ac9f8  # ratchet:github/issue-metrics@v4.2.8
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}

@@ -29,10 +29,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # ratchet:actions/checkout@v7.0.0
 
     - name: Set up Python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # ratchet:actions/setup-python@v6.2.0
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # ratchet:actions/setup-python@v6.3.0
       with:
         python-version: '3.11'
         cache: pip
@@ -147,7 +147,7 @@ jobs:
 
     - name: Send email
       if: steps.validate-email.outputs.email_valid == 'true'
-      uses: dawidd6/action-send-mail@42942bc2f8fba4e611b459a018967a6a7c78c68c  # ratchet:dawidd6/action-send-mail@v17
+      uses: dawidd6/action-send-mail@94de994a9f6fffee200243214e17002e2920bb59  # ratchet:dawidd6/action-send-mail@v18
       with:
         server_address: ${{ secrets.SMTP_SERVER }}
         server_port: ${{ secrets.SMTP_PORT }}

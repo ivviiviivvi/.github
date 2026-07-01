@@ -42,12 +42,12 @@ jobs:
 
 
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # ratchet:actions/checkout@v7.0.0
       with:
         fetch-depth: 1
 
     - name: Set up Python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405    # ratchet:actions/setup-python@v5.3.0
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1    # ratchet:actions/setup-python@v5.3.0
       with:
         python-version: '3.12'
         cache: pip
@@ -95,7 +95,7 @@ jobs:
     - name: Run Claude Code
       id: claude
       if: ${{ steps.quota.outputs.usage < steps.quota.outputs.quota && steps.quota.outputs.should_process == 'true' }}
-      uses: anthropics/claude-code-action@787c5a0ce96a9a6cfb050ea0c8f4c05f2447c251  # ratchet:anthropics/claude-code-action@v1
+      uses: anthropics/claude-code-action@fad22eb3fa582b7357fc0ea48af6645851b884fd  # ratchet:anthropics/claude-code-action@v1
       with:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         additional_permissions: |
