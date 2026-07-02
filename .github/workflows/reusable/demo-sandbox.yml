@@ -55,7 +55,7 @@ on:
         type: boolean
         default: true
       badge-style:
-        description: Shield.io badge style (flat, flat-square, for-the-badge, plastic)
+        description: 'Shield.io badge style (flat, flat-square, for-the-badge, plastic)'
         required: false
         type: string
         default: for-the-badge
@@ -476,7 +476,7 @@ jobs:
       env:
         REPO: ${{ github.repository }}
         REF: ${{ github.ref_name }}
-      run: |2
+      run: |
 
         # Create demo-specific devcontainer if it doesn't exist
         mkdir -p .devcontainer/demo
@@ -600,7 +600,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: 'feat: add "Try Demo" sandbox badge to README'
-        title: Add "Try Demo" sandbox badge
+        title: 'Add "Try Demo" sandbox badge'
         body: |
           ## Demo Sandbox Badge
 

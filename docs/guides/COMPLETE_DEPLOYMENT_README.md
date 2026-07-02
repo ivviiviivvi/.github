@@ -152,7 +152,7 @@ ______________________________________________________________________
 
 - [ ] Configure repository priorities in
   `.github/walkthrough-priority-config.yml`
-- [x] Run first staggered schedule generation
+- [ ] Run first staggered schedule generation
 - [ ] Review first daily usage report
 - [ ] Test Phase 3 deployment with sample app
 - [ ] Team briefing and Q&A
