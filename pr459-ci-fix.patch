@@ -1,0 +1,262 @@
+From c6fc3195a4669f659f6e1050ea70aae47bb97fa8 Mon Sep 17 00:00:00 2001
+From: 4444J99 <24796448+4444J99@users.noreply.github.com>
+Date: Fri, 3 Jul 2026 12:44:52 -0400
+Subject: [PATCH] fix(ci): repair PR check gates
+
+---
+ .github/workflows/docker-build-push.yml       |   2 +-
+ .github/workflows/gemini-review.yml           |   1 +
+ .../workflows/version-control-standards.yml   |   2 +
+ profile/README.md                             | 120 +++++++++++-------
+ seed.yaml                                     |   8 +-
+ workflows/ci-minimal.yml                      |  14 +-
+ 6 files changed, 88 insertions(+), 59 deletions(-)
+
+diff --git a/.github/workflows/docker-build-push.yml b/.github/workflows/docker-build-push.yml
+index 6a72fb1..194b3b2 100644
+--- a/.github/workflows/docker-build-push.yml
++++ b/.github/workflows/docker-build-push.yml
+@@ -262,7 +262,7 @@ jobs:
+           type=semver,pattern={{version}}
+           type=semver,pattern={{major}}.{{minor}}
+           type=semver,pattern={{major}}
+-          type=sha,prefix={{branch}}-
++          type=sha,prefix=sha-
+           type=raw,value=latest,enable={{is_default_branch}}
+         flavor: |
+           latest=auto
+diff --git a/.github/workflows/gemini-review.yml b/.github/workflows/gemini-review.yml
+index 4368972..463f0f1 100644
+--- a/.github/workflows/gemini-review.yml
++++ b/.github/workflows/gemini-review.yml
+@@ -53,6 +53,7 @@ jobs:
+         PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+         REPOSITORY: ${{ github.repository }}
+         ADDITIONAL_CONTEXT: ${{ inputs.additional_context }}
++        GEMINI_CLI_TRUST_WORKSPACE: "true"
+       with:
+         gcp_location: ${{ vars.GOOGLE_CLOUD_LOCATION }}
+         gcp_project_id: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+diff --git a/.github/workflows/version-control-standards.yml b/.github/workflows/version-control-standards.yml
+index 26bd37a..0456d00 100644
+--- a/.github/workflows/version-control-standards.yml
++++ b/.github/workflows/version-control-standards.yml
+@@ -63,6 +63,8 @@ jobs:
+           "^maintenance/v[0-9]+-maintenance$"
+           "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"
+           "^archive/[a-z0-9-]+/[a-z0-9-]+$"
++          # Automated Limen dispatch and CI repair branches
++          "^limen/[a-z0-9-]+(/[a-z0-9-]+)?$"
+           # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
+           "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
+         )
+diff --git a/profile/README.md b/profile/README.md
+index b31ef97..7ca3d7c 100644
+--- a/profile/README.md
++++ b/profile/README.md
+@@ -8,84 +8,110 @@ # ORGAN-I: Theoria — Theory & Epistemology
+ 
+ > *θεωρία (theoria) — contemplation, seeing*
+ >
+-> The ancient Greek word for the act of beholding truth: not passive observation,
+-> but the disciplined practice of looking until structure reveals itself.
++> The ancient Greek word for the act of beholding truth: not passive
++> observation, but the disciplined practice of looking until structure reveals
++> itself.
+ 
+-**18 repositories · ~56,000 words of documentation**
+-**9 PRODUCTION · 4 PROTOTYPE · 3 SKELETON · 2 DESIGN_ONLY**
++**18 repositories · ~56,000 words of documentation** **9 PRODUCTION · 4
++PROTOTYPE · 3 SKELETON · 2 DESIGN_ONLY**
+ 
+ </div>
+ 
+----
++______________________________________________________________________
+ 
+ ## What This Organ Does
+ 
+-ORGAN-I is the **epistemological foundation** of the eight-organ system. It houses frameworks for recursive reasoning, ontological architecture, knowledge representation, and conceptual research. Every system needs a theory of itself before it can create (ORGAN-II) or transact (ORGAN-III) — Theoria provides that self-knowledge.
++ORGAN-I is the **epistemological foundation** of the eight-organ system. It
++houses frameworks for recursive reasoning, ontological architecture, knowledge
++representation, and conceptual research. Every system needs a theory of itself
++before it can create (ORGAN-II) or transact (ORGAN-III) — Theoria provides that
++self-knowledge.
+ 
+ The work here spans:
+ 
+-- **Recursive engines** — symbolic operating systems that model identity, myth, and ritual as computable processes
+-- **Ontological frameworks** — naming conventions, metadata systems, and governance architectures for autonomous systems
+-- **Epistemological tools** — knowledge extraction pipelines, cognitive archaeology, and multi-agent deliberation systems
+-- **Linguistic analysis** — computational rhetoric, narratological algorithms, and rhetorical operating system design
++- **Recursive engines** — symbolic operating systems that model identity, myth,
++  and ritual as computable processes
++- **Ontological frameworks** — naming conventions, metadata systems, and
++  governance architectures for autonomous systems
++- **Epistemological tools** — knowledge extraction pipelines, cognitive
++  archaeology, and multi-agent deliberation systems
++- **Linguistic analysis** — computational rhetoric, narratological algorithms,
++  and rhetorical operating system design
+ 
+ ## Philosophy
+ 
+-Theory is not abstraction for its own sake. In the organ system, **theory precedes art, and art precedes commerce** — the I → II → III dependency flow. ORGAN-I produces the conceptual scaffolding that ORGAN-II transforms into creative artifacts and ORGAN-III operationalizes into products. No back-edges: commerce never dictates theory. This is a design constraint, not an accident.
++Theory is not abstraction for its own sake. In the organ system, **theory
++precedes art, and art precedes commerce** — the I → II → III dependency flow.
++ORGAN-I produces the conceptual scaffolding that ORGAN-II transforms into
++creative artifacts and ORGAN-III operationalizes into products. No back-edges:
++commerce never dictates theory. This is a design constraint, not an accident.
+ 
+-The repositories here treat ideas as engineered artifacts: versioned, documented, and structured for reuse. A naming convention is infrastructure. A governance framework is a machine. A recursive engine is a living system.
++The repositories here treat ideas as engineered artifacts: versioned,
++documented, and structured for reuse. A naming convention is infrastructure. A
++governance framework is a machine. A recursive engine is a living system.
+ 
+ ## Key Repositories
+ 
+-| Repository | Description |
+-|:-----------|:------------|
+-| **[recursive-engine--generative-entity](https://github.com/organvm-i-theoria/recursive-engine--generative-entity)** ★ | RE:GE — symbolic operating system for myth, identity, ritual, and recursive systems *(flagship)* |
+-| [radix-recursiva-solve-coagula-redi](https://github.com/organvm-i-theoria/radix-recursiva-solve-coagula-redi) | RE:GE:OS — recursive generative OS with zero-dependency Python sandbox and Obsidian vault |
+-| [auto-revision-epistemic-engine](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine) | Self-governing orchestration framework: 8 phases, 4 human gates, RBAC, append-only audit logs |
+-| [organon-noumenon--ontogenetic-morphe](https://github.com/organvm-i-theoria/organon-noumenon--ontogenetic-morphe) | 22-subsystem symbolic processing architecture with recursive 4-phase loops and async message bus |
+-| [narratological-algorithmic-lenses](https://github.com/organvm-i-theoria/narratological-algorithmic-lenses) | 14 narratological studies × 92 algorithms — Aristotle to Pixar as executable code |
+-| [linguistic-atomization-framework](https://github.com/organvm-i-theoria/linguistic-atomization-framework) | Computational rhetoric: hierarchical text atomization, 6 analysis modules, 46-text corpus |
+-| [nexus--babel-alexandria-](https://github.com/organvm-i-theoria/nexus--babel-alexandria-) | Theoria Linguae Machina — 9-layer rhetorical-linguistic OS grounded in category theory and semiotics |
+-| [my-knowledge-base](https://github.com/organvm-i-theoria/my-knowledge-base) | Epistemological knowledge system: AI conversation exports, knowledge atomization, multi-layer search |
+-| [cognitive-archaelogy-tribunal](https://github.com/organvm-i-theoria/cognitive-archaelogy-tribunal) | Archaeological dig tool: audits archives, conversations, repos into inventory and knowledge graph |
+-| [a-recursive-root](https://github.com/organvm-i-theoria/a-recursive-root) | AI Council — multi-agent debate architecture with personality archetypes and structured deliberation |
+-| [collective-persona-operations](https://github.com/organvm-i-theoria/collective-persona-operations) | Multi-agent system for collective identity and persona management |
+-| [reverse-engine-recursive-run](https://github.com/organvm-i-theoria/reverse-engine-recursive-run) | Architecture governance toolkit — 7-script Python pipeline for risk scoring and drift detection |
+-| [system-governance-framework](https://github.com/organvm-i-theoria/system-governance-framework) | Framework for autonomous system governance and organizational orchestration |
+-| [4-ivi374-F0Rivi4](https://github.com/organvm-i-theoria/4-ivi374-F0Rivi4) | OS Ecosystem Cartridge — meta-framework for holistic software ecosystem architecture |
+-| [sema-metra--alchemica-mundi](https://github.com/organvm-i-theoria/sema-metra--alchemica-mundi) | Signal-Matrix for World-Alchemy — symbolic signal processing framework |
+-| [call-function--ontological](https://github.com/organvm-i-theoria/call-function--ontological) | FUNCTIONcalled() — naming and metadata convention for self-documenting files |
+-| [cog-init-1-0-](https://github.com/organvm-i-theoria/cog-init-1-0-) | A system's first cog — bootstrap initialization for recursive architectures |
++| Repository                                                                                                            | Description                                                                                          |
++| :-------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
++| **[recursive-engine--generative-entity](https://github.com/organvm-i-theoria/recursive-engine--generative-entity)** ★ | RE:GE — symbolic operating system for myth, identity, ritual, and recursive systems *(flagship)*     |
++| [radix-recursiva-solve-coagula-redi](https://github.com/organvm-i-theoria/radix-recursiva-solve-coagula-redi)         | RE:GE:OS — recursive generative OS with zero-dependency Python sandbox and Obsidian vault            |
++| [auto-revision-epistemic-engine](https://github.com/organvm-i-theoria/auto-revision-epistemic-engine)                 | Self-governing orchestration framework: 8 phases, 4 human gates, RBAC, append-only audit logs        |
++| [organon-noumenon--ontogenetic-morphe](https://github.com/organvm-i-theoria/organon-noumenon--ontogenetic-morphe)     | 22-subsystem symbolic processing architecture with recursive 4-phase loops and async message bus     |
++| [narratological-algorithmic-lenses](https://github.com/organvm-i-theoria/narratological-algorithmic-lenses)           | 14 narratological studies × 92 algorithms — Aristotle to Pixar as executable code                    |
++| [linguistic-atomization-framework](https://github.com/organvm-i-theoria/linguistic-atomization-framework)             | Computational rhetoric: hierarchical text atomization, 6 analysis modules, 46-text corpus            |
++| [nexus--babel-alexandria-](https://github.com/organvm-i-theoria/nexus--babel-alexandria-)                             | Theoria Linguae Machina — 9-layer rhetorical-linguistic OS grounded in category theory and semiotics |
++| [my-knowledge-base](https://github.com/organvm-i-theoria/my-knowledge-base)                                           | Epistemological knowledge system: AI conversation exports, knowledge atomization, multi-layer search |
++| [cognitive-archaelogy-tribunal](https://github.com/organvm-i-theoria/cognitive-archaelogy-tribunal)                   | Archaeological dig tool: audits archives, conversations, repos into inventory and knowledge graph    |
++| [a-recursive-root](https://github.com/organvm-i-theoria/a-recursive-root)                                             | AI Council — multi-agent debate architecture with personality archetypes and structured deliberation |
++| [collective-persona-operations](https://github.com/organvm-i-theoria/collective-persona-operations)                   | Multi-agent system for collective identity and persona management                                    |
++| [reverse-engine-recursive-run](https://github.com/organvm-i-theoria/reverse-engine-recursive-run)                     | Architecture governance toolkit — 7-script Python pipeline for risk scoring and drift detection      |
++| [system-governance-framework](https://github.com/organvm-i-theoria/system-governance-framework)                       | Framework for autonomous system governance and organizational orchestration                          |
++| [4-ivi374-F0Rivi4](https://github.com/organvm-i-theoria/4-ivi374-F0Rivi4)                                             | OS Ecosystem Cartridge — meta-framework for holistic software ecosystem architecture                 |
++| [sema-metra--alchemica-mundi](https://github.com/organvm-i-theoria/sema-metra--alchemica-mundi)                       | Signal-Matrix for World-Alchemy — symbolic signal processing framework                               |
++| [call-function--ontological](https://github.com/organvm-i-theoria/call-function--ontological)                         | FUNCTIONcalled() — naming and metadata convention for self-documenting files                         |
++| [cog-init-1-0-](https://github.com/organvm-i-theoria/cog-init-1-0-)                                                   | A system's first cog — bootstrap initialization for recursive architectures                          |
+ 
+ ## The Eight-Organ System
+ 
+-ORGAN-I is one of eight organizations in the **organvm** creative-institutional system — 81 repositories across 8 orgs, ~320K words of documentation, 16 published essays. Each organ governs a distinct domain; together they form a coordinated whole:
++ORGAN-I is one of eight organizations in the **organvm** creative-institutional
++system — 81 repositories across 8 orgs, ~320K words of documentation, 16
++published essays. Each organ governs a distinct domain; together they form a
++coordinated whole:
+ 
+-| Organ | Domain | Organization |
+-|:------|:-------|:-------------|
+-| **I** | **Theory** | **[organvm-i-theoria](https://github.com/organvm-i-theoria)** |
+-| II | Art | [organvm-ii-poiesis](https://github.com/organvm-ii-poiesis) |
+-| III | Commerce | [organvm-iii-ergon](https://github.com/organvm-iii-ergon) |
+-| IV | Orchestration | [organvm-iv-taxis](https://github.com/organvm-iv-taxis) |
+-| V | Public Process | [organvm-v-logos](https://github.com/organvm-v-logos) |
+-| VI | Community | [organvm-vi-koinonia](https://github.com/organvm-vi-koinonia) |
+-| VII | Marketing | [organvm-vii-kerygma](https://github.com/organvm-vii-kerygma) |
+-| VIII | Meta | [meta-organvm](https://github.com/meta-organvm) |
++| Organ | Domain         | Organization                                                  |
++| :---- | :------------- | :------------------------------------------------------------ |
++| **I** | **Theory**     | **[organvm-i-theoria](https://github.com/organvm-i-theoria)** |
++| II    | Art            | [organvm-ii-poiesis](https://github.com/organvm-ii-poiesis)   |
++| III   | Commerce       | [organvm-iii-ergon](https://github.com/organvm-iii-ergon)     |
++| IV    | Orchestration  | [organvm-iv-taxis](https://github.com/organvm-iv-taxis)       |
++| V     | Public Process | [organvm-v-logos](https://github.com/organvm-v-logos)         |
++| VI    | Community      | [organvm-vi-koinonia](https://github.com/organvm-vi-koinonia) |
++| VII   | Marketing      | [organvm-vii-kerygma](https://github.com/organvm-vii-kerygma) |
++| VIII  | Meta           | [meta-organvm](https://github.com/meta-organvm)               |
+ 
+-> **Read the public process:** [organvm-v-logos.github.io/public-process](https://organvm-v-logos.github.io/public-process/)
++> **Read the public process:**
++> [organvm-v-logos.github.io/public-process](https://organvm-v-logos.github.io/public-process/)
+ 
+----
++______________________________________________________________________
+ 
+-<sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99) · part of the [eight-organ system](https://github.com/meta-organvm) · CONSOLIDATION-II Sprint 2026-02-12</sub>
++<sub>ORGAN-I: Theoria · 18 repositories · [@4444j99](https://github.com/4444j99)
++· part of the [eight-organ system](https://github.com/meta-organvm) ·
++CONSOLIDATION-II Sprint 2026-02-12</sub>
+ 
+ <!-- PORTFOLIO-HUB-START -->
+----
++
++______________________________________________________________________
+ 
+ <div align="center">
+ 
+ **Explore the System**
+ 
+-[Portfolio](https://4444j99.github.io/portfolio/) · [System Directory](https://4444j99.github.io/portfolio/directory/) · [49 Essays](https://organvm-v-logos.github.io/public-process/) · [Knowledge Base](https://organvm-i-theoria.github.io/my-knowledge-base/) · [Consult](https://4444j99.github.io/portfolio/consult/)
++[Portfolio](https://4444j99.github.io/portfolio/) ·
++[System Directory](https://4444j99.github.io/portfolio/directory/) ·
++[49 Essays](https://organvm-v-logos.github.io/public-process/) ·
++[Knowledge Base](https://organvm-i-theoria.github.io/my-knowledge-base/) ·
++[Consult](https://4444j99.github.io/portfolio/consult/)
+ 
+ </div>
+ <!-- PORTFOLIO-HUB-END -->
+diff --git a/seed.yaml b/seed.yaml
+index f6f1250..16ebf5f 100644
+--- a/seed.yaml
++++ b/seed.yaml
+@@ -3,7 +3,7 @@
+ # Generated: 2026-02-12 (AUTONOMY Sprint)
+ # Category: infrastructure
+ 
+-schema_version: "1.0"
++schema_version: '1.0'
+ organ: I
+ organ_name: Theory
+ repo: .github
+@@ -13,6 +13,6 @@ metadata:
+   implementation_status: PRODUCTION
+   tier: infrastructure
+   promotion_status: LOCAL
+-  last_validated: "2026-02-10"
+-  generated: "2026-02-12"
+-  sprint: "AUTONOMY"
++  last_validated: '2026-02-10'
++  generated: '2026-02-12'
++  sprint: AUTONOMY
+diff --git a/workflows/ci-minimal.yml b/workflows/ci-minimal.yml
+index 6ff35bf..dc2de09 100644
+--- a/workflows/ci-minimal.yml
++++ b/workflows/ci-minimal.yml
+@@ -11,10 +11,10 @@ jobs:
+   validate:
+     runs-on: ubuntu-latest
+     steps:
+-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+-      - name: Verify superproject metadata
+-        run: |
+-          test -f .gitmodules
+-          echo "Submodule count: $(grep -c '^\[submodule' .gitmodules || true)"
+-      - name: Success
+-        run: echo "::notice::Superproject CI passed"
++    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
++    - name: Verify superproject metadata
++      run: |
++        test -f .gitmodules
++        echo "Submodule count: $(grep -c '^\[submodule' .gitmodules || true)"
++    - name: Success
++      run: echo "::notice::Superproject CI passed"
+-- 
+2.54.0 (Apple Git-156)
+
