@@ -134,7 +134,7 @@ jobs:
 
         # Process issue comments
         echo "## Issue Comments" > comment_tasks.md
-        jq -r '.[] | "\(.user.login)|\(.created_at)|\(.body)"' issue_comments.json | while IFS='|' read -r user created body; do
+        jq -r '.[] | select(.user.login != "github-actions[bot]") | "\(.user.login)|\(.created_at)|\(.body)"' issue_comments.json | while IFS='|' read -r user created body; do
           # Check for unchecked tasks
           TASKS=$(echo "$body" | grep -E '^\s*[-*]\s*\[ \]' || echo "")
           if [ -n "$TASKS" ]; then
@@ -405,25 +405,21 @@ jobs:
 
         if [ "$HAS_BLOCKERS" == "true" ]; then
           if [[ ! "$CURRENT_LABELS" =~ "has-blockers" ]]; then
-            gh pr edit "$PR_NUM" --add-label "has-blockers"
-            echo "Added 'has-blockers' label"
+            gh pr edit "$PR_NUM" --add-label "has-blockers" && echo "Added 'has-blockers' label" || echo "::warning::Label 'has-blockers' is not available"
           fi
         else
           if [[ "$CURRENT_LABELS" =~ "has-blockers" ]]; then
-            gh pr edit "$PR_NUM" --remove-label "has-blockers"
-            echo "Removed 'has-blockers' label"
+            gh pr edit "$PR_NUM" --remove-label "has-blockers" && echo "Removed 'has-blockers' label" || echo "::warning::Could not remove 'has-blockers' label"
           fi
         fi
 
         if [ "$HAS_TASKS" == "true" ]; then
           if [[ ! "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
-            gh pr edit "$PR_NUM" --add-label "has-pending-tasks"
-            echo "Added 'has-pending-tasks' label"
+            gh pr edit "$PR_NUM" --add-label "has-pending-tasks" && echo "Added 'has-pending-tasks' label" || echo "::warning::Label 'has-pending-tasks' is not available"
           fi
         else
           if [[ "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
-            gh pr edit "$PR_NUM" --remove-label "has-pending-tasks"
-            echo "Removed 'has-pending-tasks' label"
+            gh pr edit "$PR_NUM" --remove-label "has-pending-tasks" && echo "Removed 'has-pending-tasks' label" || echo "::warning::Could not remove 'has-pending-tasks' label"
           fi
         fi
 
