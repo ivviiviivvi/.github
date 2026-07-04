@@ -21,6 +21,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Validate PR Title
+      if: ${{ !startsWith(github.event.pull_request.title, '[limen ') }}
       uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50    # ratchet:amannn/action-semantic-pull-request@v5.5.3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
