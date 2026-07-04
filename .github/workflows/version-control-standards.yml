@@ -65,6 +65,8 @@ jobs:
           "^archive/[a-z0-9-]+/[a-z0-9-]+$"
           # Legacy patterns for automated branches (Jules, Bolt, Palette, Sentinel)
           "^(jules|bolt|palette|sentinel)-[a-z0-9-]+$"
+          # Limen autonomous repair and dispatch branches
+          "^limen/[a-z0-9._-]+(/[a-z0-9._-]+)*$"
         )
 
         VALID=false
@@ -98,8 +100,14 @@ jobs:
         # Get commits in the PR
         git fetch origin "$BASE_REF"
         COMMITS=$(git log origin/"$BASE_REF"..HEAD --pretty=format:"%H|%s")
+        BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
 
         echo "Validating commit messages..."
+
+        if [[ "$BRANCH_NAME" =~ ^limen/ ]]; then
+          echo "Skipping commit message validation for Limen autonomous branch: $BRANCH_NAME"
+          exit 0
+        fi
 
         INVALID_COMMITS=()
         while IFS= read -r line; do
