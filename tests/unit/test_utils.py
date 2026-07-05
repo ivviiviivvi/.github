@@ -7,7 +7,7 @@ import sys
 import threading
 import time
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -736,16 +736,15 @@ class TestRetryWithBackoff:
         with pytest.raises(RuntimeError, match="Always fails"):
             retry_with_backoff(always_fail, max_attempts=3, initial_delay=0.01, jitter=False)
 
-    def test_respects_max_delay(self):
+    @patch("time.sleep")
+    def test_respects_max_delay(self, mock_sleep):
         """Test respects maximum delay setting."""
         from utils import retry_with_backoff
 
         call_count = 0
-        call_times = []
 
         def fail_then_succeed():
             nonlocal call_count
-            call_times.append(time.time())
             call_count += 1
             if call_count < 3:
                 raise ValueError("Fail")
@@ -760,24 +759,20 @@ class TestRetryWithBackoff:
             jitter=False,
         )
 
-        # Delays should be capped at max_delay
-        if len(call_times) > 1:
-            delay = call_times[1] - call_times[0]
-            assert delay <= 0.03  # max_delay + some tolerance
+        assert mock_sleep.call_count == 2
+        assert mock_sleep.call_args_list[0][0][0] == 0.01
+        assert mock_sleep.call_args_list[1][0][0] == 0.02
 
-    def test_adds_jitter(self):
+    @patch("time.sleep")
+    def test_adds_jitter(self, mock_sleep):
         """Test jitter adds randomness to delays."""
         from utils import retry_with_backoff
 
-        delays = []
-
         def fail_func():
-            delays.append(time.time())
             raise ValueError("Fail")
 
         # Run multiple times to check jitter
         for _ in range(2):
-            delays.clear()
             try:
                 retry_with_backoff(
                     fail_func,
@@ -788,4 +783,6 @@ class TestRetryWithBackoff:
             except ValueError:
                 pass
 
-        # Jitter should add some variation (hard to test precisely)
+        assert mock_sleep.call_count == 2
+        # Jitter should add some variation
+        assert mock_sleep.call_args_list[0][0][0] >= 0.01
