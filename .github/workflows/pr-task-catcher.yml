@@ -405,24 +405,24 @@ jobs:
 
         if [ "$HAS_BLOCKERS" == "true" ]; then
           if [[ ! "$CURRENT_LABELS" =~ "has-blockers" ]]; then
-            gh pr edit "$PR_NUM" --add-label "has-blockers"
+            gh pr edit "$PR_NUM" --add-label "has-blockers" || true
             echo "Added 'has-blockers' label"
           fi
         else
           if [[ "$CURRENT_LABELS" =~ "has-blockers" ]]; then
-            gh pr edit "$PR_NUM" --remove-label "has-blockers"
+            gh pr edit "$PR_NUM" --remove-label "has-blockers" || true
             echo "Removed 'has-blockers' label"
           fi
         fi
 
         if [ "$HAS_TASKS" == "true" ]; then
           if [[ ! "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
-            gh pr edit "$PR_NUM" --add-label "has-pending-tasks"
+            gh pr edit "$PR_NUM" --add-label "has-pending-tasks" || true
             echo "Added 'has-pending-tasks' label"
           fi
         else
           if [[ "$CURRENT_LABELS" =~ "has-pending-tasks" ]]; then
-            gh pr edit "$PR_NUM" --remove-label "has-pending-tasks"
+            gh pr edit "$PR_NUM" --remove-label "has-pending-tasks" || true
             echo "Removed 'has-pending-tasks' label"
           fi
         fi
