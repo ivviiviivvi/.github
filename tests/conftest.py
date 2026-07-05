@@ -32,7 +32,7 @@ def pytest_configure(config):
     except ImportError:
         mock_github_module = types.ModuleType("github")
 
-        class MockGithubException(Exception):
+        class MockGithubException(Exception):  # noqa: N818
             """Small PyGithub exception stand-in for import-time tests."""
 
             def __init__(self, status=None, data=None, headers=None):
@@ -46,7 +46,7 @@ def pytest_configure(config):
             """Small PyGithub Auth stand-in."""
 
             @staticmethod
-            def Token(token):
+            def Token(token):  # noqa: N802
                 return token
 
         class MockGithub:
