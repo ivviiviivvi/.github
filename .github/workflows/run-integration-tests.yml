@@ -43,7 +43,7 @@ permissions:
 
 jobs:
   test-month1:
-    name: Month 1 Core Workflows
+    name: Month 1 Test Results
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: |
@@ -104,7 +104,7 @@ jobs:
         reporter: java-junit
 
   test-month2:
-    name: Month 2 Features
+    name: Month 2 Test Results
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: |
@@ -166,7 +166,7 @@ jobs:
         reporter: java-junit
 
   test-month3:
-    name: Month 3 Advanced Automation
+    name: Month 3 Test Results
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: |
@@ -322,9 +322,9 @@ jobs:
           // Check job outcomes
           const jobs = context.payload.workflow_run?.jobs || [];
           for (const job of jobs) {
-            if (job.name.includes('Month 1') && job.conclusion === 'failure') month1_passed = false;
-            if (job.name.includes('Month 2') && job.conclusion === 'failure') month2_passed = false;
-            if (job.name.includes('Month 3') && job.conclusion === 'failure') month3_passed = false;
+            if (job.name.includes('Month 1 Test') && job.conclusion === 'failure') month1_passed = false;
+            if (job.name.includes('Month 2 Test') && job.conclusion === 'failure') month2_passed = false;
+            if (job.name.includes('Month 3 Test') && job.conclusion === 'failure') month3_passed = false;
             if (job.name.includes('Critical') && job.conclusion === 'failure') critical_passed = false;
           }
 
@@ -333,9 +333,9 @@ jobs:
 
           | Test Suite | Status |
           |-----------|--------|
-          | Month 1 Core Workflows | ${month1_passed ? '✅ Passed' : '❌ Failed'} |
-          | Month 2 Features | ${month2_passed ? '✅ Passed' : '❌ Failed'} |
-          | Month 3 Advanced | ${month3_passed ? '✅ Passed' : '❌ Failed'} |
+          | Month 1 Test Results | ${month1_passed ? '✅ Passed' : '❌ Failed'} |
+          | Month 2 Test Results | ${month2_passed ? '✅ Passed' : '❌ Failed'} |
+          | Month 3 Test Results | ${month3_passed ? '✅ Passed' : '❌ Failed'} |
           | Critical Path | ${critical_passed ? '✅ Passed' : '❌ Failed'} |
 
           **Overall**: ${month1_passed && month2_passed && month3_passed && critical_passed ? '✅ All tests passed!' : '⚠️ Some tests failed'}
