@@ -1,0 +1,11 @@
+{
+  "agent": "opencode",
+  "status": "idle",
+  "accepting_tasks": true,
+  "available_tokens": 48334537,
+  "available_pct": 96.7,
+  "current_task_id": "HEAL-cifix-organvm-dot-github--theoria-463",
+  "heartbeat": "2026-07-05T15:36:54.975735+00:00",
+  "token_usage_pct": 3.33,
+  "clock_health": "ok"
+}
