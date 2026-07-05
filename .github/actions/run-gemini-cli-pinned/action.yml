@@ -414,6 +414,7 @@ runs:
       PROMPT: ${{ inputs.prompt }}
       GEMINI_MODEL: ${{ inputs.gemini_model }}
       GH_WORKFLOW_NAME: ${{ steps.sanitize_workflow_name.outputs.gh_workflow_name }}
+      GEMINI_CLI_TRUST_WORKSPACE: "true"
 
   - name: Upload Gemini CLI outputs
     if: |-

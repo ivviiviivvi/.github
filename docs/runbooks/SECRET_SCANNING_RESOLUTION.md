@@ -69,6 +69,54 @@ A manual scan of the repository confirmed:
 - No private keys
 - All detected patterns were in documentation, examples, or workflow definitions
 
+## 2026-06 Follow-up Triage (GH-469)
+
+Issue [#469](https://github.com/organvm-i-theoria/.github/issues/469)
+reported another scheduled alert:
+
+- ✅ **TruffleHog**: Clean
+- ⚠️ **Gitleaks**: 6875 potential leaks
+- ⚠️ **detect-secrets**: 44 files with secrets
+
+This was another scanner hygiene issue, not evidence of active leaked
+credentials. Local Gitleaks verification with the repository configuration
+reported zero current-tree findings. The remaining noise came from two places:
+
+1. The alert workflows still used Gitleaks history scanning for routine
+   current-code checks.
+1. `.config/.secrets.baseline` had been regenerated from a dirty local
+   workspace and contained thousands of entries for `.git`, `.mypy_cache`,
+   `.pytest_cache`, `.ruff_cache`, `.venv`, and `node_modules` artifacts.
+
+### GH-469 Fix
+
+1. Added root `.gitleaks.toml` and `.secrets.baseline` symlinks so default tool
+   discovery resolves to the `.config/` scanner state.
+1. Updated Gitleaks config to extend the default rule pack and keep narrow
+   allowlists for documented historical placeholders.
+1. Changed alert-producing Gitleaks workflow steps to use `--no-git` for
+   current-tree checks.
+1. Added a shared detect-secrets exclude pattern for VCS internals, generated
+   caches, virtual environments, package directories, build outputs, coverage,
+   and lock files.
+1. Pruned `.config/.secrets.baseline` to tracked repository files only.
+1. Removed fragile `cache: pip` setup from the secret scanning workflows.
+1. Installed Gitleaks from a temporary directory so release tarball contents are
+   not unpacked into the repository checkout.
+
+### GH-469 Verification
+
+Local verification after the fix:
+
+- `gitleaks detect --source . --no-git --config .config/.gitleaks.toml`:
+  0 findings
+- `gitleaks detect --source . --config .config/.gitleaks.toml`: 0 findings
+- Root `.gitleaks.toml` auto-discovery: 0 findings
+- `.config/.gitleaks.toml`: valid TOML
+- `.config/.secrets.baseline`: valid JSON with 29 tracked result files and 169
+  baseline findings
+- Updated workflow YAML files: parse successfully
+
 ## Resolution
 
 ### Changes Made

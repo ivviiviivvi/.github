@@ -3,6 +3,9 @@
 
 title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
 
+[extend]
+useDefault = true
+
 # Global allowlist for false positives
 [allowlist]
   description = "Global allowlist for false positives"
@@ -11,7 +14,7 @@ title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
   paths = [
     '''\.github/workflows/scan-for-secrets\.yml''',
     '''\.github/workflows/safeguard-5-secret-scanning\.yml''',
-    '''docs/SECRETS_SETUP\.md''',
+    '''docs/guides/SECRETS_SETUP\.md''',
     '''docs/reference/SECURITY_ADVANCED\.md''',
     '''SECURITY_ADVANCED\.md''',
     '''\.github/WORKFLOW_GUIDE\.md''',
@@ -21,6 +24,7 @@ title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
     '''\.semgrep/rules\.yml''',
     '''.pre-commit-config.*\.yaml''',
     '''\.config/\.secrets\.baseline''',
+    '''\.secrets\.baseline''',
   ]
 
   # Allowlist specific patterns that are examples or documentation
@@ -32,6 +36,8 @@ title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
     '''<your.*>''',  # Placeholder format
     '''xxx+''',  # Placeholder
     '''example\.com''',  # Example domains
+    '''Authorization:\s*token\s+YOUR_TOKEN''',  # Historical GitHub API docs placeholder
+    '''sk_live_51abc123xyz789''',  # Historical Stripe docs placeholder
     '''"hashed_secret":\s*"[a-f0-9]+"''',  # detect-secrets baseline hashed values
   ]
 
@@ -46,6 +52,7 @@ title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
     "your-token-here",
     "replace-with",
     "dummy",
+    "YOUR_TOKEN",
   ]
 
 # Extend default rules if needed

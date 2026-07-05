@@ -136,7 +136,7 @@ repos:
   hooks:
   - id: detect-secrets
     args: [--baseline, .config/.secrets.baseline]
-    exclude: ^(package-lock\.json|\.config/\.secrets\.baseline)$
+    exclude: (^|/)(\.git|\.hg|\.svn|\.config/\.secrets\.baseline|\.secrets\.baseline|\.mypy_cache|\.pytest_cache|\.ruff_cache|\.venv|venv|node_modules|coverage|dist|build|__pycache__)(/|$)|(^|/)(package-lock\.json|uv\.lock)$
 
           # Security checks for Python
 - repo: https://github.com/PyCQA/bandit
