@@ -63,7 +63,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Install Trivy
       if: inputs.scan_type == 'trivy' || inputs.scan_type == 'all'
@@ -167,7 +167,7 @@ jobs:
 
     - name: Upload Trivy SARIF to GitHub Security
       if: inputs.upload_sarif && always()
-      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@411c4c9a36b3fca4d674f06b6396b2c6d23522c6  # ratchet:github/codeql-action/upload-sarif@v3
       with:
         sarif_file: trivy-results.sarif
         category: trivy
@@ -198,7 +198,7 @@ jobs:
 
     - name: Upload scan artifacts
       if: always()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: security-scan-results
         path: |

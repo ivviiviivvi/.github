@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
       with:
         ref: ${{ inputs.target_branch }}
         fetch-depth: 0
@@ -55,7 +55,7 @@ jobs:
         avatars_auto_fetch: 'true'
 
     - name: Upload video artifact
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: walkthrough-${{ github.event.repository.name }}-${{ github.run_number }}
         path: ./gource/gource.mp4

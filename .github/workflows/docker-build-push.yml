@@ -61,14 +61,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3  # ratchet:docker/setup-qemu-action@v4.1.0
+      uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130  # ratchet:docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5  # ratchet:docker/setup-buildx-action@v4.1.0
+      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # ratchet:docker/setup-buildx-action@v3
       with:
         driver-opts: |
           image=moby/buildkit:latest
@@ -235,7 +235,7 @@ jobs:
 
     - name: Log in to Docker Hub
       if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true' && steps.docker-creds.outputs.available == 'true'
-      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee  # ratchet:docker/login-action@v4.2.0
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # ratchet:docker/login-action@v3
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -243,7 +243,7 @@ jobs:
 
     - name: Log in to GitHub Container Registry
       if: github.event_name != 'pull_request' && steps.deployment-inputs.outputs.push == 'true'
-      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee  # ratchet:docker/login-action@v4.2.0
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # ratchet:docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -251,7 +251,7 @@ jobs:
 
     - name: Extract metadata
       id: meta
-      uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # ratchet:docker/metadata-action@v6.1.0
+      uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # ratchet:docker/metadata-action@v5
       with:
         images: |
           ${{ steps.docker-creds.outputs.available == 'true' && format('{0}/{1}', env.REGISTRY, env.IMAGE_NAME) || '' }}
@@ -274,7 +274,7 @@ jobs:
         echo "primary=ghcr.io/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # ratchet:docker/build-push-action@v6
+      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8  # ratchet:docker/build-push-action@v6
       with:
         context: .
         platforms: ${{ steps.deployment-inputs.outputs.platforms }}
@@ -300,7 +300,7 @@ jobs:
 
     - name: Upload Trivy scan results
       if: github.event_name != 'pull_request'
-      uses: github/codeql-action/upload-sarif@33119e582d3ab4ed79c2610af108cb08ff983917  # ratchet:github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@411c4c9a36b3fca4d674f06b6396b2c6d23522c6  # ratchet:github/codeql-action/upload-sarif@v3
       with:
         sarif_file: trivy-results.sarif
 
@@ -339,7 +339,7 @@ jobs:
 
     - name: Upload SBOM
       if: github.event_name != 'pull_request'
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: sbom
         path: sbom.spdx.json
