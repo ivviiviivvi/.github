@@ -127,7 +127,7 @@ jobs:
         (inputs.notification_type == 'github' || inputs.notification_type == 'all') &&
         github.event_name == 'pull_request' &&
         inputs.status != 'success'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         INPUT_STATUS: ${{ inputs.status }}
         EMOJI: ${{ steps.details.outputs.emoji }}
@@ -182,7 +182,7 @@ jobs:
       if: |
         (inputs.notification_type == 'slack' || inputs.notification_type == 'all') &&
         steps.validate-slack.outputs.slack_valid == 'true'
-      uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c  # ratchet:slackapi/slack-github-action@v3.0.3
+      uses: slackapi/slack-github-action@fcfb566f8b0aab22203f066d80ca1d7e4b5d05b3  # ratchet:slackapi/slack-github-action@v1
       with:
         payload: |
           {
@@ -254,7 +254,7 @@ jobs:
       if: |
         inputs.status == 'failure' &&
         (inputs.notification_type == 'github' || inputs.notification_type == 'all')
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         WORKFLOW_NAME: ${{ inputs.workflow_name }}
         RUN_URL: ${{ steps.details.outputs.run_url }}

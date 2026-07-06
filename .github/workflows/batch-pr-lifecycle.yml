@@ -53,11 +53,11 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Analyze All PRs
       id: analyze
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         AUTHOR_FILTER: ${{ github.event.inputs.author_filter }}
         LABEL_FILTER: ${{ github.event.inputs.label_filter }}
@@ -233,7 +233,7 @@ jobs:
         echo "EOF" >> $GITHUB_ENV
 
     - name: Upload Analysis Report
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: pr-analysis-report
         path: pr_analysis_report.md
@@ -252,7 +252,7 @@ jobs:
 
     steps:
     - name: Convert All Eligible Draft PRs
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         DRAFT_PRS: ${{ needs.analyze-prs.outputs.draft-prs }}
         DRY_RUN: ${{ github.event.inputs.dry_run }}
@@ -351,7 +351,7 @@ jobs:
         sleep 120
 
     - name: Merge All Mergeable PRs
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         MERGEABLE_PRS: ${{ needs.analyze-prs.outputs.mergeable-prs }}
         DRY_RUN: ${{ github.event.inputs.dry_run }}
@@ -474,7 +474,7 @@ jobs:
 
     steps:
     - name: Create Summary Issue
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       env:
         INPUT_ACTION: ${{ github.event.inputs.action }}
         INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}

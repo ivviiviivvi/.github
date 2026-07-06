@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Close Stale Issues and PRs
-      uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899  # ratchet:actions/stale@v10.3.0
+      uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639  # ratchet:actions/stale@v9
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
           # Issues
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Lock Inactive Closed Issues
-      uses: dessant/lock-threads@89ae32b08ed1a541efecbab17912962a5e38981c  # ratchet:dessant/lock-threads@v6.0.2
+      uses: dessant/lock-threads@1bf7ec25051fe7c00bdd17e6a7cf3d7bfb7dc771  # ratchet:dessant/lock-threads@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         issue-inactive-days: 90
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -132,13 +132,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@1e38d5e62363e14db8019ed7d106b9855bdba6cc  # ratchet:github/issue-metrics@v4.2.7
+      uses: github/issue-metrics@6fa9041b3ea7b6a9dafbdc388d25d86d06b2b6af  # ratchet:github/issue-metrics@v3
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}
 
     - name: Upload Metrics
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: issue-metrics
         path: issue_metrics.md

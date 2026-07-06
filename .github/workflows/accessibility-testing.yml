@@ -34,10 +34,10 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # ratchet:actions/setup-node@v6.4.0
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
       with:
         node-version: '20'
         cache: npm
@@ -96,7 +96,7 @@ jobs:
         fi
 
     - name: Upload Pa11y results
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: pa11y-results
         path: pa11y-results.json
@@ -104,7 +104,7 @@ jobs:
 
     - name: Comment on PR
       if: github.event_name == 'pull_request' && steps.parse.outputs.errors != '0'
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # ratchet:actions/github-script@v9.0.0
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
       with:
         script: |
           const fs = require('fs');
@@ -140,10 +140,10 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # ratchet:actions/setup-node@v6.4.0
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
       with:
         node-version: '20'
         cache: npm
@@ -199,7 +199,7 @@ jobs:
 
     - name: Upload axe report
       if: always()
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # ratchet:actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # ratchet:actions/upload-artifact@v4
       with:
         name: axe-playwright-report
         path: playwright-report/
@@ -211,10 +211,10 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # ratchet:actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # ratchet:actions/setup-node@v6.4.0
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # ratchet:actions/setup-node@v4
       with:
         node-version: '20'
         cache: npm
@@ -229,7 +229,7 @@ jobs:
 
     - name: Run Lighthouse CI
       continue-on-error: true
-      uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18  # ratchet:treosh/lighthouse-ci-action@v12.6.2
+      uses: treosh/lighthouse-ci-action@72f881228236981b625ed765b928efb1786a1f55  # ratchet:treosh/lighthouse-ci-action@v11
       with:
         urls: |
           http://localhost:3000
