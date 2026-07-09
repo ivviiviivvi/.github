@@ -154,6 +154,7 @@ markers = [
 ]
 
 [tool.coverage.run]
+relative_files = true
 source = ["src/automation/scripts"]
 omit = [
     "*/tests/*",
