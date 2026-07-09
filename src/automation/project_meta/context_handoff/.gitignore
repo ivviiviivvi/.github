@@ -1,0 +1,42 @@
+# Context Handoff System - Git Ignore
+
+# Generated context payloads
+context_payload.json
+context_*.json
+
+# Generated handoff reports
+handoff_report.md
+*_handoff.md
+
+# Test outputs
+tests/context_*.json
+tests/.orchestrator_state.json
+tests/*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.orchestrator_state.json.bak
