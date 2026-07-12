@@ -132,3 +132,17 @@ def test_link_checker_ignore_patterns_are_valid_regexes():
         pattern = line.strip()
         if pattern and not pattern.startswith("#"):
             re.compile(pattern)
+
+
+def test_link_checker_handles_symlinks_and_disabled_assets_truthfully():
+    """The full-doc scan must not resolve known aliases to impossible paths."""
+    workflow = read(WORKFLOWS / "link-checker.yml")
+    monitoring = read(ROOT / "docs" / "guides" / "monitoring.md")
+    chatmodes = read(ROOT / "docs" / "guides" / "README.chatmodes.md")
+
+    assert "--exclude-path 'CONTRIBUTING.md'" in workflow
+    assert "if: vars.ENABLE_MARKDOWN_LINK_CHECKS == 'true'" in workflow
+    assert "if: vars.ENABLE_SPELL_CHECK == 'true'" in workflow
+    assert "metrics-collection.yml.disabled" in monitoring
+    assert "csharp-dotnet-janitor.chatmode.md" in chatmodes
+    assert "csharp-dotnet-codebase-cleanup.chatmode.md" not in chatmodes

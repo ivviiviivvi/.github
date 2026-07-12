@@ -730,7 +730,7 @@ ______________________________________________________________________
 ### Workflows
 
 - [Alert on Failure](../../.github/workflows/alert-on-workflow-failure.yml)
-- [Metrics Collection](../../.github/workflows/metrics-collection.yml)
+- [Metrics Collection (disabled template)](../../.github/workflows/metrics-collection.yml.disabled)
 - [Metrics Dashboard](../../.github/workflows/metrics-dashboard.yml)
 - [Usage Monitoring](../../.github/workflows/usage-monitoring.yml)
 
