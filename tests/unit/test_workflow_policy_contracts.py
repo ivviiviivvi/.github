@@ -1,5 +1,6 @@
 """Regression tests for repository-owned workflow policy contracts."""
 
+import re
 from pathlib import Path
 
 import yaml
@@ -112,3 +113,13 @@ def test_dependency_review_uses_supported_action_inputs():
 
     assert "deny-licenses:" not in workflow
     assert "warn-on-deprecated:" not in workflow
+
+
+def test_link_checker_ignore_patterns_are_valid_regexes():
+    """Template placeholders must not make Lychee abort before checking links."""
+    ignore_file = read(ROOT / ".config" / ".lycheeignore")
+
+    for line in ignore_file.splitlines():
+        pattern = line.strip()
+        if pattern and not pattern.startswith("#"):
+            re.compile(pattern)
