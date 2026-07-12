@@ -573,34 +573,46 @@ jobs:
           echo "No README.md found, skipping badge injection"
           exit 0
         fi
-        BADGE="[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=${STYLE})](${SANDBOX_URL})"
+        python3 - <<'PY'
+        import os
+        from pathlib import Path
 
-        MARKER_START="<!-- DEMO:START -->"
-        MARKER_END="<!-- DEMO:END -->"
+        path = Path("README.md")
+        text = path.read_text(encoding="utf-8")
+        marker_start = "<!-- DEMO:START -->"
+        marker_end = "<!-- DEMO:END -->"
+        badge = (
+            "[![Try Demo](https://img.shields.io/badge/"
+            f"Try%20Demo-Live%20Sandbox-brightgreen?style={os.environ['STYLE']})]"
+            f"({os.environ['SANDBOX_URL']})"
+        )
+        block = f"{marker_start}\n\n{badge}\n\n{marker_end}"
 
-        if grep -q "$MARKER_START" README.md; then
-          # Replace content between markers (idempotent)
-          sed -i "/$MARKER_START/,/$MARKER_END/c\\$MARKER_START\n$BADGE\n$MARKER_END" README.md
-        elif grep -q "^# " README.md; then
-          # Insert after the first heading
-          sed -i "0,/^# /{s|^\(# .*\)|\1\n\n$MARKER_START\n$BADGE\n$MARKER_END|}" README.md
-        else
-          # Prepend to file
-          {
-            echo "$MARKER_START"
-            echo "$BADGE"
-            echo "$MARKER_END"
-            echo ""
-            cat README.md
-          } > README.md.tmp && mv README.md.tmp README.md
-        fi
+        if marker_start in text:
+            if marker_end not in text:
+                raise SystemExit("README has an opening demo marker without a closing marker")
+            before, remainder = text.split(marker_start, 1)
+            _, after = remainder.split(marker_end, 1)
+            updated = f"{before}{block}{after}"
+        else:
+            lines = text.splitlines(keepends=True)
+            heading = next((index for index, line in enumerate(lines) if line.startswith("# ")), None)
+            if heading is None:
+                updated = f"{block}\n\n{text}"
+            else:
+                lines.insert(heading + 1, f"\n{block}\n")
+                updated = "".join(lines)
+
+        if updated != text:
+            path.write_text(updated, encoding="utf-8")
+        PY
 
     - name: Create pull request
       uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c  # ratchet:peter-evans/create-pull-request@v6
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: 'feat: add "Try Demo" sandbox badge to README'
-        title: Add "Try Demo" sandbox badge
+        commit-message: 'feat(demo): add Try Demo sandbox badge'
+        title: 'feat(demo): add Try Demo sandbox badge'
         body: |
           ## Demo Sandbox Badge
 
@@ -615,7 +627,7 @@ jobs:
 
           ---
           _Automated by the [demo-sandbox](.github/workflows/demo-sandbox-reusable.yml) reusable workflow._
-        branch: demo/add-sandbox-badge
+        branch: maintenance/chore/demo-sandbox-badge
         delete-branch: true
 
   # ──────────────────────────────────────────────────────────────────────

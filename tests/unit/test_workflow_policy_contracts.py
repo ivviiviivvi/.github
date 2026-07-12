@@ -1,6 +1,7 @@
 """Regression tests for repository-owned workflow policy contracts."""
 
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -83,6 +84,10 @@ def test_repo_owned_pr_producers_emit_compliant_metadata():
             'BRANCH="maintenance/chore/dependency-updates-',
             '--title "chore(deps): update dependencies"',
         ],
+        WORKFLOWS / "demo-sandbox-reusable.yml": [
+            "branch: maintenance/chore/demo-sandbox-badge",
+            "title: 'feat(demo): add Try Demo sandbox badge'",
+        ],
         WORKFLOWS / "reusable" / "pr-batching.yml": [
             "default: maintenance/chore/",
             "title: `chore(automation): batch ${included.length} pull requests`,",
@@ -159,6 +164,25 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     assert "${{ inputs.app-type" not in workflow
     assert "${{ inputs.hosting-provider" not in workflow
     assert "&& github.event.inputs['inject-badge'] || true" not in workflow
+
+
+def test_demo_badge_injection_preserves_query_parameters_and_is_idempotent(tmp_path: Path):
+    """Badge insertion must not treat ampersands in the sandbox URL as sed replacements."""
+    workflow = yaml.safe_load(read(WORKFLOWS / "demo-sandbox-reusable.yml"))
+    script = next(
+        step["run"] for step in workflow["jobs"]["badge"]["steps"] if step.get("name") == "Inject badge into README"
+    )
+    readme = tmp_path / "README.md"
+    readme.write_text("# Demo\n\nBody\n", encoding="utf-8")
+    url = "https://codespaces.new/organvm/example?ref=main&devcontainer_path=.devcontainer/demo/devcontainer.json"
+    env = {**os.environ, "SANDBOX_URL": url, "STYLE": "for-the-badge"}
+
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    first = readme.read_bytes()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+
+    assert f"]({url})" in first.decode("utf-8")
+    assert readme.read_bytes() == first
 
 
 def test_required_checks_run_on_merge_queue_without_publishing_images():
