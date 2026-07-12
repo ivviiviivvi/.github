@@ -1,7 +1,9 @@
 """Regression tests for repository-owned workflow policy contracts."""
 
 import json
+import os
 import re
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -82,6 +84,10 @@ def test_repo_owned_pr_producers_emit_compliant_metadata():
             'BRANCH="maintenance/chore/dependency-updates-',
             '--title "chore(deps): update dependencies"',
         ],
+        WORKFLOWS / "demo-sandbox-reusable.yml": [
+            "branch: maintenance/chore/demo-sandbox-badge",
+            "title: 'feat(workflows): add Try Demo sandbox badge'",
+        ],
         WORKFLOWS / "reusable" / "pr-batching.yml": [
             "default: maintenance/chore/",
             "title: `chore(automation): batch ${included.length} pull requests`,",
@@ -122,6 +128,20 @@ def test_volatile_agent_logs_are_local_runtime_state():
     assert "/logs/agents/" in read(ROOT / ".gitignore")
 
 
+def test_agent_worktrees_are_local_runtime_state():
+    """Agent worktrees must never be committed as orphaned gitlinks."""
+    assert "/.claude/worktrees/" in read(ROOT / ".gitignore")
+
+    tracked = subprocess.run(
+        ["git", "ls-files", "--stage", "--", ".claude/worktrees"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert tracked.stdout == ""
+
+
 def test_dependency_review_uses_supported_action_inputs():
     """The dependency-review action receives only supported policy inputs."""
     workflow = read(WORKFLOWS / "dependency-review.yml")
@@ -134,6 +154,7 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     """Push defaults and manual booleans must remain correctly typed at the call boundary."""
     workflow = read(WORKFLOWS / "demo-deployment.yml")
 
+    assert "- .github/workflows/demo-sandbox-reusable.yml" in workflow
     assert "uses: ./.github/workflows/demo-sandbox-reusable.yml" in workflow
     assert "uses: ./.github/workflows/reusable/" not in workflow
     assert "github.event.inputs['app-type']" in workflow
@@ -144,6 +165,68 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     assert "${{ inputs.app-type" not in workflow
     assert "${{ inputs.hosting-provider" not in workflow
     assert "&& github.event.inputs['inject-badge'] || true" not in workflow
+
+
+def test_demo_badge_injection_preserves_query_parameters_and_is_idempotent(tmp_path: Path):
+    """Badge insertion must not treat ampersands in the sandbox URL as sed replacements."""
+    workflow = yaml.safe_load(read(WORKFLOWS / "demo-sandbox-reusable.yml"))
+    script = next(
+        step["run"] for step in workflow["jobs"]["badge"]["steps"] if step.get("name") == "Inject badge into README"
+    )
+    readme = tmp_path / "README.md"
+    readme.write_text("# Demo\n\nBody\n", encoding="utf-8")
+    url = "https://codespaces.new/organvm/example?ref=main&devcontainer_path=.devcontainer/demo/devcontainer.json"
+    env = {**os.environ, "SANDBOX_URL": url, "STYLE": "for-the-badge"}
+
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    first = readme.read_bytes()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+
+    assert f"]({url})" in first.decode("utf-8")
+    assert readme.read_bytes() == first
+
+
+def test_codespaces_url_only_names_repository_owned_devcontainers(tmp_path: Path):
+    """A disposable runner file must never appear in the durable Codespaces URL."""
+    workflow = yaml.safe_load(read(WORKFLOWS / "demo-sandbox-reusable.yml"))
+    script = next(
+        step["run"]
+        for step in workflow["jobs"]["deploy"]["steps"]
+        if step.get("name") == "Generate Codespaces deep link"
+    )
+    output = tmp_path / "github-output"
+    env = {
+        **os.environ,
+        "GITHUB_OUTPUT": str(output),
+        "REPO": "organvm/example",
+        "REF": "main",
+    }
+
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=tmp_path, check=True)
+    readme = tmp_path / "README.md"
+    readme.write_text("# Demo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", "test: establish repository head"], cwd=tmp_path, check=True)
+
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == "url=https://codespaces.new/organvm/example?ref=main\n"
+
+    devcontainer = tmp_path / ".devcontainer" / "demo" / "devcontainer.json"
+    devcontainer.parent.mkdir(parents=True)
+    devcontainer.write_text("{}\n", encoding="utf-8")
+    output.unlink()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == "url=https://codespaces.new/organvm/example?ref=main\n"
+
+    subprocess.run(["git", "add", ".devcontainer/demo/devcontainer.json"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", "test: add demo devcontainer"], cwd=tmp_path, check=True)
+    output.unlink()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == (
+        "url=https://codespaces.new/organvm/example?ref=main&devcontainer_path=.devcontainer/demo/devcontainer.json\n"
+    )
 
 
 def test_required_checks_run_on_merge_queue_without_publishing_images():

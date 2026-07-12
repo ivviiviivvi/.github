@@ -13,6 +13,7 @@ on:
     - Dockerfile
     - docker-compose.yml
     - .github/workflows/demo-deployment.yml
+    - .github/workflows/demo-sandbox-reusable.yml
   workflow_dispatch:
     inputs:
       app-type:
