@@ -18,6 +18,7 @@ def test_changed_workflows_are_valid_yaml():
     """Every repaired workflow must remain syntactically valid YAML."""
     paths = [
         WORKFLOWS / "auto-pr-create.yml",
+        WORKFLOWS / "demo-deployment.yml",
         WORKFLOWS / "gemini-review.yml",
         WORKFLOWS / "orchestrator.yml",
         WORKFLOWS / "pr-quality-checks.yml",
@@ -122,6 +123,17 @@ def test_dependency_review_uses_supported_action_inputs():
 
     assert "deny-licenses:" not in workflow
     assert "warn-on-deprecated:" not in workflow
+
+
+def test_demo_push_never_reads_manual_only_inputs_context():
+    """Main/merge-queue pushes must compile without workflow_dispatch's inputs context."""
+    workflow = read(WORKFLOWS / "demo-deployment.yml")
+
+    assert "github.event.inputs['app-type']" in workflow
+    assert "github.event.inputs['hosting-provider']" in workflow
+    assert "github.event.inputs['inject-badge']" in workflow
+    assert "${{ inputs.app-type" not in workflow
+    assert "${{ inputs.hosting-provider" not in workflow
 
 
 def test_link_checker_ignore_patterns_are_valid_regexes():
