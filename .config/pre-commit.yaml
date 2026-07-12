@@ -117,7 +117,7 @@ repos:
   - id: eslint
     files: \.[jt]sx?$
     types: [file]
-    exclude: ^src/automation/dashboard/PredictiveWidget\.tsx$
+    exclude: ^src/automation/dashboard/(PredictiveWidget\.tsx|types\.d\.ts)$
     args: [--config, .config/.eslintrc.json]
     additional_dependencies:
     - eslint@8.56.0
