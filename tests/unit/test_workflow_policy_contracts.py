@@ -19,6 +19,7 @@ def test_changed_workflows_are_valid_yaml():
     paths = [
         WORKFLOWS / "auto-pr-create.yml",
         WORKFLOWS / "demo-deployment.yml",
+        WORKFLOWS / "demo-sandbox-reusable.yml",
         WORKFLOWS / "gemini-review.yml",
         WORKFLOWS / "orchestrator.yml",
         WORKFLOWS / "pr-quality-checks.yml",
@@ -129,6 +130,8 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     """Push defaults and manual booleans must remain correctly typed at the call boundary."""
     workflow = read(WORKFLOWS / "demo-deployment.yml")
 
+    assert "uses: ./.github/workflows/demo-sandbox-reusable.yml" in workflow
+    assert "uses: ./.github/workflows/reusable/" not in workflow
     assert "github.event.inputs['app-type']" in workflow
     assert "github.event.inputs['hosting-provider']" in workflow
     assert (

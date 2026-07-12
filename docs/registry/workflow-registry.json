@@ -479,7 +479,7 @@
       "name": "Demo Sandbox Deployment",
       "path": "demo-deployment.yml",
       "meta": "demo-deployment.yml.meta.json",
-      "hash": "d30fcff91b8c70d6244c1b3a86e7dd2ca25c2cb5be084a8db51dc10137f7cf17",
+      "hash": "25114ce8923d3759719e5eef0797651f51ce7bb5f8dc3f73edbb9c036a6ff2a3",
       "functioncalled": {
         "canonical": "application.deployment.demo-sandbox.yml",
         "layer": "application",
@@ -1188,9 +1188,9 @@
     },
     {
       "name": "Demo Sandbox (Reusable)",
-      "path": "reusable/demo-sandbox.yml",
-      "meta": "reusable/demo-sandbox.yml.meta.json",
-      "hash": "24b09d689d45d23b34fd144449cd4774acdc0538bd67be376c32c4a92e567d63",
+      "path": "demo-sandbox-reusable.yml",
+      "meta": "demo-sandbox-reusable.yml.meta.json",
+      "hash": "4686d220b3d85782550f4c3e108cc50614053f1cfc305ad76142eca34b4615fd",
       "functioncalled": {
         "canonical": "core.deployment.demo-sandbox.yml",
         "layer": "core",

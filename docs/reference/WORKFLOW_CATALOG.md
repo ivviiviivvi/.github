@@ -671,7 +671,7 @@ ______________________________________________________________________
 ### demo-deployment.yml
 
 **Purpose**: Wrapper workflow that deploys org repo apps to sandbox
-environments. Calls `reusable/demo-sandbox.yml` to auto-detect app type, select
+environments. Calls `demo-sandbox-reusable.yml` to auto-detect app type, select
 a hosting provider, deploy, and inject a README badge.
 
 | Property     | Value                           |
@@ -923,7 +923,7 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-### demo-sandbox.yml
+### demo-sandbox-reusable.yml
 
 **Purpose**: Reusable sandbox deployment. Auto-detects app type and framework,
 selects a hosting provider (Vercel, Cloudflare Pages, Render, or Codespaces),

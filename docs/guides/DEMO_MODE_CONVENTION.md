@@ -13,7 +13,7 @@ synthetic data, stubbed external services, and simplified auth.
 | `DEMO_AUTH_BYPASS=true` | Use pre-seeded demo credentials instead of real auth  |
 
 All three are injected automatically by the
-[demo-sandbox reusable workflow](../../.github/workflows/reusable/demo-sandbox.yml).
+[demo-sandbox reusable workflow](../../.github/workflows/demo-sandbox-reusable.yml).
 
 ## Core Contract
 
