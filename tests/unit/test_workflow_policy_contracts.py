@@ -154,6 +154,7 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     """Push defaults and manual booleans must remain correctly typed at the call boundary."""
     workflow = read(WORKFLOWS / "demo-deployment.yml")
 
+    assert "- .github/workflows/demo-sandbox-reusable.yml" in workflow
     assert "uses: ./.github/workflows/demo-sandbox-reusable.yml" in workflow
     assert "uses: ./.github/workflows/reusable/" not in workflow
     assert "github.event.inputs['app-type']" in workflow
