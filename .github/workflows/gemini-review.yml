@@ -26,12 +26,51 @@ jobs:
       issues: write
       pull-requests: write
     steps:
+    - name: Check Gemini review availability
+      id: gemini-availability
+      env:
+        HAS_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY != '' }}
+        HAS_GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY != '' }}
+        HAS_WIF_PROVIDER: ${{ vars.GCP_WIF_PROVIDER != '' }}
+        HAS_GCP_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT != '' }}
+        HAS_SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT_EMAIL != '' }}
+        USE_CODE_ASSIST: ${{ vars.GOOGLE_GENAI_USE_GCA || 'false' }}
+        USE_VERTEX_AI: ${{ vars.GOOGLE_GENAI_USE_VERTEXAI || 'false' }}
+      run: |
+        auth_methods=0
+        reason=""
 
+        [[ "$HAS_GEMINI_API_KEY" == "true" ]] && auth_methods=$((auth_methods + 1))
+        [[ "$HAS_GOOGLE_API_KEY" == "true" ]] && auth_methods=$((auth_methods + 1))
+        [[ "$HAS_WIF_PROVIDER" == "true" ]] && auth_methods=$((auth_methods + 1))
+
+        if [[ "$auth_methods" -eq 0 ]]; then
+          reason="no Gemini authentication method is configured"
+        elif [[ "$auth_methods" -gt 1 ]]; then
+          reason="multiple Gemini authentication methods are configured"
+        elif [[ "$HAS_WIF_PROVIDER" == "true" && ( "$HAS_GCP_PROJECT" != "true" || "$HAS_SERVICE_ACCOUNT" != "true" ) ]]; then
+          reason="Workload Identity requires project and service-account configuration"
+        elif [[ "$HAS_WIF_PROVIDER" == "true" && "$USE_VERTEX_AI" == "$USE_CODE_ASSIST" ]]; then
+          reason="Workload Identity requires exactly one Gemini backend"
+        elif [[ "$HAS_GOOGLE_API_KEY" == "true" && ( "$USE_VERTEX_AI" != "true" || "$USE_CODE_ASSIST" == "true" ) ]]; then
+          reason="Google API key authentication requires Vertex AI only"
+        elif [[ "$HAS_GEMINI_API_KEY" == "true" && ( "$USE_VERTEX_AI" == "true" || "$USE_CODE_ASSIST" == "true" ) ]]; then
+          reason="Gemini API key authentication cannot enable Vertex AI or Code Assist"
+        fi
+
+        if [[ -n "$reason" ]]; then
+          echo "available=false" >> "$GITHUB_OUTPUT"
+          echo "reason=$reason" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Gemini review skipped::$reason"
+        else
+          echo "available=true" >> "$GITHUB_OUTPUT"
+          echo "reason=ready" >> "$GITHUB_OUTPUT"
+        fi
 
     - name: Mint identity token
       id: mint_identity_token
       if: |-
-        ${{ vars.APP_ID }}
+        ${{ steps.gemini-availability.outputs.available == 'true' && vars.APP_ID != '' }}
       uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # ratchet:actions/create-github-app-token@v2
       with:
         app-id: ${{ vars.APP_ID }}
@@ -41,9 +80,11 @@ jobs:
         permission-pull-requests: write
 
     - name: Checkout repository
+      if: steps.gemini-availability.outputs.available == 'true'
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
 
     - name: Run Gemini pull request review
+      if: steps.gemini-availability.outputs.available == 'true'
       uses: ./.github/actions/run-gemini-cli-pinned
       id: gemini_pr_review
       env:
@@ -276,3 +317,14 @@ jobs:
           ## Final Instructions
 
           Remember, you are running in a virtual machine and no one reviewing your output. Your review must be posted to GitHub using the MCP tools to create a pending review, add comments to the pending review, and submit the pending review.
+
+    - name: Record unavailable Gemini review
+      if: steps.gemini-availability.outputs.available != 'true'
+      env:
+        REASON: ${{ steps.gemini-availability.outputs.reason }}
+      run: |
+        {
+          echo "### Gemini review"
+          echo
+          echo "Optional review skipped: ${REASON}."
+        } >> "$GITHUB_STEP_SUMMARY"

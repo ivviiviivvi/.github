@@ -16,7 +16,7 @@ on:
         description: Prefix for batch merge branches
         required: false
         type: string
-        default: batch/
+        default: maintenance/chore/
       base-branch:
         description: Base branch for batch operations
         required: false
@@ -393,7 +393,7 @@ jobs:
           const { data: batchPR } = await github.rest.pulls.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            title: `[Batch Merge] ${included.length} PRs`,
+            title: `chore(automation): batch ${included.length} pull requests`,
             head: batchBranch,
             base: baseBranch,
             body: body

@@ -336,7 +336,7 @@ create_pr() {
 
     # Create branch
     local branch_name
-    branch_name="feature/add-video-walkthrough-$(date +%Y%m%d)"
+    branch_name="develop/feature/add-video-walkthrough-$(date +%Y%m%d)"
     local unique_suffix=""
 
     if [ "$DRY_RUN" = true ]; then
@@ -391,7 +391,7 @@ https://github.com/$ORG_NAME/.github/blob/main/.github/WALKTHROUGH_GUIDE.md" || 
 
     # Create PR using GitHub CLI
     gh pr create \
-        --title "feat: Add video walkthrough generation" \
+        --title "feat(workflows): add video walkthrough generation" \
         --body "## 🎥 Add Video Walkthrough Generation
 
 This PR adds automated video walkthrough generation infrastructure to this repository.

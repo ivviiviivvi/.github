@@ -149,7 +149,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          BRANCH="maintenance/dependency-updates-$(date +%Y%m%d)"
+          BRANCH="maintenance/chore/dependency-updates-$(date +%Y%m%d)"
           git checkout -b $BRANCH
           git add -A
           git commit -m "chore: update dependencies
@@ -158,7 +158,7 @@ jobs:
           git push origin $BRANCH
 
           gh pr create \
-            --title "🔄 Automated Dependency Updates" \
+            --title "chore(deps): update dependencies" \
             --body "## Dependency Updates
 
         This PR contains automated dependency updates from the proactive maintenance workflow.

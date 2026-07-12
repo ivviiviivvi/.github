@@ -95,17 +95,35 @@ jobs:
           const branch = context.ref.replace('refs/heads/', '');
           const baseBranch = '${{ steps.base-branch.outputs.base }}';
 
-          // Extract branch type and description
+          // Extract a conventional type and subject from every allowed branch shape.
           const parts = branch.split('/');
-          const branchType = parts[0];
-          const description = parts.slice(1).join('/').replace(/-/g, ' ');
+          const lifecycleNames = new Set([
+            'develop',
+            'experimental',
+            'production',
+            'maintenance',
+            'deprecated',
+            'archive'
+          ]);
+          const hasLifecycle = lifecycleNames.has(parts[0]) && parts.length > 2;
+          const branchType = hasLifecycle ? parts[1] : parts[0];
+          const descriptionParts = hasLifecycle ? parts.slice(2) : parts.slice(1);
+          const description = (descriptionParts.join(' ') || branch)
+            .replace(/[._/-]+/g, ' ')
+            .trim()
+            .replace(/^./, character => character.toLowerCase());
 
           // Generate conventional commit type
           const typeMap = {
             'feature': 'feat',
+            'enhancement': 'feat',
             'bugfix': 'fix',
             'hotfix': 'fix',
-            'release': 'release'
+            'fix': 'fix',
+            'refactor': 'refactor',
+            'docs': 'docs',
+            'test': 'test',
+            'chore': 'chore'
           };
           const commitType = typeMap[branchType] || 'chore';
 

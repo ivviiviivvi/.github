@@ -1,0 +1,114 @@
+"""Regression tests for repository-owned workflow policy contracts."""
+
+from pathlib import Path
+
+import yaml
+
+ROOT = Path(__file__).parents[2]
+WORKFLOWS = ROOT / ".github" / "workflows"
+
+
+def read(path: Path) -> str:
+    """Return a repository text file."""
+    return path.read_text(encoding="utf-8")
+
+
+def test_changed_workflows_are_valid_yaml():
+    """Every repaired workflow must remain syntactically valid YAML."""
+    paths = [
+        WORKFLOWS / "auto-pr-create.yml",
+        WORKFLOWS / "gemini-review.yml",
+        WORKFLOWS / "orchestrator.yml",
+        WORKFLOWS / "pr-quality-checks.yml",
+        WORKFLOWS / "pr-title-lint.yml",
+        WORKFLOWS / "proactive-maintenance.yml",
+        WORKFLOWS / "repository-bootstrap.yml",
+        WORKFLOWS / "reusable" / "pr-batching.yml",
+        WORKFLOWS / "version-control-standards.yml",
+        WORKFLOWS / "welcome.yml",
+    ]
+
+    for path in paths:
+        assert isinstance(yaml.safe_load(read(path)), dict), path
+
+
+def test_first_interaction_uses_current_input_names():
+    """The pinned first-interaction action exposes underscore input names."""
+    workflow = read(WORKFLOWS / "welcome.yml")
+
+    assert "repo_token:" in workflow
+    assert "issue_message:" in workflow
+    assert "pr_message:" in workflow
+    assert "repo-token:" not in workflow
+    assert "issue-message:" not in workflow
+    assert "pr-message:" not in workflow
+
+
+def test_automation_has_no_pr_title_or_branch_bypass():
+    """Autonomous changes satisfy the same policy contract as human changes."""
+    title_workflows = "\n".join(
+        read(path)
+        for path in [
+            WORKFLOWS / "pr-title-lint.yml",
+            WORKFLOWS / "pr-quality-checks.yml",
+        ]
+    )
+    standards = read(WORKFLOWS / "version-control-standards.yml")
+
+    assert "startsWith(github.event.pull_request.title, '[limen ')" not in title_workflows
+    assert '"^limen/' not in standards
+    assert "Skipping commit message validation for Limen" not in standards
+
+
+def test_repo_owned_pr_producers_emit_compliant_metadata():
+    """Repository-owned PR producers use conventional titles and branch shapes."""
+    expected = {
+        WORKFLOWS / "repository-bootstrap.yml": [
+            'BRANCH_NAME="maintenance/chore/workflow-templates-',
+            '--title "chore(workflows): add workflow templates"',
+        ],
+        WORKFLOWS / "orchestrator.yml": [
+            'DAILY_BRANCH="maintenance/chore/daily-batch-',
+            '--title "chore(automation): collect daily batch updates for ',
+        ],
+        WORKFLOWS / "proactive-maintenance.yml": [
+            'BRANCH="maintenance/chore/dependency-updates-',
+            '--title "chore(deps): update dependencies"',
+        ],
+        WORKFLOWS / "reusable" / "pr-batching.yml": [
+            "default: maintenance/chore/",
+            "title: `chore(automation): batch ${included.length} pull requests`,",
+        ],
+        ROOT / "src" / "automation" / "scripts" / "bootstrap-walkthrough-org.sh": [
+            'branch_name="develop/feature/add-video-walkthrough-',
+            '--title "feat(workflows): add video walkthrough generation"',
+        ],
+    }
+
+    for path, fragments in expected.items():
+        contents = read(path)
+        for fragment in fragments:
+            assert fragment in contents, (path, fragment)
+
+
+def test_optional_gemini_review_skips_before_cli_without_auth():
+    """Missing optional provider auth must not create a permanently red check."""
+    workflow = read(WORKFLOWS / "gemini-review.yml")
+
+    assert "id: gemini-availability" in workflow
+    assert 'echo "available=false" >> "$GITHUB_OUTPUT"' in workflow
+    assert "if: steps.gemini-availability.outputs.available == 'true'" in workflow
+    assert "Optional review skipped: ${REASON}." in workflow
+
+
+def test_volatile_agent_logs_are_local_runtime_state():
+    """Ephemeral agent heartbeats cannot become product diffs."""
+    assert "/logs/agents/" in read(ROOT / ".gitignore")
+
+
+def test_dependency_review_uses_supported_action_inputs():
+    """The dependency-review action receives only supported policy inputs."""
+    workflow = read(WORKFLOWS / "dependency-review.yml")
+
+    assert "deny-licenses:" not in workflow
+    assert "warn-on-deprecated:" not in workflow
