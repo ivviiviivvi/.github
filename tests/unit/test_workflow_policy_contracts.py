@@ -18,14 +18,17 @@ def test_changed_workflows_are_valid_yaml():
     """Every repaired workflow must remain syntactically valid YAML."""
     paths = [
         WORKFLOWS / "auto-pr-create.yml",
+        WORKFLOWS / "ci.yml",
         WORKFLOWS / "demo-deployment.yml",
         WORKFLOWS / "demo-sandbox-reusable.yml",
+        WORKFLOWS / "docker-build-push.yml",
         WORKFLOWS / "gemini-review.yml",
         WORKFLOWS / "orchestrator.yml",
         WORKFLOWS / "pr-quality-checks.yml",
         WORKFLOWS / "pr-title-lint.yml",
         WORKFLOWS / "proactive-maintenance.yml",
         WORKFLOWS / "repository-bootstrap.yml",
+        WORKFLOWS / "run-integration-tests.yml",
         WORKFLOWS / "reusable" / "pr-batching.yml",
         WORKFLOWS / "version-control-standards.yml",
         WORKFLOWS / "welcome.yml",
@@ -140,6 +143,23 @@ def test_demo_push_and_manual_inputs_preserve_reusable_workflow_types():
     assert "${{ inputs.app-type" not in workflow
     assert "${{ inputs.hosting-provider" not in workflow
     assert "&& github.event.inputs['inject-badge'] || true" not in workflow
+
+
+def test_required_checks_run_on_merge_queue_without_publishing_images():
+    """Every required-check owner must emit on merge_group without deployment side effects."""
+    required_check_workflows = [
+        WORKFLOWS / "ci.yml",
+        WORKFLOWS / "docker-build-push.yml",
+        WORKFLOWS / "run-integration-tests.yml",
+    ]
+
+    for path in required_check_workflows:
+        workflow = read(path)
+        assert "  merge_group:\n    types: [checks_requested]\n" in workflow, path
+
+    docker = read(WORKFLOWS / "docker-build-push.yml")
+    assert docker.count("github.event_name != 'merge_group'") == 10
+    assert ("push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group'") in docker
 
 
 def test_link_checker_ignore_patterns_are_valid_regexes():
