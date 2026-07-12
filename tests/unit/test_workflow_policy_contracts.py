@@ -2,6 +2,7 @@
 
 import json
 import re
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -120,6 +121,20 @@ def test_batch_pr_outputs_enter_github_script_through_environment():
 def test_volatile_agent_logs_are_local_runtime_state():
     """Ephemeral agent heartbeats cannot become product diffs."""
     assert "/logs/agents/" in read(ROOT / ".gitignore")
+
+
+def test_agent_worktrees_are_local_runtime_state():
+    """Agent worktrees must never be committed as orphaned gitlinks."""
+    assert "/.claude/worktrees/" in read(ROOT / ".gitignore")
+
+    tracked = subprocess.run(
+        ["git", "ls-files", "--stage", "--", ".claude/worktrees"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert tracked.stdout == ""
 
 
 def test_dependency_review_uses_supported_action_inputs():

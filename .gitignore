@@ -81,3 +81,4 @@ generated_workflows/
 
 # Local tool configuration
 .serena/
+/.claude/worktrees/
