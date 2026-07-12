@@ -86,7 +86,7 @@ def test_repo_owned_pr_producers_emit_compliant_metadata():
         ],
         WORKFLOWS / "demo-sandbox-reusable.yml": [
             "branch: maintenance/chore/demo-sandbox-badge",
-            "title: 'feat(demo): add Try Demo sandbox badge'",
+            "title: 'feat(workflows): add Try Demo sandbox badge'",
         ],
         WORKFLOWS / "reusable" / "pr-batching.yml": [
             "default: maintenance/chore/",
@@ -202,12 +202,26 @@ def test_codespaces_url_only_names_repository_owned_devcontainers(tmp_path: Path
         "REF": "main",
     }
 
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=tmp_path, check=True)
+    readme = tmp_path / "README.md"
+    readme.write_text("# Demo\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", "test: establish repository head"], cwd=tmp_path, check=True)
+
     subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
     assert output.read_text(encoding="utf-8") == "url=https://codespaces.new/organvm/example?ref=main\n"
 
     devcontainer = tmp_path / ".devcontainer" / "demo" / "devcontainer.json"
     devcontainer.parent.mkdir(parents=True)
     devcontainer.write_text("{}\n", encoding="utf-8")
+    output.unlink()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == "url=https://codespaces.new/organvm/example?ref=main\n"
+
+    subprocess.run(["git", "add", ".devcontainer/demo/devcontainer.json"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", "test: add demo devcontainer"], cwd=tmp_path, check=True)
     output.unlink()
     subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
     assert output.read_text(encoding="utf-8") == (

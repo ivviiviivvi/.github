@@ -478,7 +478,7 @@ jobs:
         REF: ${{ github.ref_name }}
       run: |
         DEEP_LINK="https://codespaces.new/${REPO}?ref=${REF}"
-        if [ -f ".devcontainer/demo/devcontainer.json" ]; then
+        if git cat-file -e "HEAD:.devcontainer/demo/devcontainer.json" 2>/dev/null; then
           DEEP_LINK="${DEEP_LINK}&devcontainer_path=.devcontainer/demo/devcontainer.json"
         fi
 
@@ -593,8 +593,8 @@ jobs:
       uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c  # ratchet:peter-evans/create-pull-request@v6
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: 'feat(demo): add Try Demo sandbox badge'
-        title: 'feat(demo): add Try Demo sandbox badge'
+        commit-message: 'feat(workflows): add Try Demo sandbox badge'
+        title: 'feat(workflows): add Try Demo sandbox badge'
         body: |
           ## Demo Sandbox Badge
 
