@@ -362,12 +362,19 @@ jobs:
       id: create-batch-pr
       if: inputs.operation == 'create-batch' && steps.create-batch.outputs.branch != ''
       uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # ratchet:actions/github-script@v7
+      env:
+        BATCH_BRANCH: ${{ steps.create-batch.outputs.branch }}
+        BASE_BRANCH: ${{ inputs.base-branch }}
+        INCLUDED_PRS: ${{ steps.create-batch.outputs.included }}
+        EXCLUDED_PRS: ${{ steps.create-batch.outputs.excluded }}
+        MERGE_METHOD: ${{ inputs.merge-method }}
+        AUTO_DELETE_BRANCHES: ${{ inputs.auto-delete-branches }}
       with:
         script: |
-          const batchBranch = '${{ steps.create-batch.outputs.branch }}';
-          const baseBranch = '${{ inputs.base-branch }}';
-          const included = JSON.parse('${{ steps.create-batch.outputs.included }}');
-          const excluded = JSON.parse('${{ steps.create-batch.outputs.excluded }}');
+          const batchBranch = process.env.BATCH_BRANCH;
+          const baseBranch = process.env.BASE_BRANCH;
+          const included = JSON.parse(process.env.INCLUDED_PRS || '[]');
+          const excluded = JSON.parse(process.env.EXCLUDED_PRS || '[]');
 
           // Build PR body
           let body = '## Batch Merge PR\n\n';
@@ -386,8 +393,8 @@ jobs:
           }
 
           body += '\n---\n\n';
-          body += '**Merge Method:** ${{ inputs.merge-method }}\n';
-          body += `**Auto-delete branches:** ${{ inputs.auto-delete-branches }}\n`;
+          body += `**Merge Method:** ${process.env.MERGE_METHOD}\n`;
+          body += `**Auto-delete branches:** ${process.env.AUTO_DELETE_BRANCHES}\n`;
 
           // Create the batch PR
           const { data: batchPR } = await github.rest.pulls.create({

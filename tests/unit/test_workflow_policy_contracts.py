@@ -102,6 +102,15 @@ def test_optional_gemini_review_skips_before_cli_without_auth():
     assert "Optional review skipped: ${REASON}." in workflow
 
 
+def test_batch_pr_outputs_enter_github_script_through_environment():
+    """PR-controlled output cannot be interpolated into executable JavaScript."""
+    workflow = read(WORKFLOWS / "reusable" / "pr-batching.yml")
+
+    assert "INCLUDED_PRS: ${{ steps.create-batch.outputs.included }}" in workflow
+    assert "JSON.parse(process.env.INCLUDED_PRS || '[]')" in workflow
+    assert "JSON.parse('${{ steps.create-batch.outputs.included }}')" not in workflow
+
+
 def test_volatile_agent_logs_are_local_runtime_state():
     """Ephemeral agent heartbeats cannot become product diffs."""
     assert "/logs/agents/" in read(ROOT / ".gitignore")

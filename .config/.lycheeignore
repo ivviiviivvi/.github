@@ -32,6 +32,7 @@ https://github.community/
 # GitHub URLs with template variables
 https://github.com/%7B
 https://hub.docker.com/r/%7B
+%7B%7B
 
 # API endpoints (require auth)
 https://api.github.com/
@@ -54,6 +55,14 @@ https://reddit.com
 https://www.mend.io
 https://platform.openai.com
 https://www.npmjs.com/package/@org/
+https://app.slack.com/block-kit-builder
+
+# Known retired or auth-sensitive documentation targets
+https://neon.com/llms/manage-branches.txt
+https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/
+https://github.com/organvm-i-theoria/.github/issues/(441|447)
+https://github.com/organvm-i-theoria/my-knowledge-base
+https://github.com/orgs/organvm-i-theoria/discussions
 
 # Placeholder/example URLs
 https://via.placeholder.com
