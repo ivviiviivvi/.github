@@ -1,5 +1,6 @@
 """Regression tests for repository-owned workflow policy contracts."""
 
+import json
 import re
 from pathlib import Path
 
@@ -160,6 +161,9 @@ def test_required_checks_run_on_merge_queue_without_publishing_images():
     docker = read(WORKFLOWS / "docker-build-push.yml")
     assert docker.count("github.event_name != 'merge_group'") == 10
     assert ("push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group'") in docker
+
+    schema = json.loads(read(ROOT / ".github" / "standards" / "FUNCTIONcalled_Workflow_Sidecar.schema.json"))
+    assert "merge_group" in schema["properties"]["triggers"]["items"]["enum"]
 
 
 def test_link_checker_ignore_patterns_are_valid_regexes():

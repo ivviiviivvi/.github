@@ -86,6 +86,7 @@
           "pull_request_review",
           "pull_request_review_comment",
           "pull_request_target",
+          "merge_group",
           "check_suite",
           "workflow_dispatch",
           "workflow_call",
