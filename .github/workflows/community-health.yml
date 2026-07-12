@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: Close Stale Issues and PRs
-      uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899  # ratchet:actions/stale@v10.3.0
+      uses: actions/stale@1e223db275d687790206a7acac4d1a11bd6fe629  # ratchet:actions/stale@v10.4.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
           # Issues
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # ratchet:actions/checkout@v6.0.2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # ratchet:actions/checkout@v7.0.0
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -132,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Issue Metrics
-      uses: github/issue-metrics@1e38d5e62363e14db8019ed7d106b9855bdba6cc  # ratchet:github/issue-metrics@v4.2.7
+      uses: github/issue-metrics@df8c49d20958f9345281fa2124858bd0ad227e1f  # ratchet:github/issue-metrics@v5.0.0
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SEARCH_QUERY: repo:${{ github.repository }} is:issue created:>=${{ github.event.repository.created_at }}

@@ -182,7 +182,7 @@ jobs:
       if: |
         (inputs.notification_type == 'slack' || inputs.notification_type == 'all') &&
         steps.validate-slack.outputs.slack_valid == 'true'
-      uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c  # ratchet:slackapi/slack-github-action@v3.0.3
+      uses: slackapi/slack-github-action@0d95c9a7becc1e6e297d76df9bc735c44f4cbcbc  # ratchet:slackapi/slack-github-action@v3.0.5
       with:
         payload: |
           {
