@@ -2,6 +2,10 @@
 
 # .github
 
+<!-- DEMO:START -->
+[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=for-the-badge)](https://codespaces.new/organvm/dot-github--theoria?ref=main# .githubdevcontainer_path=.devcontainer/demo/devcontainer.json)
+<!-- DEMO:END -->
+
 **Organization-wide infrastructure for CI/CD, AI agents, and community health**
 
 <!-- BADGES:START -->
