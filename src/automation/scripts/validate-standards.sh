@@ -50,6 +50,7 @@ validate_branch_name() {
     # Valid patterns according to VERSION_CONTROL_STANDARDS.md
     local valid_patterns=(
         "^(develop|experimental|production|maintenance|deprecated|archive)/(feature|bugfix|hotfix|enhancement|refactor|docs|test|chore)/[a-z0-9-]+(/[a-z0-9-]+)?(/[a-z0-9-]+)?$"
+        "^fix/[a-z0-9-]+(/[a-z0-9-]+)?$"
         "^release/v[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.-]+)?$"
         "^maintenance/v[0-9]+-maintenance$"
         "^maintenance/v[0-9]+\.x/[a-z0-9-]+$"

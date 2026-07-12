@@ -59,7 +59,7 @@ ______________________________________________________________________
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │ PHASE 4: Demo Sandbox Deployment                         │  │
 │  │ • demo-deployment.yml (wrapper)                           │  │
-│  │ • reusable/demo-sandbox.yml (detect → deploy → badge)     │  │
+│  │ • demo-sandbox-reusable.yml (detect → deploy → badge)     │  │
 │  │ • update-demo-registry.yml (registry_dispatch listener)   │  │
 │  └──────────────────────────────────────────────────────────┘  │
 │                           ↓                                       │
@@ -307,7 +307,7 @@ pipeline\
 - `inject-badge`: whether to create a PR adding a "Try Demo" badge to README
   (default: true)
 
-#### `reusable/demo-sandbox.yml`
+#### `demo-sandbox-reusable.yml`
 
 **Purpose**: Reusable workflow implementing the full sandbox pipeline\
 **Jobs**

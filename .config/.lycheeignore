@@ -1,15 +1,6 @@
 # Existing org URLs (non-existent)
 https://aka.ms/awesome-copilot/
 https://github.com/apps/
-https://discord.gg/{{DISCORD_INVITE}}
-https://youtube.com/@{{ORG_NAME}}
-https://{{ORG_WEBSITE}}/
-https://{{ORG_WEBSITE}}/support
-https://cookbook.{{ORG_WEBSITE}}/
-https://tutorials.{{ORG_WEBSITE}}/
-https://github.com/{{ORG_NAME}}/project-a
-https://github.com/{{ORG_NAME}}/project-b
-https://github.com/{{ORG_NAME}}/awesome-{{ORG_NAME}}
 
 # GitHub awesome-copilot (rate-limited, 429 errors)
 https://github.com/github/awesome-copilot/
@@ -32,7 +23,6 @@ https://org.github.io/
 # GitHub auth-required URLs
 https://github.com/settings/
 https://github.com/organizations/
-https://github.com/orgs/{{ORG_NAME}}/projects/
 
 # GitHub misc (identicons, assets, community)
 https://github.com/identicons/
@@ -42,6 +32,7 @@ https://github.community/
 # GitHub URLs with template variables
 https://github.com/%7B
 https://hub.docker.com/r/%7B
+%7B%7B
 
 # API endpoints (require auth)
 https://api.github.com/
@@ -52,7 +43,6 @@ https://api.agentsphere.dev/
 https://generativelanguage.googleapis.com
 
 # Domains that don't resolve
-https://walkthroughs.{{ORG_NAME}}.dev
 https://gui-rs.org
 https://get.project.com
 
@@ -65,15 +55,17 @@ https://reddit.com
 https://www.mend.io
 https://platform.openai.com
 https://www.npmjs.com/package/@org/
+https://app.slack.com/block-kit-builder
 
-# GitHub {{ORG_NAME}} repos (non-existent, referenced in docs)
-https://github.com/{{ORG_NAME}}/new-repo
-https://github.com/{{ORG_NAME}}/example-repo
+# Known retired or auth-sensitive documentation targets
+https://neon.com/llms/manage-branches.txt
+https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/
+https://github.com/organvm-i-theoria/.github/issues/(441|447)
+https://github.com/organvm-i-theoria/my-knowledge-base
+https://github.com/orgs/organvm-i-theoria/discussions
 
 # Placeholder/example URLs
 https://via.placeholder.com
-https://agentsphere.dev/{{ORG_NAME}}/
-https://raw.githubusercontent.com/{{ORG_NAME}}/.github/main/metrics/
 
 # Template placeholders (will resolve after setup)
 \{\{

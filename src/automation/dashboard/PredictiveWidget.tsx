@@ -2,6 +2,7 @@
 // Displays real-time failure risk predictions
 
 import React, { useEffect, useState } from "react";
+import type { FC } from "react";
 import "./PredictiveWidget.css";
 
 interface Prediction {
@@ -24,7 +25,7 @@ interface ModelMetrics {
   test_samples: number;
 }
 
-const PredictiveWidget: React.FC = () => {
+const PredictiveWidget: FC = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [metrics, setMetrics] = useState<ModelMetrics | null>(null);
   const [loading, setLoading] = useState(true);

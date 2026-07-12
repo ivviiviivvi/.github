@@ -376,7 +376,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Create branch and commit
-          BRANCH_NAME="bootstrap/workflow-templates-$(date +%s)"
+          BRANCH_NAME="maintenance/chore/workflow-templates-$(date +%s)"
           git checkout -b "$BRANCH_NAME"
           git add .github/workflows/
           git commit -m "chore: add workflow templates from .github repository
@@ -415,7 +415,7 @@ jobs:
             --repo "$TARGET_REPO" \
             --base main \
             --head "$BRANCH_NAME" \
-            --title "chore: Add workflow templates" \
+            --title "chore(workflows): add workflow templates" \
             --body-file /tmp/pr_body.md || {
             echo "⚠️ Warning: Could not create PR. Changes pushed to branch $BRANCH_NAME"
           }

@@ -614,7 +614,7 @@ jobs:
           so future deployments update it in place.
 
           ---
-          _Automated by the [demo-sandbox](.github/workflows/reusable/demo-sandbox.yml) reusable workflow._
+          _Automated by the [demo-sandbox](.github/workflows/demo-sandbox-reusable.yml) reusable workflow._
         branch: demo/add-sandbox-badge
         delete-branch: true
 

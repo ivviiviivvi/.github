@@ -43,11 +43,11 @@ permissions:
 
 jobs:
   sandbox:
-    uses: ./.github/workflows/reusable/demo-sandbox.yml
+    uses: ./.github/workflows/demo-sandbox-reusable.yml
     with:
-      app-type: ${{ inputs.app-type || '' }}
-      hosting-provider: ${{ inputs.hosting-provider || '' }}
-      inject-badge: ${{ github.event_name == 'workflow_dispatch' && inputs.inject-badge || true }}
+      app-type: ${{ github.event.inputs['app-type'] || '' }}
+      hosting-provider: ${{ github.event.inputs['hosting-provider'] || '' }}
+      inject-badge: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs['inject-badge'] == 'true' }}
       update-registry: true
       badge-style: for-the-badge
     secrets:

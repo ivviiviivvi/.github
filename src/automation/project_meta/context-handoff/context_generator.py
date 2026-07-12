@@ -15,10 +15,11 @@ Usage:
 """
 
 import json
-from datetime import datetime
+import sys
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 class CompressionLevel(Enum):
@@ -74,7 +75,10 @@ class ContextPayloadGenerator:
         if not self.state_file.exists():
             raise FileNotFoundError(f"State file not found: {self.state_file}")
         with open(self.state_file, encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+        if not isinstance(data, dict) or not all(isinstance(key, str) for key in data):
+            raise ValueError("Orchestrator state must be a JSON object with string keys")
+        return cast(dict[str, Any], data)
 
     def generate_context(self, level: CompressionLevel = CompressionLevel.STANDARD) -> dict[str, Any]:
         """Generate context payload at specified compression level.
@@ -148,14 +152,14 @@ class ContextPayloadGenerator:
 
         return {
             "version": "1.0.0",
-            "handoff_id": f"handoff_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "handoff_id": f"handoff_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}",
             "summary": {
                 "project": self.state.get("metadata", {}).get("project_name"),
                 "current_phase": context.get("current_phase"),
                 "progress": self._generate_minimal()["summary"]["progress"],
                 "tasks_complete": len(context.get("completed_tasks", [])),
                 "tasks_total": len(tasks),
-                "generated_at": datetime.utcnow().isoformat() + "Z",
+                "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             },
             "execution_state": {
                 "active_tasks": context.get("active_tasks", []),
@@ -232,7 +236,6 @@ class ContextPayloadGenerator:
 
         """
         tasks = self.state.get("tasks", {})
-        set(self.state.get("context", {}).get("completed_tasks", []))
         failed = set(self.state.get("context", {}).get("failed_tasks", []))
         blocked = []
         for tid, task in tasks.items():
@@ -274,7 +277,7 @@ class ContextPayloadGenerator:
             {"prompt": d.get("prompt"), "choice": d.get("decision", {}).get("choice")}
             for d in sorted(
                 decisions,
-                key=lambda x: x.get("decision", {}).get("decided_at", ""),
+                key=lambda x: x.get("decision", {}).get("decided_at") or "",
                 reverse=True,
             )[:limit]
         ]
@@ -402,12 +405,13 @@ class ContextPayloadGenerator:
             Python version string
 
         """
-        return (
+        version = (
             self.state.get("environment_config", {})
             .get("runtime_environment", {})
             .get("python", {})
             .get("version", "unknown")
         )
+        return str(version)
 
     def _get_key_packages(self) -> dict[str, str]:
         """Get key package versions.
@@ -533,4 +537,4 @@ def main():
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())

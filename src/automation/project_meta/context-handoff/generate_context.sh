@@ -89,71 +89,15 @@ fi
 PYTHON_VERSION=$("$PYTHON" -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 log_info "Python version: $PYTHON_VERSION"
 
-# Generate context using Python module
+# Generate context using the Python CLI. Pass every caller-controlled value as
+# an argument so paths cannot become Python source through shell interpolation.
 log_info "Generating context payload..."
 
-$PYTHON - <<EOF
-import sys
-import os
-sys.path.insert(0, '$SCRIPT_DIR')
-
-from context_generator import ContextPayloadGenerator, CompressionLevel
-
-try:
-    # Map level string to enum
-    level_map = {
-        'minimal': CompressionLevel.MINIMAL,
-        'standard': CompressionLevel.STANDARD,
-        'full': CompressionLevel.FULL
-    }
-
-    # Generate context
-    gen = ContextPayloadGenerator('$STATE_FILE')
-    level = level_map['$LEVEL']
-
-    # Save to file
-    output_path = gen.save_context('$OUTPUT', level)
-
-    # Get context for token counting
-    context = gen.generate_context(level)
-    tokens = gen.get_token_count(context)
-
-    # Print results
-    print(f"\n{'─' * 55}")
-    print(f"Context generated successfully")
-    print(f"{'─' * 55}")
-    print(f"Level:           $LEVEL")
-    print(f"Output:          {output_path}")
-    print(f"Estimated tokens: {tokens}")
-    print(f"{'─' * 55}\n")
-
-    # Token budget analysis
-    if tokens <= 500:
-        budget = "Excellent"
-    elif tokens <= 1200:
-        budget = "Good"
-    elif tokens <= 2000:
-        budget = "Acceptable"
-    else:
-        budget = "High - consider using lower compression level"
-
-    print(f"Token budget:    {budget}")
-
-    sys.exit(0)
-
-except FileNotFoundError as e:
-    print(f"\nError: {e}", file=sys.stderr)
-    sys.exit(1)
-except Exception as e:
-    print(f"\nError generating context: {e}", file=sys.stderr)
-    import traceback
-    traceback.print_exc()
-    sys.exit(1)
-EOF
-
-RESULT=$?
-
-if [[ $RESULT -eq 0 ]]; then
+if "$PYTHON" "$SCRIPT_DIR/context_generator.py" \
+    --state-file "$STATE_FILE" \
+    --output "$OUTPUT" \
+    --level "$LEVEL" \
+    --show-tokens; then
     log_success "Context generation complete"
     log_info "Ready for AI session handoff"
     echo ""
@@ -164,5 +108,5 @@ if [[ $RESULT -eq 0 ]]; then
     echo ""
 else
     log_error "Context generation failed"
-    exit $RESULT
+    exit 1
 fi

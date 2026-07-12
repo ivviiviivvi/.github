@@ -11,7 +11,7 @@ Usage:
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 class ContextValidator:
@@ -105,7 +105,10 @@ class ContextValidator:
             raise FileNotFoundError(f"Context file not found: {self.context_file}")
 
         with open(self.context_file, encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+        if not isinstance(data, dict) or not all(isinstance(key, str) for key in data):
+            raise ValueError("Context payload must be a JSON object with string keys")
+        return cast(dict[str, Any], data)
 
     def detect_level(self) -> str:
         """Detect compression level from context structure.
@@ -249,10 +252,10 @@ class ContextValidator:
 
         # Run validations
         schema_valid = self.validate_schema(level)
-        self.validate_token_count(level)
+        token_valid = self.validate_token_count(level)
         types_valid = self.validate_data_types()
 
-        is_valid = schema_valid and types_valid
+        is_valid = schema_valid and token_valid and types_valid
 
         return is_valid, self.errors, self.warnings
 
