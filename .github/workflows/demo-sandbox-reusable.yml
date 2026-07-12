@@ -476,29 +476,11 @@ jobs:
       env:
         REPO: ${{ github.repository }}
         REF: ${{ github.ref_name }}
-      run: |2
-
-        # Create demo-specific devcontainer if it doesn't exist
-        mkdir -p .devcontainer/demo
-        cat > .devcontainer/demo/devcontainer.json << 'DEVCONTAINER'
-        {
-          "name": "Demo Sandbox",
-          "image": "mcr.microsoft.com/devcontainers/universal:2",
-          "features": {
-            "ghcr.io/devcontainers/features/node:1": {},
-            "ghcr.io/devcontainers/features/python:1": {}
-          },
-          "containerEnv": {
-            "DEMO_MODE": "true",
-            "DEMO_BANNER": "true",
-            "DEMO_AUTH_BYPASS": "true"
-          },
-          "postCreateCommand": "echo 'Demo sandbox ready'",
-          "forwardPorts": [3000, 5000, 8000, 8080]
-        }
-        DEVCONTAINER
-
-        DEEP_LINK="https://codespaces.new/${REPO}?ref=${REF}&devcontainer_path=.devcontainer/demo/devcontainer.json"
+      run: |
+        DEEP_LINK="https://codespaces.new/${REPO}?ref=${REF}"
+        if [ -f ".devcontainer/demo/devcontainer.json" ]; then
+          DEEP_LINK="${DEEP_LINK}&devcontainer_path=.devcontainer/demo/devcontainer.json"
+        fi
 
         echo "url=$DEEP_LINK" >> "$GITHUB_OUTPUT"
         echo "Codespaces deep link: $DEEP_LINK"

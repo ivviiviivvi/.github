@@ -4,7 +4,7 @@
 
 <!-- DEMO:START -->
 
-[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=for-the-badge)](https://codespaces.new/organvm/dot-github--theoria?ref=main&devcontainer_path=.devcontainer/demo/devcontainer.json)
+[![Try Demo](https://img.shields.io/badge/Try%20Demo-Live%20Sandbox-brightgreen?style=for-the-badge)](https://codespaces.new/organvm/dot-github--theoria?ref=main)
 
 <!-- DEMO:END -->
 

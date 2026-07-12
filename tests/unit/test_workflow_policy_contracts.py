@@ -186,6 +186,35 @@ def test_demo_badge_injection_preserves_query_parameters_and_is_idempotent(tmp_p
     assert readme.read_bytes() == first
 
 
+def test_codespaces_url_only_names_repository_owned_devcontainers(tmp_path: Path):
+    """A disposable runner file must never appear in the durable Codespaces URL."""
+    workflow = yaml.safe_load(read(WORKFLOWS / "demo-sandbox-reusable.yml"))
+    script = next(
+        step["run"]
+        for step in workflow["jobs"]["deploy"]["steps"]
+        if step.get("name") == "Generate Codespaces deep link"
+    )
+    output = tmp_path / "github-output"
+    env = {
+        **os.environ,
+        "GITHUB_OUTPUT": str(output),
+        "REPO": "organvm/example",
+        "REF": "main",
+    }
+
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == "url=https://codespaces.new/organvm/example?ref=main\n"
+
+    devcontainer = tmp_path / ".devcontainer" / "demo" / "devcontainer.json"
+    devcontainer.parent.mkdir(parents=True)
+    devcontainer.write_text("{}\n", encoding="utf-8")
+    output.unlink()
+    subprocess.run(["bash", "-eu", "-o", "pipefail", "-c", script], cwd=tmp_path, env=env, check=True)
+    assert output.read_text(encoding="utf-8") == (
+        "url=https://codespaces.new/organvm/example?ref=main&devcontainer_path=.devcontainer/demo/devcontainer.json\n"
+    )
+
+
 def test_required_checks_run_on_merge_queue_without_publishing_images():
     """Every required-check owner must emit on merge_group without deployment side effects."""
     required_check_workflows = [
