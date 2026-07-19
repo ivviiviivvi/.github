@@ -38,7 +38,7 @@ jobs:
           **Why?** Issues with no activity for 90 days are assumed to be no longer relevant.
 
           **What happens next?**
-          - This issue will be closed in 7 days if no further activity occurs
+          - This issue will be kept open (never auto-closed) if no further activity occurs
           - You can remove the stale label to keep it open
           - Commenting will automatically remove the stale label
 
@@ -68,7 +68,7 @@ jobs:
           *Automated stale issue closure*
 
         days-before-stale: 90
-        days-before-close: 7
+        days-before-close: -1
         stale-issue-label: stale
         exempt-issue-labels: 'pinned,security,priority: critical,priority: high,status: in-progress,status: in-review'
         exempt-all-milestones: true
@@ -81,7 +81,7 @@ jobs:
           **Why?** PRs with no activity for 30 days are assumed to be abandoned or no longer needed.
 
           **What happens next?**
-          - This PR will be closed in 7 days if no further activity occurs
+          - This PR will be kept open (never auto-closed) if no further activity occurs
           - You can remove the stale label to keep it open
           - Pushing new commits will automatically remove the stale label
 
@@ -113,7 +113,7 @@ jobs:
           *Automated stale PR closure*
 
         days-before-pr-stale: 30
-        days-before-pr-close: 7
+        days-before-pr-close: -1
         stale-pr-label: stale
         exempt-pr-labels: 'pinned,priority: critical,priority: high,work-in-progress,awaiting-review'
         exempt-draft-pr: true
