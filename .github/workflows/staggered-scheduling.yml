@@ -27,6 +27,9 @@ permissions:
 
 env:
   SCHEDULE_FILE: .github/scheduling/schedule.json
+  # Cross-run state, deliberately NOT on `main`: that branch is protected behind a merge
+  # queue, so a direct push from CI is rejected (GH006) and the job fails every run.
+  SCHEDULE_STATE_BRANCH: automation/staggered-schedule
   REPOS_PER_DAY: 10
   MAX_CONCURRENT_WORKFLOWS: 3
 
@@ -96,6 +99,23 @@ jobs:
         REPO_COUNT=$(jq 'length' repositories.json)
         echo "repo_count=$REPO_COUNT" >> $GITHUB_OUTPUT
 
+    - name: Restore schedule state
+      run: |
+        # Fail OPEN on every unreadable condition: a missing branch or file simply means "no
+        # prior schedule", which `plan` already handles. This step must never fail the run.
+        rm -f "${{ env.SCHEDULE_FILE }}"
+        if git fetch origin "${{ env.SCHEDULE_STATE_BRANCH }}" --depth 1 --quiet 2>/dev/null; then
+          mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
+          if git show "FETCH_HEAD:${{ env.SCHEDULE_FILE }}" > "${{ env.SCHEDULE_FILE }}" 2>/dev/null; then
+            echo "restored schedule from ${{ env.SCHEDULE_STATE_BRANCH }}"
+          else
+            rm -f "${{ env.SCHEDULE_FILE }}"
+            echo "state branch carries no schedule yet"
+          fi
+        else
+          echo "no state branch yet — starting from an empty schedule"
+        fi
+
     - name: Plan staggered schedule
       id: generate
       env:
@@ -113,20 +133,16 @@ jobs:
           --today "$TODAY"
 
     - name: Save schedule
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
         mv schedule.json "${{ env.SCHEDULE_FILE }}"
 
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add "${{ env.SCHEDULE_FILE }}"
-
-        if git diff --staged --quiet; then
-          echo "No schedule changes to commit"
-        else
-          git commit -m "chore: update staggered schedule [skip ci]"
-          git push
-        fi
+        bash .github/scripts/publish-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}" \
+          "chore: update staggered schedule [skip ci]"
 
     - name: Check today's schedule
       id: check-today
@@ -243,10 +259,20 @@ jobs:
       if: always()
       env:
         SCHEDULE_DATE: ${{ needs.calculate-schedule.outputs.schedule_date }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         if [ -z "$SCHEDULE_DATE" ]; then
           echo "No schedule date was executed; skipping status update"
           exit 0
+        fi
+
+        # This job checks out `main`, which no longer carries the schedule — pull it from the
+        # state branch or the completion below would silently never run.
+        rm -f "${{ env.SCHEDULE_FILE }}"
+        if git fetch origin "${{ env.SCHEDULE_STATE_BRANCH }}" --depth 1 --quiet 2>/dev/null; then
+          mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
+          git show "FETCH_HEAD:${{ env.SCHEDULE_FILE }}" > "${{ env.SCHEDULE_FILE }}" 2>/dev/null \
+            || rm -f "${{ env.SCHEDULE_FILE }}"
         fi
 
         if [ -f "${{ env.SCHEDULE_FILE }}" ]; then
@@ -255,11 +281,10 @@ jobs:
             --date "$SCHEDULE_DATE" \
             --completed-at "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ${{ env.SCHEDULE_FILE }}
-          git commit -m "chore: mark $SCHEDULE_DATE schedule as completed [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          bash .github/scripts/publish-schedule-state.sh \
+            "${{ env.SCHEDULE_FILE }}" \
+            "${{ env.SCHEDULE_STATE_BRANCH }}" \
+            "chore: mark $SCHEDULE_DATE schedule as completed [skip ci]"
         fi
 
   monitor-quota:
