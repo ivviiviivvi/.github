@@ -36,6 +36,21 @@ fi
 
 AUTH=(-H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GITHUB_TOKEN:?GITHUB_TOKEN required}")
 
+for tool in curl jq base64; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "::error::publish-schedule-state requires $tool" >&2
+    exit 1
+  fi
+done
+
+decode_base64() {
+  if base64 --help 2>&1 | grep -q -- '--decode'; then
+    base64 --decode
+  else
+    base64 -D
+  fi
+}
+
 # Create the state branch off the default branch on first use.
 if ! curl -fsS "${AUTH[@]}" "$API/repos/$REPO/git/ref/heads/$BRANCH" >/dev/null 2>&1; then
   base_sha=$(curl -fsS "${AUTH[@]}" "$API/repos/$REPO/git/ref/heads/$DEFAULT_BRANCH" | jq -r '.object.sha')
@@ -51,7 +66,10 @@ existing_sha=$(printf '%s' "$existing" | jq -r '.sha // empty')
 
 # Skip a no-op write so the branch does not accumulate an empty commit per day.
 if [ -n "$existing_sha" ]; then
-  remote=$(printf '%s' "$existing" | jq -r '.content // empty' | tr -d '\n' | base64 --decode 2>/dev/null || true)
+  if ! remote=$(printf '%s' "$existing" | jq -r '.content // empty' | tr -d '\\n' | decode_base64 2>/dev/null); then
+    echo "::error::existing schedule state could not be decoded" >&2
+    exit 1
+  fi
   if [ "$remote" = "$(cat "$FILE")" ]; then
     echo "schedule unchanged — nothing to publish"
     exit 0
