@@ -100,21 +100,12 @@ jobs:
         echo "repo_count=$REPO_COUNT" >> $GITHUB_OUTPUT
 
     - name: Restore schedule state
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Fail OPEN on every unreadable condition: a missing branch or file simply means "no
-        # prior schedule", which `plan` already handles. This step must never fail the run.
-        rm -f "${{ env.SCHEDULE_FILE }}"
-        if git fetch origin "${{ env.SCHEDULE_STATE_BRANCH }}" --depth 1 --quiet 2>/dev/null; then
-          mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
-          if git show "FETCH_HEAD:${{ env.SCHEDULE_FILE }}" > "${{ env.SCHEDULE_FILE }}" 2>/dev/null; then
-            echo "restored schedule from ${{ env.SCHEDULE_STATE_BRANCH }}"
-          else
-            rm -f "${{ env.SCHEDULE_FILE }}"
-            echo "state branch carries no schedule yet"
-          fi
-        else
-          echo "no state branch yet — starting from an empty schedule"
-        fi
+        bash .github/scripts/restore-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}"
 
     - name: Plan staggered schedule
       id: generate
@@ -266,14 +257,9 @@ jobs:
           exit 0
         fi
 
-        # This job checks out `main`, which no longer carries the schedule — pull it from the
-        # state branch or the completion below would silently never run.
-        rm -f "${{ env.SCHEDULE_FILE }}"
-        if git fetch origin "${{ env.SCHEDULE_STATE_BRANCH }}" --depth 1 --quiet 2>/dev/null; then
-          mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
-          git show "FETCH_HEAD:${{ env.SCHEDULE_FILE }}" > "${{ env.SCHEDULE_FILE }}" 2>/dev/null \
-            || rm -f "${{ env.SCHEDULE_FILE }}"
-        fi
+        bash .github/scripts/restore-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}"
 
         if [ -f "${{ env.SCHEDULE_FILE }}" ]; then
           python src/automation/scripts/staggered_walkthrough_schedule.py complete \
