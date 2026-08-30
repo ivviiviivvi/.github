@@ -27,6 +27,9 @@ permissions:
 
 env:
   SCHEDULE_FILE: .github/scheduling/schedule.json
+  # Cross-run state, deliberately NOT on `main`: that branch is protected behind a merge
+  # queue, so a direct push from CI is rejected (GH006) and the job fails every run.
+  SCHEDULE_STATE_BRANCH: automation/staggered-schedule
   REPOS_PER_DAY: 10
   MAX_CONCURRENT_WORKFLOWS: 3
 
@@ -96,6 +99,14 @@ jobs:
         REPO_COUNT=$(jq 'length' repositories.json)
         echo "repo_count=$REPO_COUNT" >> $GITHUB_OUTPUT
 
+    - name: Restore schedule state
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        bash .github/scripts/restore-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}"
+
     - name: Plan staggered schedule
       id: generate
       env:
@@ -113,20 +124,16 @@ jobs:
           --today "$TODAY"
 
     - name: Save schedule
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mkdir -p "$(dirname "${{ env.SCHEDULE_FILE }}")"
         mv schedule.json "${{ env.SCHEDULE_FILE }}"
 
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add "${{ env.SCHEDULE_FILE }}"
-
-        if git diff --staged --quiet; then
-          echo "No schedule changes to commit"
-        else
-          git commit -m "chore: update staggered schedule [skip ci]"
-          git push
-        fi
+        bash .github/scripts/publish-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}" \
+          "chore: update staggered schedule [skip ci]"
 
     - name: Check today's schedule
       id: check-today
@@ -243,11 +250,16 @@ jobs:
       if: always()
       env:
         SCHEDULE_DATE: ${{ needs.calculate-schedule.outputs.schedule_date }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         if [ -z "$SCHEDULE_DATE" ]; then
           echo "No schedule date was executed; skipping status update"
           exit 0
         fi
+
+        bash .github/scripts/restore-schedule-state.sh \
+          "${{ env.SCHEDULE_FILE }}" \
+          "${{ env.SCHEDULE_STATE_BRANCH }}"
 
         if [ -f "${{ env.SCHEDULE_FILE }}" ]; then
           python src/automation/scripts/staggered_walkthrough_schedule.py complete \
@@ -255,11 +267,10 @@ jobs:
             --date "$SCHEDULE_DATE" \
             --completed-at "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ${{ env.SCHEDULE_FILE }}
-          git commit -m "chore: mark $SCHEDULE_DATE schedule as completed [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          bash .github/scripts/publish-schedule-state.sh \
+            "${{ env.SCHEDULE_FILE }}" \
+            "${{ env.SCHEDULE_STATE_BRANCH }}" \
+            "chore: mark $SCHEDULE_DATE schedule as completed [skip ci]"
         fi
 
   monitor-quota:
