@@ -66,7 +66,7 @@ existing_sha=$(printf '%s' "$existing" | jq -r '.sha // empty')
 
 # Skip a no-op write so the branch does not accumulate an empty commit per day.
 if [ -n "$existing_sha" ]; then
-  if ! remote=$(printf '%s' "$existing" | jq -r '.content // empty' | tr -d '\\n' | decode_base64 2>/dev/null); then
+  if ! remote=$(printf '%s' "$existing" | jq -r '.content // empty' | tr -d '\n' | decode_base64 2>/dev/null); then
     echo "::error::existing schedule state could not be decoded" >&2
     exit 1
   fi
