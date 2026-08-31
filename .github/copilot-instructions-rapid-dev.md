@@ -61,7 +61,7 @@ ______________________________________________________________________
 #### 5. Code Quality
 
 - Auto-format with Black (Python) or Prettier (JS/TS)
-- Sort imports with isort (--profile=black)
+- Sort imports with Ruff (`ruff check --select I --fix`)
 - Fix trailing whitespace, line endings, EOF issues
 - Run linters in warn-only mode
 - Apply security fixes for HIGH/MEDIUM vulnerabilities
@@ -152,7 +152,8 @@ pre-commit install
 
 ### Hook Categories
 
-1. **Auto-fix**: Black, isort, prettier, trailing-whitespace, end-of-file-fixer
+1. **Auto-fix**: Black, Ruff import sorting, prettier, trailing-whitespace,
+   end-of-file-fixer
 1. **Validate-only**: check-yaml, check-json, shellcheck
 1. **Warn-only**: flake8, eslint, mypy
 1. **Security**: bandit (HIGH/MEDIUM), detect-secrets
@@ -280,9 +281,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - run: pip install black isort flake8
+      - run: pip install black ruff flake8
       - run: black --check .
-      - run: isort --check-only .
+      - run: ruff check --select I .
       - run: flake8 --max-line-length=88
         continue-on-error: true # Warn only
 

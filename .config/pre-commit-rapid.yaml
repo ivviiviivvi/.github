@@ -91,12 +91,12 @@ repos:
     args: [--safe, --quiet]
     stages: [commit]
 
-  # isort: Auto-sort imports
-- repo: https://github.com/pycqa/isort
-  rev: 5.13.2
+  # Ruff: Auto-sort imports without the isort/Ruff ordering conflict
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.9.1
   hooks:
-  - id: isort
-    args: [--profile=black, --line-length=88]
+  - id: ruff
+    args: [--select, I, --fix]
     stages: [commit]
 
   # Flake8: Lint but don't block (warn-only mode)

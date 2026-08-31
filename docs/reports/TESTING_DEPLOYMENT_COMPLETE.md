@@ -275,7 +275,7 @@ via GitHub Actions.
 
 **Development**:
 
-- black, flake8, mypy, isort
+- black, flake8, mypy, ruff
 
 #### CI/CD Workflow (run-integration-tests.yml - 285 lines)
 
