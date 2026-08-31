@@ -272,10 +272,11 @@ def generate_metadata(file_path: Path) -> Optional[dict[str, Any]]:
         filename = file_path.name
         default_name = generate_default_workflow_name(filename)
         name = workflow.get("name", default_name)
+        classification_path = f"reusable/{filename}" if file_path.parent.name == "reusable" else filename
 
         triggers = extract_triggers(workflow)
-        layer = classify_layer(name, str(file_path))
-        role = classify_role(name, str(file_path))
+        layer = classify_layer(name, classification_path)
+        role = classify_role(name, classification_path)
         description = generate_description(workflow, name, role)
         subjects = generate_subjects(name, layer, role, triggers)
         canonical = generate_canonical_name(filename, layer, role)
