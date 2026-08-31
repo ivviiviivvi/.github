@@ -25,10 +25,10 @@ ______________________________________________________________________
 
 ### Configure Secret Detection
 
-Create `.secrets.baseline` for pre-commit hooks:
+Create `.config/.secrets.baseline` for pre-commit hooks:
 
 ```bash
-detect-secrets scan > .secrets.baseline
+detect-secrets scan > .config/.secrets.baseline
 ```
 
 ### Prevent Secrets in Code

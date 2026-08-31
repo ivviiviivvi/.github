@@ -33,6 +33,11 @@ on:
         required: false
         type: string
         default: .
+      secrets-baseline:
+        description: Path to the detect-secrets baseline file
+        required: false
+        type: string
+        default: .config/.secrets.baseline
     outputs:
       codeql-sarif:
         description: Path to CodeQL SARIF results
@@ -135,12 +140,24 @@ jobs:
       if: inputs.scan-type == 'secrets' || inputs.scan-type == 'all'
       run: |
         pip install detect-secrets==1.5.0
-        SECRET_BASELINE=".config/.secrets.baseline"
+        SECRET_BASELINE="${{ inputs.secrets-baseline }}"
+        BASELINE_EXCLUDE='(^|/)(\.config/)?\.secrets\.baseline$'
+
+        if [ ! -f "$SECRET_BASELINE" ] && [ "$SECRET_BASELINE" = ".config/.secrets.baseline" ] && [ -f ".secrets.baseline" ]; then
+          SECRET_BASELINE=".secrets.baseline"
+          echo "Using legacy root baseline at $SECRET_BASELINE."
+        fi
+
         if [ -f "$SECRET_BASELINE" ]; then
-          detect-secrets scan --all-files --baseline "$SECRET_BASELINE" --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
-          echo "Secret scan complete using $SECRET_BASELINE."
+          if git ls-files -z | xargs -0 detect-secrets-hook --baseline "$SECRET_BASELINE" --exclude-files "$BASELINE_EXCLUDE" --json > detect-secrets-results.json; then
+            [ -s detect-secrets-results.json ] || echo "{}" > detect-secrets-results.json
+            echo "Secret scan complete using $SECRET_BASELINE; no new secrets found."
+          else
+            [ -s detect-secrets-results.json ] || echo "{}" > detect-secrets-results.json
+            echo "::warning::detect-secrets found potential new secrets. Review detect-secrets-results.json."
+          fi
         else
-          detect-secrets scan --all-files --exclude-files '(^|/)\.config/\.secrets\.baseline$' > detect-secrets-results.json || true
+          detect-secrets scan --all-files --exclude-files "$BASELINE_EXCLUDE" > detect-secrets-results.json || true
           echo "Secret scan complete without a baseline."
         fi
 
@@ -155,5 +172,6 @@ jobs:
           semgrep.sarif
           detect-secrets-results.json
           .config/.secrets.baseline
+          .secrets.baseline
         retention-days: 30
         include-hidden-files: true

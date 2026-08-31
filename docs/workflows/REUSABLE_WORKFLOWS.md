@@ -291,7 +291,7 @@ ______________________________________________________________________
 | `trivy-scan-type`  | No       | `fs`                | Trivy scan type: `fs`, `image`, `config`, `repo`          |
 | `trivy-severity`   | No       | `CRITICAL,HIGH`     | Severity levels to report                                 |
 | `semgrep-config`   | No       | `auto`              | Semgrep configuration                                     |
-| `secrets-baseline` | No       | `.secrets.baseline` | Secrets baseline file path                                |
+| `secrets-baseline` | No       | `.config/.secrets.baseline` | Secrets baseline file path. Falls back to `.secrets.baseline` for legacy callers. |
 
 **Outputs:**
 

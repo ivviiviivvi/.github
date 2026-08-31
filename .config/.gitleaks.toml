@@ -3,6 +3,11 @@
 
 title = "Gitleaks Configuration for {{ORG_NAME}}/.github"
 
+# Keep the built-in detector coverage, then layer repository allowlists and
+# organization-specific rules on top.
+[extend]
+  useDefault = true
+
 # Global allowlist for false positives
 [allowlist]
   description = "Global allowlist for false positives"
